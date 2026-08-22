@@ -7,12 +7,12 @@ from sqlalchemy.orm import Session
 from ..auth import get_db,current_user
 from ..config import settings
 from ..models import Publication,Site,User
-from ..services.publishing import FileObjectStore,publish_site
+from ..services.publishing import object_store_from_settings,publish_site
 from ..services.rendering import render_site_html
 from ..services.exporting import build_source_zip
 router=APIRouter(prefix='/publishing',tags=['publishing'])
 public_router=APIRouter(tags=['public-sites'])
-STORE=FileObjectStore(Path('.zylora-publications'))
+STORE=object_store_from_settings(settings)
 @router.post('/sites/{site_id}')
 def publish(site_id:int,user:User=Depends(current_user),db:Session=Depends(get_db)):
     s=db.get(Site,site_id)

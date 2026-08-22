@@ -5,12 +5,47 @@ import pytest
 from apps.api.app.services.sites import create_site
 from apps.api.app.services.publishing import *
 from apps.api.app.services.exporting import *
+from types import SimpleNamespace
+from botocore.exceptions import ClientError
 
 def test_file_store_publish_versioning(db,user,tmp_path):
     s=create_site(db,user,'Pub','pub','AI',2); store=FileObjectStore(tmp_path)
     p1=publish_site(db,s,store,b'<html>1</html>'); p2=publish_site(db,s,store,b'<html>2</html>')
     assert p1.version==1 and p2.version==2 and store.get(p1.storage_key)==b'<html>1</html>'
     with pytest.raises(PublishError): publish_site(db,s,store,b'')
+
+def test_s3_store_persists_and_reads_publication_artifacts(db,user):
+    class Body:
+        def __init__(self,data):self.data=data
+        def read(self):return self.data
+    class Client:
+        def __init__(self):self.objects={}
+        def put_object(self,**kwargs):self.objects[(kwargs['Bucket'],kwargs['Key'])]=kwargs['Body'];assert kwargs['ContentType']=='text/html; charset=utf-8'
+        def get_object(self,**kwargs):return {'Body':Body(self.objects[(kwargs['Bucket'],kwargs['Key'])])}
+    client=Client();store=S3ObjectStore('publications',client)
+    site=create_site(db,user,'Durable','durable','AI',2)
+    publication=publish_site(db,site,store,b'<html>durable</html>')
+    assert store.get(publication.storage_key)==b'<html>durable</html>'
+
+def test_object_store_factory_fails_closed_outside_local_environments(monkeypatch,tmp_path):
+    local=object_store_from_settings(SimpleNamespace(env='test'),tmp_path)
+    assert isinstance(local,FileObjectStore)
+    missing=SimpleNamespace(env='staging',s3_bucket='',s3_access_key='',s3_secret_key='',s3_endpoint_url='',s3_region='')
+    with pytest.raises(PublishError,match='s3_storage_not_configured'):object_store_from_settings(missing)
+    captured={}
+    monkeypatch.setattr('apps.api.app.services.publishing.boto3.client',lambda *a,**kw:captured.update(kw) or object())
+    configured=SimpleNamespace(env='production',s3_bucket='bucket',s3_access_key='access',s3_secret_key='secret',s3_endpoint_url='https://s3.example',s3_region='sin')
+    store=object_store_from_settings(configured)
+    assert isinstance(store,S3ObjectStore) and store.bucket=='bucket' and captured['endpoint_url']=='https://s3.example'
+
+def test_s3_store_maps_missing_object_to_file_not_found():
+    class Missing:
+        def get_object(self,**kwargs):
+            raise ClientError({'Error':{'Code':'NoSuchKey','Message':'missing'}},'GetObject')
+    with pytest.raises(FileNotFoundError):S3ObjectStore('bucket',Missing()).get('missing.html')
+    class Forbidden:
+        def get_object(self,**kwargs):raise ClientError({'Error':{'Code':'AccessDenied','Message':'denied'}},'GetObject')
+    with pytest.raises(ClientError):S3ObjectStore('bucket',Forbidden()).get('private.html')
 
 def test_export_zip_and_safety(db,user):
     s=create_site(db,user,'My Great Site','great','AI',2)

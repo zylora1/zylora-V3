@@ -17,7 +17,8 @@ def test_token_roundtrip_tamper_and_expiry():
 
 def test_production_settings_reject_dev_secret_and_sqlite():
     from apps.api.app.config import settings, validate_production_settings
-    original=(settings.env,settings.secret_key,settings.database_url)
+    names=('env','secret_key','database_url','anthropic_api_key','s3_bucket','s3_access_key','s3_secret_key')
+    original={name:getattr(settings,name) for name in names}
     try:
         object.__setattr__(settings,'env','production')
         object.__setattr__(settings,'secret_key','dev-secret')
@@ -27,7 +28,13 @@ def test_production_settings_reject_dev_secret_and_sqlite():
         object.__setattr__(settings,'secret_key','x'*40)
         with pytest.raises(RuntimeError,match='production_requires_postgresql'):
             validate_production_settings()
+        object.__setattr__(settings,'database_url','postgresql+psycopg://host/db')
+        object.__setattr__(settings,'anthropic_api_key','')
+        with pytest.raises(RuntimeError,match='anthropic_api_key_required'):validate_production_settings()
+        object.__setattr__(settings,'anthropic_api_key','configured')
+        object.__setattr__(settings,'s3_bucket','')
+        with pytest.raises(RuntimeError,match='s3_storage_required'):validate_production_settings()
+        object.__setattr__(settings,'s3_bucket','bucket');object.__setattr__(settings,'s3_access_key','access');object.__setattr__(settings,'s3_secret_key','secret')
+        validate_production_settings()
     finally:
-        object.__setattr__(settings,'env',original[0])
-        object.__setattr__(settings,'secret_key',original[1])
-        object.__setattr__(settings,'database_url',original[2])
+        for name,value in original.items():object.__setattr__(settings,name,value)

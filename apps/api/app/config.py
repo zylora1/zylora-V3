@@ -15,6 +15,11 @@ class Settings:
     public_base_url: str = os.getenv('PUBLIC_BASE_URL','http://localhost:3000')
     api_base_url: str = field(default_factory=lambda: os.getenv('API_BASE_URL','http://localhost:8000'))
     public_site_base_url: str = field(default_factory=lambda: os.getenv('PUBLIC_SITE_BASE_URL') or os.getenv('PUBLIC_BASE_URL','http://localhost:3000'))
+    s3_endpoint_url: str = os.getenv('S3_ENDPOINT_URL','')
+    s3_region: str = os.getenv('S3_REGION','us-east-1')
+    s3_bucket: str = os.getenv('S3_BUCKET','')
+    s3_access_key: str = os.getenv('S3_ACCESS_KEY','')
+    s3_secret_key: str = os.getenv('S3_SECRET_KEY','')
     google_client_id: str = os.getenv('GOOGLE_CLIENT_ID','')
     razorpay_key_id: str = os.getenv('RAZORPAY_KEY_ID','')
     razorpay_key_secret: str = os.getenv('RAZORPAY_KEY_SECRET','')
@@ -48,3 +53,5 @@ def validate_production_settings() -> None:
             raise RuntimeError("production_requires_postgresql")
         if not settings.anthropic_api_key:
             raise RuntimeError("anthropic_api_key_required")
+        if not all((settings.s3_bucket,settings.s3_access_key,settings.s3_secret_key)):
+            raise RuntimeError("s3_storage_required")
