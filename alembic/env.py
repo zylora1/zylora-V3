@@ -2,10 +2,10 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 from apps.api.app.config import settings
-from apps.api.app.db import Base
+from apps.api.app.db import Base, normalize_database_url
 from apps.api.app import models  # noqa: F401
 config=context.config
-config.set_main_option('sqlalchemy.url',settings.database_url.replace('%','%%'))
+config.set_main_option('sqlalchemy.url',normalize_database_url(settings.database_url).replace('%','%%'))
 if config.config_file_name: fileConfig(config.config_file_name)
 target_metadata=Base.metadata
 
