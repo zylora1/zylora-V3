@@ -1,0 +1,13 @@
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.coverage.run]
+branch = true
+source = ["apps/api/app"]
+omit = ["apps/api/app/main.py"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false

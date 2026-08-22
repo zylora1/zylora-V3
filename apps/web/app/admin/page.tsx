@@ -1,0 +1,1 @@
+import type {Metadata} from 'next';import AppShell from '../../components/AppShell';import AdminClient from '../../components/AdminClient';export const metadata:Metadata={title:'SUPER_ADMIN | Zylora',robots:{index:false,follow:false}};export default function Page(){return <AppShell><AdminClient/></AppShell>}

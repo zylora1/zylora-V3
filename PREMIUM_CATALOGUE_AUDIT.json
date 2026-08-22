@@ -1,0 +1,41 @@
+{
+  "total_templates": 1008,
+  "unique_ids": 1008,
+  "unique_implementation_files": 1008,
+  "industry_count": 63,
+  "design_style_count": 76,
+  "layout_archetype_count": 36,
+  "hero_archetype_count": 32,
+  "navigation_pattern_count": 16,
+  "typography_system_count": 24,
+  "geometry_count": 16,
+  "motion_language_count": 14,
+  "structural_signatures": 1008,
+  "source_hashes": 1008,
+  "near_duplicate_pairs": 0,
+  "max_similarity": 0.6325,
+  "max_similarity_pair": [
+    "template-0016-dental-asymmetric-grid",
+    "template-0304-tourism-scandinavian"
+  ],
+  "random_50_unique": 50,
+  "random_50_source_max_similarity": 0.776,
+  "random_50_source_max_pair": [
+    "template-0020-medical-y2k",
+    "template-0418-insurance-neo-futurism"
+  ],
+  "random_50_source_mean_similarity": 0.5635,
+  "errors": [],
+  "templates_by_page_count": {
+    "1": 126,
+    "2": 126,
+    "3": 126,
+    "4": 126,
+    "5": 126,
+    "6": 126,
+    "7": 126,
+    "8": 126,
+    "9": 0,
+    "10": 0
+  }
+}

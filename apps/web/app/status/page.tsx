@@ -1,0 +1,1 @@
+export default function Status(){return <main className="legal"><h1>System status</h1><p>Operational status is reported by the API health and readiness endpoints. Connect this page to your production monitoring provider before launch.</p></main>}

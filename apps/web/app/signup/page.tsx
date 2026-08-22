@@ -1,0 +1,1 @@
+import type {Metadata} from 'next';import AuthForm from '../../components/AuthForm';export const metadata:Metadata={title:'Create account | Zylora',description:'Create your Zylora account and launch a premium business website.'};export default function Page(){return <AuthForm mode="signup"/>}

@@ -1,0 +1,1 @@
+'use client';export default function Error({reset}:{error:Error&{digest?:string};reset:()=>void}){return <main className="legal"><span className="eyebrow">Something went wrong</span><h1>We couldn't load this page.</h1><p>Please retry. If the problem continues, check Zylora's system status.</p><button className="primaryAction" onClick={reset}>Try again</button></main>}

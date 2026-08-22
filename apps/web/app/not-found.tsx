@@ -1,0 +1,1 @@
+export default function NotFound(){return <main className="legal"><span className="eyebrow">404</span><h1>That page isn't here.</h1><p>The link may have moved or the page may no longer exist.</p><a className="primaryAction" href="/">Return home</a></main>}

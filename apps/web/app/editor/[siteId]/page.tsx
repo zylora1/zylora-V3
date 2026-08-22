@@ -1,0 +1,1 @@
+import type {Metadata} from 'next';import EditorClient from '../../../components/EditorClient';export const metadata:Metadata={title:'Website editor | Zylora',robots:{index:false,follow:false}};export default async function Page({params}:{params:Promise<{siteId:string}>}){const {siteId}=await params;return <EditorClient siteId={Number(siteId)}/>}

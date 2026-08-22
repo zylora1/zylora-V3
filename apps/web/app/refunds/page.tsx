@@ -1,0 +1,1 @@
+export default function Refunds(){return <main className="legal"><h1>Cancellation & Refunds</h1><p>Subscription cancellation and refund eligibility must follow the policy published for the customer region and payment method. Managed-by-experts enquiries are not subscription checkout purchases.</p></main>}

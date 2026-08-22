@@ -1,0 +1,28 @@
+{
+  "exports_tested": 20,
+  "template_keys": [
+    "template-0001-dental-minimalism",
+    "template-0054-veterinary-scientific",
+    "template-0107-yoga-aurora",
+    "template-0160-university-pixel-art",
+    "template-0213-cafe-monochrome",
+    "template-0266-resort-neo-futurism",
+    "template-0319-real-estate-magazine",
+    "template-0372-legal-scroll-driven-storytelling",
+    "template-0425-insurance-technical-engineering",
+    "template-0478-saas-gradient-mesh",
+    "template-0531-software-conceptual-sketch",
+    "template-0584-fashion-dark-cinematic",
+    "template-0637-beauty-cyberpunk",
+    "template-0690-video-editorial",
+    "template-0743-portfolio-horizontal-storytelling",
+    "template-0796-weddings-premium-corporate",
+    "template-0849-repair-kinetic-typography",
+    "template-0902-landscaping-hand-drawn",
+    "template-0955-industrial-cinematic",
+    "template-1008-professional-y2k"
+  ],
+  "typescript_files_transpiled": 40,
+  "total_zip_bytes": 156604,
+  "errors": []
+}

@@ -1,0 +1,16 @@
+{
+  "signup": 200,
+  "create_site": 201,
+  "save_content_seo": 200,
+  "configure_booking": 200,
+  "publish": 200,
+  "public_url": "http://127.0.0.1:8879/site/certification-clinic",
+  "public_get": 200,
+  "lead_capture": 201,
+  "chatbot": 200,
+  "chatbot_mode": "LEAD_CREDITS",
+  "slot_lookup": 200,
+  "appointment_booking": 201,
+  "lead_dashboard": 200,
+  "zip_export": 200
+}

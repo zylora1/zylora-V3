@@ -1,0 +1,1 @@
+export default function Privacy(){return <main className="legal"><h1>Privacy</h1><p>Zylora processes account, website, lead, appointment, billing and operational data to provide the service. Production deployments must publish processor-specific disclosures for configured providers and applicable retention periods.</p></main>}

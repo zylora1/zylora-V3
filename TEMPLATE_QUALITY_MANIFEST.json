@@ -1,0 +1,32 @@
+{
+  "policy": "STRICT_INDIVIDUAL_AUTHORSHIP",
+  "production_approved_count": 24,
+  "production_approved_templates": [
+    "template-0005-bento.tsx",
+    "template-0004-cinematic.tsx",
+    "template-0016-clay.tsx",
+    "template-0024-conceptual.tsx",
+    "template-0019-corporate.tsx",
+    "template-0017-futurist.tsx",
+    "template-0007-glass.tsx",
+    "template-0012-high-fashion.tsx",
+    "template-0023-industrial.tsx",
+    "template-0001-luxury-editorial.tsx",
+    "template-0021-magazine.tsx",
+    "template-0008-maximal.tsx",
+    "template-0009-minimal-architecture.tsx",
+    "template-0003-neo-brutalist.tsx",
+    "template-0014-neoclassical.tsx",
+    "template-0015-neumorphic.tsx",
+    "template-0022-organic.tsx",
+    "template-0018-photography.tsx",
+    "template-0010-pixel.tsx",
+    "template-0020-playful.tsx",
+    "template-0006-retro.tsx",
+    "template-0011-scrapbook.tsx",
+    "template-0013-surreal.tsx",
+    "template-0002-swiss.tsx"
+  ],
+  "catalogue_slots_present": 1008,
+  "note": "Only templates that can be conservatively defended as distinct art-direction compositions are marked production-approved. The remaining catalogue slots are not claimed to be individually authored merely because their source hashes differ."
+}

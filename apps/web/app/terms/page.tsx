@@ -1,0 +1,1 @@
+export default function Terms(){return <main className="legal"><h1>Terms of Service</h1><p>Use of Zylora is subject to the published subscription, acceptable-use, intellectual-property, managed-service and termination terms configured for the production business.</p></main>}
