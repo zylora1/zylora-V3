@@ -106,8 +106,11 @@ class Appointment(Base):
 
 class ManagedLead(Base):
     __tablename__ = "managed_leads"
+    __table_args__ = (UniqueConstraint("client_request_id", name="uq_managed_lead_client_request"),)
     id: Mapped[int] = mapped_column(primary_key=True)
     lead_code: Mapped[str] = mapped_column(String(32), unique=True, index=True)
+    client_request_id: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    request_fingerprint: Mapped[str | None] = mapped_column(String(64), nullable=True)
     name: Mapped[str] = mapped_column(String(160))
     email: Mapped[str] = mapped_column(String(320))
     website_type: Mapped[str] = mapped_column(Text)
@@ -117,6 +120,28 @@ class ManagedLead(Base):
     internal_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+class ManagedLeadEmailDelivery(Base):
+    __tablename__ = "managed_lead_email_deliveries"
+    __table_args__ = (
+        UniqueConstraint("managed_lead_id", "kind", name="uq_managed_lead_email_kind"),
+        Index("ix_managed_email_pending", "status", "created_at"),
+    )
+    id: Mapped[int] = mapped_column(primary_key=True)
+    managed_lead_id: Mapped[int] = mapped_column(ForeignKey("managed_leads.id"), index=True)
+    kind: Mapped[str] = mapped_column(String(32))
+    recipient: Mapped[str] = mapped_column(String(320))
+    subject: Mapped[str] = mapped_column(String(320))
+    html: Mapped[str] = mapped_column(Text)
+    status: Mapped[str] = mapped_column(String(32), default="PENDING", index=True)
+    provider: Mapped[str] = mapped_column(String(32), default="RESEND")
+    provider_message_id: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    attempt_count: Mapped[int] = mapped_column(Integer, default=0)
+    last_error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    claimed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    sent_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    failed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
 class BlogPost(Base):
     __tablename__ = "blog_posts"

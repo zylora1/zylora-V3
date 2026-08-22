@@ -17,5 +17,9 @@ celery_app.conf.beat_schedule = {
     "recover-pending-whatsapp-notifications": {
         "task": "zylora.notifications.recover_pending",
         "schedule": 60.0,
+    },
+    "recover-pending-managed-lead-emails": {
+        "task": "zylora.managed_emails.recover_pending",
+        "schedule": 60.0,
     }
 }

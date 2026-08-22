@@ -35,7 +35,20 @@ def test_razorpay_create_and_signature():
     setv('razorpay_key_id','k');setv('razorpay_key_secret','s'); c=C({'id':'sub_1','status':'created'}); assert i.razorpay_create_subscription('plan',client=c)['id']=='sub_1'
     setv('razorpay_webhook_secret','wh'); body=b'{}'; sig=hmac.new(b'wh',body,hashlib.sha256).hexdigest(); assert i.verify_razorpay_webhook(body,sig); assert not i.verify_razorpay_webhook(body,'bad')
 def test_resend():
-    setv('resend_api_key','re');setv('resend_from_email','Z <z@x.com>'); c=C({'id':'email'}); assert i.resend_email('a@b.com','s','<b>x</b>',c)['id']=='email'
+    setv('resend_api_key','re');setv('resend_from_email','Z <z@x.com>'); c=C({'id':'email'}); assert i.resend_email('a@b.com','s','<b>x</b>',c,idempotency_key='managed/1/customer')['id']=='email';assert c.calls[0][2]['headers']['Idempotency-Key']=='managed/1/customer'
+def test_resend_classifies_transport_and_http_failures():
+    setv('resend_api_key','re')
+    class Timeout:
+        def post(self,*a,**kw): raise httpx.ConnectTimeout('timeout')
+    with pytest.raises(i.TransientIntegrationError): i.resend_email('a@b.com','s','h',Timeout())
+    class Status:
+        def __init__(self,status): self.status=status
+        def post(self,*a,**kw):
+            request=httpx.Request('POST','https://api.resend.com/emails');response=httpx.Response(self.status,request=request)
+            raise httpx.HTTPStatusError('bad',request=request,response=response)
+    with pytest.raises(i.TransientIntegrationError): i.resend_email('a@b.com','s','h',Status(503))
+    with pytest.raises(i.TransientIntegrationError): i.resend_email('a@b.com','s','h',Status(409),idempotency_key='same')
+    with pytest.raises(i.IntegrationError): i.resend_email('a@b.com','s','h',Status(400))
 def test_twilio():
     setv('twilio_account_sid','AC1');setv('twilio_auth_token','tok');setv('twilio_whatsapp_from','whatsapp:+1'); c=C({'sid':'SM1'}); assert i.twilio_whatsapp('+2','hi',c)['sid']=='SM1'; assert c.calls[0][2]['data']['To']=='whatsapp:+2'
 def test_twilio_classifies_retryable_and_ambiguous_transport_failures():

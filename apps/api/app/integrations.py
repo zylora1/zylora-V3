@@ -45,10 +45,21 @@ def verify_razorpay_webhook(body:bytes, signature:str)->bool:
     digest=hmac.new(secret.encode(),body,hashlib.sha256).hexdigest()
     return hmac.compare_digest(digest,signature)
 
-def resend_email(to:str,subject:str,html:str, client=httpx)->dict:
+def resend_email(to:str,subject:str,html:str, client=httpx, idempotency_key:str|None=None)->dict:
     key=_required(settings.resend_api_key,'resend')
-    r=client.post('https://api.resend.com/emails',headers={'Authorization':f'Bearer {key}','Content-Type':'application/json'},json={'from':settings.resend_from_email,'to':[to],'subject':subject,'html':html},timeout=15)
-    r.raise_for_status(); return r.json()
+    headers={'Authorization':f'Bearer {key}','Content-Type':'application/json'}
+    if idempotency_key: headers['Idempotency-Key']=idempotency_key
+    try:
+        r=client.post('https://api.resend.com/emails',headers=headers,json={'from':settings.resend_from_email,'to':[to],'subject':subject,'html':html},timeout=15)
+        r.raise_for_status()
+    except (httpx.ConnectError,httpx.ConnectTimeout,httpx.ReadTimeout,httpx.RemoteProtocolError) as exc:
+        raise TransientIntegrationError('resend_transport_failed') from exc
+    except httpx.HTTPStatusError as exc:
+        status=exc.response.status_code
+        if status==429 or status>=500 or (status==409 and idempotency_key):
+            raise TransientIntegrationError(f'resend_temporary_http_{status}') from exc
+        raise IntegrationError(f'resend_permanent_http_{status}') from exc
+    return r.json()
 
 def twilio_whatsapp(to:str,body:str, client=httpx)->dict:
     sid=_required(settings.twilio_account_sid,'twilio'); token=_required(settings.twilio_auth_token,'twilio'); sender=_required(settings.twilio_whatsapp_from,'twilio_whatsapp_from')

@@ -39,7 +39,7 @@ def test_http_blog_routes():
 def test_http_managed_zpro_flow():
     db,user,admin=setup();db.add(ManagedSchedulingConfig(id=1,enabled=True,timezone='UTC',duration_minutes=30,buffer_minutes=0,day_start_minute=540,day_end_minute=1020,weekdays_csv='0,1,2,3,4,5,6'));db.commit();c=TestClient(app)
     target=(datetime.now(timezone.utc)+timedelta(days=2)).date().isoformat();slots=c.get('/managed/slots',params={'on':target});assert slots.status_code==200 and slots.json();chosen=slots.json()[0]
-    r=c.post('/managed/enquiries',json={'name':'Maya','email':'maya@example.com','website_type':'Premium business website','starts_at':chosen});assert r.status_code==201,r.text;data=r.json();assert data['lead_code'].startswith('ZPRO-') and data['status']=='PENDING'
+    r=c.post('/managed/enquiries',json={'name':'Maya','email':'maya@example.com','website_type':'Premium business website','starts_at':chosen,'idempotency_key':'managed-api-route-1'});assert r.status_code==201,r.text;data=r.json();assert data['lead_code'].startswith('ZPRO-') and data['status']=='PENDING'
     admin_client=client_for(admin);assert any(x['lead_code']==data['lead_code'] for x in admin_client.get('/managed/enquiries').json());closed=admin_client.patch(f"/managed/enquiries/{data['id']}",json={'status':'CLOSED','amount_minor':250000,'currency':'INR','notes':'Paid'});assert closed.status_code==200 and closed.json()['status']=='CLOSED';db.close()
 
 def test_public_pricing_and_credit_modes():

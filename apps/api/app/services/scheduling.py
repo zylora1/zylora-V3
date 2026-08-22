@@ -36,14 +36,17 @@ def available_slots(db: Session, config: SchedulingConfig, local_date, now_utc: 
         cursor += timedelta(minutes=config.duration_minutes)
     return slots
 
-def book_slot(db: Session, config: SchedulingConfig, starts_local: datetime, lead_id: int | None = None, managed_lead_id: int | None = None, now_utc: datetime | None = None) -> Appointment:
+def book_slot(db: Session, config: SchedulingConfig, starts_local: datetime, lead_id: int | None = None, managed_lead_id: int | None = None, now_utc: datetime | None = None, commit: bool = True) -> Appointment:
     if starts_local.tzinfo is None: raise SchedulingError("timezone_required")
     valid = available_slots(db, config, starts_local.date(), now_utc=now_utc)
     if not any(v == starts_local for v in valid): raise SchedulingError("slot_unavailable")
     start_utc = starts_local.astimezone(timezone.utc).replace(tzinfo=None)
     end_utc = (starts_local + timedelta(minutes=config.duration_minutes)).astimezone(timezone.utc).replace(tzinfo=None)
     appt=Appointment(site_id=config.site_id, lead_id=lead_id, managed_lead_id=managed_lead_id, starts_at=start_utc, ends_at=end_utc, timezone=config.timezone, status=AppointmentStatus.CONFIRMED)
-    db.add(appt); db.commit(); db.refresh(appt); return appt
+    db.add(appt)
+    if commit: db.commit();db.refresh(appt)
+    else: db.flush()
+    return appt
 
 def cancel_appointment(db: Session, appointment_id: int) -> Appointment:
     appt=db.get(Appointment, appointment_id)

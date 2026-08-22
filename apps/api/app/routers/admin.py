@@ -16,4 +16,6 @@ def config(user:User=Depends(current_user),db:Session=Depends(get_db)):
 @router.put('/config/{key}')
 def put(key:str,body:ConfigIn,user:User=Depends(current_user),db:Session=Depends(get_db)):
     if user.role!=Role.SUPER_ADMIN: raise HTTPException(403,'super_admin_required')
-    row=set_config(db,user,key,body.value);return {'key':row.key,'value':row.value}
+    try: row=set_config(db,user,key,body.value)
+    except ValueError as exc: raise HTTPException(422,str(exc))
+    return {'key':row.key,'value':row.value}
