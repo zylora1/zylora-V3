@@ -1,5 +1,8 @@
+import pytest
+
 from apps.api.app.db import make_engine, normalize_database_url
 from apps.worker.celery_app import celery_app
+from scripts.run_migrations import validated_schema_name
 
 
 def test_managed_postgres_url_uses_installed_psycopg_driver(monkeypatch):
@@ -38,3 +41,9 @@ def test_explicit_database_driver_is_preserved(monkeypatch):
 
 def test_worker_imports_all_registered_tasks():
     assert "apps.worker.tasks" in celery_app.conf.include
+
+
+def test_migration_schema_name_is_constrained():
+    assert validated_schema_name("zylora_v3_staging") == "zylora_v3_staging"
+    with pytest.raises(ValueError, match="safe PostgreSQL identifier"):
+        validated_schema_name("public; DROP SCHEMA public")
