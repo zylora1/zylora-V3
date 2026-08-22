@@ -34,7 +34,9 @@ def prepare_schema() -> None:
 
 def main() -> None:
     prepare_schema()
-    command.upgrade(Config("alembic.ini"), "head")
+    config = Config("alembic.ini")
+    command.upgrade(config, "head")
+    command.check(config)
 
 
 if __name__ == "__main__":

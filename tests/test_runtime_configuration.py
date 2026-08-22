@@ -2,6 +2,7 @@ import pytest
 
 from apps.api.app.db import make_engine, normalize_database_url
 from apps.worker.celery_app import celery_app
+from scripts import run_migrations
 from scripts.run_migrations import validated_schema_name
 
 
@@ -47,3 +48,16 @@ def test_migration_schema_name_is_constrained():
     assert validated_schema_name("zylora_v3_staging") == "zylora_v3_staging"
     with pytest.raises(ValueError, match="safe PostgreSQL identifier"):
         validated_schema_name("public; DROP SCHEMA public")
+
+
+def test_migration_runner_upgrades_then_checks(monkeypatch):
+    calls = []
+    config = object()
+    monkeypatch.setattr(run_migrations, "prepare_schema", lambda: calls.append("prepare"))
+    monkeypatch.setattr(run_migrations, "Config", lambda _path: config)
+    monkeypatch.setattr(run_migrations.command, "upgrade", lambda cfg, rev: calls.append(("upgrade", cfg, rev)))
+    monkeypatch.setattr(run_migrations.command, "check", lambda cfg: calls.append(("check", cfg)))
+
+    run_migrations.main()
+
+    assert calls == ["prepare", ("upgrade", config, "head"), ("check", config)]
