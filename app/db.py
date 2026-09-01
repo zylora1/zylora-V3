@@ -90,10 +90,101 @@ def _split_sql_statements(sql: str) -> list[str]:
         statements.append(statement)
     return statements
 
+def _ensure_postgres_compatibility(conn) -> None:
+    """Ensure existing PostgreSQL tables have canonical TEXT primary/foreign key types.
+
+    If an existing PostgreSQL database was provisioned with integer keys for users/sites,
+    convert those columns to TEXT safely without losing any data so that foreign keys
+    and UUID primary keys operate consistently across production.
+    """
+    if conn.dialect.name != 'postgresql':
+        return
+    compat_sql = text("""
+DO $$
+DECLARE
+    rec RECORD;
+    fk_rec RECORD;
+BEGIN
+    -- 1. Check users.id data type
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_schema = current_schema() AND table_name = 'users' AND column_name = 'id'
+          AND data_type IN ('integer', 'smallint', 'bigint', 'numeric')
+    ) THEN
+        FOR fk_rec IN (
+            SELECT tc.table_name, tc.constraint_name
+            FROM information_schema.table_constraints tc
+            JOIN information_schema.constraint_column_usage ccu
+              ON ccu.constraint_name = tc.constraint_name AND ccu.table_schema = tc.table_schema
+            WHERE tc.constraint_type = 'FOREIGN KEY'
+              AND ccu.table_name = 'users' AND ccu.column_name = 'id'
+              AND tc.table_schema = current_schema()
+        ) LOOP
+            EXECUTE 'ALTER TABLE ' || quote_ident(fk_rec.table_name) || ' DROP CONSTRAINT IF EXISTS ' || quote_ident(fk_rec.constraint_name);
+        END LOOP;
+
+        BEGIN
+            ALTER TABLE users ALTER COLUMN id DROP DEFAULT;
+        EXCEPTION WHEN OTHERS THEN
+            NULL;
+        END;
+
+        ALTER TABLE users ALTER COLUMN id TYPE TEXT USING id::text;
+    END IF;
+
+    -- 2. Check sites.id data type
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_schema = current_schema() AND table_name = 'sites' AND column_name = 'id'
+          AND data_type IN ('integer', 'smallint', 'bigint', 'numeric')
+    ) THEN
+        FOR fk_rec IN (
+            SELECT tc.table_name, tc.constraint_name
+            FROM information_schema.table_constraints tc
+            JOIN information_schema.constraint_column_usage ccu
+              ON ccu.constraint_name = tc.constraint_name AND ccu.table_schema = tc.table_schema
+            WHERE tc.constraint_type = 'FOREIGN KEY'
+              AND ccu.table_name = 'sites' AND ccu.column_name = 'id'
+              AND tc.table_schema = current_schema()
+        ) LOOP
+            EXECUTE 'ALTER TABLE ' || quote_ident(fk_rec.table_name) || ' DROP CONSTRAINT IF EXISTS ' || quote_ident(fk_rec.constraint_name);
+        END LOOP;
+
+        BEGIN
+            ALTER TABLE sites ALTER COLUMN id DROP DEFAULT;
+        EXCEPTION WHEN OTHERS THEN
+            NULL;
+        END;
+
+        ALTER TABLE sites ALTER COLUMN id TYPE TEXT USING id::text;
+    END IF;
+
+    -- 3. Check any existing foreign key columns that might have integer types
+    FOR rec IN (
+        SELECT table_name, column_name
+        FROM information_schema.columns
+        WHERE table_schema = current_schema()
+          AND table_name NOT IN ('outbox', 'audit_log', 'schema_migrations')
+          AND column_name IN (
+              'user_id', 'site_id', 'client_user_id', 'freelancer_id',
+              'author_user_id', 'assigned_admin_id', 'sender_user_id',
+              'sender_admin_id', 'created_by_user_id', 'conversation_id',
+              'domain_id', 'website_id', 'source_site_id'
+          )
+          AND data_type IN ('integer', 'smallint', 'bigint', 'numeric')
+    ) LOOP
+        EXECUTE 'ALTER TABLE ' || quote_ident(rec.table_name) || ' ALTER COLUMN ' || quote_ident(rec.column_name) || ' TYPE TEXT USING ' || quote_ident(rec.column_name) || '::text';
+    END LOOP;
+END $$;
+    """)
+    conn.execute(compat_sql)
+
 def migrate() -> None:
     ROOT.joinpath('data').mkdir(exist_ok=True)
     with engine.begin() as conn:
         conn.execute(text('CREATE TABLE IF NOT EXISTS schema_migrations (version TEXT PRIMARY KEY, applied_at TEXT NOT NULL)'))
+        if not settings.database_url.startswith('sqlite'):
+            _ensure_postgres_compatibility(conn)
         applied = {r[0] for r in conn.execute(text('SELECT version FROM schema_migrations')).fetchall()}
         for path in sorted(ROOT.joinpath('migrations').glob('*.sql')):
             if path.stem in applied:

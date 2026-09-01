@@ -34,7 +34,18 @@ def current_user(request: Request):
         row = db.execute(text('''SELECT u.*, s.csrf_token, s.expires_at, s.created_at AS session_created_at FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token=:t'''), {'t':token}).mappings().first()
         if not row:
             raise HTTPException(401, 'Invalid session')
-        if datetime.fromisoformat(row['expires_at']) < datetime.now(timezone.utc):
+        exp = row['expires_at']
+        if isinstance(exp, datetime):
+            exp_dt = exp if exp.tzinfo else exp.replace(tzinfo=timezone.utc)
+        elif isinstance(exp, str):
+            exp_dt = datetime.fromisoformat(exp)
+            if not exp_dt.tzinfo:
+                exp_dt = exp_dt.replace(tzinfo=timezone.utc)
+        else:
+            exp_dt = datetime.fromisoformat(str(exp))
+            if not exp_dt.tzinfo:
+                exp_dt = exp_dt.replace(tzinfo=timezone.utc)
+        if exp_dt < datetime.now(timezone.utc):
             raise HTTPException(401, 'Session expired')
         return dict(row)
 
