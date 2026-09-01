@@ -220,6 +220,7 @@ async def custom_domain_runtime(request: Request, call_next):
 
 def _landing_html(request: Request) -> str:
     raw=(ROOT/'static'/'index.html').read_text(encoding='utf-8')
+    raw=raw.replace('/static/landing.css"','/static/landing.css?v=20260901-ui2"')
     starter=offer_for_request(request,plan='STARTER',display_only=True)
     growth=offer_for_request(request,plan='GROWTH',display_only=True)
     def _display(offer):

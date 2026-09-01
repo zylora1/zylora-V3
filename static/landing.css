@@ -18,3 +18,7 @@
 .hero-drag-item.is-dragging .hero-drag-hint{opacity:1}
 @media(max-width:700px){.hero-drag-stage{width:100%;margin-left:0;margin-right:0;overflow:hidden}.hero-drag-item{display:block;width:100%;transform:none!important;cursor:default}.hero-drag-hint{display:none}}
 @media(prefers-reduced-motion:reduce){.hero-drag-item{transform:none!important;cursor:default}.hero-drag-hint{display:none}}
+
+/* A slightly calmer headline scale at both wide and narrow viewports. */
+.hero h1{font-size:clamp(58px,9vw,142px);line-height:.86}
+@media(max-width:650px){.hero h1{font-size:clamp(52px,16vw,78px)}}

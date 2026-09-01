@@ -192,3 +192,11 @@ select{appearance:none!important;-webkit-appearance:none!important;background-co
   .welcome-actions{display:grid!important;grid-template-columns:1fr!important;width:100%!important}
   .welcome-actions>*{width:100%!important}
 }
+
+/* Keep identity/actions anchored while only the navigation list scrolls. */
+.rail.sneat-sidebar{overflow:hidden!important}
+.rail.sneat-sidebar>nav{min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;padding-right:5px!important;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#c7cbd1 transparent}
+.rail.sneat-sidebar>nav::-webkit-scrollbar{width:6px}
+.rail.sneat-sidebar>nav::-webkit-scrollbar-track{background:transparent}
+.rail.sneat-sidebar>nav::-webkit-scrollbar-thumb{background:#c7cbd1;border-radius:999px}
+.rail.sneat-sidebar>nav::-webkit-scrollbar-thumb:hover{background:#aeb4bd}
