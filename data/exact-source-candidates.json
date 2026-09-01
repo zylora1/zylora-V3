@@ -1,0 +1,32 @@
+{
+  "updated_at": "2026-08-29",
+  "public_template_count": 0,
+  "publication_policy": "fail_closed_after_local_source_binary_assets_content_adapter_and_render_gate",
+  "candidates": [
+    {
+      "awwwards_id": 11,
+      "name": "Bruno's Portfolio",
+      "repository": "https://github.com/brunosimon/folio-2025",
+      "branch": "main",
+      "commit_sha": "41046b57eeed8d156d9c3fd7fa259900baef7816",
+      "license": "MIT",
+      "status": "verified_not_materialized",
+      "blocker": "bulk GitHub archive transport is blocked in the execution sandbox; do not publish until the complete source tree and binary assets are local and rendered"
+    },
+    {
+      "awwwards_id": 52,
+      "name": "Mr. Panda's Psychologically Safe Portfolio",
+      "repository": "https://github.com/andrewwoan/mr-pandas-psychologically-safe-portfolio",
+      "branch": "main",
+      "commit_sha": "b99508de7a34d06666f5582e094a6557335e3577",
+      "license": "MIT",
+      "status": "verified_not_materialized",
+      "binary_transport_probe": {
+        "path": "public/models/Panda.glb",
+        "git_blob_sha": "32158c591a187bbf93fe401274ac1a31f137f902",
+        "base64_fetch_verified": true
+      },
+      "blocker": "bulk GitHub archive transport is blocked in the execution sandbox; per-file base64 is lossless but not yet a complete local tree"
+    }
+  ]
+}

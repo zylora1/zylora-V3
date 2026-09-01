@@ -1,0 +1,30 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "02adfabdf83e2d718a512d5512a309f745bc75cc56a4274dba63a7c31080b547",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "about": "b7e2bbc0cb4c8a30bf2c2f31a54b9fb462d8476ee7937693261d81b582fe66ab",
+    "blog": "cc680c111d4afb47563f270ae8e8ad16c387cf0ffb63fd62015e512fa25b4fcd",
+    "contact": "1b8c579756395adba151a3db0378b48dfea3d28ccf7ef5d752353c3848ace126",
+    "home": "77e47111e2a380b0c5a6165652deab0fe549d9724863a952971c2715a6af4a1e",
+    "portfolio": "424edb168ff5a90d85d4a4a2896c7b42de319c9f4ffd133b19dbc176ee09e1a0",
+    "service": "14922b6cf675125db94cca47ddc0839b2b39b8907d3fbfa86145ba5e010bab71"
+  },
+  "render_home_sha256": "77e47111e2a380b0c5a6165652deab0fe549d9724863a952971c2715a6af4a1e",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "arcade-master.zip",
+  "source_archive_sha256": "f8491d93d6ed757a834ecae5446a93c110fe5862d6d9a480f02cb82c8a5b9262",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

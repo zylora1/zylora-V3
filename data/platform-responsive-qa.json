@@ -1,0 +1,295 @@
+{
+  "widths": [
+    1440,
+    1280,
+    1024,
+    768,
+    430,
+    390,
+    375,
+    360
+  ],
+  "checks": [
+    {
+      "page": "index.html",
+      "width": 1440,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "index.html",
+      "width": 1280,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "index.html",
+      "width": 1024,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "index.html",
+      "width": 768,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "index.html",
+      "width": 430,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "index.html",
+      "width": 390,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "index.html",
+      "width": 375,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "index.html",
+      "width": 360,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "templates.html",
+      "width": 1440,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "templates.html",
+      "width": 1280,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "templates.html",
+      "width": 1024,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "templates.html",
+      "width": 768,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "templates.html",
+      "width": 430,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "templates.html",
+      "width": 390,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "templates.html",
+      "width": 375,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "templates.html",
+      "width": 360,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "login.html",
+      "width": 1440,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "login.html",
+      "width": 1280,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "login.html",
+      "width": 1024,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "login.html",
+      "width": 768,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "login.html",
+      "width": 430,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "login.html",
+      "width": 390,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "login.html",
+      "width": 375,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "login.html",
+      "width": 360,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "signup.html",
+      "width": 1440,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "signup.html",
+      "width": 1280,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "signup.html",
+      "width": 1024,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "signup.html",
+      "width": 768,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "signup.html",
+      "width": 430,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "signup.html",
+      "width": 390,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "signup.html",
+      "width": 375,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "signup.html",
+      "width": 360,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "choose-plan.html",
+      "width": 1440,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "choose-plan.html",
+      "width": 1280,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "choose-plan.html",
+      "width": 1024,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "choose-plan.html",
+      "width": 768,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "choose-plan.html",
+      "width": 430,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "choose-plan.html",
+      "width": 390,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "choose-plan.html",
+      "width": 375,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "choose-plan.html",
+      "width": 360,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "dashboard.html",
+      "width": 1440,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "dashboard.html",
+      "width": 1280,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "dashboard.html",
+      "width": 1024,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "dashboard.html",
+      "width": 768,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "dashboard.html",
+      "width": 430,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "dashboard.html",
+      "width": 390,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "dashboard.html",
+      "width": 375,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "dashboard.html",
+      "width": 360,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "editor.html",
+      "width": 1440,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "editor.html",
+      "width": 1280,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "editor.html",
+      "width": 1024,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "editor.html",
+      "width": 768,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "editor.html",
+      "width": 430,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "editor.html",
+      "width": 390,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "editor.html",
+      "width": 375,
+      "large_min_width_rules": 0
+    },
+    {
+      "page": "editor.html",
+      "width": 360,
+      "large_min_width_rules": 0
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "60c5f516dee117e7ee98c92715d3bbd5b37b6301e617ac271cf5c3ea990b9fb0",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "88fc24d44c5131325e5146e48b6667c3aebe59410dec583d5ea78ac34c23eadc"
+  },
+  "render_home_sha256": "88fc24d44c5131325e5146e48b6667c3aebe59410dec583d5ea78ac34c23eadc",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "archi-new-1.0.0.zip",
+  "source_archive_sha256": "070a1a34d6b1149fa54998e10f3d3ce7985407c237095d2e45e136d22930b019",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

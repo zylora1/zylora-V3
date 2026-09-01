@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Create a website with Zylora AI</title>
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/zylora-ui.css">
+  <link rel="stylesheet" href="/static/ai-create.css">
+</head>
+<body>
+<header class="ai-nav">
+  <a class="z-wordmark" href="/">Zylora</a>
+  <div class="ai-nav-center"><span class="status-dot"></span><span>AI website builder</span></div>
+  <div class="ai-nav-actions"><span id="creditPill" hidden>AI credits <b id="creditCount">—</b></span><a id="dashboardLink" href="/dashboard">Dashboard</a></div>
+</header>
+<main class="ai-workbench">
+  <section class="chat-pane" aria-label="AI website creation conversation">
+    <header class="chat-pane-head">
+      <div class="agent-mark">✦</div>
+      <div><b>Zylora AI</b><small>Website creation</small></div>
+      <div class="step-indicator" aria-label="Creation progress"><span class="active" data-progress="1">1</span><i></i><span data-progress="2">2</span><i></i><span data-progress="3">3</span></div>
+    </header>
+    <div class="ai-stage">
+      <section class="step active" data-step="1">
+        <div class="chat-turn assistant-turn"><div class="turn-avatar">✦</div><div class="turn-content"><div class="turn-header">Zylora AI <time>Now</time></div><div class="turn-bubble"><h1>What should the website help people do?</h1><p>Start with the job. I’ll derive the information architecture and design direction from the business brief — there is no starting template.</p></div></div></div>
+        <div class="chat-controls">
+          <div class="choice-grid" id="goalChoices">
+            <button data-goal="Show products and get enquiries">Show products &amp; get enquiries</button><button data-goal="Get appointments">Get appointments</button><button data-goal="Show my work">Show my work</button><button data-goal="Get leads">Get leads</button><button data-goal="Promote an event">Promote an event</button><button data-goal="Explain expertise">Explain expertise</button><button data-goal="Present a service business">Present a service business</button><button data-goal="Something else">Something else</button>
+          </div>
+          <div class="z-alert z-alert-info z-alert-soft commerce-guidance" id="commerceGuidance">Functional carts, customer accounts and persisted order systems are not generated. Zylora creates public marketing and lead-generation websites.</div>
+          <button class="primary next" id="goalNext" disabled>Continue <span>→</span></button>
+        </div>
+      </section>
+
+      <section class="step" data-step="2">
+        <div class="chat-turn assistant-turn"><div class="turn-avatar">✦</div><div class="turn-content"><div class="turn-header">Zylora AI <time>Brief</time></div><div class="turn-bubble"><h1>Tell me about the business.</h1><p>Mention the offer, audience, location where relevant, and any pages or content that must exist. Page count is determined by this brief, not the plan.</p></div></div></div>
+        <div class="chat-controls">
+          <label class="field-label">Business name<input id="businessName" maxlength="120" placeholder="e.g. Studio Mesa"></label>
+          <aside class="prompt-guidance" id="promptGuidance" hidden aria-label="Tips for a better AI website prompt">
+            <button class="prompt-guidance-dismiss" id="promptGuidanceDismiss" type="button" aria-label="Dismiss prompt guidance">×</button>
+            <div class="prompt-guidance-icon" aria-hidden="true">✦</div>
+            <p><strong>Get a better site — use a detailed prompt.</strong> A single line like ‘gym website’ gives a generic result. Describe your business type, target audience, tone, key services, and any specific sections you want (testimonials, pricing, booking). Not sure how to phrase it? Chat with any AI first — ask it to ‘write a detailed website description for [your business]’ — then paste that here.</p>
+          </aside>
+          <label class="prompt-box"><textarea id="businessDescription" maxlength="6000" placeholder="Example: We’re a premium fitness studio in Chennai for busy professionals aged 25–45. The tone should feel energetic, modern and trustworthy. Highlight strength training, personal coaching and group classes. Include Home, Programs, Trainers, Testimonials, Pricing, Booking, FAQ and Contact, with a strong trial-session CTA."></textarea><span><b id="charCount">0</b>/6000</span></label>
+          <p class="prompt-word-hint" id="promptWordHint" aria-live="polite"><b id="promptWordCount">0</b> words — add details such as your target audience, key services, tone, or specific sections.</p>
+          <div class="suggestion-row"><button data-fill="Independent restaurant serving seasonal Tamil-inspired plates with a strong evening reservation business. Include Home, Menu, Story and Visit pages.">Restaurant</button><button data-fill="Boutique architecture studio creating residential and hospitality spaces with a quiet material-led approach. Include Home, Projects, Studio and Contact pages.">Architecture studio</button><button data-fill="B2B software company helping operations teams automate repetitive internal workflows. Include Home, Platform, Security, Use Cases and Contact pages.">Software company</button></div>
+          <div class="actions"><button class="secondary back" data-back="1">Back</button><button class="primary next" id="briefNext">Choose a direction <span>→</span></button></div>
+        </div>
+      </section>
+
+      <section class="step" data-step="3">
+        <div class="chat-turn assistant-turn"><div class="turn-avatar">✦</div><div class="turn-content"><div class="turn-header">Zylora AI <time>Direction</time></div><div class="turn-bubble"><h1>Choose an art direction.</h1><p>These are visual composition signals for generation, not catalogue templates. You can also describe a custom direction.</p></div></div></div>
+        <div class="chat-controls">
+          <div class="design-prompt"><span>✦</span><input id="stylePrompt" placeholder="Optional: describe a custom direction"><button id="styleApply" type="button">Use direction</button></div>
+          <div class="direction-grid" id="directionGrid" aria-live="polite"></div>
+          <div class="motion-picker"><div><b>Motion direction</b><small>Shared effects only, with reduced-motion support.</small></div><label><span>Animation style</span><select id="motionStyle"><option value="Subtle" selected>Subtle</option><option value="Editorial">Editorial</option><option value="Immersive">Immersive</option><option value="Energetic">Energetic</option><option value="None">None</option></select></label></div>
+          <div class="actions final-actions"><button class="secondary back" data-back="2">Back</button><button class="primary" id="createSite" disabled data-testid="ai-create-final">Create website <span>→</span></button></div>
+          <p class="status" id="createStatus" role="status"></p>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <aside class="artifact-panel" aria-label="Generated website brief preview">
+    <header class="artifact-head"><div><span class="artifact-kicker">Generated artifact</span><h2 id="artifactTitle">Website brief</h2></div><span class="artifact-state">Draft</span></header>
+    <div class="version-strip" id="artifactVersions" aria-label="Artifact versions"></div>
+    <nav class="artifact-tabs" aria-label="Artifact preview tabs"><button class="active" data-artifact-tab="plan">Plan</button><button data-artifact-tab="pages">Pages</button><button data-artifact-tab="design">Design</button></nav>
+    <div class="artifact-body">
+      <section class="artifact-view active" id="artifactPlan" data-artifact-view="plan"></section>
+      <section class="artifact-view" id="artifactPages" data-artifact-view="pages"></section>
+      <section class="artifact-view" id="artifactDesign" data-artifact-view="design"></section>
+    </div>
+    <footer class="artifact-footer"><span>Preview updates as you answer.</span><span>Final structure is validated on create.</span></footer>
+  </aside>
+</main>
+<script src="/static/zylora-ui.js"></script><script src="/static/ai-create.js"></script>
+</body>
+</html>

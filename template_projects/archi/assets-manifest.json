@@ -1,0 +1,12 @@
+{
+  "source_archive": "archi-new-1.0.0.zip",
+  "source_archive_sha256": "070a1a34d6b1149fa54998e10f3d3ce7985407c237095d2e45e136d22930b019",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": true,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 50,
+  "external_dependencies_preserved": true
+}

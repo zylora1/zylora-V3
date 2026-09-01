@@ -1,0 +1,31 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "18c73f227bd75d0c808a394a19ae38f015c3d27d84e0aee47e67956b9af5fc4d",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "about": "5dd74b2bd78d8231c37d7a8f49dcd94abe4a3d6f90c180052e9ae47986216511",
+    "blog": "68b54818add04a0c31461920cba657210fb7b35f4f32722d1a9496a891823710",
+    "contact": "5f8abd615455d2b849956b4e56da7bc6d0549645bfe6f27ac04fd5a0aa9610e4",
+    "generic": "32360216206beb94a24ab4415d5e8adb222ea802587dd088827dca23a5e8ec88",
+    "home": "b8d598743f1dadc343ca4625c29d7e4b3e4436d80e843da36c7ba7a6dd053ac1",
+    "services": "623546fdd2df1639f977757127943b109f35f2140bf0d5ef5446a077bb4a71fe",
+    "single": "9d52d5436384f347d60ac427ab2e09d69b09d7f01fc7ba1a2f85271d74714a48"
+  },
+  "render_home_sha256": "b8d598743f1dadc343ca4625c29d7e4b3e4436d80e843da36c7ba7a6dd053ac1",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "monica-1.0.0.zip",
+  "source_archive_sha256": "f52ad60ea4d4c6181f8d0f8deb15c32f621b76484caea9831ac62e4b658259a8",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

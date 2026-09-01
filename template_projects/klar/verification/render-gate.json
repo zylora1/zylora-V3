@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "d5fef9c1d559a3c747e602452d1cd74a2b064b63f0882e53333126c78badb75d",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "8d80ae100d25654243752fe9f3b93cb1614618db42d4e475aed6d83a9703fc06"
+  },
+  "render_home_sha256": "8d80ae100d25654243752fe9f3b93cb1614618db42d4e475aed6d83a9703fc06",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "klar-1.0.0.zip",
+  "source_archive_sha256": "4b85833de63fa68e642faf1ab107ed26cf213e3b0dc20ea5391860c7b89abf50",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

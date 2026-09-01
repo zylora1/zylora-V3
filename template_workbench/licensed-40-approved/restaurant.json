@@ -1,0 +1,9 @@
+{
+  "slug": "restaurant",
+  "archive": "restaurant-1.0.0.zip",
+  "archive_sha256": "081fcb67b92f97b5233edbf43d7d3e011eb64c8078caa441fac6feabed4ce0c7",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

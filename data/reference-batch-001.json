@@ -1,0 +1,21 @@
+{
+  "batch": "reference-reconstruction-batch-001",
+  "references": [
+    "ref-0001",
+    "ref-0002",
+    "ref-0003",
+    "ref-0004",
+    "ref-0005",
+    "ref-0006",
+    "ref-0007",
+    "ref-0008",
+    "ref-0009",
+    "ref-0010"
+  ],
+  "candidate_count": 0,
+  "public_count": 0,
+  "status": "rejected_and_removed",
+  "rejection_reason": "insufficient visual fidelity to the supplied reference websites",
+  "superseded_by": "capacity-driven batches",
+  "rule": "Do not count or reuse the rejected implementations. Rebuild from the references from scratch with unique licensed/open assets."
+}

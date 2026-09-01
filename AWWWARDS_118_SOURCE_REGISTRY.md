@@ -1,0 +1,140 @@
+# Awwwards 118 Source Registry
+
+Policy: exact reproduction only when the actual source license permits modification and redistribution. Otherwise the site remains reference-only.
+
+## Verified exact-reuse candidates
+
+### 11. Bruno's Portfolio
+- Awwwards: https://www.awwwards.com/sites/brunos-portfolio
+- Live: https://bruno-simon.com
+- Source: https://github.com/brunosimon/folio-2025
+- License: verified MIT
+- Mode: exact structure/motion allowed; change content + colors only
+- Status: eligible; source + Blender assets verified
+
+### 52. Mr. Pandas Paper Portfolio
+- Awwwards: https://www.awwwards.com/sites/mr-pandas-paper-portfolio
+- Live: https://www.mr-pandas-psychologically-safe-portfolio.com/
+- Source: https://github.com/andrewwoan/mr-pandas-psychologically-safe-portfolio
+- License: verified MIT
+- Mode: exact structure/motion allowed; change content + colors only
+- Status: eligible; Vite/Three.js source + assets verified
+
+## Pending / reference-only until verified
+
+- 1. 1820 Productions — pending
+- 2. Adam Bricker — pending
+- 3. Adovasio — pending
+- 4. Art Here 2025 - Richard Mille — pending
+- 5. Artefakt — pending
+- 6. Artem Shcherban Portfolio — pending
+- 7. Aupale Vodka — pending
+- 8. AVA SRG — pending
+- 9. Aventura Dental Arts — pending
+- 10. Bécane Paris — pending
+- 12. ©Design by Dylan — pending
+- 13. Cathy DOLLE Portfolio — pending
+- 14. Champions For Good — pending
+- 15. Ciridae — pending
+- 16. Corentin Bernadou Portfolio — pending
+- 17. D2C Life Science — pending
+- 18. Damn Good Brands — pending
+- 19. Darknode — pending
+- 20. Dime MTL — pending
+- 21. Emilie Aubry — pending
+- 22. Estrela — pending
+- 23. Ethan & Tom — pending
+- 24. Etienne Planeix — pending
+- 25. Explore Primland — pending
+- 26. Farm Minerals — pending
+- 27. FC Porto Memorial — pending
+- 28. Fluid Glass — pending
+- 29. FOLLOW.ART — pending
+- 30. Foudre, Human Social Club — pending
+- 31. Gavin Schneider Productions — pending
+- 32. Good Fella — pending
+- 33. GQ & AP The Extraordinary Lab — pending
+- 34. Griflan — pending
+- 35. ICOMAT — pending
+- 36. IntegratedBio — pending
+- 37. IRONHILL — pending
+- 38. iyO — pending
+- 39. Jason Bergh — pending
+- 40. Jesko Jets — pending
+- 41. Joby — pending
+- 42. Language Explorer — pending
+- 43. Lightship — pending
+- 44. Lightweight — pending
+- 45. Max Mara - Untamed Heroine — pending
+- 46. Maxima Therapy — pending
+- 47. MERSI — pending
+- 48. Midlife Engineering — pending
+- 49. MOB LINKS — pending
+- 50. MoMoney — pending
+- 51. Mouthful of Dust — pending
+- 53. Naked City Films — pending
+- 54. NaughtyDuk© — pending
+- 55. Neon Rated — pending
+- 56. Nfinite — pending
+- 57. Nicola Romei™ — pending
+- 58. Nine To Five — pending
+- 59. OceanX 2025 — pending
+- 60. Odd Ritual — pending
+- 61. OGAKI — pending
+- 62. ON Energy — pending
+- 63. Oryzo AI — pending
+- 64. Outsource Consultants, Inc — pending
+- 65. Paper Tiger — pending
+- 66. Pedestal — pending
+- 67. Planetoño — pending
+- 68. Prototype — pending
+- 69. Ravi Klaassens — pending
+- 70. San Rita — pending
+- 71. Shed — pending
+- 72. Shift 5 — pending
+- 73. Shopify Live Globe 2025 — pending
+- 74. SILEENT — pending
+- 75. Sleep Well Creative — pending
+- 76. Slush — pending
+- 77. SŌM — pending
+- 78. Springs — pending
+- 79. Studio Dado — pending
+- 80. Studio Dialect — pending
+- 81. Stuff by Kris Temmerman — pending
+- 82. SUTÉRA — pending
+- 83. Telha Clarke — pending
+- 84. The Lookback — pending
+- 85. The Obsidian Assembly — pending
+- 86. The Renaissance Edition — pending
+- 87. UNESCO Stolen Objects Museum — pending
+- 88. Unseen Studio 2025 Wrapped — pending
+- 89. Utopia Tokyo — pending
+- 90. VALIENTE — pending
+- 91. Vast — pending
+- 92. Vibrant Wellness — pending
+- 93. Voku.Studio™ — pending
+- 94. Waabi — pending
+- 95. Weekend Max Mara Holiday Edit — pending
+- 96. Yucca Packaging — pending
+- 97. Knights of Design — pending
+- 98. Glad Studio — pending
+- 99. PQ by Ron Arad — pending
+- 100. Fresh Connections Catering — pending
+- 101. The Lead Agency — pending
+- 102. City of Rivière-du-Loup — pending
+- 103. Pinkfox — pending
+- 104. Vestfrost — pending
+- 105. Deni Cler Milano 45th Anniv — pending
+- 106. Feudi di San Gregorio — pending
+- 107. The Generation — pending
+- 108. Self Aware — pending
+- 109. Next Big Thing — pending
+- 110. Proof — pending
+- 111. Bear Grylls — pending
+- 112. Kaleidoz™ Design Website — pending
+- 113. Infini — pending
+- 114. Born & Bred — pending
+- 115. Possibles — pending
+- 116. Olivier Staub — pending
+- 117. Bright Sprout — pending
+- 118. STR8FIRE — pending

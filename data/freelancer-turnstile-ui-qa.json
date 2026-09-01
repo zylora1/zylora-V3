@@ -1,0 +1,10 @@
+{
+  "checks": 4,
+  "errors": 0,
+  "items": [
+    "Turnstile widget renders when production security config requires it",
+    "browser submits actual Turnstile token with guest enquiry",
+    "guest enquiry success state renders after Turnstile verification",
+    "Turnstile enquiry remains responsive on mobile"
+  ]
+}

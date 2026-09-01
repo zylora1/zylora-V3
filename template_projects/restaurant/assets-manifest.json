@@ -1,0 +1,12 @@
+{
+  "source_archive": "restaurant-1.0.0.zip",
+  "source_archive_sha256": "081fcb67b92f97b5233edbf43d7d3e011eb64c8078caa441fac6feabed4ce0c7",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": true,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 47,
+  "external_dependencies_preserved": true
+}

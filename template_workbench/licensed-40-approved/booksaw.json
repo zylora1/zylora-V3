@@ -1,0 +1,9 @@
+{
+  "slug": "booksaw",
+  "archive": "booksaw-1.0.0.zip",
+  "archive_sha256": "b6f8ecc17513340f4f78c03efbfa0c40ae3fffb138476b16ece3bd44ec4f3642",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

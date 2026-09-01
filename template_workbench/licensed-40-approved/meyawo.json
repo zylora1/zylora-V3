@@ -1,0 +1,9 @@
+{
+  "slug": "meyawo",
+  "archive": "meyawo-1.0.0.zip",
+  "archive_sha256": "34207779e1d10c7c657b0143f65b7d3c3b6cb8be6dfc346510fa94244a8e3b22",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

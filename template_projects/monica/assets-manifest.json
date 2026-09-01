@@ -1,0 +1,12 @@
+{
+  "source_archive": "monica-1.0.0.zip",
+  "source_archive_sha256": "f52ad60ea4d4c6181f8d0f8deb15c32f621b76484caea9831ac62e4b658259a8",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": true,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 52,
+  "external_dependencies_preserved": true
+}

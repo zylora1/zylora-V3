@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "18c73f227bd75d0c808a394a19ae38f015c3d27d84e0aee47e67956b9af5fc4d",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "0b84b82e36f08eb325e051843fecfbbc7c5f760d5e78848e5673b3eb2506d017"
+  },
+  "render_home_sha256": "0b84b82e36f08eb325e051843fecfbbc7c5f760d5e78848e5673b3eb2506d017",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "sarab-1.0.0.zip",
+  "source_archive_sha256": "2f2d00da66f4f2d98a366fae2744dbb86fa83e8f19e98e9240b61cfdfaa5efca",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

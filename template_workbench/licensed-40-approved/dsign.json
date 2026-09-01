@@ -1,0 +1,9 @@
+{
+  "slug": "dsign",
+  "archive": "dSign-1.0.0.zip",
+  "archive_sha256": "96aacf72e8446ffa51899bcd782c1fa8fc6080f08df314ea11a3864687049228",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

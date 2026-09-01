@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "fixed_batch_size": false,
+  "mode": "capacity_driven",
+  "default_workers": 24,
+  "items_per_worker": 2,
+  "default_capacity_formula": "min(queued_references, workers * items_per_worker)",
+  "quality_over_count": true,
+  "requirements": {
+    "reference_fidelity": "must reproduce the visible reference composition, hierarchy, spacing, typography character, media placement/crop logic, motion language and responsive reflow as closely as rights permit",
+    "images": {
+      "real_images_preferred": true,
+      "ai_photography_allowed": false,
+      "allowed_source_families": [
+        "Unsplash",
+        "Pexels",
+        "Pixabay",
+        "Wikimedia Commons",
+        "Openverse",
+        "other verified permissive/free-commercial-use source"
+      ],
+      "localize_assets": true,
+      "production_hotlinks": false,
+      "reuse_within_template": false,
+      "reuse_within_batch": false,
+      "unique_source_url_per_placement": true,
+      "unique_binary_hash_per_placement": true,
+      "record_license_and_source": true
+    },
+    "minimum_visual_fidelity_score": 8.5,
+    "viewports": [
+      1440,
+      1280,
+      1024,
+      768,
+      430,
+      390,
+      375,
+      360
+    ],
+    "publication": "fail_closed_until_all_gates_pass"
+  }
+}

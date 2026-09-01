@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "68a623144545a961bc075e7ff645dd27ba5e6cbc968c263c95c963aaf40723cc",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "b36d55022575ed01cef0004c68d801e80c8bb8d6c5c522d77c4f4206572c43c2"
+  },
+  "render_home_sha256": "b36d55022575ed01cef0004c68d801e80c8bb8d6c5c522d77c4f4206572c43c2",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "Jessica-1.0.0.zip",
+  "source_archive_sha256": "74172491ce84785a342c7870594e360a3678e420ec7b34e3d9f4fcbbd20035f8",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

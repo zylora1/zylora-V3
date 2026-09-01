@@ -1,0 +1,12 @@
+{
+  "source_archive": "picto-1.0.0.zip",
+  "source_archive_sha256": "4c1a766465763ac4581d00d030a637bbc88c8118399b7acf13f271a99d3f9751",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": false,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 28,
+  "external_dependencies_preserved": false
+}

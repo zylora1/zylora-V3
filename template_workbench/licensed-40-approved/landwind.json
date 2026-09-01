@@ -1,0 +1,9 @@
+{
+  "slug": "landwind",
+  "archive": "landwind-1.0.0.zip",
+  "archive_sha256": "d5c4e1269dc0d40c1537c69db0948b8ed7ada1205f7c2f3fc1a71076195ddfb5",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

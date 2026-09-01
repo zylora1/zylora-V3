@@ -1,0 +1,54 @@
+{
+  "batch": "capacity-batch-001-shard-1",
+  "mode": "capacity_driven",
+  "candidate_count": 7,
+  "public_count": 0,
+  "status": "workbench",
+  "projects": [
+    {
+      "id": "ref-0018",
+      "slug": "after-hours",
+      "title": "After Hours"
+    },
+    {
+      "id": "ref-0007",
+      "slug": "between-worlds",
+      "title": "Between Worlds"
+    },
+    {
+      "id": "ref-0021",
+      "slug": "carbon-thread",
+      "title": "Carbon Thread"
+    },
+    {
+      "id": "ref-0006",
+      "slug": "city-form",
+      "title": "City Form"
+    },
+    {
+      "id": "ref-0047",
+      "slug": "clayline-data",
+      "title": "Mosaic Data"
+    },
+    {
+      "id": "ref-0013",
+      "slug": "clear-rule",
+      "title": "Clear Rule"
+    },
+    {
+      "id": "ref-0036",
+      "slug": "dia-workspace",
+      "title": "Luma Browser"
+    }
+  ],
+  "reference_ids": [
+    "ref-0018",
+    "ref-0007",
+    "ref-0021",
+    "ref-0006",
+    "ref-0047",
+    "ref-0013",
+    "ref-0036"
+  ],
+  "rule": "Candidates are independently authored reference reconstructions; publication stays fail-closed until visual, responsive, motion, rights, asset and render gates pass."
+}

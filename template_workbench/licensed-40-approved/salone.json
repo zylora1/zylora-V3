@@ -1,0 +1,17 @@
+{
+  "slug": "salone",
+  "archive": "Salone-1.0.0.zip",
+  "archive_sha256": "0148bc8acfefb345a6e39b08e405f46aa39b18a28322854435ef5cb9a988c858",
+  "pages": [
+    "home",
+    "about",
+    "service",
+    "gallery",
+    "price",
+    "team",
+    "blog",
+    "contact",
+    "testimonial"
+  ],
+  "status": "passed"
+}

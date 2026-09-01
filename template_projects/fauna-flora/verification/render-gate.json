@@ -1,0 +1,29 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "18c73f227bd75d0c808a394a19ae38f015c3d27d84e0aee47e67956b9af5fc4d",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "about": "d666b5e77f0ec31b1d00421c824236c60dcb70c334a1f276d1e34736ab84beb2",
+    "blog": "577ffa41ce69515ee7f5d5cecfa135111d680cd2cc83d242fbbf767b2bf14ddf",
+    "contact": "652159f3ce02e33dce2e4ad2b7f0e4f85338759a6f9ad981309073a95241dab2",
+    "home": "a293fa0a763256e03aa9f0c8fa16ef2eec5b5383e364cac01dd3691d54367182",
+    "pricing": "8768cb2e9a5654a5e00f3969620c7f0c94cb9e33629f8d99562e93282c744270"
+  },
+  "render_home_sha256": "a293fa0a763256e03aa9f0c8fa16ef2eec5b5383e364cac01dd3691d54367182",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "FaunaFlora-1.0.0.zip",
+  "source_archive_sha256": "04a01a00f669ba9fce8a4cf5385dec0dc327253916da0b308e87fc634f422c9b",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

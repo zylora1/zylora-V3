@@ -1,0 +1,12 @@
+{
+  "source_archive": "tailone-1.0.0.zip",
+  "source_archive_sha256": "348dfceb07dbffd65dee9ef42498fe15d1bf73c5c9e84608f3abe909a42cbea3",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": true,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 129,
+  "external_dependencies_preserved": true
+}

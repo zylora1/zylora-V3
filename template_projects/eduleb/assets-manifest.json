@@ -1,0 +1,12 @@
+{
+  "source_archive": "eduleb.zip",
+  "source_archive_sha256": "8be5a0f901eeb6374fc2ce2500d6f13554938357fffe6be1df0b2c4636e7e7e2",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": true,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 125,
+  "external_dependencies_preserved": true
+}

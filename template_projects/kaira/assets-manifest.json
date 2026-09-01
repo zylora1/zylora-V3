@@ -1,0 +1,12 @@
+{
+  "source_archive": "kaira-1.0.0.zip",
+  "source_archive_sha256": "1a0026191a4d39a26e4aa2f76747a5b382641bbfff9aa93ac9d907ce745f3fd4",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": true,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 81,
+  "external_dependencies_preserved": true
+}

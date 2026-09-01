@@ -1,0 +1,9 @@
+{
+  "slug": "jessica",
+  "archive": "Jessica-1.0.0.zip",
+  "archive_sha256": "74172491ce84785a342c7870594e360a3678e420ec7b34e3d9f4fcbbd20035f8",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

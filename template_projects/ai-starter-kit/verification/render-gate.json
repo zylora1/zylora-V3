@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "b74f5e7d247a2a11d086c3101513fccd41c7612649ade875c762ddbb696ac0e2",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "e7f5f98900a4e675456cc41c1b3a44412932f682f2dbb975d9c4ce0d673579d1"
+  },
+  "render_home_sha256": "e7f5f98900a4e675456cc41c1b3a44412932f682f2dbb975d9c4ce0d673579d1",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "aistarterkit-1.0.0.zip",
+  "source_archive_sha256": "913a2638d12300c6115c896f351011271954963237b3deda2f4d44bfc8e39c97",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

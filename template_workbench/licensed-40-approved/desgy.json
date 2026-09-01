@@ -1,0 +1,9 @@
+{
+  "slug": "desgy",
+  "archive": "Desgy-1.0.0.zip",
+  "archive_sha256": "1dd3146d974eabf63d7741fef677d06fab03374e8f9910afe5bdea1c7aef0dfa",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

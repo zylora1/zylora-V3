@@ -1,0 +1,12 @@
+{
+  "source_archive": "luther-1.0.0.zip",
+  "source_archive_sha256": "ae215563239166dd29f19ba2e5d2ffc061f325beb39af254b431720ea99fa9c0",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": true,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 46,
+  "external_dependencies_preserved": true
+}

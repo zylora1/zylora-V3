@@ -1,0 +1,66 @@
+{
+  "slug": "brivon",
+  "name": "Brivon",
+  "category": "Agency",
+  "industry": "Creative Services",
+  "style": "Licensed source design",
+  "tone": "Original template art direction preserved",
+  "accent": "#111111",
+  "pages": 5,
+  "page_slugs": [
+    "services",
+    "contact",
+    "studio",
+    "work"
+  ],
+  "version": "1.0.0",
+  "hidden": false,
+  "demo_business_name": "Brivon",
+  "demo_tagline": "Brivon website",
+  "demo_description": "Licensed agency template adapted for Zylora editing, publishing and export.",
+  "source": {
+    "fidelity": "licensed_archive",
+    "archive_filename": "Brivon-1.0.0.zip",
+    "archive_sha256": "8e81dcc7e2152ed4b4e41c11c8b7df7fe933d654e142f84176f4964a72f375c2",
+    "conversion_mode": "licensed-html-preservation",
+    "source_identity_retained": true
+  },
+  "rights": {
+    "mode": "user_supplied_licensed_archive",
+    "user_attested_commercial_builder_rights": true,
+    "original_source_code_reused": true,
+    "original_binary_assets_reused": true,
+    "source_identity_stripped": false
+  },
+  "publication": {
+    "state": "public",
+    "render_gate": "passed"
+  },
+  "verification": {
+    "gate_file": "verification/render-gate.json",
+    "render_home": "render/home.html",
+    "css_file": "app/globals.css",
+    "assets_manifest": "assets-manifest.json"
+  },
+  "art_direction": "Original Brivon composition and bundled visual system preserved from the user-supplied licensed archive, with Zylora page-link, lead-form, editor, publish and export compatibility.",
+  "compatibility": {
+    "site_document": 3,
+    "effects": 1,
+    "next_export": 16,
+    "free_page_limit": 2,
+    "starter_page_limit": 5,
+    "growth_page_limit": 8,
+    "managed_page_limit": 10
+  },
+  "ingestion": {
+    "template_id": "LT-003",
+    "source_archive_sha256": "8e81dcc7e2152ed4b4e41c11c8b7df7fe933d654e142f84176f4964a72f375c2",
+    "source_code_reused": true,
+    "source_assets_reused": true,
+    "page_inventory_verified": true,
+    "detected_page_count": 5,
+    "framework_entry": null,
+    "conversion_mode": "licensed-html-preservation"
+  },
+  "description": "A multi-page agency website with strong service positioning, project storytelling and a professional enquiry journey."
+}

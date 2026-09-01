@@ -1,0 +1,9 @@
+{
+  "slug": "archi",
+  "archive": "archi-new-1.0.0.zip",
+  "archive_sha256": "070a1a34d6b1149fa54998e10f3d3ce7985407c237095d2e45e136d22930b019",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

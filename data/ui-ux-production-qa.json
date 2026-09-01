@@ -1,0 +1,931 @@
+{
+  "widths": [
+    1440,
+    1280,
+    1024,
+    768,
+    430,
+    390,
+    375,
+    360
+  ],
+  "checks": [
+    {
+      "label": "UI QA account can be created",
+      "ok": true
+    },
+    {
+      "label": "UI QA account can select Free",
+      "ok": true
+    },
+    {
+      "label": "index.html has no root overflow at 1440px",
+      "ok": true,
+      "page": "index.html",
+      "width": 1440
+    },
+    {
+      "label": "index.html primary heading stays inside 1440px viewport",
+      "ok": true,
+      "page": "index.html",
+      "width": 1440
+    },
+    {
+      "label": "index.html has no root overflow at 1280px",
+      "ok": true,
+      "page": "index.html",
+      "width": 1280
+    },
+    {
+      "label": "index.html primary heading stays inside 1280px viewport",
+      "ok": true,
+      "page": "index.html",
+      "width": 1280
+    },
+    {
+      "label": "index.html has no root overflow at 1024px",
+      "ok": true,
+      "page": "index.html",
+      "width": 1024
+    },
+    {
+      "label": "index.html primary heading stays inside 1024px viewport",
+      "ok": true,
+      "page": "index.html",
+      "width": 1024
+    },
+    {
+      "label": "index.html has no root overflow at 768px",
+      "ok": true,
+      "page": "index.html",
+      "width": 768
+    },
+    {
+      "label": "index.html primary heading stays inside 768px viewport",
+      "ok": true,
+      "page": "index.html",
+      "width": 768
+    },
+    {
+      "label": "index.html has no root overflow at 430px",
+      "ok": true,
+      "page": "index.html",
+      "width": 430
+    },
+    {
+      "label": "index.html primary heading stays inside 430px viewport",
+      "ok": true,
+      "page": "index.html",
+      "width": 430
+    },
+    {
+      "label": "index.html has no root overflow at 390px",
+      "ok": true,
+      "page": "index.html",
+      "width": 390
+    },
+    {
+      "label": "index.html primary heading stays inside 390px viewport",
+      "ok": true,
+      "page": "index.html",
+      "width": 390
+    },
+    {
+      "label": "index.html has no root overflow at 375px",
+      "ok": true,
+      "page": "index.html",
+      "width": 375
+    },
+    {
+      "label": "index.html primary heading stays inside 375px viewport",
+      "ok": true,
+      "page": "index.html",
+      "width": 375
+    },
+    {
+      "label": "index.html has no root overflow at 360px",
+      "ok": true,
+      "page": "index.html",
+      "width": 360
+    },
+    {
+      "label": "index.html primary heading stays inside 360px viewport",
+      "ok": true,
+      "page": "index.html",
+      "width": 360
+    },
+    {
+      "label": "login.html has no root overflow at 1440px",
+      "ok": true,
+      "page": "login.html",
+      "width": 1440
+    },
+    {
+      "label": "login.html primary heading stays inside 1440px viewport",
+      "ok": true,
+      "page": "login.html",
+      "width": 1440
+    },
+    {
+      "label": "login.html has no root overflow at 1280px",
+      "ok": true,
+      "page": "login.html",
+      "width": 1280
+    },
+    {
+      "label": "login.html primary heading stays inside 1280px viewport",
+      "ok": true,
+      "page": "login.html",
+      "width": 1280
+    },
+    {
+      "label": "login.html has no root overflow at 1024px",
+      "ok": true,
+      "page": "login.html",
+      "width": 1024
+    },
+    {
+      "label": "login.html primary heading stays inside 1024px viewport",
+      "ok": true,
+      "page": "login.html",
+      "width": 1024
+    },
+    {
+      "label": "login.html has no root overflow at 768px",
+      "ok": true,
+      "page": "login.html",
+      "width": 768
+    },
+    {
+      "label": "login.html primary heading stays inside 768px viewport",
+      "ok": true,
+      "page": "login.html",
+      "width": 768
+    },
+    {
+      "label": "login.html has no root overflow at 430px",
+      "ok": true,
+      "page": "login.html",
+      "width": 430
+    },
+    {
+      "label": "login.html primary heading stays inside 430px viewport",
+      "ok": true,
+      "page": "login.html",
+      "width": 430
+    },
+    {
+      "label": "login.html has no root overflow at 390px",
+      "ok": true,
+      "page": "login.html",
+      "width": 390
+    },
+    {
+      "label": "login.html primary heading stays inside 390px viewport",
+      "ok": true,
+      "page": "login.html",
+      "width": 390
+    },
+    {
+      "label": "login.html has no root overflow at 375px",
+      "ok": true,
+      "page": "login.html",
+      "width": 375
+    },
+    {
+      "label": "login.html primary heading stays inside 375px viewport",
+      "ok": true,
+      "page": "login.html",
+      "width": 375
+    },
+    {
+      "label": "login.html has no root overflow at 360px",
+      "ok": true,
+      "page": "login.html",
+      "width": 360
+    },
+    {
+      "label": "login.html primary heading stays inside 360px viewport",
+      "ok": true,
+      "page": "login.html",
+      "width": 360
+    },
+    {
+      "label": "signup.html has no root overflow at 1440px",
+      "ok": true,
+      "page": "signup.html",
+      "width": 1440
+    },
+    {
+      "label": "signup.html primary heading stays inside 1440px viewport",
+      "ok": true,
+      "page": "signup.html",
+      "width": 1440
+    },
+    {
+      "label": "signup.html has no root overflow at 1280px",
+      "ok": true,
+      "page": "signup.html",
+      "width": 1280
+    },
+    {
+      "label": "signup.html primary heading stays inside 1280px viewport",
+      "ok": true,
+      "page": "signup.html",
+      "width": 1280
+    },
+    {
+      "label": "signup.html has no root overflow at 1024px",
+      "ok": true,
+      "page": "signup.html",
+      "width": 1024
+    },
+    {
+      "label": "signup.html primary heading stays inside 1024px viewport",
+      "ok": true,
+      "page": "signup.html",
+      "width": 1024
+    },
+    {
+      "label": "signup.html has no root overflow at 768px",
+      "ok": true,
+      "page": "signup.html",
+      "width": 768
+    },
+    {
+      "label": "signup.html primary heading stays inside 768px viewport",
+      "ok": true,
+      "page": "signup.html",
+      "width": 768
+    },
+    {
+      "label": "signup.html has no root overflow at 430px",
+      "ok": true,
+      "page": "signup.html",
+      "width": 430
+    },
+    {
+      "label": "signup.html primary heading stays inside 430px viewport",
+      "ok": true,
+      "page": "signup.html",
+      "width": 430
+    },
+    {
+      "label": "signup.html has no root overflow at 390px",
+      "ok": true,
+      "page": "signup.html",
+      "width": 390
+    },
+    {
+      "label": "signup.html primary heading stays inside 390px viewport",
+      "ok": true,
+      "page": "signup.html",
+      "width": 390
+    },
+    {
+      "label": "signup.html has no root overflow at 375px",
+      "ok": true,
+      "page": "signup.html",
+      "width": 375
+    },
+    {
+      "label": "signup.html primary heading stays inside 375px viewport",
+      "ok": true,
+      "page": "signup.html",
+      "width": 375
+    },
+    {
+      "label": "signup.html has no root overflow at 360px",
+      "ok": true,
+      "page": "signup.html",
+      "width": 360
+    },
+    {
+      "label": "signup.html primary heading stays inside 360px viewport",
+      "ok": true,
+      "page": "signup.html",
+      "width": 360
+    },
+    {
+      "label": "ai-create.html has no root overflow at 1440px",
+      "ok": true,
+      "page": "ai-create.html",
+      "width": 1440
+    },
+    {
+      "label": "ai-create.html primary heading stays inside 1440px viewport",
+      "ok": true,
+      "page": "ai-create.html",
+      "width": 1440
+    },
+    {
+      "label": "ai-create.html has no root overflow at 1280px",
+      "ok": true,
+      "page": "ai-create.html",
+      "width": 1280
+    },
+    {
+      "label": "ai-create.html primary heading stays inside 1280px viewport",
+      "ok": true,
+      "page": "ai-create.html",
+      "width": 1280
+    },
+    {
+      "label": "ai-create.html has no root overflow at 1024px",
+      "ok": true,
+      "page": "ai-create.html",
+      "width": 1024
+    },
+    {
+      "label": "ai-create.html primary heading stays inside 1024px viewport",
+      "ok": true,
+      "page": "ai-create.html",
+      "width": 1024
+    },
+    {
+      "label": "ai-create.html has no root overflow at 768px",
+      "ok": true,
+      "page": "ai-create.html",
+      "width": 768
+    },
+    {
+      "label": "ai-create.html primary heading stays inside 768px viewport",
+      "ok": true,
+      "page": "ai-create.html",
+      "width": 768
+    },
+    {
+      "label": "ai-create.html has no root overflow at 430px",
+      "ok": true,
+      "page": "ai-create.html",
+      "width": 430
+    },
+    {
+      "label": "ai-create.html primary heading stays inside 430px viewport",
+      "ok": true,
+      "page": "ai-create.html",
+      "width": 430
+    },
+    {
+      "label": "ai-create.html has no root overflow at 390px",
+      "ok": true,
+      "page": "ai-create.html",
+      "width": 390
+    },
+    {
+      "label": "ai-create.html primary heading stays inside 390px viewport",
+      "ok": true,
+      "page": "ai-create.html",
+      "width": 390
+    },
+    {
+      "label": "ai-create.html has no root overflow at 375px",
+      "ok": true,
+      "page": "ai-create.html",
+      "width": 375
+    },
+    {
+      "label": "ai-create.html primary heading stays inside 375px viewport",
+      "ok": true,
+      "page": "ai-create.html",
+      "width": 375
+    },
+    {
+      "label": "ai-create.html has no root overflow at 360px",
+      "ok": true,
+      "page": "ai-create.html",
+      "width": 360
+    },
+    {
+      "label": "ai-create.html primary heading stays inside 360px viewport",
+      "ok": true,
+      "page": "ai-create.html",
+      "width": 360
+    },
+    {
+      "label": "templates.html has no root overflow at 1440px",
+      "ok": true,
+      "page": "templates.html",
+      "width": 1440
+    },
+    {
+      "label": "templates.html primary heading stays inside 1440px viewport",
+      "ok": true,
+      "page": "templates.html",
+      "width": 1440
+    },
+    {
+      "label": "templates.html has no root overflow at 1280px",
+      "ok": true,
+      "page": "templates.html",
+      "width": 1280
+    },
+    {
+      "label": "templates.html primary heading stays inside 1280px viewport",
+      "ok": true,
+      "page": "templates.html",
+      "width": 1280
+    },
+    {
+      "label": "templates.html has no root overflow at 1024px",
+      "ok": true,
+      "page": "templates.html",
+      "width": 1024
+    },
+    {
+      "label": "templates.html primary heading stays inside 1024px viewport",
+      "ok": true,
+      "page": "templates.html",
+      "width": 1024
+    },
+    {
+      "label": "templates.html has no root overflow at 768px",
+      "ok": true,
+      "page": "templates.html",
+      "width": 768
+    },
+    {
+      "label": "templates.html primary heading stays inside 768px viewport",
+      "ok": true,
+      "page": "templates.html",
+      "width": 768
+    },
+    {
+      "label": "templates.html has no root overflow at 430px",
+      "ok": true,
+      "page": "templates.html",
+      "width": 430
+    },
+    {
+      "label": "templates.html primary heading stays inside 430px viewport",
+      "ok": true,
+      "page": "templates.html",
+      "width": 430
+    },
+    {
+      "label": "templates.html has no root overflow at 390px",
+      "ok": true,
+      "page": "templates.html",
+      "width": 390
+    },
+    {
+      "label": "templates.html primary heading stays inside 390px viewport",
+      "ok": true,
+      "page": "templates.html",
+      "width": 390
+    },
+    {
+      "label": "templates.html has no root overflow at 375px",
+      "ok": true,
+      "page": "templates.html",
+      "width": 375
+    },
+    {
+      "label": "templates.html primary heading stays inside 375px viewport",
+      "ok": true,
+      "page": "templates.html",
+      "width": 375
+    },
+    {
+      "label": "templates.html has no root overflow at 360px",
+      "ok": true,
+      "page": "templates.html",
+      "width": 360
+    },
+    {
+      "label": "templates.html primary heading stays inside 360px viewport",
+      "ok": true,
+      "page": "templates.html",
+      "width": 360
+    },
+    {
+      "label": "freelancers.html has no root overflow at 1440px",
+      "ok": true,
+      "page": "freelancers.html",
+      "width": 1440
+    },
+    {
+      "label": "freelancers.html primary heading stays inside 1440px viewport",
+      "ok": true,
+      "page": "freelancers.html",
+      "width": 1440
+    },
+    {
+      "label": "freelancers.html has no root overflow at 1280px",
+      "ok": true,
+      "page": "freelancers.html",
+      "width": 1280
+    },
+    {
+      "label": "freelancers.html primary heading stays inside 1280px viewport",
+      "ok": true,
+      "page": "freelancers.html",
+      "width": 1280
+    },
+    {
+      "label": "freelancers.html has no root overflow at 1024px",
+      "ok": true,
+      "page": "freelancers.html",
+      "width": 1024
+    },
+    {
+      "label": "freelancers.html primary heading stays inside 1024px viewport",
+      "ok": true,
+      "page": "freelancers.html",
+      "width": 1024
+    },
+    {
+      "label": "freelancers.html has no root overflow at 768px",
+      "ok": true,
+      "page": "freelancers.html",
+      "width": 768
+    },
+    {
+      "label": "freelancers.html primary heading stays inside 768px viewport",
+      "ok": true,
+      "page": "freelancers.html",
+      "width": 768
+    },
+    {
+      "label": "freelancers.html has no root overflow at 430px",
+      "ok": true,
+      "page": "freelancers.html",
+      "width": 430
+    },
+    {
+      "label": "freelancers.html primary heading stays inside 430px viewport",
+      "ok": true,
+      "page": "freelancers.html",
+      "width": 430
+    },
+    {
+      "label": "freelancers.html has no root overflow at 390px",
+      "ok": true,
+      "page": "freelancers.html",
+      "width": 390
+    },
+    {
+      "label": "freelancers.html primary heading stays inside 390px viewport",
+      "ok": true,
+      "page": "freelancers.html",
+      "width": 390
+    },
+    {
+      "label": "freelancers.html has no root overflow at 375px",
+      "ok": true,
+      "page": "freelancers.html",
+      "width": 375
+    },
+    {
+      "label": "freelancers.html primary heading stays inside 375px viewport",
+      "ok": true,
+      "page": "freelancers.html",
+      "width": 375
+    },
+    {
+      "label": "freelancers.html has no root overflow at 360px",
+      "ok": true,
+      "page": "freelancers.html",
+      "width": 360
+    },
+    {
+      "label": "freelancers.html primary heading stays inside 360px viewport",
+      "ok": true,
+      "page": "freelancers.html",
+      "width": 360
+    },
+    {
+      "label": "choose-plan.html has no root overflow at 1440px",
+      "ok": true,
+      "page": "choose-plan.html",
+      "width": 1440
+    },
+    {
+      "label": "choose-plan.html primary heading stays inside 1440px viewport",
+      "ok": true,
+      "page": "choose-plan.html",
+      "width": 1440
+    },
+    {
+      "label": "choose-plan.html has no root overflow at 1280px",
+      "ok": true,
+      "page": "choose-plan.html",
+      "width": 1280
+    },
+    {
+      "label": "choose-plan.html primary heading stays inside 1280px viewport",
+      "ok": true,
+      "page": "choose-plan.html",
+      "width": 1280
+    },
+    {
+      "label": "choose-plan.html has no root overflow at 1024px",
+      "ok": true,
+      "page": "choose-plan.html",
+      "width": 1024
+    },
+    {
+      "label": "choose-plan.html primary heading stays inside 1024px viewport",
+      "ok": true,
+      "page": "choose-plan.html",
+      "width": 1024
+    },
+    {
+      "label": "choose-plan.html has no root overflow at 768px",
+      "ok": true,
+      "page": "choose-plan.html",
+      "width": 768
+    },
+    {
+      "label": "choose-plan.html primary heading stays inside 768px viewport",
+      "ok": true,
+      "page": "choose-plan.html",
+      "width": 768
+    },
+    {
+      "label": "choose-plan.html has no root overflow at 430px",
+      "ok": true,
+      "page": "choose-plan.html",
+      "width": 430
+    },
+    {
+      "label": "choose-plan.html primary heading stays inside 430px viewport",
+      "ok": true,
+      "page": "choose-plan.html",
+      "width": 430
+    },
+    {
+      "label": "choose-plan.html has no root overflow at 390px",
+      "ok": true,
+      "page": "choose-plan.html",
+      "width": 390
+    },
+    {
+      "label": "choose-plan.html primary heading stays inside 390px viewport",
+      "ok": true,
+      "page": "choose-plan.html",
+      "width": 390
+    },
+    {
+      "label": "choose-plan.html has no root overflow at 375px",
+      "ok": true,
+      "page": "choose-plan.html",
+      "width": 375
+    },
+    {
+      "label": "choose-plan.html primary heading stays inside 375px viewport",
+      "ok": true,
+      "page": "choose-plan.html",
+      "width": 375
+    },
+    {
+      "label": "choose-plan.html has no root overflow at 360px",
+      "ok": true,
+      "page": "choose-plan.html",
+      "width": 360
+    },
+    {
+      "label": "choose-plan.html primary heading stays inside 360px viewport",
+      "ok": true,
+      "page": "choose-plan.html",
+      "width": 360
+    },
+    {
+      "label": "editor.html has no root overflow at 1440px",
+      "ok": true,
+      "page": "editor.html",
+      "width": 1440
+    },
+    {
+      "label": "editor.html has no root overflow at 1280px",
+      "ok": true,
+      "page": "editor.html",
+      "width": 1280
+    },
+    {
+      "label": "editor.html has no root overflow at 1024px",
+      "ok": true,
+      "page": "editor.html",
+      "width": 1024
+    },
+    {
+      "label": "editor.html has no root overflow at 768px",
+      "ok": true,
+      "page": "editor.html",
+      "width": 768
+    },
+    {
+      "label": "editor.html has no root overflow at 430px",
+      "ok": true,
+      "page": "editor.html",
+      "width": 430
+    },
+    {
+      "label": "editor.html has no root overflow at 390px",
+      "ok": true,
+      "page": "editor.html",
+      "width": 390
+    },
+    {
+      "label": "editor.html has no root overflow at 375px",
+      "ok": true,
+      "page": "editor.html",
+      "width": 375
+    },
+    {
+      "label": "editor.html has no root overflow at 360px",
+      "ok": true,
+      "page": "editor.html",
+      "width": 360
+    },
+    {
+      "label": "dashboard initializes without JavaScript errors",
+      "ok": true,
+      "errors": []
+    },
+    {
+      "label": "ordinary account is labelled User in sidebar",
+      "ok": true
+    },
+    {
+      "label": "dashboard overview has no root overflow at 1440px",
+      "ok": true,
+      "width": 1440
+    },
+    {
+      "label": "dashboard overview has no root overflow at 1280px",
+      "ok": true,
+      "width": 1280
+    },
+    {
+      "label": "dashboard overview has no root overflow at 1024px",
+      "ok": true,
+      "width": 1024
+    },
+    {
+      "label": "dashboard overview has no root overflow at 768px",
+      "ok": true,
+      "width": 768
+    },
+    {
+      "label": "dashboard overview has no root overflow at 430px",
+      "ok": true,
+      "width": 430
+    },
+    {
+      "label": "mobile dashboard removes unusable search affordance at 430px",
+      "ok": true,
+      "width": 430
+    },
+    {
+      "label": "dashboard stats compose as 2\u00d72 at 430px",
+      "ok": true,
+      "width": 430
+    },
+    {
+      "label": "dashboard overview has no root overflow at 390px",
+      "ok": true,
+      "width": 390
+    },
+    {
+      "label": "mobile dashboard removes unusable search affordance at 390px",
+      "ok": true,
+      "width": 390
+    },
+    {
+      "label": "dashboard stats compose as 2\u00d72 at 390px",
+      "ok": true,
+      "width": 390
+    },
+    {
+      "label": "dashboard overview has no root overflow at 375px",
+      "ok": true,
+      "width": 375
+    },
+    {
+      "label": "mobile dashboard removes unusable search affordance at 375px",
+      "ok": true,
+      "width": 375
+    },
+    {
+      "label": "dashboard stats compose as 2\u00d72 at 375px",
+      "ok": true,
+      "width": 375
+    },
+    {
+      "label": "dashboard overview has no root overflow at 360px",
+      "ok": true,
+      "width": 360
+    },
+    {
+      "label": "mobile dashboard removes unusable search affordance at 360px",
+      "ok": true,
+      "width": 360
+    },
+    {
+      "label": "desktop Usage Balance spans the overview row",
+      "ok": true
+    },
+    {
+      "label": "Create with AI quick action uses dashboard primary purple",
+      "ok": true,
+      "color": "rgb(105, 108, 255)"
+    },
+    {
+      "label": "billing separates AI and lead credit groups",
+      "ok": true
+    },
+    {
+      "label": "billing renders all eight top-up packs",
+      "ok": true
+    },
+    {
+      "label": "top-up packs use light card styling instead of legacy dark buttons",
+      "ok": true,
+      "color": "rgb(255, 255, 255)"
+    },
+    {
+      "label": "#starterRegionalPrice price cadence does not collide",
+      "ok": true
+    },
+    {
+      "label": "#growthRegionalPrice price cadence does not collide",
+      "ok": true
+    },
+    {
+      "label": "billing has no root overflow at 768px",
+      "ok": true,
+      "width": 768
+    },
+    {
+      "label": "billing has no root overflow at 430px",
+      "ok": true,
+      "width": 430
+    },
+    {
+      "label": "billing descendants stay inside 430px viewport",
+      "ok": true,
+      "width": 430,
+      "max_right": 418.0
+    },
+    {
+      "label": "billing history switches to mobile card layout at 430px",
+      "ok": true,
+      "width": 430
+    },
+    {
+      "label": "billing has no root overflow at 390px",
+      "ok": true,
+      "width": 390
+    },
+    {
+      "label": "billing descendants stay inside 390px viewport",
+      "ok": true,
+      "width": 390,
+      "max_right": 378.0
+    },
+    {
+      "label": "billing history switches to mobile card layout at 390px",
+      "ok": true,
+      "width": 390
+    },
+    {
+      "label": "billing has no root overflow at 375px",
+      "ok": true,
+      "width": 375
+    },
+    {
+      "label": "billing descendants stay inside 375px viewport",
+      "ok": true,
+      "width": 375,
+      "max_right": 363.0
+    },
+    {
+      "label": "billing history switches to mobile card layout at 375px",
+      "ok": true,
+      "width": 375
+    },
+    {
+      "label": "billing has no root overflow at 360px",
+      "ok": true,
+      "width": 360
+    },
+    {
+      "label": "billing descendants stay inside 360px viewport",
+      "ok": true,
+      "width": 360,
+      "max_right": 348.0
+    },
+    {
+      "label": "billing history switches to mobile card layout at 360px",
+      "ok": true,
+      "width": 360
+    }
+  ],
+  "errors": [],
+  "summary": {
+    "total": 159,
+    "passed": 159,
+    "failed": 0
+  }
+}

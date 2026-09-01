@@ -1,0 +1,12 @@
+{
+  "source_archive": "nexusai-1.0.0.zip",
+  "source_archive_sha256": "01aaee28492b6639674a77b799ee97385bebb5a9126eeaa18ee4c5daa3b36a0e",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": true,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 63,
+  "external_dependencies_preserved": true
+}

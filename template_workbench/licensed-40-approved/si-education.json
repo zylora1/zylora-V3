@@ -1,0 +1,9 @@
+{
+  "slug": "si-education",
+  "archive": "si-education-1.0.0.zip",
+  "archive_sha256": "e02c08bfb8aad0a06e01829fa344b08f6723013234fee108f518c6556e6fc529",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

@@ -1,0 +1,54 @@
+{
+  "batch": "capacity-batch-001-shard-3",
+  "mode": "capacity_driven",
+  "candidate_count": 7,
+  "public_count": 0,
+  "status": "workbench",
+  "projects": [
+    {
+      "id": "ref-0015",
+      "slug": "living-spores",
+      "title": "Living Spores"
+    },
+    {
+      "id": "ref-0037",
+      "slug": "mint-docs",
+      "title": "Sprig Docs"
+    },
+    {
+      "id": "ref-0009",
+      "slug": "money-mouth",
+      "title": "Money Mouth"
+    },
+    {
+      "id": "ref-0048",
+      "slug": "northside-studio",
+      "title": "Northside"
+    },
+    {
+      "id": "ref-0017",
+      "slug": "open-space",
+      "title": "Open Space"
+    },
+    {
+      "id": "ref-0003",
+      "slug": "parallel-reality",
+      "title": "Parallel Reality"
+    },
+    {
+      "id": "ref-0058",
+      "slug": "prism-tokens",
+      "title": "Prism Tokens"
+    }
+  ],
+  "reference_ids": [
+    "ref-0015",
+    "ref-0037",
+    "ref-0009",
+    "ref-0048",
+    "ref-0017",
+    "ref-0003",
+    "ref-0058"
+  ],
+  "rule": "Candidates are independently authored reference reconstructions; publication stays fail-closed until visual, responsive, motion, rights, asset and render gates pass."
+}

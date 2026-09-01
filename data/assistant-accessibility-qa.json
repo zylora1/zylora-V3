@@ -1,0 +1,29 @@
+{
+  "checks": 13,
+  "widths": [
+    1440,
+    1280,
+    1024,
+    768,
+    430,
+    390,
+    375,
+    360
+  ],
+  "errors": 0,
+  "items": [
+    "assistant uses modal dialog semantics",
+    "chat history exposes live log semantics",
+    "assistant responsive layout is safe at 1440px",
+    "assistant responsive layout is safe at 1280px",
+    "assistant responsive layout is safe at 1024px",
+    "assistant responsive layout is safe at 768px",
+    "assistant responsive layout is safe at 430px",
+    "assistant responsive layout is safe at 390px",
+    "assistant responsive layout is safe at 375px",
+    "assistant responsive layout is safe at 360px",
+    "focus remains trapped inside open assistant",
+    "Escape closes assistant",
+    "assistant returns focus to launcher"
+  ]
+}

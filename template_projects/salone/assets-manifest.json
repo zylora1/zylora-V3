@@ -1,0 +1,12 @@
+{
+  "source_archive": "Salone-1.0.0.zip",
+  "source_archive_sha256": "0148bc8acfefb345a6e39b08e405f46aa39b18a28322854435ef5cb9a988c858",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": true,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 62,
+  "external_dependencies_preserved": true
+}

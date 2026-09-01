@@ -1,0 +1,9 @@
+{
+  "slug": "skilline",
+  "archive": "skilline-1.0.0.zip",
+  "archive_sha256": "97aad4982536426cdc88ebdba969a31bc78b6e0646e2e9b06ccc691b6a61e784",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

@@ -1,0 +1,61 @@
+{
+  "slug": "archi",
+  "name": "Archi",
+  "category": "Architecture",
+  "industry": "Professional Services",
+  "style": "Licensed source design",
+  "tone": "Original template art direction preserved",
+  "accent": "#111111",
+  "pages": 1,
+  "page_slugs": [],
+  "version": "1.0.0",
+  "hidden": false,
+  "demo_business_name": "Archi",
+  "demo_tagline": "Archi website",
+  "demo_description": "Licensed architecture template adapted for Zylora editing, publishing and export.",
+  "source": {
+    "fidelity": "licensed_archive",
+    "archive_filename": "archi-new-1.0.0.zip",
+    "archive_sha256": "070a1a34d6b1149fa54998e10f3d3ce7985407c237095d2e45e136d22930b019",
+    "conversion_mode": "licensed-html-preservation",
+    "source_identity_retained": true
+  },
+  "rights": {
+    "mode": "user_supplied_licensed_archive",
+    "user_attested_commercial_builder_rights": true,
+    "original_source_code_reused": true,
+    "original_binary_assets_reused": true,
+    "source_identity_stripped": false
+  },
+  "publication": {
+    "state": "public",
+    "render_gate": "passed"
+  },
+  "verification": {
+    "gate_file": "verification/render-gate.json",
+    "render_home": "render/home.html",
+    "css_file": "app/globals.css",
+    "assets_manifest": "assets-manifest.json"
+  },
+  "art_direction": "Original Archi composition and bundled visual system preserved from the user-supplied licensed archive, with Zylora page-link, lead-form, editor, publish and export compatibility.",
+  "compatibility": {
+    "site_document": 3,
+    "effects": 1,
+    "next_export": 16,
+    "free_page_limit": 2,
+    "starter_page_limit": 5,
+    "growth_page_limit": 8,
+    "managed_page_limit": 10
+  },
+  "ingestion": {
+    "template_id": "LT-031",
+    "source_archive_sha256": "070a1a34d6b1149fa54998e10f3d3ce7985407c237095d2e45e136d22930b019",
+    "source_code_reused": true,
+    "source_assets_reused": true,
+    "page_inventory_verified": true,
+    "detected_page_count": 1,
+    "framework_entry": null,
+    "conversion_mode": "licensed-html-preservation"
+  },
+  "description": "A restrained architecture landing page pairing spacious typography with image-led project storytelling."
+}

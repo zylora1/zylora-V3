@@ -1,0 +1,12 @@
+{
+  "source_archive": "FoodMart-1.0.0.zip",
+  "source_archive_sha256": "af4a93116cf72f4defc8abdaf9716a45e40f7b904b2564d21078623d348d8a2b",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": true,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 68,
+  "external_dependencies_preserved": true
+}

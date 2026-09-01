@@ -1,0 +1,22 @@
+# Zylora
+
+> Zylora is an AI-assisted website builder and business workspace for independent businesses, teams and creators.
+
+## Canonical public resources
+- Product: {{APP_URL}}/
+- Website templates: {{APP_URL}}/templates
+- Approved freelancers: {{APP_URL}}/freelancers
+- Resources and guides: {{APP_URL}}/blog
+- XML sitemap: {{APP_URL}}/sitemap.xml
+- Robots policy: {{APP_URL}}/robots.txt
+
+## Product facts
+- Users can create a website from a detailed business brief or start from a premium template.
+- Public websites support structured manual editing, AI-assisted editing, managed image replacement, publishing, custom domains, SEO/GEO metadata, leads and appointments.
+- AI-created information architecture follows the user's business brief rather than subscription-plan page limits.
+- Template and AI-created sites remain editable before publishing.
+- Zylora public plans are Free, Starter, Growth and Pro/Managed. Starter is ₹799/month in India or US$9/month internationally; Growth is ₹1,799/month in India or US$19/month internationally; Pro is sales-assisted “Get in touch”.
+- The embedded AI Sales Assistant is unlimited on all plans and does not consume AI credits or lead credits. Builder/editor/generation AI uses AI credits; lead-delivery actions use lead credits.
+
+## Indexing boundary
+Only public product, resource, freelancer and intentionally published website pages are discovery content. Dashboard, editor, account, checkout and private API routes are not public knowledge sources.

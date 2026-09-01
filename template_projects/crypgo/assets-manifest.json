@@ -1,0 +1,12 @@
+{
+  "source_archive": "Crypgo-1.0.0.zip",
+  "source_archive_sha256": "306c15af3bfdec50b97834846646303988f406d0c9d59c9d6b3e0fd804c81b45",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": false,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 46,
+  "external_dependencies_preserved": false
+}

@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "fe0cafff79d02048fae48cf5675060fda96eae6724976fbea2c8df28c4f3518a",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "526407aac3a91aed39edfba70db5fdd6f7ae0ce1b8a04bbbfaf6a2b15aee7939"
+  },
+  "render_home_sha256": "526407aac3a91aed39edfba70db5fdd6f7ae0ce1b8a04bbbfaf6a2b15aee7939",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "Crypgo-1.0.0.zip",
+  "source_archive_sha256": "306c15af3bfdec50b97834846646303988f406d0c9d59c9d6b3e0fd804c81b45",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

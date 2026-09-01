@@ -1,0 +1,83 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-zylora}
+      POSTGRES_USER: ${POSTGRES_USER:-zylora}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-zylora-dev-only}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-zylora} -d ${POSTGRES_DB:-zylora}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - zylora_pg:/var/lib/postgresql/data
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Safe local default. Production must explicitly set APP_ENV=production
+      # together with an HTTPS public APP_URL and real provider credentials.
+      APP_ENV: ${APP_ENV:-development}
+      APP_URL: ${APP_URL:-http://localhost:8000}
+      SESSION_TTL_HOURS: ${SESSION_TTL_HOURS:-168}
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-zylora}:${POSTGRES_PASSWORD:-zylora-dev-only}@db:5432/${POSTGRES_DB:-zylora}
+      ADMIN_NOTIFICATION_EMAIL: ${ADMIN_NOTIFICATION_EMAIL:-admin@example.com}
+      SUPER_ADMIN_EMAIL: ${SUPER_ADMIN_EMAIL:-}
+      SUPER_ADMIN_PASSWORD: ${SUPER_ADMIN_PASSWORD:-}
+      PAYMENT_PROVIDER: ${PAYMENT_PROVIDER:-mock}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-5-mini}
+      SALES_ASSISTANT_MODEL: ${SALES_ASSISTANT_MODEL:-gpt-4o-mini}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      RESEND_FROM: "${RESEND_FROM:-Zylora <notifications@zylora.local>}"
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID:-}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN:-}
+      TWILIO_WHATSAPP_FROM: ${TWILIO_WHATSAPP_FROM:-}
+      WHATSAPP_PHONE_NUMBER_ID: ${WHATSAPP_PHONE_NUMBER_ID:-}
+      WHATSAPP_ACCESS_TOKEN: ${WHATSAPP_ACCESS_TOKEN:-}
+      WHATSAPP_GRAPH_VERSION: ${WHATSAPP_GRAPH_VERSION:-v23.0}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      GOOGLE_REDIRECT_URI: ${GOOGLE_REDIRECT_URI:-}
+      GOOGLE_SERVICE_ACCOUNT_JSON: ${GOOGLE_SERVICE_ACCOUNT_JSON:-}
+      GOOGLE_SERVICE_ACCOUNT_FILE: ${GOOGLE_SERVICE_ACCOUNT_FILE:-}
+      GOOGLE_SERVICE_ACCOUNT_EMAIL: ${GOOGLE_SERVICE_ACCOUNT_EMAIL:-}
+      TURNSTILE_SITE_KEY: ${TURNSTILE_SITE_KEY:-}
+      TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY:-}
+      RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID:-}
+      RAZORPAY_KEY_SECRET: ${RAZORPAY_KEY_SECRET:-}
+      RAZORPAY_WEBHOOK_SECRET: ${RAZORPAY_WEBHOOK_SECRET:-}
+      CLOUDFLARE_API_TOKEN: ${CLOUDFLARE_API_TOKEN:-}
+      CLOUDFLARE_ZONE_ID: ${CLOUDFLARE_ZONE_ID:-}
+      CLOUDFLARE_SAAS_TARGET: ${CLOUDFLARE_SAAS_TARGET:-sites.zylora.example}
+      PUBLIC_BASE_DOMAIN: ${PUBLIC_BASE_DOMAIN:-zylora.example}
+      INDEXNOW_ENDPOINT: ${INDEXNOW_ENDPOINT:-https://api.indexnow.org/indexnow}
+      MEDIA_STORAGE_PROVIDER: ${MEDIA_STORAGE_PROVIDER:-local}
+      MEDIA_STORAGE_DIR: /app/data/media
+      MEDIA_MAX_UPLOAD_MB: ${MEDIA_MAX_UPLOAD_MB:-12}
+      MEDIA_MAX_PIXELS: ${MEDIA_MAX_PIXELS:-40000000}
+      MEDIA_S3_BUCKET: ${MEDIA_S3_BUCKET:-}
+      MEDIA_S3_REGION: ${MEDIA_S3_REGION:-us-east-1}
+      MEDIA_S3_ENDPOINT_URL: ${MEDIA_S3_ENDPOINT_URL:-}
+      MEDIA_S3_ACCESS_KEY_ID: ${MEDIA_S3_ACCESS_KEY_ID:-}
+      MEDIA_S3_SECRET_ACCESS_KEY: ${MEDIA_S3_SECRET_ACCESS_KEY:-}
+      MEDIA_S3_PREFIX: ${MEDIA_S3_PREFIX:-zylora-media}
+      PEXELS_API_KEY: ${PEXELS_API_KEY:-}
+    volumes:
+      - zylora_media:/app/data/media
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3).read()"]
+      interval: 30s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+    ports:
+      - "8000:8000"
+
+volumes:
+  zylora_pg:
+  zylora_media:

@@ -1,0 +1,2135 @@
+{
+  "buttons": [
+    {
+      "page": "accept-transfer.html",
+      "index": 1,
+      "text": "Accept website",
+      "id": "accept",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 1,
+      "text": "Show products & get enquiries",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 2,
+      "text": "Get appointments",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 3,
+      "text": "Show my work",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 4,
+      "text": "Get leads",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 5,
+      "text": "Promote an event",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 6,
+      "text": "Explain expertise",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 7,
+      "text": "Present a service business",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 8,
+      "text": "Something else",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 9,
+      "text": "Continue \u2192",
+      "id": "goalNext",
+      "type": "submit",
+      "ok": true,
+      "reason": "disabled-static"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 10,
+      "text": "\u00d7",
+      "id": "promptGuidanceDismiss",
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 11,
+      "text": "Restaurant",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 12,
+      "text": "Architecture studio",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 13,
+      "text": "Software company",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 14,
+      "text": "Back",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 15,
+      "text": "Choose a direction \u2192",
+      "id": "briefNext",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 16,
+      "text": "Use direction",
+      "id": "styleApply",
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 17,
+      "text": "Back",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 18,
+      "text": "Create website \u2192",
+      "id": "createSite",
+      "type": "submit",
+      "ok": true,
+      "reason": "disabled-static"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 19,
+      "text": "Plan",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 20,
+      "text": "Pages",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 21,
+      "text": "Design",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 1,
+      "text": "Dashboard",
+      "id": null,
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 2,
+      "text": "Websites",
+      "id": null,
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 3,
+      "text": "Templates",
+      "id": null,
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 4,
+      "text": "Leads",
+      "id": null,
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 5,
+      "text": "Growth Center",
+      "id": null,
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 6,
+      "text": "\u2713 Site Health",
+      "id": null,
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 7,
+      "text": "Domains & SSL",
+      "id": null,
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 8,
+      "text": "Integrations",
+      "id": null,
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 9,
+      "text": "Freelancer",
+      "id": null,
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 10,
+      "text": "Support",
+      "id": null,
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 11,
+      "text": "Billing",
+      "id": null,
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 12,
+      "text": "Settings",
+      "id": null,
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 13,
+      "text": "Admin portal",
+      "id": null,
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 14,
+      "text": "Log out",
+      "id": "logoutBtn",
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 15,
+      "text": "",
+      "id": "sidebarToggle",
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 16,
+      "text": "0",
+      "id": "notificationBell",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 17,
+      "text": "Resend email",
+      "id": "resendVerify",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 18,
+      "text": "Verify test account",
+      "id": "devVerify",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 19,
+      "text": "Create website",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 20,
+      "text": "Import website",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 21,
+      "text": "\u2197",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 22,
+      "text": "\uff0b New website Start a new project",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 23,
+      "text": "\u25eb Browse templates Use verified catalogue designs",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 24,
+      "text": "\u25ce Open leads Review new enquiries",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 25,
+      "text": "See all",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 26,
+      "text": "\u21bb",
+      "id": "refreshChart",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 27,
+      "text": "See all",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 28,
+      "text": "Import website",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 29,
+      "text": "\uff0b Create Website",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 30,
+      "text": "Create your first site",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 31,
+      "text": "Refresh",
+      "id": "refreshLeads",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 32,
+      "text": "Add custom domain",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "form-submit"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 33,
+      "text": "Refresh",
+      "id": "refreshDomains",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 34,
+      "text": "Save connection",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "form-submit"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 35,
+      "text": "Send test row",
+      "id": "googleSheetTest",
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 36,
+      "text": "Re-sync existing data",
+      "id": "googleSheetResync",
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 37,
+      "text": "Disconnect",
+      "id": "googleSheetRemove",
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 38,
+      "text": "Add approved knowledge",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "form-submit"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 39,
+      "text": "Refresh",
+      "id": "refreshKnowledge",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 40,
+      "text": "Submit / update application",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "form-submit"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 41,
+      "text": "Save studio profile",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "form-submit"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 42,
+      "text": "New conversation",
+      "id": "newSupportConversation",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 43,
+      "text": "Refresh",
+      "id": "refreshSupport",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 44,
+      "text": "30D",
+      "id": null,
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 45,
+      "text": "90D",
+      "id": null,
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 46,
+      "text": "Open leads",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 47,
+      "text": "Run checks",
+      "id": "healthRefresh",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 48,
+      "text": "Create restore point",
+      "id": "healthBackup",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 49,
+      "text": "Retry unresolved",
+      "id": "healthRetryDeliveries",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 50,
+      "text": "Manage plan",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 51,
+      "text": "View offer",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 52,
+      "text": "Reconcile",
+      "id": "refreshBillingRecovery",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 53,
+      "text": "Use Free / cancel renewal",
+      "id": null,
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 54,
+      "text": "Activate Starter",
+      "id": null,
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 55,
+      "text": "Activate Growth",
+      "id": null,
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 56,
+      "text": "Talk to our experts",
+      "id": "openProEnquiry",
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 57,
+      "text": "Save changes",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "form-submit"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 58,
+      "text": "Save settings",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "form-submit"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 59,
+      "text": "Send verification code",
+      "id": "requestOtp",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 60,
+      "text": "Verify",
+      "id": "verifyOtp",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 61,
+      "text": "Save Assistant",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "form-submit"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 62,
+      "text": "New test",
+      "id": "assistantStartTest",
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 63,
+      "text": "Send",
+      "id": "assistantSendTest",
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 64,
+      "text": "Delete account",
+      "id": "openDeleteAccount",
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 65,
+      "text": "Refresh control plane",
+      "id": "refreshAdmin",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 66,
+      "text": "Users",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 67,
+      "text": "Leads",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 68,
+      "text": "Plans",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 69,
+      "text": "Freelancers",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 70,
+      "text": "Support",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 71,
+      "text": "Managed CRM",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 72,
+      "text": "Zylora Blog \u00b7 Admin",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 73,
+      "text": "Audit",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 74,
+      "text": "System",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 75,
+      "text": "Apply filters",
+      "id": "adminFreelancerFilter",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 76,
+      "text": "Save moderation",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "form-submit"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 77,
+      "text": "Apply filters",
+      "id": "adminSupportFilter",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 78,
+      "text": "Create draft",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "form-submit"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 79,
+      "text": "Save platform settings",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "form-submit"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 80,
+      "text": "\u00d7",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 81,
+      "text": "Create with AI",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "form-submit"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 82,
+      "text": "\u00d7",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 83,
+      "text": "Import and open editor",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "form-submit"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 84,
+      "text": "\u00d7",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 85,
+      "text": "Send transfer invitation",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "form-submit"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 86,
+      "text": "\u00d7",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 87,
+      "text": "Send enquiry",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "form-submit"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 88,
+      "text": "\u00d7",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 89,
+      "text": "Permanently delete account",
+      "id": "deleteAccountSubmit",
+      "type": "submit",
+      "ok": true,
+      "reason": "disabled-static"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 90,
+      "text": "Sign in again to continue",
+      "id": "deleteAccountReauth",
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 91,
+      "text": "\u00d7",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 92,
+      "text": "\u00d7",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 1,
+      "text": "\u21b6",
+      "id": "undoBtn",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 2,
+      "text": "\u21b7",
+      "id": "redoBtn",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 3,
+      "text": "Preview",
+      "id": "previewBtn",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 4,
+      "text": "Publish",
+      "id": "publishBtn",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 5,
+      "text": "Pages",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 6,
+      "text": "Site",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 7,
+      "text": "AI",
+      "id": "aiTab",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 8,
+      "text": "Business profile",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 9,
+      "text": "Brand system",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 10,
+      "text": "SEO & Discoverability",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 11,
+      "text": "Navigation",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 12,
+      "text": "Revisions",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 13,
+      "text": "Accessibility",
+      "id": "a11yBtn",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 14,
+      "text": "Save basics",
+      "id": "saveBtn",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 15,
+      "text": "Apply AI edit",
+      "id": "aiApply",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 16,
+      "text": "Desktop",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 17,
+      "text": "Tablet",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 18,
+      "text": "Mobile",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 19,
+      "text": "\u21bb",
+      "id": "refreshPreview",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 20,
+      "text": "Content",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 21,
+      "text": "Style",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 22,
+      "text": "Layout",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 23,
+      "text": "Motion",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 24,
+      "text": "Responsive",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 25,
+      "text": "\u00d7",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 26,
+      "text": "Save business profile",
+      "id": "saveBusinessProfile",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 27,
+      "text": "\u00d7",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 28,
+      "text": "Choose logo",
+      "id": "brandLogoBtn",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 29,
+      "text": "Choose alternate logo",
+      "id": "brandAltLogoBtn",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 30,
+      "text": "Choose favicon",
+      "id": "brandFaviconBtn",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 31,
+      "text": "Apply brand to website",
+      "id": "applyBrand",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 32,
+      "text": "\u00d7",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 33,
+      "text": "Add link",
+      "id": "footerLinkAdd",
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 34,
+      "text": "Save site SEO settings",
+      "id": "saveSiteSeo",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 35,
+      "text": "Choose Open Graph image",
+      "id": "seoOgImage",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 36,
+      "text": "\u2726 Suggest metadata with AI",
+      "id": "seoAiAssist",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 37,
+      "text": "Save page SEO",
+      "id": "applySeo",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 38,
+      "text": "Run SEO/GEO health check",
+      "id": "seoHealthBtn",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 39,
+      "text": "\u00d7",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 40,
+      "text": "\u00d7",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 41,
+      "text": "Create restore point",
+      "id": "createBackup",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 42,
+      "text": "\u00d7",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 43,
+      "text": "\u00d7",
+      "id": "closeMedia",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 44,
+      "text": "Library",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 45,
+      "text": "Upload",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 46,
+      "text": "Stock",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 47,
+      "text": "Upload & use",
+      "id": "uploadBtn",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "editor.html",
+      "index": 48,
+      "text": "Search",
+      "id": "stockSearch",
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "forgot-password.html",
+      "index": 1,
+      "text": "Send reset link",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "generic-form-submit"
+    },
+    {
+      "page": "freelancer-profile.html",
+      "index": 1,
+      "text": "Close",
+      "id": "closeEnquiry",
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "freelancer-profile.html",
+      "index": 2,
+      "text": "Send enquiry",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "form-submit"
+    },
+    {
+      "page": "index.html",
+      "index": 1,
+      "text": "Menu",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "index.html",
+      "index": 2,
+      "text": "Talk to our experts",
+      "id": "openPro",
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "index.html",
+      "index": 3,
+      "text": "\u00d7",
+      "id": "closePro",
+      "type": "button",
+      "ok": true,
+      "reason": "js-token"
+    },
+    {
+      "page": "index.html",
+      "index": 4,
+      "text": "Send enquiry",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "form-submit"
+    },
+    {
+      "page": "login.html",
+      "index": 1,
+      "text": "Log in",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "generic-form-submit"
+    },
+    {
+      "page": "reset-password.html",
+      "index": 1,
+      "text": "Update password",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "generic-form-submit"
+    },
+    {
+      "page": "signup.html",
+      "index": 1,
+      "text": "Create my workspace",
+      "id": null,
+      "type": "submit",
+      "ok": true,
+      "reason": "form-submit"
+    }
+  ],
+  "links": [
+    {
+      "page": "accept-transfer.html",
+      "index": 1,
+      "text": "Sign in first",
+      "href": "/login",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 1,
+      "text": "Zylora",
+      "href": "/",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "ai-create.html",
+      "index": 2,
+      "text": "Dashboard",
+      "href": "/dashboard",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "choose-plan.html",
+      "index": 1,
+      "text": "Zylora",
+      "href": "/",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 1,
+      "text": "Z Zylora",
+      "href": "/",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 2,
+      "text": "Create with AI",
+      "href": "/ai-create",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 3,
+      "text": "\u2726 Create with AI Generate from a business brief",
+      "href": "/ai-create",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 4,
+      "text": "Create with AI",
+      "href": "/ai-create",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "dashboard.html",
+      "index": 5,
+      "text": "View public marketplace \u2197",
+      "href": "/freelancers",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "editor.html",
+      "index": 1,
+      "text": "Zylora",
+      "href": "/",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "editor.html",
+      "index": 2,
+      "text": "\u2190 Dashboard",
+      "href": "/dashboard",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "editor.html",
+      "index": 3,
+      "text": "Export ZIP",
+      "href": "#",
+      "ok": true,
+      "reason": "js-wired"
+    },
+    {
+      "page": "forgot-password.html",
+      "index": 1,
+      "text": "Back to login",
+      "href": "/login",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "freelancer-profile.html",
+      "index": 1,
+      "text": "Zylora",
+      "href": "/",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "freelancer-profile.html",
+      "index": 2,
+      "text": "\u2190 Freelancers",
+      "href": "/freelancers",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "freelancer-profile.html",
+      "index": 3,
+      "text": "Templates",
+      "href": "/templates",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "freelancer-profile.html",
+      "index": 4,
+      "text": "Log in",
+      "href": "/login",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "freelancer-profile.html",
+      "index": 5,
+      "text": "Get started",
+      "href": "/signup",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "freelancers.html",
+      "index": 1,
+      "text": "Zylora",
+      "href": "/",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "freelancers.html",
+      "index": 2,
+      "text": "Templates",
+      "href": "/templates",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "freelancers.html",
+      "index": 3,
+      "text": "Freelancers",
+      "href": "/freelancers",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "freelancers.html",
+      "index": 4,
+      "text": "Resources",
+      "href": "/blog",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "freelancers.html",
+      "index": 5,
+      "text": "Log in",
+      "href": "/login",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "freelancers.html",
+      "index": 6,
+      "text": "Get started",
+      "href": "/signup",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "freelancers.html",
+      "index": 7,
+      "text": "Talk to Zylora \u2192",
+      "href": "/#pricing",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "index.html",
+      "index": 1,
+      "text": "Skip to content",
+      "href": "#main",
+      "ok": true,
+      "reason": "fragment"
+    },
+    {
+      "page": "index.html",
+      "index": 2,
+      "text": "Zylora",
+      "href": "/",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "index.html",
+      "index": 3,
+      "text": "Product",
+      "href": "#product",
+      "ok": true,
+      "reason": "fragment"
+    },
+    {
+      "page": "index.html",
+      "index": 4,
+      "text": "AI Builder",
+      "href": "/ai-create",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "index.html",
+      "index": 5,
+      "text": "Business",
+      "href": "#business",
+      "ok": true,
+      "reason": "fragment"
+    },
+    {
+      "page": "index.html",
+      "index": 6,
+      "text": "Templates",
+      "href": "/templates",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "index.html",
+      "index": 7,
+      "text": "Pricing",
+      "href": "#pricing",
+      "ok": true,
+      "reason": "fragment"
+    },
+    {
+      "page": "index.html",
+      "index": 8,
+      "text": "Resources",
+      "href": "/blog",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "index.html",
+      "index": 9,
+      "text": "Log in",
+      "href": "/login",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "index.html",
+      "index": 10,
+      "text": "Get started",
+      "href": "/signup",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "index.html",
+      "index": 11,
+      "text": "Build my website",
+      "href": "/ai-create",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "index.html",
+      "index": 12,
+      "text": "Explore templates \u2198",
+      "href": "/templates",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "index.html",
+      "index": 13,
+      "text": "Explore templates \u2197",
+      "href": "/templates",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "index.html",
+      "index": 14,
+      "text": "Start free",
+      "href": "/signup",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "index.html",
+      "index": 15,
+      "text": "Choose Starter",
+      "href": "/signup",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "index.html",
+      "index": 16,
+      "text": "Choose Growth",
+      "href": "/signup",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "index.html",
+      "index": 17,
+      "text": "Zylora",
+      "href": "/",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "index.html",
+      "index": 18,
+      "text": "AI Builder",
+      "href": "/ai-create",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "index.html",
+      "index": 19,
+      "text": "Templates",
+      "href": "/templates",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "index.html",
+      "index": 20,
+      "text": "Freelancers",
+      "href": "/freelancers",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "index.html",
+      "index": 21,
+      "text": "Resources",
+      "href": "/blog",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "index.html",
+      "index": 22,
+      "text": "Log in",
+      "href": "/login",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "legal.html",
+      "index": 1,
+      "text": "Zylora",
+      "href": "/",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "legal.html",
+      "index": 2,
+      "text": "Back to product",
+      "href": "/",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "legal.html",
+      "index": 3,
+      "text": "Terms of Service Rules for accounts, subscriptions, websites, acceptable use and service o",
+      "href": "/terms",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "legal.html",
+      "index": 4,
+      "text": "Privacy Policy How account, visitor, lead, appointment and AI-assistant data is handled.",
+      "href": "/privacy",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "login.html",
+      "index": 1,
+      "text": "Back home",
+      "href": "/",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "login.html",
+      "index": 2,
+      "text": "G Continue with Google",
+      "href": "/api/auth/google/start",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "login.html",
+      "index": 3,
+      "text": "Forgot password?",
+      "href": "/forgot-password",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "login.html",
+      "index": 4,
+      "text": "Create an account",
+      "href": "/signup",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "privacy.html",
+      "index": 1,
+      "text": "Zylora",
+      "href": "/",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "privacy.html",
+      "index": 2,
+      "text": "Legal",
+      "href": "/legal",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "signup.html",
+      "index": 1,
+      "text": "Back home",
+      "href": "/",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "signup.html",
+      "index": 2,
+      "text": "G Continue with Google",
+      "href": "/api/auth/google/start",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "signup.html",
+      "index": 3,
+      "text": "Log in",
+      "href": "/login",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "templates.html",
+      "index": 1,
+      "text": "Zylora",
+      "href": "/",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "templates.html",
+      "index": 2,
+      "text": "Product",
+      "href": "/",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "templates.html",
+      "index": 3,
+      "text": "AI Builder",
+      "href": "/ai-create",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "templates.html",
+      "index": 4,
+      "text": "Templates",
+      "href": "/templates",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "templates.html",
+      "index": 5,
+      "text": "Pricing",
+      "href": "/#pricing",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "templates.html",
+      "index": 6,
+      "text": "Log in",
+      "href": "/login",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "templates.html",
+      "index": 7,
+      "text": "Start free",
+      "href": "/signup",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "templates.html",
+      "index": 8,
+      "text": "Create with AI",
+      "href": "/ai-create",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "templates.html",
+      "index": 9,
+      "text": "Zylora",
+      "href": "/",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "terms.html",
+      "index": 1,
+      "text": "Zylora",
+      "href": "/",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "terms.html",
+      "index": 2,
+      "text": "Legal",
+      "href": "/legal",
+      "ok": true,
+      "reason": "href"
+    },
+    {
+      "page": "verify-email.html",
+      "index": 1,
+      "text": "Return to dashboard",
+      "href": "/dashboard",
+      "ok": true,
+      "reason": "href"
+    }
+  ],
+  "button_total": 172,
+  "button_passed": 172,
+  "link_total": 72,
+  "link_passed": 72,
+  "errors": []
+}

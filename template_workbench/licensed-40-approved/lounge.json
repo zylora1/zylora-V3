@@ -1,0 +1,9 @@
+{
+  "slug": "lounge",
+  "archive": "Lounge-1.0.0.zip",
+  "archive_sha256": "c08199918ae9bc57ac3c9800d2c1129914baad0c4a86bfcd294bdec51c9b787f",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

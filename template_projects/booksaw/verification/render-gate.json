@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "18c73f227bd75d0c808a394a19ae38f015c3d27d84e0aee47e67956b9af5fc4d",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "88d8f51b05cc581690fb8b817dbf1e97e785a9ebf4bd1771868d2ce7651d5f80"
+  },
+  "render_home_sha256": "88d8f51b05cc581690fb8b817dbf1e97e785a9ebf4bd1771868d2ce7651d5f80",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "booksaw-1.0.0.zip",
+  "source_archive_sha256": "b6f8ecc17513340f4f78c03efbfa0c40ae3fffb138476b16ece3bd44ec4f3642",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

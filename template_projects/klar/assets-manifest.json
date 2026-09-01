@@ -1,0 +1,15 @@
+{
+  "source_archive": "klar-1.0.0.zip",
+  "source_archive_sha256": "4b85833de63fa68e642faf1ab107ed26cf213e3b0dc20ea5391860c7b89abf50",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": true,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 19,
+  "external_dependencies_preserved": true,
+  "source_archive_missing_media_repaired": true,
+  "repair_asset_count": 13,
+  "repair_asset_basis": "licensed_local_assets_from_user_supplied_batch"
+}

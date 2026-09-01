@@ -1,0 +1,12 @@
+{
+  "source_archive": "Jessica-1.0.0.zip",
+  "source_archive_sha256": "74172491ce84785a342c7870594e360a3678e420ec7b34e3d9f4fcbbd20035f8",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": true,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 29,
+  "external_dependencies_preserved": true
+}

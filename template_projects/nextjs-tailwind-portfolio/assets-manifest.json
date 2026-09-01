@@ -1,0 +1,12 @@
+{
+  "source_archive": "Next.js-Tailwind-CSS-Portfolio-Template-1.0.0.zip",
+  "source_archive_sha256": "7b5973436af685fa68e26f2275fcf071f23fddc73318bb279ce4850fa86d2f02",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": true,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 21,
+  "external_dependencies_preserved": true
+}

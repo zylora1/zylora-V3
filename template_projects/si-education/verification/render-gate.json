@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "b204665df53b5cd1a94b59a8e5c768c769a54500700b397ab9e66f73f6fa18f1",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "359d6455d17b27811caf987d7addc1ac62346c1564eea3a5276972ac24eb02e0"
+  },
+  "render_home_sha256": "359d6455d17b27811caf987d7addc1ac62346c1564eea3a5276972ac24eb02e0",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "si-education-1.0.0.zip",
+  "source_archive_sha256": "e02c08bfb8aad0a06e01829fa344b08f6723013234fee108f518c6556e6fc529",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

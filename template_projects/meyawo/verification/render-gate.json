@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "e0f766d5183b1c9b9a1e2d1a920a784d912333bf93bd18e61e96155ab1c53ce4",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "7d4786608ad14e4f8465b5df7ce06403fec40da3c8d9eca27dbd406b2312f936"
+  },
+  "render_home_sha256": "7d4786608ad14e4f8465b5df7ce06403fec40da3c8d9eca27dbd406b2312f936",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "meyawo-1.0.0.zip",
+  "source_archive_sha256": "34207779e1d10c7c657b0143f65b7d3c3b6cb8be6dfc346510fa94244a8e3b22",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

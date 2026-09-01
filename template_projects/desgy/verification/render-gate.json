@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "96440fd67318e9526f5d527b6993288de311bc0022a2e0cc98105a6497e49d1d",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "3f0a9a6fb1ad927f6e490067102b728d9dddc4bcdc09889bba948bab90158ba2"
+  },
+  "render_home_sha256": "3f0a9a6fb1ad927f6e490067102b728d9dddc4bcdc09889bba948bab90158ba2",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "Desgy-1.0.0.zip",
+  "source_archive_sha256": "1dd3146d974eabf63d7741fef677d06fab03374e8f9910afe5bdea1c7aef0dfa",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

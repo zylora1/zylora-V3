@@ -1,0 +1,33 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "dc624b8ce391924679e723344f42b4a0e350309247055a6b0eb804f01b63117f",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "about-us": "4f36be052b46cc1d6e07316a1582aa981010c41c1b42e58595a58672ca2a8a28",
+    "blog": "83f44f72c70b1173b39d48183079c2b691fd6ed37854dda9ccf35a7047817409",
+    "blog-detail": "1fa864b1f92faf4215a4ec96cc02849d6818086d7f6189ac539359d4cb78a40e",
+    "contact": "d41aef8ba4b7e58994166c07839541cd7e986949f2d41e8651a2c35f7794a913",
+    "home": "c4c57c63288cf5537f18e30506d4e727a206dfefd3bbce40fa0058b735046e2d",
+    "privacy-policy": "18aee5ce4c9552308ee82b094780799d5f465628dbc1b8920b80d274477e1e0c",
+    "projects": "1b271797b042e80d019310653498c11bca6bc16b64aa4e7f695c4c2c47972457",
+    "projects-detail": "4c203b3c7447c91ba6d1222b9eb6782865818e9b413baa09b635713e863cbf22",
+    "terms-and-conditions": "4ec842c636927233df985866f1ad4e859c950103e081e3dcd69ac68f59303189"
+  },
+  "render_home_sha256": "c4c57c63288cf5537f18e30506d4e727a206dfefd3bbce40fa0058b735046e2d",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "Studiova-1.0.0.zip",
+  "source_archive_sha256": "f1048ea45791cfa61dca2b73ea230280521272b0f58e861dad03961af57351f0",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

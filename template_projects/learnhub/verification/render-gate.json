@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "18c73f227bd75d0c808a394a19ae38f015c3d27d84e0aee47e67956b9af5fc4d",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "32a100adfc107a556498c63a948dcf7340cacdbba03a2c6234b9d04248154aea"
+  },
+  "render_home_sha256": "32a100adfc107a556498c63a948dcf7340cacdbba03a2c6234b9d04248154aea",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "learnhub-1.0.0.zip",
+  "source_archive_sha256": "94f059526a72a2d10211b9b879a1d9ebd9167eec1a9dab03ea79e87e8998353f",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

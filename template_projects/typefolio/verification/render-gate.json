@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "0de35c55806f2f38b6bb472624eeb6fd22b956df4d6979d58dfe6e5d6c47d403",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "c747e2c8e2d393611c27e20c2acc46c9882b50c7bcf0a2e96f74cee7564bfeed"
+  },
+  "render_home_sha256": "c747e2c8e2d393611c27e20c2acc46c9882b50c7bcf0a2e96f74cee7564bfeed",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "Typefolio-1.0.0.zip",
+  "source_archive_sha256": "199986000d2adc43a813f6dba9f3593a59de87c6bba24372cc48f2a19dd8c674",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

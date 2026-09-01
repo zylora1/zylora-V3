@@ -1,0 +1,13 @@
+{
+  "source_archive": "nexora-1.0.0.zip",
+  "source_archive_sha256": "c34c6d73dc81972c271f7adedf5cec6cfbcae8b3d1f95088f83e644a1a7bef1a",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": false,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 9,
+  "external_dependencies_preserved": true,
+  "localized_runtime_assets": true
+}

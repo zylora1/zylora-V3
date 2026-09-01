@@ -1,0 +1,30 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "2697a4187c4733ca3154b1f6f2ddd37cbaf63032f642370b0c90558ed5125f70",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "dental-solutions": "77015bb652c39c5360f8fd519eb5be1d3385cd046e48b1eaef34ef78eb39fd2b",
+    "home": "d4756281bbe73c8e76c9ab95f9b2d9e7cd2555e7032d322c98734a2d63477442",
+    "pricing": "a88416c0afc1689ebb78b80bbfd85b96dce0e01877013f2892a8da7ceacdf6db",
+    "service": "610b17222078578dc302cbad00810732f00a38fccb974d98205377a708a6f6d9",
+    "team": "8c047aa408e21a0385d6f78bdc71dad2d7d2f763c169c7728d00f5867fc520fc",
+    "whyus": "1568961ad132da9b15288ce3af9c642b101c00f95e6d3653f77369a546c70629"
+  },
+  "render_home_sha256": "d4756281bbe73c8e76c9ab95f9b2d9e7cd2555e7032d322c98734a2d63477442",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "primeDental-1.0.0.zip",
+  "source_archive_sha256": "7141f0df286f0fae3258a8729ec3cc40b2b62dcf34352b31a82680fed8a6c5ab",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

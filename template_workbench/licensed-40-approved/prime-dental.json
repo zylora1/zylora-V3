@@ -1,0 +1,14 @@
+{
+  "slug": "prime-dental",
+  "archive": "primeDental-1.0.0.zip",
+  "archive_sha256": "7141f0df286f0fae3258a8729ec3cc40b2b62dcf34352b31a82680fed8a6c5ab",
+  "pages": [
+    "home",
+    "service",
+    "pricing",
+    "team",
+    "whyus",
+    "dental-solutions"
+  ],
+  "status": "passed"
+}

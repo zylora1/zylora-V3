@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "597eb009327b65026a56d1f920607c9dbb6c386cdaed0bd5891f7626fdc9c0f5",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "301ce47618d6e52d9a5ae02d45e3100d00ebb6f43dd0e8fb19a76079d62636c3"
+  },
+  "render_home_sha256": "301ce47618d6e52d9a5ae02d45e3100d00ebb6f43dd0e8fb19a76079d62636c3",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "dSign-1.0.0.zip",
+  "source_archive_sha256": "96aacf72e8446ffa51899bcd782c1fa8fc6080f08df314ea11a3864687049228",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

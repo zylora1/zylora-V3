@@ -1,0 +1,9 @@
+{
+  "slug": "kaira",
+  "archive": "kaira-1.0.0.zip",
+  "archive_sha256": "1a0026191a4d39a26e4aa2f76747a5b382641bbfff9aa93ac9d907ce745f3fd4",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

@@ -1,0 +1,9 @@
+{
+  "slug": "astrodeck",
+  "archive": "astrodeck-1.0.0.zip",
+  "archive_sha256": "1e9ebd3819f36b6fd0b23124372ee7611ddcf61776bb222362ab3f0fcf567d08",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

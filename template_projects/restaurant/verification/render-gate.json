@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "18c73f227bd75d0c808a394a19ae38f015c3d27d84e0aee47e67956b9af5fc4d",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "d908becff20f9c97602a71c8373208ea4e10285a32945ca776efd711ff3fcb1c"
+  },
+  "render_home_sha256": "d908becff20f9c97602a71c8373208ea4e10285a32945ca776efd711ff3fcb1c",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "restaurant-1.0.0.zip",
+  "source_archive_sha256": "081fcb67b92f97b5233edbf43d7d3e011eb64c8078caa441fac6feabed4ce0c7",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

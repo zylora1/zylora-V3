@@ -1,0 +1,18 @@
+{
+  "slug": "eduleb",
+  "archive": "eduleb.zip",
+  "archive_sha256": "8be5a0f901eeb6374fc2ce2500d6f13554938357fffe6be1df0b2c4636e7e7e2",
+  "pages": [
+    "home",
+    "about",
+    "pricing",
+    "instructor",
+    "course",
+    "blog",
+    "contact",
+    "blog-single",
+    "course-details",
+    "faq"
+  ],
+  "status": "passed"
+}

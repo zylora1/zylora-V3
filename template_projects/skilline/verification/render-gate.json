@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "5b38603f6f79bba1befaa7d826fe621edf5976f0d4f2525677a7489ee05d18fa",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "dbd0a59f1d347d8dfae84bf025ea51244ac87d308c2a3171aad7d28ba484bbf9"
+  },
+  "render_home_sha256": "dbd0a59f1d347d8dfae84bf025ea51244ac87d308c2a3171aad7d28ba484bbf9",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "skilline-1.0.0.zip",
+  "source_archive_sha256": "97aad4982536426cdc88ebdba969a31bc78b6e0646e2e9b06ccc691b6a61e784",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

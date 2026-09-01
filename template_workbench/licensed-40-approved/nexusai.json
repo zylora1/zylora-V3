@@ -1,0 +1,9 @@
+{
+  "slug": "nexusai",
+  "archive": "nexusai-1.0.0.zip",
+  "archive_sha256": "01aaee28492b6639674a77b799ee97385bebb5a9126eeaa18ee4c5daa3b36a0e",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

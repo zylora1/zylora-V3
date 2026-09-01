@@ -1,0 +1,12 @@
+{
+  "source_archive": "astrolus-1.0.0.zip",
+  "source_archive_sha256": "5dcd63c8b6b28f1dab8570a74caa5ffd4d0e44de71dea79d103ea33ee348b538",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": true,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 23,
+  "external_dependencies_preserved": true
+}

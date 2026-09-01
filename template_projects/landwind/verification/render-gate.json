@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "78a203bed62131329738f9bfa96dd8f94d2266ff789214adda4ff94a3c93e13e",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "8533fff0e9539dcfa191f87b3043708e7e833586cf42a12d95dbe0ab91e9baca"
+  },
+  "render_home_sha256": "8533fff0e9539dcfa191f87b3043708e7e833586cf42a12d95dbe0ab91e9baca",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "landwind-1.0.0.zip",
+  "source_archive_sha256": "d5c4e1269dc0d40c1537c69db0948b8ed7ada1205f7c2f3fc1a71076195ddfb5",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

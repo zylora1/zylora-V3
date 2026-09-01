@@ -1,0 +1,9 @@
+{
+  "slug": "foodmart",
+  "archive": "FoodMart-1.0.0.zip",
+  "archive_sha256": "af4a93116cf72f4defc8abdaf9716a45e40f7b904b2564d21078623d348d8a2b",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

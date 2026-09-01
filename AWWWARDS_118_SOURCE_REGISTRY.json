@@ -1,0 +1,957 @@
+{
+  "count": 118,
+  "policy": "Exact reproduction only when source license permits redistribution/modification. Otherwise reference-only.",
+  "items": [
+    {
+      "id": 1,
+      "name": "1820 Productions",
+      "awwwards_url": "https://www.awwwards.com/sites/1820-productions",
+      "live_url": "https://www.1820productions.com",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 2,
+      "name": "Adam Bricker",
+      "awwwards_url": "https://www.awwwards.com/sites/adam-bricker",
+      "live_url": "https://www.adambricker.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 3,
+      "name": "Adovasio",
+      "awwwards_url": "https://www.awwwards.com/sites/adovasio",
+      "live_url": "https://adovasio.it/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 4,
+      "name": "Art Here 2025 - Richard Mille",
+      "awwwards_url": "https://www.awwwards.com/sites/art-here-2025-richard-mille",
+      "live_url": "https://artprize-shadows.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 5,
+      "name": "Artefakt",
+      "awwwards_url": "https://www.awwwards.com/sites/artefakt",
+      "live_url": "https://artefakt.mov/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 6,
+      "name": "Artem Shcherban Portfolio",
+      "awwwards_url": "https://www.awwwards.com/sites/artem-shcherban-portfolio",
+      "live_url": "https://artemshcherban.com",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 7,
+      "name": "Aupale Vodka",
+      "awwwards_url": "https://www.awwwards.com/sites/aupale-vodka",
+      "live_url": "https://www.aupalevodka.com/en/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 8,
+      "name": "AVA SRG",
+      "awwwards_url": "https://www.awwwards.com/sites/ava-srg",
+      "live_url": "https://srg.ava-digital.site/en",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 9,
+      "name": "Aventura Dental Arts",
+      "awwwards_url": "https://www.awwwards.com/sites/aventura-dental-arts",
+      "live_url": "https://aventuradentalarts.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 10,
+      "name": "Bécane Paris",
+      "awwwards_url": "https://www.awwwards.com/sites/becane-paris",
+      "live_url": "https://www.becaneparis.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 11,
+      "name": "Bruno's Portfolio",
+      "awwwards_url": "https://www.awwwards.com/sites/brunos-portfolio",
+      "live_url": "https://bruno-simon.com",
+      "license_status": "verified MIT",
+      "mode": "exact structure/motion allowed; change content + colors only",
+      "source_repo": "https://github.com/brunosimon/folio-2025",
+      "implementation_status": "verified and commit-pinned; not public until complete local source/binary/render gate passes",
+      "source_commit": "41046b57eeed8d156d9c3fd7fa259900baef7816"
+    },
+    {
+      "id": 12,
+      "name": "©Design by Dylan",
+      "awwwards_url": "https://www.awwwards.com/sites/c-design-by-dylan",
+      "live_url": "https://www.dylanbrouwer.design/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 13,
+      "name": "Cathy DOLLE Portfolio",
+      "awwwards_url": "https://www.awwwards.com/sites/cathy-dolle-portfolio-1",
+      "live_url": "https://www.cathydolle.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 14,
+      "name": "Champions For Good",
+      "awwwards_url": "https://www.awwwards.com/sites/champions-for-good",
+      "live_url": "https://www.champions4good.club/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 15,
+      "name": "Ciridae",
+      "awwwards_url": "https://www.awwwards.com/sites/ciridae",
+      "live_url": "https://www.ciridae.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 16,
+      "name": "Corentin Bernadou Portfolio",
+      "awwwards_url": "https://www.awwwards.com/sites/corentin-bernadou-portfolio",
+      "live_url": "https://corentinbernadou.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 17,
+      "name": "D2C Life Science",
+      "awwwards_url": "https://www.awwwards.com/sites/d2c-life-science",
+      "live_url": "https://www.d2c-lifescience.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 18,
+      "name": "Damn Good Brands",
+      "awwwards_url": "https://www.awwwards.com/sites/damn-good-brands-2",
+      "live_url": "https://damngoodbrands.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 19,
+      "name": "Darknode",
+      "awwwards_url": "https://www.awwwards.com/sites/darknode",
+      "live_url": "https://www.darknode.army/en",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 20,
+      "name": "Dime MTL",
+      "awwwards_url": "https://www.awwwards.com/sites/dime-mtl",
+      "live_url": "https://dimemtl.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 21,
+      "name": "Emilie Aubry",
+      "awwwards_url": "https://www.awwwards.com/sites/emilie-aubry",
+      "live_url": "https://www.emilieaubry.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 22,
+      "name": "Estrela",
+      "awwwards_url": "https://www.awwwards.com/sites/estrela",
+      "live_url": "https://estrela.studio/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 23,
+      "name": "Ethan & Tom",
+      "awwwards_url": "https://www.awwwards.com/sites/ethan-tom",
+      "live_url": "https://ethanandtom.com",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 24,
+      "name": "Etienne Planeix",
+      "awwwards_url": "https://www.awwwards.com/sites/etienne-planeix",
+      "live_url": "https://www.etienne.studio/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 25,
+      "name": "Explore Primland",
+      "awwwards_url": "https://www.awwwards.com/sites/explore-primland",
+      "live_url": "https://explore.ownprimland.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 26,
+      "name": "Farm Minerals",
+      "awwwards_url": "https://www.awwwards.com/sites/farm-minerals",
+      "live_url": "https://www.farmminerals.com/promo",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 27,
+      "name": "FC Porto Memorial",
+      "awwwards_url": "https://www.awwwards.com/sites/fc-porto-memorial",
+      "live_url": "https://memorial.fcporto.pt/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 28,
+      "name": "Fluid Glass",
+      "awwwards_url": "https://www.awwwards.com/sites/fluid-glass",
+      "live_url": "https://fluid.glass/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 29,
+      "name": "FOLLOW.ART",
+      "awwwards_url": "https://www.awwwards.com/sites/follow-art",
+      "live_url": "https://follow.art/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 30,
+      "name": "Foudre, Human Social Club",
+      "awwwards_url": "https://www.awwwards.com/sites/foudre-human-social-club",
+      "live_url": "https://www.agencefoudre.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 31,
+      "name": "Gavin Schneider Productions",
+      "awwwards_url": "https://www.awwwards.com/sites/gavin-schneider-productions",
+      "live_url": "https://www.gsproductions.co.za/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 32,
+      "name": "Good Fella",
+      "awwwards_url": "https://www.awwwards.com/sites/good-fella",
+      "live_url": "https://good-fella.com",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 33,
+      "name": "GQ & AP The Extraordinary Lab",
+      "awwwards_url": "https://www.awwwards.com/sites/gq-ap-the-extraordinary-lab",
+      "live_url": "https://www.gq.com/sponsored/story/the-extraordinary-lab",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 34,
+      "name": "Griflan",
+      "awwwards_url": "https://www.awwwards.com/sites/griflan-2",
+      "live_url": "https://griflan.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 35,
+      "name": "ICOMAT",
+      "awwwards_url": "https://www.awwwards.com/sites/icomat",
+      "live_url": "https://www.icomat.co.uk/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 36,
+      "name": "IntegratedBio",
+      "awwwards_url": "https://www.awwwards.com/sites/integratedbio",
+      "live_url": "https://integratedbiosciences.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 37,
+      "name": "IRONHILL",
+      "awwwards_url": "https://www.awwwards.com/sites/ironhill",
+      "live_url": "https://ironhill.au/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 38,
+      "name": "iyO",
+      "awwwards_url": "https://www.awwwards.com/sites/iyo",
+      "live_url": "https://www.iyo.ai/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 39,
+      "name": "Jason Bergh",
+      "awwwards_url": "https://www.awwwards.com/sites/jason-bergh",
+      "live_url": "https://www.jasonbergh.com",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 40,
+      "name": "Jesko Jets",
+      "awwwards_url": "https://www.awwwards.com/sites/jesko-jets",
+      "live_url": "https://jeskojets.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 41,
+      "name": "Joby",
+      "awwwards_url": "https://www.awwwards.com/sites/joby",
+      "live_url": "https://www.jobyaviation.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 42,
+      "name": "Language Explorer",
+      "awwwards_url": "https://www.awwwards.com/sites/language-explorer",
+      "live_url": "https://sites.research.google/languages/language-explorer",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 43,
+      "name": "Lightship",
+      "awwwards_url": "https://www.awwwards.com/sites/lightship-1",
+      "live_url": "https://www.lightshiprv.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 44,
+      "name": "Lightweight",
+      "awwwards_url": "https://www.awwwards.com/sites/lightweight",
+      "live_url": "https://lightweight.info/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 45,
+      "name": "Max Mara - Untamed Heroine",
+      "awwwards_url": "https://www.awwwards.com/sites/max-mara-untamed-heroine",
+      "live_url": "https://untamedheroinegame.maxmara.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 46,
+      "name": "Maxima Therapy",
+      "awwwards_url": "https://www.awwwards.com/sites/maxima-therapy",
+      "live_url": "https://maximatherapy.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 47,
+      "name": "MERSI",
+      "awwwards_url": "https://www.awwwards.com/sites/mersi",
+      "live_url": "https://www.mersi-architecture.com",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 48,
+      "name": "Midlife Engineering",
+      "awwwards_url": "https://www.awwwards.com/sites/midlife-engineering",
+      "live_url": "https://midlife.engineering",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 49,
+      "name": "MOB LINKS",
+      "awwwards_url": "https://www.awwwards.com/sites/mob-links",
+      "live_url": "https://moblinks.fr/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 50,
+      "name": "MoMoney",
+      "awwwards_url": "https://www.awwwards.com/sites/momoney",
+      "live_url": "https://www.museumofmoney.com",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 51,
+      "name": "Mouthful of Dust",
+      "awwwards_url": "https://www.awwwards.com/sites/mouthful-of-dust",
+      "live_url": "https://www.slv.vic.gov.au/mouthful-of-dust/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 52,
+      "name": "Mr. Pandas Paper Portfolio",
+      "awwwards_url": "https://www.awwwards.com/sites/mr-pandas-paper-portfolio",
+      "live_url": "https://www.mr-pandas-psychologically-safe-portfolio.com/",
+      "license_status": "verified MIT",
+      "mode": "exact structure/motion allowed; change content + colors only",
+      "source_repo": "https://github.com/andrewwoan/mr-pandas-psychologically-safe-portfolio",
+      "implementation_status": "verified and commit-pinned; binary transport proven; not public until complete local source/binary/render gate passes",
+      "source_commit": "b99508de7a34d06666f5582e094a6557335e3577",
+      "binary_probe": "public/models/Panda.glb blob 32158c591a187bbf93fe401274ac1a31f137f902 fetched losslessly as base64"
+    },
+    {
+      "id": 53,
+      "name": "Naked City Films",
+      "awwwards_url": "https://www.awwwards.com/sites/naked-city-films",
+      "live_url": "https://www.nakedcityfilms.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 54,
+      "name": "NaughtyDuk©",
+      "awwwards_url": "https://www.awwwards.com/sites/naughtyduk-c-1",
+      "live_url": "https://naughtyduk.com",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 55,
+      "name": "Neon Rated",
+      "awwwards_url": "https://www.awwwards.com/sites/neon-rated",
+      "live_url": "https://neonrated.com",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 56,
+      "name": "Nfinite",
+      "awwwards_url": "https://www.awwwards.com/sites/nfinite",
+      "live_url": "https://www.nfinitenano.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 57,
+      "name": "Nicola Romei™",
+      "awwwards_url": "https://www.awwwards.com/sites/nicola-romeitm",
+      "live_url": "https://www.nicolaromei.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 58,
+      "name": "Nine To Five",
+      "awwwards_url": "https://www.awwwards.com/sites/nine-to-five",
+      "live_url": "https://www.9to5studio.it/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 59,
+      "name": "OceanX 2025",
+      "awwwards_url": "https://www.awwwards.com/sites/oceanx-2025",
+      "live_url": "https://2025.oceanx.org/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 60,
+      "name": "Odd Ritual",
+      "awwwards_url": "https://www.awwwards.com/sites/odd-ritual",
+      "live_url": "https://oddritualgolf.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 61,
+      "name": "OGAKI",
+      "awwwards_url": "https://www.awwwards.com/sites/ogaki",
+      "live_url": "https://www.ogakidigital.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 62,
+      "name": "ON Energy",
+      "awwwards_url": "https://www.awwwards.com/sites/on-energy",
+      "live_url": "https://www.on.energy/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 63,
+      "name": "Oryzo AI",
+      "awwwards_url": "https://www.awwwards.com/sites/oryzo-ai",
+      "live_url": "https://oryzo.ai",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 64,
+      "name": "Outsource Consultants, Inc",
+      "awwwards_url": "https://www.awwwards.com/sites/outsource-consultants-inc",
+      "live_url": "https://oci.madebybuzzworthy.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 65,
+      "name": "Paper Tiger",
+      "awwwards_url": "https://www.awwwards.com/sites/paper-tiger",
+      "live_url": "https://www.papertiger.com",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 66,
+      "name": "Pedestal",
+      "awwwards_url": "https://www.awwwards.com/sites/pedestal",
+      "live_url": "https://www.pedestal.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 67,
+      "name": "Planetoño",
+      "awwwards_url": "https://www.awwwards.com/sites/planetono",
+      "live_url": "https://www.planetono.space",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 68,
+      "name": "Prototype",
+      "awwwards_url": "https://www.awwwards.com/sites/prototype-3",
+      "live_url": "https://www.prototypestudio.fr/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 69,
+      "name": "Ravi Klaassens",
+      "awwwards_url": "https://www.awwwards.com/sites/ravi-klaassens",
+      "live_url": "https://www.raviklaassens.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 70,
+      "name": "San Rita",
+      "awwwards_url": "https://www.awwwards.com/sites/san-rita",
+      "live_url": "https://sanrita.ca/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 71,
+      "name": "Shed",
+      "awwwards_url": "https://www.awwwards.com/sites/shed",
+      "live_url": "https://shed.design/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 72,
+      "name": "Shift 5",
+      "awwwards_url": "https://www.awwwards.com/sites/shift-5",
+      "live_url": "https://shift5.io",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 73,
+      "name": "Shopify Live Globe 2025",
+      "awwwards_url": "https://www.awwwards.com/sites/shopify-live-globe-2025",
+      "live_url": "https://bfcm.shop",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 74,
+      "name": "SILEENT",
+      "awwwards_url": "https://www.awwwards.com/sites/sileent",
+      "live_url": "https://www.sileent.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 75,
+      "name": "Sleep Well Creative",
+      "awwwards_url": "https://www.awwwards.com/sites/sleep-well-creative",
+      "live_url": "https://sleep-well-creatives.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 76,
+      "name": "Slush",
+      "awwwards_url": "https://www.awwwards.com/sites/slush",
+      "live_url": "https://slush.app/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 77,
+      "name": "SŌM",
+      "awwwards_url": "https://www.awwwards.com/sites/som",
+      "live_url": "https://www.drinksom.eu/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 78,
+      "name": "Springs",
+      "awwwards_url": "https://www.awwwards.com/sites/springs",
+      "live_url": "https://springs.estate/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 79,
+      "name": "Studio Dado",
+      "awwwards_url": "https://www.awwwards.com/sites/studio-dado",
+      "live_url": "https://www.studiodado.com",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 80,
+      "name": "Studio Dialect",
+      "awwwards_url": "https://www.awwwards.com/sites/studio-dialect",
+      "live_url": "https://studiodialect.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 81,
+      "name": "Stuff by Kris Temmerman",
+      "awwwards_url": "https://www.awwwards.com/sites/stuff-by-kris-temmerman",
+      "live_url": "https://neuroproductions.be",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 82,
+      "name": "SUTÉRA",
+      "awwwards_url": "https://www.awwwards.com/sites/sutera",
+      "live_url": "https://www.sutera.ch/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 83,
+      "name": "Telha Clarke",
+      "awwwards_url": "https://www.awwwards.com/sites/telha-clarke",
+      "live_url": "https://telhaclarke.com.au/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 84,
+      "name": "The Lookback",
+      "awwwards_url": "https://www.awwwards.com/sites/the-lookback",
+      "live_url": "https://tlb.betteroff.studio/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 85,
+      "name": "The Obsidian Assembly",
+      "awwwards_url": "https://www.awwwards.com/sites/the-obsidian-assembly",
+      "live_url": "https://obsidianassembly.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 86,
+      "name": "The Renaissance Edition",
+      "awwwards_url": "https://www.awwwards.com/sites/the-renaissance-edition",
+      "live_url": "https://www.shopify.com/editions/winter2026",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 87,
+      "name": "UNESCO Stolen Objects Museum",
+      "awwwards_url": "https://www.awwwards.com/sites/unesco-stolen-objects-museum",
+      "live_url": "https://museum.unesco.org",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 88,
+      "name": "Unseen Studio 2025 Wrapped",
+      "awwwards_url": "https://www.awwwards.com/sites/unseen-studio-2025-wrapped",
+      "live_url": "https://2025.unseen.co/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 89,
+      "name": "Utopia Tokyo",
+      "awwwards_url": "https://www.awwwards.com/sites/utopia-tokyo",
+      "live_url": "https://www.utopiatokyo.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 90,
+      "name": "VALIENTE",
+      "awwwards_url": "https://www.awwwards.com/sites/valiente",
+      "live_url": "https://valientebrands.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 91,
+      "name": "Vast",
+      "awwwards_url": "https://www.awwwards.com/sites/vast",
+      "live_url": "https://vastspace.com",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 92,
+      "name": "Vibrant Wellness",
+      "awwwards_url": "https://www.awwwards.com/sites/vibrant-wellness",
+      "live_url": "https://vibrant.noomoagency.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 93,
+      "name": "Voku.Studio™",
+      "awwwards_url": "https://www.awwwards.com/sites/voku-studiotm",
+      "live_url": "https://voku.studio/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 94,
+      "name": "Waabi",
+      "awwwards_url": "https://www.awwwards.com/sites/waabi",
+      "live_url": "https://waabi.ai",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 95,
+      "name": "Weekend Max Mara Holiday Edit",
+      "awwwards_url": "https://www.awwwards.com/sites/weekend-max-mara-holiday-edit",
+      "live_url": "https://weekend-mm-2025-gift-guide-production.monogrid.io",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 96,
+      "name": "Yucca Packaging",
+      "awwwards_url": "https://www.awwwards.com/sites/yucca-packaging",
+      "live_url": "https://yucca.co.za/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 97,
+      "name": "Knights of Design",
+      "awwwards_url": "https://www.awwwards.com/sites/knights-of-design",
+      "live_url": "http://knights.design/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 98,
+      "name": "Glad Studio",
+      "awwwards_url": "https://www.awwwards.com/sites/glad-studio",
+      "live_url": "https://gladstudio.se/en/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 99,
+      "name": "PQ by Ron Arad",
+      "awwwards_url": "https://www.awwwards.com/sites/pq-by-ron-arad",
+      "live_url": "https://www.pqbyronarad.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 100,
+      "name": "Fresh Connections Catering",
+      "awwwards_url": "https://www.awwwards.com/sites/fresh-connections-catering",
+      "live_url": "http://www.freshconnectionscatering.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 101,
+      "name": "The Lead Agency",
+      "awwwards_url": "https://www.awwwards.com/sites/the-lead-agency",
+      "live_url": "http://www.theleadagency.com/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 102,
+      "name": "City of Rivière-du-Loup",
+      "awwwards_url": "https://www.awwwards.com/sites/city-of-riviere-du-loup",
+      "live_url": "http://villerdl.ca/fr",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 103,
+      "name": "Pinkfox",
+      "awwwards_url": "https://www.awwwards.com/sites/pinkfox",
+      "live_url": "http://pinkfox.me/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 104,
+      "name": "Vestfrost",
+      "awwwards_url": "https://www.awwwards.com/sites/vestfrost",
+      "live_url": "http://vestfrost.ua/en",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 105,
+      "name": "Deni Cler Milano 45th Anniv",
+      "awwwards_url": "https://www.awwwards.com/sites/deni-cler-milano-45th-anniv",
+      "live_url": "http://www.45.denicler.eu/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 106,
+      "name": "Feudi di San Gregorio",
+      "awwwards_url": "https://www.awwwards.com/sites/feudi-di-san-gregorio",
+      "live_url": "https://www.feudi.it/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 107,
+      "name": "The Generation",
+      "awwwards_url": "https://www.awwwards.com/sites/the-generation",
+      "live_url": "http://thegeneration.se/",
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 108,
+      "name": "Self Aware",
+      "awwwards_url": "https://www.awwwards.com/sites/self-aware",
+      "live_url": null,
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 109,
+      "name": "Next Big Thing",
+      "awwwards_url": "https://www.awwwards.com/sites/next-big-thing",
+      "live_url": null,
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 110,
+      "name": "Proof",
+      "awwwards_url": "https://www.awwwards.com/sites/proof-1",
+      "live_url": null,
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 111,
+      "name": "Bear Grylls",
+      "awwwards_url": "https://www.awwwards.com/sites/bear-grylls",
+      "live_url": null,
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 112,
+      "name": "Kaleidoz™ Design Website",
+      "awwwards_url": "https://www.awwwards.com/sites/kaleidoztm-design-website",
+      "live_url": null,
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 113,
+      "name": "Infini",
+      "awwwards_url": "https://www.awwwards.com/sites/infini",
+      "live_url": null,
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 114,
+      "name": "Born & Bred",
+      "awwwards_url": "https://www.awwwards.com/sites/born-bred",
+      "live_url": null,
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 115,
+      "name": "Possibles",
+      "awwwards_url": "https://www.awwwards.com/sites/possibles",
+      "live_url": null,
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 116,
+      "name": "Olivier Staub",
+      "awwwards_url": "https://www.awwwards.com/sites/olivier-staub",
+      "live_url": null,
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 117,
+      "name": "Bright Sprout",
+      "awwwards_url": "https://www.awwwards.com/sites/bright-sprout",
+      "live_url": null,
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    },
+    {
+      "id": 118,
+      "name": "STR8FIRE",
+      "awwwards_url": "https://www.awwwards.com/sites/str8fire",
+      "live_url": null,
+      "license_status": "pending",
+      "mode": "reference-only until license verified"
+    }
+  ]
+}

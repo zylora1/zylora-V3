@@ -1,0 +1,17 @@
+{
+  "slug": "studiova",
+  "archive": "Studiova-1.0.0.zip",
+  "archive_sha256": "f1048ea45791cfa61dca2b73ea230280521272b0f58e861dad03961af57351f0",
+  "pages": [
+    "home",
+    "projects",
+    "blog",
+    "contact",
+    "about-us",
+    "blog-detail",
+    "privacy-policy",
+    "projects-detail",
+    "terms-and-conditions"
+  ],
+  "status": "passed"
+}

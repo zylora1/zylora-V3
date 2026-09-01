@@ -1,0 +1,28 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "3597c60cf9863781fc7bbc76f7fb47d848f278e09a8874b8ae92e8ef3e5f8009",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "96dd94d7ed34c9a7765e893ea57a0d449ad8fc4bc018f1866980cc9271f3e2ff",
+    "portfolio-single-1": "8e00d06db060a699752babdd774c85c9c20fc9644efbafd8f51383e0aac53e91",
+    "portfolio-single-2": "adc2d1edb944b28349cf5883dae0d155b433a92ad5658a6c966600d9ec43bee5",
+    "portfolio-single-3": "a4504f13a2304e89c1b9ce7a48705806d7e4f23c937548a981579ff8746e6182"
+  },
+  "render_home_sha256": "96dd94d7ed34c9a7765e893ea57a0d449ad8fc4bc018f1866980cc9271f3e2ff",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "minimal-1.0.0.zip",
+  "source_archive_sha256": "861748bf90ca085a8c6ce55c7742fba10ef231ad26b58e15d2f5629dba1ca9e7",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

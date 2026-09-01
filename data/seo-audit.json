@@ -1,0 +1,23 @@
+{
+  "checks": 17,
+  "errors": [],
+  "items": [
+    "landing returns 200",
+    "title length is search-friendly",
+    "meta description is present and useful length",
+    "robots meta enables rich previews",
+    "absolute canonical URL present",
+    "web manifest linked",
+    "Open Graph title/description/image present",
+    "Twitter card metadata present",
+    "JSON-LD parses as valid JSON",
+    "Organization, WebSite, SoftwareApplication and FAQPage schemas present",
+    "JSON-LD pricing includes Managed by experts",
+    "templates canonical is absolute",
+    "robots.txt exposes sitemap and protects private routes",
+    "dynamic sitemap contains core public routes",
+    "manifest endpoint has correct content type",
+    "Open Graph image is locally served",
+    "llms.txt is available"
+  ]
+}

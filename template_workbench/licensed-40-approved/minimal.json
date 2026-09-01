@@ -1,0 +1,12 @@
+{
+  "slug": "minimal",
+  "archive": "minimal-1.0.0.zip",
+  "archive_sha256": "861748bf90ca085a8c6ce55c7742fba10ef231ad26b58e15d2f5629dba1ca9e7",
+  "pages": [
+    "home",
+    "portfolio-single-1",
+    "portfolio-single-2",
+    "portfolio-single-3"
+  ],
+  "status": "passed"
+}

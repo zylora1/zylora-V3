@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "8d1b0760ede175d1dec0915bda04232bca135bf9cf672d17295ab4e11b6252b3",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "3cbe0b8aadc84c79610b0faf79383ffa714d9b5d8dd5188dc77ea3cd472956f3"
+  },
+  "render_home_sha256": "3cbe0b8aadc84c79610b0faf79383ffa714d9b5d8dd5188dc77ea3cd472956f3",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "SaasCandy-1.0.0.zip",
+  "source_archive_sha256": "7c14f102d5f6ed704a6c2f894f10dec778c982413e14e84bf275e1431597af8b",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

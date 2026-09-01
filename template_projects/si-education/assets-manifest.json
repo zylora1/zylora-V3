@@ -1,0 +1,12 @@
+{
+  "source_archive": "si-education-1.0.0.zip",
+  "source_archive_sha256": "e02c08bfb8aad0a06e01829fa344b08f6723013234fee108f518c6556e6fc529",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": true,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 44,
+  "external_dependencies_preserved": true
+}

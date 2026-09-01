@@ -1,0 +1,9 @@
+{
+  "slug": "learnhub",
+  "archive": "learnhub-1.0.0.zip",
+  "archive_sha256": "94f059526a72a2d10211b9b879a1d9ebd9167eec1a9dab03ea79e87e8998353f",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

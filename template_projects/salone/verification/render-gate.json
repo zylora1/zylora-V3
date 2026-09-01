@@ -1,0 +1,33 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "f7d27c1f958fd81956ef87817ec3669538ad9697d25cea44d1948af8f6c8bbc4",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "about": "04951d9cfef96dad9a7117466bb59cb39d855e6a572f64b04b87b97ced62926c",
+    "blog": "d92465acdf10558e6620fd35212b61c6ed710379b7c33c33b82bdee2bde40d1f",
+    "contact": "087e102c8d73f0480fc7d304540aabe31cc376a4b629506cfbd96ea267f3170b",
+    "gallery": "be69c363ad7abe29812ea369ac8f0c72d6fb93856b6792fa3ffb362ae74a931b",
+    "home": "a560990d8555f0781678b7d8196dc39c5f70118b66ba90db90b86d491832f8a9",
+    "price": "005d1edc1a6ca3e555a53d5bde3b63f56b1f62327a041b44e8596fbb042a6598",
+    "service": "07e8884d89aeb392a5165e14922ea3ba8ed99bb6578e5611ed14f4ad6971e754",
+    "team": "ac1f580c48484c66235396f46ee8d2c25b6dc9ee6d01e1b36b782895afba285f",
+    "testimonial": "08379710142c4fd0c511c3951a87baba9919f18f63bda0a8fc6a742f81a8866b"
+  },
+  "render_home_sha256": "a560990d8555f0781678b7d8196dc39c5f70118b66ba90db90b86d491832f8a9",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "Salone-1.0.0.zip",
+  "source_archive_sha256": "0148bc8acfefb345a6e39b08e405f46aa39b18a28322854435ef5cb9a988c858",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

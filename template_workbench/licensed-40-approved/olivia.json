@@ -1,0 +1,9 @@
+{
+  "slug": "olivia",
+  "archive": "olivia-1.0.0.zip",
+  "archive_sha256": "8697f02f323c34d032731d6c2134cd1826ea057ebb0fde311eb058cf5f2bb401",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

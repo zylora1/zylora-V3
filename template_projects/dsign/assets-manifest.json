@@ -1,0 +1,12 @@
+{
+  "source_archive": "dSign-1.0.0.zip",
+  "source_archive_sha256": "96aacf72e8446ffa51899bcd782c1fa8fc6080f08df314ea11a3864687049228",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": false,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 52,
+  "external_dependencies_preserved": false
+}

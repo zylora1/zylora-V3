@@ -1,0 +1,191 @@
+{
+  "batch": "capacity-batch-001",
+  "mode": "capacity_driven",
+  "candidate_count": 27,
+  "public_count": 0,
+  "status": "implementation_qa_passed_reference_review_pending",
+  "projects": [
+    {
+      "id": "ref-0018",
+      "slug": "after-hours",
+      "title": "After Hours"
+    },
+    {
+      "id": "ref-0007",
+      "slug": "between-worlds",
+      "title": "Between Worlds"
+    },
+    {
+      "id": "ref-0021",
+      "slug": "carbon-thread",
+      "title": "Carbon Thread"
+    },
+    {
+      "id": "ref-0006",
+      "slug": "city-form",
+      "title": "City Form"
+    },
+    {
+      "id": "ref-0047",
+      "slug": "clayline-data",
+      "title": "Mosaic Data"
+    },
+    {
+      "id": "ref-0013",
+      "slug": "clear-rule",
+      "title": "Clear Rule"
+    },
+    {
+      "id": "ref-0036",
+      "slug": "dia-workspace",
+      "title": "Luma Browser"
+    },
+    {
+      "id": "ref-0004",
+      "slug": "ether-edge",
+      "title": "Ether Edge"
+    },
+    {
+      "id": "ref-0019",
+      "slug": "first-take",
+      "title": "First Take"
+    },
+    {
+      "id": "ref-0011",
+      "slug": "flowline-finance",
+      "title": "Flowline"
+    },
+    {
+      "id": "ref-0008",
+      "slug": "framework-zero",
+      "title": "Framework Zero"
+    },
+    {
+      "id": "ref-0060",
+      "slug": "grove-code",
+      "title": "Grove Code"
+    },
+    {
+      "id": "ref-0002",
+      "slug": "high-stakes-craft",
+      "title": "High Stakes Craft"
+    },
+    {
+      "id": "ref-0012",
+      "slug": "home-pilot",
+      "title": "Home Pilot"
+    },
+    {
+      "id": "ref-0015",
+      "slug": "living-spores",
+      "title": "Living Spores"
+    },
+    {
+      "id": "ref-0037",
+      "slug": "mint-docs",
+      "title": "Sprig Docs"
+    },
+    {
+      "id": "ref-0009",
+      "slug": "money-mouth",
+      "title": "Money Mouth"
+    },
+    {
+      "id": "ref-0048",
+      "slug": "northside-studio",
+      "title": "Northside"
+    },
+    {
+      "id": "ref-0017",
+      "slug": "open-space",
+      "title": "Open Space"
+    },
+    {
+      "id": "ref-0003",
+      "slug": "parallel-reality",
+      "title": "Parallel Reality"
+    },
+    {
+      "id": "ref-0058",
+      "slug": "prism-tokens",
+      "title": "Prism Tokens"
+    },
+    {
+      "id": "ref-0014",
+      "slug": "resilient-run",
+      "title": "Resilient Run"
+    },
+    {
+      "id": "ref-0005",
+      "slug": "signal-merch",
+      "title": "Signal Merch"
+    },
+    {
+      "id": "ref-0010",
+      "slug": "signal-nudge",
+      "title": "Signal Nudge"
+    },
+    {
+      "id": "ref-0020",
+      "slug": "soft-machine",
+      "title": "Soft Machine"
+    },
+    {
+      "id": "ref-0001",
+      "slug": "tender-theory",
+      "title": "Tender Theory"
+    },
+    {
+      "id": "ref-0016",
+      "slug": "westward-play",
+      "title": "Westward Play"
+    }
+  ],
+  "reference_ids": [
+    "ref-0018",
+    "ref-0007",
+    "ref-0021",
+    "ref-0006",
+    "ref-0047",
+    "ref-0013",
+    "ref-0036",
+    "ref-0004",
+    "ref-0019",
+    "ref-0011",
+    "ref-0008",
+    "ref-0060",
+    "ref-0002",
+    "ref-0012",
+    "ref-0015",
+    "ref-0037",
+    "ref-0009",
+    "ref-0048",
+    "ref-0017",
+    "ref-0003",
+    "ref-0058",
+    "ref-0014",
+    "ref-0005",
+    "ref-0010",
+    "ref-0020",
+    "ref-0001",
+    "ref-0016"
+  ],
+  "rule": "Candidates are independently authored reference reconstructions; publication stays fail-closed until visual, responsive, motion, rights, asset and render gates pass.",
+  "qa": {
+    "asset_uniqueness_passed": true,
+    "responsive_passed_count": 27,
+    "responsive_widths": [
+      1440,
+      1280,
+      1024,
+      768,
+      430,
+      390,
+      375,
+      360
+    ],
+    "layout_report": "template_workbench/capacity-batch-001-qa-v6/qa-report.json",
+    "visual_fidelity_review": "pending",
+    "reference_motion_review": "pending"
+  }
+}

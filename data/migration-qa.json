@@ -1,0 +1,13 @@
+{
+  "checks": 7,
+  "errors": 0,
+  "items": [
+    "fresh database reaches exact migration head",
+    "fresh database contains production editor/marketplace/support tables",
+    "fresh database contains versioned editor/publish columns",
+    "fresh database contains configurable plan credit economics",
+    "obsolete freelancer transfer-fee table is absent",
+    "existing database upgrades from previous head to current head",
+    "editor migration preserves existing website content"
+  ]
+}

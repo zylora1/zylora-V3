@@ -1,0 +1,9 @@
+{
+  "slug": "klar",
+  "archive": "klar-1.0.0.zip",
+  "archive_sha256": "4b85833de63fa68e642faf1ab107ed26cf213e3b0dc20ea5391860c7b89abf50",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

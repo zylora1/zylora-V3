@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "target_public_templates": 3000,
+  "discovery_target": 3600,
+  "default_parallelism": 24,
+  "sources": [
+    {
+      "name": "Lapa Ninja",
+      "enabled": true,
+      "base_url": "https://www.lapa.ninja/",
+      "index_url_template": "https://www.lapa.ninja/page/{page}/",
+      "reference_path_regex": "^/post/[^/?#]+/?$",
+      "max_pages": 400,
+      "priority": 100
+    },
+    {
+      "name": "Awwwards",
+      "enabled": true,
+      "base_url": "https://www.awwwards.com/",
+      "index_url_template": "https://www.awwwards.com/websites/?page={page}",
+      "reference_path_regex": "^/sites/[^/?#]+/?$",
+      "max_pages": 400,
+      "priority": 95
+    },
+    {
+      "name": "Land-book",
+      "enabled": true,
+      "base_url": "https://land-book.com/",
+      "index_url_template": "https://land-book.com/websites?page={page}",
+      "reference_path_regex": "^/websites/[^/?#]+/?$",
+      "max_pages": 300,
+      "priority": 90
+    },
+    {
+      "name": "Godly",
+      "enabled": true,
+      "base_url": "https://godly.website/",
+      "index_url_template": "https://godly.website/websites?page={page}",
+      "reference_path_regex": "^/(?:website|websites)/[^/?#]+/?$",
+      "max_pages": 300,
+      "priority": 88
+    },
+    {
+      "name": "One Page Love",
+      "enabled": true,
+      "base_url": "https://onepagelove.com/",
+      "index_url_template": "https://onepagelove.com/inspiration/page/{page}",
+      "reference_path_regex": "^/[^/?#]+/?$",
+      "max_pages": 300,
+      "priority": 82
+    },
+    {
+      "name": "SiteInspire",
+      "enabled": true,
+      "base_url": "https://www.siteinspire.com/",
+      "index_url_template": "https://www.siteinspire.com/websites?page={page}",
+      "reference_path_regex": "^/websites/[^/?#]+/?$",
+      "max_pages": 300,
+      "priority": 80
+    }
+  ]
+}

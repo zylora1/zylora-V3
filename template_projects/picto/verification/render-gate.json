@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "76b2651e7905fa29dcca23ec57d7c81c200de7109e6bfd4292626e38d5118c94",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "bcfdb9afa3abe44fe2d9d6ff28260568be5a64d1207bee020c51ba332ff3edd7"
+  },
+  "render_home_sha256": "bcfdb9afa3abe44fe2d9d6ff28260568be5a64d1207bee020c51ba332ff3edd7",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "picto-1.0.0.zip",
+  "source_archive_sha256": "4c1a766465763ac4581d00d030a637bbc88c8118399b7acf13f271a99d3f9751",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

@@ -1,0 +1,12 @@
+{
+  "source_archive": "skilline-1.0.0.zip",
+  "source_archive_sha256": "97aad4982536426cdc88ebdba969a31bc78b6e0646e2e9b06ccc691b6a61e784",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": true,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 26,
+  "external_dependencies_preserved": true
+}

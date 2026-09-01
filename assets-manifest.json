@@ -1,0 +1,10 @@
+{
+  "catalogue_template_count": 0,
+  "policy": {
+    "status": "clean_restart",
+    "template_source_rule": "Only add a source-exact implementation when the source is explicitly open-source and its license permits modification and redistribution.",
+    "fidelity_rule": "For permitted open-source templates, preserve layout, spacing, typography treatment, animations, scroll animations, hover effects, responsive behavior, and interaction timing; change only content and colors unless the license or technical integration requires otherwise.",
+    "asset_rule": "Use assets only when their licenses permit redistribution; replace non-redistributable assets with appropriately licensed real assets without changing the surrounding layout geometry."
+  },
+  "templates": []
+}

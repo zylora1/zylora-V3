@@ -1,0 +1,9 @@
+{
+  "slug": "sarab",
+  "archive": "sarab-1.0.0.zip",
+  "archive_sha256": "2f2d00da66f4f2d98a366fae2744dbb86fa83e8f19e98e9240b61cfdfaa5efca",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

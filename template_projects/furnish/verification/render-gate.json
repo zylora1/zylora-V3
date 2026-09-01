@@ -1,0 +1,29 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "60672bfda8bc69a394177ceb8c4f419b063ea4a8e23438f30adaf17164da0107",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "about": "7f41d3a2db41d0c71e675f0585c0f03a13955e4e72a061c1a6c90c7365a3b3dc",
+    "contact": "9ee91a6a3c7f3ef6d3fe5dbc422cdd0157be84d2573bc8ed9901ad47c0b38490",
+    "home": "b39c96a6aca55ba8c949080e1eff645eeb3f8a48602ed5cb062cc2e37c61aef9",
+    "products": "5d5be9519dad2314b86116180b5fddb823143a207d020eae314f4192d67f9793",
+    "testimonials": "255c65e4abee06d2f3ed7a622fd2a6b2440098d8989125cbf4b6e6373ab559a5"
+  },
+  "render_home_sha256": "b39c96a6aca55ba8c949080e1eff645eeb3f8a48602ed5cb062cc2e37c61aef9",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "furnish-1.0.0.zip",
+  "source_archive_sha256": "8dd85a4c7f1dda1b876c979775bfa8d9d29a0236ab3e2bfc7e4bd3c247e9535f",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

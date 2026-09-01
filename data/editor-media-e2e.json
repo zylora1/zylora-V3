@@ -1,0 +1,23 @@
+{
+  "checks": 17,
+  "errors": 0,
+  "items": [
+    "editor desktop has no horizontal overflow",
+    "canvas image selection opens contextual inspector",
+    "browser upload creates optimized managed media asset",
+    "browser image replacement persists in draft preview",
+    "crop focal fit and alt text survive autosave",
+    "image replacement survives full editor reload",
+    "undo restores previous structured content state",
+    "redo restores updated structured content state",
+    "text typography and responsive overrides persist",
+    "revision history is visible in editor",
+    "editor device preview switches to 768px",
+    "editor device preview switches to 390px",
+    "editor device preview switches to 100%",
+    "published public site matches edited image and content",
+    "second site from same template retains original image",
+    "Next.js export bundles managed image and structured edits",
+    "editor mobile shell has no document horizontal overflow"
+  ]
+}

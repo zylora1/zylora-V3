@@ -1,0 +1,48 @@
+{
+  "batch": "capacity-batch-001-shard-4",
+  "mode": "capacity_driven",
+  "candidate_count": 6,
+  "public_count": 0,
+  "status": "workbench",
+  "projects": [
+    {
+      "id": "ref-0014",
+      "slug": "resilient-run",
+      "title": "Resilient Run"
+    },
+    {
+      "id": "ref-0005",
+      "slug": "signal-merch",
+      "title": "Signal Merch"
+    },
+    {
+      "id": "ref-0010",
+      "slug": "signal-nudge",
+      "title": "Signal Nudge"
+    },
+    {
+      "id": "ref-0020",
+      "slug": "soft-machine",
+      "title": "Soft Machine"
+    },
+    {
+      "id": "ref-0001",
+      "slug": "tender-theory",
+      "title": "Tender Theory"
+    },
+    {
+      "id": "ref-0016",
+      "slug": "westward-play",
+      "title": "Westward Play"
+    }
+  ],
+  "reference_ids": [
+    "ref-0014",
+    "ref-0005",
+    "ref-0010",
+    "ref-0020",
+    "ref-0001",
+    "ref-0016"
+  ],
+  "rule": "Candidates are independently authored reference reconstructions; publication stays fail-closed until visual, responsive, motion, rights, asset and render gates pass."
+}

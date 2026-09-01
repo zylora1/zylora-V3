@@ -1,0 +1,15 @@
+{
+  "slug": "monica",
+  "archive": "monica-1.0.0.zip",
+  "archive_sha256": "f52ad60ea4d4c6181f8d0f8deb15c32f621b76484caea9831ac62e4b658259a8",
+  "pages": [
+    "home",
+    "about",
+    "services",
+    "blog",
+    "contact",
+    "generic",
+    "single"
+  ],
+  "status": "passed"
+}

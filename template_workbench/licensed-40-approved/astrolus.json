@@ -1,0 +1,9 @@
+{
+  "slug": "astrolus",
+  "archive": "astrolus-1.0.0.zip",
+  "archive_sha256": "5dcd63c8b6b28f1dab8570a74caa5ffd4d0e44de71dea79d103ea33ee348b538",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

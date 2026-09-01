@@ -1,0 +1,12 @@
+{
+  "source_archive": "furnish-1.0.0.zip",
+  "source_archive_sha256": "8dd85a4c7f1dda1b876c979775bfa8d9d29a0236ab3e2bfc7e4bd3c247e9535f",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": true,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 26,
+  "external_dependencies_preserved": true
+}

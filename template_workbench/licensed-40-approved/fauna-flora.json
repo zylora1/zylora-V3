@@ -1,0 +1,13 @@
+{
+  "slug": "fauna-flora",
+  "archive": "FaunaFlora-1.0.0.zip",
+  "archive_sha256": "04a01a00f669ba9fce8a4cf5385dec0dc327253916da0b308e87fc634f422c9b",
+  "pages": [
+    "home",
+    "about",
+    "pricing",
+    "blog",
+    "contact"
+  ],
+  "status": "passed"
+}

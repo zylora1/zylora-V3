@@ -1,0 +1,12 @@
+{
+  "source_archive": "Studiova-1.0.0.zip",
+  "source_archive_sha256": "f1048ea45791cfa61dca2b73ea230280521272b0f58e861dad03961af57351f0",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": true,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 316,
+  "external_dependencies_preserved": true
+}

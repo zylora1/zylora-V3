@@ -1,0 +1,12 @@
+{
+  "source_archive": "aistarterkit-1.0.0.zip",
+  "source_archive_sha256": "913a2638d12300c6115c896f351011271954963237b3deda2f4d44bfc8e39c97",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": false,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 70,
+  "external_dependencies_preserved": false
+}

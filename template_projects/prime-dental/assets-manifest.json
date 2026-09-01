@@ -1,0 +1,12 @@
+{
+  "source_archive": "primeDental-1.0.0.zip",
+  "source_archive_sha256": "7141f0df286f0fae3258a8729ec3cc40b2b62dcf34352b31a82680fed8a6c5ab",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": true,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 26,
+  "external_dependencies_preserved": true
+}

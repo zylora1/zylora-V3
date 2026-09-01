@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "1c5a5710a4357b9ffecd5619bfd9bbd19e334f8d8e09872cbd129da9016c28a1",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "592ae39341e56d34ac5bf54cada8f57728db561aa4a248e2f7b3d7aa8d612d44"
+  },
+  "render_home_sha256": "592ae39341e56d34ac5bf54cada8f57728db561aa4a248e2f7b3d7aa8d612d44",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "Next.js-Tailwind-CSS-Portfolio-Template-1.0.0.zip",
+  "source_archive_sha256": "7b5973436af685fa68e26f2275fcf071f23fddc73318bb279ce4850fa86d2f02",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

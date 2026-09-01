@@ -1,0 +1,10 @@
+{
+  "name": "zylora-release-qa",
+  "private": true,
+  "scripts": {
+    "check:nextjs-sources": "node scripts/check_nextjs_sources.js"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  }
+}

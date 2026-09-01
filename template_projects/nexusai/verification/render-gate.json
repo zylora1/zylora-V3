@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "18c73f227bd75d0c808a394a19ae38f015c3d27d84e0aee47e67956b9af5fc4d",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "ed51a122e68ea8b1b83967bdc0b83849d1c46f8fc7d487000f92dd986e5238fb"
+  },
+  "render_home_sha256": "ed51a122e68ea8b1b83967bdc0b83849d1c46f8fc7d487000f92dd986e5238fb",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "nexusai-1.0.0.zip",
+  "source_archive_sha256": "01aaee28492b6639674a77b799ee97385bebb5a9126eeaa18ee4c5daa3b36a0e",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

@@ -1,0 +1,9 @@
+{
+  "slug": "typefolio",
+  "archive": "Typefolio-1.0.0.zip",
+  "archive_sha256": "199986000d2adc43a813f6dba9f3593a59de87c6bba24372cc48f2a19dd8c674",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

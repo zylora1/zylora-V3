@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "396cdc995a2e24344c60650938af2bfee21e1a3d47519a3e6b4306ed7cc59bdb",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "179959021c8a9b6bfbdc42604d1beedefcc41a36acca4d9dfa1b9383ce24c001"
+  },
+  "render_home_sha256": "179959021c8a9b6bfbdc42604d1beedefcc41a36acca4d9dfa1b9383ce24c001",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "astrolus-1.0.0.zip",
+  "source_archive_sha256": "5dcd63c8b6b28f1dab8570a74caa5ffd4d0e44de71dea79d103ea33ee348b538",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

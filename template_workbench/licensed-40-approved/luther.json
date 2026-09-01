@@ -1,0 +1,9 @@
+{
+  "slug": "luther",
+  "archive": "luther-1.0.0.zip",
+  "archive_sha256": "ae215563239166dd29f19ba2e5d2ffc061f325beb39af254b431720ea99fa9c0",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

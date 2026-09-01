@@ -1,0 +1,12 @@
+{
+  "source_archive": "arcade-master.zip",
+  "source_archive_sha256": "f8491d93d6ed757a834ecae5446a93c110fe5862d6d9a480f02cb82c8a5b9262",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": true,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 82,
+  "external_dependencies_preserved": true
+}

@@ -1,0 +1,9 @@
+{
+  "slug": "picto",
+  "archive": "picto-1.0.0.zip",
+  "archive_sha256": "4c1a766465763ac4581d00d030a637bbc88c8118399b7acf13f271a99d3f9751",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}

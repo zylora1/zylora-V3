@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "18c73f227bd75d0c808a394a19ae38f015c3d27d84e0aee47e67956b9af5fc4d",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "9b721a8b2ac74c2baab337bc0dda9d95458f4026ecceb4bf30dc3ce12a9da229"
+  },
+  "render_home_sha256": "9b721a8b2ac74c2baab337bc0dda9d95458f4026ecceb4bf30dc3ce12a9da229",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "Lounge-1.0.0.zip",
+  "source_archive_sha256": "c08199918ae9bc57ac3c9800d2c1129914baad0c4a86bfcd294bdec51c9b787f",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

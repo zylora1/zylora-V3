@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "18c73f227bd75d0c808a394a19ae38f015c3d27d84e0aee47e67956b9af5fc4d",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "628c966bf6b4f636a7f798291ef742673a0ba4392c79dc20329f94af60daf551"
+  },
+  "render_home_sha256": "628c966bf6b4f636a7f798291ef742673a0ba4392c79dc20329f94af60daf551",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "FoodMart-1.0.0.zip",
+  "source_archive_sha256": "af4a93116cf72f4defc8abdaf9716a45e40f7b904b2564d21078623d348d8a2b",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

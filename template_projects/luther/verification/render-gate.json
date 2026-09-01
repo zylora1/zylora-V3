@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "4ab84b3538c9ce010ff50e9bd07c21287a4f60c799abbc575ee994a2637c3e72",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "b48e192285d890864f66fd11144469c4cb6e81b82083eb7d0d3eba605bca3031"
+  },
+  "render_home_sha256": "b48e192285d890864f66fd11144469c4cb6e81b82083eb7d0d3eba605bca3031",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "luther-1.0.0.zip",
+  "source_archive_sha256": "ae215563239166dd29f19ba2e5d2ffc061f325beb39af254b431720ea99fa9c0",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

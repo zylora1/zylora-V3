@@ -1,0 +1,25 @@
+{
+  "asset_manifest_verified": true,
+  "content_adapter_passed": true,
+  "css_sha256": "3299a7d774109b124e88fc0acb2d1bf5fdc4f45f5691462481ae9f64361e4bc8",
+  "external_dependencies_reviewed": true,
+  "functional_semantics_mapped": true,
+  "licensed_source_reused": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "page_inventory_verified": true,
+  "page_sha256": {
+    "home": "38855301d96f11ff2f8fb3ba0033c3fdf3249bbb190862684462bf30d6a2d523"
+  },
+  "render_home_sha256": "38855301d96f11ff2f8fb3ba0033c3fdf3249bbb190862684462bf30d6a2d523",
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "rights_check_passed": true,
+  "site_document_compatible": true,
+  "source_archive": "astrodeck-1.0.0.zip",
+  "source_archive_sha256": "1e9ebd3819f36b6fd0b23124372ee7611ddcf61776bb222362ab3f0fcf567d08",
+  "source_binary_assets_reused": true,
+  "source_code_reused": true,
+  "source_identity_retained": true,
+  "status": "passed",
+  "user_license_attestation": true
+}

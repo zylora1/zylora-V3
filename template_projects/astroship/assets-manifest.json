@@ -1,0 +1,12 @@
+{
+  "source_archive": "astroship-1.0.0.zip",
+  "source_archive_sha256": "d152a4ca6a7866301792e5e3e99b158547cd6be7c1b4b4be805dea96141ff2ec",
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "original_source_assets_reused": true,
+  "production_hotlinks": true,
+  "external_dependencies_reviewed": true,
+  "bundled_asset_count": 14,
+  "external_dependencies_preserved": true
+}

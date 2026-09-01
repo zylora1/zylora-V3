@@ -1,0 +1,27 @@
+{
+  "checks": 21,
+  "errors": 0,
+  "items": [
+    "USER submits freelancer application in dashboard",
+    "application persists as PENDING",
+    "USER creates support thread with immutable reference",
+    "USER Marketplace/Support desktop has no overflow",
+    "USER Support mobile has no overflow",
+    "SUPER_ADMIN opens full freelancer moderation editor",
+    "SUPER_ADMIN approval persists and creates public slug",
+    "SUPER_ADMIN Support exposes plan website and assignee filters",
+    "SUPER_ADMIN replies through Support Inbox",
+    "SUPER_ADMIN internal note is visible to admin",
+    "approved freelancer appears in public directory",
+    "public freelancer directory has no overflow",
+    "public freelancer profile renders approved freelancer",
+    "external CTA uses tracked Zylora redirect",
+    "tracked redirect records click and redirects externally",
+    "outbound click analytics persisted",
+    "guest submits freelancer enquiry without account",
+    "guest enquiry persists exactly once",
+    "freelancer profile/enquiry mobile has no overflow",
+    "USER sees unread Support reply indicator",
+    "USER sees admin reply but never internal note"
+  ]
+}

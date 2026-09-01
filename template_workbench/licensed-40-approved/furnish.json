@@ -1,0 +1,13 @@
+{
+  "slug": "furnish",
+  "archive": "furnish-1.0.0.zip",
+  "archive_sha256": "8dd85a4c7f1dda1b876c979775bfa8d9d29a0236ab3e2bfc7e4bd3c247e9535f",
+  "pages": [
+    "home",
+    "about",
+    "products",
+    "contact",
+    "testimonials"
+  ],
+  "status": "passed"
+}

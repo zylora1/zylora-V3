@@ -1,0 +1,9 @@
+{
+  "slug": "tailone",
+  "archive": "tailone-1.0.0.zip",
+  "archive_sha256": "348dfceb07dbffd65dee9ef42498fe15d1bf73c5c9e84608f3abe909a42cbea3",
+  "pages": [
+    "home"
+  ],
+  "status": "passed"
+}
