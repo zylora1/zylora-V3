@@ -98,9 +98,11 @@ def durable_rate_limit(key: str, limit: int, window_seconds: int):
             raise HTTPException(429,'Too many requests')
 
 def clear_rate_limits() -> None:
+    """Clear only process-local limiter state.
+
+    Durable limits deliberately live in the database so a process restart (or a
+    second application replica) cannot reset an abuse window.  Test fixtures
+    that need a clean database explicitly clear ``rate_limit_buckets`` as part
+    of their database reset.
+    """
     _RATE.clear()
-    try:
-        with SessionLocal.begin() as db:
-            db.execute(text('DELETE FROM rate_limit_buckets'))
-    except Exception:
-        pass

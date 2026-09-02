@@ -2,10 +2,10 @@
   "status": "passed",
   "source_archive": "4",
   "source_archive_sha256": "9fff30e344755380e6400f5877a53f3853eefc0e5aff7e6065392e4bdce52670",
-  "render_home_sha256": "7a1e24c07b7c325b5c869853ea5904a995d2c30d61caddeda15a82725575d068",
+  "render_home_sha256": "d6423e764bc7937ae5ae3ba31234a8f242f43886b5b46d43376d6b62095bbbee",
   "css_sha256": "ac26ee4cb1f477dc714c61900570aa95e6a43af950d91661f809a22858e4c1bd",
   "page_sha256": {
-    "home": "7a1e24c07b7c325b5c869853ea5904a995d2c30d61caddeda15a82725575d068"
+    "home": "d6423e764bc7937ae5ae3ba31234a8f242f43886b5b46d43376d6b62095bbbee"
   },
   "rights_check_passed": true,
   "user_license_attestation": true,
