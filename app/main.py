@@ -199,7 +199,7 @@ def _render_live_site_path(site: dict, path: str, *, request_host: str|None=None
 @app.middleware('http')
 async def custom_domain_runtime(request: Request, call_next):
     path=request.url.path
-    if path.startswith('/api/') or path.startswith('/static/') or path=='/manifest.webmanifest':
+    if path.startswith('/api/') or path.startswith('/static/') or path in {'/manifest.webmanifest','/favicon.ico'}:
         return await call_next(request)
     host=(request.headers.get('host') or '').split(':')[0].lower()
     app_host=(urlparse(settings.app_url).hostname or '').lower()
@@ -221,6 +221,7 @@ async def custom_domain_runtime(request: Request, call_next):
 def _landing_html(request: Request) -> str:
     raw=(ROOT/'static'/'index.html').read_text(encoding='utf-8')
     raw=raw.replace('/static/landing.css"','/static/landing.css?v=20260901-ui2"')
+    raw=raw.replace('</head>','<link rel="icon" href="/static/favicon.svg?v=20260902-brand1" type="image/svg+xml"></head>',1)
     starter=offer_for_request(request,plan='STARTER',display_only=True)
     growth=offer_for_request(request,plan='GROWTH',display_only=True)
     def _display(offer):
@@ -234,6 +235,18 @@ def _landing_html(request: Request) -> str:
     }
     for key,value in values.items(): raw=raw.replace(key,str(value))
     return raw
+
+def _google_auth_html(filename: str) -> HTMLResponse:
+    raw=(ROOT/'static'/filename).read_text(encoding='utf-8')
+    raw=raw.replace('/static/auth.css"','/static/auth.css?v=20260902-google1"')
+    raw=raw.replace('</head>','<link rel="icon" href="/static/favicon.svg?v=20260902-brand1" type="image/svg+xml"></head>',1)
+    return HTMLResponse(raw)
+
+def _dashboard_html() -> HTMLResponse:
+    raw=(ROOT/'static'/'dashboard.html').read_text(encoding='utf-8')
+    raw=raw.replace('/static/dashboard-sneat.css?v=20260901-ui2"','/static/dashboard-sneat.css?v=20260902-brand1"')
+    raw=raw.replace('</head>','<link rel="icon" href="/static/favicon.svg?v=20260902-brand1" type="image/svg+xml"></head>',1)
+    return HTMLResponse(raw)
 
 @app.get('/api/health',include_in_schema=False)
 def health():
@@ -250,9 +263,9 @@ def admin_entry(request: Request):
     if settings.super_admin_app_url: return RedirectResponse(settings.super_admin_app_url,status_code=302)
     return HTMLResponse('<!doctype html><title>Zylora Admin</title><h1>SUPER_ADMIN_APP_URL is not configured.</h1>',status_code=503)
 @app.get('/login',include_in_schema=False)
-def login(): return FileResponse(ROOT/'static'/'login.html')
+def login(): return _google_auth_html('login.html')
 @app.get('/signup',include_in_schema=False)
-def signup(): return FileResponse(ROOT/'static'/'signup.html')
+def signup(): return _google_auth_html('signup.html')
 @app.get('/forgot-password',include_in_schema=False)
 def forgot_password(): return FileResponse(ROOT/'static'/'forgot-password.html')
 @app.get('/reset-password',include_in_schema=False)
@@ -269,7 +282,7 @@ def dashboard(request: Request):
         try:
             if current_user(request).get('role')=='SUPER_ADMIN': return RedirectResponse(settings.super_admin_app_url or '/admin',status_code=302)
         except HTTPException: pass
-    return FileResponse(ROOT/'static'/'dashboard.html')
+    return _dashboard_html()
 @app.get('/ai-create',include_in_schema=False)
 def ai_create(): return FileResponse(ROOT/'static'/'ai-create.html')
 @app.get('/legal',include_in_schema=False)
@@ -525,5 +538,7 @@ def sitemap_part(part:int):
 
 @app.get('/manifest.webmanifest',include_in_schema=False)
 def manifest(): return FileResponse(ROOT/'static'/'manifest.webmanifest',media_type='application/manifest+json')
+@app.get('/favicon.ico',include_in_schema=False)
+def favicon(): return FileResponse(ROOT/'static'/'favicon.svg',media_type='image/svg+xml')
 @app.get('/llms.txt',response_class=PlainTextResponse,include_in_schema=False)
 def llms(): return (ROOT/'static'/'llms.txt').read_text(encoding='utf-8').replace('{{APP_URL}}',_public_base_url().rstrip('/'))
