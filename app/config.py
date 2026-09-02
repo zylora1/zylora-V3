@@ -32,6 +32,7 @@ class Settings(BaseSettings):
     # Optional one-time SUPER_ADMIN bootstrap. Keep these server-side only.
     super_admin_email: str = ''
     super_admin_password: str = ''
+    super_admin_app_url: str = ''
 
     openai_api_key: str = ''
     openai_model: str = 'gpt-5-mini'

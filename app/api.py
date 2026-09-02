@@ -10,6 +10,7 @@ from sqlalchemy.exc import IntegrityError
 from .db import SessionLocal, now_iso
 from .security import current_user, require_csrf, new_session, hash_password, verify_password, durable_rate_limit
 from .templates import TEMPLATES, BY_SLUG, AI_RUNTIME_SLUG, render_template, render_template_page
+from .template_catalogue import public_templates
 from .providers import ai_generate_site, ai_edit, send_whatsapp, sync_google_sheet_event, plan_site_architecture
 from .notifications import notify
 from .config import settings
@@ -212,7 +213,9 @@ def login(payload:LoginIn, request:Request, response:Response):
     with SessionLocal() as db: row=db.execute(text('SELECT * FROM users WHERE lower(email)=lower(:e)'),{'e':str(payload.email)}).mappings().first()
     if not row or not verify_password(payload.password,row['password_hash']): raise HTTPException(401,'Invalid email or password')
     token,csrf,_=new_session(row['id']); response.set_cookie('zylora_session',token,httponly=True,samesite='lax',secure=settings.app_env=='production',max_age=settings.session_ttl_hours*3600)
-    return {'ok':True,'csrf_token':csrf,'plan_selected':bool(row.get('plan_selected',1))}
+    is_admin=row.get('role')=='SUPER_ADMIN'
+    return {'ok':True,'csrf_token':csrf,'role':row.get('role'),'plan_selected':True if is_admin else bool(row.get('plan_selected',1)),
+        'next':(settings.super_admin_app_url or '/admin') if is_admin else '/dashboard'}
 
 @router.post('/auth/logout')
 def logout(request:Request,response:Response):
@@ -223,8 +226,13 @@ def logout(request:Request,response:Response):
 @router.get('/auth/me')
 def me(request:Request):
     u=_user(request)
-    wallet=wallet_summary(u['id'])
     result={k:u[k] for k in ['id','email','name','role','plan','plan_selected','email_verified','csrf_token','account_type','profile_image_url'] if k in u}
+    if u.get('role')=='SUPER_ADMIN':
+        result['plan_selected']=True
+        result['subscription_required']=False
+        result['admin_portal_url']=settings.super_admin_app_url or '/admin'
+        return result
+    wallet=wallet_summary(u['id'])
     result['plan_selected']=bool(result.get('plan_selected',1))
     result['ai_credits']=wallet['total']; result['lead_credits']=wallet['lead_total']; result['credit_wallet']=wallet
     return result
@@ -407,7 +415,7 @@ def credits(request:Request):
     u=_user(request); return wallet_summary(u['id'])
 
 @router.get('/templates')
-def templates(): return {'items':TEMPLATES}
+def templates(): return {'items':public_templates()}
 
 @router.get('/sites')
 def sites(request:Request):
@@ -426,9 +434,10 @@ def create_site(payload:SiteIn,request:Request):
         runtime_slug=AI_RUNTIME_SLUG
         meta=BY_SLUG[runtime_slug]
     else:
-        if not TEMPLATES:
+        available=public_templates()
+        if not available:
             raise HTTPException(409,detail={'code':'TEMPLATE_CATALOGUE_EMPTY','message':'The template catalogue is being rebuilt. Create with AI for now.'})
-        if not payload.template_slug or payload.template_slug not in {t['slug'] for t in TEMPLATES}:
+        if not payload.template_slug or payload.template_slug not in {t['slug'] for t in available}:
             raise HTTPException(400,'Unknown template')
         runtime_slug=payload.template_slug
         meta=BY_SLUG[runtime_slug]
@@ -465,12 +474,12 @@ def create_site(payload:SiteIn,request:Request):
             reservation_id=reserved.get('id')
     try:
         if origin=='AI':
-            architecture=plan_site_architecture(payload.business_name,payload.description,payload.industry,payload.style)
+            architecture=plan_site_architecture(payload.business_name,payload.description,payload.industry,payload.style,user_id=u['id'])
             pages=architecture.get('pages') or [{'id':'home','title':'Home','purpose':'Primary overview'}]
             page_count=max(1,min(20,len(pages)))
             with SessionLocal.begin() as db:
                 db.execute(text("UPDATE generation_jobs SET status='GENERATING',progress_stage='Creating pages',updated_at=:a WHERE id=:i"),{'a':now_iso(),'i':job_id})
-            copy=ai_generate_site(payload.business_name,payload.description,payload.industry,payload.style,payload.motion_style)
+            copy=ai_generate_site(payload.business_name,payload.description,payload.industry,payload.style,payload.motion_style,user_id=u['id'])
         else:
             architecture={'pages':[{'id':'home','title':'Home','purpose':'Template home'},*[
                 {'id':p,'title':p.replace('-',' ').title(),'purpose':'Template page'} for p in meta.get('page_slugs',[])]],
@@ -574,7 +583,7 @@ def edit_ai(site_id:str,payload:AiEditIn,request:Request):
         html=instrument_editable_html(render_template_page(s['template_slug'],s,'' if page=='home' else page),page,s['template_slug'])
         context={**s,'assets':list_assets(u['id'],site_id),'editor_nodes':extract_editor_nodes(html)}
         try:
-            operations,provider=generate_operations(context,payload.instruction,page)
+            operations,provider=generate_operations(context,payload.instruction,page,user_id=u['id'],site_id=site_id)
             if s.get('origin')=='TEMPLATE' and any(validate_operation(op)['type']=='add_section' for op in operations):
                 raise ValueError('Template page structure is fixed; AI cannot add sections to template-origin sites')
             operations=validate_operations_against_html(html,operations)

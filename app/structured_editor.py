@@ -947,7 +947,7 @@ def _local_operations(current: dict, instruction: str, page: str) -> list[dict]:
     return [validate_operation(x) for x in ops]
 
 
-def generate_operations(current: dict, instruction: str, page: str='home') -> tuple[list[dict],str]:
+def generate_operations(current: dict, instruction: str, page: str='home', *, user_id: str|None=None, site_id: str|None=None) -> tuple[list[dict],str]:
     if not settings.openai_api_key:
         if settings.app_env.lower() == 'production':
             raise RuntimeError('OpenAI is not configured in production')
@@ -960,6 +960,8 @@ def generate_operations(current: dict, instruction: str, page: str='home') -> tu
     payload={'model':settings.openai_model,'input':prompt,'max_output_tokens':800,'text':{'format':{'type':'json_object'}}}
     with httpx.Client(timeout=45) as client:
         res=client.post('https://api.openai.com/v1/responses',headers=headers,json=payload); res.raise_for_status(); data=res.json()
+    from .providers import record_ai_api_usage
+    record_ai_api_usage(surface='WEBSITE',operation='STRUCTURED_EDIT',model=settings.openai_model,usage=data.get('usage') or {},user_id=user_id,site_id=site_id)
     parsed=json.loads(data.get('output_text','{}'))
     cap=parsed.get('schema_capability_request') if isinstance(parsed,dict) else None
     if isinstance(cap,dict):

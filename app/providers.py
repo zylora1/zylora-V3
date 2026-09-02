@@ -2,10 +2,39 @@ from __future__ import annotations
 import hashlib, json, re as _re
 import httpx
 from urllib.parse import quote
+from uuid import uuid4
 from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
 from .config import settings
 from .db import SessionLocal, now_iso
+
+_OPENAI_TEXT_PRICES_USD_PER_MTOK={
+    'gpt-4o-mini':(0.15,0.075,0.60),
+    'gpt-5-mini':(0.25,0.025,2.00),
+}
+
+def estimate_openai_cost_micros(model: str, usage: dict) -> int:
+    """Estimate USD cost in millionths from provider-reported token counts.
+
+    Unknown models intentionally return zero instead of fabricating a price.
+    """
+    prices=_OPENAI_TEXT_PRICES_USD_PER_MTOK.get(str(model).lower())
+    if not prices: return 0
+    input_tokens=int(usage.get('input_tokens') or 0)
+    cached=int((usage.get('input_tokens_details') or {}).get('cached_tokens') or usage.get('cached_input_tokens') or 0)
+    output_tokens=int(usage.get('output_tokens') or 0)
+    uncached=max(0,input_tokens-cached)
+    return max(0,round(uncached*prices[0]+cached*prices[1]+output_tokens*prices[2]))
+
+def record_ai_api_usage(*, surface: str, operation: str, model: str, usage: dict, user_id: str|None=None, site_id: str|None=None) -> int:
+    cost=estimate_openai_cost_micros(model,usage)
+    cached=int((usage.get('input_tokens_details') or {}).get('cached_tokens') or usage.get('cached_input_tokens') or 0)
+    with SessionLocal.begin() as db:
+        db.execute(text('''INSERT INTO ai_api_usage(id,user_id,site_id,surface,operation,model,input_tokens,cached_input_tokens,output_tokens,estimated_cost_micros,created_at)
+            VALUES (:i,:u,:s,:surface,:op,:m,:tin,:cached,:tout,:cost,:a)'''),{
+            'i':str(uuid4()),'u':user_id,'s':site_id,'surface':surface,'op':operation,'m':model,
+            'tin':int(usage.get('input_tokens') or 0),'cached':cached,'tout':int(usage.get('output_tokens') or 0),'cost':cost,'a':now_iso()})
+    return cost
 
 def _outbox(channel: str, recipient: str, body: str, subject: str | None = None, metadata: dict | None = None, status: str='SENT'):
     with SessionLocal.begin() as db:
@@ -113,7 +142,7 @@ def _deterministic_ia(description:str,industry:str)->list[dict]:
         if len(result)>=max_pages: break
     return result
 
-def plan_site_architecture(business_name:str,description:str,industry:str,style:str)->dict:
+def plan_site_architecture(business_name:str,description:str,industry:str,style:str,*,user_id:str|None=None)->dict:
     """Requirements -> IA -> design direction before SiteDocument generation."""
     local_pages=_deterministic_ia(description,industry)
     design_archetypes=['editorial-asymmetric','cinematic-image-led','swiss-minimal','modular-bento','typography-led','immersive-story','poster-brutalist','soft-organic','technical-grid']
@@ -143,7 +172,8 @@ def plan_site_architecture(business_name:str,description:str,industry:str,style:
     payload={'model':settings.openai_model,'input':prompt,'max_output_tokens':800,'text':{'format':{'type':'json_object'}}}
     try:
         with httpx.Client(timeout=35) as client:
-            res=client.post('https://api.openai.com/v1/responses',headers=headers,json=payload); res.raise_for_status(); parsed=json.loads(res.json().get('output_text','{}'))
+            res=client.post('https://api.openai.com/v1/responses',headers=headers,json=payload); res.raise_for_status(); data=res.json(); parsed=json.loads(data.get('output_text','{}'))
+        record_ai_api_usage(surface='WEBSITE',operation='SITE_ARCHITECTURE',model=settings.openai_model,usage=data.get('usage') or {},user_id=user_id)
         pages=[]; seen=set()
         for item in (parsed.get('pages') or [])[:20]:
             if not isinstance(item,dict): continue
@@ -158,7 +188,7 @@ def plan_site_architecture(business_name:str,description:str,industry:str,style:
         pass
     return local
 
-def ai_generate_site(business_name:str,description:str,industry:str,style:str,motion_style:str='Subtle')->dict:
+def ai_generate_site(business_name:str,description:str,industry:str,style:str,motion_style:str='Subtle',*,user_id:str|None=None)->dict:
     if not settings.openai_api_key:
         if settings.app_env.lower()=='production':
             raise RuntimeError('OpenAI is not configured in production')
@@ -172,7 +202,8 @@ def ai_generate_site(business_name:str,description:str,industry:str,style:str,mo
     headers={'Authorization':f'Bearer {settings.openai_api_key}','Content-Type':'application/json'}
     payload={'model':settings.openai_model,'input':prompt,'max_output_tokens':500,'text':{'format':{'type':'json_object'}}}
     with httpx.Client(timeout=45) as client:
-        res=client.post('https://api.openai.com/v1/responses',headers=headers,json=payload); res.raise_for_status(); parsed=json.loads(res.json().get('output_text','{}'))
+        res=client.post('https://api.openai.com/v1/responses',headers=headers,json=payload); res.raise_for_status(); data=res.json(); parsed=json.loads(data.get('output_text','{}'))
+    record_ai_api_usage(surface='WEBSITE',operation='SITE_COPY',model=settings.openai_model,usage=data.get('usage') or {},user_id=user_id)
     return {'tagline':str(parsed.get('tagline') or business_name)[:120],'description':str(parsed.get('description') or description)[:3000],'provider':'openai','motion_style':motion_style}
 
 def ai_edit(current:dict,instruction:str)->dict:
@@ -193,7 +224,7 @@ def ai_edit(current:dict,instruction:str)->dict:
         res=client.post('https://api.openai.com/v1/responses',headers=headers,json=payload); res.raise_for_status(); parsed=json.loads(res.json().get('output_text','{}'))
     return {**current,**parsed,'provider':'openai'}
 
-def ai_seo_metadata(context:dict)->dict:
+def ai_seo_metadata(context:dict,*,user_id:str|None=None,site_id:str|None=None)->dict:
     business=str(context.get('business_name') or 'Website').strip()[:160]; page=str(context.get('page') or 'home').strip()[:80]
     desc=' '.join(str(context.get('description') or '').split()).strip()[:1200]; topic=' '.join(str(context.get('primary_topic') or '').split()).strip()[:180]
     location=' '.join(str(context.get('primary_location') or '').split()).strip()[:160]
@@ -207,7 +238,8 @@ def ai_seo_metadata(context:dict)->dict:
     headers={'Authorization':f'Bearer {settings.openai_api_key}','Content-Type':'application/json'}
     payload={'model':settings.openai_model,'input':prompt,'max_output_tokens':220,'text':{'format':{'type':'json_object'}}}
     with httpx.Client(timeout=30) as client:
-        res=client.post('https://api.openai.com/v1/responses',headers=headers,json=payload); res.raise_for_status(); parsed=json.loads(res.json().get('output_text','{}'))
+        res=client.post('https://api.openai.com/v1/responses',headers=headers,json=payload); res.raise_for_status(); data=res.json(); parsed=json.loads(data.get('output_text','{}'))
+    record_ai_api_usage(surface='WEBSITE',operation='SEO_METADATA',model=settings.openai_model,usage=data.get('usage') or {},user_id=user_id,site_id=site_id)
     return {'title':' '.join(str(parsed.get('title') or '').split())[:180],'description':' '.join(str(parsed.get('description') or '').split())[:500],'provider':'openai'}
 
 def _retrieval_chunks(docs:list[dict],question:str)->list[dict]:

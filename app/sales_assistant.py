@@ -10,7 +10,7 @@ from sqlalchemy import text
 from .config import settings
 from .db import SessionLocal, now_iso
 from .settings_store import get_system_setting
-from .providers import sales_assistant_completion
+from .providers import sales_assistant_completion, estimate_openai_cost_micros
 from .notifications import notify
 from .operations import record_analytics, record_operational_event, safe_exception_summary
 from .appointment_engine import available_slots, slot_is_available
@@ -358,9 +358,10 @@ def process_message(site_id: str, conversation_id: str, message: str, *, contact
         now=now_iso(); uid=str(uuid4()); aid=str(uuid4())
         db.execute(text('INSERT INTO assistant_messages(id,conversation_id,role,content,intent_json,tool_calls_json,token_input,token_output,estimated_cost_micros,created_at) VALUES (:i,:c,\'user\',:m,:ints,\'[]\',0,0,0,:a)'),{'i':uid,'c':conversation_id,'m':msg,'ints':json.dumps(intents),'a':now})
         tool_calls=['search_business_knowledge','get_business_hours','get_location','get_contact_options'] + (['check_appointment_availability'] if slots or {'AVAILABILITY_QUERY','APPOINTMENT_INTENT'}&set(intents) else [])
-        db.execute(text('INSERT INTO assistant_messages(id,conversation_id,role,content,intent_json,tool_calls_json,token_input,token_output,estimated_cost_micros,created_at) VALUES (:i,:c,\'assistant\',:m,:ints,:tools,:tin,:tout,:cost,:a)'),{'i':aid,'c':conversation_id,'m':answer[:1200],'ints':json.dumps(intents),'tools':json.dumps(tool_calls),'tin':input_tokens,'tout':output_tokens,'cost':0,'a':now})
+        estimated_cost=estimate_openai_cost_micros(model,{'input_tokens':input_tokens,'output_tokens':output_tokens})
+        db.execute(text('INSERT INTO assistant_messages(id,conversation_id,role,content,intent_json,tool_calls_json,token_input,token_output,estimated_cost_micros,created_at) VALUES (:i,:c,\'assistant\',:m,:ints,:tools,:tin,:tout,:cost,:a)'),{'i':aid,'c':conversation_id,'m':answer[:1200],'ints':json.dumps(intents),'tools':json.dumps(tool_calls),'tin':input_tokens,'tout':output_tokens,'cost':estimated_cost,'a':now})
         if not test_mode:
-            db.execute(text('INSERT INTO assistant_usage(id,site_id,conversation_id,usage_unit,units,input_tokens,output_tokens,estimated_cost_micros,created_at) VALUES (:i,:s,:c,\'MESSAGE\',1,:tin,:tout,0,:a)'),{'i':str(uuid4()),'s':site_id,'c':conversation_id,'tin':input_tokens,'tout':output_tokens,'a':now})
+            db.execute(text('INSERT INTO assistant_usage(id,site_id,conversation_id,usage_unit,units,input_tokens,output_tokens,estimated_cost_micros,created_at) VALUES (:i,:s,:c,\'MESSAGE\',1,:tin,:tout,:cost,:a)'),{'i':str(uuid4()),'s':site_id,'c':conversation_id,'tin':input_tokens,'tout':output_tokens,'cost':estimated_cost,'a':now})
         stage='QUALIFY' if should_lead else ('UNDERSTAND' if intents!=['GENERAL_QUERY'] else 'DISCOVER')
         db.execute(text('UPDATE assistant_conversations SET stage=:st,intents_json=:ints,qualification_json=:q,model_version=:model,last_activity_at=:a WHERE id=:c'),{'st':stage,'ints':json.dumps(intents),'q':json.dumps(q),'model':model,'a':now,'c':conversation_id})
         conv.update({'intents_json':json.dumps(intents),'qualification_json':json.dumps(q)})

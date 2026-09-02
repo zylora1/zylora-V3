@@ -47,5 +47,5 @@ for f1 in sorted(folder_data.keys(), key=int):
         d2 = folder_data[f2]
         ratio = SequenceMatcher(None, d1['clean_text'][:1500], d2['clean_text'][:1500]).ratio()
         if ratio > 0.65 or (d1['pkg'] and d1['pkg'] == d2['pkg'] and d1['pkg'] != 'sites-project'):
-            print(f'Match: Folder {f1:>r} vs Folder {f2:>r} | Similarity: {ratio:.2f} | Pkg: {d1[psk}} vs {d2[psk}}')
+            print(f'Match: Folder {f1!r} vs Folder {f2!r} | Similarity: {ratio:.2f} | Pkg: {d1["pkg"]} vs {d2["pkg"]}')
             print(f'   F+{f1} images: {len(d1["images"])} vs F+{f2} images: {len(d2["images"])}')

@@ -12,6 +12,7 @@ from urllib.parse import urlparse
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, Response, RedirectResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 
 from .api import router
@@ -26,6 +27,8 @@ from .sales_assistant import prune_assistant_data
 from .notifications import retry_due_deliveries
 from .operations import record_operational_event, prune_old_analytics, safe_exception_summary
 from .config import ROOT, settings, validate_production_settings
+from .security import current_user
+from .template_catalogue import public_templates
 from .db import SessionLocal, migrate
 from .bootstrap import bootstrap_super_admin
 from .templates import BY_SLUG, TEMPLATES, render_template, render_template_page
@@ -83,6 +86,9 @@ async def lifespan(app: FastAPI):
         except asyncio.CancelledError: pass
 
 app=FastAPI(title='Zylora',docs_url='/api/docs' if settings.app_env!='production' else None,redoc_url=None,lifespan=lifespan)
+_admin_origin=settings.super_admin_app_url.rstrip('/') if settings.super_admin_app_url.startswith(('https://','http://')) else ''
+if _admin_origin:
+    app.add_middleware(CORSMiddleware,allow_origins=[_admin_origin],allow_credentials=True,allow_methods=['GET','POST','PUT','PATCH','DELETE','OPTIONS'],allow_headers=['Content-Type','X-CSRF-Token'])
 app.include_router(router)
 app.include_router(extended_router)
 app.include_router(gap_router)
@@ -97,7 +103,7 @@ app.mount('/static',StaticFiles(directory=ROOT/'static'),name='static')
 
 @app.get('/template-assets/{slug}/{asset_path:path}',include_in_schema=False)
 def template_asset(slug:str,asset_path:str):
-    if slug not in {str(t.get('slug')) for t in TEMPLATES}: raise HTTPException(404,'Template asset not found')
+    if slug not in {str(t.get('slug')) for t in public_templates()}: raise HTTPException(404,'Template asset not found')
     project=(ROOT/'template_projects'/slug).resolve()
     # Current template projects store portable assets at <project>/assets. Keep a
     # backwards-compatible public/assets fallback for older project layouts.
@@ -236,6 +242,12 @@ def health():
 
 @app.get('/',include_in_schema=False)
 def home(request: Request): return HTMLResponse(_landing_html(request))
+@app.get('/admin',include_in_schema=False)
+def admin_entry(request: Request):
+    user=current_user(request)
+    if user.get('role')!='SUPER_ADMIN': raise HTTPException(403,'Admin only')
+    if settings.super_admin_app_url: return RedirectResponse(settings.super_admin_app_url,status_code=302)
+    return HTMLResponse('<!doctype html><title>Zylora Admin</title><h1>SUPER_ADMIN_APP_URL is not configured.</h1>',status_code=503)
 @app.get('/login',include_in_schema=False)
 def login(): return FileResponse(ROOT/'static'/'login.html')
 @app.get('/signup',include_in_schema=False)
@@ -251,7 +263,12 @@ def accept_transfer_page(): return FileResponse(ROOT/'static'/'accept-transfer.h
 @app.get('/choose-plan',include_in_schema=False)
 def choose_plan(): return FileResponse(ROOT/'static'/'choose-plan.html')
 @app.get('/dashboard',include_in_schema=False)
-def dashboard(): return FileResponse(ROOT/'static'/'dashboard.html')
+def dashboard(request: Request):
+    if request.cookies.get('zylora_session'):
+        try:
+            if current_user(request).get('role')=='SUPER_ADMIN': return RedirectResponse(settings.super_admin_app_url or '/admin',status_code=302)
+        except HTTPException: pass
+    return FileResponse(ROOT/'static'/'dashboard.html')
 @app.get('/ai-create',include_in_schema=False)
 def ai_create(): return FileResponse(ROOT/'static'/'ai-create.html')
 @app.get('/legal',include_in_schema=False)
