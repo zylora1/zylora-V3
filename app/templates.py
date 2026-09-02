@@ -36,8 +36,22 @@ def _safe_relative(project: Path, value: object) -> Path | None:
 
 
 def _sha256_matches(path: Path, expected: object) -> bool:
-    value=str(expected or '').strip().lower()
-    return bool(re.fullmatch(r'[0-9a-f]{64}',value)) and hashlib.sha256(path.read_bytes()).hexdigest()==value
+    value = str(expected or '').strip().lower()
+    if not bool(re.fullmatch(r'[0-9a-f]{64}', value)):
+        return False
+    data = path.read_bytes()
+    if hashlib.sha256(data).hexdigest() == value:
+        return True
+    # Git checks out LF on Linux containers (Railway) and CRLF on Windows.
+    # Allow canonical newline normalization for text files so gates remain valid cross-platform.
+    if path.suffix.lower() in {'.html', '.css', '.json', '.txt', '.js', '.svg'}:
+        normalized = data.replace(b'\r\n', b'\n')
+        if hashlib.sha256(normalized).hexdigest() == value:
+            return True
+        crlf = normalized.replace(b'\n', b'\r\n')
+        if hashlib.sha256(crlf).hexdigest() == value:
+            return True
+    return False
 
 
 def _load_gate(path: Path) -> dict | None:
