@@ -81,7 +81,7 @@ def test_business_profile_design_system_and_sitewide_ai(monkeypatch):
     assert brand.json()['brand']['container_width']=='1280px'
     doc=c.get(f'/api/sites/{sid}/editor-document?page=home').json(); h1=next(x for x in doc['nodes'] if x.get('tag')=='h1')
     import app.api_operations as ops
-    def fake_generate(context,instruction,page):
+    def fake_generate(context,instruction,page,**_scope):
         if page!='home': return [],'test'
         return [{'page':'home','type':'set_text','selector':f'[data-zylora-id="{h1["id"]}"]','text':'Improved site-wide headline'}],'test'
     monkeypatch.setattr(ops,'generate_operations',fake_generate)

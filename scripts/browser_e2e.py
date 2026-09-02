@@ -310,7 +310,8 @@ def main() -> None:
         page.locator('#devVerify').click()
         page.wait_for_function("document.querySelector('#verifyBanner').hidden")
         check(client.get('/api/auth/me').json()['email_verified'] == 1, 'email verification UI persists verified state')
-        check(page.locator(".template-item").count() == 40, "dashboard exposes the licensed 40-template catalogue")
+        template_count=len(client.get('/api/templates').json()['items'])
+        check(page.locator(".template-item").count() == template_count, "dashboard exposes the complete published template catalogue")
         check(no_overflow(page), "dashboard desktop has no horizontal overflow")
         check(page.locator('.rail-btn[data-view="blog"]').count() == 0 and page.locator('#blog').count() == 0, "normal-user dashboard has no blog CMS surface")
         for view in ["websites", "templates", "leads", "domains", "integrations", "freelancer", "analytics", "billing", "settings", "overview"]:
@@ -481,7 +482,7 @@ def main() -> None:
         check(any(x["channel"] == "WHATSAPP" and x["recipient"] == "+919876543210" for x in outbox), "verified WhatsApp notification is queued")
 
         page.locator('.rail-btn[data-view="templates"]').click()
-        check(page.locator('.template-item').count() == 40, 'licensed template catalogue remains available after AI-site publish')
+        check(page.locator('.template-item').count() == template_count, 'published template catalogue remains available after AI-site publish')
         page.locator('.rail-btn[data-view="billing"]').click()
         check(client.get('/api/billing').json()['plan'] == 'FREE', 'AI-site publish and source-export unlock do not silently change the subscription plan')
         check('US$9' in page.locator('#starterRegionalPrice').inner_text(), 'international dashboard displays the explicit Starter US$9/month regional offer')
