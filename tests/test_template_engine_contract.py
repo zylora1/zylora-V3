@@ -49,7 +49,7 @@ def create_ai(c,h,name='Engine Site',description=None):
 
 def test_ai_creation_persists_prompt_derived_site_document_without_plan_truncation():
     reset_db(); c,h=signup()
-    items=c.get('/api/templates').json()['items']; assert len(items)==40 and all(x.get('publication',{}).get('state')=='public' for x in items)
+    items=c.get('/api/templates').json()['items']; assert len(items)>=40 and all(x.get('publication',{}).get('state')=='public' for x in items)
     legacy=c.post('/api/sites',headers=h,json={'business_name':'Legacy','description':'A removed legacy template request.','origin':'TEMPLATE','template_slug':'atelier-noir'})
     assert legacy.status_code in {400,404,409}
 

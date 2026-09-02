@@ -1,0 +1,51 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "38733629da3fc8a3911d41fc03c11ff070ad0b0e35afa9d597363f35253a5dd1",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/favicon.svg",
+      "local_path": "assets/favicon.svg",
+      "sha256": "b5436256824549c45c55854ecc3246488780f652c030151250cece7cd8c1eecb",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/about-portrait.jpg",
+      "local_path": "assets/assets/about-portrait.jpg",
+      "sha256": "cc8a14ab9538196f11a414fb5fe9557fab7ec1810bd8eea7a979cc38884ce0b5",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/hero-composite.jpg",
+      "local_path": "assets/assets/hero-composite.jpg",
+      "sha256": "e29917ceffd457d63a0b465ac460d3a593c8b768fb26ef0aa7f19f2d8601e38c",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/reference.jpg",
+      "local_path": "assets/assets/reference.jpg",
+      "sha256": "cae4fa3465ef638e75df4dd225d5b7187bc2489d78606fd91a801cf4075a8150",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/work-ark.jpg",
+      "local_path": "assets/assets/work-ark.jpg",
+      "sha256": "bfe3d4c8aa27842b76fcde6469ae14607c72c49e081daf7fa42b7b2b794cd6a6",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/work-luxe.jpg",
+      "local_path": "assets/assets/work-luxe.jpg",
+      "sha256": "a3845292b3b6a2ca2ad3cf6d70b9e5e69be6588eb2c533db3852022e83a1cfc2",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/work-modern.jpg",
+      "local_path": "assets/assets/work-modern.jpg",
+      "sha256": "4238c1bc678ab91d608d4201d0b80f07c2b3cc8fcc3f7e70a4d1d5371bfd559a",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

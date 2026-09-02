@@ -1,0 +1,33 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "f14136d58aad3d28df822b25835c8703b417cc2a5be7a169c1edec531987a873",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/hero.webp",
+      "local_path": "assets/hero.webp",
+      "sha256": "bb2022166f72aa2a50f87f3906d38621ec132eff5546eff07804028a01c05ccb",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/work-01.webp",
+      "local_path": "assets/work-01.webp",
+      "sha256": "1c743bfac1fc958743f144e68fc99578c7a8a2e86cc7b26acc60fcf08fe5a975",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/work-02.webp",
+      "local_path": "assets/work-02.webp",
+      "sha256": "41a961f1dae63776b20722beb7e90202c3692ac0c60800898ac4aef03b5d36f5",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/work-03.webp",
+      "local_path": "assets/work-03.webp",
+      "sha256": "e01e304004ea7bf016f475440025f56c8c4a9abfe146cdb6db434c3c5c9ac2a5",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

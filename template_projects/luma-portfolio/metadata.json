@@ -1,0 +1,47 @@
+{
+  "slug": "luma-portfolio",
+  "name": "Luma Portfolio",
+  "category": "Photography & Visual",
+  "industry": "Photography & Visual",
+  "style": "Modern Professional",
+  "tone": "Professional & Modern",
+  "accent": "#111111",
+  "pages": 1,
+  "page_slugs": [],
+  "version": "1.0.0",
+  "hidden": false,
+  "demo_business_name": "Luma Portfolio",
+  "demo_tagline": "Premium Photography & Visual website",
+  "demo_description": "Modern design template designed for Photography & Visual.",
+  "source": {
+    "fidelity": "licensed_archive",
+    "archive_filename": "10",
+    "archive_sha256": "10a7f3ea44f5540fe33916a7008a210e2051cbfeb5ac085eeabf392d29e3bf59",
+    "conversion_mode": "licensed-html-preservation",
+    "source_identity_retained": true
+  },
+  "rights": {
+    "mode": "user_supplied_licensed_archive",
+    "user_attested_commercial_builder_rights": true,
+    "original_source_code_reused": true,
+    "original_binary_assets_reused": true,
+    "source_identity_stripped": false
+  },
+  "publication": {
+    "state": "public",
+    "render_gate": "passed"
+  },
+  "verification": {
+    "gate_file": "verification/render-gate.json",
+    "render_home": "render/home.html",
+    "css_file": "app/globals.css",
+    "assets_manifest": "assets-manifest.json"
+  },
+  "art_direction": "Production art direction tailored for Photography & Visual.",
+  "compatibility": {
+    "site_document": 3,
+    "effects": 1,
+    "next_export": 16
+  },
+  "description": "Professional template for Photography & Visual."
+}

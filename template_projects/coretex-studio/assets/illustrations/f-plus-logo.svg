@@ -1,0 +1,7 @@
+<svg viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <text x="20" y="46" fill="white" font-family="Georgia, serif" font-style="italic" font-size="46" font-weight="700">f</text>
+  <g transform="translate(48, 14)">
+    <path d="M6 0 L6 12 M0 6 L12 6" stroke="white" stroke-width="3" stroke-linecap="square"/>
+    <circle cx="15" cy="0" r="2" fill="white"/>
+  </g>
+</svg>

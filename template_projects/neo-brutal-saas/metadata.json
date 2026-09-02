@@ -1,0 +1,47 @@
+{
+  "slug": "neo-brutal-saas",
+  "name": "Neo Brutal SaaS",
+  "category": "SaaS & Landing",
+  "industry": "SaaS & Landing",
+  "style": "Modern Professional",
+  "tone": "Professional & Modern",
+  "accent": "#111111",
+  "pages": 1,
+  "page_slugs": [],
+  "version": "1.0.0",
+  "hidden": false,
+  "demo_business_name": "Neo Brutal SaaS",
+  "demo_tagline": "Premium SaaS & Landing website",
+  "demo_description": "Modern design template designed for SaaS & Landing.",
+  "source": {
+    "fidelity": "licensed_archive",
+    "archive_filename": "neo-brutal-saas-template(1).zip",
+    "archive_sha256": "f14136d58aad3d28df822b25835c8703b417cc2a5be7a169c1edec531987a873",
+    "conversion_mode": "licensed-html-preservation",
+    "source_identity_retained": true
+  },
+  "rights": {
+    "mode": "user_supplied_licensed_archive",
+    "user_attested_commercial_builder_rights": true,
+    "original_source_code_reused": true,
+    "original_binary_assets_reused": true,
+    "source_identity_stripped": false
+  },
+  "publication": {
+    "state": "public",
+    "render_gate": "passed"
+  },
+  "verification": {
+    "gate_file": "verification/render-gate.json",
+    "render_home": "render/home.html",
+    "css_file": "app/globals.css",
+    "assets_manifest": "assets-manifest.json"
+  },
+  "art_direction": "Production art direction tailored for SaaS & Landing.",
+  "compatibility": {
+    "site_document": 3,
+    "effects": 1,
+    "next_export": 16
+  },
+  "description": "Professional template for SaaS & Landing."
+}

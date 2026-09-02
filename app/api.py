@@ -33,7 +33,7 @@ router=APIRouter(prefix='/api')
 
 class SignupIn(BaseModel):
     name:str=Field(min_length=2,max_length=80); email:EmailStr; password:str=Field(min_length=8,max_length=128); turnstile_token:str|None=None
-class LoginIn(BaseModel): email:EmailStr; password:str
+class LoginIn(BaseModel): email:EmailStr; password:str=Field(min_length=1)
 class SiteIn(BaseModel): business_name:str=Field(min_length=2,max_length=120); description:str=Field(default='',max_length=6000); template_slug:str|None=None; origin:str='AI'; industry:str=Field(default='Business',max_length=120); style:str=Field(default='Minimal',max_length=120); motion_style:str=Field(default='Subtle',max_length=40)
 class EditIn(BaseModel): tagline:str|None=None; description:str|None=None; accent:str|None=None
 class AiEditIn(BaseModel): instruction:str=Field(min_length=3,max_length=2000); page:str=Field(default='home',max_length=80); expected_version:int|None=Field(default=None,ge=1)

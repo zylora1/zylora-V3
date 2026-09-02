@@ -1,0 +1,69 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "e2e18dffa7b39751e54fdbe1dd8c8c8ed2b3da30fc6e11bb3b9afc631ef1c5b9",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/images/lifestyle-01.jpg",
+      "local_path": "assets/images/lifestyle-01.jpg",
+      "sha256": "c873a0bb69105820e12458e1b2752af8c9b3645b0a4423b4b0fb3f37c08de226",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/lifestyle-01.webp",
+      "local_path": "assets/images/lifestyle-01.webp",
+      "sha256": "e50510e500fda2e74435ff49f0f2f847603ae51e8e53a21942e03fefd47bf4ce",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/lifestyle-02.jpg",
+      "local_path": "assets/images/lifestyle-02.jpg",
+      "sha256": "ca0ca57dca73e8cb7d34eca519f02bb887fb5d93250744d8222b77a7d84c6e03",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/lifestyle-02.webp",
+      "local_path": "assets/images/lifestyle-02.webp",
+      "sha256": "51ce650b2c4d3c7b0571b669da52408c1241d45393f5a6aec64c208aae752c7b",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/story-01.jpg",
+      "local_path": "assets/images/story-01.jpg",
+      "sha256": "c6c51783628e317008b03004640a273251c41c6373a6fc63738dc2d56df83965",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/story-01.webp",
+      "local_path": "assets/images/story-01.webp",
+      "sha256": "8bfb42c38082c74aff6e4cf929121df126cff7fd459cfff712c33e981b0063e4",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/story-02.jpg",
+      "local_path": "assets/images/story-02.jpg",
+      "sha256": "31fca586ffb2bd5c5dde093d51602c7022386bbfad30c3f3d7f259ca87f750c0",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/story-02.webp",
+      "local_path": "assets/images/story-02.webp",
+      "sha256": "cf2ef87f27b70717dccf02bf75175eab50afa72554e8c269c7e65e058ccd54d6",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/story-03.jpg",
+      "local_path": "assets/images/story-03.jpg",
+      "sha256": "94f3723a9abcd2ead05ed1216c770a4845f8f734a62a9a9a7c1555d2b4969080",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/story-03.webp",
+      "local_path": "assets/images/story-03.webp",
+      "sha256": "cd889a9d5e4875090e150c2ff4835dcc52bfa3b8657d9d57a4f4a59acc74b260",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

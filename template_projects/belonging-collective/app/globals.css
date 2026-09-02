@@ -1,0 +1,72 @@
+html { scroll-behavior: smooth; } body { min-width: 0; } img, svg, video { max-width: 100%; height: auto; }
+
+    :root {
+      --page-bg: #FFFDF5;
+      --ink: #28191B;
+      --burgundy: #3A1018;
+    }
+    body {
+      background-color: var(--page-bg);
+      color: var(--ink);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    .font-serif {
+      font-family: 'Instrument Serif', serif;
+    }
+  
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --page-bg: #FFFDF5;
+  --ink: #28191B;
+  --burgundy: #3A1018;
+  --burgundy-hover: #260A10;
+  --muted: #645A56;
+  --border-subtle: #EAE2D5;
+  
+  --pastel-pink: #F6CAD7;
+  --pastel-lavender: #C7C8F4;
+  --pastel-yellow: #FAD66B;
+  --pastel-gold: #F8CA4F;
+  
+  --ribbon-green: #9BC78E;
+  --ribbon-yellow: #EAC85C;
+  --ribbon-pink: #F3AFC5;
+  --ribbon-purple: #A5A7DF;
+  
+  --dark-panel: #231F21;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--page-bg);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--page-bg);
+  color: var(--ink);
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+.font-serif {
+  font-family: 'Instrument Serif', Georgia, Cambria, 'Times New Roman', Times, serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

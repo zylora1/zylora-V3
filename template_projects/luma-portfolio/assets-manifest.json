@@ -1,0 +1,129 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "10a7f3ea44f5540fe33916a7008a210e2051cbfeb5ac085eeabf392d29e3bf59",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/favicon.svg",
+      "local_path": "assets/favicon.svg",
+      "sha256": "e6d2e59b7b5bbb0342e0fb496dfc262decbfe4426bbb7b047aec8d467d1dc6f7",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/field.jpg",
+      "local_path": "assets/images/field.jpg",
+      "sha256": "baa0b3b6300cf604e60360d4e7523f67fb79f02c1ea5854a781185e4738fe8a9",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/forest.jpg",
+      "local_path": "assets/images/forest.jpg",
+      "sha256": "c4ce520866655c9be88d8d0384066f3842dcfa0c8b3e44b2abcfd587c7e63aa3",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-main.jpg",
+      "local_path": "assets/images/hero-main.jpg",
+      "sha256": "e29917ceffd457d63a0b465ac460d3a593c8b768fb26ef0aa7f19f2d8601e38c",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-orbit-1.jpg",
+      "local_path": "assets/images/hero-orbit-1.jpg",
+      "sha256": "cc8a14ab9538196f11a414fb5fe9557fab7ec1810bd8eea7a979cc38884ce0b5",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-orbit-2.jpg",
+      "local_path": "assets/images/hero-orbit-2.jpg",
+      "sha256": "540e6ce4abe01c1702c9d74cd41f402c2dbae5bdeaae2a67abc53babaf236108",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-orbit-3.jpg",
+      "local_path": "assets/images/hero-orbit-3.jpg",
+      "sha256": "1a91f27254f24c2d56e8cf6254d1bf0aa0ed9f319d5302141777e3762497f8a8",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-orbit-4.jpg",
+      "local_path": "assets/images/hero-orbit-4.jpg",
+      "sha256": "75ee091819fb4116f94af07305cb63b3c2cdf29308d870ebeb8f943ec2f38091",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-orbit-5.jpg",
+      "local_path": "assets/images/hero-orbit-5.jpg",
+      "sha256": "092df899d322b50ec2b26ea2ec02cc92e6c35ac86d1d1d57c849bf226c929219",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/lens.jpg",
+      "local_path": "assets/images/lens.jpg",
+      "sha256": "07a2849500aff162c14aaba95f79d99203b3a0594534dd6d982a1f55f5c61e2e",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/manifest.json",
+      "local_path": "assets/images/manifest.json",
+      "sha256": "e441c2bf02e5ffaadd108f185cdc869f6ba8aacec4decae5e5ce3c268ba5e8c8",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/moody.jpg",
+      "local_path": "assets/images/moody.jpg",
+      "sha256": "decac423d213f54f7d2df8ebddebad88f4f95adee6466e18d7fa38fd4a425c11",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/news-canyon.jpg",
+      "local_path": "assets/images/news-canyon.jpg",
+      "sha256": "ad2a21267503843125d1f1c88c16d796617f6be2b041e698f744aa60ca1c5a08",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/news-flowers.jpg",
+      "local_path": "assets/images/news-flowers.jpg",
+      "sha256": "7e0381fed07c018f064b7c58d43503ae29d94669124dc849f62037988e4b4e2f",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/news-tech.jpg",
+      "local_path": "assets/images/news-tech.jpg",
+      "sha256": "4cf2fb0c2010602210603af64422f26ee08ca9a000981930b73c56675c33005c",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/object.jpg",
+      "local_path": "assets/images/object.jpg",
+      "sha256": "e36d91020722e10e1fa2f9dac912f85ca9b5ad4add01773c3a76808ebd4bf83a",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/portrait-art.jpg",
+      "local_path": "assets/images/portrait-art.jpg",
+      "sha256": "faa8f59f94d5e6ec336051967e7110e6d24eff58fbcb075e5783914f57985808",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/product.jpg",
+      "local_path": "assets/images/product.jpg",
+      "sha256": "9cdf39cd88cd78a09e9c4ac113171dc2328eaf9174b712c0be7e85163f11dac5",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/red-landscape.jpg",
+      "local_path": "assets/images/red-landscape.jpg",
+      "sha256": "7a1384dc1e1f3c9baae6b211dcb556e4db56d520ae346daaf197823c47ce6a19",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/villa.jpg",
+      "local_path": "assets/images/villa.jpg",
+      "sha256": "de8e7e95ef9ee784fa02f5dd6767547d0efb821f275139c95a53068775e6129d",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

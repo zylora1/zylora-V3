@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "source_archive": "editorial-neon-yellow-v1.1.zip",
+  "source_archive_sha256": "f14136d58aad3d28df822b25835c8703b417cc2a5be7a169c1edec531987a873",
+  "render_home_sha256": "1105ff4dff373d7a73258736f395860608ec0bed954c060cbc3f2c77aff6e082",
+  "css_sha256": "757644bfc639badb277db8a29bbd82e6b58ad80e95011596f4bdaec06f75dc82",
+  "page_sha256": {
+    "home": "1105ff4dff373d7a73258736f395860608ec0bed954c060cbc3f2c77aff6e082"
+  },
+  "rights_check_passed": true,
+  "user_license_attestation": true,
+  "licensed_source_reused": true,
+  "asset_manifest_verified": true,
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "content_adapter_passed": true,
+  "site_document_compatible": true,
+  "functional_semantics_mapped": true,
+  "page_inventory_verified": true,
+  "external_dependencies_reviewed": true,
+  "source_code_reused": true,
+  "source_binary_assets_reused": true,
+  "source_identity_retained": true
+}

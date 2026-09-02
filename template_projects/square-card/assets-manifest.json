@@ -1,0 +1,15 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "56c1d9730405c8393cc3261c4908582b72cb7aff4c5fbf0d3f3e4f84c082ef45",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/favicon.svg",
+      "local_path": "assets/favicon.svg",
+      "sha256": "2025e7e392b8e760059bd46ac8890995bee3579d534c5f166bed251b8c824c19",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

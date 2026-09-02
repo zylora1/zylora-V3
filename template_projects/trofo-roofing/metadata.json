@@ -1,0 +1,47 @@
+{
+  "slug": "trofo-roofing",
+  "name": "Trofo Roofing",
+  "category": "Home Services & Trade",
+  "industry": "Home Services & Trade",
+  "style": "Modern Professional",
+  "tone": "Professional & Modern",
+  "accent": "#111111",
+  "pages": 1,
+  "page_slugs": [],
+  "version": "1.0.0",
+  "hidden": false,
+  "demo_business_name": "Trofo Roofing",
+  "demo_tagline": "Premium Home Services & Trade website",
+  "demo_description": "Modern design template designed for Home Services & Trade.",
+  "source": {
+    "fidelity": "licensed_archive",
+    "archive_filename": "31",
+    "archive_sha256": "0d838f5cafe30990d8a4c2c6ee3f6f5dbd91a3eae718597d98a93bc145fc60f8",
+    "conversion_mode": "licensed-html-preservation",
+    "source_identity_retained": true
+  },
+  "rights": {
+    "mode": "user_supplied_licensed_archive",
+    "user_attested_commercial_builder_rights": true,
+    "original_source_code_reused": true,
+    "original_binary_assets_reused": true,
+    "source_identity_stripped": false
+  },
+  "publication": {
+    "state": "public",
+    "render_gate": "passed"
+  },
+  "verification": {
+    "gate_file": "verification/render-gate.json",
+    "render_home": "render/home.html",
+    "css_file": "app/globals.css",
+    "assets_manifest": "assets-manifest.json"
+  },
+  "art_direction": "Production art direction tailored for Home Services & Trade.",
+  "compatibility": {
+    "site_document": 3,
+    "effects": 1,
+    "next_export": 16
+  },
+  "description": "Professional template for Home Services & Trade."
+}

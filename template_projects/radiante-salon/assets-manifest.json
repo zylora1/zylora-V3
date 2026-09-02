@@ -1,0 +1,261 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "00f06e8f2e823f9f03384407307dc56d1dcaeef7bce6db75e2ad029a5ed05802",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/images/collage-01.jpg",
+      "local_path": "assets/images/collage-01.jpg",
+      "sha256": "7d940f93f9380a4e196d4f0d7fee07d27b7d08aa0ebad3361674e7a18918c4a5",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/collage-02.jpg",
+      "local_path": "assets/images/collage-02.jpg",
+      "sha256": "68c1e9c88c7f8d81199e39c12e77a780770a9f09db91b699eb80e83c6a53c5ba",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/cta-detail-right.jpg",
+      "local_path": "assets/images/cta-detail-right.jpg",
+      "sha256": "8f6801d65a3f0bab6ed22f2e1aea2b52c0eae407f39412f84fdbe1b657498b6e",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/cta-eye-top.jpg",
+      "local_path": "assets/images/cta-eye-top.jpg",
+      "sha256": "d1bb2055d48b2c756986eda473c8fec9c37cccad23b46601dfefc37909f7ddc7",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/cta-model-left.jpg",
+      "local_path": "assets/images/cta-model-left.jpg",
+      "sha256": "5d333643a14c611449df350f376f3e4a200d65d4e6058406c1444627cd65bd1f",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/final-banner.jpg",
+      "local_path": "assets/images/final-banner.jpg",
+      "sha256": "dbdcf7a6c3696567a57160f56739feec66263809e259f81332fcb9bdfddaa4ff",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/gallery-01.jpg",
+      "local_path": "assets/images/gallery-01.jpg",
+      "sha256": "7b8495af729d04bccab1f4d54341d63553df38ca1cf18e0e13cbb218dea051a4",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/gallery-02.jpg",
+      "local_path": "assets/images/gallery-02.jpg",
+      "sha256": "0ed1b7fd30d5b1428b456f392f049bc10f051a537f0e914cdefc18963c48de6a",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/gallery-03.jpg",
+      "local_path": "assets/images/gallery-03.jpg",
+      "sha256": "5cb00810d2329bbe4468089eaabbdfd2a53bd2524aec59fe5b3a4d026da7b63d",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-face-duo.jpg",
+      "local_path": "assets/images/hero-face-duo.jpg",
+      "sha256": "3710d45c9c3b5744205328497ecceaa5347bdbb466da8157c75698033dfea49c",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-face-left.jpg",
+      "local_path": "assets/images/hero-face-left.jpg",
+      "sha256": "875ece63c61bfacef932a9406b6e93c95e11a1552c6195470118e2b90c1ab93e",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-group-beauty.jpg",
+      "local_path": "assets/images/hero-group-beauty.jpg",
+      "sha256": "e590ebf77ab8915f70b3d36aea51d76743915ddd0059c372998c9010ae1a2e75",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-models.jpg",
+      "local_path": "assets/images/hero-models.jpg",
+      "sha256": "0c825f5631b2946fe6ece2b7e25df02eca800c50f5b80c4b2d40ad6e481b00c8",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-three-women.jpg",
+      "local_path": "assets/images/hero-three-women.jpg",
+      "sha256": "8e6c231eb2a2e65a4c3475c7c81c3bc407071892e0ecc43fe576304230051ce3",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-treatment.jpg",
+      "local_path": "assets/images/hero-treatment.jpg",
+      "sha256": "818ad8a8ea7e0cb1a86253da13650746a982f6bd2927f1fd0b9090e5df5056bf",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/manifesto-strip.jpg",
+      "local_path": "assets/images/manifesto-strip.jpg",
+      "sha256": "e590ebf77ab8915f70b3d36aea51d76743915ddd0059c372998c9010ae1a2e75",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/salon-interior-arch.jpg",
+      "local_path": "assets/images/salon-interior-arch.jpg",
+      "sha256": "ca7b67e2bdbf9d1e5cd4612e2a6493be115807bd326f0e331c5868a1a56eea3c",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/salon-main-interior.jpg",
+      "local_path": "assets/images/salon-main-interior.jpg",
+      "sha256": "b7665460f9d718dbb095d23af5a04a4d296d71210bd9a0562e5af5759877b54f",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/salon-thumb-1.jpg",
+      "local_path": "assets/images/salon-thumb-1.jpg",
+      "sha256": "1b359e243300ab55c2498659c67a90f94efe5225e25752c1a6ff7c80344bec1e",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/salon-thumb-2.jpg",
+      "local_path": "assets/images/salon-thumb-2.jpg",
+      "sha256": "b0f5555bf7d55561c2d93b41598ca61d11527b65e8404020d0930f25f39314a5",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/salon-thumb-3.jpg",
+      "local_path": "assets/images/salon-thumb-3.jpg",
+      "sha256": "4ae587c41d5153edeede52971267a8d7477a12696c41f349e34013bb4062867c",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/salon-thumb-4.jpg",
+      "local_path": "assets/images/salon-thumb-4.jpg",
+      "sha256": "99b3dc278e3403cdeaa01a38564fd0c7fcc4da93dc4b666ba30525cda8a55b42",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-brow-1.jpg",
+      "local_path": "assets/images/service-brow-1.jpg",
+      "sha256": "8e569439c60056ff630cc0ee4eba8cc14978e136395ca65d595b2c4f724b4c3a",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-brow-2.jpg",
+      "local_path": "assets/images/service-brow-2.jpg",
+      "sha256": "1c3591f8e2f778cc05e5e7a96f0b958c78dae0f8d3176378a6ab281a93a641f3",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-color-1.jpg",
+      "local_path": "assets/images/service-color-1.jpg",
+      "sha256": "5d354f6a5bf9912ee94527ff8fe3f6e654db3c81f0311520660e27e351de0ec2",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-color-2.jpg",
+      "local_path": "assets/images/service-color-2.jpg",
+      "sha256": "d149badb7d181d434fca005c70988ab762240b030f19acb9f1051c6b0d9c487a",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-color-3.jpg",
+      "local_path": "assets/images/service-color-3.jpg",
+      "sha256": "9259cc6fef01092e278de91f6d41cb82cb97d1ede4aca29c3a257a0742676a38",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-hair-1.jpg",
+      "local_path": "assets/images/service-hair-1.jpg",
+      "sha256": "1b359e243300ab55c2498659c67a90f94efe5225e25752c1a6ff7c80344bec1e",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-hair-2.jpg",
+      "local_path": "assets/images/service-hair-2.jpg",
+      "sha256": "c70aab5d6f57db18995b3cb25e2981b2ea06c37fb142dc6d1094395a2d950a8c",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-hair-3.jpg",
+      "local_path": "assets/images/service-hair-3.jpg",
+      "sha256": "9d3e5d1c6733da60b7c50c92501a377db665d338d141ffbc54444d4f88a70174",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-hair-4.jpg",
+      "local_path": "assets/images/service-hair-4.jpg",
+      "sha256": "a90835a09686d53036ddff49310d2a9dcd05a168f04686d50b9912a5f4fbe5a6",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-makeup-1.jpg",
+      "local_path": "assets/images/service-makeup-1.jpg",
+      "sha256": "5b012d7df0567a2716a15e02c771143446665f2498dd5557675076c70b895510",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-makeup-2.jpg",
+      "local_path": "assets/images/service-makeup-2.jpg",
+      "sha256": "0eed32ae1edd35c706a6badded6e4fac6a6f6ccfe93a8c769b434af54b1d0e13",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-makeup-3.jpg",
+      "local_path": "assets/images/service-makeup-3.jpg",
+      "sha256": "809f89aa6ea649780cc36a3511c9f8288f253db35ab5267c7c8d230569eba7f4",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-massage-1.jpg",
+      "local_path": "assets/images/service-massage-1.jpg",
+      "sha256": "7baa768de5817953dbcff7b5138f66d205bc851822861dc70c8fbc9e95e28715",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-massage-2.jpg",
+      "local_path": "assets/images/service-massage-2.jpg",
+      "sha256": "8ae0ce25e242493aa340a82fc12d5ebf02658205a9bce324d722479b4beb7554",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-massage-3.jpg",
+      "local_path": "assets/images/service-massage-3.jpg",
+      "sha256": "3eaad7e76c44678c2849a3d96e36f2ee522b0eced0109785c5e2734592cb6238",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-nails-1.jpg",
+      "local_path": "assets/images/service-nails-1.jpg",
+      "sha256": "339023e9f2d525d0862dda375242e9217596ff3a7538e7be86778de531da7488",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-nails-2.jpg",
+      "local_path": "assets/images/service-nails-2.jpg",
+      "sha256": "c6931bfcb97c89a66e10e3993c2be4a5853425ecaf2cc59e705fda78af39c2ce",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/treatment-back.jpg",
+      "local_path": "assets/images/treatment-back.jpg",
+      "sha256": "184650531495738fe00a50a6df2160b3850ac9f916c1dcc81962090197920aab",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/treatment-facial.jpg",
+      "local_path": "assets/images/treatment-facial.jpg",
+      "sha256": "bc9dcba14451f3f8055f1407a15c7b73fc88c3fca01846c11297fc19506d7a4a",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/treatment-neck.jpg",
+      "local_path": "assets/images/treatment-neck.jpg",
+      "sha256": "d76a4ffab03c3d8e035ee0897b3923f33f110c86a45057cf6118e8c03f2cfd7d",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

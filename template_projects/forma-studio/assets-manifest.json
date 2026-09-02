@@ -1,0 +1,51 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "1a6276e47f6e572d721dda9f7ec5bb3dbdf92a7c6762fe5d6966c44d9e74a6b8",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/favicon.svg",
+      "local_path": "assets/favicon.svg",
+      "sha256": "e6d2e59b7b5bbb0342e0fb496dfc262decbfe4426bbb7b047aec8d467d1dc6f7",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/architecture-2.jpg",
+      "local_path": "assets/images/architecture-2.jpg",
+      "sha256": "4cf2fb0c2010602210603af64422f26ee08ca9a000981930b73c56675c33005c",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/architecture.jpg",
+      "local_path": "assets/images/architecture.jpg",
+      "sha256": "9cdf39cd88cd78a09e9c4ac113171dc2328eaf9174b712c0be7e85163f11dac5",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/athlete.jpg",
+      "local_path": "assets/images/athlete.jpg",
+      "sha256": "75ee091819fb4116f94af07305cb63b3c2cdf29308d870ebeb8f943ec2f38091",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/bottle.jpg",
+      "local_path": "assets/images/bottle.jpg",
+      "sha256": "e36d91020722e10e1fa2f9dac912f85ca9b5ad4add01773c3a76808ebd4bf83a",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/portrait-2.jpg",
+      "local_path": "assets/images/portrait-2.jpg",
+      "sha256": "1a91f27254f24c2d56e8cf6254d1bf0aa0ed9f319d5302141777e3762497f8a8",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/portrait.jpg",
+      "local_path": "assets/images/portrait.jpg",
+      "sha256": "540e6ce4abe01c1702c9d74cd41f402c2dbae5bdeaae2a67abc53babaf236108",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

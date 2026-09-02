@@ -1,0 +1,51 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "50b2f4ea05d888c91c2d267b5b79d9265c44bc148fecbd0cd7b8983a778d196d",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/client-avatar.jpg",
+      "local_path": "assets/client-avatar.jpg",
+      "sha256": "73437c8f5ed11e5040059850db76a88e89ecb781adcd25aaaf8d038309afd159",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/favicon.svg",
+      "local_path": "assets/favicon.svg",
+      "sha256": "e6d2e59b7b5bbb0342e0fb496dfc262decbfe4426bbb7b047aec8d467d1dc6f7",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/og.jpg",
+      "local_path": "assets/og.jpg",
+      "sha256": "a8783dcebc3b0313ccf3321e4d39460ef03199e24c33372c74440c562e572139",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/project-01.jpg",
+      "local_path": "assets/project-01.jpg",
+      "sha256": "faa8f59f94d5e6ec336051967e7110e6d24eff58fbcb075e5783914f57985808",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/project-02.jpg",
+      "local_path": "assets/project-02.jpg",
+      "sha256": "decac423d213f54f7d2df8ebddebad88f4f95adee6466e18d7fa38fd4a425c11",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/project-03.jpg",
+      "local_path": "assets/project-03.jpg",
+      "sha256": "07a2849500aff162c14aaba95f79d99203b3a0594534dd6d982a1f55f5c61e2e",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/team.jpg",
+      "local_path": "assets/team.jpg",
+      "sha256": "092df899d322b50ec2b26ea2ec02cc92e6c35ac86d1d1d57c849bf226c929219",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

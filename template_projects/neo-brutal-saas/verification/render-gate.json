@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "source_archive": "neo-brutal-saas-template(1).zip",
+  "source_archive_sha256": "f14136d58aad3d28df822b25835c8703b417cc2a5be7a169c1edec531987a873",
+  "render_home_sha256": "7acf605d9ed102c8b35fad6839288a0e84aeb9c48a696cac4b5d61ca8e99af20",
+  "css_sha256": "d0cb0e90763bfb161b7368a2b0a6994d0a8528ede84d81ac9969dbbd9fd3cc4b",
+  "page_sha256": {
+    "home": "7acf605d9ed102c8b35fad6839288a0e84aeb9c48a696cac4b5d61ca8e99af20"
+  },
+  "rights_check_passed": true,
+  "user_license_attestation": true,
+  "licensed_source_reused": true,
+  "asset_manifest_verified": true,
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "content_adapter_passed": true,
+  "site_document_compatible": true,
+  "functional_semantics_mapped": true,
+  "page_inventory_verified": true,
+  "external_dependencies_reviewed": true,
+  "source_code_reused": true,
+  "source_binary_assets_reused": true,
+  "source_identity_retained": true
+}

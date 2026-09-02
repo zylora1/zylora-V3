@@ -1,0 +1,47 @@
+{
+  "slug": "godesign-studio",
+  "name": "GoDesign Studio",
+  "category": "Design & Architecture",
+  "industry": "Design & Architecture",
+  "style": "Modern Professional",
+  "tone": "Professional & Modern",
+  "accent": "#111111",
+  "pages": 1,
+  "page_slugs": [],
+  "version": "1.0.0",
+  "hidden": false,
+  "demo_business_name": "GoDesign Studio",
+  "demo_tagline": "Premium Design & Architecture website",
+  "demo_description": "Modern design template designed for Design & Architecture.",
+  "source": {
+    "fidelity": "licensed_archive",
+    "archive_filename": "38",
+    "archive_sha256": "5a721e32f28c7cbc568556c2a11f9825b192bbaf95af4b38b480a56dbd7e1e8a",
+    "conversion_mode": "licensed-html-preservation",
+    "source_identity_retained": true
+  },
+  "rights": {
+    "mode": "user_supplied_licensed_archive",
+    "user_attested_commercial_builder_rights": true,
+    "original_source_code_reused": true,
+    "original_binary_assets_reused": true,
+    "source_identity_stripped": false
+  },
+  "publication": {
+    "state": "public",
+    "render_gate": "passed"
+  },
+  "verification": {
+    "gate_file": "verification/render-gate.json",
+    "render_home": "render/home.html",
+    "css_file": "app/globals.css",
+    "assets_manifest": "assets-manifest.json"
+  },
+  "art_direction": "Production art direction tailored for Design & Architecture.",
+  "compatibility": {
+    "site_document": 3,
+    "effects": 1,
+    "next_export": 16
+  },
+  "description": "Professional template for Design & Architecture."
+}

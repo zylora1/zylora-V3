@@ -1,0 +1,788 @@
+{
+  "1": {
+    "folder": "1",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "1a6276e47f6e572d721dda9f7ec5bb3dbdf92a7c6762fe5d6966c44d9e74a6b8",
+    "page_len": 8979,
+    "components": [],
+    "assets_count": 7,
+    "assets_sample": [
+      "favicon.svg",
+      "images\\architecture-2.jpg",
+      "images\\architecture.jpg",
+      "images\\athlete.jpg",
+      "images\\bottle.jpg"
+    ],
+    "readme_snippet": "",
+    "page_snippet": "const services = [   { icon: 'square', title: 'Brand Strategy', copy: 'Positioning, messaging, and brand frameworks that build strong, future-ready brands.' },   { icon: 'eye', title: 'Creative Direction', copy: 'Leading creative vision across campaigns, platforms, and experiences.' },   { icon: 'bu"
+  },
+  "2": {
+    "folder": "2",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "38733629da3fc8a3911d41fc03c11ff070ad0b0e35afa9d597363f35253a5dd1",
+    "page_len": 7131,
+    "components": [],
+    "assets_count": 7,
+    "assets_sample": [
+      "favicon.svg",
+      "assets\\about-portrait.jpg",
+      "assets\\hero-composite.jpg",
+      "assets\\reference.jpg",
+      "assets\\work-ark.jpg"
+    ],
+    "readme_snippet": " [README.md]: # Mariana Web Designer Portfolio  Pixel-faithful editorial portfolio recreation based on the user-supplied 865 \u00d7 1536 reference.  ## Main files  - `app/page.tsx` \u2014 semantic page structur",
+    "page_snippet": "import Image from 'next/image';  const stats = [   ['6+', 'Years of experience'], ['80+', 'Projects completed'],   ['40+', 'Happy clients'], ['12', 'Industry awards'], ];  const services = [   ['monitor', 'Web design', 'Custom websites that are beautiful, functional and conversion-focused.'],   ['pe"
+  },
+  "3": {
+    "folder": "3",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "56c1d9730405c8393cc3261c4908582b72cb7aff4c5fbf0d3f3e4f84c082ef45",
+    "page_len": 12014,
+    "components": [],
+    "assets_count": 1,
+    "assets_sample": [
+      "favicon.svg"
+    ],
+    "readme_snippet": "",
+    "page_snippet": "'use client';  import { ArrowLeft, ArrowRight, Search } from 'lucide-react'; import { useRef } from 'react';  const fragments = [   ['p',22,84],['p',41,78],['l',60,90],['p',79,83],['p',98,93],   ['p',14,104],['p',34,99],['p',53,109],['p',72,102],['p',91,112],['b',110,105],   ['b',7,122],['p',27,117]"
+  },
+  "4": {
+    "folder": "4",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "9fff30e344755380e6400f5877a53f3853eefc0e5aff7e6065392e4bdce52670",
+    "page_len": 8345,
+    "components": [],
+    "assets_count": 3,
+    "assets_sample": [
+      "favicon.svg",
+      "noise.svg",
+      "og.png"
+    ],
+    "readme_snippet": "",
+    "page_snippet": "const faqs = [   ['What is a bounty?', 'A clearly scoped, paid creative project with the essentials agreed before work begins.'],   ['Who is Bounties for?', 'Independent creatives and teams looking for thoughtful, transparent collaborations.'],   [\"What\u2019s the difference between Bounties and a tradit"
+  },
+  "5": {
+    "folder": "5",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "4a304026b5462ca50f32fcd397157073d43e610d26b5e242b92c98299b808773",
+    "page_len": 5993,
+    "components": [],
+    "assets_count": 5,
+    "assets_sample": [
+      "fandom.jpg",
+      "favicon.svg",
+      "ignite.jpg",
+      "showcase.jpg",
+      "stories.jpg"
+    ],
+    "readme_snippet": " [README.md]: # Incention landing page  Reference-faithful single-page Vinext/React implementation created for a 494 \u00d7 1536 px authoritative canvas.  ## Structure  - `app/page.tsx` \u2014 semantic page con",
+    "page_snippet": "import Image from 'next/image';  const projects = [   { title: <>IGNITE<br />IP</>, image: '/ignite.jpg', className: 'project-card--yellow', copy: 'Supercharge worlds with creative partnerships and the right launch momentum.' },   { title: <>NET NEW<br />STORIES</>, image: '/stories.jpg', className:"
+  },
+  "6": {
+    "folder": "6",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "50b2f4ea05d888c91c2d267b5b79d9265c44bc148fecbd0cd7b8983a778d196d",
+    "page_len": 6444,
+    "components": [],
+    "assets_count": 7,
+    "assets_sample": [
+      "client-avatar.jpg",
+      "favicon.svg",
+      "og.jpg",
+      "project-01.jpg",
+      "project-02.jpg"
+    ],
+    "readme_snippet": "",
+    "page_snippet": "import Image from 'next/image';  const services = [   { number: '01', title: 'Research', tags: ['Prototyping', 'User Research', 'User Interviews'] },   { number: '02', title: 'Product Design', tags: ['Product Architecture', 'Design Thinking'] },   { number: '03', title: 'Visual Design', tags: ['Desi"
+  },
+  "7": {
+    "folder": "7",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "6401d212790c7301fd165488dae6c6209a399288d891ec853e573493d9131b40",
+    "page_len": 10484,
+    "components": [],
+    "assets_count": 1,
+    "assets_sample": [
+      "favicon.svg"
+    ],
+    "readme_snippet": "",
+    "page_snippet": "const ArrowIcon = ({ up = false }: { up?: boolean }) => (   <svg viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d={up ? 'M4 10.5 8 6.5l4 4M8 7v7' : 'M3 8h9M9 5l3 3-3 3'} /></svg> );  const MicroIcon = () => <svg viewBox=\"0 0 18 18\" aria-hidden=\"true\"><path d=\"m4 11 6-6 3 3-6 6H4v-3Z\" /><path d=\"m9 6 2"
+  },
+  "8": {
+    "folder": "8",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "b67e0ab10a82fa3e739321768e3af7bef9382b588de99fbe3da467142dd6bbaa",
+    "page_len": 7970,
+    "components": [],
+    "assets_count": 9,
+    "assets_sample": [
+      "favicon.svg",
+      "images\\article.jpg",
+      "images\\benefits.jpg",
+      "images\\hero.jpg",
+      "images\\involved.jpg"
+    ],
+    "readme_snippet": " [ASSET-LICENSES.md]: # Photographic asset licenses  All photography is downloaded locally and used under the [Unsplash License](https://unsplash.com/license). No AI-generated photography is used.  | ",
+    "page_snippet": "\"use client\";  import { ArrowLeft, ArrowRight, Droplets, Factory, Sun, Wind } from \"lucide-react\"; import Image from \"next/image\"; import { useState } from \"react\";  const energyTypes = [   { title: \"Solar Energy\", Icon: Sun },   { title: \"Hydro Energy\", Icon: Droplets },   { title: \"Geothermal Ener"
+  },
+  "9": {
+    "folder": "9",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "1317226284b95bc3fd933f66ae881b00ce43617e853a100606b43e38cdd387b7",
+    "page_len": 8383,
+    "components": [],
+    "assets_count": 2,
+    "assets_sample": [
+      "favicon.svg",
+      "reference.jpg"
+    ],
+    "readme_snippet": " [ASSET-LICENSES.md]: # Asset provenance  ## Reference artwork  - `public/reference.jpg` - Source: image supplied directly by the user in this Codex task. - Use: local visual source for the photograph",
+    "page_snippet": "'use client';  import { useState } from 'react';  const profiles = [   { name: ['Court', 'Cunningham'], role: 'CEO, Orchard', bio: 'Court is a proven operator and category builder with a record of pairing ambitious ideas with disciplined execution.' },   { name: ['Alicia', 'Sontag'], role: 'Co-found"
+  },
+  "10": {
+    "folder": "10",
+    "pkg_name": "luma-visual-portfolio",
+    "page_file": "app/page.tsx",
+    "page_sha": "10a7f3ea44f5540fe33916a7008a210e2051cbfeb5ac085eeabf392d29e3bf59",
+    "page_len": 10637,
+    "components": [],
+    "assets_count": 20,
+    "assets_sample": [
+      "favicon.svg",
+      "images\\field.jpg",
+      "images\\forest.jpg",
+      "images\\hero-main.jpg",
+      "images\\hero-orbit-1.jpg"
+    ],
+    "readme_snippet": " [README.md]: # Luma visual portfolio  A self-contained Vinext/React implementation of the supplied 409 \u00d7 2048 visual reference.  ## Structure  - `app/page.tsx` \u2014 page content, featured-work controls,",
+    "page_snippet": "\"use client\";  import { Aperture, ArrowUpRight, Camera, CircleDot, Eye, Focus, Layers3, MoveUpRight, Palette, Sparkles, Star, WandSparkles } from \"lucide-react\"; import { useState } from \"react\";  const gallery = [   [\"/images/villa.jpg\", \"A secluded home framed by the landscape\", \"villa\"],   [\"/ima"
+  },
+  "11": {
+    "folder": "11",
+    "pkg_name": "uniqum-business-services",
+    "page_file": "app/page.tsx",
+    "page_sha": "a7d7b2e7bcfcbe0b1daf37e34baf7dadae116f2ab2d3a756829b621890d2e872",
+    "page_len": 9642,
+    "components": [],
+    "assets_count": 17,
+    "assets_sample": [
+      "favicon.svg",
+      "images\\automation.jpg",
+      "images\\footer.jpg",
+      "images\\hero.jpg",
+      "images\\manager.jpg"
+    ],
+    "readme_snippet": " [README.md]: # Uniqum business-services landing page  Pixel-faithful single-page implementation based on the supplied 349 \u00d7 2048 reference.  ## Commands  - `npm run dev` - `npm run typecheck` - `npm ",
+    "page_snippet": "\"use client\";  import { useRef, useState } from \"react\";  const services = [   { title: \"Project Management\", copy: \"Lean teams, clear plans and accountable action.\", image: \"/images/service-project.jpg\", color: \"peach\", icon: \"\u25a6\" },   { title: \"Email Marketing\", copy: \"Useful campaigns built around"
+  },
+  "12": {
+    "folder": "12",
+    "pkg_name": "lauritz-editorial-magazine",
+    "page_file": "app/page.tsx",
+    "page_sha": "08c6cad93a9407b7d1ca342fb3b96b65f711d034a8af21d673b983fbf6a9ff69",
+    "page_len": 8082,
+    "components": [],
+    "assets_count": 11,
+    "assets_sample": [
+      "favicon.svg",
+      "images\\article-fashion.jpg",
+      "images\\article-fragments.jpg",
+      "images\\article-interior.jpg",
+      "images\\article-plant.jpg"
+    ],
+    "readme_snippet": " [ASSET-LICENSES.md]: # Asset provenance  All ten editorial images in `public/images` are crops of the reference screenshot supplied by the user for this implementation. No AI-generated or hotlinked p",
+    "page_snippet": "\"use client\";  import { useMemo, useState } from \"react\";  type Story = {   image: string;   alt: string;   date: string;   title: string;   categories: string[];   popularity: number;   comments: number; };  const lead: Story = {   image: \"/images/feature-main.jpg\",   alt: \"Artist holding a white s"
+  },
+  "13": {
+    "folder": "13",
+    "pkg_name": "creacy-dark-editorial-portfolio",
+    "page_file": "app/page.tsx",
+    "page_sha": "25871e6bf28ddee031f3fec3a40b176718b0946b14e9abe4c0f4c96880af96bb",
+    "page_len": 7751,
+    "components": [],
+    "assets_count": 7,
+    "assets_sample": [
+      "favicon.svg",
+      "images\\countryside.jpg",
+      "images\\hero.jpg",
+      "images\\mountain-side.jpg",
+      "images\\portrait.jpg"
+    ],
+    "readme_snippet": " [README.md]: # Creacy dark editorial photography portfolio  This folder is a self-contained Next.js/vinext implementation of the supplied dark editorial photography reference. The authoritative compo",
+    "page_snippet": "\"use client\";  import { useState } from \"react\";  const expertiseSlides = [   { name: \"Landscape\", main: \"/images/mountain-side.jpg\", side: \"/images/countryside.jpg\", title: \"Chasing Clouds at Mont Blanc\u2019s Pinnacle\" },   { name: \"Wildlife\", main: \"/images/wildlife.jpg\", side: \"/images/mountain-side."
+  },
+  "14": {
+    "folder": "14",
+    "pkg_name": "shopify-ventures-editorial",
+    "page_file": "app/page.tsx",
+    "page_sha": "3a9b27da9b721e72e97a47c73ba8d5121a7d11a1f62e0b01db0709005c316f46",
+    "page_len": 7966,
+    "components": [],
+    "assets_count": 1,
+    "assets_sample": [
+      "favicon.svg"
+    ],
+    "readme_snippet": "",
+    "page_snippet": "const news = [   { source: \"Modern Retail\", title: \"New Partnership Establishes Faire as Shopify\u2019s Recommended Wholesale Marketplace\" },   { source: \"CNBC\", title: \"Klaviyo valued at $9.2 billion after pricing IPO above range\" },   { source: \"PYMNTS.com\", title: \"Affirm strikes strategic partnership"
+  },
+  "15": {
+    "folder": "15",
+    "pkg_name": "hofin-real-estate",
+    "page_file": "app/page.tsx",
+    "page_sha": "ca1bf8f17080d1ffa5b8eeaee63528e9438376e9802eb0e90812cdb541ec8751",
+    "page_len": 11804,
+    "components": [],
+    "assets_count": 11,
+    "assets_sample": [
+      "favicon.svg",
+      "images\\feature-interior.jpg",
+      "images\\footer-house.jpg",
+      "images\\hero-villa.jpg",
+      "images\\property-01.jpg"
+    ],
+    "readme_snippet": " [README.md]: # HOFIN real-estate marketplace  Pixel-faithful single-page recreation of the supplied 505 \u00d7 2047 reference. The authoritative layout is tuned for a 505px browser viewport and scales res",
+    "page_snippet": "\"use client\";  import { ArrowLeft, ArrowRight, ArrowUpRight, ChevronDown, ChevronUp, Heart, MapPin, Search } from \"lucide-react\"; import { FormEvent, useRef, useState } from \"react\";  type Property = { image: string; name: string; location: string; price: string; copy?: string };  const latest: Prop"
+  },
+  "16": {
+    "folder": "16",
+    "pkg_name": "lavender-email-coach",
+    "page_file": "app/page.tsx",
+    "page_sha": "b8fd3e6fd663f6a042c533c5f7e9e4149867ee7dc0ea8116e9aa72065c72d6b6",
+    "page_len": 9527,
+    "components": [],
+    "assets_count": 0,
+    "assets_sample": [],
+    "readme_snippet": " [README.md]: # Lavender email coach landing page  Pixel-faithful, responsive landing-page recreation based on the supplied 485 \u00d7 2048 reference. Product visuals are built with HTML, CSS, and inline S",
+    "page_snippet": "const Marker = ({ children, className = \"\" }: { children: React.ReactNode; className?: string }) => (   <span className={`marker ${className}`}>{children}</span> );  function Envelope() {   return (     <svg className=\"envelope\" viewBox=\"0 0 100 90\" aria-hidden=\"true\">       <g transform=\"rotate(9 5"
+  },
+  "17": {
+    "folder": "17",
+    "pkg_name": "cono-editorial-photography",
+    "page_file": "app/page.tsx",
+    "page_sha": "6ac04c0af8333153e7b86f09e684cd8fb2e0059579cc0f71e04b4e3b7d5db952",
+    "page_len": 5712,
+    "components": [],
+    "assets_count": 7,
+    "assets_sample": [
+      "favicon.svg",
+      "images\\gallery-couple.jpg",
+      "images\\gallery-field.jpg",
+      "images\\gallery-mountain.jpg",
+      "images\\hero-road.jpg"
+    ],
+    "readme_snippet": " [README.md]: # CONO editorial photography portfolio  Single-page editorial photography portfolio recreated from the supplied 736 \u00d7 1900 reference composition.  ## Structure  - `app/page.tsx` \u2014 semant",
+    "page_snippet": "\"use client\";  import { useState } from \"react\";  const quotes = [   \"We carry the places we have loved with us, long after the road has disappeared from view.\",   \"The truest photographs live somewhere between a quiet landscape and an unguarded moment.\",   \"Every story begins with light, distance, "
+  },
+  "18": {
+    "folder": "18",
+    "pkg_name": "iso-meet-creative-marketplace",
+    "page_file": "app/page.tsx",
+    "page_sha": "6db8287db281a7454bc5509211d64898d27cae51da761910299970da95c50dfe",
+    "page_len": 12535,
+    "components": [],
+    "assets_count": 2,
+    "assets_sample": [
+      "favicon.svg",
+      "reference-190.jpg"
+    ],
+    "readme_snippet": " [README.md]: # ISO Meet \u2014 Creative Talent Marketplace  Pixel-faithful recreation of the supplied 639 \u00d7 2048 ISO Meet reference, built as a standalone Vinext/React site in folder `18`.  The photograph",
+    "page_snippet": "\"use client\";  import { useState } from \"react\";  const categories = [   [\"Photographers\", \"photo-1\"], [\"Models\", \"photo-2\"], [\"Videographers\", \"photo-3\"],   [\"Hair stylists\", \"photo-4\"], [\"Content creators\", \"photo-5\"], [\"Marketing\", \"photo-6\"],   [\"Photo editors\", \"photo-7\"], [\"Brand specialists\","
+  },
+  "19": {
+    "folder": "19",
+    "pkg_name": "rendr-fintech-landing",
+    "page_file": "app/page.tsx",
+    "page_sha": "88e51f4407a4e400481499031118052c0519152bb2c845bc03447b04cccb526c",
+    "page_len": 10120,
+    "components": [],
+    "assets_count": 1,
+    "assets_sample": [
+      "favicon.svg"
+    ],
+    "readme_snippet": "",
+    "page_snippet": "\"use client\";  import { useState } from \"react\"; import { ArrowRight, ChevronLeft, ChevronRight, ChevronUp, CircleUserRound, CreditCard, Facebook, Linkedin, Menu, Play, Plus, Twitter } from \"lucide-react\";  const faqs = [   [\"What are my payment options?\", \"Collaboratively redefine multidisciplinary"
+  },
+  "20": {
+    "folder": "20",
+    "pkg_name": "iso-meet-creative-marketplace",
+    "page_file": "app/page.tsx",
+    "page_sha": "6a65d428b7b6bc93cee6c10cfdc8e728190af00ec0bb3b8c0df18295ea89c7d9",
+    "page_len": 11976,
+    "components": [],
+    "assets_count": 1,
+    "assets_sample": [
+      "reference.jpg"
+    ],
+    "readme_snippet": "",
+    "page_snippet": "\"use client\";  import { useState } from \"react\";  const services = [   [\"Marketing teams\", \"Extra creative power for campaigns, launches and content.\"],   [\"Product design teams\", \"Flexible support for digital products, UX and websites.\"],   [\"Managers & founders\", \"A senior creative partner without"
+  },
+  "21": {
+    "folder": "21",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "f1d8f3b78c1d2f2a19effff77b3886b81e15147680f0eb96429a33a3a54376e1",
+    "page_len": 7868,
+    "components": [],
+    "assets_count": 14,
+    "assets_sample": [
+      "favicon.svg",
+      "og.png",
+      "reference.jpg",
+      "images\\article.jpg",
+      "images\\benefits.jpg"
+    ],
+    "readme_snippet": " [ASSET-LICENSES.md]: # Photographic asset licenses  All photography is downloaded locally and used under the [Unsplash License](https://unsplash.com/license). No AI-generated photography is used.  | ",
+    "page_snippet": "'use client';  import Image from 'next/image'; import { useState } from 'react';  function ArrowButton({ label, href = '#platform' }: { label: string; href?: string }) {   return <a className=\"micro-cta\" href={href}><span>{label}</span><b aria-hidden=\"true\">\u2197</b></a>; }  const capabilities = [   { t"
+  },
+  "22": {
+    "folder": "22",
+    "pkg_name": "metta-language-community",
+    "page_file": "app/page.tsx",
+    "page_sha": "5e7de2133dc03c01338ff7bfb8e20b20b5e9f0ce033d123ce12a5fbc9dd743bd",
+    "page_len": 5836,
+    "components": [],
+    "assets_count": 1,
+    "assets_sample": [
+      "images\\metta-reference.jpg"
+    ],
+    "readme_snippet": " [README.md]: # metta language community  Pixel-faithful narrow landing page recreated from the supplied visual reference.  Run with `npm install` and `npm run dev`. ",
+    "page_snippet": "\"use client\";  import { useState } from \"react\";  const lessons = [   { title: \"\u0418\u043d\u0434\u0438\u0432\u0438\u0434\u0443\u0430\u043b\u044c\u043d\u044b\u0435 \u0443\u0440\u043e\u043a\u0438\", number: \"01\", tone: \"pink\", copy: \"\u0414\u043b\u044f \u0442\u0435\u0445, \u043a\u0442\u043e \u0445\u043e\u0447\u0435\u0442 \u0443\u0447\u0438\u0442\u044c\u0441\u044f \u0432 \u0441\u0432\u043e\u0451\u043c \u0442\u0435\u043c\u043f\u0435\", detail: \"\u041f\u043e\u043b\u043d\u043e\u0435 \u0432\u043d\u0438\u043c\u0430\u043d\u0438\u0435 \u043f\u0440\u0435\u043f\u043e\u0434\u0430\u0432\u0430\u0442\u0435\u043b\u044f, \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u043c\u0430 \u043f\u043e\u0434 \u043b\u0438\u0447\u043d\u044b\u0435 \u0446\u0435\u043b\u0438\" },   { title: \"\u0413\u0440\u0443\u043f\u043f\u043e\u0432\u044b\u0435 \u043a\u0443\u0440\u0441\u044b\", number: \"02\", tone:"
+  },
+  "23": {
+    "folder": "23",
+    "pkg_name": "hollhii-growth-agency",
+    "page_file": "app/page.tsx",
+    "page_sha": "3dbaf6a10c194418ef959a60efab88030203e171f2aaff991eb48f7e006f3f27",
+    "page_len": 10961,
+    "components": [],
+    "assets_count": 0,
+    "assets_sample": [],
+    "readme_snippet": "",
+    "page_snippet": "\"use client\";  import { useState } from \"react\";  const photo = (id: number, width = 1200) =>   `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${width}`;  function Icon({ name }: { name: string }) {   const paths: Record<string, React.ReactNode> = {     s"
+  },
+  "24": {
+    "folder": "24",
+    "pkg_name": "atacama-climate-action",
+    "page_file": "app/page.tsx",
+    "page_sha": "7eec98faf92283ec19d5fcb79fdccbc91da51facddaa6c08b880b7381aafb880",
+    "page_len": 6124,
+    "components": [],
+    "assets_count": 2,
+    "assets_sample": [
+      "favicon.svg",
+      "reference.jpg"
+    ],
+    "readme_snippet": "",
+    "page_snippet": "const Arrow = ({ diagonal = false }: { diagonal?: boolean }) => (   <span aria-hidden=\"true\">{diagonal ? \"\u2197\" : \"\u2192\"}</span> );  const initiatives = [   [\"Tree planting\", \"green era & cleaner\", \"12/03/23\"],   [\"Beach cleanup\", \"future generations\", \"29/05/23\"],   [\"Educational events\", \"courses \u00b7 gree"
+  },
+  "25": {
+    "folder": "25",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "29d7c6e073aa507cded11ec325a2d8bf975d5df9a9331b7a9ced5dc2fbd5d995",
+    "page_len": 5779,
+    "components": [],
+    "assets_count": 2,
+    "assets_sample": [
+      "favicon.svg",
+      "reference.jpg"
+    ],
+    "readme_snippet": "",
+    "page_snippet": "\"use client\";  import { FormEvent, useState } from \"react\";  const tags = [[\"UI/UX DESIGN\",\"mint\"],[\"PRODUCT TESTING\",\"violet\"],[\"ILLUSTRATION\",\"blue\"],[\"LOGO DESIGN\",\"pink\"],[\"CONSULTING\",\"white\"],[\"BRANDING DESIGN\",\"lavender\"],[\"DEVELOPMENT\",\"cream\"],[\"DESIGN AUDIT\",\"coral\"]] as const; const servi"
+  },
+  "26": {
+    "folder": "26",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "4d508ca087d47588669603b5f78454fb3fc68c1f6fd71c0f87662c9dd343fb7f",
+    "page_len": 8576,
+    "components": [],
+    "assets_count": 1,
+    "assets_sample": [
+      "favicon.svg"
+    ],
+    "readme_snippet": "",
+    "page_snippet": "function Spark({ size = 18 }: { size?: number }) {   return <svg width={size} height={size} viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 0c1.2 7.4 4.6 10.8 12 12-7.4 1.2-10.8 4.6-12 12C10.8 16.6 7.4 13.2 0 12 7.4 10.8 10.8 7.4 12 0Z\" fill=\"currentColor\" /></svg>; }  function HeroArtwork() {  "
+  },
+  "27": {
+    "folder": "27",
+    "pkg_name": "moss-hotel-landing-page-27",
+    "page_file": "index.html",
+    "page_sha": "da3bd82b759524acf32e97aea5e86a7fb3f16ab5cf95ecfbce6653621ad29c56",
+    "page_len": 7397,
+    "components": [],
+    "assets_count": 0,
+    "assets_sample": [],
+    "readme_snippet": " [README.md]: # MOSS \u2014 folder 27  Pixel-faithful, responsive static landing page based on the supplied 333 \u00d7 1536 reference.  ## Run  ```bash npm install npm run dev ```  ## Photography  All photograp",
+    "page_snippet": "<!doctype html> <html lang=\"en\">   <head>     <meta charset=\"UTF-8\" />     <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />     <meta name=\"description\" content=\"Moss Hotel \u2014 a quiet architectural retreat in the alpine landscape.\" />     <title>MOSS \u2014 Alpine Retreat</title>  "
+  },
+  "28": {
+    "folder": "28",
+    "pkg_name": "editorial-brand-portfolio-28",
+    "page_file": "index.html",
+    "page_sha": "58d3be1abbe05f20447bd734715a079269d21da2bd5ec35217290f78bf74dd2e",
+    "page_len": 7759,
+    "components": [],
+    "assets_count": 0,
+    "assets_sample": [],
+    "readme_snippet": " [README.md]: # Folder 28 \u2014 Editorial Brand Portfolio  Dependency-free, single-page recreation of the supplied 341 \u00d7 1536 px reference.  ## Preview  Open `index.html` directly, or run a local static s",
+    "page_snippet": "<!doctype html> <html lang=\"en\">   <head>     <meta charset=\"UTF-8\" />     <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />     <meta name=\"description\" content=\"An editorial portfolio for Zita Fernandes, brand identity and art direction.\" />     <title>Zita Fernandes \u2014 Brand"
+  },
+  "29": {
+    "folder": "29",
+    "pkg_name": "gentle-systems-archive",
+    "page_file": "app/page.tsx",
+    "page_sha": "30a45d22fcad99c8bec6ff73e58d3a106bfa0deca1d8b8afc81bcb60a4c11bb9",
+    "page_len": 5275,
+    "components": [],
+    "assets_count": 1,
+    "assets_sample": [
+      "reference.jpg"
+    ],
+    "readme_snippet": "",
+    "page_snippet": "const Sprite = ({ className, alt }: { className: string; alt: string }) => (   <figure className={`sprite ${className}`} role=\"img\" aria-label={alt} /> );  function SystemsDiagram() {   return <svg className=\"systems-diagram\" viewBox=\"0 0 105 180\" role=\"img\" aria-label=\"Branching scientific systems "
+  },
+  "30": {
+    "folder": "30",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "b5606c344035d761704311ce51bfe803b9367299ce9f936eb01ab496436ed263",
+    "page_len": 9382,
+    "components": [],
+    "assets_count": 1,
+    "assets_sample": [
+      "favicon.svg"
+    ],
+    "readme_snippet": "",
+    "page_snippet": "\"use client\";  import { useState } from \"react\";  function Logo({ light = false }: { light?: boolean }) {   return <span className={`logo ${light ? \"light\" : \"\"}`}><i /><i /><i /><b>Square Card</b></span>; }  const pixels: [number, number, string][] = [   [9,79,\"purple\"],[27,79,\"purple\"],[46,80,\"pur"
+  },
+  "31": {
+    "folder": "31",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "0d838f5cafe30990d8a4c2c6ee3f6f5dbd91a3eae718597d98a93bc145fc60f8",
+    "page_len": 901,
+    "components": [
+      "ExpertiseSection.tsx",
+      "FAQSection.tsx",
+      "FinalCTASection.tsx",
+      "Footer.tsx",
+      "Header.tsx",
+      "Hero.tsx",
+      "ProcessSection.tsx",
+      "PropertySection.tsx",
+      "TestimonialsSection.tsx"
+    ],
+    "assets_count": 18,
+    "assets_sample": [
+      "images\\expertise-01.jpg",
+      "images\\expertise-02.jpg",
+      "images\\expertise-03.jpg",
+      "images\\expertise-04.jpg",
+      "images\\faq-roofer.jpg"
+    ],
+    "readme_snippet": " [README.md]: # Trofo \u2014 Premium Roofing & Home-Services Landing Page Template  A high-fidelity, conversion-optimized, pixel-faithful production template for roofing contractors, residential roofing co",
+    "page_snippet": "import { Header } from '../components/Header'; import { Hero } from '../components/Hero'; import { ExpertiseSection } from '../components/ExpertiseSection'; import { PropertySection } from '../components/PropertySection'; import { ProcessSection } from '../components/ProcessSection'; import { Testim"
+  },
+  "32": {
+    "folder": "32",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "e2e18dffa7b39751e54fdbe1dd8c8c8ed2b3da30fc6e11bb3b9afc631ef1c5b9",
+    "page_len": 1425,
+    "components": [
+      "BelongingSection.tsx",
+      "FAQSection.tsx",
+      "Footer.tsx",
+      "Header.tsx",
+      "Hero.tsx",
+      "HeroCards.tsx",
+      "LifestyleCards.tsx",
+      "MembershipSection.tsx",
+      "OnboardingSection.tsx",
+      "RibbonDecoration.tsx",
+      "SupportSection.tsx",
+      "TestimonialsSection.tsx"
+    ],
+    "assets_count": 10,
+    "assets_sample": [
+      "images\\lifestyle-01.jpg",
+      "images\\lifestyle-01.webp",
+      "images\\lifestyle-02.jpg",
+      "images\\lifestyle-02.webp",
+      "images\\story-01.jpg"
+    ],
+    "readme_snippet": " [ASSET-LICENSES.md]: # Asset Licenses & Photography Attributions  All photographs used in this template are legally reusable REAL photography sourced from Unsplash under the Unsplash License (free co",
+    "page_snippet": "import React from 'react'; import Header from '../components/Header'; import Hero from '../components/Hero'; import OnboardingSection from '../components/OnboardingSection'; import TestimonialsSection from '../components/TestimonialsSection'; import BelongingSection from '../components/BelongingSect"
+  },
+  "33": {
+    "folder": "33",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "e0b407d6c5a31b4b5c4176e0ff45d7f08cfc5d7ca88eaed28cfaf4ccc74d7de1",
+    "page_len": 3499,
+    "components": [
+      "AboutClinic.tsx",
+      "AppointmentModal.tsx",
+      "CareCarousel.tsx",
+      "ComparisonMatrix.tsx",
+      "ConsultationFlow.tsx",
+      "DentalJournal.tsx",
+      "DoctorNetwork.tsx",
+      "FAQAccordion.tsx",
+      "Footer.tsx",
+      "Header.tsx",
+      "Hero.tsx",
+      "PhilosophyBanner.tsx",
+      "PrefooterCTA.tsx",
+      "PricingPlans.tsx",
+      "SmileMosaic.tsx",
+      "TechInnovation.tsx",
+      "Testimonials.tsx",
+      "Treatments.tsx"
+    ],
+    "assets_count": 32,
+    "assets_sample": [
+      "images\\article-1.jpg",
+      "images\\article-2.jpg",
+      "images\\article-3.jpg",
+      "images\\carousel-ortho.jpg",
+      "images\\carousel-pediatric.jpg"
+    ],
+    "readme_snippet": " [ASSET-LICENSES.md]: # Asset Licenses & Photography Attributions  All photographs used in this template are legally reusable REAL photographs sourced from Unsplash under the Unsplash License (free co",
+    "page_snippet": "'use client';  import React, { useState } from 'react'; import Header from '../components/Header'; import Hero from '../components/Hero'; import AboutClinic from '../components/AboutClinic'; import SmileMosaic from '../components/SmileMosaic'; import PhilosophyBanner from '../components/PhilosophyBa"
+  },
+  "34": {
+    "folder": "34",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "99e01d4f516c474147a3a327c190cc24b0b3f9a026ab07c611e5ea8866c74023",
+    "page_len": 695,
+    "components": [
+      "Footer.tsx",
+      "Header.tsx",
+      "Hero.tsx",
+      "Initiatives.tsx",
+      "Intro.tsx",
+      "MissionBand.tsx",
+      "Newsletter.tsx",
+      "ProblemCards.tsx"
+    ],
+    "assets_count": 16,
+    "assets_sample": [
+      "images\\avatar-1.jpg",
+      "images\\avatar-2.jpg",
+      "images\\avatar-3.jpg",
+      "images\\card-forest.jpg",
+      "images\\card-ghg.jpg"
+    ],
+    "readme_snippet": " [ASSET-LICENSES.md]: # ASSET LICENSES & PROVENANCE RECORD  All imagery used in this project is 100% genuine photography sourced legally from Unsplash under the Unsplash License (free for commercial a",
+    "page_snippet": "'use client';  import React from 'react'; import { Header } from '@/components/Header'; import { Hero } from '@/components/Hero'; import { Intro } from '@/components/Intro'; import { MissionBand } from '@/components/MissionBand'; import { Initiatives } from '@/components/Initiatives'; import { Probl"
+  },
+  "35": {
+    "folder": "35",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "0ded8e9fc4a349cca234bfeaca9411e3463f1f7696fc523eaae93fcca50e3091",
+    "page_len": 667,
+    "components": [
+      "DedicationStats.tsx",
+      "FinalCTA.tsx",
+      "Footer.tsx",
+      "Header.tsx",
+      "Hero.tsx",
+      "Salons.tsx",
+      "Services.tsx"
+    ],
+    "assets_count": 31,
+    "assets_sample": [
+      "images\\cta-detail-right.jpg",
+      "images\\cta-eye-top.jpg",
+      "images\\cta-model-left.jpg",
+      "images\\hero-face-duo.jpg",
+      "images\\hero-face-left.jpg"
+    ],
+    "readme_snippet": " [REFERENCE_SPEC.md]: # REFERENCE SPECIFICATION: RADIANTE SALON (ABOUT US PAGE)  ## 1. REFERENCE BOARD MEASUREMENTS - **Board Width**: 426 px - **Board Height**: 870 px - **Presentation Canvas Backgro",
+    "page_snippet": "'use client';  import React from 'react'; import { Header } from '@/components/Header'; import { Hero } from '@/components/Hero'; import { DedicationStats } from '@/components/DedicationStats'; import { Services } from '@/components/Services'; import { Salons } from '@/components/Salons'; import { F"
+  },
+  "36": {
+    "folder": "36",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "0d18cb0079d6276cdfc7e0dbeb884beb120fd9d939c11f4f5e1d2ee6b73a7fb8",
+    "page_len": 1671,
+    "components": [
+      "BookingModal.tsx",
+      "CinematicPanels.tsx",
+      "DedicationStats.tsx",
+      "FinalBanner.tsx",
+      "FinalCTA.tsx",
+      "Footer.tsx",
+      "Header.tsx",
+      "Hero.tsx",
+      "LowerGallery.tsx",
+      "Manifesto.tsx",
+      "Philosophy.tsx",
+      "PostTreatmentInfo.tsx",
+      "Salons.tsx",
+      "Services.tsx",
+      "Testimonials.tsx"
+    ],
+    "assets_count": 42,
+    "assets_sample": [
+      "images\\collage-01.jpg",
+      "images\\collage-02.jpg",
+      "images\\cta-detail-right.jpg",
+      "images\\cta-eye-top.jpg",
+      "images\\cta-model-left.jpg"
+    ],
+    "readme_snippet": " [REFERENCE_SPEC.md]: # REFERENCE SPECIFICATION: RADIANTE SALON (ABOUT US PAGE)  ## 1. REFERENCE BOARD MEASUREMENTS - **Board Width**: 426 px - **Board Height**: 870 px - **Presentation Canvas Backgro",
+    "page_snippet": "'use client';  import React, { useState } from 'react'; import { Header } from '@/components/Header'; import { Hero } from '@/components/Hero'; import { Manifesto } from '@/components/Manifesto'; import { Philosophy } from '@/components/Philosophy'; import { Services } from '@/components/Services'; "
+  },
+  "37": {
+    "folder": "37",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "888842fed644d7193dcecc83fb94dc65560b0d8dcedb0b50c3ecbc3a87243590",
+    "page_len": 1102,
+    "components": [
+      "CapabilityStrip.tsx",
+      "Efficiency.tsx",
+      "FAQ.tsx",
+      "Footer.tsx",
+      "Header.tsx",
+      "Hero.tsx",
+      "PortfolioStatement.tsx",
+      "Pricing.tsx",
+      "Projects.tsx",
+      "Workflow.tsx"
+    ],
+    "assets_count": 18,
+    "assets_sample": [
+      "illustrations\\coretex-mark.svg",
+      "illustrations\\eye-mark.svg",
+      "illustrations\\f-plus-logo.svg",
+      "illustrations\\fragment-logo.svg",
+      "illustrations\\leaf-emblem.svg"
+    ],
+    "readme_snippet": " [REFERENCE_SPEC.md]: # REFERENCE SPECIFICATION  ## Reference Image - File: `media_1788192847215.jpg` - Width: 125 px - Height: 870 px - Aspect Ratio: 1 : 6.96  ## Global Coordinates & Heights (Scaled",
+    "page_snippet": "import React from 'react'; import Header from '../components/Header'; import Hero from '../components/Hero'; import CapabilityStrip from '../components/CapabilityStrip'; import Projects from '../components/Projects'; import PortfolioStatement from '../components/PortfolioStatement'; import Efficienc"
+  },
+  "38": {
+    "folder": "38",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "5a721e32f28c7cbc568556c2a11f9825b192bbaf95af4b38b480a56dbd7e1e8a",
+    "page_len": 966,
+    "components": [
+      "AboutBento.tsx",
+      "Contact.tsx",
+      "Footer.tsx",
+      "Header.tsx",
+      "Hero.tsx",
+      "Projects.tsx",
+      "Services.tsx"
+    ],
+    "assets_count": 14,
+    "assets_sample": [
+      "images\\about-phone-1.jpg",
+      "images\\about-phone-2.jpg",
+      "images\\about-phone-mockup.jpg",
+      "images\\ceramics-raw.jpg",
+      "images\\flower-raw.jpg"
+    ],
+    "readme_snippet": " [REFERENCE_SPEC.md]: # REFERENCE SPECIFICATION \u2014 GoDesign Studio (Template 38)  ## Reference Canvas & Geometry - **Original Reference Image**: 490 \u00d7 870 px - **Inferred Viewport**: Central white canv",
+    "page_snippet": "import React from 'react'; import Header from '../components/Header'; import Hero from '../components/Hero'; import AboutBento from '../components/AboutBento'; import Services from '../components/Services'; import Projects from '../components/Projects'; import Contact from '../components/Contact'; i"
+  },
+  "39": {
+    "folder": "39",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "b530688657fa4a1409a05dac53d23962a019ea41f1d854184af30c257c71f514",
+    "page_len": 1379,
+    "components": [
+      "ClientReviews.tsx",
+      "Differentiators.tsx",
+      "FinalCTA.tsx",
+      "Footer.tsx",
+      "Header.tsx",
+      "Hero.tsx",
+      "OfferStrip.tsx",
+      "RecentWork.tsx",
+      "ServicePackages.tsx",
+      "Stylists.tsx",
+      "Transformations.tsx"
+    ],
+    "assets_count": 17,
+    "assets_sample": [
+      "assets\\hero-hair-wash.webp",
+      "assets\\salon-interior.webp",
+      "assets\\stylist-01.webp",
+      "assets\\stylist-02.webp",
+      "assets\\stylist-03.webp"
+    ],
+    "readme_snippet": " [REFERENCE_SPEC.md]: # REFERENCE SPECIFICATION (Folder 39)  ## Reference Image - File: media_1788193823176.jpg - Width: 187 px - Height: 870 px - Aspect Ratio: 1 : 4.65  ## Color Palette Sampled From",
+    "page_snippet": "import Header from '@/components/Header'; import Hero from '@/components/Hero'; import OfferStrip from '@/components/OfferStrip'; import Transformations from '@/components/Transformations'; import Stylists from '@/components/Stylists'; import Differentiators from '@/components/Differentiators'; impo"
+  },
+  "40": {
+    "folder": "40",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "ce6867797a71cc8a8420c0ec5f63398f297090e3f1da409b9021fc7294cc4965",
+    "page_len": 1239,
+    "components": [
+      "Benefits.tsx",
+      "EditorDemo.tsx",
+      "FinalCTA.tsx",
+      "Footer.tsx",
+      "Hero.tsx",
+      "PlatformGrid.tsx",
+      "Pricing.tsx",
+      "TrustStrip.tsx"
+    ],
+    "assets_count": 1,
+    "assets_sample": [
+      "hero-mountain.png"
+    ],
+    "readme_snippet": " [REFERENCE_SPEC.md]: # REFERENCE SPECIFICATION & RECONSTRUCTION MAP  ## 1. COMPOSITE REFERENCE BOARD ANALYSIS - **Source Board Dimensions**: 728 \u00d7 870 px - **Interpretation**: A single continuous lan",
+    "page_snippet": "import React from 'react'; import Hero from '@/components/Hero'; import TrustStrip from '@/components/TrustStrip'; import EditorDemo from '@/components/EditorDemo'; import PlatformGrid from '@/components/PlatformGrid'; import Pricing from '@/components/Pricing'; import Benefits from '@/components/Be"
+  },
+  "41": {
+    "folder": "41",
+    "pkg_name": "sites-project",
+    "page_file": "app/page.tsx",
+    "page_sha": "49a39e37f95cf47e3424cf2122b67c7a5f666bd25d0f2e115a15d6b61f90a155",
+    "page_len": 1267,
+    "components": [
+      "Contact.tsx",
+      "DarkCTA.tsx",
+      "Footer.tsx",
+      "FullWidthPhoto.tsx",
+      "Header.tsx",
+      "Hero.tsx",
+      "Manifesto.tsx",
+      "QualitySolutions.tsx",
+      "Team.tsx",
+      "Testimonials.tsx"
+    ],
+    "assets_count": 11,
+    "assets_sample": [
+      "assets\\contact-handyman.jpg",
+      "assets\\full-width-handyman.jpg",
+      "assets\\hero-handyman.jpg",
+      "assets\\team-01.jpg",
+      "assets\\team-02.jpg"
+    ],
+    "readme_snippet": " [REFERENCE_SPEC.md]: # REFERENCE SPECIFICATION (Folder 41)  ## Reference Source - Image: media_1788195291917.jpg - Dimensions: 172 \u00d7 870 px  ## Core Palette - Deep Navy: `#0B1828` - Dark Background (",
+    "page_snippet": "import Header from '@/components/Header'; import Hero from '@/components/Hero'; import Manifesto from '@/components/Manifesto'; import QualitySolutions from '@/components/QualitySolutions'; import DarkCTA from '@/components/DarkCTA'; import FullWidthPhoto from '@/components/FullWidthPhoto'; import T"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "slug": "lauritz-magazine",
+  "name": "Lauritz Magazine",
+  "category": "Editorial & Publishing",
+  "industry": "Editorial & Publishing",
+  "style": "Modern Professional",
+  "tone": "Professional & Modern",
+  "accent": "#111111",
+  "pages": 1,
+  "page_slugs": [],
+  "version": "1.0.0",
+  "hidden": false,
+  "demo_business_name": "Lauritz Magazine",
+  "demo_tagline": "Premium Editorial & Publishing website",
+  "demo_description": "Modern design template designed for Editorial & Publishing.",
+  "source": {
+    "fidelity": "licensed_archive",
+    "archive_filename": "12",
+    "archive_sha256": "08c6cad93a9407b7d1ca342fb3b96b65f711d034a8af21d673b983fbf6a9ff69",
+    "conversion_mode": "licensed-html-preservation",
+    "source_identity_retained": true
+  },
+  "rights": {
+    "mode": "user_supplied_licensed_archive",
+    "user_attested_commercial_builder_rights": true,
+    "original_source_code_reused": true,
+    "original_binary_assets_reused": true,
+    "source_identity_stripped": false
+  },
+  "publication": {
+    "state": "public",
+    "render_gate": "passed"
+  },
+  "verification": {
+    "gate_file": "verification/render-gate.json",
+    "render_home": "render/home.html",
+    "css_file": "app/globals.css",
+    "assets_manifest": "assets-manifest.json"
+  },
+  "art_direction": "Production art direction tailored for Editorial & Publishing.",
+  "compatibility": {
+    "site_document": 3,
+    "effects": 1,
+    "next_export": 16
+  },
+  "description": "Professional template for Editorial & Publishing."
+}

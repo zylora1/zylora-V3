@@ -1,0 +1,21 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "1317226284b95bc3fd933f66ae881b00ce43617e853a100606b43e38cdd387b7",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/favicon.svg",
+      "local_path": "assets/favicon.svg",
+      "sha256": "e6d2e59b7b5bbb0342e0fb496dfc262decbfe4426bbb7b047aec8d467d1dc6f7",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/reference.jpg",
+      "local_path": "assets/reference.jpg",
+      "sha256": "b63edfb702fdf81ab4aa5f438d49d3f256a58975fd7d967183d4c4d813a42306",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

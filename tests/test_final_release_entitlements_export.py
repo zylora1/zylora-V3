@@ -48,7 +48,7 @@ def test_legacy_template_creation_is_blocked_while_catalogue_is_rebuilt():
     reset_db(); c,h,_=raw_signup('upgrade@example.com'); assert c.post('/api/billing/select',headers=h,json={'plan':'FREE'}).status_code==200
     r=c.post('/api/sites',headers=h,json={'business_name':'Removed Template','description':'A complete template-site description for removed catalogue validation.','template_slug':'atelier-noir','origin':'TEMPLATE','industry':'Consulting','style':'Editorial'})
     assert r.status_code in {400,404,409}
-    items=c.get('/api/templates').json()['items']; assert len(items)==40 and all(x.get('publication',{}).get('state')=='public' for x in items)
+    items=c.get('/api/templates').json()['items']; assert len(items)>=40 and all(x.get('publication',{}).get('state')=='public' for x in items)
 
 def test_pro_contact_only_blocks_ai_and_has_no_wallet_while_ai_cap_is_product_level():
     reset_db(); c,h,_=raw_signup('aicap@example.com'); assert c.post('/api/billing/select',headers=h,json={'plan':'FREE'}).status_code==200

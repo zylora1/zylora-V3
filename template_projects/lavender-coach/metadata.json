@@ -1,0 +1,47 @@
+{
+  "slug": "lavender-coach",
+  "name": "Lavender Coach",
+  "category": "Sales & Coaching",
+  "industry": "Sales & Coaching",
+  "style": "Modern Professional",
+  "tone": "Professional & Modern",
+  "accent": "#111111",
+  "pages": 1,
+  "page_slugs": [],
+  "version": "1.0.0",
+  "hidden": false,
+  "demo_business_name": "Lavender Coach",
+  "demo_tagline": "Premium Sales & Coaching website",
+  "demo_description": "Modern design template designed for Sales & Coaching.",
+  "source": {
+    "fidelity": "licensed_archive",
+    "archive_filename": "16",
+    "archive_sha256": "b8fd3e6fd663f6a042c533c5f7e9e4149867ee7dc0ea8116e9aa72065c72d6b6",
+    "conversion_mode": "licensed-html-preservation",
+    "source_identity_retained": true
+  },
+  "rights": {
+    "mode": "user_supplied_licensed_archive",
+    "user_attested_commercial_builder_rights": true,
+    "original_source_code_reused": true,
+    "original_binary_assets_reused": true,
+    "source_identity_stripped": false
+  },
+  "publication": {
+    "state": "public",
+    "render_gate": "passed"
+  },
+  "verification": {
+    "gate_file": "verification/render-gate.json",
+    "render_home": "render/home.html",
+    "css_file": "app/globals.css",
+    "assets_manifest": "assets-manifest.json"
+  },
+  "art_direction": "Production art direction tailored for Sales & Coaching.",
+  "compatibility": {
+    "site_document": 3,
+    "effects": 1,
+    "next_export": 16
+  },
+  "description": "Professional template for Sales & Coaching."
+}

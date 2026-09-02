@@ -1,0 +1,75 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "ca1bf8f17080d1ffa5b8eeaee63528e9438376e9802eb0e90812cdb541ec8751",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/favicon.svg",
+      "local_path": "assets/favicon.svg",
+      "sha256": "e6d2e59b7b5bbb0342e0fb496dfc262decbfe4426bbb7b047aec8d467d1dc6f7",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/feature-interior.jpg",
+      "local_path": "assets/images/feature-interior.jpg",
+      "sha256": "244dcd15834ab2288290c5f703c60eae28943a71b1f7b05231955f414aab8ea7",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/footer-house.jpg",
+      "local_path": "assets/images/footer-house.jpg",
+      "sha256": "3ec507afbf2c71918c32c1bcb8fa48999e2c749de490706b41d75406d04a277b",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-villa.jpg",
+      "local_path": "assets/images/hero-villa.jpg",
+      "sha256": "34bfd7a47d02b1a1a10f55b9be534a4361a7b5d0e135a21e965bb1e3464650c8",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/property-01.jpg",
+      "local_path": "assets/images/property-01.jpg",
+      "sha256": "1453933fa2c3da9d6c4af2112123da94120927fddc76de19c5642d8b09330242",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/property-02.jpg",
+      "local_path": "assets/images/property-02.jpg",
+      "sha256": "95f9ecda5a4d633712ed7629718bef3bd081b91fc369db6876b11108b4cc3a53",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/property-03.jpg",
+      "local_path": "assets/images/property-03.jpg",
+      "sha256": "6ab1bfc4ac69e962346f40364427f742163193edf09c8c573c2c8d885f30458e",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/rent-01.jpg",
+      "local_path": "assets/images/rent-01.jpg",
+      "sha256": "7b6a88288fdab6ca68ab32e678cb79fd6bc5b5312b85b74330d6b570105428fb",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/rent-02.jpg",
+      "local_path": "assets/images/rent-02.jpg",
+      "sha256": "5baa5289fb036bb2ce54d78c716a5a27c2549514b9b358db9db0684495316b7a",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/rent-03.jpg",
+      "local_path": "assets/images/rent-03.jpg",
+      "sha256": "2590cf8bc8ff02da0ee147626ee36ae9dbbcf5ad697a6f1a4dd6f159818b8cf6",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/rent-04.jpg",
+      "local_path": "assets/images/rent-04.jpg",
+      "sha256": "6da2aadfce30de0760d11d36709411bc8d5edd35e70676e895f77a5932edcc73",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

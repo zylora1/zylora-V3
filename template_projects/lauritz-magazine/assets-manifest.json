@@ -1,0 +1,75 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "08c6cad93a9407b7d1ca342fb3b96b65f711d034a8af21d673b983fbf6a9ff69",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/favicon.svg",
+      "local_path": "assets/favicon.svg",
+      "sha256": "e815ff856f1598083b11a896aaef86ad7253f7759970d9a1c1596aacc10bb89d",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/article-fashion.jpg",
+      "local_path": "assets/images/article-fashion.jpg",
+      "sha256": "5146698be665148dc88a74da05774ac2f2146811dd96f8bac9acd2c4729deb06",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/article-fragments.jpg",
+      "local_path": "assets/images/article-fragments.jpg",
+      "sha256": "6a857617c2c69362aea8d37c81bf79fd31e90ffd806d29e5652043661373d9bd",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/article-interior.jpg",
+      "local_path": "assets/images/article-interior.jpg",
+      "sha256": "c028c47b19e0c905849acf26c629247dd5fac82a53099570b6a06309014bdc03",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/article-plant.jpg",
+      "local_path": "assets/images/article-plant.jpg",
+      "sha256": "ce2e92c89ef87f5241c40159df2c3f70aa664f3e19f1ecd5619f5c756a5f4af2",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/feature-main.jpg",
+      "local_path": "assets/images/feature-main.jpg",
+      "sha256": "6476ae50aa0803863f35565a95f056539a9e7c38747e249174da1d583d647e67",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/story-abstract.jpg",
+      "local_path": "assets/images/story-abstract.jpg",
+      "sha256": "617e13d63c4324971935a84f2ea0b92dc912ed6f22941da10d6ef3c16c71571c",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/story-gold.jpg",
+      "local_path": "assets/images/story-gold.jpg",
+      "sha256": "d792d3063d896ff48c70956fbfb470e4709d476fd13f2253e40f56e6e5c46866",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/story-hands.jpg",
+      "local_path": "assets/images/story-hands.jpg",
+      "sha256": "4f267fd00eac5dd5dc2c638d47959c40d7e1c56decfb7782246531dd6b81c9cd",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/story-meeting.jpg",
+      "local_path": "assets/images/story-meeting.jpg",
+      "sha256": "a311c55f6fae9adf2391016cd2417df3b8116cf8a92f524d5ac954f4cf57d002",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/story-rest.jpg",
+      "local_path": "assets/images/story-rest.jpg",
+      "sha256": "10d61f2341dde4f9efbd46942b1ce3a34da12a90dfd809f3ea34429fbdd93dc5",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

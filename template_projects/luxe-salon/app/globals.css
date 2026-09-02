@@ -1,0 +1,96 @@
+html { scroll-behavior: smooth; } body { min-width: 0; } img, svg, video { max-width: 100%; height: auto; }
+:root {
+  --page-bg: #FFFFFF;
+  --paper-bg: #FAFAFA;
+  --ink-primary: #111111;
+  --ink-secondary: #282828;
+  --ink-muted: #666666;
+  --ink-subtle: #8E8E8E;
+  --line-color: #ECECEC;
+  --line-subtle: #F2F2F2;
+  --font-sans: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background-color: var(--page-bg);
+  color: var(--ink-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+.content-column {
+  max-width: 860px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* Hairlines */
+.hairline-b {
+  border-bottom: 1px solid var(--line-color);
+}
+.hairline-t {
+  border-top: 1px solid var(--line-color);
+}
+.hairline-r {
+  border-right: 1px solid var(--line-color);
+}
+.hairline-l {
+  border-left: 1px solid var(--line-color);
+}
+
+/* Buttons */
+.btn-black {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 16px;
+  background-color: #111111;
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+  border: 1px solid #111111;
+}
+.btn-black:hover {
+  background-color: #2D2D2D;
+  border-color: #2D2D2D;
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px;
+  background-color: transparent;
+  border: 1px solid #D0D0D0;
+  color: #111111;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+.btn-outline:hover {
+  border-color: #111111;
+  background-color: #F8F8F8;
+}
+
+::selection {
+  background-color: #111111;
+  color: #FFFFFF;
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }

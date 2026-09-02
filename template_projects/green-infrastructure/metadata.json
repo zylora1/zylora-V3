@@ -1,0 +1,47 @@
+{
+  "slug": "green-infrastructure",
+  "name": "Green Infrastructure",
+  "category": "Sustainability & Environment",
+  "industry": "Sustainability & Environment",
+  "style": "Modern Professional",
+  "tone": "Professional & Modern",
+  "accent": "#111111",
+  "pages": 1,
+  "page_slugs": [],
+  "version": "1.0.0",
+  "hidden": false,
+  "demo_business_name": "Green Infrastructure",
+  "demo_tagline": "Premium Sustainability & Environment website",
+  "demo_description": "Modern design template designed for Sustainability & Environment.",
+  "source": {
+    "fidelity": "licensed_archive",
+    "archive_filename": "21",
+    "archive_sha256": "f1d8f3b78c1d2f2a19effff77b3886b81e15147680f0eb96429a33a3a54376e1",
+    "conversion_mode": "licensed-html-preservation",
+    "source_identity_retained": true
+  },
+  "rights": {
+    "mode": "user_supplied_licensed_archive",
+    "user_attested_commercial_builder_rights": true,
+    "original_source_code_reused": true,
+    "original_binary_assets_reused": true,
+    "source_identity_stripped": false
+  },
+  "publication": {
+    "state": "public",
+    "render_gate": "passed"
+  },
+  "verification": {
+    "gate_file": "verification/render-gate.json",
+    "render_home": "render/home.html",
+    "css_file": "app/globals.css",
+    "assets_manifest": "assets-manifest.json"
+  },
+  "art_direction": "Production art direction tailored for Sustainability & Environment.",
+  "compatibility": {
+    "site_document": 3,
+    "effects": 1,
+    "next_export": 16
+  },
+  "description": "Professional template for Sustainability & Environment."
+}

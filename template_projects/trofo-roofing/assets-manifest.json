@@ -1,0 +1,117 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "0d838f5cafe30990d8a4c2c6ee3f6f5dbd91a3eae718597d98a93bc145fc60f8",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/images/expertise-01.jpg",
+      "local_path": "assets/images/expertise-01.jpg",
+      "sha256": "deae04ba450cc858618ce27282ddbf894b3dfb32f63250da3a78a0fd5ae0cf48",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/expertise-02.jpg",
+      "local_path": "assets/images/expertise-02.jpg",
+      "sha256": "81e8fc38986f566a64f55ff567e320ffa982b20e5d2f37f3294c88d63905b5e5",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/expertise-03.jpg",
+      "local_path": "assets/images/expertise-03.jpg",
+      "sha256": "aa00ac620f640fe0ea7da9a553460596dbd136dd9ebd04f902fd64ffc2daf7f8",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/expertise-04.jpg",
+      "local_path": "assets/images/expertise-04.jpg",
+      "sha256": "24ad8fcbd240f9c15335f3242eaae6b4af727db01be9eddce7d33bddbb0d1a99",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/faq-roofer.jpg",
+      "local_path": "assets/images/faq-roofer.jpg",
+      "sha256": "3d6360d7f11e4615fb056b714f23536053e8bf8e8681a5e40b60c6b4418f9c82",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/final-roof.jpg",
+      "local_path": "assets/images/final-roof.jpg",
+      "sha256": "abc2bf3b1c24fe3f34eab39e1a9f04f0ffcff00a8635281f689d22380f2a7c1d",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-roof.jpg",
+      "local_path": "assets/images/hero-roof.jpg",
+      "sha256": "a10959f7a9a9ddc20068e2bce7c1453c3525551fdc8dfec960616ef0981d1c57",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/process-01.jpg",
+      "local_path": "assets/images/process-01.jpg",
+      "sha256": "deae04ba450cc858618ce27282ddbf894b3dfb32f63250da3a78a0fd5ae0cf48",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/process-02.jpg",
+      "local_path": "assets/images/process-02.jpg",
+      "sha256": "d8d5f5e2768d7b0217d81e7f3232a16ec22bcb9364ec49674e5284f3b108bfa9",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/process-03.jpg",
+      "local_path": "assets/images/process-03.jpg",
+      "sha256": "62bf9c55e2b5e6cf037f6e84e536603698e20eef2388b727f96e1fe9b511d836",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/property-01.jpg",
+      "local_path": "assets/images/property-01.jpg",
+      "sha256": "cbfaeab4f577c64c4f4fbe90650997f39e4301d75998ba65cd1ba883e171ceac",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/property-02.jpg",
+      "local_path": "assets/images/property-02.jpg",
+      "sha256": "5d1045d27f632cd4ea4eab95913c1a5c1b7fbb6ce1cf54094a15aeaa512c2d1d",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/property-03.jpg",
+      "local_path": "assets/images/property-03.jpg",
+      "sha256": "81578d79a96c87ae1b99f6cec6bb4107864321e0a213fcc456a9d11c1c3a0662",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/property-04.jpg",
+      "local_path": "assets/images/property-04.jpg",
+      "sha256": "92709cb0fbe0ac3b34a505fb97966f497451d4011a1f16ddb202f4ef669ee646",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/property-05.jpg",
+      "local_path": "assets/images/property-05.jpg",
+      "sha256": "99bf4328fae0f81f27fdff5405177888e9d3c2163c6b4e78e5cb6f653e336be5",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/property-06.jpg",
+      "local_path": "assets/images/property-06.jpg",
+      "sha256": "ec908dd71b7438f1038fee39ce8612ebfc7f9d89ffd498f7e8aa89b26f548188",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/testimonial-01.jpg",
+      "local_path": "assets/images/testimonial-01.jpg",
+      "sha256": "562b212caa6ec06d8b0b313660dac6aa0bbfb729092cc4f16d04558a319af6b1",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/testimonial-02.jpg",
+      "local_path": "assets/images/testimonial-02.jpg",
+      "sha256": "29cf6ad39eb198c05b8d915fca0becfd3d270d510d32eaec1b886c426c681c67",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

@@ -99,3 +99,8 @@ def durable_rate_limit(key: str, limit: int, window_seconds: int):
 
 def clear_rate_limits() -> None:
     _RATE.clear()
+    try:
+        with SessionLocal.begin() as db:
+            db.execute(text('DELETE FROM rate_limit_buckets'))
+    except Exception:
+        pass

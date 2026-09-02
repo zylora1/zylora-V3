@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "source_archive": "editorial-red-portfolio-v1.1.zip",
+  "source_archive_sha256": "f14136d58aad3d28df822b25835c8703b417cc2a5be7a169c1edec531987a873",
+  "render_home_sha256": "ea99ecceac243223cb7a04a642676a895d2eaa797100ffeb93b80552f7e7505e",
+  "css_sha256": "4271bbb1173ad233f65984173e83e3578524b1bd5746406e18af41d4459c13da",
+  "page_sha256": {
+    "home": "ea99ecceac243223cb7a04a642676a895d2eaa797100ffeb93b80552f7e7505e"
+  },
+  "rights_check_passed": true,
+  "user_license_attestation": true,
+  "licensed_source_reused": true,
+  "asset_manifest_verified": true,
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "content_adapter_passed": true,
+  "site_document_compatible": true,
+  "functional_semantics_mapped": true,
+  "page_inventory_verified": true,
+  "external_dependencies_reviewed": true,
+  "source_code_reused": true,
+  "source_binary_assets_reused": true,
+  "source_identity_retained": true
+}

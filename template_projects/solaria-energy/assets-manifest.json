@@ -1,0 +1,63 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "b67e0ab10a82fa3e739321768e3af7bef9382b588de99fbe3da467142dd6bbaa",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/favicon.svg",
+      "local_path": "assets/favicon.svg",
+      "sha256": "e6d2e59b7b5bbb0342e0fb496dfc262decbfe4426bbb7b047aec8d467d1dc6f7",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/article.jpg",
+      "local_path": "assets/images/article.jpg",
+      "sha256": "7a1384dc1e1f3c9baae6b211dcb556e4db56d520ae346daaf197823c47ce6a19",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/benefits.jpg",
+      "local_path": "assets/images/benefits.jpg",
+      "sha256": "c4ce520866655c9be88d8d0384066f3842dcfa0c8b3e44b2abcfd587c7e63aa3",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero.jpg",
+      "local_path": "assets/images/hero.jpg",
+      "sha256": "d3c2dc7cb492916cfad1f03992d44134f49c76d6c6ae4eee837cd1b60e459537",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/involved.jpg",
+      "local_path": "assets/images/involved.jpg",
+      "sha256": "ad2a21267503843125d1f1c88c16d796617f6be2b041e698f744aa60ca1c5a08",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/solar-1.jpg",
+      "local_path": "assets/images/solar-1.jpg",
+      "sha256": "de8e7e95ef9ee784fa02f5dd6767547d0efb821f275139c95a53068775e6129d",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/solar-2.jpg",
+      "local_path": "assets/images/solar-2.jpg",
+      "sha256": "7e0381fed07c018f064b7c58d43503ae29d94669124dc849f62037988e4b4e2f",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/solar-3.jpg",
+      "local_path": "assets/images/solar-3.jpg",
+      "sha256": "8bbe343d914b6bfd24a448835abae5433abac187aecd11d0671d8fc93b56a398",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/wind.jpg",
+      "local_path": "assets/images/wind.jpg",
+      "sha256": "baa0b3b6300cf604e60360d4e7523f67fb79f02c1ea5854a781185e4738fe8a9",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

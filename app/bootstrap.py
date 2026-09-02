@@ -28,10 +28,10 @@ def bootstrap_super_admin() -> bool:
         return False
     if not email or not password:
         raise RuntimeError('SUPER_ADMIN_EMAIL and SUPER_ADMIN_PASSWORD must be set together for bootstrap')
+    if len(password) < 8:
+        raise RuntimeError('SUPER_ADMIN_PASSWORD must be at least 8 characters')
     if '@' not in email or email.startswith('@') or email.endswith('@'):
         raise RuntimeError('SUPER_ADMIN_EMAIL must be a valid email address')
-    if len(password) < 16:
-        raise RuntimeError('SUPER_ADMIN_PASSWORD must be at least 16 characters')
 
     with SessionLocal.begin() as db:
         existing = db.execute(

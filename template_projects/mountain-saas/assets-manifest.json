@@ -1,0 +1,15 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "ce6867797a71cc8a8420c0ec5f63398f297090e3f1da409b9021fc7294cc4965",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/hero-mountain.png",
+      "local_path": "assets/hero-mountain.png",
+      "sha256": "3eca1e64a28edf133925f103e4cab161e7236b98491847a33f4c919a73177b43",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

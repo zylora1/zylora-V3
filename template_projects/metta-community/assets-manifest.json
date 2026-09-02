@@ -1,0 +1,15 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "5e7de2133dc03c01338ff7bfb8e20b20b5e9f0ce033d123ce12a5fbc9dd743bd",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/images/metta-reference.jpg",
+      "local_path": "assets/images/metta-reference.jpg",
+      "sha256": "6b7f6ef768feeece2374f058233da3507bf315526d3ded56ca1f86ce4e882411",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

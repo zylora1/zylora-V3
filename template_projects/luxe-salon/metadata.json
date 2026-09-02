@@ -1,0 +1,47 @@
+{
+  "slug": "luxe-salon",
+  "name": "Luxe Salon",
+  "category": "Beauty & Salon",
+  "industry": "Beauty & Salon",
+  "style": "Modern Professional",
+  "tone": "Professional & Modern",
+  "accent": "#111111",
+  "pages": 1,
+  "page_slugs": [],
+  "version": "1.0.0",
+  "hidden": false,
+  "demo_business_name": "Luxe Salon",
+  "demo_tagline": "Premium Beauty & Salon website",
+  "demo_description": "Modern design template designed for Beauty & Salon.",
+  "source": {
+    "fidelity": "licensed_archive",
+    "archive_filename": "39",
+    "archive_sha256": "b530688657fa4a1409a05dac53d23962a019ea41f1d854184af30c257c71f514",
+    "conversion_mode": "licensed-html-preservation",
+    "source_identity_retained": true
+  },
+  "rights": {
+    "mode": "user_supplied_licensed_archive",
+    "user_attested_commercial_builder_rights": true,
+    "original_source_code_reused": true,
+    "original_binary_assets_reused": true,
+    "source_identity_stripped": false
+  },
+  "publication": {
+    "state": "public",
+    "render_gate": "passed"
+  },
+  "verification": {
+    "gate_file": "verification/render-gate.json",
+    "render_home": "render/home.html",
+    "css_file": "app/globals.css",
+    "assets_manifest": "assets-manifest.json"
+  },
+  "art_direction": "Production art direction tailored for Beauty & Salon.",
+  "compatibility": {
+    "site_document": 3,
+    "effects": 1,
+    "next_export": 16
+  },
+  "description": "Professional template for Beauty & Salon."
+}

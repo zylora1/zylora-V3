@@ -1,0 +1,63 @@
+html { scroll-behavior: smooth; } body { min-width: 0; } img, svg, video { max-width: 100%; height: auto; }
+:root { --paper:#f7f4f7; --ink:#171613; --muted:#777172; --rule:#e8e4e8; --brown:#2a1706; --cream:#efe8dd; --brown-muted:#a99c8d; }
+* { box-sizing:border-box; }
+html,body { margin:0; min-width:320px; background:var(--paper); color:var(--ink); font-family:Arial,Helvetica,sans-serif; }
+body { overflow-x:hidden; }
+a { color:inherit; text-decoration:none; }
+p,h1,h2,figure { margin:0; }
+.archive { position:relative; width:min(100%, 640px); height:1103px; margin:0 auto; background:var(--paper); }
+.topbar { position:absolute; inset:8px 22px auto; height:8px; display:grid; grid-template-columns:1fr 1fr 1fr; border-top:1px solid rgba(0,0,0,.025); font-size:3px; line-height:7px; }
+.topbar a:nth-child(2){text-align:center}.topbar a:last-child{text-align:right}
+.intro { position:absolute; top:72px; left:22px; right:22px; display:grid; grid-template-columns:1fr 1fr; }
+.intro h1,.intro p { font-size:11px; line-height:1.08; font-weight:400; letter-spacing:-.35px; }
+.intro p { padding-left:1px; }
+.award { position:absolute; top:139px; left:23px; font-size:3px; }
+.award>span { display:block; margin-bottom:5px; }
+.award article { position:relative; width:78px; height:39px; margin-left:25px; padding:7px 6px; border-radius:5px; background:#ef634c; color:#fff; }
+.award article small { display:inline-block; padding:1px 5px; border-radius:6px; background:#fff; color:#df4c3d; font-size:3px; }
+.award article b { position:absolute; right:7px; top:8px; font-size:3px; font-weight:400; }
+.award article p { margin-top:8px; color:#1d1714; font-size:4px; }
+.label { position:absolute; font-size:3px; line-height:1; white-space:nowrap; }
+.caption { position:absolute; font-size:3px; line-height:1.25; color:#615d5d; }
+.sprite { position:absolute; background-image:url('/reference.jpg'); background-size:360px 1536px; background-repeat:no-repeat; }
+.experiment { position:absolute; top:207px; left:0; width:100%; height:184px; }
+.experiment .l1{left:23px;top:5px}.experiment .l2{left:155px;top:5px}.experiment .l3{left:209px;top:5px}
+.fan { left:48px; top:11px; width:105px; height:165px; background-position:-48px -218px; }
+.thermal.one { left:155px; top:12px; width:52px; height:70px; background-position:-155px -219px; }
+.thermal.two { left:208px; top:12px; width:52px; height:70px; background-position:-208px -219px; }
+.experiment .caption { left:48px; top:176px; }
+.generative { position:absolute; top:410px; left:0; width:100%; height:151px; }
+.generative .g1{left:23px;top:3px}.generative .g2{left:154px;top:3px}.generative .g3{left:235px;top:3px}
+.objects { left:48px; top:10px; width:48px; height:111px; background-position:-48px -420px; }
+.cloud { left:96px; top:10px; width:137px; height:109px; background-position:-96px -420px; }
+.machine { left:235px; top:10px; width:77px; height:144px; background-position:-235px -420px; }
+.quote { position:absolute; top:588px; left:48px; width:79px; height:58px; padding:9px 8px; border-radius:3px; background:#241306; color:#f2e9dc; }
+.quote p { font-size:4px; line-height:1.25; }.quote small{position:absolute;left:8px;bottom:7px;font-size:3px;color:#ad9a86}
+.triptych { position:absolute; top:678px; left:0; width:100%; height:137px; }
+.triptych .t1{left:23px;top:0}.triptych .t2{left:155px;top:0}.triptych .t3{left:236px;top:0}
+.panorama { left:48px; top:8px; width:106px; height:105px; background-position:-48px -686px; }
+.installation { left:155px; top:8px; width:78px; height:106px; background-position:-155px -686px; }
+.biomaterial { left:235px; top:8px; width:104px; height:106px; background-position:-235px -686px; }
+.triptych .caption { left:143px; top:119px; }
+.collaboration { position:absolute; top:868px; left:0; width:100%; height:146px; }
+.collaboration .c1{left:22px;top:0}.collaboration .c2{left:101px;top:0}.collaboration .c3{left:207px;top:0}
+.technical { left:48px; top:9px; width:52px; height:92px; background-position:-48px -877px; }
+.hands { left:101px; top:9px; width:104px; height:74px; background-position:-101px -877px; }
+.loop { left:207px; top:9px; width:131px; height:110px; background-position:-207px -877px; }
+.collaboration .left-copy{left:48px;top:61px;width:50px}.collaboration .right-copy{left:207px;top:123px}
+.archive-end { position:absolute; left:121px; right:21px; bottom:41px; display:grid; grid-template-columns:1fr 1fr 1fr; font-size:3px; color:#6d6969; }
+.manifesto { position:relative; width:100%; height:433px; background:var(--brown); color:var(--cream); }
+.manifesto>* { width:min(100%,640px); margin-inline:auto; }
+.manifesto-nav { height:42px; padding:9px 22px 0; display:grid; grid-template-columns:1fr 1fr 1fr 45px; border-top:1px solid rgba(239,232,221,.08); font-size:3px; color:var(--brown-muted); }
+.manifesto-nav span:nth-child(2),.manifesto-nav span:nth-child(3){text-align:center}.manifesto-nav span:last-child{text-align:right;line-height:1.7}
+.manifesto-copy { position:relative; height:171px; font-size:4px; line-height:1.3; }
+.manifesto-copy p:first-child { position:absolute; left:22px; top:94px; width:92px; color:#817361; }
+.manifesto-copy p:last-child { position:absolute; left:180px; top:92px; width:150px; }
+.systems-diagram { position:absolute; left:max(calc((100% - 640px)/2 + 23px),23px); top:251px; width:95px; height:151px; color:#9e8e7b; }
+.manifesto h2 { position:absolute; left:50%; top:244px; width:auto; transform:translateX(-2%); font-size:15px; line-height:1; font-weight:400; letter-spacing:-.7px; }
+.manifesto footer { position:absolute; left:50%; bottom:9px; transform:translateX(-50%); height:8px; padding:0 22px; display:grid; grid-template-columns:1fr 1fr 1fr; align-items:end; border-top:1px solid rgba(239,232,221,.13); font-size:3px; color:#9b8c7c; }
+.manifesto footer span:nth-child(2){text-align:center}.manifesto footer span:last-child{text-align:right}
+:focus-visible { outline:1px solid currentColor; outline-offset:2px; }
+@media (min-width:641px){.archive{box-shadow:0 0 0 1px rgba(0,0,0,.015)}.archive>*:not(.topbar){transform-origin:top left}.manifesto h2{transform:translateX(-8%)}}
+@media (max-width:359px){.archive{transform-origin:top left}.archive,.manifesto>*{min-width:320px}.intro{grid-template-columns:1fr 1fr}.sprite{background-size:360px 1536px}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}

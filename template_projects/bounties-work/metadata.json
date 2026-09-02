@@ -1,0 +1,47 @@
+{
+  "slug": "bounties-work",
+  "name": "Bounties Work",
+  "category": "Business & SaaS",
+  "industry": "Business & SaaS",
+  "style": "Modern Professional",
+  "tone": "Professional & Modern",
+  "accent": "#111111",
+  "pages": 1,
+  "page_slugs": [],
+  "version": "1.0.0",
+  "hidden": false,
+  "demo_business_name": "Bounties Work",
+  "demo_tagline": "Premium Business & SaaS website",
+  "demo_description": "Modern design template designed for Business & SaaS.",
+  "source": {
+    "fidelity": "licensed_archive",
+    "archive_filename": "4",
+    "archive_sha256": "9fff30e344755380e6400f5877a53f3853eefc0e5aff7e6065392e4bdce52670",
+    "conversion_mode": "licensed-html-preservation",
+    "source_identity_retained": true
+  },
+  "rights": {
+    "mode": "user_supplied_licensed_archive",
+    "user_attested_commercial_builder_rights": true,
+    "original_source_code_reused": true,
+    "original_binary_assets_reused": true,
+    "source_identity_stripped": false
+  },
+  "publication": {
+    "state": "public",
+    "render_gate": "passed"
+  },
+  "verification": {
+    "gate_file": "verification/render-gate.json",
+    "render_home": "render/home.html",
+    "css_file": "app/globals.css",
+    "assets_manifest": "assets-manifest.json"
+  },
+  "art_direction": "Production art direction tailored for Business & SaaS.",
+  "compatibility": {
+    "site_document": 3,
+    "effects": 1,
+    "next_export": 16
+  },
+  "description": "Professional template for Business & SaaS."
+}

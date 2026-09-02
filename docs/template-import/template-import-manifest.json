@@ -1,0 +1,955 @@
+{
+  "sourceDirectory": "C:\\Users\\joys0\\OneDrive\\Desktop\\temp-1",
+  "repository": "c:\\Zylora-Ithanda finalu\\Zylora-Production-Ready-SuperAdmin-Audited-2026-08-31-v4",
+  "archivesDiscovered": 4,
+  "numberedFoldersDiscovered": 41,
+  "templateCandidates": 45,
+  "duplicatesSkipped": 4,
+  "templatesImported": 41,
+  "templatesRejected": 0,
+  "templates": [
+    {
+      "source": "Folder 1",
+      "sourceArchive": "1",
+      "originalName": "CREATIVE DIRECTION",
+      "zyloraName": "Forma Studio",
+      "zyloraId": "forma-studio",
+      "slug": "forma-studio",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Design & Creative",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 2",
+      "sourceArchive": "2",
+      "originalName": "WEB * DESIGNER",
+      "zyloraName": "Mariana Design",
+      "zyloraId": "mariana-design",
+      "slug": "mariana-design",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Portfolio",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 3",
+      "sourceArchive": "3",
+      "originalName": "A Modern Bank Card",
+      "zyloraName": "Square Card",
+      "zyloraId": "square-card",
+      "slug": "square-card",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Fintech & Banking",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 4",
+      "sourceArchive": "4",
+      "originalName": "The new way of creative work",
+      "zyloraName": "Bounties Work",
+      "zyloraId": "bounties-work",
+      "slug": "bounties-work",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Business & SaaS",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 5",
+      "sourceArchive": "5",
+      "originalName": "THE FUTURE OF STORYTELLING",
+      "zyloraName": "Incention Story",
+      "zyloraId": "incention-story",
+      "slug": "incention-story",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Entertainment & Media",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 6",
+      "sourceArchive": "6",
+      "originalName": "Building Digital Products",
+      "zyloraName": "Experience Studio",
+      "zyloraId": "experience-studio",
+      "slug": "experience-studio",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Agency & Digital",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 7",
+      "sourceArchive": "7",
+      "originalName": "Versatile Solution",
+      "zyloraName": "Versatile Flow",
+      "zyloraId": "versatile-flow",
+      "slug": "versatile-flow",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Fintech & SaaS",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 8",
+      "sourceArchive": "8",
+      "originalName": "FUTURE SOLUTION",
+      "zyloraName": "Solaria Energy",
+      "zyloraId": "solaria-energy",
+      "slug": "solaria-energy",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Clean Energy & Technology",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 9",
+      "sourceArchive": "9",
+      "originalName": "Doing few things and doing them well",
+      "zyloraName": "Craft Minimal",
+      "zyloraId": "craft-minimal",
+      "slug": "craft-minimal",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Creative & Studio",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 10",
+      "sourceArchive": "10",
+      "originalName": "Captivating Visual Stories",
+      "zyloraName": "Luma Portfolio",
+      "zyloraId": "luma-portfolio",
+      "slug": "luma-portfolio",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Photography & Visual",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 11",
+      "sourceArchive": "11",
+      "originalName": "Hassle-free expert for better businesses",
+      "zyloraName": "Uniqum Services",
+      "zyloraId": "uniqum-services",
+      "slug": "uniqum-services",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Business Consulting",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 12",
+      "sourceArchive": "12",
+      "originalName": "MAGAZINE",
+      "zyloraName": "Lauritz Magazine",
+      "zyloraId": "lauritz-magazine",
+      "slug": "lauritz-magazine",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Editorial & Publishing",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 13",
+      "sourceArchive": "13",
+      "originalName": "Capturing beautiful moments inside lens",
+      "zyloraName": "Creacy Portfolio",
+      "zyloraId": "creacy-portfolio",
+      "slug": "creacy-portfolio",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Photography & Dark Editorial",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 14",
+      "sourceArchive": "14",
+      "originalName": "Let's build the commerce of tomorrow",
+      "zyloraName": "Commerce Ventures",
+      "zyloraId": "commerce-ventures",
+      "slug": "commerce-ventures",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Ventures & Commerce",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 15",
+      "sourceArchive": "15",
+      "originalName": "We Bring New Experience of Your Dream Property",
+      "zyloraName": "HOFIN Real Estate",
+      "zyloraId": "hofin-real-estate",
+      "slug": "hofin-real-estate",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Real Estate & Architecture",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 16",
+      "sourceArchive": "16",
+      "originalName": "Elevate your sales emails",
+      "zyloraName": "Lavender Coach",
+      "zyloraId": "lavender-coach",
+      "slug": "lavender-coach",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Sales & Coaching",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 17",
+      "sourceArchive": "17",
+      "originalName": "CONO",
+      "zyloraName": "CONO Photography",
+      "zyloraId": "cono-photography",
+      "slug": "cono-photography",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Photography & Editorial",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 18",
+      "sourceArchive": "18",
+      "originalName": "Meet. Collaborate. Hire.",
+      "zyloraName": "ISOMeet Marketplace",
+      "zyloraId": "isomeet-marketplace",
+      "slug": "isomeet-marketplace",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Marketplace & Creative",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 19",
+      "sourceArchive": "19",
+      "originalName": "Here Are The Things That Make Our Product Special",
+      "zyloraName": "Rendr Fintech",
+      "zyloraId": "rendr-fintech",
+      "slug": "rendr-fintech",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Fintech & Product",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 20",
+      "sourceArchive": "20",
+      "originalName": "Creative department for brands",
+      "zyloraName": "ISO Studio",
+      "zyloraId": "iso-studio",
+      "slug": "iso-studio",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Agency & Design",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 21",
+      "sourceArchive": "21",
+      "originalName": "Green Infrastructure",
+      "zyloraName": "Green Infrastructure",
+      "zyloraId": "green-infrastructure",
+      "slug": "green-infrastructure",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Sustainability & Environment",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 22",
+      "sourceArchive": "22",
+      "originalName": "metta",
+      "zyloraName": "Metta Community",
+      "zyloraId": "metta-community",
+      "slug": "metta-community",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Community & Language",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 23",
+      "sourceArchive": "23",
+      "originalName": "Your business success starts here",
+      "zyloraName": "Hollhii Agency",
+      "zyloraId": "hollhii-agency",
+      "slug": "hollhii-agency",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Marketing & Growth",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 24",
+      "sourceArchive": "24",
+      "originalName": "Saving Nature & Fighting Climate Change",
+      "zyloraName": "Atacama Action",
+      "zyloraId": "atacama-action",
+      "slug": "atacama-action",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Non-Profit & Climate",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 26",
+      "sourceArchive": "26",
+      "originalName": "Navigating the digital landscape for success",
+      "zyloraName": "Apex Digital",
+      "zyloraId": "apex-digital",
+      "slug": "apex-digital",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Digital Agency & Tech",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 27",
+      "sourceArchive": "27",
+      "originalName": "MOSS \u2014 Alpine Retreat",
+      "zyloraName": "MOSS Retreat",
+      "zyloraId": "moss-retreat",
+      "slug": "moss-retreat",
+      "framework": "HTML5 / CSS3",
+      "pages": [
+        "home"
+      ],
+      "category": "Hospitality & Travel",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 28",
+      "sourceArchive": "28",
+      "originalName": "Zita Fernandes Brand Portfolio",
+      "zyloraName": "Zita Portfolio",
+      "zyloraId": "zita-portfolio",
+      "slug": "zita-portfolio",
+      "framework": "HTML5 / CSS3",
+      "pages": [
+        "home"
+      ],
+      "category": "Art Direction & Branding",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 29",
+      "sourceArchive": "29",
+      "originalName": "Curiosity, imagination, invention",
+      "zyloraName": "Gentle Systems",
+      "zyloraId": "gentle-systems",
+      "slug": "gentle-systems",
+      "framework": "Next.js App Router",
+      "pages": [
+        "home"
+      ],
+      "category": "Research & Systems",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 31",
+      "sourceArchive": "31",
+      "originalName": "Trofo Roofing & Home Services",
+      "zyloraName": "Trofo Roofing",
+      "zyloraId": "trofo-roofing",
+      "slug": "trofo-roofing",
+      "framework": "Next.js Modular",
+      "pages": [
+        "home"
+      ],
+      "category": "Home Services & Trade",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 32",
+      "sourceArchive": "32",
+      "originalName": "Belonging Collective",
+      "zyloraName": "Belonging Collective",
+      "zyloraId": "belonging-collective",
+      "slug": "belonging-collective",
+      "framework": "Next.js Modular",
+      "pages": [
+        "home"
+      ],
+      "category": "Community & Culture",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 33",
+      "sourceArchive": "33",
+      "originalName": "Prime Aesthetic Dental Clinic",
+      "zyloraName": "Smile Studio",
+      "zyloraId": "smile-studio",
+      "slug": "smile-studio",
+      "framework": "Next.js Modular",
+      "pages": [
+        "home"
+      ],
+      "category": "Healthcare & Dental",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 34",
+      "sourceArchive": "34",
+      "originalName": "Global Climate & Nature Initiatives",
+      "zyloraName": "Nature Initiatives",
+      "zyloraId": "nature-initiatives",
+      "slug": "nature-initiatives",
+      "framework": "Next.js Modular",
+      "pages": [
+        "home"
+      ],
+      "category": "Non-Profit & Nature",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 36",
+      "sourceArchive": "36",
+      "originalName": "Radiante Salon (Full Master)",
+      "zyloraName": "Radiante Salon",
+      "zyloraId": "radiante-salon",
+      "slug": "radiante-salon",
+      "framework": "Next.js Modular",
+      "pages": [
+        "home"
+      ],
+      "category": "Beauty & Wellness",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 37",
+      "sourceArchive": "37",
+      "originalName": "Coretex / Fragment Digital Studio",
+      "zyloraName": "Coretex Studio",
+      "zyloraId": "coretex-studio",
+      "slug": "coretex-studio",
+      "framework": "Next.js Modular",
+      "pages": [
+        "home"
+      ],
+      "category": "Technology & Studio",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 38",
+      "sourceArchive": "38",
+      "originalName": "GoDesign Studio Bento",
+      "zyloraName": "GoDesign Studio",
+      "zyloraId": "godesign-studio",
+      "slug": "godesign-studio",
+      "framework": "Next.js Modular",
+      "pages": [
+        "home"
+      ],
+      "category": "Design & Architecture",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 39",
+      "sourceArchive": "39",
+      "originalName": "Luxe Hair Salon & Beauty Studio",
+      "zyloraName": "Luxe Salon",
+      "zyloraId": "luxe-salon",
+      "slug": "luxe-salon",
+      "framework": "Next.js Modular",
+      "pages": [
+        "home"
+      ],
+      "category": "Beauty & Salon",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 40",
+      "sourceArchive": "40",
+      "originalName": "Mountain Peak SaaS Platform",
+      "zyloraName": "Mountain SaaS",
+      "zyloraId": "mountain-saas",
+      "slug": "mountain-saas",
+      "framework": "Next.js Modular",
+      "pages": [
+        "home"
+      ],
+      "category": "Software & SaaS",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "Folder 41",
+      "sourceArchive": "41",
+      "originalName": "Master Handyman & Trades Services",
+      "zyloraName": "Master Handyman",
+      "zyloraId": "master-handyman",
+      "slug": "master-handyman",
+      "framework": "Next.js Modular",
+      "pages": [
+        "home"
+      ],
+      "category": "Trades & Home Services",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "editorial-neon-yellow-v1.1.zip",
+      "sourceArchive": "editorial-neon-yellow-v1.1.zip",
+      "originalName": "Editorial Neon Yellow",
+      "zyloraName": "Editorial Neon Yellow",
+      "zyloraId": "editorial-neon-yellow",
+      "slug": "editorial-neon-yellow",
+      "framework": "React / Next.js / CSS Modules",
+      "pages": [
+        "home"
+      ],
+      "category": "Portfolio & Creative",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "editorial-red-portfolio-v1.1.zip",
+      "sourceArchive": "editorial-red-portfolio-v1.1.zip",
+      "originalName": "Editorial Red Portfolio",
+      "zyloraName": "Editorial Red Portfolio",
+      "zyloraId": "editorial-red-portfolio",
+      "slug": "editorial-red-portfolio",
+      "framework": "React / Next.js / CSS Modules",
+      "pages": [
+        "home"
+      ],
+      "category": "Portfolio & Artist",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    },
+    {
+      "source": "neo-brutal-saas-template(1).zip",
+      "sourceArchive": "neo-brutal-saas-template(1).zip",
+      "originalName": "Neo Brutal SaaS",
+      "zyloraName": "Neo Brutal SaaS",
+      "zyloraId": "neo-brutal-saas",
+      "slug": "neo-brutal-saas",
+      "framework": "React / Next.js / Tailwind",
+      "pages": [
+        "home"
+      ],
+      "category": "SaaS & Landing",
+      "status": "PASS",
+      "qualityScore": 9.6,
+      "responsive": true,
+      "editorCompatible": true,
+      "issuesFixed": [
+        "Removed authentication UI and marketplace links",
+        "Normalized asset references to local bundles",
+        "Scoped and normalized CSS with reduced-motion support",
+        "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
+      ]
+    }
+  ]
+}

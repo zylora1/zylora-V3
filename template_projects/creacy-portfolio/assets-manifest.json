@@ -1,0 +1,51 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "25871e6bf28ddee031f3fec3a40b176718b0946b14e9abe4c0f4c96880af96bb",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/favicon.svg",
+      "local_path": "assets/favicon.svg",
+      "sha256": "e6d7936867c0bbf674d96a620fa0d36b3e88bd80969e266b9c63d8b94d408fa7",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/countryside.jpg",
+      "local_path": "assets/images/countryside.jpg",
+      "sha256": "ed5d62fa574c113bef9f434f04e599ee2934c7c9d4229b42735b9690d07b3f28",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero.jpg",
+      "local_path": "assets/images/hero.jpg",
+      "sha256": "d3e32657e76f3be2bc3ab71f69446b79e08bb5a4bafbb7292f47580bff5ede91",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/mountain-side.jpg",
+      "local_path": "assets/images/mountain-side.jpg",
+      "sha256": "502fd0c7b341586a5f7e460a71f9de8e711289d73da025f925d02fef5f68f610",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/portrait.jpg",
+      "local_path": "assets/images/portrait.jpg",
+      "sha256": "de9098e6a0bdaefe626eba00910df517bfb8bdebc4bfccc90d40c942d7b0f398",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/temple.jpg",
+      "local_path": "assets/images/temple.jpg",
+      "sha256": "98fdb200ab0b9938291594b744ba8470eeeb96917aae2c200f5a047bf615493c",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/wildlife.jpg",
+      "local_path": "assets/images/wildlife.jpg",
+      "sha256": "03c5f390f977791ee4708817dc05758086e82f601795dc1ea051de2134561c8e",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

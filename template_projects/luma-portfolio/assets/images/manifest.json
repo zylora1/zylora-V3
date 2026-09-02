@@ -1,0 +1,30 @@
+{
+  "hero": {
+    "central": "hero-main.jpg",
+    "orbitingPortraits": ["hero-orbit-1.jpg", "hero-orbit-2.jpg", "hero-orbit-3.jpg", "hero-orbit-4.jpg", "hero-orbit-5.jpg"],
+    "idealReplacement": "Transparent dark head-and-shoulders portrait with curly hair and magenta glasses"
+  },
+  "showcase": {
+    "primary": "red-landscape.jpg",
+    "idealReplacement": "Wide red-orange landscape with a lone centered figure"
+  },
+  "gallery": [
+    { "file": "villa.jpg", "subject": "forest villa and pool" },
+    { "file": "red-landscape.jpg", "subject": "red landscape and lone figure" },
+    { "file": "product.jpg", "subject": "monochrome object and hand" },
+    { "file": "portrait-art.jpg", "subject": "portrait and floral double exposure" },
+    { "file": "moody.jpg", "subject": "soft-focus teal portrait" },
+    { "file": "lens.jpg", "subject": "hands holding an iridescent optical lens" }
+  ],
+  "services": [
+    { "file": "field.jpg", "subject": "misty green field with one tree" },
+    { "file": "object.jpg", "subject": "minimal dark cylindrical product" }
+  ],
+  "cta": { "file": "forest.jpg", "subject": "aerial forest and winding road" },
+  "news": [
+    { "file": "news-flowers.jpg", "subject": "face among small white flowers" },
+    { "file": "news-tech.jpg", "subject": "black technology object" },
+    { "file": "news-canyon.jpg", "subject": "warm canyon interior with figure" }
+  ],
+  "publishingNote": "Current files are real inherited photographs but several are visual substitutes. Confirm rights and replace them with exact licensed matches before public release."
+}

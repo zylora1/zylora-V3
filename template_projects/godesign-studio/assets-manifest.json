@@ -1,0 +1,93 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "5a721e32f28c7cbc568556c2a11f9825b192bbaf95af4b38b480a56dbd7e1e8a",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/images/about-phone-1.jpg",
+      "local_path": "assets/images/about-phone-1.jpg",
+      "sha256": "8604c54a5984c1c72a6001bef4cba88d820096e9315d8b29a15dde7107227212",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/about-phone-2.jpg",
+      "local_path": "assets/images/about-phone-2.jpg",
+      "sha256": "84809e155736654904600accdf220b46468edcc6b6a835bce826525b0b483db2",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/about-phone-mockup.jpg",
+      "local_path": "assets/images/about-phone-mockup.jpg",
+      "sha256": "f0b80b340af9824441f2a2212d54ac9345a7565b185235281c92742784c089ca",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/ceramics-raw.jpg",
+      "local_path": "assets/images/ceramics-raw.jpg",
+      "sha256": "0ef45c6852fc41abecea6fe3a75d78761ed8c0974d9eafab648f97670fa9b681",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/flower-raw.jpg",
+      "local_path": "assets/images/flower-raw.jpg",
+      "sha256": "578afc0707143b4213f1ae1886b62e9b5abb6d72d42949c75594c5c27c5753be",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-arch-raw.jpg",
+      "local_path": "assets/images/hero-arch-raw.jpg",
+      "sha256": "df791cfce1f1aa3ca7c4829ea2012b5764b13f569d1235284b19c83677747029",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-architecture.jpg",
+      "local_path": "assets/images/hero-architecture.jpg",
+      "sha256": "b46c8d18c956a519f6c8f5c238ed5527ca1c878f0b16bd3ce88e25beb8859847",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-laptop-raw.jpg",
+      "local_path": "assets/images/hero-laptop-raw.jpg",
+      "sha256": "587b937216f22fe70c6ac94d793c724267551af9def81d95aa5d745fd2f3e6ef",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-laptop.jpg",
+      "local_path": "assets/images/hero-laptop.jpg",
+      "sha256": "7c6af51602d4fe8245e2232451adfd5265497b640ac2661e3c16c736274ae04a",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/project-building.jpg",
+      "local_path": "assets/images/project-building.jpg",
+      "sha256": "85a5b5d5e137578af0159373693ae579120b0b8d3eba9bf2df234fd501463107",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/project-ceramics.jpg",
+      "local_path": "assets/images/project-ceramics.jpg",
+      "sha256": "0082bc8f77716b8f1680a199e5e8ad612ebeb173b77183dc1adafdff3e8edfd8",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/project-flower.jpg",
+      "local_path": "assets/images/project-flower.jpg",
+      "sha256": "8a9ddf77a256330996732ebebcd5b60205ae0ac4d6b291b519513851753c4c72",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/project-lamp-modern.jpg",
+      "local_path": "assets/images/project-lamp-modern.jpg",
+      "sha256": "bbd82a1ce3e5e224da92b804740664e4245e6c2b0f26b68885bacaefc32fd93f",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/project-lamp.jpg",
+      "local_path": "assets/images/project-lamp.jpg",
+      "sha256": "1014199f7b6fbfde94bc876b2b5c41ec18c945b3b7cef3de508fafb879342b1e",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "4a304026b5462ca50f32fcd397157073d43e610d26b5e242b92c98299b808773",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/fandom.jpg",
+      "local_path": "assets/fandom.jpg",
+      "sha256": "2bb8de4c5f050410fa589929034dd5d7d4d8c9578400c376f201feff0f8bed84",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/favicon.svg",
+      "local_path": "assets/favicon.svg",
+      "sha256": "e6d2e59b7b5bbb0342e0fb496dfc262decbfe4426bbb7b047aec8d467d1dc6f7",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/ignite.jpg",
+      "local_path": "assets/ignite.jpg",
+      "sha256": "3dd47ab61d12a8ab9a279632f112a6d23d08ee600919b8a1554e734c5232a87a",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/showcase.jpg",
+      "local_path": "assets/showcase.jpg",
+      "sha256": "3da7b083576839c19f9210e8c8884e1e31cbb2e74fc4430f2a7b0e57e1d24033",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/stories.jpg",
+      "local_path": "assets/stories.jpg",
+      "sha256": "2fff58331a32fe0b2baa23c39f9d1a5e7d4670b4ebd074268fc60692ad15515a",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

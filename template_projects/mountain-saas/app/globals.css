@@ -1,0 +1,71 @@
+html { scroll-behavior: smooth; } body { min-width: 0; } img, svg, video { max-width: 100%; height: auto; }
+:root {
+  --page-bg: #FFFFFF;
+  --surface-hero: #F1F1F0;
+  --surface-box: #F5F5F4;
+  --surface-card: #FFFFFF;
+  --surface-dark: #1A1A1A;
+  --ink-primary: #111111;
+  --ink-secondary: #444444;
+  --ink-muted: #737373;
+  --ink-subtle: #999999;
+  --line-light: #E5E5E3;
+  --line-dark: #2E2E2E;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Inter', 'Geist', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background-color: var(--page-bg);
+  color: var(--ink-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+.content-container {
+  width: 100%;
+  max-width: 820px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+@media (max-width: 640px) {
+  .content-container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
+/* Subtle hairlines */
+.hairline-b {
+  border-bottom: 1px solid var(--line-light);
+}
+
+.hairline-t {
+  border-top: 1px solid var(--line-light);
+}
+
+.hairline-box {
+  border: 1px solid var(--line-light);
+}
+
+/* Mountain mask gradient */
+.mountain-fade-mask {
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.85) 60%, rgba(0,0,0,0) 100%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.85) 60%, rgba(0,0,0,0) 100%);
+}
+
+::selection {
+  background-color: #111111;
+  color: #FFFFFF;
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }

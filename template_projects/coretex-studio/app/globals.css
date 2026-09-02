@@ -1,0 +1,153 @@
+html { scroll-behavior: smooth; } body { min-width: 0; } img, svg, video { max-width: 100%; height: auto; }
+:root {
+  --black: #000000;
+  --surface-1: #050705;
+  --surface-2: #0B0E0C;
+  --surface-3: #121613;
+  --text-white: #FFFFFF;
+  --text-light: #ECEFEA;
+  --text-muted: #8E988A;
+  --text-dim: #525B4E;
+  --green-accent: #B2D275;
+  --green-primary: #8EA56A;
+  --green-muted: #667D50;
+  --green-border: #2B3824;
+  --line-subtle: #1C221A;
+  --line-border: #2A3326;
+  --purple-brand: #6931FF;
+  --font-sans: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background-color: var(--black);
+  color: var(--text-white);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Atmospheric Hero Glow */
+.hero-atmospheric-glow {
+  background: 
+    radial-gradient(ellipse 65% 55% at 75% 5%, rgba(142, 165, 106, 0.42) 0%, rgba(85, 110, 60, 0.18) 40%, rgba(0, 0, 0, 0) 75%),
+    radial-gradient(circle at 50% 0%, rgba(178, 210, 117, 0.12) 0%, transparent 50%),
+    #000000;
+}
+
+/* Subtle Hairlines */
+.hairline-b {
+  border-bottom: 1px solid var(--line-subtle);
+}
+
+.hairline-t {
+  border-top: 1px solid var(--line-subtle);
+}
+
+.hairline-r {
+  border-right: 1px solid var(--line-subtle);
+}
+
+.hairline-l {
+  border-left: 1px solid var(--line-subtle);
+}
+
+/* Outlined Pill Buttons */
+.btn-pill-hero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background-color: rgba(255, 255, 255, 0.03);
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-pill-hero:hover {
+  background-color: #FFFFFF;
+  color: #000000;
+  border-color: #FFFFFF;
+}
+
+.btn-pill-green {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  border: 1px solid var(--green-primary);
+  background-color: rgba(142, 165, 106, 0.12);
+  color: var(--green-accent);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: all 0.2s ease;
+}
+
+.btn-pill-green:hover {
+  background-color: var(--green-accent);
+  color: #000000;
+  border-color: var(--green-accent);
+}
+
+/* Card Button */
+.btn-pricing-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 8px 16px;
+  border-radius: 6px;
+  background-color: var(--green-accent);
+  color: #000000;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-pricing-primary:hover {
+  background-color: #C8E885;
+  box-shadow: 0 0 15px rgba(178, 210, 117, 0.3);
+}
+
+.btn-pricing-outline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 8px 16px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-pricing-outline:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+::selection {
+  background-color: #2D3B23;
+  color: #B2D275;
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }

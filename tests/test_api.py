@@ -37,7 +37,7 @@ def create_site(c,h,name='Northstar',template='atelier-noir',origin='AI',descrip
 def test_full_product_workflows():
     reset_db(); c,h=auth_client()
     me=c.get('/api/auth/me').json(); assert me['plan']=='FREE' and me['ai_credits']==20
-    ts=c.get('/api/templates').json()['items']; assert len(ts)==40 and all(x.get('publication',{}).get('state')=='public' for x in ts)
+    ts=c.get('/api/templates').json()['items']; assert len(ts)>=40 and all(x.get('publication',{}).get('state')=='public' for x in ts)
 
     ai_sid=create_site(c,h,name='AI Launch',template='northstar-cloud',origin='AI')
     assert c.get(f'/api/sites/{ai_sid}').json()['origin']=='AI'

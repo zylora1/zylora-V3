@@ -1,0 +1,117 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "4ec76c31c9fbc99c72e5dda8b766f42063ba95d878670eb5e7c64e6f6748c0b9",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/illustrations/coretex-mark.svg",
+      "local_path": "assets/illustrations/coretex-mark.svg",
+      "sha256": "0add6bd3aa7420e3710b6b5f4c1099c6fa0f25bdb16714c916e7f5479c4a23ac",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/illustrations/eye-mark.svg",
+      "local_path": "assets/illustrations/eye-mark.svg",
+      "sha256": "7f7e50697b7d534f13834330381d92347bdef4b8d0855ece6651711bf48477c7",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/illustrations/f-plus-logo.svg",
+      "local_path": "assets/illustrations/f-plus-logo.svg",
+      "sha256": "4bbd52e2d25409444f0247ae8bb40923463a2a9034985584f9032305a3e4b30c",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/illustrations/fragment-logo.svg",
+      "local_path": "assets/illustrations/fragment-logo.svg",
+      "sha256": "3a8eb18c252de9d85e146f98878921197d6785c1516e9d374324487369b5aeae",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/illustrations/leaf-emblem.svg",
+      "local_path": "assets/illustrations/leaf-emblem.svg",
+      "sha256": "9f4b3b880422b88c9220d13df9ee71dc40c53afc9be446ecd0d52fb0c2f11a99",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/illustrations/process-symbol.svg",
+      "local_path": "assets/illustrations/process-symbol.svg",
+      "sha256": "29aa8d9be49a349e701580a167bc7b26db0db323bef94e5f29531130552a780b",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/illustrations/silver-logo.svg",
+      "local_path": "assets/illustrations/silver-logo.svg",
+      "sha256": "9c3ec59004a6f503ad824d0b8ff3112f00aad215ee4fc58f482994ee724d15d2",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/botanical.jpg",
+      "local_path": "assets/images/botanical.jpg",
+      "sha256": "213a8a1b4131f8413a8d03a92de92443e22ee829006ee46845f7d1787014be5c",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/botanical_leaves.jpg",
+      "local_path": "assets/images/botanical_leaves.jpg",
+      "sha256": "45ae1922de3c43e76432ceae7b7559ece94e7671be4c5c4dbc6b2f920f3628cb",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/clouds.jpg",
+      "local_path": "assets/images/clouds.jpg",
+      "sha256": "40de3fc7af71df285bcaf247f0f8e3dda1b7703c58ebada67dee9d339a84fbd6",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/prism.jpg",
+      "local_path": "assets/images/prism.jpg",
+      "sha256": "50d51e1f5ce174f61ed286691f23c5df02e015f7a6e8bb90391e441ded6b50e1",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/project-01.webp",
+      "local_path": "assets/images/project-01.webp",
+      "sha256": "9024d33258fc3f62c2142be5da15e0b04b736800cafddae65a4c87aeeb9be554",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/project-03.webp",
+      "local_path": "assets/images/project-03.webp",
+      "sha256": "ba5540541bdaff3a5f21a666f5a2f9f812b2c59091e36edf1528571eed2c3460",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/project-04.webp",
+      "local_path": "assets/images/project-04.webp",
+      "sha256": "6c41823f122c27358c20660ccb4769ef79a420981bc33771aec5c4b8ad1f69af",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/project-05.webp",
+      "local_path": "assets/images/project-05.webp",
+      "sha256": "85697920c49da9d8b4a5f4e536f5edb41324aaa2df7ac29e342924d9d0c4a7a4",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/project-06.webp",
+      "local_path": "assets/images/project-06.webp",
+      "sha256": "ca140a1ca0c8790a8b2ee95930029e1e18d62d59d50ac68d152d9064ac0d5282",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/silver.jpg",
+      "local_path": "assets/images/silver.jpg",
+      "sha256": "ff5efe3725d319956e1f497d4b30978a2528e6d89ea123f79ea083b7e211136a",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/vortex.jpg",
+      "local_path": "assets/images/vortex.jpg",
+      "sha256": "ebace432e72e51fcc29c8b4dcb6501502fe2795152c9d6cea278c066f787e174",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

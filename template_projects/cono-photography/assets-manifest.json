@@ -1,0 +1,51 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "6ac04c0af8333153e7b86f09e684cd8fb2e0059579cc0f71e04b4e3b7d5db952",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/favicon.svg",
+      "local_path": "assets/favicon.svg",
+      "sha256": "e815ff856f1598083b11a896aaef86ad7253f7759970d9a1c1596aacc10bb89d",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/gallery-couple.jpg",
+      "local_path": "assets/images/gallery-couple.jpg",
+      "sha256": "dd4c3ff4415d74d94f52d995bfa87869f87a4bbddc0053f57a693e7fa695eac2",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/gallery-field.jpg",
+      "local_path": "assets/images/gallery-field.jpg",
+      "sha256": "303ce15a1255ab929a7ea6077e7ba3865644751083a1dd8b1e772e030ab48616",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/gallery-mountain.jpg",
+      "local_path": "assets/images/gallery-mountain.jpg",
+      "sha256": "29efcc797866a87a17c704de6da7c1d927504fb71338db86f132071656153768",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-road.jpg",
+      "local_path": "assets/images/hero-road.jpg",
+      "sha256": "4d13eb98ec642ed685d3ffe35cc904c9033a930b34a134adb9a8ae132c49ed06",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/instagram-autumn.jpg",
+      "local_path": "assets/images/instagram-autumn.jpg",
+      "sha256": "d3e32657e76f3be2bc3ab71f69446b79e08bb5a4bafbb7292f47580bff5ede91",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/story-coast.jpg",
+      "local_path": "assets/images/story-coast.jpg",
+      "sha256": "9cc53e75e959fe1d12a9b16039555fe05fc4fd46bf445bcc0344952bfc653ff4",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

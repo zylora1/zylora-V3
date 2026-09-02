@@ -1,0 +1,105 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "99e01d4f516c474147a3a327c190cc24b0b3f9a026ab07c611e5ea8866c74023",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/images/avatar-1.jpg",
+      "local_path": "assets/images/avatar-1.jpg",
+      "sha256": "55447a7f2e224c7cd7efff86331e283b412b4c759c65510d3d776f807efe80f1",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/avatar-2.jpg",
+      "local_path": "assets/images/avatar-2.jpg",
+      "sha256": "9f697a8fcb60a85ac182a832a9dcc35bd8700da190fb8e393cb7129856a4ee5e",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/avatar-3.jpg",
+      "local_path": "assets/images/avatar-3.jpg",
+      "sha256": "a9c5e837d028424873dcb677abaf958fd41f404e2f4c0285ccfc1764afb464f9",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/card-forest.jpg",
+      "local_path": "assets/images/card-forest.jpg",
+      "sha256": "6d1196d7e0a057e9b5d8cd125fda2c3749005bada5321c7f9c4623f801701e93",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/card-ghg.jpg",
+      "local_path": "assets/images/card-ghg.jpg",
+      "sha256": "fce1a2a0af924521eec1fd5151d01ee95348759fce3a9a8414893d9220c7d12f",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/card-glacier.jpg",
+      "local_path": "assets/images/card-glacier.jpg",
+      "sha256": "f90f3caf84ae50ddbecffe4caa889ecdd8ae3ed01eba2727c4358a72a7ea86d0",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/card-ocean.jpg",
+      "local_path": "assets/images/card-ocean.jpg",
+      "sha256": "d681ddee6fca22eaae7d779edf453c84f15b929838d31a61819dba08f642e89b",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-landscape.jpg",
+      "local_path": "assets/images/hero-landscape.jpg",
+      "sha256": "ded561c5be74eb581b0fa2799022aff7585f173fce038854657c71298d2730e6",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-volunteer.jpg",
+      "local_path": "assets/images/hero-volunteer.jpg",
+      "sha256": "cfbe5b0df4ce00aded772b911009cceb52572901b07c6c95ea18b39b4731e361",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/initiative-preview.jpg",
+      "local_path": "assets/images/initiative-preview.jpg",
+      "sha256": "368a93444188175016494efc38a5dfc4fe4df16a6154cbfaa5df4507db7e1767",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/intro-circle-1.jpg",
+      "local_path": "assets/images/intro-circle-1.jpg",
+      "sha256": "6cd776faa75d518c1f879ef8bde8f8bb8bef11b5eb5a75f8460c2f2fb19a92c0",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/intro-circle-2.jpg",
+      "local_path": "assets/images/intro-circle-2.jpg",
+      "sha256": "51cc5b28715bd3c064c5e990844e01935cce7fb5ee5382a033418ff8d3492e80",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/intro-circle-3.jpg",
+      "local_path": "assets/images/intro-circle-3.jpg",
+      "sha256": "d907865b7d4644da14107bf3bd89c1cac576f241cf771e89b41acbd987944f06",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/intro-circle-4.jpg",
+      "local_path": "assets/images/intro-circle-4.jpg",
+      "sha256": "46c1283267971eaa7a3aa9ff0e71ee686e4ec46171dc821cfdc1601de44bf83c",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/nature-mountain.jpg",
+      "local_path": "assets/images/nature-mountain.jpg",
+      "sha256": "0cb59ea222ccd48b1d842260a03a5a34e6ec35e20fc596108f81d6f73608a8a8",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/protect-glacier.jpg",
+      "local_path": "assets/images/protect-glacier.jpg",
+      "sha256": "7f94bccaeeba846d8dee1d3e3f2b978a466bd18dc08290c09ed1d64db80a493c",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "6a65d428b7b6bc93cee6c10cfdc8e728190af00ec0bb3b8c0df18295ea89c7d9",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/reference.jpg",
+      "local_path": "assets/reference.jpg",
+      "sha256": "c5058b733d65ccf9196b499d961594eb11cd46326bb18eff8932fddbc95e6a44",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "f14136d58aad3d28df822b25835c8703b417cc2a5be7a169c1edec531987a873",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/about-city.webp",
+      "local_path": "assets/about-city.webp",
+      "sha256": "c6fe3b59a18e631da7af92775d264b2010c50d1419909bc99a5da4dedb63212b",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/about-man.webp",
+      "local_path": "assets/about-man.webp",
+      "sha256": "3f5bbd4c45e6a8c9549fc28890f25a0c08edf4f9b873ed3fb5e5014ce92257fa",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/hero-woman.webp",
+      "local_path": "assets/hero-woman.webp",
+      "sha256": "b575bbd6e9f262eb8877eadd7470a8fe41b79947fdbe206d419280ec0a5d3c23",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/print-grain.webp",
+      "local_path": "assets/print-grain.webp",
+      "sha256": "583a2431dd747a95c99d94462284341239758672d171919da26f49f8978f0484",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/services-street.webp",
+      "local_path": "assets/services-street.webp",
+      "sha256": "4b0d9cbd6dcd27af4573896baccad131c5a9e4e7c1ad6804e175ca77a0ac4674",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/services-woman.webp",
+      "local_path": "assets/services-woman.webp",
+      "sha256": "52e492061d433eedd797b646a24cddaf8ca42055ecd3d2964d88877e2f68373a",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/work-abstract.webp",
+      "local_path": "assets/work-abstract.webp",
+      "sha256": "13284cc6daecf59268787f9e040fc94f20b2437a4751a87364ec191cd67111de",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/work-clouds.webp",
+      "local_path": "assets/work-clouds.webp",
+      "sha256": "734ba5b3b86e6dd126333f0ecb92196cd8b5e038ebb985c0f0af0b19f327aff9",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/work-color-woman.webp",
+      "local_path": "assets/work-color-woman.webp",
+      "sha256": "d0362ffbe24f88fc15cc57353c1da1bdc9fae3da3b3358fe43cdf724f5e9f787",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/work-man.webp",
+      "local_path": "assets/work-man.webp",
+      "sha256": "9b8385c8b0c570997c89024b45912f3527d088b0a80b638aab35202f1559c7e2",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/work-night.webp",
+      "local_path": "assets/work-night.webp",
+      "sha256": "2f675058707c2ff3cacd9d29374cea5cd87c23216b84bb6cf94969b9957dbd49",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/work-shadow.webp",
+      "local_path": "assets/work-shadow.webp",
+      "sha256": "42e27da6089e989354e5f5b289e590d46e6f90a0178cbeb08cf1557b64e0d7af",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/work-silhouette.webp",
+      "local_path": "assets/work-silhouette.webp",
+      "sha256": "9d8ff9f99286b77626324105a973cd6cbd162e8373aea4bce4a1ac46a4beac41",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

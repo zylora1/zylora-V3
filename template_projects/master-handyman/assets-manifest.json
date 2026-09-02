@@ -1,0 +1,75 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "ef6eb086ceb1a3af7df76333931638c924d98daaaa268f3f30bb790a35d7a4b7",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/assets/contact-handyman.jpg",
+      "local_path": "assets/assets/contact-handyman.jpg",
+      "sha256": "e708ac55e5c885db35d20093869563c9551c66ef4b392154bc0e8e75347c9899",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/full-width-handyman.jpg",
+      "local_path": "assets/assets/full-width-handyman.jpg",
+      "sha256": "4929e6298bdd4e2d3e1ef2ad83e1bf7308f8124b0a5426938a76d9be8fa94dfa",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/hero-handyman.jpg",
+      "local_path": "assets/assets/hero-handyman.jpg",
+      "sha256": "600a388c7750c4054c6842f0f57bd34e82bed5e37effae022f32333f6f7021b9",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/team-01.jpg",
+      "local_path": "assets/assets/team-01.jpg",
+      "sha256": "a43e36ad6d0c4b96b4ee5ae3477af872c9dc6fe3048639f7b97e452fce19d10f",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/team-02.jpg",
+      "local_path": "assets/assets/team-02.jpg",
+      "sha256": "29cf6ad39eb198c05b8d915fca0becfd3d270d510d32eaec1b886c426c681c67",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/team-03.jpg",
+      "local_path": "assets/assets/team-03.jpg",
+      "sha256": "830036816587609ed3668e57950fca7a5eb833f093317841491268c09f077d11",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/team-04.jpg",
+      "local_path": "assets/assets/team-04.jpg",
+      "sha256": "917545614d23b31d9424556d7d3f0854c0122d71fa699e5951d7cbfae60a793d",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/testimonial-01.jpg",
+      "local_path": "assets/assets/testimonial-01.jpg",
+      "sha256": "deae04ba450cc858618ce27282ddbf894b3dfb32f63250da3a78a0fd5ae0cf48",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/testimonial-02.jpg",
+      "local_path": "assets/assets/testimonial-02.jpg",
+      "sha256": "f768dc6890eef00d99948224a7a26b3056d9d3e234ed7a7e6b2c280b1ab5cfad",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/testimonial-03.jpg",
+      "local_path": "assets/assets/testimonial-03.jpg",
+      "sha256": "717e28d72eb4b5180e04b2f03d31963c9c924fcc1b8985671c22326192a02b6d",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/testimonial-04.jpg",
+      "local_path": "assets/assets/testimonial-04.jpg",
+      "sha256": "ec908dd71b7438f1038fee39ce8612ebfc7f9d89ffd498f7e8aa89b26f548188",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

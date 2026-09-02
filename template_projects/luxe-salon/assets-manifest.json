@@ -1,0 +1,111 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "b530688657fa4a1409a05dac53d23962a019ea41f1d854184af30c257c71f514",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/assets/hero-hair-wash.webp",
+      "local_path": "assets/assets/hero-hair-wash.webp",
+      "sha256": "45233f1404df90ee65952b53c1d734c80b0d1ef783cfb36ca652eb991bab9aa6",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/salon-interior.webp",
+      "local_path": "assets/assets/salon-interior.webp",
+      "sha256": "3014c5868282584762c49827765382adc099ecbdfa76c386262d8867a88bb6cb",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/stylist-01.webp",
+      "local_path": "assets/assets/stylist-01.webp",
+      "sha256": "cef0c96ed49c0d61ccfa6b2ec3ed55d669cf82cd2f769b7f5cddefc9280ea688",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/stylist-02.webp",
+      "local_path": "assets/assets/stylist-02.webp",
+      "sha256": "99b3dc278e3403cdeaa01a38564fd0c7fcc4da93dc4b666ba30525cda8a55b42",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/stylist-03.webp",
+      "local_path": "assets/assets/stylist-03.webp",
+      "sha256": "9d3e5d1c6733da60b7c50c92501a377db665d338d141ffbc54444d4f88a70174",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/transform-01.webp",
+      "local_path": "assets/assets/transform-01.webp",
+      "sha256": "516f5d0200aec58d83721536a1a8bb60e024c760a1c18814fa8a3434103d5426",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/transform-02.webp",
+      "local_path": "assets/assets/transform-02.webp",
+      "sha256": "d149badb7d181d434fca005c70988ab762240b030f19acb9f1051c6b0d9c487a",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/transform-03.webp",
+      "local_path": "assets/assets/transform-03.webp",
+      "sha256": "99b3dc278e3403cdeaa01a38564fd0c7fcc4da93dc4b666ba30525cda8a55b42",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/transform-04.webp",
+      "local_path": "assets/assets/transform-04.webp",
+      "sha256": "a90835a09686d53036ddff49310d2a9dcd05a168f04686d50b9912a5f4fbe5a6",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/work-01.webp",
+      "local_path": "assets/assets/work-01.webp",
+      "sha256": "841ef749d74f9875f115e694e90ef8a07c50679498fa683cc85456971017e19c",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/work-02.webp",
+      "local_path": "assets/assets/work-02.webp",
+      "sha256": "7edd1bb5a445b3f3afc0f13faffeeda7c1bcb5b5dec65b6f0acadcb837797866",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/work-03.webp",
+      "local_path": "assets/assets/work-03.webp",
+      "sha256": "735e23802775c3630e54a398872172a1ce2f52cc9f5a6373098a73b2043ec43c",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/work-04.webp",
+      "local_path": "assets/assets/work-04.webp",
+      "sha256": "f0195c80ede5b218dc339ca3ac8b297ad5aaa52cd75e8e272856d7b051e7e004",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/work-05.webp",
+      "local_path": "assets/assets/work-05.webp",
+      "sha256": "0b79b1c67d922d8556bd82ea295698e7d10206e596be89d95e7a68914aef188c",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/work-06.webp",
+      "local_path": "assets/assets/work-06.webp",
+      "sha256": "d878d987e34e4931131fa50fc17edc6540caa483ffaad6dbbed303a097488273",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/work-07.webp",
+      "local_path": "assets/assets/work-07.webp",
+      "sha256": "e99b3d393a9673e93853cf46914b1b5a16f8b54f3c265d308d292f570abcfd10",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/assets/work-08.webp",
+      "local_path": "assets/assets/work-08.webp",
+      "sha256": "b94f5944d818729fd28443b6cbfd3cadff5a45326c5e6a02092c50717a481242",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

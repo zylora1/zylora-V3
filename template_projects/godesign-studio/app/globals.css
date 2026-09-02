@@ -1,0 +1,83 @@
+html { scroll-behavior: smooth; } body { min-width: 0; } img, svg, video { max-width: 100%; height: auto; }
+:root {
+  --white: #FFFFFF;
+  --black: #111111;
+  --charcoal: #2B2D33;
+  --gray-card: #ECECE9;
+  --blue-gray: #DEE5ED;
+  --lavender: #DFDEE4;
+  --watermark: #C2C5D1;
+  --hairline: #E5E5E2;
+  --muted: #6E7179;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #FAFAFA;
+  color: #111111;
+  font-family: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-serif-italic {
+  font-family: 'Instrument Serif', 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+}
+
+/* Rotating circular badge */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 24s linear infinite;
+}
+
+/* Hairline dividers */
+.hairline-b {
+  border-bottom: 1px solid #ECECE9;
+}
+
+.hairline-t {
+  border-top: 1px solid #ECECE9;
+}
+
+::selection {
+  background-color: #111111;
+  color: #FFFFFF;
+}
+
+/* GoDesign Studio Responsive & Grid Alignment */
+html, body { overflow-x: hidden !important; }
+main { width: 100% !important; max-width: 100vw !important; overflow-x: hidden !important; display: flex !important; justify-content: center !important; }
+div, section, article, header, footer { max-width: 100% !important; box-sizing: border-box !important; }
+.flex { display: flex !important; }
+.flex-col { flex-direction: column !important; }
+.items-center { align-items: center !important; }
+.justify-between { justify-content: space-between !important; }
+.justify-start { justify-content: flex-start !important; }
+.w-full { width: 100% !important; }
+.relative { position: relative !important; }
+.min-h-screen { min-height: 100vh !important; }
+.bg-white { background-color: #ffffff !important; }
+.bg-\[\#F5F5F5\] { background-color: #F5F5F5 !important; }
+.border-x { border-left-width: 1px !important; border-right-width: 1px !important; }
+.border-\[\#ECECE9\] { border-color: #ECECE9 !important; }
+.shadow-\[0_4px_30px_rgba\(0\,0\,0\,0\.06\)\] { box-shadow: 0 4px 30px rgba(0,0,0,0.06) !important; }
+@media (max-width: 480px) {
+  .max-w-\[314px\] { max-width: 100% !important; width: 100% !important; }
+}
+
+
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }

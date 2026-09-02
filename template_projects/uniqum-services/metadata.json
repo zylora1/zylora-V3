@@ -1,0 +1,47 @@
+{
+  "slug": "uniqum-services",
+  "name": "Uniqum Services",
+  "category": "Business Consulting",
+  "industry": "Business Consulting",
+  "style": "Modern Professional",
+  "tone": "Professional & Modern",
+  "accent": "#111111",
+  "pages": 1,
+  "page_slugs": [],
+  "version": "1.0.0",
+  "hidden": false,
+  "demo_business_name": "Uniqum Services",
+  "demo_tagline": "Premium Business Consulting website",
+  "demo_description": "Modern design template designed for Business Consulting.",
+  "source": {
+    "fidelity": "licensed_archive",
+    "archive_filename": "11",
+    "archive_sha256": "a7d7b2e7bcfcbe0b1daf37e34baf7dadae116f2ab2d3a756829b621890d2e872",
+    "conversion_mode": "licensed-html-preservation",
+    "source_identity_retained": true
+  },
+  "rights": {
+    "mode": "user_supplied_licensed_archive",
+    "user_attested_commercial_builder_rights": true,
+    "original_source_code_reused": true,
+    "original_binary_assets_reused": true,
+    "source_identity_stripped": false
+  },
+  "publication": {
+    "state": "public",
+    "render_gate": "passed"
+  },
+  "verification": {
+    "gate_file": "verification/render-gate.json",
+    "render_home": "render/home.html",
+    "css_file": "app/globals.css",
+    "assets_manifest": "assets-manifest.json"
+  },
+  "art_direction": "Production art direction tailored for Business Consulting.",
+  "compatibility": {
+    "site_document": 3,
+    "effects": 1,
+    "next_export": 16
+  },
+  "description": "Professional template for Business Consulting."
+}

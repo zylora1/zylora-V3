@@ -1,0 +1,201 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "06a9be61c3a42c27df998cbfdce2c41264dc37fadc5ff24f01a54b625b816b30",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/images/article-1.jpg",
+      "local_path": "assets/images/article-1.jpg",
+      "sha256": "baf6983c99629483cf1ad87d49e70b2ab06d6edb9ebaaa6a81c9d39caa57aa08",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/article-2.jpg",
+      "local_path": "assets/images/article-2.jpg",
+      "sha256": "662659c926b459d684085ede9e7c28a59614fa4b4b9d46ce6029ff4704315cca",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/article-3.jpg",
+      "local_path": "assets/images/article-3.jpg",
+      "sha256": "4cdd08d48c4af692e2d8067698d1c57eaef07426f47af0567509ebf3a8851151",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/carousel-ortho.jpg",
+      "local_path": "assets/images/carousel-ortho.jpg",
+      "sha256": "0acf171a55512bd7ccc6babffdd12d87dbc0a29d5eb65ebb1726fccf507bd7ad",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/carousel-pediatric.jpg",
+      "local_path": "assets/images/carousel-pediatric.jpg",
+      "sha256": "01b60082e916d67d2c487d10c2c8aa5a3ed6248c089ef713f5434ee2ea0791a9",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/carousel-surgery.jpg",
+      "local_path": "assets/images/carousel-surgery.jpg",
+      "sha256": "342ec361a9d365e9663e64ebaae5c03c078f79bf1ed649ded77aa96c1c2ac8ce",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/cinematic-consultation.jpg",
+      "local_path": "assets/images/cinematic-consultation.jpg",
+      "sha256": "ca2a36e160a0f38c0ac24a1953eb08c0060bc7199c34bc7173bc04e1498ef058",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/consultation-procedure.jpg",
+      "local_path": "assets/images/consultation-procedure.jpg",
+      "sha256": "8061010b846794af46053ed578326ea2c389999a1b1ea4bc8a3f8545d32abdc5",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/dental-model-3d.jpg",
+      "local_path": "assets/images/dental-model-3d.jpg",
+      "sha256": "342ec361a9d365e9663e64ebaae5c03c078f79bf1ed649ded77aa96c1c2ac8ce",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/doc-brody.jpg",
+      "local_path": "assets/images/doc-brody.jpg",
+      "sha256": "2d7584bba83c6dff5c250273281b1f9eb04a5179ad6ee5b67b22c9902a5bd262",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/doc-chen.jpg",
+      "local_path": "assets/images/doc-chen.jpg",
+      "sha256": "0ead5dabd0ac9b6882423829286261ed72025cb2a64282242975e2b6aee5a617",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/doc-jenkins.jpg",
+      "local_path": "assets/images/doc-jenkins.jpg",
+      "sha256": "bd8006e42e46c21631269a6ffa1fc6dec6c5c55214b09a1efeab323a73e34761",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/doc-patel.jpg",
+      "local_path": "assets/images/doc-patel.jpg",
+      "sha256": "bd8006e42e46c21631269a6ffa1fc6dec6c5c55214b09a1efeab323a73e34761",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/doc-vance.jpg",
+      "local_path": "assets/images/doc-vance.jpg",
+      "sha256": "92eba171b3a229222349869ad98f6b55e0ff257dd14f1dabff63e77190ecc546",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero-patient.jpg",
+      "local_path": "assets/images/hero-patient.jpg",
+      "sha256": "20ea53d7bc6151219faaa3de9bcc56835d1f3d3a213ba6f4495cc5ae32d1db35",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/patient-1.jpg",
+      "local_path": "assets/images/patient-1.jpg",
+      "sha256": "df53f0858b1bee4b269e1c7b9f63e9a28f437016646f73392eb36be75c24fced",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/patient-2.jpg",
+      "local_path": "assets/images/patient-2.jpg",
+      "sha256": "7f5eca25fe58023c415307781703971390211a4cf709978f9a0ef32bc89a53d6",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/patient-3.jpg",
+      "local_path": "assets/images/patient-3.jpg",
+      "sha256": "29cf6ad39eb198c05b8d915fca0becfd3d270d510d32eaec1b886c426c681c67",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/patient-4.jpg",
+      "local_path": "assets/images/patient-4.jpg",
+      "sha256": "ea590654e35cc67cc84a3dd1b923284d13a8eddd5ee20a566272641f29e9f6ff",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/prefooter-cta.jpg",
+      "local_path": "assets/images/prefooter-cta.jpg",
+      "sha256": "20ea53d7bc6151219faaa3de9bcc56835d1f3d3a213ba6f4495cc5ae32d1db35",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-cosmetic.jpg",
+      "local_path": "assets/images/service-cosmetic.jpg",
+      "sha256": "c6c51783628e317008b03004640a273251c41c6373a6fc63738dc2d56df83965",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-hygiene.jpg",
+      "local_path": "assets/images/service-hygiene.jpg",
+      "sha256": "8179f5b13857ef8a15f80bbddb3604527874b38f30f2158ba2e3daa7608d6e09",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-implants.jpg",
+      "local_path": "assets/images/service-implants.jpg",
+      "sha256": "ca5b808e321b52fa914e30051525bfc960d4be14efea562995d02e73105060f0",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/smile-1.jpg",
+      "local_path": "assets/images/smile-1.jpg",
+      "sha256": "92f47c631f70c352118c5d09c0e68da6486d31629b640daee38fc633da52ab19",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/smile-2.jpg",
+      "local_path": "assets/images/smile-2.jpg",
+      "sha256": "f8598578acf79ffb1e11b1b51bd7c3b5ffc886613cc5b56f0b01ec4fad02ce86",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/smile-3.jpg",
+      "local_path": "assets/images/smile-3.jpg",
+      "sha256": "c0c060c53a1cd5b3d59a402b9b361d3fb8fdec13271d174282c6700cb7258bdd",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/smile-4.jpg",
+      "local_path": "assets/images/smile-4.jpg",
+      "sha256": "748a48f5bfd19dea7154dbf2ac325b184afaa57a1d72b424198b13c9631cfa88",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/smile-5.jpg",
+      "local_path": "assets/images/smile-5.jpg",
+      "sha256": "96a5a7e0d4ff49297aca42a57fc048b888102d3cdcae1bc1f08fd49cc1cf20aa",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/smiling-woman.jpg",
+      "local_path": "assets/images/smiling-woman.jpg",
+      "sha256": "120d53e2288121a5fa4f198edca403f6a227d2088d07882c0139040a03b8b33f",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/tech-cbct.jpg",
+      "local_path": "assets/images/tech-cbct.jpg",
+      "sha256": "92a4a2cc540587686b6299bdeb1e98fdbd1aa8ee79ee7902006cdedf67110cc4",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/tech-microscope.jpg",
+      "local_path": "assets/images/tech-microscope.jpg",
+      "sha256": "b513ab401ea662c1057c47dd08c906236a9b1bf2a89bace82981548647b24a88",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/tech-scanner.jpg",
+      "local_path": "assets/images/tech-scanner.jpg",
+      "sha256": "49ddc30ac8d5d18ae6ca17236ce7e90d6f6b9e435c89d4fee242c68ca20da252",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

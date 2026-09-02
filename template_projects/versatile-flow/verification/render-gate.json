@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "source_archive": "7",
+  "source_archive_sha256": "6401d212790c7301fd165488dae6c6209a399288d891ec853e573493d9131b40",
+  "render_home_sha256": "bc8c23c46531d173b4ef6a5de0b0e818fc0d44c67f041cf832e828d971de1fdb",
+  "css_sha256": "6fc280478b617753a23b4e3c5392ee37a46b3c0c059cf095687225ce937e691c",
+  "page_sha256": {
+    "home": "bc8c23c46531d173b4ef6a5de0b0e818fc0d44c67f041cf832e828d971de1fdb"
+  },
+  "rights_check_passed": true,
+  "user_license_attestation": true,
+  "licensed_source_reused": true,
+  "asset_manifest_verified": true,
+  "render_smoke_passed": true,
+  "responsive_source_preserved": true,
+  "motion_source_preserved_or_static_fallback": true,
+  "content_adapter_passed": true,
+  "site_document_compatible": true,
+  "functional_semantics_mapped": true,
+  "page_inventory_verified": true,
+  "external_dependencies_reviewed": true,
+  "source_code_reused": true,
+  "source_binary_assets_reused": true,
+  "source_identity_retained": true
+}

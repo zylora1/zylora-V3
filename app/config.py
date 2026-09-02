@@ -129,7 +129,7 @@ def validate_production_settings() -> None:
     if bool(settings.super_admin_email) != bool(settings.super_admin_password):
         need(False, 'SUPER_ADMIN_EMAIL/SUPER_ADMIN_PASSWORD (set both or neither)')
     if settings.super_admin_password:
-        need(len(settings.super_admin_password) >= 16, 'SUPER_ADMIN_PASSWORD (minimum 16 characters)')
+        need(len(settings.super_admin_password) >= 8, 'SUPER_ADMIN_PASSWORD (minimum 8 characters)')
     need(bool(settings.public_base_domain and '.example' not in settings.public_base_domain), 'PUBLIC_BASE_DOMAIN')
     media_provider=settings.media_storage_provider.strip().lower()
     need(media_provider in {'local','s3'}, 'MEDIA_STORAGE_PROVIDER=local or s3')

@@ -1,0 +1,111 @@
+{
+  "all_bundled_assets_local": true,
+  "commercial_reuse_verified": true,
+  "license_basis": "user_attested_commercial_builder_rights",
+  "source_archive_sha256": "a7d7b2e7bcfcbe0b1daf37e34baf7dadae116f2ab2d3a756829b621890d2e872",
+  "external_dependencies_reviewed": true,
+  "assets": [
+    {
+      "path": "assets/favicon.svg",
+      "local_path": "assets/favicon.svg",
+      "sha256": "45128e7ff6ea57c6f37492840b44cbe4ae31bfd92068c1f4771d225c9ef662ad",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/automation.jpg",
+      "local_path": "assets/images/automation.jpg",
+      "sha256": "d5c109808edd5bd4cefbf645b5b391fa62e1e279d39d2a5e87aad75153343314",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/footer.jpg",
+      "local_path": "assets/images/footer.jpg",
+      "sha256": "cc790a88b6ff660fcc9d5c0e3aabe458fc8926d439461b79d8d7063c7101364e",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/hero.jpg",
+      "local_path": "assets/images/hero.jpg",
+      "sha256": "2e970c6966a9f14e0fc92baa3e67ac96edc15fae0c25d12e5566c6165fc22807",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/manager.jpg",
+      "local_path": "assets/images/manager.jpg",
+      "sha256": "c5999172047e5f6dece15fed7d26f948448b1b8009ce0f918adb0c3e96aa90af",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/resource-1.jpg",
+      "local_path": "assets/images/resource-1.jpg",
+      "sha256": "e3b37bfcba2012796cb1734bd7266e02cb25fbe8f49aade9972fb760ec9af8d2",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/resource-2.jpg",
+      "local_path": "assets/images/resource-2.jpg",
+      "sha256": "55aa4f737de436d97323788ff5e4e08ea1738a2a55261c20daf2489e45722268",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/resource-3.jpg",
+      "local_path": "assets/images/resource-3.jpg",
+      "sha256": "877aed3ac579ae2ecd1c7abc8402c9b9e06ef025bdeb3d96cf5183c792be4742",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-content.jpg",
+      "local_path": "assets/images/service-content.jpg",
+      "sha256": "d5c109808edd5bd4cefbf645b5b391fa62e1e279d39d2a5e87aad75153343314",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-email.jpg",
+      "local_path": "assets/images/service-email.jpg",
+      "sha256": "d5a26fe39e564ba034af0016830fc7f1e9bf57362460b1301e3d21eec1949939",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-project.jpg",
+      "local_path": "assets/images/service-project.jpg",
+      "sha256": "5f247874f209c9b5199395ef3e27160ff7a25ea09d233ab9cb45dbe88e454196",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/service-support.jpg",
+      "local_path": "assets/images/service-support.jpg",
+      "sha256": "3e7418e978debee5dd5921e2f33feb8f2666b066b5f7bd38adeaf910b8bcd50e",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/story-team.jpg",
+      "local_path": "assets/images/story-team.jpg",
+      "sha256": "8a2c1928706e98baa91430fb7ccb1e4c66f92eec1929952df0a6bd2600888e86",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/testimonial-1.jpg",
+      "local_path": "assets/images/testimonial-1.jpg",
+      "sha256": "1e3c04fd91a6b3a0abfef63b6d612de06d30cdf18cf042b962a447019548f93c",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/testimonial-2.jpg",
+      "local_path": "assets/images/testimonial-2.jpg",
+      "sha256": "a9d395f38b36f3e23eb51296a4cbf4af29d56c2672a13f222d7412c4423c0409",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/testimonial-3.jpg",
+      "local_path": "assets/images/testimonial-3.jpg",
+      "sha256": "bf0de80f8d5d6446b6e132ba3ded20f87ce73dfbf24342d363a31a893525ea3c",
+      "license": "user_attested_commercial_builder_rights"
+    },
+    {
+      "path": "assets/images/testimonial-4.jpg",
+      "local_path": "assets/images/testimonial-4.jpg",
+      "sha256": "a9d395f38b36f3e23eb51296a4cbf4af29d56c2672a13f222d7412c4423c0409",
+      "license": "user_attested_commercial_builder_rights"
+    }
+  ]
+}

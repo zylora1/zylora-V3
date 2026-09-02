@@ -1,0 +1,97 @@
+html { scroll-behavior: smooth; } body { min-width: 0; } img, svg, video { max-width: 100%; height: auto; }
+:root {
+  --canvas-bg: #E8E6E9;
+  --shell-bg: #FFFFFF;
+  --lime: #E8FF4A;
+  --lime-bright: #EAFF3D;
+  --lime-soft: #F2FF85;
+  --lime-dark: #0D1600;
+  --ink: #111511;
+  --ink-secondary: #4A4D46;
+  --ink-muted: #7E827A;
+  --border-light: #E6E5E0;
+  --border-dark: rgba(255, 255, 255, 0.25);
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--canvas-bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  padding: 16px 12px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+@media (min-width: 768px) {
+  body {
+    padding: 24px 20px;
+  }
+}
+
+.site-shell {
+  width: 100%;
+  max-width: 1220px;
+  background-color: var(--shell-bg);
+  border-radius: 28px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.04);
+  padding: 14px 18px 24px;
+  overflow: hidden;
+  position: relative;
+}
+
+@media (min-width: 1024px) {
+  .site-shell {
+    padding: 16px 24px 28px;
+    border-radius: 32px;
+  }
+}
+
+/* Custom interactive pill button styles */
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn-pill:hover {
+  transform: translateY(-1px);
+}
+
+/* Rounded card smooth transitions */
+.smooth-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.smooth-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }

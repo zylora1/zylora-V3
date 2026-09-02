@@ -74,11 +74,40 @@ def test_super_admin_bootstrap_refuses_to_elevate_existing_normal_user(monkeypat
         assert db.execute(text('SELECT role FROM users WHERE email=:e'),{'e':email}).scalar_one()=='USER'
 
 
-def test_super_admin_bootstrap_requires_both_variables_and_strong_password(monkeypatch):
+def test_super_admin_bootstrap_requires_both_variables_when_either_is_set(monkeypatch):
     monkeypatch.setattr(settings,'super_admin_email','partial-admin@example.com')
     monkeypatch.setattr(settings,'super_admin_password','')
     with pytest.raises(RuntimeError,match='must be set together'):
         bootstrap_super_admin()
-    monkeypatch.setattr(settings,'super_admin_password','too-short')
-    with pytest.raises(RuntimeError,match='at least 16 characters'):
+    monkeypatch.setattr(settings,'super_admin_email','')
+    monkeypatch.setattr(settings,'super_admin_password','some-password')
+    with pytest.raises(RuntimeError,match='must be set together'):
         bootstrap_super_admin()
+
+
+@pytest.mark.parametrize('valid_pw', ['12345678', 'abcdefgh', 'password', 'super-admin-pass'])
+def test_super_admin_bootstrap_accepts_valid_passwords_min_length_8(monkeypatch, valid_pw):
+    email = f'bootstrap-{uuid4().hex[:6]}@example.com'
+    _delete_user(email)
+    monkeypatch.setattr(settings, 'super_admin_email', email)
+    monkeypatch.setattr(settings, 'super_admin_password', valid_pw)
+
+    assert bootstrap_super_admin() is True
+    with SessionLocal() as db:
+        row = db.execute(text('SELECT * FROM users WHERE email=:e'), {'e': email}).mappings().one()
+        assert row['role'] == 'SUPER_ADMIN'
+        assert row['password_hash'] != valid_pw
+        assert verify_password(valid_pw, row['password_hash'])
+    _delete_user(email)
+
+
+@pytest.mark.parametrize('short_pw', ['a', '1', 'abc', '1234567'])
+def test_super_admin_bootstrap_rejects_passwords_shorter_than_8(monkeypatch, short_pw):
+    email = f'bootstrap-short-{uuid4().hex[:6]}@example.com'
+    _delete_user(email)
+    monkeypatch.setattr(settings, 'super_admin_email', email)
+    monkeypatch.setattr(settings, 'super_admin_password', short_pw)
+
+    with pytest.raises(RuntimeError, match='at least 8 characters'):
+        bootstrap_super_admin()
+    _delete_user(email)
