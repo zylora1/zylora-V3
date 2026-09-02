@@ -8,7 +8,8 @@ from sqlalchemy import text
 from app.db import SessionLocal, migrate, now_iso
 from app.main import app
 from app.providers import estimate_openai_cost_micros
-from app.security import clear_rate_limits
+from app.config import settings
+from app.security import clear_rate_limits, session_cookie_samesite
 from app.templates import TEMPLATES
 
 
@@ -94,3 +95,11 @@ def test_openai_cost_estimate_uses_provider_token_usage_and_cached_rate():
         'output_tokens':0,
     }) == 75_000
     assert estimate_openai_cost_micros('unpriced-future-model',{'input_tokens':1_000_000}) == 0
+
+
+def test_separate_production_admin_uses_secure_cross_origin_session_cookie(monkeypatch):
+    monkeypatch.setattr(settings, 'app_env', 'production')
+    monkeypatch.setattr(settings, 'super_admin_app_url', 'https://zylora-admin-production.up.railway.app')
+    assert session_cookie_samesite() == 'none'
+    monkeypatch.setattr(settings, 'super_admin_app_url', '')
+    assert session_cookie_samesite() == 'lax'

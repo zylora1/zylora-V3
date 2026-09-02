@@ -21,7 +21,7 @@ from .providers import (
     razorpay_create_subscription, razorpay_verify_subscription_payment, razorpay_subscription_signature,
     razorpay_get_subscription, razorpay_cancel_subscription, razorpay_get_payment,
 )
-from .security import hash_password, new_session, durable_rate_limit
+from .security import hash_password, new_session, durable_rate_limit, session_cookie_samesite
 from .settings_store import get_system_setting
 from .billing_regions import offer_for_request, regional_price, provider_plan_id, region_for_country, normalize_country, save_billing_country, INDIA, INTERNATIONAL
 from .credits import ensure_wallet, reset_monthly_for_plan, grant_topup, wallet_summary, TOPUP_PACKS
@@ -145,7 +145,7 @@ def google_callback(state: str, code: str|None=None, mock_email: str|None=None):
     token,csrf,_=new_session(uid)
     target=(settings.super_admin_app_url or '/admin') if user_role=='SUPER_ADMIN' else (row['redirect_to'] or '/dashboard')
     resp=RedirectResponse(target,status_code=302)
-    resp.set_cookie('zylora_session',token,httponly=True,samesite='lax',secure=settings.app_env=='production',max_age=settings.session_ttl_hours*3600)
+    resp.set_cookie('zylora_session',token,httponly=True,samesite=session_cookie_samesite(),secure=settings.app_env=='production',max_age=settings.session_ttl_hours*3600)
     resp.set_cookie('zylora_oauth_csrf',csrf,httponly=False,samesite='lax',secure=settings.app_env=='production',max_age=300)
     _audit(uid,'GOOGLE_LOGIN','user',uid)
     return resp
