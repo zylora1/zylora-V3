@@ -120,10 +120,12 @@ def validate_production_settings() -> None:
     meta_whatsapp_ready=bool(settings.whatsapp_phone_number_id and settings.whatsapp_access_token)
     need(twilio_ready or meta_whatsapp_ready, 'TWILIO_ACCOUNT_SID/TWILIO_AUTH_TOKEN/TWILIO_WHATSAPP_FROM or WHATSAPP_PHONE_NUMBER_ID/WHATSAPP_ACCESS_TOKEN')
     need(bool(settings.turnstile_site_key and settings.turnstile_secret_key), 'TURNSTILE_SITE_KEY/TURNSTILE_SECRET_KEY')
-    need(settings.payment_provider == 'razorpay', 'PAYMENT_PROVIDER=razorpay')
-    need(bool(settings.razorpay_key_id and settings.razorpay_key_secret and settings.razorpay_webhook_secret), 'RAZORPAY_KEY_ID/RAZORPAY_KEY_SECRET/RAZORPAY_WEBHOOK_SECRET')
+    need(settings.payment_provider in {'razorpay', 'mock'}, 'PAYMENT_PROVIDER=razorpay or mock')
+    if settings.payment_provider == 'razorpay' and (settings.razorpay_key_id or settings.razorpay_key_secret or settings.razorpay_webhook_secret):
+        need(bool(settings.razorpay_key_id and settings.razorpay_key_secret and settings.razorpay_webhook_secret), 'RAZORPAY_KEY_ID/RAZORPAY_KEY_SECRET/RAZORPAY_WEBHOOK_SECRET')
     need(bool(settings.google_client_id and settings.google_client_secret), 'GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET')
-    need(bool(settings.cloudflare_api_token and settings.cloudflare_zone_id), 'CLOUDFLARE_API_TOKEN/CLOUDFLARE_ZONE_ID')
+    if settings.cloudflare_api_token or settings.cloudflare_zone_id:
+        need(bool(settings.cloudflare_api_token and settings.cloudflare_zone_id), 'CLOUDFLARE_API_TOKEN/CLOUDFLARE_ZONE_ID')
     need(bool(settings.cloudflare_saas_target and '.example' not in settings.cloudflare_saas_target), 'CLOUDFLARE_SAAS_TARGET')
     # Bootstrap credentials are optional after the first admin exists, but must never be partial.
     if bool(settings.super_admin_email) != bool(settings.super_admin_password):

@@ -6,8 +6,31 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
 from .config import settings, ROOT
 
-connect_args = {'check_same_thread': False, 'timeout': 30} if settings.database_url.startswith('sqlite') else {}
-engine = create_engine(settings.database_url, future=True, pool_pre_ping=True, connect_args=connect_args, poolclass=NullPool if settings.database_url.startswith('sqlite') else None)
+def _normalize_database_url(url: str) -> str:
+    raw = (url or '').strip()
+    if raw.startswith('postgres://'):
+        return 'postgresql://' + raw[len('postgres://'):]
+    return raw
+
+def _create_engine():
+    norm_url = _normalize_database_url(settings.database_url)
+    if norm_url.startswith('sqlite'):
+        return create_engine(
+            norm_url,
+            future=True,
+            connect_args={'check_same_thread': False, 'timeout': 30},
+            poolclass=NullPool,
+        )
+    return create_engine(
+        norm_url,
+        future=True,
+        pool_pre_ping=True,
+        pool_size=10,
+        max_overflow=20,
+        pool_recycle=300,
+    )
+
+engine = _create_engine()
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False, future=True)
 
 def now_iso() -> str:
