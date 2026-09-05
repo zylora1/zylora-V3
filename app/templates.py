@@ -401,6 +401,34 @@ IMPORTED_RUNTIME_META = {
 # Runtime registry contains verified catalogue metadata plus the hidden AI renderer.
 BY_SLUG = {AI_RUNTIME_SLUG: AI_RUNTIME_META, IMPORTED_RUNTIME_SLUG: IMPORTED_RUNTIME_META, **{str(t['slug']):t for t in TEMPLATES}}
 
+def reload_catalogue() -> list[dict]:
+    global TEMPLATES, BY_SLUG
+    TEMPLATES = _load_catalogue()
+    BY_SLUG = {AI_RUNTIME_SLUG: AI_RUNTIME_META, IMPORTED_RUNTIME_SLUG: IMPORTED_RUNTIME_META, **{str(t['slug']):t for t in TEMPLATES}}
+    return TEMPLATES
+
+def list_all_template_projects() -> list[dict]:
+    root = ROOT / 'template_projects'
+    items = []
+    if not root.exists():
+        return items
+    for meta_path in sorted(root.glob('*/metadata.json')):
+        try:
+            meta = json.loads(meta_path.read_text(encoding='utf-8'))
+        except Exception:
+            continue
+        if not isinstance(meta, dict) or not meta.get('slug'):
+            continue
+        slug = str(meta['slug'])
+        pub = meta.get('publication') if isinstance(meta.get('publication'), dict) else {}
+        is_ready = _catalogue_project_ready(meta_path.parent, meta)
+        meta['is_ready'] = is_ready
+        meta['state'] = pub.get('state', 'unknown')
+        meta['render_gate'] = pub.get('render_gate', 'unknown')
+        meta.setdefault('preview', f'/static/template-previews/{slug}.png')
+        items.append(meta)
+    return items
+
 
 def _doc(content: dict) -> dict:
     raw = content.get("published_structure_json") or content.get("draft_structure_json")
@@ -590,8 +618,24 @@ def _render_catalogue_project(slug: str, content: dict, page_slug: str='home') -
     # Template-project source keeps portable ../assets references for standalone export.
     # Rewrite them only in the hosted runtime to the guarded per-template asset route.
     asset_base=f'/template-assets/{quote(slug)}/'
-    body=body.replace('../assets/',asset_base)
-    css=css.replace('../assets/',asset_base)
+    body=body.replace('../assets/',asset_base).replace('./assets/',asset_base)
+    css=css.replace('../assets/',asset_base).replace('./assets/',asset_base)
+    assets_dir = project / 'assets'
+    if assets_dir.is_dir():
+        rel_files = []
+        for p in assets_dir.rglob('*'):
+            if p.is_file():
+                rel_files.append(p.relative_to(assets_dir).as_posix())
+        rel_files.sort(key=len, reverse=True)
+        for rel in rel_files:
+            body = re.sub(r'((?:src|href|poster)=["\'])\/?' + re.escape(rel) + r'(["\'])', r'\1' + asset_base + rel + r'\2', body)
+            body = re.sub(r'(url\([\'"]?)\/?' + re.escape(rel) + r'([\'"]?\))', r'\1' + asset_base + rel + r'\2', body)
+            css = re.sub(r'(url\([\'"]?)\/?' + re.escape(rel) + r'([\'"]?\))', r'\1' + asset_base + rel + r'\2', css)
+            base_name = Path(rel).name
+            if base_name != rel:
+                body = re.sub(r'((?:src|href|poster)=["\'])\/?' + re.escape(base_name) + r'(["\'])', r'\1' + asset_base + rel + r'\2', body)
+                body = re.sub(r'(url\([\'"]?)\/?(?:[A-Za-z0-9_.-]+\/)*' + re.escape(base_name) + r'([\'"]?\))', r'\1' + asset_base + rel + r'\2', body)
+                css = re.sub(r'(url\([\'"]?)\/?(?:[A-Za-z0-9_.-]+\/)*' + re.escape(base_name) + r'([\'"]?\))', r'\1' + asset_base + rel + r'\2', css)
     # Catalogue projects use the shared Zylora effects runtime rather than
     # shipping one-off animation engines inside individual templates.
     effects_css_path=ROOT/'static'/'zylora-template-effects.css'

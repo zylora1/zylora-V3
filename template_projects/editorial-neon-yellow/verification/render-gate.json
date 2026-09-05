@@ -1,11 +1,11 @@
 {
   "status": "passed",
   "source_archive": "editorial-neon-yellow-v1.1.zip",
-  "source_archive_sha256": "f14136d58aad3d28df822b25835c8703b417cc2a5be7a169c1edec531987a873",
-  "render_home_sha256": "1105ff4dff373d7a73258736f395860608ec0bed954c060cbc3f2c77aff6e082",
-  "css_sha256": "757644bfc639badb277db8a29bbd82e6b58ad80e95011596f4bdaec06f75dc82",
+  "source_archive_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "render_home_sha256": "0573f70fab416587d89f1d26622d204bff3ba838555262a512419308661a4b22",
+  "css_sha256": "d8d0c0b0d4bc983d02535c056dc79fd22707ad0f128c986a6e111017a4f3acaf",
   "page_sha256": {
-    "home": "1105ff4dff373d7a73258736f395860608ec0bed954c060cbc3f2c77aff6e082"
+    "home": "0573f70fab416587d89f1d26622d204bff3ba838555262a512419308661a4b22"
   },
   "rights_check_passed": true,
   "user_license_attestation": true,

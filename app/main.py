@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 import json
 import re
 from urllib.parse import urlparse
+import mimetypes
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, Response, RedirectResponse
@@ -28,6 +29,7 @@ from .operations import record_operational_event, prune_old_analytics, safe_exce
 from .config import ROOT, settings, validate_production_settings
 from .db import SessionLocal, migrate
 from .bootstrap import bootstrap_super_admin
+from .security import current_user
 from .templates import BY_SLUG, TEMPLATES, render_template, render_template_page
 from .plans import all_plans
 from .billing_regions import offer_for_request
@@ -95,16 +97,41 @@ app.include_router(operations_router)
 app.include_router(sales_assistant_router)
 app.mount('/static',StaticFiles(directory=ROOT/'static'),name='static')
 
+@app.get('/favicon.ico', include_in_schema=False)
+def favicon():
+    ico = ROOT / 'static' / 'favicon.ico'
+    if ico.exists():
+        return FileResponse(ico, media_type='image/x-icon')
+    png = ROOT / 'static' / 'favicon.png'
+    return FileResponse(png, media_type='image/png')
+
 @app.get('/template-assets/{slug}/{asset_path:path}',include_in_schema=False)
 def template_asset(slug:str,asset_path:str):
     if slug not in {str(t.get('slug')) for t in TEMPLATES}: raise HTTPException(404,'Template asset not found')
     project=(ROOT/'template_projects'/slug).resolve()
-    # Current template projects store portable assets at <project>/assets. Keep a
-    # backwards-compatible public/assets fallback for older project layouts.
-    for rel in (Path('assets'),Path('public')/'assets'):
+    # Current template projects store portable assets at <project>/assets. Keep fallbacks for double-nested or source assets.
+    for rel in (Path('assets'),Path('public')/'assets',Path('assets')/'assets',Path('assets')/'source'):
         base=(project/rel).resolve(); target=(base/asset_path).resolve()
         if base in target.parents and target.is_file():
-            return FileResponse(target)
+            mime, _ = mimetypes.guess_type(str(target))
+            ext = target.suffix.lower()
+            if ext == '.css': mime = 'text/css'
+            elif ext == '.js': mime = 'application/javascript'
+            elif ext == '.svg': mime = 'image/svg+xml'
+            elif ext in ('.woff', '.woff2'): mime = f'font/{ext[1:]}'
+            return FileResponse(target, media_type=mime or 'application/octet-stream')
+    assets_dir = (project / 'assets').resolve()
+    if assets_dir.is_dir():
+        fname = Path(asset_path).name
+        for cand in assets_dir.rglob(fname):
+            if cand.is_file() and assets_dir in cand.parents:
+                mime, _ = mimetypes.guess_type(str(cand))
+                ext = cand.suffix.lower()
+                if ext == '.css': mime = 'text/css'
+                elif ext == '.js': mime = 'application/javascript'
+                elif ext == '.svg': mime = 'image/svg+xml'
+                elif ext in ('.woff', '.woff2'): mime = f'font/{ext[1:]}'
+                return FileResponse(cand, media_type=mime or 'application/octet-stream')
     raise HTTPException(404,'Template asset not found')
 
 def _apply_security_headers(request: Request, response: Response) -> Response:
@@ -228,6 +255,15 @@ def _landing_html(request: Request) -> str:
     for key,value in values.items(): raw=raw.replace(key,str(value))
     return raw
 
+@app.get('/landing.css',include_in_schema=False)
+def root_landing_css(): return FileResponse(ROOT/'static'/'landing.css',media_type='text/css')
+@app.get('/auth.css',include_in_schema=False)
+def root_auth_css(): return FileResponse(ROOT/'static'/'auth.css',media_type='text/css')
+@app.get('/zylora-apple.css',include_in_schema=False)
+def root_apple_css(): return FileResponse(ROOT/'static'/'zylora-apple.css',media_type='text/css')
+@app.get('/zylora-ui.css',include_in_schema=False)
+def root_ui_css(): return FileResponse(ROOT/'static'/'zylora-ui.css',media_type='text/css')
+
 @app.get('/api/health',include_in_schema=False)
 def health():
     with SessionLocal() as db:
@@ -250,8 +286,24 @@ def verify_email_page(): return FileResponse(ROOT/'static'/'verify-email.html')
 def accept_transfer_page(): return FileResponse(ROOT/'static'/'accept-transfer.html')
 @app.get('/choose-plan',include_in_schema=False)
 def choose_plan(): return FileResponse(ROOT/'static'/'choose-plan.html')
+def _require_super_admin(request: Request) -> dict:
+    u = current_user(request)
+    if u.get('role') != 'SUPER_ADMIN':
+        raise HTTPException(403, 'Access denied: SUPER_ADMIN role required')
+    return u
+
 @app.get('/dashboard',include_in_schema=False)
-def dashboard(): return FileResponse(ROOT/'static'/'dashboard.html')
+def dashboard(request: Request):
+    u = current_user(request)
+    if u.get('role') == 'SUPER_ADMIN' and request.query_params.get('stay') != '1':
+        return RedirectResponse('/super-admin', status_code=303)
+    return FileResponse(ROOT/'static'/'dashboard.html')
+
+@app.get('/super-admin',include_in_schema=False)
+@app.get('/super-admin/{subpath:path}',include_in_schema=False)
+def super_admin_page(request: Request, subpath: str = ''):
+    _require_super_admin(request)
+    return FileResponse(ROOT/'static'/'super-admin.html')
 @app.get('/ai-create',include_in_schema=False)
 def ai_create(): return FileResponse(ROOT/'static'/'ai-create.html')
 @app.get('/legal',include_in_schema=False)
@@ -262,6 +314,8 @@ def terms(): return FileResponse(ROOT/'static'/'terms.html')
 def privacy(): return FileResponse(ROOT/'static'/'privacy.html')
 @app.get('/editor/{site_id}',include_in_schema=False)
 def editor(site_id:str): return FileResponse(ROOT/'static'/'editor.html')
+@app.get('/studio/{site_id}',include_in_schema=False)
+def studio(site_id:str): return FileResponse(ROOT/'static'/'studio.html')
 @app.get('/freelancers',include_in_schema=False)
 def freelancers_page():
     raw=(ROOT/'static'/'freelancers.html').read_text(encoding='utf-8')

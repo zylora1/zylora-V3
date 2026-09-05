@@ -36,7 +36,11 @@ class SignupIn(BaseModel):
 class LoginIn(BaseModel): email:EmailStr; password:str=Field(min_length=1)
 class SiteIn(BaseModel): business_name:str=Field(min_length=2,max_length=120); description:str=Field(default='',max_length=6000); template_slug:str|None=None; origin:str='AI'; industry:str=Field(default='Business',max_length=120); style:str=Field(default='Minimal',max_length=120); motion_style:str=Field(default='Subtle',max_length=40)
 class EditIn(BaseModel): tagline:str|None=None; description:str|None=None; accent:str|None=None
-class AiEditIn(BaseModel): instruction:str=Field(min_length=3,max_length=2000); page:str=Field(default='home',max_length=80); expected_version:int|None=Field(default=None,ge=1)
+class AiEditIn(BaseModel):
+    instruction:str=Field(min_length=3,max_length=2000)
+    page:str=Field(default='home',max_length=80)
+    expected_version:int|None=Field(default=None,ge=1)
+    selection:list[str]|None=None
 class LeadIn(BaseModel):
     site_id:str
     source:str=Field(default='FORM',max_length=30)
@@ -535,6 +539,23 @@ def update_site(site_id:str,payload:EditIn,request:Request):
         push_history(db,site_id,u['id'],'CONTENT_EDIT'); create_revision(db,site_id,u['id'],'SAVE','Manual content save')
     _audit(u['id'],'SITE_UPDATE','site',site_id); return {'ok':True}
 
+@router.delete('/sites/{site_id}')
+def delete_draft_site(site_id: str, request: Request):
+    u = _user(request, True)
+    with SessionLocal.begin() as db:
+        row = db.execute(text('SELECT * FROM sites WHERE id=:s'), {'s': site_id}).mappings().first()
+        if not row:
+            raise HTTPException(404, 'Site not found')
+        site = dict(row)
+        if site['user_id'] != u['id'] and u['role'] != 'SUPER_ADMIN':
+            raise HTTPException(403, 'You do not own this website')
+        if site['status'] == 'LIVE':
+            raise HTTPException(400, detail={'code': 'LIVE_SITE_DELETE_RESTRICTED', 'message': 'Published websites cannot be deleted directly. Unpublish the website first.'})
+        _delete_account_site_data(db, site_id)
+        db.execute(text('DELETE FROM sites WHERE id=:s'), {'s': site_id})
+    _audit(u['id'], 'SITE_DELETE_DRAFT', 'site', site_id, {'business_name': site['business_name'], 'slug': site['slug']})
+    return {'ok': True, 'deleted_site_id': site_id}
+
 @router.post('/sites/{site_id}/ai-edit')
 def edit_ai(site_id:str,payload:AiEditIn,request:Request):
     u=_user(request,True)
@@ -571,30 +592,48 @@ def edit_ai(site_id:str,payload:AiEditIn,request:Request):
         meta=BY_SLUG[s['template_slug']]; allowed_pages=set(_site_page_keys(s))
         page=(payload.page or 'home').strip().lower()
         if page not in allowed_pages: raise HTTPException(422,'That page is not available on this website')
-        html=instrument_editable_html(render_template_page(s['template_slug'],s,'' if page=='home' else page),page,s['template_slug'])
-        context={**s,'assets':list_assets(u['id'],site_id),'editor_nodes':extract_editor_nodes(html)}
-        try:
-            operations,provider=generate_operations(context,payload.instruction,page)
-            if s.get('origin')=='TEMPLATE' and any(validate_operation(op)['type']=='add_section' for op in operations):
-                raise ValueError('Template page structure is fixed; AI cannot add sections to template-origin sites')
-            operations=validate_operations_against_html(html,operations)
-            operations=validate_internal_page_links(operations,allowed_pages)
-        except SchemaCapabilityRequired as exc:
-            raise HTTPException(422,detail=exc.detail)
-        except ValueError as exc:
-            raise HTTPException(422,str(exc))
-        for op in operations:
-            if op['type']=='replace_image': get_asset(op['asset_id'],user_id=u['id'],site_id=site_id)
-        current=parse_document(s.get('draft_structure_json')); document=merge_operations(current,operations)
-        # Structured operations are authoritative for website editing. Do not also mutate
-        # the legacy tagline/description fields as a hidden side effect of an unrelated
-        # image/layout/style instruction. Those base fields remain unchanged unless the
-        # user edits them through the explicit manual content endpoint.
+
+        is_v4 = bool(s.get('studio_document_json'))
+
+        if is_v4:
+            from .generate_v4 import generate_v4_operations
+            from .studio_ai_operations import apply_v4_operations
+            from .studio_document import SiteDocument, validate_studio_document
+            
+            try:
+                doc_dict = json.loads(s.get('studio_document_json') or '{}')
+                doc = SiteDocument(**doc_dict)
+                operations, provider = generate_v4_operations(s.get('studio_document_json') or '{}', payload.instruction, payload.selection or [])
+                updated_doc = apply_v4_operations(doc, operations)
+                document = updated_doc.model_dump(exclude_none=True)
+                document_schema_version = 4
+            except Exception as exc:
+                raise HTTPException(422, str(exc))
+        else:
+            html=instrument_editable_html(render_template_page(s['template_slug'],s,'' if page=='home' else page),page,s['template_slug'])
+            context={**s,'assets':list_assets(u['id'],site_id),'editor_nodes':extract_editor_nodes(html)}
+            try:
+                operations,provider=generate_operations(context,payload.instruction,page)
+                if s.get('origin')=='TEMPLATE' and any(validate_operation(op)['type']=='add_section' for op in operations):
+                    raise ValueError('Template page structure is fixed; AI cannot add sections to template-origin sites')
+                operations=validate_operations_against_html(html,operations)
+                operations=validate_internal_page_links(operations,allowed_pages)
+            except SchemaCapabilityRequired as exc:
+                raise HTTPException(422,detail=exc.detail)
+            except ValueError as exc:
+                raise HTTPException(422,str(exc))
+            for op in operations:
+                if op['type']=='replace_image': get_asset(op['asset_id'],user_id=u['id'],site_id=site_id)
+            current=parse_document(s.get('draft_structure_json')); document=merge_operations(current,operations)
+            document_schema_version = 3
+
         edited={'tagline':s['tagline'],'description':s['description']}
-        # Credits are debited only after all AI actions and permissions have validated.
         debit=debit_wallet(db,u['id'],u['plan'],int(get_plan(u['plan']).get('ai_edit_cost',2)),'AI_EDIT',idem,credit_type='ai',reference_id=site_id)
         ensure_history(db,s,u['id'])
-        db.execute(text('UPDATE sites SET tagline=:g,description=:d,draft_structure_json=:structure,document_schema_version=3,document_version=document_version+1,updated_at=:c WHERE id=:i AND document_version=:v'),{'g':edited['tagline'],'d':edited['description'],'structure':json.dumps(document,separators=(',',':')),'c':now_iso(),'i':site_id,'v':current_version})
+        if is_v4:
+            db.execute(text('UPDATE sites SET tagline=:g,description=:d,studio_document_json=:structure,document_schema_version=:dsv,document_version=document_version+1,updated_at=:c WHERE id=:i AND document_version=:v'),{'g':edited['tagline'],'d':edited['description'],'structure':json.dumps(document,separators=(',',':')),'dsv':document_schema_version,'c':now_iso(),'i':site_id,'v':current_version})
+        else:
+            db.execute(text('UPDATE sites SET tagline=:g,description=:d,draft_structure_json=:structure,document_schema_version=:dsv,document_version=document_version+1,updated_at=:c WHERE id=:i AND document_version=:v'),{'g':edited['tagline'],'d':edited['description'],'structure':json.dumps(document,separators=(',',':')),'dsv':document_schema_version,'c':now_iso(),'i':site_id,'v':current_version})
         push_history(db,site_id,u['id'],'AI_EDIT'); create_revision(db,site_id,u['id'],'AI','AI structured edit')
     _audit(u['id'],'AI_EDIT','site',site_id,{'provider':provider,'credits':debit,'page':page,'operation_count':len(operations)}); return {'tagline':edited['tagline'],'description':edited['description'],'provider':provider,'credits':debit,'page':page,'operations':operations,'structure':document,'document_version':current_version+1}
 
@@ -798,6 +837,37 @@ def rollback_published(site_id:str,revision:int,request:Request):
         db.execute(text("INSERT INTO published_versions(id,site_id,revision,snapshot_json,structure_json,created_by,created_at) VALUES (:i,:s,:r,:snap,:st,:u,:a)"),{'i':str(uuid4()),'s':site_id,'r':next_revision,'snap':row['snapshot_json'],'st':row['structure_json'],'u':u['id'],'a':now_iso()})
     _audit(u['id'],'SITE_ROLLBACK','site',site_id,{'restored_revision':revision,'new_revision':next_revision})
     return {'ok':True,'restored_revision':revision,'published_revision':next_revision}
+
+@router.post('/sites/{site_id}/unpublish')
+def unpublish_site(site_id: str, request: Request):
+    u = _user(request, True)
+    with SessionLocal.begin() as db:
+        s = _owned_site(db, u['id'], site_id)
+        if s['status'] != 'LIVE':
+            return {'ok': True, 'status': s['status']}
+        db.execute(text("UPDATE sites SET status='DRAFT', updated_at=:c WHERE id=:i"), {'c': now_iso(), 'i': site_id})
+    _audit(u['id'], 'SITE_UNPUBLISH', 'site', site_id)
+    return {'ok': True, 'status': 'DRAFT'}
+
+@router.post('/sites/{site_id}/duplicate')
+def duplicate_site(site_id: str, request: Request):
+    u = _user(request, True)
+    with SessionLocal.begin() as db:
+        s = _owned_site(db, u['id'], site_id)
+        new_id = str(uuid4())
+        new_name = f"{s['business_name']} (Copy)"
+        new_slug = re.sub(r'[^a-z0-9]+', '-', new_name.lower()).strip('-')[:40] + '-' + new_id[:6]
+        now = now_iso()
+        db.execute(text("""INSERT INTO sites(id, user_id, business_name, tagline, description, accent, style, origin, template_slug, status, slug, draft_structure_json, page_count, document_schema_version, brand_json, seo_json, created_at, updated_at)
+          VALUES (:i, :u, :b, :t, :d, :a, :st, :o, :ts, 'DRAFT', :sl, :ds, :pc, :dv, :bj, :sj, :now, :now)"""), {
+            'i': new_id, 'u': u['id'], 'b': new_name, 't': s.get('tagline'), 'd': s.get('description'),
+            'a': s.get('accent'), 'st': s.get('style'), 'o': s.get('origin') or 'AI', 'ts': s.get('template_slug'),
+            'sl': new_slug, 'ds': s.get('draft_structure_json') or '{}', 'pc': s.get('page_count') or 1,
+            'dv': s.get('document_schema_version') or 3, 'bj': s.get('brand_json') or '{}', 'sj': s.get('seo_json') or '{}',
+            'now': now
+        })
+    _audit(u['id'], 'SITE_DUPLICATE', 'site', new_id, {'original_site_id': site_id})
+    return {'ok': True, 'id': new_id, 'business_name': new_name}
 
 @router.get('/sites/{site_id}/preview', response_class=HTMLResponse)
 def preview(site_id:str,request:Request):

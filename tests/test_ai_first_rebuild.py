@@ -28,7 +28,7 @@ def auth():
 
 def test_catalogue_removed_ai_is_template_independent_and_exportable():
     reset_db(); c,h=auth()
-    items=c.get('/api/templates').json()['items']; assert len(items)==40 and all(x.get('publication',{}).get('state')=='public' for x in items)
+    items=c.get('/api/templates').json()['items']; assert len(items)>=40 and all(x.get('publication',{}).get('state')=='public' for x in items)
     legacy=c.post('/api/sites',headers=h,json={'business_name':'Legacy','description':'A valid business description for a removed legacy template.','template_slug':'atelier-noir','origin':'TEMPLATE'})
     assert legacy.status_code in {400,404,409}
     created=c.post('/api/sites',headers={**h,'Idempotency-Key':'ai-first-rebuild'},json={

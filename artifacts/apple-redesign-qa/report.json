@@ -1,0 +1,3005 @@
+{
+  "viewports": [
+    1440,
+    1280,
+    1024,
+    768,
+    430,
+    390,
+    375,
+    360
+  ],
+  "checks": 64,
+  "passed": 64,
+  "failed": 0,
+  "results": [
+    {
+      "surface": "landing",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "viewport": 1440,
+      "viewportHeight": 900,
+      "rootWidth": 1440,
+      "bodyWidth": 1440,
+      "visible": 36,
+      "overflowers": [],
+      "rail": null
+    },
+    {
+      "surface": "landing",
+      "width": 1280,
+      "noHorizontalOverflow": true,
+      "viewport": 1280,
+      "viewportHeight": 900,
+      "rootWidth": 1280,
+      "bodyWidth": 1280,
+      "visible": 36,
+      "overflowers": [],
+      "rail": null
+    },
+    {
+      "surface": "landing",
+      "width": 1024,
+      "noHorizontalOverflow": true,
+      "viewport": 1024,
+      "viewportHeight": 900,
+      "rootWidth": 1024,
+      "bodyWidth": 1024,
+      "visible": 32,
+      "overflowers": [],
+      "rail": null
+    },
+    {
+      "surface": "landing",
+      "width": 768,
+      "noHorizontalOverflow": true,
+      "viewport": 768,
+      "viewportHeight": 900,
+      "rootWidth": 768,
+      "bodyWidth": 768,
+      "visible": 31,
+      "overflowers": [],
+      "rail": null
+    },
+    {
+      "surface": "landing",
+      "width": 430,
+      "noHorizontalOverflow": true,
+      "viewport": 430,
+      "viewportHeight": 900,
+      "rootWidth": 430,
+      "bodyWidth": 515,
+      "visible": 31,
+      "overflowers": [],
+      "rail": null
+    },
+    {
+      "surface": "landing",
+      "width": 390,
+      "noHorizontalOverflow": true,
+      "viewport": 390,
+      "viewportHeight": 900,
+      "rootWidth": 390,
+      "bodyWidth": 515,
+      "visible": 31,
+      "overflowers": [],
+      "rail": null
+    },
+    {
+      "surface": "landing",
+      "width": 375,
+      "noHorizontalOverflow": true,
+      "viewport": 375,
+      "viewportHeight": 900,
+      "rootWidth": 375,
+      "bodyWidth": 515,
+      "visible": 31,
+      "overflowers": [],
+      "rail": null
+    },
+    {
+      "surface": "landing",
+      "width": 360,
+      "noHorizontalOverflow": true,
+      "viewport": 360,
+      "viewportHeight": 900,
+      "rootWidth": 360,
+      "bodyWidth": 515,
+      "visible": 31,
+      "overflowers": [],
+      "rail": null
+    },
+    {
+      "surface": "landing-laptop",
+      "width": 1366,
+      "noHorizontalOverflow": true,
+      "viewport": 1366,
+      "viewportHeight": 768,
+      "rootWidth": 1366,
+      "bodyWidth": 1366,
+      "visible": 36,
+      "overflowers": [],
+      "rail": null
+    },
+    {
+      "surface": "landing-laptop",
+      "width": 1280,
+      "noHorizontalOverflow": true,
+      "viewport": 1280,
+      "viewportHeight": 800,
+      "rootWidth": 1280,
+      "bodyWidth": 1280,
+      "visible": 36,
+      "overflowers": [],
+      "rail": null
+    },
+    {
+      "surface": "dashboard-overview",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "viewport": 1440,
+      "viewportHeight": 900,
+      "rootWidth": 1440,
+      "bodyWidth": 1440,
+      "visible": 45,
+      "overflowers": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-overview",
+      "width": 1280,
+      "noHorizontalOverflow": true,
+      "viewport": 1280,
+      "viewportHeight": 900,
+      "rootWidth": 1280,
+      "bodyWidth": 1280,
+      "visible": 45,
+      "overflowers": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-overview",
+      "width": 1024,
+      "noHorizontalOverflow": true,
+      "viewport": 1024,
+      "viewportHeight": 900,
+      "rootWidth": 1024,
+      "bodyWidth": 1024,
+      "visible": 45,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -270,
+          "right": -31,
+          "width": 239
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -250,
+          "right": -180,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -280,
+          "right": -21,
+          "width": 259
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -254,
+          "right": -47,
+          "width": 207
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -266,
+          "right": -35,
+          "width": 231
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -252,
+          "right": -232,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -251,
+          "right": -233,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-overview",
+      "width": 768,
+      "noHorizontalOverflow": true,
+      "viewport": 768,
+      "viewportHeight": 900,
+      "rootWidth": 768,
+      "bodyWidth": 768,
+      "visible": 46,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -152,
+          "right": -83,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -246,
+          "right": -55,
+          "width": 190
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -187,
+          "right": -114,
+          "width": 73
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -232,
+          "right": -69,
+          "width": 162
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -218,
+          "right": -198,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -217,
+          "right": -199,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-overview",
+      "width": 430,
+      "noHorizontalOverflow": true,
+      "viewport": 430,
+      "viewportHeight": 900,
+      "rootWidth": 430,
+      "bodyWidth": 430,
+      "visible": 45,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -152,
+          "right": -83,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -246,
+          "right": -55,
+          "width": 190
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -187,
+          "right": -114,
+          "width": 73
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -232,
+          "right": -69,
+          "width": 162
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -218,
+          "right": -198,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -217,
+          "right": -199,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-overview",
+      "width": 390,
+      "noHorizontalOverflow": true,
+      "viewport": 390,
+      "viewportHeight": 900,
+      "rootWidth": 390,
+      "bodyWidth": 390,
+      "visible": 45,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -152,
+          "right": -83,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -246,
+          "right": -55,
+          "width": 190
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -187,
+          "right": -114,
+          "width": 73
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -232,
+          "right": -69,
+          "width": 162
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -218,
+          "right": -198,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -217,
+          "right": -199,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-overview",
+      "width": 375,
+      "noHorizontalOverflow": true,
+      "viewport": 375,
+      "viewportHeight": 900,
+      "rootWidth": 375,
+      "bodyWidth": 375,
+      "visible": 45,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -152,
+          "right": -83,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -246,
+          "right": -55,
+          "width": 190
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -187,
+          "right": -114,
+          "width": 73
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -232,
+          "right": -69,
+          "width": 162
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -218,
+          "right": -198,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -217,
+          "right": -199,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-overview",
+      "width": 360,
+      "noHorizontalOverflow": true,
+      "viewport": 360,
+      "viewportHeight": 900,
+      "rootWidth": 360,
+      "bodyWidth": 360,
+      "visible": 45,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -152,
+          "right": -83,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -246,
+          "right": -55,
+          "width": 190
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -187,
+          "right": -114,
+          "width": 73
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -232,
+          "right": -69,
+          "width": 162
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -218,
+          "right": -198,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -217,
+          "right": -199,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-overview-laptop",
+      "width": 1366,
+      "noHorizontalOverflow": true,
+      "viewport": 1366,
+      "viewportHeight": 768,
+      "rootWidth": 1366,
+      "bodyWidth": 1366,
+      "visible": 45,
+      "overflowers": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-overview-laptop",
+      "width": 1280,
+      "noHorizontalOverflow": true,
+      "viewport": 1280,
+      "viewportHeight": 800,
+      "rootWidth": 1280,
+      "bodyWidth": 1280,
+      "visible": 45,
+      "overflowers": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-assistant",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "viewport": 1440,
+      "viewportHeight": 900,
+      "rootWidth": 1440,
+      "bodyWidth": 1440,
+      "visible": 29,
+      "overflowers": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-assistant",
+      "width": 1280,
+      "noHorizontalOverflow": true,
+      "viewport": 1280,
+      "viewportHeight": 900,
+      "rootWidth": 1280,
+      "bodyWidth": 1280,
+      "visible": 29,
+      "overflowers": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-assistant",
+      "width": 1024,
+      "noHorizontalOverflow": true,
+      "viewport": 1024,
+      "viewportHeight": 900,
+      "rootWidth": 1024,
+      "bodyWidth": 1024,
+      "visible": 29,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -270,
+          "right": -31,
+          "width": 239
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -250,
+          "right": -180,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -280,
+          "right": -21,
+          "width": 259
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -254,
+          "right": -47,
+          "width": 207
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -266,
+          "right": -35,
+          "width": 231
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -252,
+          "right": -232,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -251,
+          "right": -233,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-assistant",
+      "width": 768,
+      "noHorizontalOverflow": true,
+      "viewport": 768,
+      "viewportHeight": 900,
+      "rootWidth": 768,
+      "bodyWidth": 768,
+      "visible": 30,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -152,
+          "right": -83,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -246,
+          "right": -55,
+          "width": 190
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -187,
+          "right": -114,
+          "width": 73
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -232,
+          "right": -69,
+          "width": 162
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -218,
+          "right": -198,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -217,
+          "right": -199,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-assistant",
+      "width": 430,
+      "noHorizontalOverflow": true,
+      "viewport": 430,
+      "viewportHeight": 900,
+      "rootWidth": 430,
+      "bodyWidth": 430,
+      "visible": 29,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -152,
+          "right": -83,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -246,
+          "right": -55,
+          "width": 190
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -187,
+          "right": -114,
+          "width": 73
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -232,
+          "right": -69,
+          "width": 162
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -218,
+          "right": -198,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -217,
+          "right": -199,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-assistant",
+      "width": 390,
+      "noHorizontalOverflow": true,
+      "viewport": 390,
+      "viewportHeight": 900,
+      "rootWidth": 390,
+      "bodyWidth": 390,
+      "visible": 29,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -152,
+          "right": -83,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -246,
+          "right": -55,
+          "width": 190
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -187,
+          "right": -114,
+          "width": 73
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -232,
+          "right": -69,
+          "width": 162
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -218,
+          "right": -198,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -217,
+          "right": -199,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-assistant",
+      "width": 375,
+      "noHorizontalOverflow": true,
+      "viewport": 375,
+      "viewportHeight": 900,
+      "rootWidth": 375,
+      "bodyWidth": 375,
+      "visible": 29,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -152,
+          "right": -83,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -246,
+          "right": -55,
+          "width": 190
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -187,
+          "right": -114,
+          "width": 73
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -232,
+          "right": -69,
+          "width": 162
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -218,
+          "right": -198,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -217,
+          "right": -199,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-assistant",
+      "width": 360,
+      "noHorizontalOverflow": true,
+      "viewport": 360,
+      "viewportHeight": 900,
+      "rootWidth": 360,
+      "bodyWidth": 360,
+      "visible": 29,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -152,
+          "right": -83,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -246,
+          "right": -55,
+          "width": 190
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -187,
+          "right": -114,
+          "width": 73
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -232,
+          "right": -69,
+          "width": 162
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -218,
+          "right": -198,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -217,
+          "right": -199,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-appointments",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "viewport": 1440,
+      "viewportHeight": 900,
+      "rootWidth": 1440,
+      "bodyWidth": 1440,
+      "visible": 26,
+      "overflowers": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-appointments",
+      "width": 1280,
+      "noHorizontalOverflow": true,
+      "viewport": 1280,
+      "viewportHeight": 900,
+      "rootWidth": 1280,
+      "bodyWidth": 1280,
+      "visible": 26,
+      "overflowers": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-appointments",
+      "width": 1024,
+      "noHorizontalOverflow": true,
+      "viewport": 1024,
+      "viewportHeight": 900,
+      "rootWidth": 1024,
+      "bodyWidth": 1024,
+      "visible": 26,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -270,
+          "right": -31,
+          "width": 239
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -250,
+          "right": -180,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -280,
+          "right": -21,
+          "width": 259
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -254,
+          "right": -47,
+          "width": 207
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -266,
+          "right": -35,
+          "width": 231
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -252,
+          "right": -232,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -251,
+          "right": -233,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-appointments",
+      "width": 768,
+      "noHorizontalOverflow": true,
+      "viewport": 768,
+      "viewportHeight": 900,
+      "rootWidth": 768,
+      "bodyWidth": 768,
+      "visible": 27,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -152,
+          "right": -83,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -246,
+          "right": -55,
+          "width": 190
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -187,
+          "right": -114,
+          "width": 73
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -232,
+          "right": -69,
+          "width": 162
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -218,
+          "right": -198,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -217,
+          "right": -199,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-appointments",
+      "width": 430,
+      "noHorizontalOverflow": true,
+      "viewport": 430,
+      "viewportHeight": 900,
+      "rootWidth": 430,
+      "bodyWidth": 430,
+      "visible": 26,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -152,
+          "right": -83,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -246,
+          "right": -55,
+          "width": 190
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -187,
+          "right": -114,
+          "width": 73
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -232,
+          "right": -69,
+          "width": 162
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -218,
+          "right": -198,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -217,
+          "right": -199,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-appointments",
+      "width": 390,
+      "noHorizontalOverflow": true,
+      "viewport": 390,
+      "viewportHeight": 900,
+      "rootWidth": 390,
+      "bodyWidth": 390,
+      "visible": 26,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -152,
+          "right": -83,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -246,
+          "right": -55,
+          "width": 190
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -187,
+          "right": -114,
+          "width": 73
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -232,
+          "right": -69,
+          "width": 162
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -218,
+          "right": -198,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -217,
+          "right": -199,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-appointments",
+      "width": 375,
+      "noHorizontalOverflow": true,
+      "viewport": 375,
+      "viewportHeight": 900,
+      "rootWidth": 375,
+      "bodyWidth": 375,
+      "visible": 26,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -152,
+          "right": -83,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -246,
+          "right": -55,
+          "width": 190
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -187,
+          "right": -114,
+          "width": 73
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -232,
+          "right": -69,
+          "width": 162
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -218,
+          "right": -198,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -217,
+          "right": -199,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-appointments",
+      "width": 360,
+      "noHorizontalOverflow": true,
+      "viewport": 360,
+      "viewportHeight": 900,
+      "rootWidth": 360,
+      "bodyWidth": 360,
+      "visible": 26,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -152,
+          "right": -83,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -246,
+          "right": -55,
+          "width": 190
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -187,
+          "right": -114,
+          "width": 73
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -232,
+          "right": -69,
+          "width": 162
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -218,
+          "right": -198,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -217,
+          "right": -199,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-analytics",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "viewport": 1440,
+      "viewportHeight": 900,
+      "rootWidth": 1440,
+      "bodyWidth": 1440,
+      "visible": 21,
+      "overflowers": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-analytics",
+      "width": 1280,
+      "noHorizontalOverflow": true,
+      "viewport": 1280,
+      "viewportHeight": 900,
+      "rootWidth": 1280,
+      "bodyWidth": 1280,
+      "visible": 21,
+      "overflowers": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-analytics",
+      "width": 1024,
+      "noHorizontalOverflow": true,
+      "viewport": 1024,
+      "viewportHeight": 900,
+      "rootWidth": 1024,
+      "bodyWidth": 1024,
+      "visible": 21,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -270,
+          "right": -31,
+          "width": 239
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -250,
+          "right": -180,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -280,
+          "right": -21,
+          "width": 259
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -254,
+          "right": -47,
+          "width": 207
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -266,
+          "right": -35,
+          "width": 231
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -252,
+          "right": -232,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -251,
+          "right": -233,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-analytics",
+      "width": 768,
+      "noHorizontalOverflow": true,
+      "viewport": 768,
+      "viewportHeight": 900,
+      "rootWidth": 768,
+      "bodyWidth": 768,
+      "visible": 22,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -152,
+          "right": -83,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -246,
+          "right": -55,
+          "width": 190
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -187,
+          "right": -114,
+          "width": 73
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -232,
+          "right": -69,
+          "width": 162
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -218,
+          "right": -198,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -217,
+          "right": -199,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-analytics",
+      "width": 430,
+      "noHorizontalOverflow": true,
+      "viewport": 430,
+      "viewportHeight": 900,
+      "rootWidth": 430,
+      "bodyWidth": 430,
+      "visible": 21,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -152,
+          "right": -83,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -246,
+          "right": -55,
+          "width": 190
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -187,
+          "right": -114,
+          "width": 73
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -232,
+          "right": -69,
+          "width": 162
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -218,
+          "right": -198,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -217,
+          "right": -199,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-analytics",
+      "width": 390,
+      "noHorizontalOverflow": true,
+      "viewport": 390,
+      "viewportHeight": 900,
+      "rootWidth": 390,
+      "bodyWidth": 390,
+      "visible": 21,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -152,
+          "right": -83,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -246,
+          "right": -55,
+          "width": 190
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -187,
+          "right": -114,
+          "width": 73
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -232,
+          "right": -69,
+          "width": 162
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -218,
+          "right": -198,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -217,
+          "right": -199,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-analytics",
+      "width": 375,
+      "noHorizontalOverflow": true,
+      "viewport": 375,
+      "viewportHeight": 900,
+      "rootWidth": 375,
+      "bodyWidth": 375,
+      "visible": 21,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -152,
+          "right": -83,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -246,
+          "right": -55,
+          "width": 190
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -187,
+          "right": -114,
+          "width": 73
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -232,
+          "right": -69,
+          "width": 162
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -218,
+          "right": -198,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -217,
+          "right": -199,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-analytics",
+      "width": 360,
+      "noHorizontalOverflow": true,
+      "viewport": 360,
+      "viewportHeight": 900,
+      "rootWidth": 360,
+      "bodyWidth": 360,
+      "visible": 21,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -152,
+          "right": -83,
+          "width": 70
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -246,
+          "right": -55,
+          "width": 190
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -187,
+          "right": -114,
+          "width": 73
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -232,
+          "right": -69,
+          "width": 162
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -218,
+          "right": -198,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -217,
+          "right": -199,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "super-admin-overview",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "viewport": 1440,
+      "viewportHeight": 900,
+      "rootWidth": 1440,
+      "bodyWidth": 1440,
+      "visible": 25,
+      "overflowers": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-overview",
+      "width": 1280,
+      "noHorizontalOverflow": true,
+      "viewport": 1280,
+      "viewportHeight": 900,
+      "rootWidth": 1280,
+      "bodyWidth": 1280,
+      "visible": 25,
+      "overflowers": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-overview",
+      "width": 1024,
+      "noHorizontalOverflow": true,
+      "viewport": 1024,
+      "viewportHeight": 900,
+      "rootWidth": 1024,
+      "bodyWidth": 1024,
+      "visible": 26,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -14,
+          "right": 246,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -4,
+          "right": 235,
+          "width": 239
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -14,
+          "right": 245,
+          "width": 259
+        },
+        {
+          "tag": "DIV",
+          "cls": "sidebar-user",
+          "left": -14,
+          "right": 245,
+          "width": 259
+        },
+        {
+          "tag": "DIV",
+          "cls": "sidebar-foot",
+          "left": -14,
+          "right": 245,
+          "width": 259
+        }
+      ],
+      "rail": {
+        "left": -14,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-overview",
+      "width": 768,
+      "noHorizontalOverflow": true,
+      "viewport": 768,
+      "viewportHeight": 900,
+      "rootWidth": 768,
+      "bodyWidth": 768,
+      "visible": 26,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -125,
+          "right": 135,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -17,
+          "right": 27,
+          "width": 44
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -101,
+          "right": 111,
+          "width": 213
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -44,
+          "right": 54,
+          "width": 98
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -87,
+          "right": 97,
+          "width": 185
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -73,
+          "right": -53,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -72,
+          "right": -54,
+          "width": 18
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -70,
+          "right": -57,
+          "width": 14
+        }
+      ],
+      "rail": {
+        "left": -125,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-overview",
+      "width": 430,
+      "noHorizontalOverflow": true,
+      "viewport": 430,
+      "viewportHeight": 900,
+      "rootWidth": 430,
+      "bodyWidth": 430,
+      "visible": 25,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -233,
+          "right": 27,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -126,
+          "right": -82,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "admin-brand-tag",
+          "left": -98,
+          "right": -46,
+          "width": 52
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -210,
+          "right": 2,
+          "width": 213
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -153,
+          "right": -55,
+          "width": 98
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -196,
+          "right": -12,
+          "width": 185
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -182,
+          "right": -162,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -181,
+          "right": -163,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -233,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-overview",
+      "width": 390,
+      "noHorizontalOverflow": true,
+      "viewport": 390,
+      "viewportHeight": 900,
+      "rootWidth": 390,
+      "bodyWidth": 390,
+      "visible": 25,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -267,
+          "right": -7,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -160,
+          "right": -116,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "admin-brand-tag",
+          "left": -132,
+          "right": -80,
+          "width": 52
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -244,
+          "right": -31,
+          "width": 213
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -187,
+          "right": -89,
+          "width": 98
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -230,
+          "right": -45,
+          "width": 185
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -216,
+          "right": -196,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -215,
+          "right": -197,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -267,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-overview",
+      "width": 375,
+      "noHorizontalOverflow": true,
+      "viewport": 375,
+      "viewportHeight": 900,
+      "rootWidth": 375,
+      "bodyWidth": 375,
+      "visible": 25,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -279,
+          "right": -19,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "admin-brand-tag",
+          "left": -144,
+          "right": -92,
+          "width": 52
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -256,
+          "right": -44,
+          "width": 213
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -199,
+          "right": -101,
+          "width": 98
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -242,
+          "right": -58,
+          "width": 185
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -228,
+          "right": -208,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -227,
+          "right": -209,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -279,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-overview",
+      "width": 360,
+      "noHorizontalOverflow": true,
+      "viewport": 360,
+      "viewportHeight": 900,
+      "rootWidth": 360,
+      "bodyWidth": 360,
+      "visible": 25,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "admin-brand-tag",
+          "left": -144,
+          "right": -93,
+          "width": 52
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -257,
+          "right": -44,
+          "width": 213
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -199,
+          "right": -102,
+          "width": 98
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -243,
+          "right": -58,
+          "width": 185
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -229,
+          "right": -209,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -228,
+          "right": -210,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-overview-laptop",
+      "width": 1366,
+      "noHorizontalOverflow": true,
+      "viewport": 1366,
+      "viewportHeight": 768,
+      "rootWidth": 1366,
+      "bodyWidth": 1366,
+      "visible": 25,
+      "overflowers": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-overview-laptop",
+      "width": 1280,
+      "noHorizontalOverflow": true,
+      "viewport": 1280,
+      "viewportHeight": 800,
+      "rootWidth": 1280,
+      "bodyWidth": 1280,
+      "visible": 25,
+      "overflowers": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-users",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "viewport": 1440,
+      "viewportHeight": 900,
+      "rootWidth": 1440,
+      "bodyWidth": 1440,
+      "visible": 24,
+      "overflowers": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-users",
+      "width": 1280,
+      "noHorizontalOverflow": true,
+      "viewport": 1280,
+      "viewportHeight": 900,
+      "rootWidth": 1280,
+      "bodyWidth": 1280,
+      "visible": 24,
+      "overflowers": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-users",
+      "width": 1024,
+      "noHorizontalOverflow": true,
+      "viewport": 1024,
+      "viewportHeight": 900,
+      "rootWidth": 1024,
+      "bodyWidth": 1024,
+      "visible": 25,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -14,
+          "right": 246,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -4,
+          "right": 235,
+          "width": 239
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -14,
+          "right": 245,
+          "width": 259
+        },
+        {
+          "tag": "DIV",
+          "cls": "sidebar-user",
+          "left": -14,
+          "right": 245,
+          "width": 259
+        },
+        {
+          "tag": "DIV",
+          "cls": "sidebar-foot",
+          "left": -14,
+          "right": 245,
+          "width": 259
+        }
+      ],
+      "rail": {
+        "left": -14,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-users",
+      "width": 768,
+      "noHorizontalOverflow": true,
+      "viewport": 768,
+      "viewportHeight": 900,
+      "rootWidth": 768,
+      "bodyWidth": 768,
+      "visible": 25,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -161,
+          "right": 99,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -54,
+          "right": -10,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "admin-brand-tag",
+          "left": -26,
+          "right": 26,
+          "width": 52
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -138,
+          "right": 75,
+          "width": 213
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -80,
+          "right": 17,
+          "width": 98
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -124,
+          "right": 61,
+          "width": 185
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -110,
+          "right": -90,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -109,
+          "right": -91,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -161,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-users",
+      "width": 430,
+      "noHorizontalOverflow": true,
+      "viewport": 430,
+      "viewportHeight": 900,
+      "rootWidth": 430,
+      "bodyWidth": 430,
+      "visible": 24,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -215,
+          "right": 45,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -107,
+          "right": -63,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "admin-brand-tag",
+          "left": -79,
+          "right": -27,
+          "width": 52
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -191,
+          "right": 21,
+          "width": 213
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -134,
+          "right": -36,
+          "width": 98
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -177,
+          "right": 7,
+          "width": 185
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -163,
+          "right": -143,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -162,
+          "right": -144,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -215,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-users",
+      "width": 390,
+      "noHorizontalOverflow": true,
+      "viewport": 390,
+      "viewportHeight": 900,
+      "rootWidth": 390,
+      "bodyWidth": 390,
+      "visible": 24,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -259,
+          "right": 1,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -151,
+          "right": -107,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "admin-brand-tag",
+          "left": -123,
+          "right": -72,
+          "width": 52
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -236,
+          "right": -23,
+          "width": 213
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -178,
+          "right": -81,
+          "width": 98
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -222,
+          "right": -37,
+          "width": 185
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -208,
+          "right": -188,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -207,
+          "right": -189,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -259,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-users",
+      "width": 375,
+      "noHorizontalOverflow": true,
+      "viewport": 375,
+      "viewportHeight": 900,
+      "rootWidth": 375,
+      "bodyWidth": 375,
+      "visible": 24,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -277,
+          "right": -17,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -170,
+          "right": -126,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "admin-brand-tag",
+          "left": -142,
+          "right": -90,
+          "width": 52
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -254,
+          "right": -41,
+          "width": 213
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -196,
+          "right": -99,
+          "width": 98
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -240,
+          "right": -55,
+          "width": 185
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -226,
+          "right": -206,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -225,
+          "right": -207,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -277,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-users",
+      "width": 360,
+      "noHorizontalOverflow": true,
+      "viewport": 360,
+      "viewportHeight": 900,
+      "rootWidth": 360,
+      "bodyWidth": 360,
+      "visible": 24,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "admin-brand-tag",
+          "left": -144,
+          "right": -93,
+          "width": 52
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -257,
+          "right": -44,
+          "width": 213
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -199,
+          "right": -102,
+          "width": 98
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -243,
+          "right": -58,
+          "width": 185
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -229,
+          "right": -209,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -228,
+          "right": -210,
+          "width": 18
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "booking-widget",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "viewport": 1440,
+      "viewportHeight": 844,
+      "rootWidth": 1440,
+      "bodyWidth": 1424,
+      "visible": 41,
+      "overflowers": [],
+      "rail": null
+    },
+    {
+      "surface": "booking-widget",
+      "width": 390,
+      "noHorizontalOverflow": true,
+      "viewport": 390,
+      "viewportHeight": 844,
+      "rootWidth": 390,
+      "bodyWidth": 374,
+      "visible": 43,
+      "overflowers": [],
+      "rail": null
+    }
+  ],
+  "consoleErrors": [],
+  "networkErrors": []
+}

@@ -3,6 +3,7 @@ import io, json, zipfile
 from pathlib import Path
 from fastapi.testclient import TestClient
 from bs4 import BeautifulSoup
+from sqlalchemy import text
 
 from app.main import app
 from app.db import SessionLocal, migrate
@@ -47,6 +48,10 @@ def test_instrument_and_replace_all_visual_media():
 
 def test_import_static_site_edit_publish_and_export():
     reset_db(); c,h=auth_client('importer@example.com','Importer')
+    # Standard users are forbidden from universal import
+    assert c.post('/api/sites/import',headers=h,files={'file':('website.zip',b'fake','application/zip')}).status_code==403
+    with SessionLocal.begin() as db:
+        db.execute(text("UPDATE users SET role='SUPER_ADMIN' WHERE email='importer@example.com'"))
     project=make_zip({
       'site/index.html':'''<!doctype html><html><head><title>Imported Home</title><link rel="stylesheet" href="style.css"></head><body><nav><a href="about.html">About</a></nav><section class="hero"><picture><source srcset="hero.png"><img src="hero.png" alt="Original"></picture><h1>Imported Home</h1></section><video poster="poster.png"></video></body></html>''',
       'site/about.html':'<!doctype html><html><body><a href="index.html">Home</a><h1>About Imported</h1></body></html>',
@@ -100,6 +105,8 @@ def test_source_only_frameworks_normalize_without_execution():
 
 def test_import_rejects_zip_traversal():
     reset_db(); c,h=auth_client('safeimport@example.com','Safe Import')
+    with SessionLocal.begin() as db:
+        db.execute(text("UPDATE users SET role='SUPER_ADMIN' WHERE email='safeimport@example.com'"))
     bad=make_zip({'../outside.html':'<h1>bad</h1>'})
     r=c.post('/api/sites/import',headers=h,files={'file':('bad.zip',bad,'application/zip')})
     assert r.status_code==422

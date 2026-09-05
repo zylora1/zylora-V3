@@ -347,6 +347,15 @@ def owner_appointment_settings_save(site_id: str,payload: AppointmentSettingsIn,
     return {'configured':True,**payload.model_dump(),'weekdays':weekdays}
 
 
+@router.get('/sites/{site_id}/appointments')
+def get_site_appointments(site_id: str, request: Request):
+    u = _user(request)
+    with SessionLocal() as db:
+        _owned_site(db, u['id'], site_id)
+        rows = db.execute(text("SELECT id, site_id, name, email, starts_at, status, source, created_at, lead_id, conversation_id FROM appointments WHERE site_id=:s ORDER BY starts_at DESC LIMIT 50"), {'s': site_id}).mappings().all()
+    return {'items': [dict(r) for r in rows]}
+
+
 # Smart forms deliberately reuse the public lead endpoint/renderer; this stores only its editable field schema.
 ALLOWED_FORM_TYPES={'text','email','tel','textarea','select','date','time','number'}
 class FormField(BaseModel):

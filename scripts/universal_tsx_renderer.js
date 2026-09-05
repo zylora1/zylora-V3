@@ -1,4 +1,4 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 const path = require('path');
 const Module = require('module');
 const ts = require('typescript');
@@ -145,11 +145,41 @@ function compileExt(mod, filename) {
 }
 
 for (const ext of ['.tsx', '.ts', '.jsx']) Module._extensions[ext] = compileExt;
-Module._extensions['.css'] = (m, f) => m.exports = new Proxy({}, { get: (o, k) => String(k) });
+
+function createCssProxy() {
+  const handler = {
+    get: (target, prop) => {
+      if (prop === '__esModule') return true;
+      if (prop === 'default') return new Proxy({}, handler);
+      if (typeof prop === 'symbol') return undefined;
+      return String(prop);
+    }
+  };
+  return new Proxy({}, handler);
+}
+Module._extensions['.css'] = (m, f) => {
+  m.exports = createCssProxy();
+};
 for (const ext of ['.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif', '.svg']) {
   Module._extensions[ext] = (m, f) => {
-    let rel = path.relative(ROOT, f).split(path.sep).join('/');
-    m.exports = { __esModule: true, default: '../assets/' + rel.replace(/^public\//, ''), src: '../assets/' + rel.replace(/^public\//, '') };
+    const filename = path.basename(f);
+    const assetPath = '../assets/' + filename;
+    const proxiedDefault = new Proxy(new String(assetPath), {
+      get: (target, prop) => {
+        if (prop === 'src') return assetPath;
+        if (prop === 'default') return assetPath;
+        if (prop === '__esModule') return true;
+        if (typeof target[prop] === 'function') return target[prop].bind(target);
+        return target[prop];
+      }
+    });
+    m.exports = {
+      __esModule: true,
+      default: proxiedDefault,
+      src: assetPath,
+      width: 1200,
+      height: 800
+    };
   };
 }
 

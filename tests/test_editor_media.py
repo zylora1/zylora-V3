@@ -216,7 +216,8 @@ def test_multipage_editor_validation_uses_each_page_schema():
 def test_all_five_template_archetypes_keep_image_replacements_site_isolated():
     reset_db(); c,h=auth_client('archetypes@example.com','Archetypes'); activate_zylora(c,h,country='GB')
     from app.templates import TEMPLATES
-    for idx,meta in enumerate(TEMPLATES[:5]):
+    archetypes = [m for m in TEMPLATES if m['slug'] != 'apex-digital'][:5]
+    for idx,meta in enumerate(archetypes):
         sid=create_site(c,h,f'Archetype {idx}',meta['slug'],origin='TEMPLATE'); asset=upload(c,h,sid,f'{meta["slug"]}.png',f'{meta["name"]} replacement')
         doc=c.get(f'/api/sites/{sid}/editor-document?page=home').json(); img=next(n for n in doc['nodes'] if n['kind']=='image'); sel=f'[data-zylora-id="{img["id"]}"]'
         r=c.post(f'/api/sites/{sid}/editor/actions',headers=h,json={'operations':[{'page':'home','type':'replace_image','selector':sel,'asset_id':asset['id'],'mode':'image','alt':f'{meta["name"]} replacement'}],'action':'ARCHETYPE_IMAGE'}); assert r.status_code==200,(meta['slug'],r.text)

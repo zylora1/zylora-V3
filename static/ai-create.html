@@ -1,15 +1,18 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <link rel="icon" type="image/png" href="/static/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Create a website with Zylora AI</title>
   <meta name="robots" content="noindex,nofollow">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/zylora-ui.css">
   <link rel="stylesheet" href="/static/ai-create.css">
+  <link rel="stylesheet" href="/static/prompt-input.css">
 </head>
 <body>
 <header class="ai-nav">
@@ -45,7 +48,7 @@
             <div class="prompt-guidance-icon" aria-hidden="true">✦</div>
             <p><strong>Get a better site — use a detailed prompt.</strong> A single line like ‘gym website’ gives a generic result. Describe your business type, target audience, tone, key services, and any specific sections you want (testimonials, pricing, booking). Not sure how to phrase it? Chat with any AI first — ask it to ‘write a detailed website description for [your business]’ — then paste that here.</p>
           </aside>
-          <label class="prompt-box"><textarea id="businessDescription" maxlength="6000" placeholder="Example: We’re a premium fitness studio in Chennai for busy professionals aged 25–45. The tone should feel energetic, modern and trustworthy. Highlight strength training, personal coaching and group classes. Include Home, Programs, Trainers, Testimonials, Pricing, Booking, FAQ and Contact, with a strong trial-session CTA."></textarea><span><b id="charCount">0</b>/6000</span></label>
+          <div id="aiCreatePromptInputRoot" hidden></div><label class="prompt-box"><textarea id="businessDescription" maxlength="6000" placeholder="Example: We’re a premium fitness studio in Chennai for busy professionals aged 25–45. The tone should feel energetic, modern and trustworthy. Highlight strength training, personal coaching and group classes. Include Home, Programs, Trainers, Testimonials, Pricing, Booking, FAQ and Contact, with a strong trial-session CTA."></textarea><span><b id="charCount">0</b>/6000</span></label>
           <p class="prompt-word-hint" id="promptWordHint" aria-live="polite"><b id="promptWordCount">0</b> words — add details such as your target audience, key services, tone, or specific sections.</p>
           <div class="suggestion-row"><button data-fill="Independent restaurant serving seasonal Tamil-inspired plates with a strong evening reservation business. Include Home, Menu, Story and Visit pages.">Restaurant</button><button data-fill="Boutique architecture studio creating residential and hospitality spaces with a quiet material-led approach. Include Home, Projects, Studio and Contact pages.">Architecture studio</button><button data-fill="B2B software company helping operations teams automate repetitive internal workflows. Include Home, Platform, Security, Use Cases and Contact pages.">Software company</button></div>
           <div class="actions"><button class="secondary back" data-back="1">Back</button><button class="primary next" id="briefNext">Choose a direction <span>→</span></button></div>
@@ -77,6 +80,12 @@
     <footer class="artifact-footer"><span>Preview updates as you answer.</span><span>Final structure is validated on create.</span></footer>
   </aside>
 </main>
-<script src="/static/zylora-ui.js"></script><script src="/static/ai-create.js"></script>
+<script src="/static/zylora-ui.js"></script><script src="/static/ai-create.js?v=20260905-premium"></script>
 </body>
 </html>
+
+<style>
+h1, h2, h3, .plan-intro h1, .turn-bubble h1, .view-head h1, .art h1 {
+  font-family: 'Newsreader', 'Tiempos Headline', 'Tiempos', Georgia, serif !important;
+}
+</style>

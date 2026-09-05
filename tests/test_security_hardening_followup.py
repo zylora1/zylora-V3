@@ -6,10 +6,12 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_admin_freelancer_price_uses_major_units_in_ui_and_minor_units_on_wire():
-    js=(ROOT/'static/dashboard.js').read_text()
-    html=(ROOT/'static/dashboard.html').read_text()
-    assert "$('#freelancerPrice').value=(p.starting_price_minor||0)/100" in js
-    assert "starting_price_minor:Math.round(Number($('#freelancerPrice').value||0)*100)" in js
+    user_js = (ROOT/'static/dashboard.js').read_text(encoding='utf-8')
+    user_html = (ROOT/'static/dashboard.html').read_text(encoding='utf-8')
+    admin_js = (ROOT/'static/super-admin.js').read_text(encoding='utf-8') if (ROOT/'static/super-admin.js').exists() else ''
+    admin_html = (ROOT/'static/super-admin.html').read_text(encoding='utf-8') if (ROOT/'static/super-admin.html').exists() else ''
+    js = user_js + admin_js
+    html = user_html + admin_html
     assert "$('#freelancerPrice').value=(p.starting_price_minor||0)/100" in js
     assert "starting_price_minor:Math.round(Number($('#freelancerPrice').value||0)*100)" in js
     assert "$('#adminFreelancerEditPrice').value=(x.starting_price_minor||0)/100" in js
@@ -19,7 +21,7 @@ def test_admin_freelancer_price_uses_major_units_in_ui_and_minor_units_on_wire()
 
 
 def test_ai_create_does_not_promise_unsupported_ecommerce():
-    html=(ROOT/'static/ai-create.html').read_text()
+    html=(ROOT/'static/ai-create.html').read_text(encoding='utf-8')
     assert 'data-goal="Sell products"' not in html
     assert 'Show products &amp; get enquiries' in html
     assert 'Functional carts, customer accounts and persisted order systems are not generated.' in html
@@ -27,10 +29,10 @@ def test_ai_create_does_not_promise_unsupported_ecommerce():
 
 
 def test_sensitive_rate_limit_call_sites_are_durable():
-    api=(ROOT/'app/api.py').read_text()
-    ext=(ROOT/'app/api_extended.py').read_text()
-    gap=(ROOT/'app/api_gapfixes.py').read_text()
-    marketplace=(ROOT/'app/api_marketplace_support.py').read_text()
+    api=(ROOT/'app/api.py').read_text(encoding='utf-8')
+    ext=(ROOT/'app/api_extended.py').read_text(encoding='utf-8')
+    gap=(ROOT/'app/api_gapfixes.py').read_text(encoding='utf-8')
+    marketplace=(ROOT/'app/api_marketplace_support.py').read_text(encoding='utf-8')
     expected=[
         (api,"durable_rate_limit('login:'+ip"),
         (api,"durable_rate_limit('signup:'+ip"),
@@ -49,7 +51,7 @@ def test_sensitive_rate_limit_call_sites_are_durable():
         assert marker in source
     # The legacy single-process limiter must not be called by application endpoints.
     for path in (ROOT/'app').glob('api*.py'):
-        assert ' rate_limit(' not in path.read_text().replace('durable_rate_limit(', '')
+        assert ' rate_limit(' not in path.read_text(encoding='utf-8').replace('durable_rate_limit(', '')
 
 
 def test_dev_grounding_understands_explicit_hours_without_literal_hours_word():
@@ -60,14 +62,14 @@ def test_dev_grounding_understands_explicit_hours_without_literal_hours_word():
 
 
 def test_removed_freelancer_fee_local_does_not_return_stale_calculation():
-    source=(ROOT/'app/api_gapfixes.py').read_text()
+    source=(ROOT/'app/api_gapfixes.py').read_text(encoding='utf-8')
     assert 'fees=[]' not in source
     assert "'fees':[]" not in source
     assert "raise HTTPException(410,'Freelancer transfer fees were removed." in source
 
 def test_verified_template_catalogue_uses_current_preview_and_selection_flow():
-    js=(ROOT/'static/dashboard.js').read_text()
-    html=(ROOT/'static/dashboard.html').read_text()
+    js=(ROOT/'static/dashboard.js').read_text(encoding='utf-8')
+    html=(ROOT/'static/dashboard.html').read_text(encoding='utf-8')
     assert 'Use template' in js
     assert 'data-template-use' in js
     assert '/template-preview/' in js

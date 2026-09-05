@@ -14,6 +14,11 @@ def _normalize_database_url(url: str) -> str:
 
 def _create_engine():
     norm_url = _normalize_database_url(settings.database_url)
+    if settings.app_env == 'production' and (not norm_url or norm_url.startswith('sqlite')):
+        raise RuntimeError(
+            "CRITICAL CONFIGURATION ERROR: Production environment requires PostgreSQL. "
+            "DATABASE_URL cannot be missing or use SQLite in production."
+        )
     if norm_url.startswith('sqlite'):
         return create_engine(
             norm_url,
@@ -203,6 +208,11 @@ END $$;
     conn.execute(compat_sql)
 
 def migrate() -> None:
+    if settings.app_env == 'production' and (not settings.database_url or settings.database_url.startswith('sqlite')):
+        raise RuntimeError(
+            "CRITICAL CONFIGURATION ERROR: Production database migrations require PostgreSQL. "
+            "DATABASE_URL cannot be missing or use SQLite in production."
+        )
     ROOT.joinpath('data').mkdir(exist_ok=True)
     with engine.begin() as conn:
         conn.execute(text('CREATE TABLE IF NOT EXISTS schema_migrations (version TEXT PRIMARY KEY, applied_at TEXT NOT NULL)'))

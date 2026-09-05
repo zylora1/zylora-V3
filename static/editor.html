@@ -1,25 +1,259 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Zylora Editor</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/static/zylora-ui.css"><link rel="stylesheet" href="/static/editor.css"><link rel="stylesheet" href="/static/premium-design.css"></head><body>
-<header class="editor-nav"><div class="editor-left"><a class="z-wordmark" href="/">Zylora</a><a href="/dashboard" class="back">← Dashboard</a></div><div class="site-title"><b id="siteName">Loading…</b><span id="siteStatus">DRAFT</span><span id="saveState" aria-live="polite">Saved</span></div><div class="history-actions"><button id="undoBtn" aria-label="Undo" title="Undo (Ctrl/Cmd+Z)">↶</button><button id="redoBtn" aria-label="Redo" title="Redo (Ctrl/Cmd+Shift+Z)">↷</button></div><div class="editor-actions"><button id="previewBtn">Preview</button><a id="exportBtn" href="#">Export ZIP</a><button class="publish" id="publishBtn" data-testid="editor-publish">Publish</button></div></header>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Zylora Studio</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/static/zylora-ui.css"><link rel="stylesheet" href="/static/editor.css"><link rel="stylesheet" href="/static/premium-design.css"></head><body>
+<header class="editor-nav">
+  <div class="editor-left">
+    <a class="z-wordmark" href="/">Zylora</a>
+    <span class="nav-sep">/</span>
+    <a href="/dashboard" class="back">Dashboard</a>
+  </div>
+  <div class="site-title">
+    <b id="siteName">Loading…</b>
+    <span id="siteStatus">DRAFT</span>
+    <span id="saveState" aria-live="polite">Saved</span>
+  </div>
+  <div class="history-actions">
+    <button id="undoBtn" aria-label="Undo" title="Undo (Ctrl/Cmd+Z)">↶</button>
+    <button id="redoBtn" aria-label="Redo" title="Redo (Ctrl/Cmd+Shift+Z)">↷</button>
+  </div>
+  <div class="editor-actions">
+    <button id="previewBtn">Preview</button>
+    <a id="exportBtn" href="#">Export ZIP</a>
+    <button class="publish" id="publishBtn" data-testid="editor-publish">Publish</button>
+  </div>
+</header>
 <main class="editor-shell">
 <aside class="left-rail" aria-label="Editor navigation"><div class="left-tabs"><button class="active" data-panel="pagesPanel">Pages</button><button data-panel="sitePanel">Site</button><button data-panel="aiPanel" id="aiTab">AI</button></div>
 <section id="pagesPanel" class="rail-panel"><div class="panel-head"><div><small>Website</small><h2>Pages</h2></div></div><div id="pageList" class="page-list"></div><hr><button class="rail-action" data-open="businessProfilePanel">Business profile</button><button class="rail-action" data-open="brandPanel">Brand system</button><button class="rail-action" data-open="seoPanel">SEO &amp; Discoverability</button><button class="rail-action" data-open="navigationPanel">Navigation</button><button class="rail-action" data-open="revisionPanel">Revisions</button><button class="rail-action" id="a11yBtn">Accessibility</button></section>
 <section id="sitePanel" class="rail-panel hidden"><div class="panel-head"><div><small>Site basics</small><h2>Content</h2></div></div><label>Tagline<textarea id="tagline"></textarea></label><label>Description<textarea id="description" class="large"></textarea></label><label>Accent color<div class="color-row"><input id="accent" type="color"><input id="accentText" maxlength="7"></div></label><button class="primary" id="saveBtn" data-testid="editor-save">Save basics</button><div class="msg" id="saveMsg">Changes autosave after you stop typing. Browser recovery is enabled.</div></section>
-<section id="aiPanel" class="rail-panel hidden"><div class="ai-head"><span>✦</span><div><b>Zylora AI Editor</b><small>Structured, validated actions</small></div></div><p>Describe content, typography, imagery, layout, responsive or motion changes. AI uses the same constrained document model as manual editing.</p><label>Page<select id="aiPage"></select></label><label class="check"><input id="aiSitewide" type="checkbox"> Apply across the entire website</label><textarea id="aiInstruction" class="large" placeholder='Example: Replace the hero image with storefront.jpg, make the heading 36px on mobile and change the CTA to "Book now".'></textarea><button class="primary" id="aiApply" data-testid="ai-apply">Apply AI edit</button><div class="msg" id="aiMsg"></div></section>
+<section id="aiPanel" class="rail-panel hidden">
+  <div class="ai-head">
+    <span class="ai-icon">✦</span>
+    <div class="ai-title-group">
+      <b>Zylora AI Editor</b>
+      <small>Structured, validated actions</small>
+    </div>
+  </div>
+  <p class="ai-desc">Describe content, typography, imagery, layout, responsive or motion changes. AI uses the same constrained document model as manual editing.</p>
+  <div class="form-group">
+    <label for="aiPage">Target page</label>
+    <select id="aiPage"></select>
+  </div>
+  <label class="check-row" for="aiSitewide">
+    <input id="aiSitewide" type="checkbox">
+    <span>Apply across the entire website</span>
+  </label>
+  <div class="form-group">
+    <label for="aiInstruction">AI instruction</label>
+    <textarea id="aiInstruction" class="large" placeholder='Example: Replace the hero image with storefront.jpg, make the heading 36px on mobile and change the CTA to "Book now".'></textarea>
+  </div>
+  <button class="primary ai-apply-btn" id="aiApply" data-testid="ai-apply">Apply AI edit</button>
+  <div class="msg ai-status-msg" id="aiMsg" role="status" aria-live="polite"></div>
+</section>
 </aside>
-<section class="preview-area"><div class="preview-toolbar"><div class="devices" role="group" aria-label="Preview device"><button class="active" data-device="desktop" data-width="100%" aria-label="Desktop">Desktop</button><button data-device="tablet" data-width="768px" aria-label="Tablet">Tablet</button><button data-device="mobile" data-width="390px" aria-label="Mobile">Mobile</button></div><span id="previewLabel">Draft preview</span><span class="hint">Click an element to edit · double-click text for inline editing</span><button id="refreshPreview">↻</button></div><div class="frame-wrap"><iframe id="previewFrame" title="Website preview"></iframe></div></section>
-<aside class="inspector" aria-label="Properties inspector"><div id="emptyInspector" class="empty-inspector"><span>◎</span><h2>Select an element</h2><p>Click text, images, buttons or sections directly in the canvas.</p></div><div id="selectedInspector" class="hidden"><div class="selection-head"><div><small id="selectedKind">Element</small><h2 id="selectedLabel">Selected</h2></div><span id="editabilityBadge">EDITABLE</span></div><div class="inspector-tabs" role="tablist"><button class="active" data-inspector="contentInspector">Content</button><button data-inspector="styleInspector">Style</button><button data-inspector="layoutInspector">Layout</button><button data-inspector="motionInspector">Motion</button><button data-inspector="responsiveInspector">Responsive</button></div><section id="contentInspector" class="inspector-panel"></section><section id="styleInspector" class="inspector-panel hidden"></section><section id="layoutInspector" class="inspector-panel hidden"></section><section id="motionInspector" class="inspector-panel hidden"></section><section id="responsiveInspector" class="inspector-panel hidden"></section></div></aside>
+<section class="preview-area"><div class="preview-toolbar">
+  <div class="devices" role="group" aria-label="Preview device">
+    <button class="active" data-device="desktop" data-width="100%" aria-label="Desktop">Desktop</button>
+    <button data-device="tablet" data-width="768px" aria-label="Tablet">Tablet</button>
+    <button data-device="mobile" data-width="390px" aria-label="Mobile">Mobile</button>
+  </div>
+  <div class="preview-badge-group">
+    <span id="previewLabel">Draft preview</span>
+  </div>
+  <span class="hint">Click an element to edit · double-click text for inline editing</span>
+  <button id="refreshPreview" title="Refresh canvas preview" aria-label="Refresh preview">↻</button>
+</div><div class="frame-wrap" id="frameWrap"><div class="canvas-loading-state hidden" id="canvasLoading"><div class="canvas-spinner"></div><span>Loading website…</span></div><div class="canvas-error-state hidden" id="canvasError"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><h3>Website preview couldn’t load</h3><p>There was a problem rendering the canvas preview for this page.</p><div class="canvas-error-actions"><button class="primary" id="canvasRetryBtn" type="button">Retry preview</button><button class="secondary" id="canvasOpenExternalBtn" type="button">Open in new tab</button></div></div><div class="canvas-empty-state hidden" id="canvasEmpty"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg><h3>Empty website document</h3><p>This page currently has no visible content sections.</p></div><iframe id="previewFrame" title="Website preview"></iframe></div></section>
+<aside class="inspector" aria-label="Properties inspector"><div id="emptyInspector" class="empty-inspector"><span>◎</span><h2>Select an element</h2><p>Click text, images, buttons or sections directly in the canvas.</p></div><div id="selectedInspector" class="hidden"><div class="selection-head"><div><small id="selectedKind">Element</small><h2 id="selectedLabel">Selected</h2></div><div class="selection-head-right"><span id="editabilityBadge">EDITABLE</span><button class="inspector-close-btn" id="closeInspectorBtn" aria-label="Deselect element and close inspector" title="Close inspector">×</button></div></div><div class="inspector-tabs" role="tablist"><button class="active" data-inspector="contentInspector">Content</button><button data-inspector="styleInspector">Style</button><button data-inspector="layoutInspector">Layout</button><button data-inspector="motionInspector">Motion</button><button data-inspector="responsiveInspector">Responsive</button></div><section id="contentInspector" class="inspector-panel"></section><section id="styleInspector" class="inspector-panel hidden"></section><section id="layoutInspector" class="inspector-panel hidden"></section><section id="motionInspector" class="inspector-panel hidden"></section><section id="responsiveInspector" class="inspector-panel hidden"></section></div></aside>
 </main>
 <div class="drawer hidden" id="businessProfilePanel" role="dialog" aria-modal="true" aria-labelledby="businessProfileTitle"><div class="drawer-card"><header><div><small>Source of truth</small><h2 id="businessProfileTitle">Business profile</h2></div><button data-close aria-label="Close">×</button></header><div class="drawer-body"><p class="msg">These details synchronize across site basics, structured business data, SEO defaults and AI context.</p><label>Business name<input id="bpName" maxlength="160"></label><label>Tagline<input id="bpTagline" maxlength="240"></label><label>Description<textarea id="bpDescription" maxlength="1200"></textarea></label><div class="grid2"><label>Email<input id="bpEmail" type="email"></label><label>Phone<input id="bpPhone" maxlength="80"></label><label>Website<input id="bpWebsite" placeholder="https://…"></label><label>Country<input id="bpCountry" maxlength="80"></label><label>Street<input id="bpStreet" maxlength="180"></label><label>Locality<input id="bpLocality" maxlength="120"></label><label>Region<input id="bpRegion" maxlength="120"></label><label>Postal code<input id="bpPostal" maxlength="40"></label></div><label>Opening hours<textarea id="bpHours" placeholder="Mo-Fr 09:00-17:00"></textarea></label><label>Services<textarea id="bpServices" placeholder="One service per line"></textarea></label><label>Social profiles<textarea id="bpSocial" placeholder="One URL per line"></textarea></label><button class="primary" id="saveBusinessProfile">Save business profile</button><div class="msg" id="bpMsg"></div></div></div></div>
 <div class="drawer hidden" id="brandPanel" role="dialog" aria-modal="true" aria-labelledby="brandTitle"><div class="drawer-card"><header><div><small>Website system</small><h2 id="brandTitle">Brand</h2></div><button data-close aria-label="Close">×</button></header><div class="drawer-body"><div class="grid2"><label>Primary<input id="brandPrimary" type="color"></label><label>Secondary<input id="brandSecondary" type="color"></label><label>Accent<input id="brandAccent" type="color"></label><label>Muted<input id="brandMuted" type="color"></label><label>Background<input id="brandBackground" type="color"></label><label>Surface<input id="brandSurface" type="color"></label><label>Border<input id="brandBorder" type="color"></label><label>Heading<input id="brandHeading" type="color"></label><label>Body<input id="brandBody" type="color"></label></div><label>Heading font<select id="brandHeadingFont"><option>Space Grotesk</option><option>Inter</option><option>IBM Plex Mono</option><option>Manrope</option><option>Georgia</option><option>Arial</option></select></label><label>Body font<select id="brandBodyFont"><option>Inter</option><option>Space Grotesk</option><option>IBM Plex Mono</option><option>Manrope</option><option>Georgia</option><option>Arial</option></select></label><label>Button radius<select id="brandRadius"><option value="0px">Square</option><option value="6px">Small</option><option value="10px">Medium</option><option value="16px">Rounded</option><option value="999px">Pill</option></select></label><div class="grid2"><label>Container width<select id="brandContainer"><option value="960px">960px</option><option value="1120px">1120px</option><option value="1280px">1280px</option><option value="1440px">1440px</option></select></label><label>Section spacing<select id="brandSectionSpacing"><option value="64px">Compact</option><option value="80px">Comfortable</option><option value="96px">Generous</option><option value="120px">Editorial</option><option value="144px">Immersive</option></select></label><label>Content gap<select id="brandGap"><option value="16px">16px</option><option value="24px">24px</option><option value="32px">32px</option><option value="48px">48px</option></select></label><label>Body size<select id="brandBodySize"><option value="14px">14px</option><option value="16px">16px</option><option value="18px">18px</option><option value="20px">20px</option></select></label><label>Heading scale<select id="brandHeadingScale"><option value="compact">Compact</option><option value="balanced">Balanced</option><option value="expressive">Expressive</option></select></label></div><div class="asset-buttons"><button id="brandLogoBtn">Choose logo</button><button id="brandAltLogoBtn">Choose alternate logo</button><button id="brandFaviconBtn">Choose favicon</button></div><button class="primary" id="applyBrand">Apply brand to website</button></div></div></div>
-<div class="drawer hidden" id="seoPanel" role="dialog" aria-modal="true" aria-labelledby="seoTitle"><div class="drawer-card"><header><div><small>Site settings</small><h2 id="seoTitle">SEO &amp; Discoverability</h2></div><button data-close aria-label="Close">×</button></header><div class="drawer-body">
-<h3>Site defaults</h3><label>Site title<input id="seoSiteTitle" maxlength="180"></label><label>Site description<textarea id="seoSiteDescription" maxlength="500"></textarea></label><div class="grid2"><label>Business / entity name<input id="seoBusinessName" maxlength="160"></label><label>Business category<input id="seoBusinessType" maxlength="80" placeholder="Dentist, Restaurant, Organization…"></label><label>Primary topic<input id="seoPrimaryTopic" maxlength="160"></label><label>Primary location<input id="seoPrimaryLocation" maxlength="160"></label></div><label class="check"><input id="seoIndexSite" type="checkbox"> Allow search indexing</label><label class="check"><input id="seoFollowLinks" type="checkbox"> Allow crawlers to follow public links</label>
-<h3>Business information</h3><div class="grid2"><label>Phone<input id="seoPhone" maxlength="80"></label><label>Email<input id="seoEmail" type="email" maxlength="180"></label><label>Street<input id="seoStreet" maxlength="180"></label><label>Locality<input id="seoLocality" maxlength="120"></label><label>Region<input id="seoRegion" maxlength="120"></label><label>Postal code<input id="seoPostal" maxlength="40"></label><label>Country<input id="seoCountry" maxlength="80"></label><label>Service areas<input id="seoServiceArea" placeholder="Chennai, Anna Nagar"></label></div><label>Opening hours<textarea id="seoOpeningHours" placeholder="Mo-Fr 09:00-17:00&#10;Sa 09:00-13:00"></textarea></label><h3>Footer links</h3><p class="msg">Paste a social, contact, map or other public URL. Zylora detects the icon locally; links are rendered only in the footer. Maximum 8.</p><div class="button-row"><input id="footerLinkUrl" placeholder="https://instagram.com/yourprofile" aria-label="Footer link URL"><button id="footerLinkAdd" type="button">Add link</button></div><div id="footerLinkList"></div><h3>External app destinations</h3><p class="msg">Use these only when the business already has a real external product/account destination. Zylora will not fabricate account backends.</p><div class="grid2"><label>App URL<input id="seoAppUrl" placeholder="https://app.example.com"></label><label>Login URL<input id="seoLoginUrl" placeholder="https://app.example.com/login"></label><label>Signup URL<input id="seoSignupUrl" placeholder="https://app.example.com/signup"></label><label>Booking URL<input id="seoBookingUrl" placeholder="https://booking.example.com"></label><label>Checkout URL<input id="seoCheckoutUrl" placeholder="https://checkout.example.com"></label><label>Customer portal URL<input id="seoPortalUrl" placeholder="https://portal.example.com"></label></div><label class="check"><input id="seoIndexNow" type="checkbox"> Notify supported search engines with IndexNow</label><label class="check"><input id="seoLlms" type="checkbox"> Enable experimental /llms.txt</label><button id="saveSiteSeo">Save site SEO settings</button>
-<hr><h3>Current page · <span id="seoPageName">Home</span></h3><label>SEO title<input id="seoTitleInput" maxlength="180"></label><label>Meta description<textarea id="seoDescription" maxlength="500"></textarea></label><label>Page slug<input id="seoSlug" maxlength="80" aria-describedby="seoSlugHelp"></label><p id="seoSlugHelp" class="msg">Changing a published slug preserves the previous URL with a permanent redirect.</p><label>Open Graph title<input id="seoOgTitle" maxlength="180"></label><label>Open Graph description<textarea id="seoOgDescription" maxlength="500"></textarea></label><label>Canonical URL<input id="seoCanonical" placeholder="https://…"></label><label class="check"><input id="seoNoindex" type="checkbox"> Hide this page from search engines</label><button id="seoOgImage">Choose Open Graph image</button><div class="button-row"><button id="seoAiAssist">✦ Suggest metadata with AI</button><button class="primary" id="applySeo">Save page SEO</button></div><p class="msg">AI suggestions use the existing AI-credit system and remain editable.</p>
-<hr><div class="button-row"><button id="seoHealthBtn">Run SEO/GEO health check</button></div><div id="seoHealth" class="revision-list" aria-live="polite"></div>
-</div></div></div>
+<div class="drawer hidden" id="seoPanel" role="dialog" aria-modal="true" aria-labelledby="seoTitle">
+  <div class="drawer-card">
+    <header class="drawer-head">
+      <div>
+        <small class="drawer-kicker">Site settings</small>
+        <h2 id="seoTitle">SEO &amp; Discoverability</h2>
+      </div>
+      <button data-close class="drawer-close-btn" aria-label="Close">×</button>
+    </header>
+    <div class="drawer-body">
+      <!-- Section 1: CURRENT PAGE SEO -->
+      <section class="seo-card-section current-page-card">
+        <div class="section-badge-header">
+          <span class="seo-badge">Page Settings</span>
+          <h3>Current page · <span id="seoPageName">Home</span></h3>
+        </div>
 
-<div class="drawer hidden" id="navigationPanel" role="dialog" aria-modal="true" aria-labelledby="navigationTitle"><div class="drawer-card"><header><div><small>Current page</small><h2 id="navigationTitle">Navigation</h2></div><button data-close aria-label="Close">×</button></header><div class="drawer-body"><p class="msg">Edit menu labels and destinations without changing the template navigation structure.</p><div id="navigationList" class="revision-list"></div></div></div></div>
+        <div class="seo-group">
+          <h4>Search Engine Appearance</h4>
+          <div class="form-group">
+            <label for="seoSlug">Page slug</label>
+            <input id="seoSlug" maxlength="80" aria-describedby="seoSlugHelp">
+            <small id="seoSlugHelp" class="field-hint">Changing a published slug preserves the previous URL with a 301 redirect.</small>
+          </div>
+          <div class="form-group">
+            <div class="label-with-counter">
+              <label for="seoTitleInput">SEO title</label>
+              <span class="char-count" id="seoTitleCount">0 / 60</span>
+            </div>
+            <input id="seoTitleInput" maxlength="180" placeholder="Recommended: 50–60 characters">
+          </div>
+          <div class="form-group">
+            <div class="label-with-counter">
+              <label for="seoDescription">Meta description</label>
+              <span class="char-count" id="seoDescCount">0 / 160</span>
+            </div>
+            <textarea id="seoDescription" maxlength="500" placeholder="Recommended: 140–160 characters"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="seoCanonical">Canonical URL</label>
+            <input id="seoCanonical" placeholder="https://…">
+          </div>
+        </div>
+
+        <div class="seo-group">
+          <h4>Social Sharing (Open Graph)</h4>
+          <div class="form-group">
+            <label for="seoOgTitle">Open Graph title</label>
+            <input id="seoOgTitle" maxlength="180">
+          </div>
+          <div class="form-group">
+            <label for="seoOgDescription">Open Graph description</label>
+            <textarea id="seoOgDescription" maxlength="500"></textarea>
+          </div>
+          <div class="form-group og-image-group">
+            <label>Open Graph preview image</label>
+            <div id="ogThumbWrap" class="og-thumb-wrap hidden">
+              <img id="ogThumbImg" src="" alt="OG preview thumbnail">
+            </div>
+            <button type="button" class="tertiary-action-btn" id="seoOgImage">Choose Open Graph image</button>
+          </div>
+        </div>
+
+        <div class="seo-group">
+          <h4>Indexing Control</h4>
+          <label class="check-row" for="seoNoindex">
+            <input id="seoNoindex" type="checkbox">
+            <span>Hide this page from search engines (noindex)</span>
+          </label>
+        </div>
+
+        <div class="seo-actions-bar">
+          <button class="primary action-save-seo" id="applySeo">Save page SEO</button>
+          <button type="button" class="secondary action-ai-seo" id="seoAiAssist">✦ Suggest metadata with AI</button>
+          <p class="field-hint">AI suggestions use your credit balance and remain fully editable before saving.</p>
+        </div>
+      </section>
+
+      <!-- Section 2: SEO / GEO HEALTH CHECK -->
+      <section class="seo-card-section health-check-card">
+        <div class="section-badge-header">
+          <span class="seo-badge audit-badge">Audit</span>
+          <h3>SEO / GEO Health Check</h3>
+        </div>
+        <div class="health-status-box">
+          <div class="health-meta">
+            <b>Structural Audit</b>
+            <p class="field-hint">Checks search tags, canonical structure, entity signals and local GEO metadata.</p>
+          </div>
+          <span class="health-badge-pill" id="seoHealthStatusBadge">Not checked</span>
+        </div>
+        <div class="button-row">
+          <button type="button" class="secondary" id="seoHealthBtn">Run SEO/GEO health check</button>
+        </div>
+        <div id="seoHealth" class="revision-list" aria-live="polite"></div>
+      </section>
+
+      <!-- Section 3: COLLAPSIBLE SITE-WIDE DEFAULTS -->
+      <details class="seo-collapsible-group" open>
+        <summary><h3>Site-wide SEO Defaults</h3></summary>
+        <div class="collapsible-content">
+          <div class="form-group">
+            <label for="seoSiteTitle">Site title</label>
+            <input id="seoSiteTitle" maxlength="180">
+          </div>
+          <div class="form-group">
+            <label for="seoSiteDescription">Site description</label>
+            <textarea id="seoSiteDescription" maxlength="500"></textarea>
+          </div>
+          <div class="grid2">
+            <div class="form-group"><label for="seoBusinessName">Business / entity name</label><input id="seoBusinessName" maxlength="160"></div>
+            <div class="form-group"><label for="seoBusinessType">Business category</label><input id="seoBusinessType" maxlength="80" placeholder="Dentist, Restaurant…"></div>
+            <div class="form-group"><label for="seoPrimaryTopic">Primary topic</label><input id="seoPrimaryTopic" maxlength="160"></div>
+            <div class="form-group"><label for="seoPrimaryLocation">Primary location</label><input id="seoPrimaryLocation" maxlength="160"></div>
+          </div>
+          <label class="check-row" for="seoIndexSite">
+            <input id="seoIndexSite" type="checkbox">
+            <span>Allow search indexing</span>
+          </label>
+          <label class="check-row" for="seoFollowLinks">
+            <input id="seoFollowLinks" type="checkbox">
+            <span>Allow crawlers to follow public links</span>
+          </label>
+        </div>
+      </details>
+
+      <!-- Section 4: BUSINESS INFORMATION & LOCAL SEO -->
+      <details class="seo-collapsible-group">
+        <summary><h3>Business Information &amp; Local Knowledge</h3></summary>
+        <div class="collapsible-content">
+          <div class="grid2">
+            <div class="form-group"><label for="seoPhone">Phone</label><input id="seoPhone" maxlength="80"></div>
+            <div class="form-group"><label for="seoEmail">Email</label><input id="seoEmail" type="email" maxlength="180"></div>
+            <div class="form-group"><label for="seoStreet">Street</label><input id="seoStreet" maxlength="180"></div>
+            <div class="form-group"><label for="seoLocality">Locality</label><input id="seoLocality" maxlength="120"></div>
+            <div class="form-group"><label for="seoRegion">Region</label><input id="seoRegion" maxlength="120"></div>
+            <div class="form-group"><label for="seoPostal">Postal code</label><input id="seoPostal" maxlength="40"></div>
+            <div class="form-group"><label for="seoCountry">Country</label><input id="seoCountry" maxlength="80"></div>
+            <div class="form-group"><label for="seoServiceArea">Service areas</label><input id="seoServiceArea" placeholder="Chennai, Anna Nagar"></div>
+          </div>
+          <div class="form-group">
+            <label for="seoOpeningHours">Opening hours</label>
+            <textarea id="seoOpeningHours" placeholder="Mo-Fr 09:00-17:00&#10;Sa 09:00-13:00"></textarea>
+          </div>
+        </div>
+      </details>
+
+      <!-- Section 5: FOOTER LINKS & EXTERNAL DESTINATIONS -->
+      <details class="seo-collapsible-group">
+        <summary><h3>Footer Links &amp; External Destinations</h3></summary>
+        <div class="collapsible-content">
+          <div class="form-group">
+            <label>Add public footer link</label>
+            <p class="field-hint">Paste a social, contact, map or public profile URL (maximum 8 links).</p>
+            <div class="button-row">
+              <input id="footerLinkUrl" placeholder="https://instagram.com/yourprofile" aria-label="Footer link URL">
+              <button id="footerLinkAdd" type="button">Add link</button>
+            </div>
+          </div>
+          <div id="footerLinkList"></div>
+
+          <h4 style="margin:24px 0 8px;">External app destinations</h4>
+          <p class="field-hint">Use these only when the business already has a real external product/account destination.</p>
+          <div class="grid2">
+            <div class="form-group"><label for="seoAppUrl">App URL</label><input id="seoAppUrl" placeholder="https://app.example.com"></div>
+            <div class="form-group"><label for="seoLoginUrl">Login URL</label><input id="seoLoginUrl" placeholder="https://app.example.com/login"></div>
+            <div class="form-group"><label for="seoSignupUrl">Signup URL</label><input id="seoSignupUrl" placeholder="https://app.example.com/signup"></div>
+            <div class="form-group"><label for="seoBookingUrl">Booking URL</label><input id="seoBookingUrl" placeholder="https://booking.example.com"></div>
+            <div class="form-group"><label for="seoCheckoutUrl">Checkout URL</label><input id="seoCheckoutUrl" placeholder="https://checkout.example.com"></div>
+            <div class="form-group"><label for="seoPortalUrl">Portal URL</label><input id="seoPortalUrl" placeholder="https://portal.example.com"></div>
+          </div>
+          <label class="check-row" for="seoIndexNow">
+            <input id="seoIndexNow" type="checkbox">
+            <span>Notify supported search engines with IndexNow</span>
+          </label>
+          <label class="check-row" for="seoLlms">
+            <input id="seoLlms" type="checkbox">
+            <span>Enable experimental /llms.txt</span>
+          </label>
+        </div>
+      </details>
+
+      <div class="site-seo-save-bar">
+        <button class="secondary wide" id="saveSiteSeo">Save site SEO settings</button>
+      </div>
+    </div>
+  </div>
+</div><div class="drawer hidden" id="navigationPanel" role="dialog" aria-modal="true" aria-labelledby="navigationTitle"><div class="drawer-card"><header><div><small>Current page</small><h2 id="navigationTitle">Navigation</h2></div><button data-close aria-label="Close">×</button></header><div class="drawer-body"><p class="msg">Edit menu labels and destinations without changing the template navigation structure.</p><div id="navigationList" class="revision-list"></div></div></div></div>
 <div class="drawer hidden" id="revisionPanel" role="dialog" aria-modal="true" aria-labelledby="revisionTitle"><div class="drawer-card"><header><div><small>Durable history</small><h2 id="revisionTitle">Revisions</h2></div><button data-close aria-label="Close">×</button></header><div class="drawer-body"><div id="revisionList" class="revision-list"></div><h3>Published versions</h3><p class="msg">Roll the live site back to a version that was published earlier.</p><div id="publishedVersionList" class="revision-list"></div><hr><div class="button-row"><h3>Recovery points</h3><button id="createBackup">Create restore point</button></div><p class="msg">Automatic backups are also created during editing and before risky operations.</p><div id="backupList" class="revision-list"></div></div></div></div>
 <div class="drawer hidden" id="a11yPanel" role="dialog" aria-modal="true" aria-labelledby="a11yTitle"><div class="drawer-card"><header><div><small>Current page</small><h2 id="a11yTitle">Accessibility checks</h2></div><button data-close aria-label="Close">×</button></header><div class="drawer-body"><div id="a11yList"></div></div></div></div>
 <div class="modal hidden" id="mediaModal" role="dialog" aria-modal="true" aria-labelledby="mediaTitle"><div class="media-card"><header><div><small>Managed media</small><h2 id="mediaTitle">Replace image</h2></div><button id="closeMedia" aria-label="Close">×</button></header><div class="media-tabs"><button class="active" data-media-tab="libraryMedia">Library</button><button data-media-tab="uploadMedia">Upload</button><button data-media-tab="stockMedia">Stock</button></div><section id="libraryMedia" class="media-panel"><div id="mediaGrid" class="media-grid"></div></section><section id="uploadMedia" class="media-panel hidden"><label class="upload-zone" for="mediaFile"><b>Upload an image</b><span>JPEG, PNG, WebP or AVIF · up to the configured limit</span><input id="mediaFile" type="file" accept="image/jpeg,image/png,image/webp,image/avif"></label><label>Alt text<input id="uploadAlt" maxlength="500"></label><button class="primary" id="uploadBtn">Upload & use</button><div id="uploadMsg" class="msg"></div></section><section id="stockMedia" class="media-panel hidden"><div class="search-row"><input id="stockQuery" placeholder="Search licensed Pexels photos"><button id="stockSearch">Search</button></div><div id="stockMsg" class="msg"></div><div id="stockGrid" class="media-grid"></div></section></div></div>
-<div class="toast" id="toast" role="status"></div><script src="/static/zylora-ui.js"></script><script src="/static/publish-flow.js"></script><script src="/static/editor.js"></script><script src="/static/premium-design.js"></script></body></html>
+<div class="toast" id="toast" role="status"></div><script src="/static/zylora-ui.js"></script><script src="/static/publish-flow.js"></script><script src="/static/editor.js?v=20260905-premium"></script><script src="/static/premium-design.js"></script></body></html>

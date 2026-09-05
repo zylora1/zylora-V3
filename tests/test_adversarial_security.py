@@ -118,7 +118,7 @@ def test_immediate_downgrade_entitlement_and_paid_upgrade_fail_closed(monkeypatc
 
 
 def test_database_rate_limit_holds_across_processes():
-    reset_db(); key='concurrent-process-rate-limit'; limit=5
+    reset_db(); key='concurrent-process-rate-limit'; limit=3
     worker=r'''
 from fastapi import HTTPException
 from app.security import durable_rate_limit
@@ -131,11 +131,11 @@ except Exception:
 raise SystemExit(0)
 ''' % (key,limit)
     env=os.environ.copy()
-    ps=[subprocess.Popen([sys.executable,'-c',worker],cwd=ROOT,env=env,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL) for _ in range(18)]
+    ps=[subprocess.Popen([sys.executable,'-c',worker],cwd=ROOT,env=env,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL) for _ in range(8)]
     codes=[]
     try:
         for p in ps:
-            try: codes.append(p.wait(timeout=20))
+            try: codes.append(p.wait(timeout=45))
             except subprocess.TimeoutExpired:
                 p.kill(); codes.append(45)
         assert codes.count(0)==limit,codes

@@ -61,5 +61,24 @@ function renderDirections(){const custom=$('#stylePrompt').value.trim();$('#dire
 $('#styleApply').onclick=()=>{const q=$('#stylePrompt').value.trim();if(!q)return;state.direction=q;state.selectedVersion=null;renderDirections();$('#createSite').disabled=false;renderArtifact()};$('#stylePrompt').oninput=renderArtifact;$('#motionStyle').onchange=renderArtifact;
 $$('[data-artifact-tab]').forEach(b=>b.onclick=()=>{state.artifactTab=b.dataset.artifactTab;$$('[data-artifact-tab]').forEach(x=>x.classList.toggle('active',x===b));renderArtifact()});
 renderDirections();renderVersions();updatePromptWordHint();renderArtifact();
+const aiCreatePromptInputRoot = $('#aiCreatePromptInputRoot');
+if (window.PromptInputModule && aiCreatePromptInputRoot) {
+  aiCreatePromptInputRoot.hidden = false;
+  const fallbackPromptBox = $('#businessDescription')?.closest('.prompt-box');
+  if (fallbackPromptBox) fallbackPromptBox.hidden = true;
+  PromptInputModule.mount(aiCreatePromptInputRoot, {
+    placeholder: "Example: We're a premium fitness studio in Chennai...",
+    onSubmit: function(text, meta) {
+      const ta = $('#businessDescription');
+      if (ta) { ta.value = text; ta.dispatchEvent(new Event('input')); }
+      const briefNext = $('#briefNext');
+      if (briefNext) briefNext.click();
+    },
+    onChange: function(text) {
+      const ta = $('#businessDescription');
+      if (ta) { ta.value = text; ta.dispatchEvent(new Event('input')); }
+    }
+  });
+}
 $('#createSite').onclick=async()=>{const status=$('#createStatus');status.className='status';status.textContent='Planning pages, art direction and content…';if(!state.versions.length||state.versions.at(-1).label!=='Direction')snapshot('Direction');const draft={business_name:$('#businessName').value.trim(),description:$('#businessDescription').value.trim(),origin:'AI',industry:state.goal||'Business',style:state.direction||'swiss-minimal',motion_style:$('#motionStyle').value||'Subtle'};try{if(!state.me){sessionStorage.setItem('zyloraAiDraft',JSON.stringify(draft));location.href='/signup?next=%2Fai-create';return}const j=await api('/api/sites',{method:'POST',headers:{'Idempotency-Key':crypto.randomUUID?.()||String(Date.now())},body:JSON.stringify(draft)});sessionStorage.removeItem('zyloraAiDraft');status.textContent=`Created ${j.page_count||1} page${j.page_count===1?'':'s'}. Opening the editor…`;location.href=`/editor/${j.id}`}catch(e){if(e.status===401){sessionStorage.setItem('zyloraAiDraft',JSON.stringify(draft));location.href='/login?next=%2Fai-create';return}status.classList.add('error');status.textContent=e.message}};
 (async()=>{try{state.me=await api('/api/auth/me');sessionStorage.setItem('csrf',state.me.csrf_token);$('#creditPill').hidden=false;$('#creditCount').textContent=state.me.ai_credits;const draft=JSON.parse(sessionStorage.getItem('zyloraAiDraft')||'null');if(draft){$('#businessName').value=draft.business_name||'';$('#businessDescription').value=draft.description||'';$('#businessDescription').dispatchEvent(new Event('input'));state.goal=draft.industry||'';state.direction=draft.style||'';if($('#motionStyle'))$('#motionStyle').value=draft.motion_style||'Subtle';if(state.goal)$$('#goalChoices button').forEach(x=>x.classList.toggle('active',x.dataset.goal===state.goal));renderDirections();snapshot('Recovered');go(3);$('#createSite').disabled=!state.direction}}catch(e){if(e.status!==401)console.warn(e)}finally{syncPromptGuidance()}})();

@@ -5,7 +5,7 @@
   "numberedFoldersDiscovered": 41,
   "templateCandidates": 45,
   "duplicatesSkipped": 4,
-  "templatesImported": 41,
+  "templatesImported": 38,
   "templatesRejected": 0,
   "templates": [
     {
@@ -25,7 +25,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -48,7 +48,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -66,12 +66,12 @@
         "home"
       ],
       "category": "Fintech & Banking",
-      "status": "PASS",
-      "qualityScore": 9.6,
-      "responsive": true,
+      "status": "FAIL",
+      "qualityScore": 8.5,
+      "responsive": false,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -94,7 +94,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -117,7 +117,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -140,7 +140,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -163,7 +163,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -186,7 +186,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -209,7 +209,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -232,7 +232,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -255,7 +255,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -278,7 +278,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -301,7 +301,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -324,7 +324,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -347,7 +347,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -365,12 +365,12 @@
         "home"
       ],
       "category": "Sales & Coaching",
-      "status": "PASS",
-      "qualityScore": 9.6,
-      "responsive": true,
+      "status": "FAIL",
+      "qualityScore": 8.5,
+      "responsive": false,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -393,7 +393,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -416,7 +416,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -439,7 +439,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -462,7 +462,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -485,7 +485,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -508,7 +508,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -531,7 +531,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -554,7 +554,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -577,7 +577,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -600,7 +600,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -623,7 +623,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -646,7 +646,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -669,7 +669,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -692,7 +692,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -715,7 +715,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -738,7 +738,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -761,7 +761,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -784,7 +784,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -802,12 +802,12 @@
         "home"
       ],
       "category": "Design & Architecture",
-      "status": "PASS",
-      "qualityScore": 9.6,
-      "responsive": true,
+      "status": "FAIL",
+      "qualityScore": 8.5,
+      "responsive": false,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -830,7 +830,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -853,7 +853,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -876,7 +876,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -899,7 +899,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -922,7 +922,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"
@@ -945,7 +945,7 @@
       "responsive": true,
       "editorCompatible": true,
       "issuesFixed": [
-        "Removed authentication UI and marketplace links",
+        "Removed authentication and marketplace links",
         "Normalized asset references to local bundles",
         "Scoped and normalized CSS with reduced-motion support",
         "Multi-breakpoint responsive certification (1440/1280/1024/768/430/390/375/360)"

@@ -299,7 +299,66 @@ def revisions(site_id: str, request: Request):
     return {'items':items}
 
 
+@router.post('/sites/{site_id}/studio-migrate')
+def migrate_to_studio(site_id: str, request: Request):
+    u=_user(request,True)
+    from .studio_migration import migrate_v3_to_v4
+    with SessionLocal.begin() as db:
+        site=_owned_site(db,u['id'],site_id)
+        if site.get('studio_document_json'):
+            return {'ok': True, 'migrated': False, 'message': 'Already migrated'}
+        
+        # We must render the base pages to perform the migration correctly
+        rendered_pages = {}
+        for p in _page_keys(site):
+            rendered_pages[p] = render_draft(site, p)
+            
+        v3_doc = parse_document(site.get('draft_structure_json'))
+        v4_doc = migrate_v3_to_v4(v3_doc, rendered_pages)
+        
+        v4_json = v4_doc.model_dump_json(exclude_none=True)
+        db.execute(text('UPDATE sites SET studio_document_json=:v4 WHERE id=:s'), {'v4': v4_json, 's': site_id})
+        
+        # Also backup current to revisions if needed
+        create_revision(db,site_id,u['id'],'BACKUP','Studio v4 Migration Backup')
+        
+from .studio_document import SiteDocument, validate_studio_document
 
+@router.post('/sites/{site_id}/studio-save')
+def save_studio(site_id: str, document: dict, request: Request):
+    u=_user(request,True)
+    
+    with SessionLocal.begin() as db:
+        site=_owned_site(db,u['id'],site_id)
+        if not site:
+            raise HTTPException(404, "Site not found")
+            
+        try:
+            valid_doc = validate_studio_document(document)
+            client_rev = valid_doc.revision
+            
+            # Concurrency check
+            if site.studio_document_json:
+                import json
+                current_server_doc = json.loads(site.studio_document_json)
+                server_rev = current_server_doc.get("revision", 1)
+                
+                # If client revision is older than server revision, it's a conflict
+                if client_rev < server_rev:
+                    return {'ok': False, 'conflict': True, 'serverRevision': server_rev}
+                
+                # Bump revision for the successful save
+                valid_doc.revision = server_rev + 1
+            else:
+                valid_doc.revision = 1
+                
+            doc_json = valid_doc.model_dump_json(exclude_none=True)
+            site.studio_document_json = doc_json
+            
+        except Exception as e:
+            raise HTTPException(400, f"Invalid document: {str(e)}")
+
+    return {'ok': True, 'newRevision': valid_doc.revision}
 
 @router.get('/sites/{site_id}/revisions/{revision_id}/preview')
 def revision_preview(site_id: str, revision_id: str, request: Request, page: str='home'):

@@ -279,12 +279,12 @@ def growth_report(user_id: str, *, site_id: str|None=None, days: int=30) -> dict
             site_leads=int(db.execute(text('SELECT count(*) FROM leads WHERE site_id=:s AND created_at>=:a'),{'s':sid,'a':start}).scalar_one() or 0); leads+=site_leads
             site_appts=int(db.execute(text("SELECT count(*) FROM appointments WHERE site_id=:s AND created_at>=:a AND status!='CANCELLED'"),{'s':sid,'a':start}).scalar_one() or 0); appointments+=site_appts
             site_metrics.append({**dict(site),'page_views':site_views,'visitors':site_visitors,'cta_clicks':site_clicks,'leads':site_leads,'appointments':site_appts,
-              'lead_conversion_rate':round(site_leads/max(1,site_visitors)*100,2)})
+              'lead_conversion_rate':round(site_leads/site_visitors*100,2) if site_visitors>0 else 0.0})
         # Attribute lead paths when public runtime records source path in future lead metadata; until then leads remain site-level.
         pages=sorted(page_map.values(),key=lambda x:x['views'],reverse=True)
         for p in pages:
-            p['cta_rate']=round(p['cta_clicks']/max(1,p['views'])*100,2)
-        lead_rate=round(leads/max(1,visitors)*100,2); cta_rate=round(clicks/max(1,views)*100,2)
+            p['cta_rate']=round(p['cta_clicks']/p['views']*100,2) if p['views']>0 else 0.0
+        lead_rate=round(leads/visitors*100,2) if visitors>0 else 0.0; cta_rate=round(clicks/views*100,2) if views>0 else 0.0
     insights=[]
     if views==0:
         insights.append({'severity':'INFO','code':'NO_TRAFFIC','title':'No tracked visitors yet','detail':'Publish the site and share it to start collecting first-party performance data.','action':'PUBLISH_OR_PROMOTE'})

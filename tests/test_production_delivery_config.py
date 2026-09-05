@@ -322,3 +322,36 @@ def test_all_foreign_keys_match_primary_key_types():
         ref_type = tables.get(ref_table, {}).get(ref_col, 'UNKNOWN')
         assert fk_type == ref_type, f"Mismatch in {mig}: {table}.{fk_col} ({fk_type}) references {ref_table}.{ref_col} ({ref_type})"
 
+
+# ---- TEST 13: Production database fail-closed gate ----
+
+def test_production_mode_rejects_sqlite_in_create_engine(monkeypatch):
+    from app.db import _create_engine
+    monkeypatch.setattr(settings, 'app_env', 'production')
+    monkeypatch.setattr(settings, 'database_url', 'sqlite:///data/test.db')
+    with pytest.raises(RuntimeError) as exc:
+        _create_engine()
+    assert 'Production environment requires PostgreSQL' in str(exc.value)
+
+
+def test_production_mode_rejects_sqlite_in_migrate(monkeypatch):
+    from app.db import migrate
+    monkeypatch.setattr(settings, 'app_env', 'production')
+    monkeypatch.setattr(settings, 'database_url', 'sqlite:///data/test.db')
+    with pytest.raises(RuntimeError) as exc:
+        migrate()
+    assert 'Production database migrations require PostgreSQL' in str(exc.value)
+
+
+def test_environment_normalization_detects_railway_and_environment(monkeypatch):
+    from app.config import Settings
+    monkeypatch.setenv('ENVIRONMENT', 'production')
+    s1 = Settings()
+    assert s1.app_env == 'production'
+
+    monkeypatch.delenv('ENVIRONMENT', raising=False)
+    monkeypatch.setenv('RAILWAY_ENVIRONMENT', 'production')
+    s2 = Settings()
+    assert s2.app_env == 'production'
+
+

@@ -6,15 +6,27 @@ from sqlalchemy import text
 from .db import SessionLocal, now_iso, engine
 from .config import settings
 
+def _scrypt(password: bytes, salt: bytes) -> bytes:
+    for attempt in range(10):
+        try:
+            return hashlib.scrypt(password, salt=salt, n=2**14, r=8, p=1, maxmem=128*1024*1024)
+        except (ValueError, OSError) as e:
+            if 'malloc failure' in str(e).lower() and attempt < 9:
+                import gc
+                gc.collect()
+                time.sleep(0.04 * (attempt + 1))
+                continue
+            raise
+
 def hash_password(password: str) -> str:
     salt = os.urandom(16)
-    derived = hashlib.scrypt(password.encode(), salt=salt, n=2**14, r=8, p=1)
+    derived = _scrypt(password.encode(), salt=salt)
     return base64.b64encode(salt + derived).decode()
 
 def verify_password(password: str, encoded: str) -> bool:
     raw = base64.b64decode(encoded.encode())
     salt, expected = raw[:16], raw[16:]
-    actual = hashlib.scrypt(password.encode(), salt=salt, n=2**14, r=8, p=1)
+    actual = _scrypt(password.encode(), salt=salt)
     return hmac.compare_digest(actual, expected)
 
 def new_session(user_id: str) -> tuple[str, str, str]:
@@ -47,7 +59,11 @@ def current_user(request: Request):
                 exp_dt = exp_dt.replace(tzinfo=timezone.utc)
         if exp_dt < datetime.now(timezone.utc):
             raise HTTPException(401, 'Session expired')
-        return dict(row)
+        user_dict = dict(row)
+        status = str(user_dict.get('status') or 'ACTIVE').upper()
+        if status in {'RESTRICTED', 'SUSPENDED'}:
+            raise HTTPException(403, detail={'code': 'ACCOUNT_RESTRICTED', 'message': 'This account has been restricted by an administrator.'})
+        return user_dict
 
 def require_csrf(request: Request, user: dict, x_csrf_token: str | None = Header(default=None)):
     if request.method in {'POST','PUT','PATCH','DELETE'} and x_csrf_token != user['csrf_token']:
@@ -99,8 +115,3 @@ def durable_rate_limit(key: str, limit: int, window_seconds: int):
 
 def clear_rate_limits() -> None:
     _RATE.clear()
-    try:
-        with SessionLocal.begin() as db:
-            db.execute(text('DELETE FROM rate_limit_buckets'))
-    except Exception:
-        pass

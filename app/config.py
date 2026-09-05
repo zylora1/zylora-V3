@@ -13,9 +13,16 @@ class Settings(BaseSettings):
     @field_validator('app_env', mode='before')
     @classmethod
     def normalize_app_env(cls, value):
-        raw=str(value or 'development').strip().lower()
-        aliases={'dev':'development','local':'development','development':'development',
-                 'test':'test','testing':'test','prod':'production','live':'production','production':'production'}
+        import os
+        env_override = os.getenv('APP_ENV') or os.getenv('ENVIRONMENT') or os.getenv('RAILWAY_ENVIRONMENT')
+        if value and str(value).lower() not in {'', 'development'}:
+            raw = str(value).strip().lower()
+        elif env_override:
+            raw = str(env_override).strip().lower()
+        else:
+            raw = str(value or 'development').strip().lower()
+        aliases = {'dev':'development','local':'development','development':'development',
+                   'test':'test','testing':'test','prod':'production','live':'production','production':'production'}
         if raw not in aliases:
             raise ValueError('APP_ENV must be development, test, or production')
         return aliases[raw]
@@ -26,12 +33,20 @@ class Settings(BaseSettings):
         return str(value or 'mock').strip().lower()
     app_url: str = 'http://127.0.0.1:8000'
     database_url: str = f"sqlite:///{ROOT / 'data' / 'zylora.db'}"
+    redis_url: str = ''
     session_ttl_hours: int = 168
     admin_notification_email: str = 'admin@example.com'
 
     # Optional one-time SUPER_ADMIN bootstrap. Keep these server-side only.
     super_admin_email: str = ''
+    super_admin_mail_id: str = ''
     super_admin_password: str = ''
+
+    @field_validator('super_admin_email', mode='before')
+    @classmethod
+    def normalize_super_admin_email(cls, value):
+        import os
+        return str(value or os.getenv('SUPER_ADMIN_MAIL_ID', '')).strip()
 
     openai_api_key: str = ''
     openai_model: str = 'gpt-5-mini'
@@ -56,6 +71,8 @@ class Settings(BaseSettings):
     google_service_account_email: str = ''
     turnstile_site_key: str = ''
     turnstile_secret_key: str = ''
+    turnstile_enabled: bool = True
+    turnstile_allowed_hostnames: str = ''
 
     payment_provider: str = 'mock'
     razorpay_key_id: str = ''
@@ -63,6 +80,7 @@ class Settings(BaseSettings):
     razorpay_webhook_secret: str = ''
 
     cloudflare_api_token: str = ''
+    cloudflare_account_id: str = ''
     cloudflare_zone_id: str = ''
     cloudflare_saas_target: str = 'sites.zylora.example'
 

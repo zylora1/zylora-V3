@@ -19,6 +19,8 @@ ROOT = Path(__file__).resolve().parents[1]
 @pytest.fixture(autouse=True)
 def ensure_db():
     clear_rate_limits()
+    with SessionLocal.begin() as db:
+        db.execute(text('DELETE FROM rate_limit_buckets'))
     migrate()
 
 

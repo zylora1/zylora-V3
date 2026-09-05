@@ -1,3 +1,106 @@
-html { scroll-behavior: smooth; } body { min-width: 0; } img, svg, video { max-width: 100%; height: auto; }
+:root {
+  --page: #f3ede4;
+  --ink: #171611;
+  --muted: #736d64;
+  --line: #cec5b9;
+  --serif: Didot, "Bodoni MT", "Times New Roman", serif;
+  --sans: Arial, Helvetica, sans-serif;
+}
 
-@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--page); }
+body { margin: 0; background: var(--page); color: var(--ink); font-family: var(--sans); }
+a { color: inherit; text-decoration: none; }
+a:focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+.page-shell { position: relative; width: 341px; height: 1536px; margin: 0 auto; overflow: hidden; background: var(--page); }
+.site-header { height: 24px; padding: 6px 6px 0; display: grid; grid-template-columns: 72px 1fr 48px; align-items: start; font-size: 3.2px; line-height: 1; letter-spacing: .02em; }
+.site-header nav { display: flex; justify-content: center; gap: 15px; }
+.site-header .utility { justify-self: end; }
+.brand { font-weight: 700; }
+
+.intro { position: relative; height: 252px; }
+.intro h1 { position: absolute; top: -3px; left: 85px; width: 209px; margin: 0; font: 400 11.2px/.99 var(--serif); letter-spacing: -.035em; }
+.intro-fragments { position: absolute; left: 6px; top: 77px; display: flex; align-items: flex-start; gap: 5px; }
+figure { margin: 0; }
+.fragment { position: relative; padding-top: 9px; }
+.fragment span, .portrait > span { position: absolute; top: 0; left: 0; font-size: 2.8px; }
+.fragment-one .photo { width: 42px; height: 50px; background-position: -9px -112px; }
+.fragment-two .photo { width: 51px; height: 65px; background-position: -60px -103px; }
+.fragment-three .photo { width: 50px; height: 65px; background-position: -118px -103px; }
+.disciplines { position: absolute; right: 7px; top: 111px; width: 69px; font-size: 3.4px; line-height: 1.25; }
+.disciplines span { display: block; }
+.portrait { position: absolute; right: 6px; top: 166px; padding-top: 8px; }
+.portrait .photo { width: 50px; height: 64px; background-position: -285px -190px; }
+
+.photo { background-image: url("../assets/reference.jpg"); background-repeat: no-repeat; background-size: 341px 1536px; background-color: #c9bdad; }
+
+.positioning { height: 111px; position: relative; }
+.positioning p { position: absolute; top: 4px; left: 6px; width: 329px; margin: 0; text-align: center; font: 400 8.9px/1.03 var(--serif); letter-spacing: -.03em; }
+.section-marker { position: absolute; top: 73px; left: 0; width: 100%; text-align: center; font-size: 2.8px; line-height: 1.45; letter-spacing: .08em; }
+.section-marker span, .section-marker strong { display: block; font-weight: 400; }
+
+.works { height: 272px; position: relative; padding: 0 5px; }
+.work-grid { display: grid; grid-template-columns: repeat(5, 1fr); column-gap: 4px; row-gap: 20px; align-items: start; }
+.work { min-width: 0; position: relative; padding-top: 9px; font-size: 2.8px; }
+.work > span { position: absolute; top: 0; left: 0; }
+.work a { display: block; }
+.work .photo { width: 100%; height: 74px; margin-bottom: 4px; transition: opacity 120ms linear; }
+.work a:hover .photo { opacity: .96; }
+.work a:hover b { text-decoration: underline; text-underline-offset: 1px; }
+.work b, .work small { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.work b { font-size: 3.2px; line-height: 1.1; }
+.work small { margin-top: 1px; color: var(--muted); font-size: 2.65px; line-height: 1.1; }
+.work-01 .photo { background-position: -5px -378px; }
+.work-02 .photo { background-position: -72px -378px; }
+.work-03 .photo { background-position: -138px -378px; }
+.work-04 .photo { background-position: -205px -378px; }
+.work-05 .photo { background-position: -272px -378px; }
+.work-06 .photo { height: 75px; background-position: -5px -496px; }
+.work-07 .photo { height: 75px; background-position: -72px -496px; }
+.work-08 .photo { height: 75px; background-position: -138px -496px; }
+.work-09 .photo { height: 75px; background-position: -205px -496px; }
+.work-10 .photo { height: 75px; background-position: -272px -496px; }
+.archive-link { position: absolute; bottom: 4px; left: 0; width: 100%; text-align: center; font: 3px var(--serif); }
+
+.principles { height: 570px; padding: 0 5px; }
+.principles-title { height: 42px; padding-top: 2px; text-align: center; }
+.principles-title span { display: block; font-size: 2.7px; letter-spacing: .12em; }
+.principles-title h2 { margin: 4px 0 0; font: 400 5px var(--serif); }
+.principle { height: 104px; border-top: .5px solid var(--line); display: grid; grid-template-columns: 109px 1fr 49px; position: relative; }
+.principle-meta { padding-top: 9px; font-size: 2.8px; line-height: 1.3; }
+.principle-meta span { display: inline-block; width: 35px; }
+.principle-meta b { font-weight: 400; }
+.principle p { margin: 9px 2px 0 0; font: 400 9.9px/.98 var(--serif); letter-spacing: -.025em; }
+.principle .photo { width: 49px; height: 103px; }
+.principle-01 .photo { background-position: -287px -674px; }
+.principle-02 .photo { background-position: -287px -778px; }
+.principle-03 .photo { background-position: -287px -882px; }
+.principle-04 .photo { background-position: -287px -986px; }
+.principle-05 .photo { background-position: -287px -1090px; }
+
+.closing-image { position: relative; margin: 0 5px; height: 221px; }
+.closing-image .photo { width: 331px; height: 219px; background-position: -5px -1188px; }
+.closing-image span, .closing-image figcaption { position: absolute; color: #f7f2e9; font-size: 2.6px; line-height: 1.15; }
+.closing-left { left: 112px; top: 105px; }
+.closing-right { right: 103px; top: 105px; text-align: right; }
+.closing-image figcaption { left: 0; right: 0; bottom: 14px; text-align: center; }
+
+footer { height: 79px; padding: 10px 5px 0; display: grid; grid-template-columns: 84px 84px 86px 1fr; font-size: 2.7px; line-height: 1.35; }
+footer div > * { display: block; }
+footer b { margin-bottom: 3px; font-size: 2.6px; letter-spacing: .08em; }
+.wordmark { height: 60px; margin-left: 4px; white-space: nowrap; font: 400 61px/.78 var(--serif); letter-spacing: -.06em; }
+
+@media (max-width: 340px) {
+  .page-shell { transform-origin: top left; transform: scale(.9384); margin: 0 auto; }
+  body { overflow-x: hidden; }
+}
+@media (min-width: 600px) {
+  body { padding: 32px 0; }
+  .page-shell { box-shadow: 0 0 0 1px rgba(23,22,17,.06); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .work .photo { transition: none; }
+}

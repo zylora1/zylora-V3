@@ -27,17 +27,20 @@ def _owned_site(db,user_id: str,site_id: str) -> dict:
 @router.post('/sites/import')
 async def import_website(request: Request, file: UploadFile=File(...), site_name: str=Form(default='')):
     u=_user(request,True)
+    if u.get('role') != 'SUPER_ADMIN':
+        raise HTTPException(403, detail={'code': 'FORBIDDEN', 'message': 'Import Website is reserved for SUPER_ADMIN.'})
     ip=request.client.host if request.client else 'unknown'
     durable_rate_limit(f'site-import-user-hour:{u["id"]}',10,3600)
     durable_rate_limit(f'site-import-ip-hour:{ip}',30,3600)
     cfg=get_plan(u['plan'])
-    if int(cfg.get('contact_only') or 0):
-        raise HTTPException(403,detail={'code':'MANAGED_SELF_SERVICE_UNAVAILABLE','message':'Managed/PRO sites are handled by Zylora experts and do not use self-service project import.'})
-    with SessionLocal() as db:
-        drafts=int(db.execute(text("SELECT count(*) FROM sites WHERE user_id=:u AND status='DRAFT'"),{'u':u['id']}).scalar_one())
-    limit=int(cfg.get('site_limit') or 1)
-    if drafts>=limit:
-        raise HTTPException(409,detail={'code':'DRAFT_LIMIT_REACHED','message':f'You already have {drafts} drafts. Delete a draft before importing another website.','limit':limit,'drafts':drafts})
+    if u.get('role') != 'SUPER_ADMIN':
+        if int(cfg.get('contact_only') or 0):
+            raise HTTPException(403,detail={'code':'MANAGED_SELF_SERVICE_UNAVAILABLE','message':'Managed/PRO sites are handled by Zylora experts and do not use self-service project import.'})
+        with SessionLocal() as db:
+            drafts=int(db.execute(text("SELECT count(*) FROM sites WHERE user_id=:u AND status='DRAFT'"),{'u':u['id']}).scalar_one())
+        limit=int(cfg.get('site_limit') or 1)
+        if drafts>=limit:
+            raise HTTPException(409,detail={'code':'DRAFT_LIMIT_REACHED','message':f'You already have {drafts} drafts. Delete a draft before importing another website.','limit':limit,'drafts':drafts})
     raw=await file.read(MAX_IMPORT_ARCHIVE_MB*1024*1024+1)
     if len(raw)>MAX_IMPORT_ARCHIVE_MB*1024*1024: raise HTTPException(413,'Website archive is too large')
     result=import_site(u['id'],raw=raw,filename=file.filename or 'website.zip',site_name=site_name[:120] if site_name else None)

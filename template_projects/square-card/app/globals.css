@@ -20,16 +20,4 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 @media(max-width:600px){.shell{width:min(calc(100% - 36px),520px)}.site-header{grid-template-columns:1fr auto}.site-header nav{display:none}.hero{height:520px;padding-top:24px}.hero h1{font-size:clamp(37px,10.5vw,48px)}.hero-copy>p{width:100%;max-width:420px}.hero-art{top:238px;right:calc(50% - 166px)}.partners{top:466px;width:100%;gap:17px;overflow:hidden}.services{height:auto;padding:24px 18px}.services-intro{grid-template-columns:1fr;height:auto;gap:18px}.services h2{font-size:28px}.services-intro p{font-size:8px}.service-grid{grid-template-columns:1fr 1fr;height:auto;margin-top:25px}.service-grid article{height:142px}.products{height:390px;padding-top:50px}.products-head{align-items:center}.products-head h2{font-size:25px}.product-viewport{margin-left:18px}.product-card{flex-basis:min(78vw,290px)}.features{height:auto;padding:50px 0}.features-inner{grid-template-columns:1fr}.features-copy h2{font-size:26px}.features-copy>p{width:100%}.features-copy ol{grid-template-columns:1fr 1fr}.radial{margin:25px auto 0}.footer-main{height:auto;min-height:430px;border-radius:30px 30px 0 0}.footer-main:before{display:none}.footer-inner{grid-template-columns:1fr 1fr;height:auto;padding-top:38px}.subscribe{grid-column:1/-1}.subscribe form{width:100%;max-width:320px}.pixel-strip{position:absolute}.copyright{height:40px}footer{height:auto}.quick>div{grid-template-columns:1fr}.socials{margin-bottom:55px}}
 
 .hero-art{margin:0}
-
-/* Square Card Mobile Responsiveness */
-html, body { overflow-x: hidden !important; }
-body { min-width: 0 !important; }
-.card-system, .product-card, .products-grid, section, main, div { max-width: 100% !important; box-sizing: border-box !important; }
-@media (max-width: 430px) {
-  .card-system { transform: scale(0.82) !important; transform-origin: top center !important; margin: 0 auto !important; }
-  .products-grid { grid-template-columns: 1fr !important; }
-  .shell { width: calc(100% - 20px) !important; }
-}
-
-
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }

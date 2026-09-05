@@ -876,10 +876,26 @@ def apply_document(html: str, document: dict | str | None, page_slug: str='', as
 
 
 def _local_operations(current: dict, instruction: str, page: str) -> list[dict]:
-    text=instruction.strip(); low=text.lower(); ops=[]; primary='main section:first-of-type' if page=='home' else 'main'
+    text=instruction.strip(); low=text.lower(); ops=[]
+    nodes=current.get('editor_nodes') or []
+    primary=None
+    for n in nodes:
+        if n.get('tag') in {'section', 'header', 'div', 'main'} and n.get('id'):
+            primary=f'[data-zylora-id="{n["id"]}"]'
+            break
+    if not primary:
+        if nodes and nodes[0].get('id'):
+            primary=f'[data-zylora-id="{nodes[0]["id"]}"]'
+        else:
+            primary='main section:first-of-type' if page=='home' else 'main'
     quoted=re.findall(r'["“](.+?)["”]',text)
     if ('headline' in low or 'heading' in low or 'hero title' in low) and quoted:
-        ops.append({'page':page,'type':'set_text','selector':'h1','text':quoted[0]})
+        heading_selector='h1'
+        for n in nodes:
+            if n.get('tag') in {'h1', 'h2', 'h3'} and n.get('id'):
+                heading_selector=f'[data-zylora-id="{n["id"]}"]'
+                break
+        ops.append({'page':page,'type':'set_text','selector':heading_selector,'text':quoted[0]})
     assets=current.get('assets') or []
     if ('image' in low or 'photo' in low):
         matched=None
@@ -942,7 +958,7 @@ def _local_operations(current: dict, instruction: str, page: str) -> list[dict]:
         m=re.search(r'(?:section\s+)(\d+)',low)
         if m: ops.append({'page':page,'type':'remove','selector':f'main section:nth-of-type({max(1,int(m.group(1)))})'})
     if not ops:
-        ops.append({'page':page,'type':'set_style','selector':'main','styles':{'letter-spacing':'-0.01em'}})
+        ops.append({'page':page,'type':'set_style','selector':primary,'styles':{'letter-spacing':'-0.01em'}})
         ops.append({'page':page,'type':'set_effect','selector':primary,'effect_kind':'scroll','effect':'fade-up','config':{'duration_ms':700,'delay_ms':0}})
     return [validate_operation(x) for x in ops]
 

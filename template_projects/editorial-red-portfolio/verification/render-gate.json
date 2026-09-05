@@ -1,11 +1,11 @@
 {
   "status": "passed",
   "source_archive": "editorial-red-portfolio-v1.1.zip",
-  "source_archive_sha256": "f14136d58aad3d28df822b25835c8703b417cc2a5be7a169c1edec531987a873",
-  "render_home_sha256": "ea99ecceac243223cb7a04a642676a895d2eaa797100ffeb93b80552f7e7505e",
-  "css_sha256": "4271bbb1173ad233f65984173e83e3578524b1bd5746406e18af41d4459c13da",
+  "source_archive_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "render_home_sha256": "bebb58ecdf1ed5a6809e4eb01107ece2b525275384409e0623d454f7252473c3",
+  "css_sha256": "6ce3fcd078964d76d72be386622088af3aad35a6c4ed967d60838b1811704c16",
   "page_sha256": {
-    "home": "ea99ecceac243223cb7a04a642676a895d2eaa797100ffeb93b80552f7e7505e"
+    "home": "bebb58ecdf1ed5a6809e4eb01107ece2b525275384409e0623d454f7252473c3"
   },
   "rights_check_passed": true,
   "user_license_attestation": true,

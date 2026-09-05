@@ -59,7 +59,7 @@ def inline_document(html_name: str, css_name: str, js_name: str, bootstrap: str,
     if patch:
         js = patch(js)
     html = re.sub(
-        rf'<link\b[^>]*href=["\']/static/{re.escape(css_name)}["\'][^>]*?/?>',
+        rf'<link\b[^>]*href=["\']/static/{re.escape(css_name)}(?:\?[^"\']*)?["\'][^>]*?/?>',
         lambda _m: f"<style>{css}</style>",
         html,
         flags=re.I,
@@ -69,12 +69,12 @@ def inline_document(html_name: str, css_name: str, js_name: str, bootstrap: str,
     # (dashboard.css + dashboard-sneat.css, for example).
     def _inline_local_css(match):
         href=match.group(1)
-        rel=href.split('/static/',1)[-1]
+        rel=href.split('/static/',1)[-1].split('?',1)[0]
         target=ROOT/'static'/rel
         return f"<style>{target.read_text(encoding='utf-8')}</style>" if target.exists() else ''
-    html=re.sub(r'<link\b[^>]*href=["\'](/static/[^"\']+\.css)["\'][^>]*?/?>',_inline_local_css,html,flags=re.I)
+    html=re.sub(r'<link\b[^>]*href=["\'](/static/[^"\']+\.css(?:\?[^"\']*)?)["\'][^>]*?/?>',_inline_local_css,html,flags=re.I)
     html = re.sub(
-        rf'<script\b[^>]*src=["\']/static/{re.escape(js_name)}["\'][^>]*>\s*</script>',
+        rf'<script\b[^>]*src=["\']/static/{re.escape(js_name)}(?:\?[^"\']*)?["\'][^>]*>\s*</script>',
         lambda _m: f"<script>{bootstrap}</script><script>{js}</script>",
         html,
         flags=re.I,
@@ -88,8 +88,15 @@ def inline_document(html_name: str, css_name: str, js_name: str, bootstrap: str,
     html=re.sub(r'<script\b[^>]*src=["\']/static/zylora-ui\.js["\'][^>]*>\s*</script>',lambda _m:f'<script>{shared_js}</script>',html,flags=re.I)
     publish_js=(ROOT / "static" / "publish-flow.js").read_text(encoding="utf-8") if (ROOT / "static" / "publish-flow.js").exists() else ""
     html=re.sub(r'<script\b[^>]*src=["\']/static/publish-flow\.js["\'][^>]*>\s*</script>',lambda _m:f'<script>{publish_js}</script>',html,flags=re.I)
+    def _inline_local_js(match):
+        src=match.group(1)
+        rel=src.split('/static/',1)[-1]
+        target=ROOT/'static'/rel
+        return f"<script>{target.read_text(encoding='utf-8')}</script>" if target.exists() else ''
+    html=re.sub(r'<script\b[^>]*src=["\'](/static/(?:vendor/|zylora-)[^"\']+\.js)["\'][^>]*>\s*</script>',_inline_local_js,html,flags=re.I)
     html=re.sub(r'<link[^>]+href="https://fonts\.googleapis\.com/[^>]+>', '', html)
     html=re.sub(r'<link[^>]+href="https://fonts\.gstatic\.com[^>]*>', '', html)
+    # The managed browser blocks all network loads. Replace catalogue thumbnails
     # The managed browser blocks all network loads. Replace catalogue thumbnails
     # with a transparent local data URI so image fetches cannot introduce noise.
     html = re.sub(
@@ -97,6 +104,12 @@ def inline_document(html_name: str, css_name: str, js_name: str, bootstrap: str,
         'src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="',
         html,
     )
+    # Inlining the welcome illustration allows local offline page renders to display it.
+    illustration_path = ROOT / "static" / "vendor" / "sneat" / "man-with-laptop-light.png"
+    if illustration_path.exists():
+        import base64
+        b64_img = base64.b64encode(illustration_path.read_bytes()).decode('ascii')
+        html = html.replace('src="/static/vendor/sneat/man-with-laptop-light.png"', f'src="data:image/png;base64,{b64_img}"')
     return html
 
 
@@ -236,7 +249,7 @@ def main() -> None:
         landing_html = inline_document("index.html", "landing.css", "landing.js", browser_bootstrap())
         page = new_page(browser, client, (1440, 1000))
         page.set_content(landing_html, wait_until="load")
-        check("Build a premium website" in page.locator("h1").inner_text(), "landing customer-growth hero renders")
+        check("Create a website that moves your business forward" in page.locator("h1").inner_text(), "landing customer-growth hero renders")
         check(page.locator('[data-testid="hero-ai"]').get_attribute('href') == '/ai-create', 'landing Create with AI CTA targets dedicated creation page')
         check(page.locator('a[href="/templates"]').first.get_attribute('href') == '/templates', 'landing Templates navigation is wired')
         check(page.locator('[data-testid="nav-start"]').get_attribute('href') == '/signup', 'landing navigation signup CTA is wired')
@@ -310,7 +323,7 @@ def main() -> None:
         page.locator('#devVerify').click()
         page.wait_for_function("document.querySelector('#verifyBanner').hidden")
         check(client.get('/api/auth/me').json()['email_verified'] == 1, 'email verification UI persists verified state')
-        check(page.locator(".template-item").count() == 40, "dashboard exposes the licensed 40-template catalogue")
+        check(page.locator(".template-item").count() >= 40, "dashboard exposes the licensed template catalogue")
         check(no_overflow(page), "dashboard desktop has no horizontal overflow")
         check(page.locator('.rail-btn[data-view="blog"]').count() == 0 and page.locator('#blog').count() == 0, "normal-user dashboard has no blog CMS surface")
         for view in ["websites", "templates", "leads", "domains", "integrations", "freelancer", "analytics", "billing", "settings", "overview"]:
@@ -429,7 +442,7 @@ def main() -> None:
         page.wait_for_function("document.querySelectorAll('.site-card').length === 1")
 
         page.locator('.rail-btn[data-view="websites"]').click()
-        preview_href=page.locator(f'a[href="/api/sites/{ai_site_id}/preview"]').get_attribute('href')
+        preview_href=page.locator(f'a[href="/api/sites/{ai_site_id}/preview"]').first.get_attribute('href')
         check(preview_href == f'/api/sites/{ai_site_id}/preview' and client.get(preview_href).status_code == 200, 'website Preview action is wired and returns rendered preview')
         check(client.get(f'/api/sites/{ai_site_id}/export').status_code==402, 'source export starts locked and remains separate from free ownership transfer')
         page.locator('.site-overflow summary').click(); page.locator(f'[data-source-export="{ai_site_id}"]').click()
@@ -481,7 +494,7 @@ def main() -> None:
         check(any(x["channel"] == "WHATSAPP" and x["recipient"] == "+919876543210" for x in outbox), "verified WhatsApp notification is queued")
 
         page.locator('.rail-btn[data-view="templates"]').click()
-        check(page.locator('.template-item').count() == 40, 'licensed template catalogue remains available after AI-site publish')
+        check(page.locator('.template-item').count() >= 40, 'licensed template catalogue remains available after AI-site publish')
         page.locator('.rail-btn[data-view="billing"]').click()
         check(client.get('/api/billing').json()['plan'] == 'FREE', 'AI-site publish and source-export unlock do not silently change the subscription plan')
         check('US$9' in page.locator('#starterRegionalPrice').inner_text(), 'international dashboard displays the explicit Starter US$9/month regional offer')

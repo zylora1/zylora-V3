@@ -104,5 +104,28 @@
         <form class="newsletter"><label class="sr-only" for="email">Email address</label><input id="email" type="email" placeholder="NEWSLETTER EMAIL" /><button aria-label="Join newsletter" type="submit">→</button></form>
       </footer>
     </main>
-    <script type="module" src="script.js"></script>
+    <script>
+(() => {
+  const menuButton = document.querySelector('.menu-button');
+  const menu = document.querySelector('.menu');
+  if (menuButton && menu) {
+    menuButton.addEventListener('click', () => {
+      const open = menu.classList.toggle('open');
+      menuButton.setAttribute('aria-expanded', String(open));
+    });
+    document.querySelectorAll('.menu a').forEach((link) => {
+      link.addEventListener('click', () => {
+        menu.classList.remove('open');
+        menuButton.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+  const newsletter = document.querySelector('.newsletter');
+  if (newsletter) {
+    newsletter.addEventListener('submit', (event) => {
+      event.preventDefault();
+    });
+  }
+})();
+</script>
   

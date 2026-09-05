@@ -28,7 +28,7 @@
     "dashboard shows verification gate for new account",
     "verification resend stores development token",
     "email verification UI persists verified state",
-    "dashboard exposes the licensed 40-template catalogue",
+    "dashboard exposes the licensed template catalogue",
     "dashboard desktop has no horizontal overflow",
     "normal-user dashboard has no blog CMS surface",
     "dashboard websites view opens",

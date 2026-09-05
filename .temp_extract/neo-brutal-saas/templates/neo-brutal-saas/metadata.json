@@ -1,0 +1,25 @@
+{
+  "id": "neo-brutal-saas",
+  "name": "Neo Brutal SaaS",
+  "slug": "neo-brutal-saas",
+  "category": "SaaS",
+  "vertical": "software",
+  "styleTags": [
+    "neo-brutalism",
+    "brutalist",
+    "editorial-grid",
+    "high-contrast",
+    "geometric"
+  ],
+  "pageCount": 1,
+  "version": "1.0.0",
+  "responsive": true,
+  "assets": {
+    "hero": "./assets/hero.webp",
+    "works": [
+      "./assets/work-01.webp",
+      "./assets/work-02.webp",
+      "./assets/work-03.webp"
+    ]
+  }
+}

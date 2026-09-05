@@ -1,21 +1,3930 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Zylora — Premium websites that bring you customers</title><meta content="Build a premium website, publish it, capture qualified leads, book appointments and grow your business from one connected Zylora workspace." name="description"/><meta content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" name="robots"/><link href="{{APP_URL}}/" rel="canonical"/><meta content="website" property="og:type"/><meta content="Zylora — Premium websites that bring you customers" property="og:title"/><meta content="Build a premium website that brings you customers. Create, publish, capture leads and book appointments in one workspace." property="og:description"/><meta content="{{APP_URL}}/" property="og:url"/><meta content="{{APP_URL}}/static/og-zylora.webp" property="og:image"/><meta content="Zylora website builder workspace" property="og:image:alt"/><meta content="summary_large_image" name="twitter:card"/><meta content="Zylora — Premium website and customer-growth platform" name="twitter:title"/><meta content="Build a premium website that brings you customers, then manage leads, appointments, SEO and growth in the same workspace." name="twitter:description"/><meta content="{{APP_URL}}/static/og-zylora.webp" name="twitter:image"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="/static/zylora-ui.css" rel="stylesheet"/><link href="/static/landing.css" rel="stylesheet"/><link href="/manifest.webmanifest" rel="manifest"/><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"{{APP_URL}}/#organization","name":"Zylora","url":"{{APP_URL}}/"},{"@type":"WebSite","@id":"{{APP_URL}}/#website","url":"{{APP_URL}}/","name":"Zylora","publisher":{"@id":"{{APP_URL}}/#organization"}},{"@type":"SoftwareApplication","@id":"{{APP_URL}}/#software","name":"Zylora","url":"{{APP_URL}}/","applicationCategory":"BusinessApplication","operatingSystem":"Web","description":"AI website creation, premium templates, publishing, domains, leads, appointments and business operations in one workspace.","offers":[{"@type":"Offer","name":"Free","price":"0","priceCurrency":"USD"},{"@type":"Offer","name":"Starter India","price":"799","priceCurrency":"INR"},{"@type":"Offer","name":"Starter International","price":"9","priceCurrency":"USD"},{"@type":"Offer","name":"Growth India","price":"1799","priceCurrency":"INR"},{"@type":"Offer","name":"Growth International","price":"19","priceCurrency":"USD"},{"@type":"Offer","name":"Managed by experts","url":"{{APP_URL}}/#pricing","description":"Sales-assisted managed website delivery. Contact Zylora for project scope and pricing."}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does AI creation require a starting template?","acceptedAnswer":{"@type":"Answer","text":"No. AI creation derives its page structure and design direction from the business brief."}},{"@type":"Question","name":"Does my plan decide how many pages AI creates?","acceptedAnswer":{"@type":"Answer","text":"No. AI-created page count follows the explicit brief and inferred business needs."}},{"@type":"Question","name":"Can I edit the generated website?","acceptedAnswer":{"@type":"Answer","text":"Yes. The editor supports structured manual edits and AI-assisted changes before publishing."}}]}]}</script></head><body>
-<a class="skip" href="#main">Skip to content</a>
-<header class="site-nav"><a aria-label="Zylora home" class="z-wordmark brand" href="/">Zylora</a><nav aria-label="Primary" id="primaryNav"><a href="#product">Product</a><a href="/ai-create">AI Builder</a><a href="#business">Business</a><a href="/templates">Templates</a><a href="#pricing">Pricing</a><a href="/blog">Resources</a></nav><div class="nav-actions"><a class="login" href="/login">Log in</a><a class="button button-dark" data-testid="nav-start" href="/signup">Get started</a><button aria-controls="primaryNav" aria-expanded="false" aria-label="Open navigation" class="menu" data-testid="mobile-menu">Menu</button></div></header>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Zylora — Build a website that brings you customers</title>
+  <meta name="description" content="Create, publish and grow a premium business website with AI, lead capture, appointments and analytics in one connected workspace."/>
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/><link rel="canonical" href="{{APP_URL}}/"/>
+  <meta property="og:type" content="website"/><meta property="og:title" content="Zylora — Build a website that brings you customers"/><meta property="og:description" content="Create, publish and grow a premium business website from one calm workspace."/><meta property="og:url" content="{{APP_URL}}/"/><meta property="og:image" content="{{APP_URL}}/static/og-zylora.webp"/>
+  <meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="Zylora — AI website and customer growth platform"/><meta name="twitter:description" content="Build, publish, capture leads and book appointments from one workspace."/><meta name="twitter:image" content="{{APP_URL}}/static/og-zylora.webp"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/static/favicon.png"/>
+  <link rel="shortcut icon" href="/favicon.ico"/>
+  <link rel="stylesheet" href="landing.css"/><link rel="stylesheet" href="/static/landing.css"/><link rel="manifest" href="/manifest.webmanifest"/>
+  <link rel="alternate" type="text/plain" href="{{APP_URL}}/llms.txt" title="Zylora LLM Manifest"/>
+  <style id="zylora-apple-core-styles">
+/* ==========================================================================
+   ZYLORA — APPLE / LINEAR GRADE DESIGN SYSTEM (STANDALONE PRODUCTION CSS)
+   ========================================================================== */
+
+:root {
+  /* Apple Surface Palette */
+  --paper: #f5f5f7;
+  --surface: #ffffff;
+  --surface-subtle: #fbfbfd;
+  --surface-raised: #ffffff;
+  --surface-dark: #0d0d11;
+  --surface-dark-card: rgba(255, 255, 255, 0.05);
+  --surface-dark-border: rgba(255, 255, 255, 0.10);
+
+  /* Typography & Ink Tokens */
+  --ink: #1d1d1f;
+  --ink-secondary: #6e6e73;
+  --ink-tertiary: #86868b;
+  --font-serif: 'Newsreader', 'Tiempos Headline', 'Tiempos', 'Editorial New', Georgia, serif;
+  --font-display: 'Newsreader', 'Tiempos Headline', 'Tiempos', Georgia, serif;
+  --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  /* Accent & Interactive States */
+  --zy-blue: #0071e3;
+  --zy-blue-hover: #0077ed;
+  --zy-blue-active: #0062c4;
+  --zy-blue-soft: #e8f2ff;
+  --zy-green: #1f9d55;
+  --zy-green-soft: #eaf7ef;
+  --zy-amber: #b66a00;
+  --zy-red: #d92d20;
+
+  /* Borders, Geometry & Elevation */
+  --zy-line: rgba(0, 0, 0, 0.08);
+  --zy-line-strong: rgba(0, 0, 0, 0.14);
+  --zy-radius-sm: 8px;
+  --zy-radius-md: 12px;
+  --zy-radius-lg: 18px;
+  --zy-radius-xl: 24px;
+  --zy-radius-pill: 999px;
+  --zy-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --zy-shadow-md: 0 12px 32px rgba(0, 0, 0, 0.06);
+  --zy-shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.09);
+  --zy-focus-ring: 0 0 0 3.5px rgba(0, 113, 227, 0.18);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-body);
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body.landing-page {
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  color: var(--ink);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+.skip-link {
+  position: fixed;
+  left: 16px;
+  top: -60px;
+  z-index: 1000;
+  background: #ffffff;
+  padding: 10px 14px;
+  border-radius: var(--zy-radius-sm);
+  box-shadow: var(--zy-shadow-md);
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 14px;
+  outline: var(--zy-focus-ring);
+}
+
+/* --------------------------------------------------------------------------
+   WIX-STYLE TEXT-ONLY WORDMARK & LOGO
+   -------------------------------------------------------------------------- */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  text-decoration: none;
+  color: var(--ink);
+  line-height: 1;
+  transition: opacity 0.15s ease;
+  user-select: none;
+}
+
+.brand:hover {
+  opacity: 0.82;
+}
+
+.brand-wordmark, .brand span {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif !important;
+  font-weight: 750 !important;
+  font-size: 23px !important;
+  letter-spacing: -0.035em !important;
+  color: #111111 !important;
+  text-transform: none !important;
+  display: inline-block;
+  line-height: 1;
+}
+
+.brand-wordmark::after, .brand span::after {
+  display: none !important;
+  content: "" !important;
+}
+
+/* --------------------------------------------------------------------------
+   STICKY TRANSLUCENT APPLE NAVIGATION
+   -------------------------------------------------------------------------- */
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 max(24px, calc((100vw - 1200px) / 2));
+  background: rgba(10, 15, 30, 0.55);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.site-nav .brand-wordmark, .site-nav .brand span {
+  color: #ffffff !important;
+}
+
+.site-nav nav a {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.site-nav nav a:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.site-nav .nav-login {
+  color: #ffffff !important;
+}
+
+.site-nav .button-primary {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+.site-nav nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.site-nav nav a {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  padding: 6px 13px;
+  border-radius: var(--zy-radius-pill);
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.site-nav nav a:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-login {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink-secondary);
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: var(--zy-radius-pill);
+  transition: color 0.15s ease;
+}
+
+.nav-login:hover {
+  color: var(--ink);
+}
+
+.button {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 18px;
+  border-radius: var(--zy-radius-pill);
+  text-decoration: none;
+  border: 1px solid transparent;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s ease;
+}
+
+.button-primary {
+  background: #1d1d1f;
+  color: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.button-primary:hover {
+  background: #000000;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+}
+
+.button-primary:active {
+  transform: translateY(0);
+}
+
+.button-secondary, .button-outline {
+  background: #ffffff;
+  color: var(--ink) !important;
+  border: 1px solid var(--zy-line-strong);
+}
+
+.button-secondary:hover, .button-outline:hover {
+  background: #f7f7f9;
+  border-color: rgba(0, 0, 0, 0.22);
+}
+
+.menu {
+  display: none;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  border-radius: var(--zy-radius-sm);
+  cursor: pointer;
+  color: var(--ink);
+  padding: 0;
+}
+
+.menu:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* --------------------------------------------------------------------------
+   HERO SECTION
+   -------------------------------------------------------------------------- */
+.hero {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 56px 24px 44px;
+  text-align: center;
+  position: relative;
+  background: radial-gradient(circle at 50% -10%, rgba(2, 132, 199, 0.10), transparent 60%),
+              radial-gradient(circle at 15% 30%, rgba(59, 130, 246, 0.08), transparent 45%),
+              radial-gradient(circle at 85% 35%, rgba(14, 165, 233, 0.06), transparent 45%);
+}
+
+.hero-copy-wrap {
+  max-width: 820px;
+  margin: 0 auto 44px;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  color: var(--zy-blue) !important;
+  letter-spacing: 0.08em !important;
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, rgba(0, 113, 227, 0.08), rgba(2, 132, 199, 0.10));
+  border: 1px solid rgba(0, 113, 227, 0.22);
+  padding: 4px 14px;
+  border-radius: var(--zy-radius-pill);
+  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.08);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #1d1d1f 25%, #0071e3 65%, #0284c7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(38px, 5.4vw, 70px);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 auto 18px;
+}
+
+.hero-copy {
+  max-width: 660px;
+  margin: 0 auto;
+  color: var(--ink-secondary);
+  font-size: clamp(16.5px, 1.8vw, 20px);
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+}
+
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+.hero-actions .button {
+  min-height: 44px;
+  padding: 0 24px;
+  font-size: 14.5px;
+}
+
+.hero-actions .button-primary {
+  background: var(--zy-blue);
+  color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(0, 113, 227, 0.28);
+}
+
+.hero-actions .button-primary:hover {
+  background: var(--zy-blue-hover);
+  box-shadow: 0 6px 20px rgba(0, 113, 227, 0.35);
+}
+
+.hero-note {
+  margin: 16px 0 0;
+  color: var(--ink-tertiary);
+  font-size: 12.5px;
+  font-weight: 450;
+}
+
+/* --------------------------------------------------------------------------
+   PRODUCT STAGE (MACOS / SAFARI DEMONSTRATION)
+   -------------------------------------------------------------------------- */
+.product-stage {
+  position: relative;
+  max-width: 1040px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.stage-window {
+  overflow: hidden;
+  border: 1px solid var(--zy-line);
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: var(--zy-shadow-lg), 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.window-bar {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: #fafafc;
+  border-bottom: 1px solid var(--zy-line);
+}
+
+.window-dots {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.window-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.window-dots span:nth-child(1) { background: #ff5f56; }
+.window-dots span:nth-child(2) { background: #ffbd2e; }
+.window-dots span:nth-child(3) { background: #27c93f; }
+
+.window-url {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 6px;
+  font-size: 11.5px;
+  color: var(--ink-secondary);
+}
+
+.window-url small {
+  color: var(--ink-secondary);
+  font-weight: 500;
+  font-family: -apple-system, BlinkMacSystemFont, monospace;
+}
+
+.window-actions {
+  width: 44px;
+}
+
+.stage-app {
+  display: grid;
+  grid-template-columns: 168px 1fr;
+  min-height: 480px;
+  background: #f8f8fa;
+}
+
+.stage-app aside {
+  padding: 22px 14px;
+  background: #ffffff;
+  border-right: 1px solid var(--zy-line);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stage-aside-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  color: var(--ink);
+  padding: 0 6px;
+}
+
+.stage-aside-logo .brand-wordmark {
+  font-size: 16px;
+}
+
+.stage-aside-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.stage-aside-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  color: var(--ink-secondary);
+  font-weight: 500;
+}
+
+.stage-aside-item.on {
+  background: var(--zy-blue-soft);
+  color: var(--zy-blue);
+  font-weight: 600;
+}
+
+.stage-main {
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stage-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stage-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--zy-radius-pill);
+  background: var(--zy-green-soft);
+  color: var(--zy-green);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--zy-green);
+  box-shadow: 0 0 6px var(--zy-green);
+}
+
+.stage-btn-mini {
+  background: var(--zy-blue);
+  color: #ffffff;
+  border: 0;
+  border-radius: 8px;
+  padding: 6px 13px;
+  font-size: 12.5px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.stage-btn-mini:hover {
+  background: var(--zy-blue-hover);
+}
+
+.stage-main h2 {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin: 0;
+  color: var(--ink);
+}
+
+.stage-main > p {
+  margin: -8px 0 0;
+  color: var(--ink-secondary);
+  font-size: 13.5px;
+}
+
+.stage-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.stage-metrics article {
+  background: #ffffff;
+  border: 1px solid var(--zy-line);
+  border-radius: 12px;
+  padding: 14px 16px;
+  box-shadow: var(--zy-shadow-sm);
+}
+
+.metric-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stage-metrics small {
+  font-size: 11.5px;
+  color: var(--ink-tertiary);
+  font-weight: 500;
+}
+
+.metric-badge {
+  font-size: 10.5px;
+  background: #f0f0f2;
+  color: var(--ink-secondary);
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.metric-trend.up {
+  font-size: 10.5px;
+  background: var(--zy-green-soft);
+  color: var(--zy-green);
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.stage-metrics strong {
+  display: block;
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  margin: 6px 0 3px;
+  color: var(--ink);
+}
+
+.metric-footnote {
+  font-size: 11px;
+  color: var(--ink-tertiary);
+  display: block;
+}
+
+.stage-chart {
+  background: #ffffff;
+  border: 1px solid var(--zy-line);
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: var(--zy-shadow-sm);
+}
+
+.chart-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.chart-top-bar b {
+  font-size: 13.5px;
+  color: var(--ink);
+  display: block;
+  font-weight: 600;
+}
+
+.chart-top-bar small {
+  font-size: 11.5px;
+  color: var(--ink-tertiary);
+  display: block;
+  margin-top: 2px;
+}
+
+.chart-range {
+  font-size: 11px;
+  background: #f2f2f4;
+  color: var(--ink-secondary);
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.chart-visual {
+  position: relative;
+  width: 100%;
+}
+
+.chart-svg {
+  width: 100%;
+  height: 95px;
+  display: block;
+}
+
+.chart-labels {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 6px;
+  font-size: 10.5px;
+  color: var(--ink-tertiary);
+}
+
+.stage-float {
+  position: absolute;
+  right: -16px;
+  bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px 18px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--zy-line);
+  border-radius: 16px;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.assistant-orb {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--zy-blue);
+  color: #ffffff;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.stage-float b {
+  font-size: 13px;
+  color: var(--ink);
+  display: block;
+  font-weight: 600;
+}
+
+.stage-float small {
+  font-size: 11.5px;
+  color: var(--ink-tertiary);
+  display: block;
+  margin-top: 1px;
+}
+
+.live-dot {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--zy-green);
+  background: var(--zy-green-soft);
+  padding: 3px 8px;
+  border-radius: var(--zy-radius-pill);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pulse-ring {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--zy-green);
+  box-shadow: 0 0 6px var(--zy-green);
+}
+
+/* --------------------------------------------------------------------------
+   TRUST & CAPABILITIES STRIP
+   -------------------------------------------------------------------------- */
+.trust-line {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px 24px 44px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  color: var(--ink-tertiary);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.trust-line span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* --------------------------------------------------------------------------
+   CONNECTED WORKSPACE STORY
+   -------------------------------------------------------------------------- */
+.story, .booking-section, .pricing, .faq {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 64px 24px;
+}
+
+.section-intro {
+  max-width: 760px;
+}
+
+.section-intro h2, .feature-copy h2, .final-cta h2 {
+  margin: 12px 0 16px;
+  font-family: var(--font-display);
+  font-size: clamp(34px, 4.2vw, 56px);
+  line-height: 1.06;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.section-intro > p:last-child, .feature-copy > p, .booking-context > p, .final-cta > p {
+  color: var(--ink-secondary);
+  font-size: 16.5px;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.story-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 36px;
+}
+
+.story-grid article {
+  min-width: 0;
+  border-radius: 22px;
+  background: #ffffff;
+  border: 1px solid var(--zy-line);
+  padding: 32px;
+  overflow: hidden;
+  box-shadow: var(--zy-shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.story-grid article:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--zy-shadow-md);
+}
+
+.story-large {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+  gap: 40px;
+  min-height: 440px;
+  background: var(--surface-subtle) !important;
+}
+
+.story-step-tag {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--zy-blue);
+  text-transform: uppercase;
+}
+
+.story-grid h3 {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2.6vw, 36px);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.12;
+  margin: 14px 0;
+  color: var(--ink);
+}
+
+.story-grid p {
+  color: var(--ink-secondary);
+  font-size: 15px;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.story-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 20px;
+  color: var(--zy-blue);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.story-link:hover {
+  text-decoration: underline;
+}
+
+.builder-visual {
+  position: relative;
+  min-height: 340px;
+  align-self: center;
+}
+
+.brief-card {
+  position: absolute;
+  right: 20px;
+  bottom: 0;
+  width: min(360px, 92%);
+  padding: 22px;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--zy-line);
+}
+
+.brief-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.brief-head small {
+  color: var(--ink-tertiary);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.brief-head span {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--zy-blue);
+  background: var(--zy-blue-soft);
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.brief-card b {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.builder-steps {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.builder-steps span {
+  font-size: 10px;
+  color: var(--ink-tertiary);
+  background: #f0f0f2;
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+
+.builder-steps span.done {
+  color: var(--zy-blue);
+  background: var(--zy-blue-soft);
+  font-weight: 600;
+}
+
+.builder-steps span.current {
+  color: var(--ink);
+  background: #e2e2e6;
+  font-weight: 600;
+}
+
+.brief-btn {
+  width: 100%;
+  padding: 9px;
+  background: var(--zy-blue);
+  color: #ffffff;
+  border: 0;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sitemap-visual {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  background: #1d1d1f;
+  color: #ffffff;
+  padding: 16px;
+  border-radius: 14px;
+  font-size: 11px;
+  width: 160px;
+  box-shadow: var(--zy-shadow-md);
+}
+
+.sitemap-visual small {
+  color: #86868b;
+  font-size: 9.5px;
+  display: block;
+  margin-bottom: 8px;
+  letter-spacing: 0.06em;
+}
+
+.sitemap-visual div {
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  margin-bottom: 4px;
+  font-size: 11px;
+}
+
+.sitemap-visual div.active {
+  background: var(--zy-blue);
+}
+
+.deploy-status-card, .intel-status-card {
+  margin-top: 24px;
+  padding: 14px 18px;
+  background: #fbfbfd;
+  border: 1px solid var(--zy-line);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.deploy-status-card b, .intel-status-card b {
+  font-size: 13px;
+  display: block;
+  color: var(--ink);
+}
+
+.deploy-status-card small, .intel-status-card small {
+  font-size: 11px;
+  color: var(--ink-tertiary);
+  display: block;
+  margin-top: 2px;
+}
+
+.pill-green {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--zy-green);
+  background: var(--zy-green-soft);
+  padding: 3px 9px;
+  border-radius: var(--zy-radius-pill);
+}
+
+/* --------------------------------------------------------------------------
+   AI SALES ASSISTANT (OBSIDIAN DARK APPLE BAND)
+   -------------------------------------------------------------------------- */
+.feature-band {
+  background: var(--surface-dark);
+  color: #ffffff;
+  padding: 80px 24px;
+  margin: 32px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-band::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 380px;
+  background: radial-gradient(ellipse at 50% 0%, rgba(0, 113, 227, 0.16), transparent 70%);
+  pointer-events: none;
+}
+
+.feature-band-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 56px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.feature-copy h2 {
+  color: #ffffff !important;
+}
+
+.feature-copy > p {
+  color: #a1a1a6 !important;
+}
+
+.feature-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.step-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: var(--surface-dark-card);
+  border: 1px solid var(--surface-dark-border);
+}
+
+.step-num {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.step-card b {
+  display: block;
+  font-size: 14.5px;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.step-card p {
+  margin: 0;
+  font-size: 13px;
+  color: #a1a1a6;
+  line-height: 1.5;
+}
+
+.chat-demo-window {
+  background: #17171a;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.chat-demo-top {
+  height: 48px;
+  padding: 0 18px;
+  background: #1c1c20;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chat-demo-agent {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.agent-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  background: var(--zy-blue);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+}
+
+.chat-demo-agent b {
+  font-size: 13px;
+  color: #ffffff;
+  display: block;
+}
+
+.chat-demo-agent small {
+  font-size: 11px;
+  color: var(--zy-green);
+  display: block;
+}
+
+.chat-demo-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 300px;
+  background: #141416;
+}
+
+.bubble {
+  padding: 11px 16px;
+  border-radius: 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  max-width: 82%;
+}
+
+.bubble-bot {
+  background: #232328;
+  color: #f2f2f2;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.bubble-user {
+  background: var(--zy-blue);
+  color: #ffffff;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.bubble-options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-self: flex-start;
+}
+
+.bubble-options span {
+  font-size: 11.5px;
+  padding: 5px 12px;
+  border-radius: var(--zy-radius-pill);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chat-demo-input {
+  height: 48px;
+  padding: 0 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1c1c20;
+}
+
+.chat-demo-input span {
+  font-size: 12px;
+  color: #71717a;
+}
+
+.chat-demo-send {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--zy-blue);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+}
+
+/* --------------------------------------------------------------------------
+   AUTHORITATIVE BOOKING SECTION
+   -------------------------------------------------------------------------- */
+.booking-cockpit {
+  margin-top: 36px;
+  display: grid;
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr) minmax(0, 220px);
+  background: #ffffff;
+  border: 1px solid var(--zy-line);
+  border-radius: 22px;
+  box-shadow: var(--zy-shadow-md);
+  overflow: hidden;
+}
+
+.booking-col {
+  padding: 28px;
+}
+
+.booking-col-context {
+  border-right: 1px solid var(--zy-line);
+  background: #fafafc;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.booking-host-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #1d1d1f;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+}
+
+.booking-col-context h4 {
+  margin: 0;
+  font-size: 17px;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.booking-col-context p {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--ink-secondary);
+  line-height: 1.5;
+}
+
+.booking-meta-row {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 12.5px;
+  color: var(--ink-tertiary);
+}
+
+.booking-meta-row span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-secondary);
+}
+
+.booking-col-calendar {
+  border-right: 1px solid var(--zy-line);
+}
+
+.calendar-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.calendar-head b {
+  font-size: 14.5px;
+  color: var(--ink);
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  text-align: center;
+}
+
+.cal-day-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-tertiary);
+  padding-bottom: 8px;
+}
+
+.cal-day {
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.cal-day:hover:not(.disabled) {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.cal-day.disabled {
+  color: #d1d1d6;
+  cursor: default;
+}
+
+.cal-day.active {
+  background: var(--zy-blue) !important;
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+.booking-col-times {
+  background: #fafafc;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.times-title {
+  font-size: 11.5px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-tertiary);
+  margin-bottom: 8px;
+}
+
+.time-slot {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--zy-line-strong);
+  background: #ffffff;
+  color: var(--ink);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.time-slot:hover {
+  border-color: var(--zy-blue);
+  color: var(--zy-blue);
+}
+
+.time-slot.active {
+  background: var(--zy-blue-soft);
+  border-color: var(--zy-blue);
+  color: var(--zy-blue);
+}
+
+/* --------------------------------------------------------------------------
+   SITE VISIBILITY & SEARCH INTELLIGENCE
+   -------------------------------------------------------------------------- */
+.seo-dashboard {
+  margin-top: 36px;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 20px;
+}
+
+.seo-card {
+  background: #ffffff;
+  border: 1px solid var(--zy-line);
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: var(--zy-shadow-sm);
+}
+
+.seo-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.seo-card-head b {
+  font-size: 13.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-tertiary);
+}
+
+.seo-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.seo-kpi {
+  background: #fbfbfd;
+  border: 1px solid var(--zy-line);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+}
+
+.seo-kpi strong {
+  display: block;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--zy-blue);
+  letter-spacing: -0.04em;
+}
+
+.seo-kpi small {
+  font-size: 11.5px;
+  color: var(--ink-secondary);
+}
+
+.seo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.seo-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #fbfbfd;
+  border: 1px solid var(--zy-line);
+}
+
+.seo-icon {
+  color: var(--zy-green);
+  font-size: 14px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.seo-item b {
+  display: block;
+  font-size: 13.5px;
+  color: var(--ink);
+}
+
+.seo-item small {
+  display: block;
+  font-size: 11.5px;
+  color: var(--ink-tertiary);
+  margin-top: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   PRICING SECTION
+   -------------------------------------------------------------------------- */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 36px;
+}
+
+.price-card {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  background: #ffffff;
+  border: 1px solid var(--zy-line);
+  border-radius: 20px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--zy-shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.price-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--zy-shadow-md);
+}
+
+.price-card.featured {
+  border-color: var(--zy-blue);
+  box-shadow: 0 12px 32px rgba(0, 113, 227, 0.12);
+  position: relative;
+}
+
+.price-card.enterprise {
+  background: #1c1c22;
+  color: #ffffff;
+  border-color: #2e2e38;
+}
+
+.price-card.enterprise h3, .price-card.enterprise strong {
+  color: #ffffff;
+}
+
+.price-card.enterprise p, .price-card.enterprise li {
+  color: #a1a1a6;
+}
+
+.price-tag-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.price-badge {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  border-radius: var(--zy-radius-pill);
+  background: #f0f0f2;
+  color: var(--ink-secondary);
+}
+
+.price-badge.popular {
+  background: var(--zy-blue-soft);
+  color: var(--zy-blue);
+}
+
+.price-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  color: var(--ink);
+}
+
+.price-card strong {
+  display: block;
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  margin: 12px 0 6px;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.price-card p {
+  font-size: 12.5px;
+  color: var(--ink-secondary);
+  line-height: 1.5;
+  margin: 0 0 20px;
+}
+
+.price-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.price-features li {
+  font-size: 12.5px;
+  color: var(--ink-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.price-features li::before {
+  content: "✓";
+  color: var(--zy-green);
+  font-weight: 700;
+}
+
+.price-card .button {
+  width: 100%;
+  margin-top: auto;
+}
+
+/* --------------------------------------------------------------------------
+   ACCESSIBLE FAQ ACCORDION
+   -------------------------------------------------------------------------- */
+.faq-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 36px;
+  max-width: 820px;
+}
+
+.faq-item {
+  border: 1px solid var(--zy-line);
+  border-radius: 16px;
+  background: #ffffff;
+  overflow: hidden;
+  transition: border-color 0.15s ease;
+}
+
+.faq-item[open] {
+  border-color: var(--zy-line-strong);
+}
+
+.faq-item summary {
+  padding: 20px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+  user-select: none;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item summary::after {
+  content: "+";
+  font-size: 20px;
+  color: var(--ink-tertiary);
+  transition: transform 0.2s ease;
+}
+
+.faq-item[open] summary::after {
+  content: "−";
+  color: var(--zy-blue);
+}
+
+.faq-item p {
+  padding: 0 24px 20px;
+  margin: 0;
+  font-size: 14.5px;
+  color: var(--ink-secondary);
+  line-height: 1.6;
+}
+
+/* --------------------------------------------------------------------------
+   FINAL CTA SECTION
+   -------------------------------------------------------------------------- */
+.final-cta {
+  max-width: 1180px;
+  margin: 40px auto 80px;
+  padding: 72px 24px;
+  text-align: center;
+  background: linear-gradient(180deg, #fbfbfd 0%, #f0f4fa 100%);
+  border: 1px solid var(--zy-line);
+  border-radius: 28px;
+  box-shadow: var(--zy-shadow-sm);
+}
+
+.final-cta .hero-actions {
+  margin-top: 24px;
+}
+
+/* --------------------------------------------------------------------------
+   APPLE FOOTER WITH WIX-STYLE WORDMARK
+   -------------------------------------------------------------------------- */
+.site-footer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px 64px;
+  border-top: 1px solid var(--zy-line);
+  display: grid;
+  grid-template-columns: 1.2fr 2fr;
+  gap: 40px;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-brand p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-secondary);
+  line-height: 1.5;
+  max-width: 280px;
+}
+
+.site-footer nav {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.site-footer nav div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.site-footer nav b {
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.site-footer nav a {
+  font-size: 13.5px;
+  color: var(--ink-secondary);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.site-footer nav a:hover {
+  color: var(--zy-blue);
+}
+
+.site-footer small {
+  grid-column: 1 / -1;
+  color: var(--ink-tertiary);
+  font-size: 12px;
+  padding-top: 24px;
+  border-top: 1px solid var(--zy-line);
+}
+
+/* --------------------------------------------------------------------------
+   EXPERT CONSULTATION MODAL
+   -------------------------------------------------------------------------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: none;
+  place-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal.open {
+  display: grid;
+}
+
+.modal-card {
+  width: min(520px, 100%);
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 24px;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.25);
+  padding: 32px;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 0;
+  background: #f2f2f5;
+  color: var(--ink-secondary);
+  font-size: 18px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background 0.15s ease;
+}
+
+.modal-close:hover {
+  background: #e5e5ea;
+  color: var(--ink);
+}
+
+.modal-card h2 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  margin: 8px 0 20px;
+  color: var(--ink);
+}
+
+.modal-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modal-card label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-secondary);
+}
+
+.modal-card input {
+  height: 42px;
+  border-radius: 10px;
+  border: 1px solid var(--zy-line-strong);
+  padding: 0 14px;
+  font-size: 14px;
+  color: var(--ink);
+  outline: 0;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.modal-card input:focus {
+  border-color: var(--zy-blue);
+  box-shadow: var(--zy-focus-ring);
+}
+
+/* --------------------------------------------------------------------------
+   WIX-STYLE DESIGNER TEMPLATES SHOWCASE
+   -------------------------------------------------------------------------- */
+.templates-showcase {
+  max-width: 1200px;
+  margin: 60px auto 40px;
+  padding: 40px 24px 70px;
+  position: relative;
+}
+
+.templates-showcase::before {
+  content: "";
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: 400px;
+  background: radial-gradient(ellipse at center, rgba(0, 113, 227, 0.08) 0%, rgba(14, 165, 233, 0.04) 40%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.showcase-header {
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto 36px;
+  position: relative;
+  z-index: 1;
+}
+
+.showcase-header h2 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+  margin: 12px 0 14px;
+  line-height: 1.15;
+}
+
+.showcase-header p {
+  font-size: 16px;
+  color: var(--ink-secondary);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.showcase-filters {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+  position: relative;
+  z-index: 1;
+}
+
+.tpl-tab {
+  background: #ffffff;
+  border: 1px solid var(--zy-line-strong);
+  border-radius: var(--zy-radius-pill);
+  padding: 7px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-secondary);
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.tpl-tab:hover {
+  border-color: #1d1d1f;
+  color: var(--ink);
+  background: #f7f7f9;
+}
+
+.tpl-tab.active {
+  background: #1d1d1f;
+  color: #ffffff !important;
+  border-color: #1d1d1f;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.tpl-card {
+  min-width: 0;
+  background: #ffffff;
+  border: 1px solid var(--zy-line);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--zy-shadow-sm);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.tpl-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.08), 0 0 20px rgba(0, 113, 227, 0.08);
+  border-color: rgba(0, 113, 227, 0.35);
+}
+
+.tpl-media-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #f0f2f5;
+}
+
+.tpl-media-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.4s ease;
+  display: block;
+}
+
+.tpl-card:hover .tpl-media-wrap img {
+  transform: scale(1.03);
+}
+
+.tpl-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--zy-radius-pill);
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1d1d1f;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.tpl-info {
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.tpl-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.tpl-title-row h3 {
+  margin: 0;
+  font-size: 16.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.tpl-category {
+  font-size: 11px;
+  font-weight: 700;
+  color: #0071e3;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tpl-desc {
+  font-size: 12.5px;
+  color: var(--ink-secondary);
+  line-height: 1.45;
+  margin: 2px 0 16px;
+}
+
+.tpl-actions {
+  margin-top: auto;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.tpl-actions .button {
+  flex: 1;
+  font-size: 12.5px;
+  min-height: 36px;
+  padding: 0 12px;
+}
+
+.showcase-footer {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.showcase-all-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--zy-blue);
+  text-decoration: none;
+  padding: 10px 22px;
+  border-radius: var(--zy-radius-pill);
+  background: var(--zy-blue-soft);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.showcase-all-link:hover {
+  background: #d8eaff;
+  transform: translateY(-1px);
+}
+
+/* --------------------------------------------------------------------------
+   SMOOTH SCROLL ENTRANCE REVEAL ANIMATIONS
+   -------------------------------------------------------------------------- */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE LAYOUT MATRIX
+   -------------------------------------------------------------------------- */
+@media (max-width: 1080px) {
+  .stage-app { grid-template-columns: 1fr; }
+  .stage-app aside { display: none; }
+  .pricing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .booking-cockpit { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .booking-col-times { grid-column: 1 / -1; }
+  .seo-dashboard { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 860px) {
+  .site-nav nav { display: none; }
+  .menu { display: flex; }
+  .site-nav nav.open,
+  .site-nav.open nav,
+  nav#primaryNav.open {
+    display: flex !important;
+    flex-direction: column;
+    position: absolute;
+    top: 56px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--zy-line);
+    padding: 16px 24px 24px;
+    gap: 8px;
+  }
+  .site-nav nav.open a,
+  .site-nav.open nav a,
+  nav#primaryNav.open a {
+    font-size: 16px;
+    padding: 10px 14px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .feature-band-inner { grid-template-columns: 1fr; gap: 40px; }
+  .booking-cockpit { grid-template-columns: 1fr; }
+  .booking-col-context, .booking-col-calendar { border-right: 0; border-bottom: 1px solid var(--zy-line); }
+  .story-large { grid-template-columns: 1fr; }
+  .builder-visual { min-height: 280px; }
+  .brief-card { position: static; width: 100%; margin-top: 16px; }
+  .sitemap-visual { display: none; }
+  .template-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  .site-footer { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .hero { padding: 40px 16px 32px; }
+  .hero h1 { font-size: 34px; }
+  .stage-main { padding: 20px 16px; }
+  .stage-metrics { grid-template-columns: 1fr; }
+  .story-grid { grid-template-columns: 1fr; }
+  .pricing-grid { grid-template-columns: minmax(0, 1fr); }
+  .stage-float { display: none; }
+}
+
+  
+/* ==========================================================================
+   WIX STRUCTURE + APPLE THEME: SCROLL CAROUSEL & ANALYTICS COCKPIT
+   ========================================================================== */
+.wix-section-header {
+  max-width: 1240px;
+  margin: 0 auto 36px;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 48px;
+  align-items: end;
+}
+@media (max-width: 900px) {
+  .wix-section-header {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+}
+.wix-header-left {
+  display: flex;
+  flex-direction: column;
+}
+.wix-header-left h2.wix-title {
+  font-family: var(--font-display, 'Space Grotesk', -apple-system, sans-serif);
+  font-size: clamp(34px, 4.4vw, 54px);
+  font-weight: 750;
+  letter-spacing: -0.04em;
+  line-height: 1.06;
+  color: #111111;
+  margin: 12px 0 0;
+}
+.wix-header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.wix-header-right p.wix-desc {
+  font-size: 16px;
+  line-height: 1.55;
+  color: #555558;
+  margin: 0 0 24px;
+  max-width: 480px;
+}
+.wix-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #000000;
+  color: #ffffff !important;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14.5px;
+  padding: 13px 30px;
+  border-radius: 9999px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+.wix-pill-btn:hover {
+  background: #222222;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
+  color: #ffffff !important;
+}
+
+/* Templates Scroll Carousel */
+.templates-showcase {
+  position: relative;
+  padding: 96px 0 84px;
+  background: #fbfbfd;
+  overflow-x: clip;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+@supports not (overflow-x: clip) {
+  .templates-showcase { overflow-x: hidden; }
+}
+.carousel-nav-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.carousel-nav-arrows {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.carousel-arrow {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  display: grid;
+  place-items: center;
+  color: #111111;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.carousel-arrow:hover {
+  background: #111111;
+  color: #ffffff;
+  border-color: #111111;
+  transform: scale(1.06);
+}
+.carousel-viewport {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  position: relative;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  padding: 24px 0 28px;
+}
+.carousel-viewport.is-dragging {
+  cursor: grabbing;
+}
+.carousel-track {
+  display: flex;
+  gap: 28px;
+  width: max-content;
+  padding: 0 32px;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.12s cubic-bezier(0.2, 0, 0.2, 1);
+}
+@media (max-width: 640px) {
+  .carousel-track {
+    padding: 0 16px;
+    gap: 16px;
+  }
+}
+.wix-card {
+  flex: 0 0 380px;
+  width: 380px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 14px 34px -10px rgba(0, 0, 0, 0.07), 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+@media (max-width: 768px) {
+  .wix-card {
+    flex: 0 0 310px;
+    width: 310px;
+    border-radius: 20px;
+  }
+}
+.wix-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 26px 52px -12px rgba(0, 0, 0, 0.12), 0 0 24px rgba(0, 113, 227, 0.10);
+  border-color: rgba(0, 113, 227, 0.35);
+}
+.card-visual {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #f0f2f5;
+}
+.card-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: transform 0.5s ease;
+}
+.wix-card:hover .card-visual img {
+  transform: scale(1.04);
+}
+.card-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 9999px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #111111;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+.floating-metric {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 6px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.metric-num {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0071e3;
+  line-height: 1.1;
+}
+.metric-lbl {
+  font-size: 9px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.card-body {
+  padding: 20px 22px 22px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.card-row h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 750;
+  color: #111111;
+  letter-spacing: -0.02em;
+}
+.cat-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: #0071e3;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.card-body p {
+  font-size: 13px;
+  color: #66666a;
+  line-height: 1.5;
+  margin: 0 0 18px;
+  flex: 1;
+}
+.card-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.card-actions .button {
+  flex: 1;
+  font-size: 13px;
+  min-height: 38px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-weight: 600;
+}
+.carousel-progress-wrap {
+  max-width: 1240px;
+  margin: 18px auto 0;
+  padding: 0 24px;
+  display: flex;
+  justify-content: center;
+}
+.carousel-progress-track {
+  width: 240px;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+.carousel-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #000000;
+  border-radius: 9999px;
+  transition: width 0.15s ease;
+}
+
+/* Wix Analytics Section: Spot the gaps, grab the opportunities */
+.wix-analytics-section {
+  padding: 96px 0;
+  background: #ffffff;
+  position: relative;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+.wix-analytics-cockpit {
+  max-width: 1240px;
+  margin: 40px auto 0;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 320px minmax(420px, 1.3fr) minmax(280px, 1fr);
+  gap: 24px;
+  align-items: stretch;
+}
+@media (max-width: 1100px) {
+  .wix-analytics-cockpit { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .wix-analytics-cockpit { grid-template-columns: 1fr; }
+}
+.wix-cockpit-card {
+  background: #f8fafc;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 24px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+}
+.card-marketing {
+  background: #f0f7ff;
+  border: 1px solid rgba(0, 113, 227, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.marketing-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.marketing-top b {
+  font-size: 15px;
+  font-weight: 750;
+  color: #111111;
+}
+.mini-chip {
+  background: #0071e3;
+  color: #ffffff;
+  border: 0;
+  border-radius: 9999px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.marketing-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.mstat {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 12px;
+  border: 1px solid rgba(0, 113, 227, 0.10);
+}
+.mstat small {
+  display: block;
+  font-size: 11px;
+  color: #666;
+}
+.mstat .stat-val {
+  font-size: 20px;
+  font-weight: 750;
+  color: #111111;
+  margin-top: 4px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.trend.up {
+  color: #16a34a;
+  font-size: 11px;
+  font-weight: 700;
+}
+.holiday-sale-banner {
+  background: #0d383b;
+  color: #ffffff;
+  border-radius: 16px;
+  padding: 18px;
+  margin-top: auto;
+}
+.sale-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 750;
+  margin-bottom: 8px;
+}
+.sale-icons {
+  display: flex;
+  gap: 6px;
+  opacity: 0.8;
+}
+.holiday-sale-banner p {
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: #c0dede;
+  margin: 0 0 14px;
+}
+.sale-btn {
+  display: inline-block;
+  background: #ffffff;
+  color: #0d383b;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 9999px;
+}
+.card-sessions {
+  background: #eef7fc;
+  border: 1px solid rgba(2, 132, 199, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.sessions-header-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+@media (max-width: 600px) {
+  .sessions-header-grid { grid-template-columns: 1fr; }
+}
+.sessions-header-grid small {
+  font-size: 11px;
+  color: #555558;
+  display: block;
+}
+.session-num {
+  font-size: 20px;
+  font-weight: 750;
+  color: #111111;
+  margin-top: 4px;
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+.sessions-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 16px;
+  margin-top: auto;
+}
+@media (max-width: 600px) {
+  .sessions-details-grid { grid-template-columns: 1fr; }
+}
+.subcard-donut, .subcard-bars {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid rgba(2, 132, 199, 0.10);
+}
+.subcard-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #111111;
+  margin-bottom: 12px;
+}
+.donut-chart-box {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  margin: 0 auto;
+}
+.donut-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.donut-center-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.donut-center-text strong {
+  font-size: 13px;
+  font-weight: 800;
+  color: #111111;
+}
+.donut-center-text small {
+  font-size: 9px;
+  color: #666;
+}
+.donut-legend-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 12px;
+  font-size: 10.5px;
+  color: #555558;
+}
+.donut-legend-row span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.dot-blue { background: #0071e3; }
+.dot-sky { background: #0284c7; }
+.dot-gray { background: #cbd5e1; }
+.wix-bar-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 120px;
+  padding: 10px 0 0;
+  gap: 6px;
+}
+.wix-bar-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  flex: 1;
+}
+.bar-val {
+  font-size: 8.5px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 4px;
+}
+.bar-fill {
+  width: 100%;
+  max-width: 18px;
+  background: #b9e6fe;
+  border-radius: 4px 4px 0 0;
+  min-height: 6px;
+}
+.bar-fill.active-bar {
+  background: #0284c7;
+}
+.bar-lbl {
+  font-size: 9px;
+  color: #777;
+  margin-top: 6px;
+}
+.card-lifestyle {
+  background: #f6f8fa;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.lifestyle-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  overflow: hidden;
+  border-radius: 24px;
+}
+.lifestyle-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.floating-items-table {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  right: 14px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+.table-head-row {
+  font-size: 12px;
+  font-weight: 750;
+  color: #111111;
+  margin-bottom: 8px;
+}
+.table-grid-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.2fr;
+  font-size: 9.5px;
+  color: #777;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  padding-bottom: 4px;
+  margin-bottom: 6px;
+}
+.table-item-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.2fr;
+  font-size: 11px;
+  align-items: center;
+  color: #111111;
+}
+.item-name {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 600;
+}
+
+  
+@media (max-width: 640px) {
+  .templates-showcase { padding: 60px 0 50px; }
+  .wix-header-left h2.wix-title { font-size: 30px !important; line-height: 1.15; }
+  .wix-analytics-section { padding: 60px 0; }
+}
+
+
+/* Rocket.com High-Trust Confidence Bar */
+.rocket-trust-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  padding: 14px 24px;
+  margin: 18px auto 0;
+  max-width: 960px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 9999px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #333336;
+}
+.trust-item svg {
+  color: #0071e3;
+}
+@media (max-width: 640px) {
+  .rocket-trust-bar {
+    border-radius: 16px;
+    gap: 12px 18px;
+    justify-content: flex-start;
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   HERO SECTION — ANTHROPIC SERIF & ELECTRIC BLUE WAVE BACKGROUND
+   -------------------------------------------------------------------------- */
+.hero {
+  max-width: 100% !important;
+  width: 100% !important;
+  margin: -56px auto 0 !important;
+  padding: 130px 24px 70px !important;
+  text-align: center !important;
+  position: relative !important;
+  background: #060913 url('/static/hero-wave-bg.png') no-repeat center top / cover !important;
+  overflow: hidden !important;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(6, 9, 19, 0.45) 0%, rgba(6, 9, 19, 0.25) 45%, rgba(6, 9, 19, 0.90) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-copy-wrap {
+  max-width: 860px !important;
+  margin: 0 auto 48px !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.eyebrow {
+  text-transform: uppercase !important;
+  color: #93c5fd !important;
+  letter-spacing: 0.10em !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  margin-bottom: 20px !important;
+  background: rgba(255, 255, 255, 0.10) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  padding: 6px 16px !important;
+  border-radius: var(--zy-radius-pill) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+.hero h1 {
+  font-family: var(--font-serif) !important;
+  font-size: clamp(42px, 6.2vw, 76px) !important;
+  line-height: 1.04 !important;
+  letter-spacing: -0.035em !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+  margin: 0 auto 20px !important;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.45) !important;
+}
+
+.gradient-text {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  color: #ffffff !important;
+  display: inline !important;
+}
+
+.hero-copy {
+  max-width: 680px !important;
+  margin: 0 auto !important;
+  color: rgba(255, 255, 255, 0.88) !important;
+  font-size: clamp(17px, 1.9vw, 21px) !important;
+  line-height: 1.6 !important;
+  letter-spacing: -0.01em !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35) !important;
+  font-family: var(--font-body) !important;
+}
+
+.hero-actions {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 14px !important;
+  margin-top: 32px !important;
+  flex-wrap: wrap !important;
+}
+
+.hero-actions .button {
+  min-height: 48px !important;
+  padding: 0 28px !important;
+  font-size: 15px !important;
+  border-radius: 9999px !important;
+}
+
+.hero-actions .button-primary {
+  background: #ffffff !important;
+  color: #050811 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.20), 0 2px 6px rgba(0, 0, 0, 0.3) !important;
+  border: 0 !important;
+  transition: transform 0.2s, background 0.2s, box-shadow 0.2s !important;
+}
+
+.hero-actions .button-primary:hover {
+  background: #f1f5f9 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 12px 30px rgba(255, 255, 255, 0.28) !important;
+}
+
+.hero-actions .button-secondary {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.30) !important;
+  backdrop-filter: blur(12px) !important;
+  font-weight: 600 !important;
+  transition: transform 0.2s, background 0.2s !important;
+}
+
+.hero-actions .button-secondary:hover {
+  background: rgba(255, 255, 255, 0.20) !important;
+  transform: translateY(-2px) !important;
+}
+
+.rocket-trust-bar {
+  display: inline-flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 24px !important;
+  margin: 32px auto 0 !important;
+  padding: 12px 28px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-radius: 9999px !important;
+  backdrop-filter: blur(16px) !important;
+  flex-wrap: wrap !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.30) !important;
+}
+
+.trust-item {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+}
+
+.trust-item span {
+  color: #ffffff !important;
+}
+
+.trust-item svg {
+  color: #60a5fa !important;
+}
+
+.hero-note {
+  margin: 18px 0 0 !important;
+  color: rgba(255, 255, 255, 0.72) !important;
+  font-size: 13px !important;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3) !important;
+}
+
+.product-stage {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Glass Dark Navigation Over Hero */
+.nav {
+  background: rgba(6, 9, 19, 0.82) !important;
+  backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10) !important;
+}
+
+.nav a {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.nav a:hover {
+  color: #ffffff !important;
+}
+
+.nav .brand-wordmark, .nav .brand span {
+  color: #ffffff !important;
+}
+
+.nav-login {
+  color: #ffffff !important;
+}
+
+.nav .button-primary {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 0 !important;
+}
+
+</style>
+  <link rel="stylesheet" href="/static/zylora-home.css?v=20260905b"/>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "{{APP_URL}}/#organization",
+      "name": "Zylora",
+      "url": "{{APP_URL}}/",
+      "logo": "{{APP_URL}}/static/favicon.png",
+      "description": "Zylora is an AI website builder and business workspace for publishing websites, capturing leads and managing appointments."
+    },
+    {
+      "@type": "WebSite",
+      "@id": "{{APP_URL}}/#website",
+      "url": "{{APP_URL}}/",
+      "name": "Zylora",
+      "publisher": { "@id": "{{APP_URL}}/#organization" }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "{{APP_URL}}/#software",
+      "name": "Zylora",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "description": "Create and visually edit a business website, publish it to a Zylora subdomain or custom domain, answer visitor questions with an AI sales assistant, capture leads, manage appointments and review analytics from one workspace.",
+      "featureList": [
+        "AI website creation from a business brief",
+        "Zylora Studio visual website editing",
+        "Lead capture and lead management",
+        "AI sales assistant",
+        "Appointment booking",
+        "Website analytics",
+        "Custom domains and SSL lifecycle",
+        "SEO metadata, sitemaps and structured data",
+        "Standalone source export"
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body class="landing-page">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-nav">
+  <a class="brand" href="/" aria-label="Zylora home">
+    <span class="brand-wordmark">Zylora</span>
+  </a>
+  <nav id="primaryNav" aria-label="Primary">
+    <a href="#product">Zylora Studio</a>
+    <a href="#connected-workspace">Solutions</a>
+    <a href="/templates">Templates</a>
+    <a href="/blog">Resources</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#assistant">AI Assistant</a>
+  </nav>
+  <div class="nav-actions">
+    <a class="nav-login" href="/login">Log in</a>
+    <a class="button button-primary" href="/signup" data-testid="nav-start">Start for free</a>
+    <button class="menu" type="button" aria-label="Open navigation" aria-controls="primaryNav" aria-expanded="false" data-testid="mobile-menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</header>
 <main id="main">
-<section class="hero"><p class="eyebrow">Premium website + customer growth</p><div class="hero-drag-stage" data-hero-drag-stage><div class="hero-drag-item" data-hero-drag tabindex="0" aria-label="Movable Zylora hero headline"><span class="hero-drag-hint" aria-hidden="true">Move headline</span><h1>Build a premium website<br/>that brings you <span aria-live="polite" class="text-rotate"><span class="rotate-word rotate-teal" data-rotate-word="">customers</span></span>.</h1></div></div><p class="hero-copy">Build with AI or a professionally designed template. Publish, capture enquiries, qualify leads with the AI Sales Assistant, book appointments and improve conversion from one workspace.</p><div class="hero-actions"><a class="button button-dark" data-testid="hero-ai" href="/ai-create">Build my website</a><a class="text-link" href="/templates">Explore templates <span aria-hidden="true">↘</span></a></div><div class="hero-note"><span>Build → Publish → Get customers</span><span>No starting template required for AI creation</span><span>Your content. Your website. Source export available.</span></div></section>
-<section aria-labelledby="workspace-title" class="workspace-preview" id="product"><div class="section-head"><p class="eyebrow">One workspace</p><h2 id="workspace-title">A calmer way to build and operate.</h2><p>Creation is only the first step. Zylora keeps the website and the business activity around it connected.</p></div><div aria-label="Illustration of the Zylora workspace" class="product-shell"><aside><div class="mini-logo">Z</div><i></i><i></i><i></i><i></i><i></i></aside><div class="product-main"><div class="product-top"><div><span class="chip">Live 0/1</span><span class="chip">Sites 0</span><span class="chip">Leads 0</span></div><div class="search-pill">Search sites, leads, or actions…</div></div><div class="product-title"><small>YOUR WORKSPACE</small><strong>Welcome to Zylora</strong></div><div class="product-grid"><article class="quick"><small>QUICK ACTION</small><h3>Create with AI</h3><p>Turn a business brief into a structured, editable website.</p><span class="mini-button">Start a site</span></article><article><small>LEAD CAPTURE</small><h3>Keep every enquiry visible.</h3><div class="bars"><b></b><b></b><b></b><b></b><b></b><b></b></div></article><article><small>OPERATIONS</small><h3>Publish, edit and manage from one place.</h3><div class="line-list"><i></i><i></i><i></i></div></article></div></div></div></section>
-<section class="ai-flow" id="business"><div class="section-head"><p class="eyebrow">Built from the brief</p><h2>The information architecture comes first.</h2><p>Zylora does not force an AI-created site into a catalogue layout. It extracts requirements, determines the pages the business actually needs and applies an art direction to that structure.</p></div><ol class="flow-grid"><li><span>01</span><h3>Describe the business</h3><p>Give Zylora the goal, offer, audience and anything the site must include.</p></li><li><span>02</span><h3>Choose a direction</h3><p>Select a visual signal such as Swiss minimal, editorial, cinematic, organic or technical.</p></li><li><span>03</span><h3>Edit with control</h3><p>Refine content, typography, media, layout, responsive behavior and motion in the same editor.</p></li><li><span>04</span><h3>Publish and operate</h3><p>Connect the public website to leads, appointments, notifications, domains and analytics.</p></li></ol></section>
-<section class="capabilities"><article><p class="eyebrow">Leads</p><h3>Every enquiry in one place.</h3><p>Form and assistant enquiries arrive in a focused inbox with notification controls.</p></article><article><p class="eyebrow">Appointments</p><h3>Scheduling that stays connected.</h3><p>Publish available times and keep booked appointments attached to the right website.</p></article><article><p class="eyebrow">SEO</p><h3>Technical foundations included.</h3><p>Manage titles, descriptions, canonicals, structured data, sitemap, robots and discoverability.</p></article><article><p class="eyebrow">Source</p><h3>Your site can leave with you.</h3><p>Export an independent Next.js source project when source export is enabled for the account.</p></article></section>
-<section class="catalogue-status"><div><p class="eyebrow">Premium templates</p><h2>Start with a design that already feels considered.</h2></div><div><p>Browse production-ready templates with real previews, responsive layouts, deliberate typography and conversion-focused sections. Or create a site from your business brief with AI.</p><a class="text-link" href="/templates">Explore templates <span aria-hidden="true">↗</span></a></div></section>
-<section class="pricing" id="pricing"><div class="section-head"><p class="eyebrow">Simple regional pricing</p><h2>Start free. Upgrade when you need more.</h2><p>Starter is ₹799/month in India or US$9/month internationally. Growth is ₹1,799/month in India or US$19/month internationally. These are fixed regional prices, not currency conversions.</p></div><div class="price-grid">
-<article class="price-card"><span class="landing-plan-badge">Free</span><div class="price-row"><h3>₹0</h3><small>forever</small></div><ul class="landing-feature-list"><li>2-page template publishing</li><li>15 monthly AI credits + 20 lead credits</li><li>Unlimited AI Sales Assistant usage</li><li>Publish on a Zylora subdomain</li><li class="muted-feature">Zylora branding remains visible</li></ul><a class="button button-outline" href="/signup">Start free</a></article>
-<article class="price-card featured"><span class="landing-plan-badge popular">Starter</span><div class="price-row"><h3 id="starterRegionalPrice">{{STARTER_REGIONAL_PRICE}}</h3><small>/ month</small></div><p id="regionalPriceNote" class="muted-feature">{{REGIONAL_PRICE_NOTE}}</p><ul class="landing-feature-list"><li>Up to 5-page template publishing</li><li>100 monthly AI credits + 100 lead credits</li><li>Unlimited AI Sales Assistant usage</li><li>Custom domain + paid-site branding removal</li><li>Appointments, SEO/GEO and analytics</li></ul><a class="button button-dark" href="/signup">Choose Starter</a></article>
-<article class="price-card"><span class="landing-plan-badge">Growth</span><div class="price-row"><h3 id="growthRegionalPrice">{{GROWTH_REGIONAL_PRICE}}</h3><small>/ month</small></div><p class="muted-feature">Higher capacity for growing businesses.</p><ul class="landing-feature-list"><li>Up to 8-page template publishing</li><li>300 monthly AI credits + 300 lead credits</li><li>Unlimited AI Sales Assistant usage</li><li>Custom domain + paid-site branding removal</li><li>Higher builder/editor and lead-delivery capacity</li></ul><a class="button button-outline" href="/signup">Choose Growth</a></article>
-<article class="price-card"><span class="landing-plan-badge">Pro</span><div class="price-row"><h3>Get in touch</h3></div><ul class="landing-feature-list"><li>Sales-assisted managed website delivery</li><li>Scoped around your business requirements</li><li>No self-service credit wallet</li><li>Expert implementation and support</li></ul><button class="button button-outline" id="openPro" type="button">Talk to our experts</button></article>
-</div></section>
-<section class="faq"><div class="section-head"><p class="eyebrow">Questions</p><h2>What should I know before I start?</h2></div><details><summary>Does AI creation require a starting template?</summary><p>No. AI creation derives its page structure and design direction from the business brief. The internal rendering system is not exposed as a selectable catalogue template.</p></details><details><summary>How does regional pricing work?</summary><p>Starter is ₹799/month in India or US$9/month internationally, while Growth is ₹1,799/month in India or US$19/month internationally. These are fixed regional prices, not exchange-rate conversions.</p></details><details><summary>Does my plan decide how many pages AI creates?</summary><p>No. The AI-created page count follows the explicit brief and inferred business needs. Plans still control other account entitlements such as credits and draft capacity.</p></details><details><summary>Can I edit the generated website?</summary><p>Yes. The editor supports structured manual edits and AI-assisted changes before publishing.</p></details></section>
+  <section class="reveal-on-scroll hero">
+    <div class="hero-copy-wrap">
+      <p class="eyebrow">The Zylora website platform</p>
+      <h1><span class="gradient-text">Create a website that moves your business forward.</span></h1>
+      <p class="hero-copy">Zylora brings AI website creation, Zylora Studio, customer conversations, lead capture and bookings into one connected workspace.</p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="/ai-create" data-testid="hero-ai">Get started</a>
+        <a class="button button-secondary" href="/templates">Explore templates</a>
+      </div>
+      
+    <div class="rocket-trust-bar" aria-label="Core product capabilities">
+      <div class="trust-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span>Managed SSL lifecycle</span>
+      </div>
+      <div class="trust-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <span>Structured publishing</span>
+      </div>
+      <div class="trust-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        <span>Standalone source export</span>
+      </div>
+      <div class="trust-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <span>Zylora Studio editing</span>
+      </div>
+    </div>
+
+      <p class="hero-note">Start free. Build with AI or begin from a template.</p>
+    </div>
+    <div class="product-stage" id="product">
+      <div class="stage-window">
+        <div class="window-bar">
+          <div class="window-dots"><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span></div>
+          <div class="window-url" aria-hidden="true">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <small>app.zylora.com/workspace</small>
+          </div>
+          <div class="window-actions"></div>
+        </div>
+        <div class="stage-app">
+          <aside aria-hidden="true">
+            <div class="stage-aside-logo">
+              <span class="brand-wordmark">Zylora Studio</span>
+            </div>
+            <div class="stage-aside-nav">
+              <span class="stage-aside-item on">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                Overview
+              </span>
+              <span class="stage-aside-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                Websites
+              </span>
+              <span class="stage-aside-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                Leads
+              </span>
+              <span class="stage-aside-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Booking
+              </span>
+              <span class="stage-aside-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                Analytics
+              </span>
+            </div>
+          </aside>
+          <div class="stage-main">
+            <div class="stage-top">
+              <span class="stage-badge"><span class="badge-dot"></span> Product walkthrough</span>
+              <a class="stage-btn-mini" href="/ai-create">Create website</a>
+            </div>
+            <div>
+              <h2>Your website, in motion.</h2>
+              <p>Design, publish and grow from the same product.</p>
+            </div>
+            <div class="stage-metrics">
+              <article>
+                <div class="metric-top">
+                  <small>Websites</small>
+                  <span class="metric-badge">Draft + live</span>
+                </div>
+                <strong>Build</strong>
+                  <span class="metric-footnote">Zylora Studio, domains &amp; publishing</span>
+              </article>
+              <article>
+                <div class="metric-top">
+                  <small>Qualified leads</small>
+                  <span class="metric-trend up">Connected</span>
+                </div>
+                <strong>Capture</strong>
+                <span class="metric-footnote">Forms and assistant conversations</span>
+              </article>
+              <article>
+                <div class="metric-top">
+                  <small>Appointments</small>
+                  <span class="metric-badge">Server-authoritative</span>
+                </div>
+                <strong>Book</strong>
+                <span class="metric-footnote">Availability, timezone and conflicts</span>
+              </article>
+            </div>
+            <div class="stage-chart">
+              <div class="chart-top-bar">
+                <div>
+                  <b>The Zylora business loop</b>
+                  <small>Publish → engage → capture → book → learn</small>
+                </div>
+                <span class="chart-range">One connected workspace</span>
+              </div>
+              <div class="chart-visual">
+                <svg class="chart-svg" viewBox="0 0 700 110" fill="none" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#0071e3" stop-opacity="0.22"/>
+                      <stop offset="100%" stop-color="#0071e3" stop-opacity="0.0"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M0,100 C60,95 120,70 180,75 C240,80 300,45 360,50 C420,55 480,20 540,25 C600,30 660,10 700,5 L700,110 L0,110 Z" fill="url(#chartGrad)"/>
+                  <path d="M0,100 C60,95 120,70 180,75 C240,80 300,45 360,50 C420,55 480,20 540,25 C600,30 660,10 700,5" fill="none" stroke="#0071e3" stroke-width="2.5" stroke-linecap="round"/>
+                  <circle cx="540" cy="25" r="4.5" fill="#0071e3" stroke="#fff" stroke-width="2"/>
+                </svg>
+                <div class="chart-labels" aria-hidden="true">
+                  <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="stage-float" aria-hidden="true">
+        <div class="assistant-orb">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2a8 8 0 0 0-8 8c0 3 2 5.5 4 7v3h8v-3c2-1.5 4-4 4-7a8 8 0 0 0-8-8z"/></svg>
+        </div>
+        <div>
+          <b>AI Sales Assistant</b>
+          <small>Qualify · Capture · Book</small>
+        </div>
+        <span class="live-dot"><span class="pulse-ring"></span> Live</span>
+      </div>
+    </div>
+  </section>
+  <div class="trust-line" aria-label="Core platform capabilities">
+    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> AI website creation</span>
+    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Publishing &amp; domains</span>
+    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Lead capture</span>
+    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Appointments</span>
+    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Analytics</span>
+    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> SEO · AEO · GEO</span>
+  </div>
+
+  <!-- WIX-STYLE DESIGNER TEMPLATES SHOWCASE: SCROLL-DRIVEN CAROUSEL -->
+  <section class="templates-showcase reveal-on-scroll" id="templates">
+    <div class="wix-section-header">
+      <div class="wix-header-left">
+        <p class="eyebrow">Curated Template Library</p>
+        <h2 class="wix-title">Crafted for conversion.<br>Designed to perform.</h2>
+      </div>
+      <div class="wix-header-right">
+        <p class="wix-desc">Choose from the verified template library, then customize content, imagery and responsive presentation in Zylora Studio.</p>
+        <div class="carousel-nav-group">
+          <div class="carousel-nav-arrows">
+            <button class="carousel-arrow prev" id="tplPrevBtn" type="button" aria-label="Previous template">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <button class="carousel-arrow next" id="tplNextBtn" type="button" aria-label="Next template">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+          <a href="/templates" class="wix-pill-btn">Explore all templates</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Filter Tabs -->
+    <div class="showcase-filters" role="tablist" aria-label="Template categories">
+      <button class="tpl-tab active" type="button" data-cat="all">All Designs</button>
+      <button class="tpl-tab" type="button" data-cat="saas">SaaS &amp; Tech</button>
+      <button class="tpl-tab" type="button" data-cat="luxury">Commerce &amp; Luxury</button>
+      <button class="tpl-tab" type="button" data-cat="agency">Design &amp; Studios</button>
+      <button class="tpl-tab" type="button" data-cat="services">Dining &amp; Hospitality</button>
+    </div>
+
+    <!-- Horizontal Scroll Carousel (Moved on Scroll!) -->
+    <div class="carousel-viewport" id="tplCarouselViewport">
+      <div class="carousel-track" id="tplCarouselTrack">
+        <!-- 1. Astrolus -->
+        <article class="wix-card tpl-card" data-category="saas">
+          <div class="card-visual">
+            <img src="/static/template-previews/astrolus.png" alt="Astrolus SaaS Template Preview" loading="lazy" width="600" height="375" />
+            <span class="card-badge">SaaS layout</span>
+            <div class="floating-metric">
+              <span class="metric-num">Launch</span>
+              <span class="metric-lbl">Product-led</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-row">
+              <h3>Astrolus</h3>
+              <span class="cat-tag">SaaS &amp; Tech</span>
+            </div>
+            <p>Product-led software landing with structured lead capture, dark accents and a focused conversion path.</p>
+            <div class="card-actions">
+              <a class="button button-outline" href="/templates">Live preview</a>
+              <a class="button button-primary" href="/signup?template=astrolus">Use template</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 2. Luxe Salon -->
+        <article class="wix-card tpl-card" data-category="luxury">
+          <div class="card-visual">
+            <img src="/static/template-previews/luxe-salon.png" alt="Luxe Salon Spa Template Preview" loading="lazy" width="600" height="375" />
+            <span class="card-badge">Booking Ready</span>
+            <div class="floating-metric">
+              <span class="metric-num">Booking</span>
+              <span class="metric-lbl">Service-ready</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-row">
+              <h3>Luxe Salon &amp; Spa</h3>
+              <span class="cat-tag">Luxury &amp; Beauty</span>
+            </div>
+            <p>Bespoke wellness and beauty layout with service presentation and appointment-booking calls to action.</p>
+            <div class="card-actions">
+              <a class="button button-outline" href="/templates">Live preview</a>
+              <a class="button button-primary" href="/signup?template=luxe-salon">Use template</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3. Apex Digital -->
+        <article class="wix-card tpl-card" data-category="agency">
+          <div class="card-visual">
+            <img src="/static/template-previews/godesign-studio.png" alt="GoDesign Studio agency template preview" loading="lazy" width="600" height="375" />
+            <span class="card-badge">Creative studio</span>
+            <div class="floating-metric">
+              <span class="metric-num">Agency</span>
+              <span class="metric-lbl">Portfolio-led</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-row">
+              <h3>GoDesign Studio</h3>
+              <span class="cat-tag">Design &amp; Studios</span>
+            </div>
+            <p>Bold typography and portfolio showcases engineered for creative agencies and independent consultants.</p>
+            <div class="card-actions">
+              <a class="button button-outline" href="/templates">Live preview</a>
+              <a class="button button-primary" href="/signup?template=godesign-studio">Use template</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 4. Studiova -->
+        <article class="wix-card tpl-card" data-category="agency">
+          <div class="card-visual">
+            <img src="/static/template-previews/studiova.png" alt="Studiova Architecture Template Preview" loading="lazy" width="600" height="375" />
+            <span class="card-badge">Minimal</span>
+            <div class="floating-metric">
+              <span class="metric-num">Studio</span>
+              <span class="metric-lbl">Editorial layout</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-row">
+              <h3>Studiova Architecture</h3>
+              <span class="cat-tag">Architecture</span>
+            </div>
+            <p>Editorial space and architectural project gallery designed to display client engagements elegantly.</p>
+            <div class="card-actions">
+              <a class="button button-outline" href="/templates">Live preview</a>
+              <a class="button button-primary" href="/signup?template=studiova">Use template</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 5. Kaira -->
+        <article class="wix-card tpl-card" data-category="luxury">
+          <div class="card-visual">
+            <img src="/static/template-previews/kaira.png" alt="Kaira Boutique Template Preview" loading="lazy" width="600" height="375" />
+            <span class="card-badge">Commerce</span>
+            <div class="floating-metric">
+              <span class="metric-num">Retail</span>
+              <span class="metric-lbl">Showcase layout</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-row">
+              <h3>Kaira Boutique</h3>
+              <span class="cat-tag">Commerce &amp; Luxury</span>
+            </div>
+            <p>Curated retail and boutique brand experience with integrated catalog inquiry and showcase cards.</p>
+            <div class="card-actions">
+              <a class="button button-outline" href="/templates">Live preview</a>
+              <a class="button button-primary" href="/signup?template=kaira">Use template</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 6. Bistro Gastronomie -->
+        <article class="wix-card tpl-card" data-category="services">
+          <div class="card-visual">
+            <img src="/static/template-previews/restaurant.png" alt="Bistro Dining Template Preview" loading="lazy" width="600" height="375" />
+            <span class="card-badge">Table Reserve</span>
+            <div class="floating-metric">
+              <span class="metric-num">Dining</span>
+              <span class="metric-lbl">Reservation-ready</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-row">
+              <h3>Bistro Gastronomie</h3>
+              <span class="cat-tag">Dining &amp; Hospitality</span>
+            </div>
+            <p>Hospitality-focused presentation with menu highlights, editable social-proof sections and reservation calls to action.</p>
+            <div class="card-actions">
+              <a class="button button-outline" href="/templates">Live preview</a>
+              <a class="button button-primary" href="/signup?template=restaurant">Use template</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 7. Rendr Fintech -->
+        <article class="wix-card tpl-card" data-category="saas">
+          <div class="card-visual">
+            <img src="/static/template-previews/rendr-fintech.png" alt="Rendr Fintech Template Preview" loading="lazy" width="600" height="375" />
+            <span class="card-badge">High Trust</span>
+            <div class="floating-metric">
+              <span class="metric-num">Fintech</span>
+              <span class="metric-lbl">Trust-focused</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-row">
+              <h3>Rendr Fintech</h3>
+              <span class="cat-tag">Finance &amp; Tech</span>
+            </div>
+            <p>Modern fintech interface with focused product explanations, clear calls to action and structured lead capture.</p>
+            <div class="card-actions">
+              <a class="button button-outline" href="/templates">Live preview</a>
+              <a class="button button-primary" href="/signup?template=rendr-fintech">Use template</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="carousel-progress-wrap" aria-hidden="true">
+      <div class="carousel-progress-track">
+        <div class="carousel-progress-bar" id="tplProgressBar"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WIX-STYLE ANALYTICS & INTELLIGENCE: SPOT THE GAPS, GRAB THE OPPORTUNITIES -->
+  <section class="wix-analytics-section reveal-on-scroll" id="intelligence">
+    <div class="wix-section-header">
+      <div class="wix-header-left">
+        <h2 class="wix-title">Spot the gaps, grab the opportunities</h2>
+      </div>
+      <div class="wix-header-right">
+        <p class="wix-desc">Use real website activity to understand the path from visit to conversation, lead and appointment. When there is no data, Zylora shows a useful zero state.</p>
+        <a href="/signup" class="wix-pill-btn">Get Started</a>
+      </div>
+    </div>
+
+    <div class="wix-analytics-cockpit">
+      <!-- Card 1: Marketing / Campaigns -->
+      <div class="wix-cockpit-card card-marketing">
+        <div class="marketing-top">
+          <b>Conversion workflow</b>
+          <span class="mini-chip">Live data only</span>
+        </div>
+        <div class="marketing-stats">
+          <div class="mstat">
+            <small>Visitor activity</small>
+            <div class="stat-val">Observe <span class="trend up">in context</span></div>
+          </div>
+          <div class="mstat">
+            <small>Conversion path</small>
+            <div class="stat-val">Connect <span class="trend up">to outcomes</span></div>
+          </div>
+        </div>
+        <div class="holiday-sale-banner">
+          <div class="sale-header">
+            <span>Visitor journey</span>
+            <div class="sale-icons">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </div>
+          </div>
+          <p>See the page, source and action that led to a conversation, lead or appointment.</p>
+          <a class="sale-btn" href="/signup">Open workspace</a>
+        </div>
+      </div>
+
+      <!-- Card 2: Site Sessions Analytics (Center Card with Donut & Bars) -->
+      <div class="wix-cockpit-card card-sessions">
+        <div class="sessions-header-grid">
+          <div>
+            <small>Site sessions</small>
+            <div class="session-num">Real <span class="trend up">events</span></div>
+          </div>
+          <div>
+            <small>Leads and bookings</small>
+            <div class="session-num">Linked <span class="trend up">records</span></div>
+          </div>
+          <div>
+            <small>Date range</small>
+            <div class="session-num">Filter <span class="trend up">and compare</span></div>
+          </div>
+        </div>
+        <div class="sessions-details-grid">
+          <!-- Donut -->
+          <div class="subcard-donut">
+            <div class="subcard-title">Sessions by device</div>
+            <div class="donut-chart-box">
+              <svg class="donut-svg" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="48" fill="none" stroke="#e5f2fe" stroke-width="12"/>
+                <circle cx="60" cy="60" r="48" fill="none" stroke="#0071e3" stroke-width="12" stroke-dasharray="175 301" stroke-dashoffset="0" stroke-linecap="round"/>
+                <circle cx="60" cy="60" r="48" fill="none" stroke="#0284c7" stroke-width="12" stroke-dasharray="123 301" stroke-dashoffset="-175"/>
+              </svg>
+              <div class="donut-center-text">
+                <strong>Live data</strong>
+                <small>from your site</small>
+              </div>
+            </div>
+            <div class="donut-legend-row">
+              <span><i class="dot dot-blue"></i> Visits</span>
+              <span><i class="dot dot-sky"></i> Conversations</span>
+              <span><i class="dot dot-gray"></i> Bookings</span>
+            </div>
+          </div>
+          <!-- Bar chart -->
+          <div class="subcard-bars">
+            <div class="subcard-title">Avg. sessions by day</div>
+            <div class="wix-bar-chart">
+              <div class="wix-bar-col"><span class="bar-val">—</span><div class="bar-fill" style="height:12%"></div><span class="bar-lbl">Sun</span></div>
+              <div class="wix-bar-col"><span class="bar-val">—</span><div class="bar-fill active-bar" style="height:12%"></div><span class="bar-lbl">Mon</span></div>
+              <div class="wix-bar-col"><span class="bar-val">—</span><div class="bar-fill" style="height:12%"></div><span class="bar-lbl">Tue</span></div>
+              <div class="wix-bar-col"><span class="bar-val">—</span><div class="bar-fill" style="height:12%"></div><span class="bar-lbl">Wed</span></div>
+              <div class="wix-bar-col"><span class="bar-val">—</span><div class="bar-fill" style="height:12%"></div><span class="bar-lbl">Thu</span></div>
+              <div class="wix-bar-col"><span class="bar-val">—</span><div class="bar-fill" style="height:12%"></div><span class="bar-lbl">Fri</span></div>
+              <div class="wix-bar-col"><span class="bar-val">—</span><div class="bar-fill" style="height:12%"></div><span class="bar-lbl">Sat</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Lifestyle / E-commerce with Top Selling Items -->
+      <div class="wix-cockpit-card card-lifestyle">
+        <div class="lifestyle-img-wrap">
+          <img src="/static/template-previews/kaira.png" alt="Lifestyle Commerce Preview" loading="lazy" />
+          <div class="floating-items-table">
+            <div class="table-head-row"><b>Recent activity</b></div>
+            <div class="table-grid-row">
+              <span>Event</span><span>Source</span><span>Status</span><span>Time</span>
+            </div>
+            <div class="table-item-row">
+              <div class="item-name">No activity yet</div>
+              <span>Website</span>
+              <span class="trend up">Ready</span>
+              <b>—</b>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="reveal-on-scroll story" id="connected-workspace">
+    <div class="section-intro">
+      <p class="eyebrow">One Connected Workspace</p>
+      <h2>From first idea to first customer.</h2>
+      <p>Every part of Zylora shares the same website, customer and business context. Nothing gets lost between creation and conversion.</p>
+    </div>
+    <div class="story-grid">
+      <article class="story-large">
+        <div>
+          <span class="story-step-tag">01 · Brief to Publish</span>
+          <h3>Describe the business. Zylora builds the structure.</h3>
+          <p>Start with a brief, not a blank canvas. Refine copy, layout, media and responsive behavior before publishing.</p>
+          <a class="story-link" href="/ai-create">Create with AI →</a>
+        </div>
+        <div class="builder-visual" aria-hidden="true">
+          <div class="sitemap-visual">
+            <small>SITEMAP PAGES</small>
+            <div class="active">Home · Hero &amp; Booking</div>
+            <div>Services &amp; Doctors</div>
+            <div>About Specialist</div>
+            <div>Contact &amp; Map</div>
+          </div>
+          <div class="brief-card">
+            <div class="brief-head">
+              <small>BUSINESS BRIEF</small>
+              <span>AI Structured</span>
+            </div>
+            <b>A calm, conversion-ready website for a specialist clinic.</b>
+            <div class="builder-steps">
+              <span class="done">01 Brief ✓</span>
+              <span class="current">02 Structure</span>
+              <span>03 Content</span>
+              <span>04 Publish</span>
+            </div>
+            <button class="brief-btn" type="button">Generate website</button>
+          </div>
+        </div>
+      </article>
+      <article>
+        <span class="story-step-tag">02 · Deployment</span>
+        <h3>Publish with confidence.</h3>
+        <p>Connect a domain, monitor SSL and manage discoverability from the same workspace.</p>
+        <div class="deploy-status-card" aria-hidden="true">
+          <div>
+            <b>yourbusiness.com</b>
+            <small>TLS 1.3 · Edge routed · Canonical active</small>
+          </div>
+          <span class="pill-green">Connected</span>
+        </div>
+      </article>
+      <article>
+        <span class="story-step-tag">03 · Intelligence</span>
+        <h3>See what needs attention.</h3>
+        <p>Use real lead, visitor and assistant activity. Empty states stay honest until data arrives.</p>
+        <div class="intel-status-card" aria-hidden="true">
+          <div>
+            <b>Appointment workflow</b>
+            <small>Appears after a visitor books an available slot</small>
+          </div>
+          <span class="pill-green">Live data</span>
+        </div>
+        <div class="intel-status-card" aria-hidden="true" style="margin-top:8px">
+          <div>
+            <b>Lead qualification</b>
+            <small>Uses the actual conversation and captured contact details</small>
+          </div>
+          <span class="pill-green">Live data</span>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section class="reveal-on-scroll feature-band" id="assistant">
+    <div class="feature-band-inner">
+      <div class="feature-copy">
+        <p class="eyebrow" style="background:rgba(255,255,255,0.12);color:#ffffff!important">AI Sales Assistant</p>
+        <h2>A conversation that can become a customer.</h2>
+        <p>The assistant answers from approved business knowledge, captures contact details, qualifies intent and moves ready visitors into the existing booking flow.</p>
+        <div class="feature-steps">
+          <div class="step-card">
+            <span class="step-num">1</span>
+            <div>
+              <b>Visitor asks a real question</b>
+              <p>Instant answers strictly from your verified business brief and FAQs.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <span class="step-num">2</span>
+            <div>
+              <b>Assistant qualifies the need</b>
+              <p>Evaluates urgency, project requirements, and captures verified contact details.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <span class="step-num">3</span>
+            <div>
+              <b>Lead or appointment reaches your workspace</b>
+              <p>No manual copying. The full interaction syncs directly into your operations dashboard.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-demo-window" aria-hidden="true">
+        <div class="chat-demo-top">
+          <div class="chat-demo-agent">
+            <div class="agent-dot">+</div>
+            <div>
+              <b>Website Assistant</b>
+              <small>● Online · Ready to help</small>
+            </div>
+          </div>
+          <span style="color:#71717a">✕</span>
+        </div>
+        <div class="chat-demo-body">
+          <div class="bubble bubble-bot">
+            Hi—how can I help with your project today?
+          </div>
+          <div class="bubble bubble-user">
+            I'd like to understand pricing and book a consultation.
+          </div>
+          <div class="bubble bubble-bot">
+            I can help with both. Consultations are ₹1,500 with full review. We have 3 openings available this week. What kind of project are you planning?
+          </div>
+          <div class="bubble-options">
+            <span>Specialist clinic</span>
+            <span>Design studio</span>
+            <span>Consultancy</span>
+          </div>
+        </div>
+        <div class="chat-demo-input">
+          <span>Ask about services or availability…</span>
+          <span class="chat-demo-send">↑</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="reveal-on-scroll booking-section" id="booking">
+    <div class="section-intro">
+      <p class="eyebrow">Appointments</p>
+      <h2>Booking that feels effortless.</h2>
+      <p>Visitors select only dates and times returned by your authoritative availability engine. You keep the customer, source, timezone and booking status together.</p>
+    </div>
+    <div class="booking-cockpit">
+      <div class="booking-col booking-col-context">
+        <div class="booking-host-badge">📅</div>
+        <div>
+          <h4>Choose a time to talk</h4>
+          <p>30 minute strategy consultation</p>
+        </div>
+        <div class="booking-meta-row">
+          <span><strong>Host:</strong> Your team</span>
+          <span><strong>Timezone:</strong> India Standard Time (IST)</span>
+          <span><strong>Availability:</strong> Returned by the booking engine</span>
+        </div>
+      </div>
+      <div class="booking-col booking-col-calendar">
+        <div class="calendar-head">
+          <b>Booking interface preview</b>
+          <span style="color:#86868b">‹ ›</span>
+        </div>
+        <div class="cal-grid" aria-hidden="true">
+          <span class="cal-day-label">MON</span><span class="cal-day-label">TUE</span><span class="cal-day-label">WED</span><span class="cal-day-label">THU</span><span class="cal-day-label">FRI</span><span class="cal-day-label">SAT</span><span class="cal-day-label">SUN</span>
+          <span class="cal-day disabled"></span><span class="cal-day">1</span><span class="cal-day">2</span><span class="cal-day">3</span><span class="cal-day">4</span><span class="cal-day">5</span><span class="cal-day">6</span>
+          <span class="cal-day">7</span><span class="cal-day">8</span><span class="cal-day active">9</span><span class="cal-day">10</span><span class="cal-day">11</span><span class="cal-day">12</span><span class="cal-day">13</span>
+          <span class="cal-day">14</span><span class="cal-day">15</span><span class="cal-day">16</span><span class="cal-day">17</span><span class="cal-day">18</span><span class="cal-day">19</span><span class="cal-day">20</span>
+          <span class="cal-day">21</span><span class="cal-day">22</span><span class="cal-day">23</span><span class="cal-day">24</span><span class="cal-day">25</span><span class="cal-day">26</span><span class="cal-day">27</span>
+          <span class="cal-day">28</span><span class="cal-day">29</span><span class="cal-day">30</span>
+        </div>
+      </div>
+      <div class="booking-col booking-col-times">
+        <span class="times-title">Available Times<br><small style="color:#0071e3">Wed, Sep 9</small></span>
+        <button class="time-slot" type="button">9:00 AM</button>
+        <button class="time-slot" type="button">9:30 AM</button>
+        <button class="time-slot active" type="button">10:00 AM</button>
+        <button class="time-slot" type="button">10:30 AM</button>
+        <button class="time-slot" type="button">2:00 PM</button>
+      </div>
+    </div>
+  </section>
+  <section class="reveal-on-scroll story" id="discoverability">
+    <div class="section-intro">
+      <p class="eyebrow">Discoverability &amp; Search Intelligence</p>
+      <h2>Built to be found by humans and AI.</h2>
+      <p>Modern discovery happens in Google search results, Perplexity answers, and ChatGPT summaries. Zylora formats your business structure so both traditional crawlers and generative engines understand your offering.</p>
+    </div>
+    <div class="seo-dashboard">
+      <div class="seo-card">
+        <div class="seo-card-head">
+          <b>Site Visibility &amp; Engine Readiness</b>
+          <span class="pill-green">Configuration preview</span>
+        </div>
+        <p style="color:#6e6e73;font-size:13.5px;line-height:1.5">Zylora manages page metadata, JSON-LD structured data, Open Graph fields, canonical URLs and sitemaps through the publishing pipeline.</p>
+        <div class="seo-kpi-row">
+          <div class="seo-kpi">
+            <strong>Per page</strong>
+            <small>Titles, descriptions<br>and canonical URLs</small>
+          </div>
+          <div class="seo-kpi">
+            <strong>Structured</strong>
+            <small>JSON-LD generated<br>from saved site data</small>
+          </div>
+        </div>
+      </div>
+      <div class="seo-card">
+        <div class="seo-list">
+          <div class="seo-item">
+            <span class="seo-icon">✓</span>
+            <div>
+              <b>Traditional Search Engines (Google, Bing)</b>
+              <small>Page titles, meta descriptions, canonical URLs, XML sitemaps and clean robots.txt.</small>
+            </div>
+          </div>
+          <div class="seo-item">
+            <span class="seo-icon">✓</span>
+            <div>
+              <b>Generative Answer Engines (AEO &amp; GEO)</b>
+              <small>JSON-LD Schema.org Structured Data: Organization, WebSite, LocalBusiness, FAQPage schemas.</small>
+            </div>
+          </div>
+          <div class="seo-item">
+            <span class="seo-icon">✓</span>
+            <div>
+              <b>Semantic content architecture</b>
+              <small>Clear entity relationships engineered for Perplexity, ChatGPT and Copilot citation.</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="reveal-on-scroll pricing" id="pricing">
+    <div class="section-intro">
+      <p class="eyebrow">Straightforward Regional Pricing</p>
+      <h2>Start free. Grow when it makes sense.</h2>
+      <p>{{REGIONAL_PRICE_NOTE}}</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-tag-top">
+          <span class="price-badge">Free</span>
+        </div>
+        <h3>Free Starter</h3>
+        <strong>₹0</strong>
+        <p>Build and publish your first focused website.</p>
+        <ul class="price-features">
+          <li>2-page template publishing</li>
+          <li>15 monthly AI credits</li>
+          <li>AI Sales Assistant</li>
+          <li>Zylora subdomain</li>
+        </ul>
+        <a class="button button-outline" href="/signup">Start free</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-tag-top">
+          <span class="price-badge popular">Popular</span>
+        </div>
+        <h3>Starter</h3>
+        <strong>{{STARTER_REGIONAL_PRICE}}</strong>
+        <p>International regional price · USD billing</p>
+        <ul class="price-features">
+          <li>Up to 5-page publishing</li>
+          <li>100 monthly AI and lead credits</li>
+          <li>Custom domain &amp; SSL</li>
+          <li>Appointments and analytics</li>
+        </ul>
+        <a class="button button-primary" href="/signup">Choose Starter</a>
+      </div>
+      <div class="price-card">
+        <div class="price-tag-top">
+          <span class="price-badge">Growth</span>
+        </div>
+        <h3>Growth</h3>
+        <strong>{{GROWTH_REGIONAL_PRICE}}</strong>
+        <p>Higher capacity for a growing business.</p>
+        <ul class="price-features">
+          <li>Up to 8-page publishing</li>
+          <li>300 monthly AI and lead credits</li>
+          <li>Custom domain &amp; SSL</li>
+          <li>Higher operational capacity</li>
+        </ul>
+        <a class="button button-outline" href="/signup">Choose Growth</a>
+      </div>
+      <div class="price-card enterprise">
+        <div class="price-tag-top">
+          <span class="price-badge" style="background:rgba(255,255,255,0.1);color:#fff">Managed</span>
+        </div>
+        <h3>Managed</h3>
+        <strong>Let's talk</strong>
+        <p>Expert-led delivery scoped around your business.</p>
+        <ul class="price-features">
+          <li>Sales-assisted planning</li>
+          <li>Expert implementation</li>
+          <li>Business-specific scope</li>
+          <li>Ongoing dedicated support</li>
+        </ul>
+        <button class="button button-outline" id="openPro" style="background:transparent;color:#fff;border-color:rgba(255,255,255,0.3)" type="button">Talk to our experts</button>
+      </div>
+    </div>
+  </section>
+  <section class="reveal-on-scroll faq" id="faq">
+    <div class="section-intro">
+      <p class="eyebrow">Common Questions</p>
+      <h2>The details, clearly.</h2>
+    </div>
+    <div class="faq-grid">
+      <details class="faq-item">
+        <summary>Do I need a starting template?</summary>
+        <p>No. Zylora can create your site from a natural-language business brief. Templates are also available whenever you prefer starting from an art-directed layout.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Can visitors book appointments?</summary>
+        <p>Yes. The booking flow uses your configured availability rules and keeps appointments connected to your leads and analytics.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Can I edit the generated website?</summary>
+        <p>Yes. Zylora Studio lets you update text, imagery, colors and supported page structures with instant preview.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How does regional pricing work?</summary>
+        <p>Prices are determined automatically based on your billing country, providing fair regional rates for every market.</p>
+      </details>
+    </div>
+  </section>
+  <section class="reveal-on-scroll final-cta">
+    <p class="eyebrow">Ready When You Are</p>
+    <h2>Build the website.<br/>Keep the customers.</h2>
+    <p>Start with a business brief and grow from one connected workspace.</p>
+    <div class="hero-actions">
+      <a class="button button-primary" href="/signup">Start building</a>
+    </div>
+  </section>
 </main>
-<footer><a class="z-wordmark footer-logo" href="/">Zylora</a><p>Build. Publish. Get customers.</p><nav aria-label="Footer"><a href="/ai-create">AI Builder</a><a href="/templates">Templates</a><a href="/freelancers">Freelancers</a><a href="/blog">Resources</a><a href="/login">Log in</a></nav><small>© 2026 Zylora</small></footer>
-<div aria-hidden="true" aria-labelledby="proTitle" aria-modal="true" class="modal" id="proModal" role="dialog"><div class="modal-card"><button aria-label="Close" class="modal-close" id="closePro" type="button">×</button><p class="eyebrow">Managed by experts</p><h2 id="proTitle">Tell us what you need.</h2><form id="proForm"><label>Name<input autocomplete="name" id="proName" maxlength="120" required=""/></label><label>Email<input autocomplete="email" id="proEmail" maxlength="254" required="" type="email"/></label><label>Website type<input id="proType" maxlength="120" placeholder="Clinic, agency, school…" required=""/></label><label>Preferred contact time<input id="proTime" maxlength="120" placeholder="For example: weekdays after 4 PM"/></label><div aria-label="Bot protection" class="turnstile-slot" data-turnstile=""></div><button class="button button-dark" type="submit">Send enquiry</button><p aria-live="polite" id="proMsg"></p></form></div></div>
-<script defer="" src="/static/zylora-ui.js"></script><script defer="" src="/static/landing.js"></script></body></html>
+<footer class="site-footer">
+  <div class="footer-brand">
+    <a class="brand" href="/" aria-label="Zylora home">
+      <span class="brand-wordmark">Zylora</span>
+    </a>
+    <p>Websites that work for the business behind them.</p>
+  </div>
+  <nav aria-label="Footer">
+    <div>
+      <b>Product</b>
+      <a href="/ai-create">Website builder</a>
+      <a href="/templates">Templates</a>
+      <a href="#assistant">AI Assistant</a>
+      <a href="#booking">Appointments</a>
+    </div>
+    <div>
+      <b>Company</b>
+      <a href="/blog">Blog &amp; Resources</a>
+      <a href="/freelancers">Experts</a>
+      <a href="/login">Log in</a>
+    </div>
+    <div>
+      <b>Legal</b>
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+    </div>
+  </nav>
+  <small>© 2026 Zylora. All rights reserved.</small>
+</footer>
+<div class="modal" id="proModal" role="dialog" aria-modal="true" aria-labelledby="proTitle" aria-hidden="true">
+  <div class="modal-card">
+    <button class="modal-close" id="closePro" type="button" aria-label="Close">×</button>
+    <p class="eyebrow">Managed by experts</p>
+    <h2 id="proTitle">Tell us what you need.</h2>
+    <form id="proForm">
+      <label>Name<input id="proName" autocomplete="name" maxlength="120" required/></label>
+      <label>Email<input id="proEmail" autocomplete="email" maxlength="254" type="email" required/></label>
+      <label>Website type<input id="proType" maxlength="120" placeholder="Clinic, agency, school…" required/></label>
+      <label>Preferred contact time<input id="proTime" maxlength="120" placeholder="Weekdays after 4 PM"/></label>
+      <div class="turnstile-slot" data-turnstile aria-label="Bot protection"></div>
+      <button class="button button-primary" type="submit">Send enquiry</button>
+      <p id="proMsg" aria-live="polite"></p>
+    </form>
+  </div>
+</div>
+<script defer src="/static/zylora-ui.js"></script><script defer src="/static/landing.js?v=20260905-premium"></script>
+</body></html>

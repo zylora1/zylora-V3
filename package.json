@@ -5,6 +5,11 @@
     "check:nextjs-sources": "node scripts/check_nextjs_sources.js"
   },
   "devDependencies": {
-    "typescript": "5.9.3"
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "esbuild": "^0.28.2",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "typescript": "^5.9.3"
   }
 }

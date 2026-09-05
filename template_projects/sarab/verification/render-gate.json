@@ -8,9 +8,9 @@
   "motion_source_preserved_or_static_fallback": true,
   "page_inventory_verified": true,
   "page_sha256": {
-    "home": "0b84b82e36f08eb325e051843fecfbbc7c5f760d5e78848e5673b3eb2506d017"
+    "home": "5ef1eeafa9fbab83bccc3300f0e709246537fbf2d482df39a2d05d3fccd506d1"
   },
-  "render_home_sha256": "0b84b82e36f08eb325e051843fecfbbc7c5f760d5e78848e5673b3eb2506d017",
+  "render_home_sha256": "5ef1eeafa9fbab83bccc3300f0e709246537fbf2d482df39a2d05d3fccd506d1",
   "render_smoke_passed": true,
   "responsive_source_preserved": true,
   "rights_check_passed": true,
