@@ -99,16 +99,35 @@
       "viewport": 1440
     }
   ],
-  "console_errors": [],
+  "console_errors": [
+    "[JavaScript Error: \"downloadable font: download failed (font-family: \"Inter\" style:normal weight:400 stretch:100 src index:0): status=2152398850 source: https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa25L7W0I5nvwUgHU.woff2\"]",
+    "[JavaScript Error: \"downloadable font: download failed (font-family: \"Space Grotesk\" style:normal weight:700 stretch:100 src index:0): status=2152398850 source: https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPb94C-s0.woff2\"]",
+    "[JavaScript Error: \"downloadable font: download failed (font-family: \"Inter\" style:normal weight:600 stretch:100 src index:0): status=2152398850 source: https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0I5nvwU.woff2\"]",
+    "[JavaScript Error: \"downloadable font: download failed (font-family: \"Space Grotesk\" style:normal weight:500 stretch:100 src index:0): status=2152398850 source: https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2\"]",
+    "[JavaScript Error: \"downloadable font: download failed (font-family: \"Inter\" style:normal weight:500 stretch:100 src index:0): status=2152398850 source: https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0I5nvwU.woff2\"]",
+    "[JavaScript Error: \"downloadable font: download failed (font-family: \"Inter\" style:normal weight:700 stretch:100 src index:0): status=2152398850 source: https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0I5nvwU.woff2\"]",
+    "[JavaScript Error: \"downloadable font: download failed (font-family: \"Inter\" style:normal weight:400 stretch:100 src index:0): status=2152398850 source: https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0I5nvwU.woff2\"]",
+    "[JavaScript Error: \"downloadable font: download failed (font-family: \"Space Grotesk\" style:normal weight:700 stretch:100 src index:0): status=2152398850 source: https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2\"]",
+    "[JavaScript Error: \"downloadable font: download failed (font-family: \"Inter\" style:normal weight:700 stretch:100 src index:0): status=2152398850 source: https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa25L7W0I5nvwUgHU.woff2\"]"
+  ],
   "page_errors": [],
   "failed_requests": [
-    "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/av0/rch/ohty3/0x4AAAAAAEkz5DE9Df395l1b/auto/fbE/new/normal?lang=auto",
+    "GET https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa25L7W0I5nvwUgHU.woff2",
+    "GET https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPb94C-s0.woff2",
+    "GET https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0I5nvwU.woff2",
+    "GET https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2",
+    "GET https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0I5nvwU.woff2",
+    "GET https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0I5nvwU.woff2",
+    "GET https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0I5nvwU.woff2",
+    "GET https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2",
+    "GET https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa25L7W0I5nvwUgHU.woff2",
+    "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/av0/rch/pqmff/0x4AAAAAAEkz5DE9Df395l1b/auto/fbE/new/normal?lang=auto",
     "GET https://zylora-api-production.up.railway.app/static/template-previews/astrolus.png",
-    "GET https://zylora-api-production.up.railway.app/static/template-previews/arcade.png",
-    "GET https://zylora-api-production.up.railway.app/static/template-previews/ai-starter-kit.png",
-    "GET https://zylora-api-production.up.railway.app/static/template-previews/apex-digital.png",
     "GET https://zylora-api-production.up.railway.app/static/template-previews/archi.png",
-    "GET https://zylora-api-production.up.railway.app/static/template-previews/astrodeck.png"
+    "GET https://zylora-api-production.up.railway.app/static/template-previews/arcade.png",
+    "GET https://zylora-api-production.up.railway.app/static/template-previews/apex-digital.png",
+    "GET https://zylora-api-production.up.railway.app/static/template-previews/astrodeck.png",
+    "GET https://zylora-api-production.up.railway.app/static/template-previews/ai-starter-kit.png"
   ],
   "unexpected_http": []
 }

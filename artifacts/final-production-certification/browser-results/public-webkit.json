@@ -105,16 +105,8 @@
   ],
   "page_errors": [],
   "failed_requests": [
-    "GET https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit",
-    "GET https://zylora-api-production.up.railway.app/static/template-previews/astrolus.png",
-    "GET https://zylora-api-production.up.railway.app/static/template-previews/belonging-collective.png",
-    "GET https://zylora-api-production.up.railway.app/static/template-previews/apex-digital.png",
-    "GET https://zylora-api-production.up.railway.app/static/template-previews/astroship.png",
-    "GET https://zylora-api-production.up.railway.app/static/template-previews/arcade.png",
-    "GET https://zylora-api-production.up.railway.app/static/template-previews/archi.png",
-    "GET https://zylora-api-production.up.railway.app/static/template-previews/astrodeck.png",
-    "GET https://zylora-api-production.up.railway.app/static/template-previews/ai-starter-kit.png",
-    "GET https://zylora-api-production.up.railway.app/static/template-previews/atacama-action.png"
+    "GET https://challenges.cloudflare.com/turnstile/v0/g/330e41bb475c/api.js",
+    "GET https://zylora-api-production.up.railway.app/api/templates"
   ],
   "unexpected_http": []
 }

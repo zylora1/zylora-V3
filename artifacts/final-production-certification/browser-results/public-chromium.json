@@ -104,8 +104,6 @@
     "Failed to load resource: the server responded with a status of 401 ()"
   ],
   "page_errors": [],
-  "failed_requests": [
-    "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/av0/rch/wqvew/0x4AAAAAAEkz5DE9Df395l1b/auto/fbE/new/normal?lang=auto"
-  ],
+  "failed_requests": [],
   "unexpected_http": []
 }
