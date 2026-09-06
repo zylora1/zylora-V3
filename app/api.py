@@ -8,7 +8,7 @@ from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
 from .db import SessionLocal, now_iso
-from .security import current_user, require_csrf, new_session, hash_password, verify_password, durable_rate_limit, session_cookie_samesite
+from .security import current_user, require_csrf, new_session, hash_password, verify_password, durable_rate_limit, session_cookie_samesite, session_cookie_domain
 from .templates import TEMPLATES, BY_SLUG, AI_RUNTIME_SLUG, render_template, render_template_page
 from .template_catalogue import public_templates
 from .providers import ai_generate_site, ai_edit, send_whatsapp, sync_google_sheet_event, plan_site_architecture
@@ -206,7 +206,7 @@ def signup(payload:SignupIn, request:Request, response:Response):
         ensure_wallet(db,uid,'FREE',int(get_plan('FREE').get('signup_bonus_credits',5)))
         db.execute(text('INSERT INTO notification_settings(id,user_id,site_id,email_to,updated_at,created_at) VALUES (:i,:u,NULL,:e,:c,:c)'),{'i':str(uuid4()),'u':uid,'e':str(payload.email).lower(),'c':now_iso()})
     verify_token=issue_auth_token(uid,'VERIFY_EMAIL',str(payload.email).lower())
-    token,csrf,_=new_session(uid); response.set_cookie('zylora_session',token,httponly=True,samesite=session_cookie_samesite(),secure=settings.app_env=='production',max_age=settings.session_ttl_hours*3600)
+    token,csrf,_=new_session(uid); response.set_cookie('zylora_session',token,httponly=True,samesite=session_cookie_samesite(),secure=settings.app_env=='production',domain=session_cookie_domain(),max_age=settings.session_ttl_hours*3600)
     result={'ok':True,'csrf_token':csrf,'email_verification_required':True,'plan_selected':False,'next':'/dashboard'}
     if settings.app_env!='production': result['debug_verification_token']=verify_token
     return result
@@ -217,7 +217,7 @@ def login(payload:LoginIn, request:Request, response:Response):
     durable_rate_limit('login:'+ip,20,900)
     with SessionLocal() as db: row=db.execute(text('SELECT * FROM users WHERE lower(email)=lower(:e)'),{'e':str(payload.email)}).mappings().first()
     if not row or not verify_password(payload.password,row['password_hash']): raise HTTPException(401,'Invalid email or password')
-    token,csrf,_=new_session(row['id']); response.set_cookie('zylora_session',token,httponly=True,samesite=session_cookie_samesite(),secure=settings.app_env=='production',max_age=settings.session_ttl_hours*3600)
+    token,csrf,_=new_session(row['id']); response.set_cookie('zylora_session',token,httponly=True,samesite=session_cookie_samesite(),secure=settings.app_env=='production',domain=session_cookie_domain(),max_age=settings.session_ttl_hours*3600)
     is_admin=row.get('role')=='SUPER_ADMIN'
     return {'ok':True,'csrf_token':csrf,'plan_selected':True if is_admin else bool(row.get('plan_selected',1)),
             'role':row.get('role'),'next':(settings.super_admin_app_url or '/super-admin') if is_admin else '/dashboard'}
@@ -226,7 +226,7 @@ def login(payload:LoginIn, request:Request, response:Response):
 def logout(request:Request,response:Response):
     u=_user(request,True); token=request.cookies.get('zylora_session')
     with SessionLocal.begin() as db: db.execute(text('DELETE FROM sessions WHERE token=:t'),{'t':token})
-    response.delete_cookie('zylora_session'); return {'ok':True}
+    response.delete_cookie('zylora_session',domain=session_cookie_domain()); return {'ok':True}
 
 @router.get('/auth/me')
 def me(request:Request):
@@ -400,7 +400,7 @@ def delete_account(payload: AccountDeleteIn, request: Request, response: Respons
         db.execute(text("INSERT INTO audit_log(user_id,action,object_type,object_id,metadata,created_at) VALUES (NULL,'ACCOUNT_DELETED','user',NULL,:m,:c)"),
                    {'m':json.dumps({'cleanup_warning_count':len(cleanup_warnings)}),'c':now_iso()})
 
-    response.delete_cookie('zylora_session')
+    response.delete_cookie('zylora_session',domain=session_cookie_domain())
     return {'ok':True,'deleted':True,'cleanup_warnings':cleanup_warnings}
 
 

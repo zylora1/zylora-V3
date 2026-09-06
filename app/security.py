@@ -3,6 +3,7 @@ import base64, hashlib, hmac, os, secrets, time
 from datetime import datetime, timedelta, timezone
 from fastapi import Cookie, Header, HTTPException, Request
 from sqlalchemy import text
+from urllib.parse import urlparse
 from .db import SessionLocal, now_iso, engine
 from .config import settings
 
@@ -81,6 +82,33 @@ def session_cookie_samesite() -> str:
     if settings.app_env == 'production' and settings.super_admin_app_url:
         return 'none'
     return 'lax'
+
+
+def session_cookie_domain() -> str | None:
+    """Share the session with the configured sibling admin origin only.
+
+    The public API and Super Admin UI are separate Railway services.  A
+    host-only cookie authenticates the API but cannot be sent by the admin
+    origin, even when CORS allows credentialed requests.  Derive the narrowest
+    common hostname suffix from the configured origins; in development keep a
+    host-only cookie.
+    """
+    if settings.app_env != 'production' or not settings.super_admin_app_url:
+        return None
+    api_host = (urlparse(settings.app_url or '').hostname or '').lower().rstrip('.')
+    admin_host = (urlparse(settings.super_admin_app_url or '').hostname or '').lower().rstrip('.')
+    if not api_host or not admin_host or api_host == admin_host:
+        return None
+    api_labels = api_host.split('.')
+    admin_labels = admin_host.split('.')
+    common: list[str] = []
+    for api_label, admin_label in zip(reversed(api_labels), reversed(admin_labels)):
+        if api_label != admin_label:
+            break
+        common.append(api_label)
+    if len(common) < 2:
+        return None
+    return '.' + '.'.join(reversed(common))
 
 
 def rate_limit(key: str, limit: int, window_seconds: int):
