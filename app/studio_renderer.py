@@ -31,6 +31,14 @@ _ANIMATION_EFFECTS={
     'slide':'zyStudioSlide',
     'scale':'zyStudioScale',
 }
+_SCROLL_EFFECTS={
+    'fade':'zyStudioScrollFade',
+    'reveal':'zyStudioScrollReveal',
+    'rise':'zyStudioScrollRise',
+    'slide':'zyStudioScrollSlide',
+    'scale':'zyStudioScrollScale',
+    'fade-up':'zyStudioScrollRise',
+}
 
 def _css_name(prop: str) -> str:
     return re.sub(r'([A-Z])',lambda match:'-'+match.group(1).lower(),str(prop).strip())
@@ -103,6 +111,12 @@ def _render_node_css(node: Node, doc: SiteDocument) -> str:
         elif trigger in {'animation','load','entrance'} and effect in _ANIMATION_EFFECTS:
             duration=_safe_css_value((interaction.get('duration') or interaction.get('duration_ms') or 650)) or '650'
             css += f"@keyframes {_ANIMATION_EFFECTS[effect]} {{ from {{ opacity:0; transform: translateY({ '14px' if effect in {'rise','slide'} else '0' }); }} to {{ opacity:1; transform: translateY(0); }} }}\n.z-node-{node.id} {{ animation: {_ANIMATION_EFFECTS[effect]} {duration}ms ease both; }}\n"
+        elif trigger == 'scroll' and effect in _SCROLL_EFFECTS:
+            duration=_safe_css_value((interaction.get('duration') or interaction.get('duration_ms') or 650)) or '650'
+            delay=_safe_css_value((interaction.get('delay') or interaction.get('delay_ms') or 0)) or '0'
+            keyframe=_SCROLL_EFFECTS[effect]
+            start='scale(.96)' if effect=='scale' else ('translateY(18px)' if effect in {'rise','slide','fade-up'} else 'translateY(10px)')
+            css += f"@keyframes {keyframe} {{ from {{ opacity:0; transform:{start}; }} to {{ opacity:1; transform:none; }} }}\n.z-node-{node.id}.z-scroll-target {{ opacity:0; transform:{start}; }}\n.z-node-{node.id}.z-scroll-target.z-scroll-visible {{ animation:{keyframe} {duration}ms ease {delay}ms both; }}\n"
     if node.interactions:
         css += "@media (prefers-reduced-motion: reduce) {\n"
         css += f".z-node-{node.id} {{ animation: none !important; transition: none !important; transform: none !important; }}\n"
@@ -165,7 +179,12 @@ def _render_node_html(node: Node, doc: SiteDocument, page: Page, data_context:di
         classes += " zylora-chatbot-container"
 
     rendered_id=node.id+instance_suffix
+    scroll_effect=next((str(i.get('effect') or '').lower() for i in (node.interactions or []) if isinstance(i,dict) and str(i.get('trigger') or '').lower()=='scroll' and str(i.get('effect') or '').lower() in _SCROLL_EFFECTS),None)
+    if scroll_effect:
+        classes += ' z-scroll-target'
     attrs = f'class="{classes}" id="{html.escape(rendered_id,quote=True)}" data-studio-type="{html.escape(node.type,quote=True)}"'
+    if scroll_effect:
+        attrs += f' data-z-scroll-effect="{html.escape(scroll_effect,quote=True)}"'
     
     if tag == "img" and content.src:
         # Sanitize src to prevent javascript: or data:xss URIs
@@ -272,6 +291,7 @@ def render_page(doc: SiteDocument, page_id: str, *, data_context:dict|None=None,
     structured=seo_override.get('structured_data')
     structured_json=json.dumps(structured,ensure_ascii=False,separators=(',',':')).replace('</','<\\/') if isinstance(structured,dict) else ''
     structured_meta=f'<script type="application/ld+json">{structured_json}</script>' if structured_json else ''
+    scroll_script = """<script>(function(){if(window.__zyloraScrollEffects)return;window.__zyloraScrollEffects=1;var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;var targets=document.querySelectorAll('.z-scroll-target');if(reduce||!('IntersectionObserver' in window)){targets.forEach(function(el){el.classList.add('z-scroll-visible')});return}var observer=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){entry.target.classList.add('z-scroll-visible');observer.unobserve(entry.target)}})},{threshold:.12,rootMargin:'0px 0px -8% 0px'});targets.forEach(function(el){observer.observe(el)});})();</script>"""
     final_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -286,6 +306,7 @@ def render_page(doc: SiteDocument, page_id: str, *, data_context:dict|None=None,
 </head>
 <body>
     {body_html}
+    {scroll_script}
 </body>
 </html>"""
 

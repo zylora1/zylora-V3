@@ -33,6 +33,8 @@ export function CanvasNode({nodeId}:{nodeId:string}){
  const isSelected=state.selectedNodeIds.includes(nodeId),isLocked=!!node.metadata?.locked;
  const isAbsolute=cssStyles.position==='absolute'||cssStyles.position==='fixed';
  const elementRef=React.useRef<HTMLElement|null>(null);
+ const gesture=React.useRef<{pointerId:number;startX:number;startY:number;base:any;active:false;kind:'select'|'move'}|null>(null);
+ const suppressClick=React.useRef(false);
  const getRect=()=>{const el=elementRef.current;if(!el)return{x:parseFloat(cssStyles.left)||0,y:parseFloat(cssStyles.top)||0,w:100,h:40};const r=el.getBoundingClientRect();const parent=el.parentElement?.getBoundingClientRect();return{x:isAbsolute?parseFloat(cssStyles.left)||0:(r.left-(parent?.left||r.left))/state.zoom,y:isAbsolute?parseFloat(cssStyles.top)||0:(r.top-(parent?.top||r.top))/state.zoom,w:r.width/state.zoom,h:r.height/state.zoom}};
  const previewUpdate=(rect:any,lines:any[]=[])=>{setRectOverride(rect);dispatch({type:'SET_SNAP_LINES',payload:lines})};
  const endDrag=(rect:any)=>{const base=dragBase.current||getRect();setRectOverride(null);dispatch({type:'SET_SNAP_LINES',payload:[]});if(!state.document)return;const geometry=isAbsolute?{left:`${Math.round(rect.x)}px`,top:`${Math.round(rect.y)}px`}:{transform:`translate(${Math.round(rect.x-base.x)}px, ${Math.round(rect.y-base.y)}px)`};dragBase.current=null;dispatch({type:'UPDATE_NODE_GEOMETRY',payload:{nodeId,geometry}})};
@@ -40,12 +42,41 @@ export function CanvasNode({nodeId}:{nodeId:string}){
  const endResize=(rect:any)=>{setRectOverride(null);dispatch({type:'SET_SNAP_LINES',payload:[]});dispatch({type:'UPDATE_NODE_GEOMETRY',payload:{nodeId,geometry:{width:`${Math.round(rect.w)}px`,height:`${Math.round(rect.h)}px`,...(isAbsolute?{left:`${Math.round(rect.x)}px`,top:`${Math.round(rect.y)}px`}:{})}}})};
  const {startResize}=useResize({x:0,y:0,w:0,h:0},previewUpdate,endResize,state.zoom);
  const select=(e:React.MouseEvent)=>{e.stopPropagation();dispatch({type:'SELECT_NODE',payload:e.shiftKey?(isSelected?state.selectedNodeIds.filter(id=>id!==nodeId):[...state.selectedNodeIds,nodeId]):[nodeId]})};
- const pointerDown=(e:React.PointerEvent)=>{if(isLocked)return;if((e.target as HTMLElement).closest('.studio-resize-handle,.studio-floating-actions'))return;const el=elementRef.current;if(!el)return;dragBase.current=getRect();el.setPointerCapture?.(e.pointerId);startDrag(e,dragBase.current)};
+ const pointerDown=(e:React.PointerEvent)=>{
+  if(isLocked)return;
+  if((e.target as HTMLElement).closest('.studio-resize-handle,.studio-floating-actions'))return;
+  // Keep nested node gestures isolated; this does not prevent native scrolling.
+  e.stopPropagation();
+  // A pointerdown is only a click candidate. Geometry is never mutated until
+  // an already-selected node crosses the intentional-drag threshold.
+  const el=elementRef.current;if(!el)return;
+  const base=getRect();dragBase.current=base;
+  gesture.current={pointerId:e.pointerId,startX:e.clientX,startY:e.clientY,base,active:false,kind:isSelected?'move':'select'};
+  const move=(event:PointerEvent)=>{
+   const g=gesture.current;if(!g||event.pointerId!==g.pointerId)return;
+   const distance=Math.hypot(event.clientX-g.startX,event.clientY-g.startY);
+   if(g.kind==='select'||g.active||distance<6)return;
+   g.active=true;suppressClick.current=true;
+   window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',cancel);
+   el.setPointerCapture?.(event.pointerId);
+   startDrag(event,g.base);
+  };
+  const finish=(cancelled=false)=>{
+   const g=gesture.current;if(!g||g.pointerId!==e.pointerId)return;
+   window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',cancel);
+   gesture.current=null;
+   if(!g.active&&!cancelled&&g.kind==='select')select(e as unknown as React.MouseEvent);
+   if(!g.active&&!cancelled&&g.kind==='move')dragBase.current=null;
+  };
+  const up=(event:PointerEvent)=>{if(event.pointerId!==e.pointerId)return;finish(false)};
+  const cancel=()=>finish(true);
+  window.addEventListener('pointermove',move);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',cancel);
+ };
  const drop=(e:React.DragEvent)=>{e.preventDefault();e.stopPropagation();const dropped=e.dataTransfer.getData('studio/node-id');if(dropped&&dropped!==nodeId&&acceptsChildren(node.type))dispatch({type:'REPARENT_NODE',payload:{nodeId:dropped,newParentId:nodeId}})};
  const Tag:any=node.type==='section'?'section':node.type==='heading'?'h2':node.type==='button'?'button':node.type==='link'?'a':node.type==='form'?'form':node.type==='navigation'?'nav':'div';
  const renderHandle=(pos:string)=>{if(!isSelected||isLocked)return null;const style:any={position:'absolute',width:9,height:9,background:'#fff',border:'1px solid #4263eb',zIndex:1000};if(pos.includes('top'))style.top=-5;if(pos.includes('bottom'))style.bottom=-5;if(pos.includes('left'))style.left=-5;if(pos.includes('right'))style.right=-5;if(pos==='top'||pos==='bottom'){style.left='calc(50% - 4px)';style.cursor='ns-resize'}if(pos==='left'||pos==='right'){style.top='calc(50% - 4px)';style.cursor='ew-resize'}if(pos.includes('top')&&pos.includes('left')||pos.includes('bottom')&&pos.includes('right'))style.cursor='nwse-resize';if(pos.includes('top')&&pos.includes('right')||pos.includes('bottom')&&pos.includes('left'))style.cursor='nesw-resize';return <span key={pos} className="studio-resize-handle" data-handle={pos} style={style} onPointerDown={e=>{e.stopPropagation();const el=elementRef.current;if(el)startResize(e,pos,getRect())}}/>};
  const renderStyle:any={...cssStyles,...(rectOverride?{width:`${rectOverride.w}px`,height:`${rectOverride.h}px`,...(isAbsolute?{left:`${rectOverride.x}px`,top:`${rectOverride.y}px`}:{transform:`translate(${rectOverride.x-(dragBase.current?.x||0)}px, ${rectOverride.y-(dragBase.current?.y||0)}px)`})}:{}),position:cssStyles.position||'relative',display:effectiveVisibility==='hidden'?'none':cssStyles.display};
- const props:any={ref:elementRef,style:renderStyle,onClick:select,onPointerDown:pointerDown,onDragOver:e=>e.preventDefault(),onDrop:drop,'data-studio-id':node.id,'data-studio-type':node.type,'aria-label':node.accessibility?.ariaLabel||undefined};
+ const props:any={ref:elementRef,style:renderStyle,onClick:(e:React.MouseEvent)=>{if(suppressClick.current){suppressClick.current=false;return}select(e)},onPointerDown:pointerDown,onDragOver:e=>e.preventDefault(),onDrop:drop,'data-studio-id':node.id,'data-studio-type':node.type,'data-studio-selected':isSelected?'true':undefined,'aria-label':node.accessibility?.ariaLabel||undefined};
  if(Tag==='img'){props.src=node.content.src;props.alt=node.content.alt||''}
  if(Tag==='a'&&node.content.href){props.href=node.content.href; if(node.metadata?.linkTarget==='_blank'){props.target='_blank';props.rel='noopener noreferrer'}}
  const content=node.type==='image'?<img src={node.content.src||undefined} alt={node.content.alt||''} style={{width:'100%',height:'100%',objectFit:cssStyles.objectFit||'cover',objectPosition:cssStyles.objectPosition||'50% 50%',display:'block'}}/>:editableTypes.includes(node.type)&&node.children.length===0?<EditableText value={node.content.text||''} onChange={text=>dispatch({type:'UPDATE_NODE_TEXT',payload:{nodeId,text}})} onEnter={()=>elementRef.current?.blur()}/>:node.content.text||node.content.html||null;

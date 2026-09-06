@@ -1,1 +1,3 @@
-Final repository result after all source fixes: 363 passed, 1 skipped, 0 failures, 59 warnings, 269.21s.
+Final repository result after the current Studio and Sales Assistant source changes: 371 passed, 1 skipped, 0 failures, 59 warnings, 272.54s (elevated Windows run).
+
+Compile check: python -m compileall -q app studio scripts tests/test_studio_canva_contract.py — PASS.

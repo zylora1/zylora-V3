@@ -32,3 +32,12 @@ def test_v4_renderer_honors_reduced_motion_for_interactions():
     node = Node(id='headline', type='heading', content=NodeContent(text='Hello'), interactions=[{'trigger': 'animation', 'effect': 'rise'}])
     html = render_page(_doc(node), 'home')
     assert 'prefers-reduced-motion: reduce' in html
+
+
+def test_v4_renderer_emits_scroll_effect_observer_and_reduced_motion_fallback():
+    node = Node(id='reveal', type='section', content=NodeContent(text='Reveal me'), interactions=[{'trigger':'scroll','effect':'reveal','duration_ms':700}])
+    html = render_page(_doc(node), 'home')
+    assert 'data-z-scroll-effect="reveal"' in html
+    assert 'IntersectionObserver' in html
+    assert 'z-scroll-visible' in html
+    assert 'prefers-reduced-motion: reduce' in html

@@ -22029,6 +22029,8 @@
     const isSelected = state.selectedNodeIds.includes(nodeId), isLocked = !!node.metadata?.locked;
     const isAbsolute = cssStyles.position === "absolute" || cssStyles.position === "fixed";
     const elementRef = import_react4.default.useRef(null);
+    const gesture = import_react4.default.useRef(null);
+    const suppressClick = import_react4.default.useRef(false);
     const getRect = () => {
       const el = elementRef.current;
       if (!el) return { x: parseFloat(cssStyles.left) || 0, y: parseFloat(cssStyles.top) || 0, w: 100, h: 40 };
@@ -22072,11 +22074,43 @@
     const pointerDown = (e) => {
       if (isLocked) return;
       if (e.target.closest(".studio-resize-handle,.studio-floating-actions")) return;
+      e.stopPropagation();
       const el = elementRef.current;
       if (!el) return;
-      dragBase.current = getRect();
-      el.setPointerCapture?.(e.pointerId);
-      startDrag(e, dragBase.current);
+      const base = getRect();
+      dragBase.current = base;
+      gesture.current = { pointerId: e.pointerId, startX: e.clientX, startY: e.clientY, base, active: false, kind: isSelected ? "move" : "select" };
+      const move = (event) => {
+        const g = gesture.current;
+        if (!g || event.pointerId !== g.pointerId) return;
+        const distance = Math.hypot(event.clientX - g.startX, event.clientY - g.startY);
+        if (g.kind === "select" || g.active || distance < 6) return;
+        g.active = true;
+        suppressClick.current = true;
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerup", up);
+        window.removeEventListener("pointercancel", cancel);
+        el.setPointerCapture?.(event.pointerId);
+        startDrag(event, g.base);
+      };
+      const finish = (cancelled = false) => {
+        const g = gesture.current;
+        if (!g || g.pointerId !== e.pointerId) return;
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerup", up);
+        window.removeEventListener("pointercancel", cancel);
+        gesture.current = null;
+        if (!g.active && !cancelled && g.kind === "select") select(e);
+        if (!g.active && !cancelled && g.kind === "move") dragBase.current = null;
+      };
+      const up = (event) => {
+        if (event.pointerId !== e.pointerId) return;
+        finish(false);
+      };
+      const cancel = () => finish(true);
+      window.addEventListener("pointermove", move);
+      window.addEventListener("pointerup", up);
+      window.addEventListener("pointercancel", cancel);
     };
     const drop = (e) => {
       e.preventDefault();
@@ -22109,7 +22143,13 @@
       } });
     };
     const renderStyle = { ...cssStyles, ...rectOverride ? { width: `${rectOverride.w}px`, height: `${rectOverride.h}px`, ...isAbsolute ? { left: `${rectOverride.x}px`, top: `${rectOverride.y}px` } : { transform: `translate(${rectOverride.x - (dragBase.current?.x || 0)}px, ${rectOverride.y - (dragBase.current?.y || 0)}px)` } } : {}, position: cssStyles.position || "relative", display: effectiveVisibility === "hidden" ? "none" : cssStyles.display };
-    const props = { ref: elementRef, style: renderStyle, onClick: select, onPointerDown: pointerDown, onDragOver: (e) => e.preventDefault(), onDrop: drop, "data-studio-id": node.id, "data-studio-type": node.type, "aria-label": node.accessibility?.ariaLabel || void 0 };
+    const props = { ref: elementRef, style: renderStyle, onClick: (e) => {
+      if (suppressClick.current) {
+        suppressClick.current = false;
+        return;
+      }
+      select(e);
+    }, onPointerDown: pointerDown, onDragOver: (e) => e.preventDefault(), onDrop: drop, "data-studio-id": node.id, "data-studio-type": node.type, "data-studio-selected": isSelected ? "true" : void 0, "aria-label": node.accessibility?.ariaLabel || void 0 };
     if (Tag === "img") {
       props.src = node.content.src;
       props.alt = node.content.alt || "";
@@ -22130,31 +22170,32 @@
   var fonts = ["Inter", "Arial", "Georgia", "Helvetica Neue", "system-ui", "Space Grotesk"];
   var effects = ["none", "lift", "scale", "shadow", "underline", "glow"];
   var motions = ["none", "fade", "rise", "slide", "scale"];
-  var styleText = `.context-toolbar{display:flex;align-items:center;gap:5px;min-height:32px;max-width:min(720px,48vw);overflow:auto;white-space:nowrap}.context-toolbar button,.context-toolbar select,.context-toolbar input{height:28px;border:1px solid #3a3d45;border-radius:6px;background:#202228;color:#f6f7fb;padding:0 7px;font-size:11px}.context-toolbar button:hover,.context-toolbar button.active{background:#34384a;border-color:#7180ff}.context-toolbar input[type=color]{width:30px;padding:2px}.context-toolbar input[type=number]{width:58px}.context-toolbar select{max-width:150px}.toolbar-selection-label{font-size:11px;color:#aeb5c5;max-width:90px;overflow:hidden;text-overflow:ellipsis}.toolbar-divider{height:18px;width:1px;background:#3a3d45}.studio-resize-handle{box-sizing:border-box;border-radius:3px;touch-action:none}.studio-floating-actions{position:absolute;left:50%;top:-24px;transform:translateX(-50%);height:18px;padding:0 7px;border-radius:5px;background:#4263eb;color:white;font:700 11px/18px system-ui;z-index:1002;pointer-events:none}.canvas-file-drop{position:absolute;inset:24px;border:2px dashed #7180ff;background:#7180ff22;display:grid;place-items:center;color:#fff;font-weight:700;z-index:40;pointer-events:none;border-radius:12px}.studio-canvas [data-studio-id]{touch-action:none}.studio-canvas img{max-width:100%}@media(max-width:820px){.topbar-center{display:flex;max-width:calc(100vw - 70px);overflow:auto}}`;
+  var scrollEffects = ["none", "fade", "reveal", "rise", "slide", "scale"];
+  var styleText = `.context-toolbar{display:flex;align-items:center;gap:5px;min-height:32px;max-width:min(720px,48vw);overflow:auto;white-space:nowrap}.context-toolbar button,.context-toolbar select,.context-toolbar input{height:28px;border:1px solid #3a3d45;border-radius:6px;background:#202228;color:#f6f7fb;padding:0 7px;font-size:11px}.context-toolbar button:hover,.context-toolbar button.active{background:#34384a;border-color:#7180ff}.context-toolbar input[type=color]{width:30px;padding:2px}.context-toolbar input[type=number]{width:58px}.context-toolbar select{max-width:150px}.toolbar-selection-label{font-size:11px;color:#aeb5c5;max-width:90px;overflow:hidden;text-overflow:ellipsis}.toolbar-divider{height:18px;width:1px;background:#3a3d45}.studio-resize-handle{box-sizing:border-box;border-radius:3px;touch-action:none}.studio-floating-actions{position:absolute;left:50%;top:-24px;transform:translateX(-50%);height:18px;padding:0 7px;border-radius:5px;background:#4263eb;color:white;font:700 11px/18px system-ui;z-index:1002;pointer-events:none}.canvas-file-drop{position:absolute;inset:24px;border:2px dashed #7180ff;background:#7180ff22;display:grid;place-items:center;color:#fff;font-weight:700;z-index:40;pointer-events:none;border-radius:12px}.studio-canvas [data-studio-id]{touch-action:pan-y}.studio-canvas [data-studio-id][data-studio-selected=true]{touch-action:none}.studio-canvas img{max-width:100%}@media(max-width:820px){.topbar-center{display:flex;max-width:calc(100vw - 70px);overflow:auto}}`;
   function ContextToolbar({ onFit, onPreview }) {
     const { state, dispatch } = useStudio();
-    const page = state.document?.pages[state.currentPageId], node = state.selectedNodeIds.length === 1 ? page?.nodes[state.selectedNodeIds[0]] : null;
+    const page = state.document?.pages[state.currentPageId];
+    const node = state.selectedNodeIds.length === 1 ? page?.nodes[state.selectedNodeIds[0]] : null;
     const update = (style) => {
       if (node) dispatch({ type: "UPDATE_NODE_STYLE", payload: { nodeId: node.id, style } });
     };
     const setInteraction = (kind, effect) => {
       if (!node) return;
       const existing = (node.interactions || []).filter((x) => x.trigger !== kind);
-      dispatch({ type: "UPDATE_NODE_INTERACTIONS", payload: { nodeId: node.id, interactions: [...existing, { trigger: kind, effect }] } });
+      dispatch({ type: "UPDATE_NODE_INTERACTIONS", payload: { nodeId: node.id, interactions: effect === "none" ? existing : [...existing, { trigger: kind, effect }] } });
     };
     const cycleCrop = () => {
       if (!node) return;
       const positions = ["50% 50%", "25% 50%", "75% 50%", "50% 25%", "50% 75%"];
       const current = node.style.css.objectPosition || positions[0];
-      const next = positions[(positions.indexOf(current) + 1) % positions.length];
-      update({ objectPosition: next });
+      update({ objectPosition: positions[(positions.indexOf(current) + 1) % positions.length] });
     };
     if (!node) return /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("style", null, styleText), /* @__PURE__ */ import_react5.default.createElement("div", { className: "context-toolbar global-toolbar" }, /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Undo", disabled: state.historyIndex <= 0, onClick: () => dispatch({ type: "UNDO" }) }, "\u21B6"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Redo", disabled: state.historyIndex >= state.history.length - 1, onClick: () => dispatch({ type: "REDO" }) }, "\u21B7"), /* @__PURE__ */ import_react5.default.createElement("span", { className: "toolbar-divider" }), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: onFit }, "Fit"), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: onPreview }, "Preview")));
     const isText = ["heading", "paragraph", "text", "button", "link"].includes(node.type), isImage = node.type === "image";
     return /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("style", null, styleText), /* @__PURE__ */ import_react5.default.createElement("div", { className: "context-toolbar selection-toolbar", onPointerDown: (e) => e.stopPropagation() }, /* @__PURE__ */ import_react5.default.createElement("span", { className: "toolbar-selection-label" }, node.metadata?.displayName || node.type), isText && /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Font family", value: node.style.css.fontFamily || "Inter", onChange: (e) => update({ fontFamily: e.target.value }) }, fonts.map((font) => /* @__PURE__ */ import_react5.default.createElement("option", { key: font }, font))), /* @__PURE__ */ import_react5.default.createElement("input", { "aria-label": "Font size", type: "number", min: "8", max: "220", value: parseInt(node.style.css.fontSize || "16") || 16, onChange: (e) => update({ fontSize: `${e.target.value}px` }) }), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Bold", className: node.style.css.fontWeight === "700" ? "active" : "", onClick: () => update({ fontWeight: node.style.css.fontWeight === "700" ? "400" : "700" }) }, "B"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Italic", className: node.style.css.fontStyle === "italic" ? "active" : "", onClick: () => update({ fontStyle: node.style.css.fontStyle === "italic" ? "normal" : "italic" }) }, "I"), /* @__PURE__ */ import_react5.default.createElement("input", { "aria-label": "Text color", type: "color", value: /^#[0-9a-f]{6}$/i.test(node.style.css.color || "") ? node.style.css.color : "#111111", onChange: (e) => update({ color: e.target.value }) })), isImage && /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => document.querySelector(".assets-panel input[type=file]")?.click() }, "Replace"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Crop", onClick: cycleCrop }, "Crop"), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Image fit", value: node.style.css.objectFit || "cover", onChange: (e) => update({ objectFit: e.target.value }) }, /* @__PURE__ */ import_react5.default.createElement("option", { value: "cover" }, "Fill"), /* @__PURE__ */ import_react5.default.createElement("option", { value: "contain" }, "Fit"), /* @__PURE__ */ import_react5.default.createElement("option", { value: "fill" }, "Stretch")), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update({ borderRadius: node.style.css.borderRadius ? "0px" : "16px" }) }, "Radius")), (isText || isImage || node.type === "button" || node.type === "link") && /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => {
       const href = window.prompt("Optional link URL", node.content.href || "");
       if (href !== null) dispatch({ type: "UPDATE_NODE_CONTENT", payload: { nodeId: node.id, content: { href: href || void 0 } } });
-    } }, "Link"), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Hover effect", value: (node.interactions || []).find((x) => x.trigger === "hover")?.effect || "none", onChange: (e) => setInteraction("hover", e.target.value) }, effects.map((x) => /* @__PURE__ */ import_react5.default.createElement("option", { key: x, value: x }, "Hover: ", x))), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Animation", value: (node.interactions || []).find((x) => x.trigger === "animation")?.effect || "none", onChange: (e) => setInteraction("animation", e.target.value) }, motions.map((x) => /* @__PURE__ */ import_react5.default.createElement("option", { key: x, value: x }, "Animate: ", x))), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Duplicate", onClick: () => dispatch({ type: "DUPLICATE_NODE", payload: { nodeId: node.id } }) }, "\u29C9"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Delete", onClick: () => dispatch({ type: "DELETE_NODE", payload: { nodeId: node.id } }) }, "\u232B")));
+    } }, "Link"), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Hover effect", value: (node.interactions || []).find((x) => x.trigger === "hover")?.effect || "none", onChange: (e) => setInteraction("hover", e.target.value) }, effects.map((x) => /* @__PURE__ */ import_react5.default.createElement("option", { key: x, value: x }, "Hover: ", x))), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Animation", value: (node.interactions || []).find((x) => x.trigger === "animation")?.effect || "none", onChange: (e) => setInteraction("animation", e.target.value) }, motions.map((x) => /* @__PURE__ */ import_react5.default.createElement("option", { key: x, value: x }, "Animate: ", x))), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Scroll effect", value: (node.interactions || []).find((x) => x.trigger === "scroll")?.effect || "none", onChange: (e) => setInteraction("scroll", e.target.value) }, scrollEffects.map((x) => /* @__PURE__ */ import_react5.default.createElement("option", { key: x, value: x }, "On scroll: ", x))), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Duplicate", onClick: () => dispatch({ type: "DUPLICATE_NODE", payload: { nodeId: node.id } }) }, "\u29C9"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Delete", onClick: () => dispatch({ type: "DELETE_NODE", payload: { nodeId: node.id } }) }, "\u232B")));
   }
 
   // studio/components/LayersPanel.tsx

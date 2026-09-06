@@ -40,6 +40,18 @@ def main():
         if not page.locator('.studio-canvas [data-studio-id]').count(): print('BROWSER ERRORS',errors,'ROOT',page.locator('#studio-root').inner_text()[:500],flush=True)
         page.wait_for_selector('.studio-canvas [data-studio-id]',timeout=15000)
         check(page.locator('.tool-rail button').count()==10,'Studio exposes all ten professional workspaces',checks)
+        # P0 regression: scrolling over an unselected node must never mutate
+        # its geometry. Selection and deliberate drag are separate gestures.
+        safe_heading=page.locator('[data-studio-type="heading"]').first
+        safe_box=safe_heading.bounding_box()
+        assert safe_box
+        before_safe=safe_heading.evaluate("e=>({style:e.getAttribute('style'),transform:getComputedStyle(e).transform,width:e.getBoundingClientRect().width,height:e.getBoundingClientRect().height})")
+        page.mouse.move(safe_box['x']+safe_box['width']/2,safe_box['y']+safe_box['height']/2)
+        page.mouse.wheel(0,420)
+        page.wait_for_timeout(120)
+        after_safe=safe_heading.evaluate("e=>({style:e.getAttribute('style'),transform:getComputedStyle(e).transform,width:e.getBoundingClientRect().width,height:e.getBoundingClientRect().height})")
+        check(after_safe==before_safe,'scrolling over an unselected component never mutates its geometry',checks)
+        check(page.locator('.selection-toolbar').count()==0,'scrolling does not implicitly select a component',checks)
         page.locator('.tool-rail button[title="Add"]').click();before_sections=page.locator('[data-studio-type="section"]').count();page.get_by_title('Add Section',exact=True).click();page.wait_for_timeout(250)
         if page.locator('[data-studio-type="section"]').count()<=before_sections: print('INSERT DEBUG',before_sections,page.locator('[data-studio-type="section"]').count(),errors,page.locator('.inspector-selection').inner_text() if page.locator('.inspector-selection').count() else 'no selection',flush=True)
         check(page.locator('[data-studio-type="section"]').count()>before_sections,'Add panel inserts a structured section',checks)
@@ -57,7 +69,8 @@ def main():
         font_size=page.get_by_label('Font size');font_size.fill('42');font_size.press('Enter');page.get_by_label('Font family').select_option('Georgia');page.get_by_label('Text color').fill('#123456');page.get_by_label('Hover effect').select_option('lift');page.get_by_label('Animation').select_option('fade')
         page.once('dialog',lambda dialog: dialog.accept('https://example.com/'))
         page.get_by_text('Link',exact=True).click();check(heading.evaluate("e=>getComputedStyle(e).fontSize")=='42px','contextual toolbar changes typography and effects',checks)
-        before_x=heading.bounding_box()['x'];box=heading.bounding_box();assert box;page.mouse.move(box['x']+box['width']/2,box['y']+box['height']/2);page.mouse.down();page.mouse.move(box['x']+45,box['y']+30);page.mouse.up();page.wait_for_timeout(150);after_x=heading.bounding_box()['x'];check(after_x!=before_x,'pointer drag moves a structured element',checks)
+        before_x=heading.bounding_box()['x'];box=heading.bounding_box();assert box;page.mouse.move(box['x']+box['width']/2,box['y']+box['height']/2);page.mouse.down();page.mouse.move(box['x']+90,box['y']+45,steps=5);page.mouse.up();page.wait_for_timeout(150);after_x=heading.bounding_box()['x'];
+        check(after_x!=before_x,'pointer drag moves a structured element',checks)
         image=page.locator('[data-studio-type="image"]').last;image_id=image.get_attribute('data-studio-id');image.dispatch_event('click');image=page.locator(f'[data-studio-id="{image_id}"]');page.wait_for_selector(f'[data-studio-id="{image_id}"] .studio-resize-handle',timeout=5000);page.get_by_label('Crop').click();page.get_by_label('Image fit').select_option('contain');page.get_by_text('Radius',exact=True).click();page.wait_for_timeout(100);handles=image.locator('.studio-resize-handle');before=image.bounding_box();handle=handles.nth(3);hb=handle.bounding_box();assert hb;rx=hb['x']+2;ry=hb['y']+2;handle.dispatch_event('pointerdown',{'clientX':rx,'clientY':ry,'pointerId':7,'button':0,'pointerType':'mouse'});page.locator('body').dispatch_event('pointermove',{'clientX':rx+34,'clientY':ry+2,'pointerId':7,'pointerType':'mouse'});page.locator('body').dispatch_event('pointerup',{'clientX':rx+34,'clientY':ry+2,'pointerId':7,'pointerType':'mouse'});after=image.bounding_box();
         check(after['width']!=before['width'],'pointer resize changes image geometry',checks)
         page.locator('.topbar-center button[title="mobile"]').click();check(page.locator('.canvas-width').inner_text()=='390px','responsive editor switches to mobile canvas',checks)

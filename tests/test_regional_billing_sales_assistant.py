@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import uuid
+import app.sales_assistant as sales_assistant
 from fastapi.testclient import TestClient
 from sqlalchemy import text
 
@@ -270,3 +271,46 @@ def test_assistant_owner_tenant_isolation():
     assert b.get(f'/api/sites/{sid}/assistant/settings').status_code == 404
     assert b.patch(f'/api/sites/{sid}/assistant/settings', headers=hb, json={'tone': 'CONCISE'}).status_code == 404
     a.close(); b.close()
+
+
+def test_assistant_provider_usage_debits_site_owner_wallet(monkeypatch):
+    c, h = _auth('assistant-owner-billing')
+    sid = _site(c, h)
+    conv = c.post(f'/api/public/sites/{sid}/assistant/conversations', json={'session_id': 'owner-billing-session-001'}).json()
+    monkeypatch.setattr(sales_assistant.settings, 'openai_api_key', 'controlled-test-key')
+    monkeypatch.setattr(sales_assistant, 'sales_assistant_completion', lambda **kwargs: {
+        'answer':'Measured response', 'input_tokens':1000, 'output_tokens':1000,
+        'model':kwargs.get('model') or 'gpt-4o-mini'
+    })
+    before=c.get('/api/credits').json()['total']
+    response=c.post(f"/api/public/sites/{sid}/assistant/conversations/{conv['id']}/messages",json={'message':'What services do you provide?'})
+    assert response.status_code==200,response.text
+    after=c.get('/api/credits').json()['total']
+    assert after==before-1
+    with SessionLocal() as db:
+        tx=db.execute(text("SELECT operation,status,amount FROM credit_transactions WHERE operation='AI_ASSISTANT' ORDER BY created_at DESC LIMIT 1")).mappings().first()
+        usage=db.execute(text("SELECT estimated_cost_micros FROM assistant_usage WHERE conversation_id=:c ORDER BY created_at DESC LIMIT 1"),{'c':conv['id']}).mappings().first()
+    assert tx and tx['status']=='FINALIZED' and int(tx['amount'])==1
+    assert usage and int(usage['estimated_cost_micros'])==750
+    c.close()
+
+
+def test_assistant_zero_owner_balance_uses_public_fallback_without_provider_call(monkeypatch):
+    c, h = _auth('assistant-zero-balance')
+    sid = _site(c, h)
+    conv = c.post(f'/api/public/sites/{sid}/assistant/conversations', json={'session_id': 'zero-balance-session-001'}).json()
+    uid=c.get('/api/auth/me').json()['id']
+    with SessionLocal.begin() as db:
+        db.execute(text("UPDATE credit_wallets SET monthly_remaining=0,signup_remaining=0,topup_remaining=0 WHERE user_id=:u"),{'u':uid})
+        db.execute(text("UPDATE users SET ai_credits=0 WHERE id=:u"),{'u':uid})
+    called={'n':0}
+    monkeypatch.setattr(sales_assistant.settings, 'openai_api_key', 'controlled-test-key')
+    def provider(**kwargs):
+        called['n']+=1
+        return {'answer':'should not execute','input_tokens':1,'output_tokens':1,'model':'gpt-4o-mini'}
+    monkeypatch.setattr(sales_assistant, 'sales_assistant_completion', provider)
+    response=c.post(f"/api/public/sites/{sid}/assistant/conversations/{conv['id']}/messages",json={'message':'Tell me more about services'})
+    assert response.status_code==200,response.text
+    assert response.json().get('credit_exhausted') is True and response.json().get('fallback',{}).get('lead_form') is True
+    assert called['n']==0
+    c.close()

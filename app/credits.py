@@ -1,5 +1,6 @@
 from __future__ import annotations
 from datetime import datetime, timezone
+from math import ceil
 from uuid import uuid4
 from fastapi import HTTPException
 from sqlalchemy import text
@@ -23,6 +24,18 @@ TOPUP_PACKS={
         'bulk':{'name':'Bulk','credits':1000,'price_usd_minor':6500},
     },
 }
+
+def provider_cost_to_credits(cost_micros:int, *, credit_usd_micros:int=10000)->int:
+    """Convert provider USD micro-cost into whole AI credits using one rule.
+
+    The conversion unit is centrally configurable by ``ai_credit_usd_micros``;
+    callers should pass the value resolved from ``system_settings``.  A
+    billable provider call with non-zero measured cost always consumes at least
+    one credit, while a zero-cost call remains zero so unknown usage is never
+    silently overcharged.
+    """
+    cost=max(0,int(cost_micros or 0)); unit=max(1,int(credit_usd_micros or 10000))
+    return 0 if cost==0 else max(1,ceil(cost/unit))
 
 def _period_key()->str:
     n=datetime.now(timezone.utc); return f'{n.year:04d}-{n.month:02d}'
