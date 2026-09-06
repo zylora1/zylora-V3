@@ -219,8 +219,9 @@ def login(payload:LoginIn, request:Request, response:Response):
     if not row or not verify_password(payload.password,row['password_hash']): raise HTTPException(401,'Invalid email or password')
     token,csrf,_=new_session(row['id']); response.set_cookie('zylora_session',token,httponly=True,samesite=session_cookie_samesite(),secure=settings.app_env=='production',domain=session_cookie_domain(),max_age=settings.session_ttl_hours*3600)
     is_admin=row.get('role')=='SUPER_ADMIN'
+    admin_target = '/super-admin' if settings.app_env == 'production' else (settings.super_admin_app_url or '/super-admin')
     return {'ok':True,'csrf_token':csrf,'plan_selected':True if is_admin else bool(row.get('plan_selected',1)),
-            'role':row.get('role'),'next':(settings.super_admin_app_url or '/super-admin') if is_admin else '/dashboard'}
+            'role':row.get('role'),'next':admin_target if is_admin else '/dashboard'}
 
 @router.post('/auth/logout')
 def logout(request:Request,response:Response):
@@ -237,7 +238,7 @@ def me(request:Request):
     if result.get('role')!='SUPER_ADMIN':
         result['ai_credits']=wallet['total']; result['lead_credits']=wallet['lead_total']; result['credit_wallet']=wallet
     result['subscription_required']=False if result.get('role')=='SUPER_ADMIN' else not bool(result.get('plan_selected',1))
-    if result.get('role')=='SUPER_ADMIN': result['admin_portal_url']=settings.super_admin_app_url or '/super-admin'
+    if result.get('role')=='SUPER_ADMIN': result['admin_portal_url']='/super-admin' if settings.app_env == 'production' else (settings.super_admin_app_url or '/super-admin')
     return result
 
 class ProfilePatch(BaseModel):

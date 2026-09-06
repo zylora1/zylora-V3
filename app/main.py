@@ -337,8 +337,7 @@ def home(request: Request): return HTMLResponse(_landing_html(request))
 def admin_entry(request: Request):
     user=current_user(request)
     if user.get('role')!='SUPER_ADMIN': raise HTTPException(403,'Admin only')
-    if settings.super_admin_app_url: return RedirectResponse(settings.super_admin_app_url,status_code=302)
-    return HTMLResponse('<!doctype html><title>Zylora Admin</title><h1>SUPER_ADMIN_APP_URL is not configured.</h1>',status_code=503)
+    return RedirectResponse('/super-admin',status_code=302)
 @app.get('/login',include_in_schema=False)
 def login(): return _google_auth_html('login.html')
 @app.get('/signup',include_in_schema=False)
@@ -365,8 +364,6 @@ def _require_super_admin(request: Request) -> dict:
 def dashboard(request: Request):
     user=current_user(request)
     if user.get('role')=='SUPER_ADMIN':
-        if settings.app_env=='production' and settings.super_admin_app_url:
-            return RedirectResponse(settings.super_admin_app_url, status_code=302)
         return RedirectResponse('/super-admin', status_code=302)
     return _dashboard_html()
 

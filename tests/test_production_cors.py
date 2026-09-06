@@ -28,7 +28,7 @@ def test_production_session_cookie_domain_covers_configured_sibling_services(mon
     monkeypatch.setattr(settings, 'app_env', 'production')
     monkeypatch.setattr(settings, 'app_url', 'https://zylora-api-production.up.railway.app')
     monkeypatch.setattr(settings, 'super_admin_app_url', 'https://zylora-admin-production.up.railway.app')
-    assert session_cookie_domain() == '.up.railway.app'
+    assert session_cookie_domain() is None
 
 
 def test_development_session_cookie_remains_host_only(monkeypatch):

@@ -108,7 +108,13 @@ def session_cookie_domain() -> str | None:
         common.append(api_label)
     if len(common) < 2:
         return None
-    return '.' + '.'.join(reversed(common))
+    domain = '.' + '.'.join(reversed(common))
+    # Railway's shared `up.railway.app` suffix is a public-suffix boundary in
+    # browsers; parent-domain cookies are rejected/omitted there. Keep the
+    # session host-only and use the same-origin admin portal instead.
+    if domain == '.up.railway.app':
+        return None
+    return domain
 
 
 def rate_limit(key: str, limit: int, window_seconds: int):
