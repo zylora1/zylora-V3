@@ -1,0 +1,4 @@
+Live security header probe: HTTPS, HSTS, CSP frame-ancestors, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, and Permissions-Policy present.
+CORS probe: no Access-Control-Allow-Origin for legitimate or attacker Origin.
+Malformed JSON returned sanitized HTTP 422 without stack trace.
+Live authenticated tenant-isolation/IDOR/RBAC probes: BLOCKED without controlled credentials.

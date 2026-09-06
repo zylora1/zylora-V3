@@ -1,0 +1,4 @@
+Railway Postgres service status: SUCCESS.
+Deployed /api/health: HTTP 200 and application database SELECT 1 completed.
+Startup migration path completed without deployment error.
+Direct server-version and full schema/index inventory: BLOCKED (no safe authorized SQL tunnel/public diagnostic was used).

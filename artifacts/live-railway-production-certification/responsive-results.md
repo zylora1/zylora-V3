@@ -1,0 +1,1 @@
+For public home, login, signup, pricing, templates, and robots, all of 1440, 1280, 1024, 768, 430, 390, 375, and 360 widths had no horizontal overflow in all three engines. Authenticated/private surfaces remain BLOCKED.

@@ -1,0 +1,2 @@
+Railway deployment startup reached "Application startup complete" and health 200 on deployment 79ddcf80-34af-4df7-ab02-6188b8fad666.
+No migration failure appeared in deploy logs. Full live table/constraint inventory remains BLOCKED.

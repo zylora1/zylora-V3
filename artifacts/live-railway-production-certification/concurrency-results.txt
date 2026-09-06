@@ -1,0 +1,2 @@
+Repository concurrency/security suite: PASS as part of final 363-test run.
+Live CRM deduplication, OCC, appointment race, and credit race: BLOCKED pending controlled authenticated records.

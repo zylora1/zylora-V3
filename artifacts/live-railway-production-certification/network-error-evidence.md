@@ -1,0 +1,1 @@
+Final deployment HTTP sample: no 5xx entries. Expected 401 entries were unauthenticated `/api/auth/me`; an intentional malformed request returned 422. Public page assets and template previews returned 200/304. No failed JS/CSS/image request was observed on the final public matrix apart from browser-specific Turnstile cross-origin warnings.

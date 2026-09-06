@@ -1,0 +1,24 @@
+# Production defect register
+
+| ID | Severity | Subsystem | Defect | Reproduction | Root Cause | Files Changed | Test Added | Final Status |
+|---|---|---|---|---|---|---|---|---|
+| ZYL-001 | P1 | CMS/runtime | CMS router was implemented but not mounted, making collection/item routes unreachable from the live FastAPI app. | CMS browser/API route smoke and route inspection. | `app/main.py` did not include the CMS router. | `app/main.py` | `tests/test_cms.py`, full pytest | FIXED |
+| ZYL-002 | P1 | Studio/auth | `/studio/{site_id}` served a static shell without authenticated site ownership enforcement or site context injection. | Requesting Studio route and comparing shell context. | Route used a raw `FileResponse` instead of an authenticated response. | `app/main.py` | `scripts/studio_v4_e2e.py`, Studio API tests | FIXED |
+| ZYL-003 | P1 | Studio/canvas | Migrated image nodes without a source rendered as `<img>` with child controls, causing browser DOM/runtime failures. | Chromium Studio load of an existing migrated document. | Image tag selection was unconditional. | `studio/components/CanvasNode.tsx` | `scripts/studio_v4_e2e.py` | FIXED |
+| ZYL-004 | P1 | Studio/text editing | React reconciliation could remove an unmanaged contenteditable node during direct editing. | Chromium direct text edit followed by inspector/panel updates. | Controlled DOM reconciliation was allowed to overwrite an active editor. | `studio/components/CanvasNode.tsx` | Studio Chromium/Firefox/WebKit journey | FIXED |
+| ZYL-005 | P1 | Studio/manipulation | Drag/resize listeners were attached asynchronously and could miss the first pointer movement. | Real browser drag/resize journey. | Listener registration depended on a state effect after pointer down. | `studio/interactions/useDrag.ts`, `useResize.ts`, `CanvasNode.tsx` | Studio multi-engine journey | FIXED |
+| ZYL-006 | P2 | Browser regression | WebKit `innerText` adds a trailing newline for contenteditable text, producing a false-negative E2E assertion. | Studio WebKit journey initially failed while `textContent` was correct. | Test asserted engine-specific presentation text. | `scripts/studio_v4_e2e.py` | WebKit rerun: 14 checks / 0 errors | FIXED |
+| ZYL-007 | P0 gate | Infrastructure | Real PostgreSQL certification could not run because no PostgreSQL service or Docker daemon is available in the environment. | `docker info` failed; `psql` absent. | External infrastructure unavailable, not an application assertion. | None; fail-closed production guard already present in `app/db.py`/`app/config.py`. | Migration evidence artifact | BLOCKED |
+| ZYL-008 | P0 gate | Media/deployment | Current environment uses local media storage with `media_storage_durable=false`; production validation rejects it. | Loaded settings and `validate_production_settings()` review. | No persistent volume/S3 credentials configured. | None; fail-closed configuration guard retained. | Provider verification artifact | BLOCKED |
+| ZYL-009 | P0/P1 gate | External providers | OpenAI, Razorpay, email, WhatsApp, Google, Cloudflare, Turnstile, and Redis credentials are absent, so live provider certification is unavailable. | Settings presence check with values redacted. | External credentials/infrastructure not supplied. | None. | Provider verification artifact; mock/security tests | BLOCKED / NOT CONFIGURED |
+
+No defect is marked FIXED without a rerun of its targeted verification. Environment blockers are not relabeled as passes.
+
+## Live Railway pass (2026-09-06)
+
+| ID | Severity | Subsystem | Defect | Reproduction | Root Cause | Files Changed | Test Added | Final Status |
+|---|---|---|---|---|---|---|---|---|
+| ZYL-010 | P1 | Public routing | `/pricing` returned 404 on the deployed service while the public navigation linked to `/choose-plan`. | Final Chromium/Firefox/WebKit matrix against `https://zylora-api-production.up.railway.app/pricing` on deployment `8431c983…`. | No public alias route existed for the product-facing pricing URL. | `app/main.py` | `tests/test_public_route_aliases.py`; deployed matrix rerun | FIXED |
+| ZYL-011 | P1 | Email/auth | A configured Resend credential returned HTTP 403 and caused `/api/auth/password/request` to return a raw 500. | Controlled request to the user-supplied audit address on deployment `2afa07d…`; Railway traceback identified Resend 403. | `issue_auth_token()` propagated provider failure after issuing the token. | `app/auth_flows.py` | `tests/test_auth_email_delivery_resilience.py`; final live request returned generic 200 | FIXED (provider remains INVALID) |
+
+Live-gate blockers are recorded in the final certification report and are not marked as defects fixed: authenticated tenant-isolation/CRM/Studio journeys, durable-media restart proof, and CAPTCHA/provider flows require additional controlled credentials or test setup.
