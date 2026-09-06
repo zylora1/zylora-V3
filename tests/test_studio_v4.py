@@ -98,6 +98,7 @@ def test_studio_migration_load_save_conflict_and_owned_shell():
     shell=client.get(f'/studio/{site_id}')
     assert shell.status_code == 200
     assert site_id in shell.text and 'csrfToken' in shell.text
+    assert '/static/studio-ux.css' in shell.text
 
     migrated=client.post(f'/api/sites/{site_id}/studio-migrate',headers=headers)
     assert migrated.status_code == 200, migrated.text

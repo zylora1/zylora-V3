@@ -1,24 +1,37 @@
 import React from 'react';
-import { Node, useStudio } from '../store';
+import {Node, useStudio} from '../store';
 
-const groups:Record<string,Array<[string,string,string]>>={
- Basic:[['Section','section','▭'],['Container','container','□'],['Stack','stack','↕'],['Flex','flex','↔'],['Grid','grid','⊞'],['Text','text','T'],['Heading','heading','H'],['Rich text','text','¶'],['Button','button','◉'],['Image','image','▧'],['Video','video','▶'],['Icon','icon','◇'],['Divider','divider','—'],['Spacer','container','↕']],
- Navigation:[['Navbar','navigation','☰'],['Menu','navigation','≡'],['Mobile navigation','navigation','☷'],['Breadcrumb','navigation','›'],['Tabs','container','▤']],
- Content:[['Card','container','▣'],['Feature block','section','✦'],['Testimonial','container','❝'],['FAQ','container','?'],['Team member','container','♙'],['Logo cloud','gallery','◫'],['Stats','grid','#'],['Badge','text','●'],['Quote','text','❞']],
- Conversion:[['Form','form','▤'],['Contact form','form','✉'],['Lead form','lead_form','◎'],['CTA','section','↗'],['Newsletter','form','✉'],['Appointment widget','appointment_booking','◷'],['Chatbot widget','ai_sales_assistant','✦']],
- Business:[['Pricing','grid','$'],['Services','grid','✣'],['Gallery','gallery','▦'],['Portfolio','gallery','▧'],['Testimonials','carousel','❝'],['Location / map','map','⌖'],['Social links','navigation','⌁']],
- CMS:[['Repeater','repeater','⟳'],['Dynamic list','list','☷'],['Dynamic grid','grid','⊞'],['Dynamic gallery','gallery','▦'],['CMS table','table','▤'],['Collection field','text','{ }'],['Dynamic page link','link','↗']],
- Advanced:[['Embed','embed','</>'],['Safe HTML','embed','<>'],['Reusable component','component_instance','◇'],['Global section','section','◎']]
+type AddItem = {label:string; type:string; icon:string; description:string; style?:Node['style']; content?:Node['content']; metadata?:Record<string,any>};
+const primary:AddItem[] = [
+  {label:'Text', type:'text', icon:'T', description:'Add a text box'},
+  {label:'Button', type:'button', icon:'↗', description:'Add a call-to-action'},
+  {label:'Card', type:'container', icon:'▣', description:'Add an editable card', style:{css:{padding:'24px',borderRadius:'16px',background:'#ffffff',boxShadow:'0 10px 30px rgba(16,24,40,.08)',minWidth:'240px',minHeight:'160px'},tokens:{}}, metadata:{kind:'card'}},
+  {label:'Image frame', type:'image', icon:'▧', description:'Add a frame for your image', style:{css:{width:'320px',height:'220px',objectFit:'cover',borderRadius:'12px',background:'#f2f4f7'},tokens:{}}, content:{src:'',alt:''}, metadata:{kind:'image-frame'}},
+  {label:'Shape', type:'container', icon:'○', description:'Add a simple shape', style:{css:{width:'220px',height:'140px',borderRadius:'18px',background:'#eef0f3'},tokens:{}}, metadata:{kind:'shape'}},
+  {label:'Section', type:'section', icon:'▭', description:'Add a new website section', style:{css:{padding:'64px 40px',minHeight:'240px'},tokens:{}}, metadata:{kind:'section'}},
+  {label:'Divider', type:'divider', icon:'—', description:'Separate content cleanly'},
+];
+const business:AddItem[] = [
+  {label:'Lead form', type:'lead_form', icon:'◎', description:'Capture an enquiry'},
+  {label:'Appointment', type:'appointment_booking', icon:'◷', description:'Let visitors book time'},
+  {label:'Sales Assistant', type:'ai_sales_assistant', icon:'✦', description:'Add your AI assistant'},
+  {label:'FAQ', type:'container', icon:'?', description:'Answer common questions', metadata:{kind:'faq'}},
+  {label:'Gallery', type:'gallery', icon:'▦', description:'Show a collection of images'},
+];
+const presets:Record<string,Partial<Node>> = {
+  text:{content:{text:'Add your text'},style:{css:{fontSize:'18px',lineHeight:'1.5'},tokens:{}}},
+  button:{content:{text:'Get started',href:'#'},style:{css:{padding:'12px 18px',borderRadius:'8px',background:'#111827',color:'#ffffff'},tokens:{}}},
+  divider:{style:{css:{width:'100%',borderWidth:'1px 0 0',borderStyle:'solid'},tokens:{}}},
 };
-const presets:Record<string,Partial<Node>>={
- section:{style:{css:{padding:'80px 40px',minHeight:'240px'},tokens:{}}},container:{style:{css:{padding:'24px',maxWidth:'1200px',margin:'0 auto'},tokens:{}}},stack:{style:{css:{display:'flex',flexDirection:'column',gap:'16px'},tokens:{}}},flex:{style:{css:{display:'flex',gap:'16px',alignItems:'center'},tokens:{}}},grid:{style:{css:{display:'grid',gridTemplateColumns:'repeat(3, minmax(0, 1fr))',gap:'24px'},tokens:{}}},heading:{content:{text:'A clear, confident heading'},style:{css:{fontSize:'48px',lineHeight:'1.05',fontWeight:'700'},tokens:{}}},text:{content:{text:'Add thoughtful supporting copy here.'},style:{css:{fontSize:'16px',lineHeight:'1.6'},tokens:{}}},button:{content:{text:'Get started',href:'#'},style:{css:{padding:'12px 18px',borderRadius:'8px'},tokens:{}}},image:{content:{src:'',alt:''},style:{css:{width:'100%',height:'auto',objectFit:'cover'},tokens:{}}},divider:{style:{css:{width:'100%',borderWidth:'1px 0 0',borderStyle:'solid'},tokens:{}}}
-};
-export function AddPanel(){
- const {state,dispatch}=useStudio();const [search,setSearch]=React.useState('');
- const insert=(label:string,type:string)=>dispatch({type:'INSERT_NODE',payload:{node:{type,...(presets[type]||{}),metadata:{displayName:label,global:label==='Global section'}}}});
- return <div className="studio-panel add-panel"><div className="panel-search"><span>⌕</span><input aria-label="Search elements" placeholder="Search elements" value={search} onChange={e=>setSearch(e.target.value)}/></div>
-  {Object.entries(groups).map(([group,items])=>{const visible=items.filter(([label])=>label.toLowerCase().includes(search.toLowerCase()));return visible.length?<section className="element-group" key={group}><h3>{group}</h3><div className="element-grid">{visible.map(([label,type,icon])=><button key={label} draggable onDragStart={e=>{e.dataTransfer.setData('application/x-zylora-node',JSON.stringify({label,type}));e.dataTransfer.effectAllowed='copy'}} onClick={()=>insert(label,type)} title={`Add ${label}`}><b>{icon}</b><span>{label}</span></button>)}</div></section>:null})}
-  <p className="panel-hint">Click to add to the selected container, or drag onto a highlighted drop zone.</p>
- </div>;
+
+export function AddPanel() {
+  const {dispatch} = useStudio();
+  const [search, setSearch] = React.useState('');
+  const insert = (item:AddItem) => dispatch({type:'INSERT_NODE', payload:{node:{type:item.type, ...(presets[item.type]||{}), ...(item.style?{style:item.style}:{}), ...(item.content?{content:item.content}:{}), metadata:{displayName:item.label, ...(item.metadata||{})}}}});
+  const renderGroup = (title:string, items:AddItem[]) => {
+    const visible=items.filter(item => `${item.label} ${item.description}`.toLowerCase().includes(search.toLowerCase()));
+    if(!visible.length)return null;
+    return <section className="element-group" key={title}><h3>{title}</h3><div className="element-grid">{visible.map(item=><button key={item.label} className="add-item" draggable onDragStart={e=>{const payload={label:item.label,type:item.type};e.dataTransfer.setData('application/x-zylora-node',JSON.stringify(payload));e.dataTransfer.effectAllowed='copy';(window as any).__zyloraDraggingNode=payload}} onDragEnd={()=>{window.setTimeout(()=>delete (window as any).__zyloraDraggingNode,250)}} onClick={()=>insert(item)} title={`Add ${item.label}`} aria-label={`Add ${item.label}`}><b>{item.icon}</b><span>{item.label}</span><small>{item.description}</small></button>)}</div></section>;
+  };
+    return <div className="studio-panel add-panel"><div className="panel-intro"><b>Build your page</b><span>Drag something onto the page or click to add it.</span></div><div className="panel-search"><span>⌕</span><input aria-label="Search elements" placeholder="Search building blocks" value={search} onChange={e=>setSearch(e.target.value)}/></div>{renderGroup('Essentials',primary)}{renderGroup('Zylora tools',business)}<p className="panel-hint">Your website stays structured automatically — no layout code needed.</p></div>;
 }
-

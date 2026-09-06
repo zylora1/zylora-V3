@@ -72,7 +72,19 @@ export function CanvasNode({nodeId}:{nodeId:string}){
   const cancel=()=>finish(true);
   window.addEventListener('pointermove',move);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',cancel);
  };
- const drop=(e:React.DragEvent)=>{e.preventDefault();e.stopPropagation();const dropped=e.dataTransfer.getData('studio/node-id');if(dropped&&dropped!==nodeId&&acceptsChildren(node.type))dispatch({type:'REPARENT_NODE',payload:{nodeId:dropped,newParentId:nodeId}})};
+ const drop=(e:React.DragEvent)=>{
+  // Let file drops bubble to the workspace so the normal upload pipeline handles
+  // them. Canvas nodes only consume document-aware layer drops and Add-panel
+  // primitives; this keeps a drag over a node from swallowing OS file drops.
+  if(Array.from(e.dataTransfer.types).includes('Files'))return;
+  e.preventDefault();e.stopPropagation();
+  const dropped=e.dataTransfer.getData('studio/node-id');
+  if(dropped&&dropped!==nodeId&&acceptsChildren(node.type))dispatch({type:'REPARENT_NODE',payload:{nodeId:dropped,newParentId:nodeId}});
+  const raw=e.dataTransfer.getData('application/x-zylora-node')||((window as any).__zyloraDraggingNode?JSON.stringify((window as any).__zyloraDraggingNode):'');
+  if(raw&&acceptsChildren(node.type)){
+   try{const item=JSON.parse(raw);dispatch({type:'INSERT_NODE',payload:{parentId:nodeId,node:{type:item.type||'text',metadata:{displayName:item.label||'Text'}}}})}catch{/* invalid drag payloads are ignored safely */}
+  }
+ };
  const Tag:any=node.type==='section'?'section':node.type==='heading'?'h2':node.type==='button'?'button':node.type==='link'?'a':node.type==='form'?'form':node.type==='navigation'?'nav':'div';
  const renderHandle=(pos:string)=>{if(!isSelected||isLocked)return null;const style:any={position:'absolute',width:9,height:9,background:'#fff',border:'1px solid #4263eb',zIndex:1000};if(pos.includes('top'))style.top=-5;if(pos.includes('bottom'))style.bottom=-5;if(pos.includes('left'))style.left=-5;if(pos.includes('right'))style.right=-5;if(pos==='top'||pos==='bottom'){style.left='calc(50% - 4px)';style.cursor='ns-resize'}if(pos==='left'||pos==='right'){style.top='calc(50% - 4px)';style.cursor='ew-resize'}if(pos.includes('top')&&pos.includes('left')||pos.includes('bottom')&&pos.includes('right'))style.cursor='nwse-resize';if(pos.includes('top')&&pos.includes('right')||pos.includes('bottom')&&pos.includes('left'))style.cursor='nesw-resize';return <span key={pos} className="studio-resize-handle" data-handle={pos} style={style} onPointerDown={e=>{e.stopPropagation();const el=elementRef.current;if(el)startResize(e,pos,getRect())}}/>};
  const renderStyle:any={...cssStyles,...(rectOverride?{width:`${rectOverride.w}px`,height:`${rectOverride.h}px`,...(isAbsolute?{left:`${rectOverride.x}px`,top:`${rectOverride.y}px`}:{transform:`translate(${rectOverride.x-(dragBase.current?.x||0)}px, ${rectOverride.y-(dragBase.current?.y||0)}px)`})}:{}),position:cssStyles.position||'relative',display:effectiveVisibility==='hidden'?'none':cssStyles.display};

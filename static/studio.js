@@ -21487,7 +21487,7 @@
   };
   var topSelection = (nodes, ids) => ids.filter((id) => nodes[id] && !ids.some((other) => other !== id && descendants(nodes, [other]).has(id)));
   var validSlug = (raw) => raw.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "page";
-  var baseNode = (type, parentId) => ({ id: uid(type), type, parentId, children: [], content: { text: ["heading", "text", "paragraph"].includes(type) ? type === "heading" ? "New heading" : "Add your text" : type === "button" ? "Button" : void 0 }, style: { css: type === "image" ? { width: "320px", height: "220px", objectFit: "cover" } : {}, tokens: {} }, layout: {}, responsiveOverrides: {}, visibility: "visible", bindings: {}, metadata: { displayName: type.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()) }, accessibility: {}, interactions: [] });
+  var baseNode = (type, parentId) => ({ id: uid(type), type, parentId, children: [], content: { text: ["heading", "text", "paragraph"].includes(type) ? type === "heading" ? "New heading" : "Add your text" : type === "button" ? "Button" : void 0 }, style: { css: type === "image" ? { width: "320px", height: "220px", objectFit: "cover" } : {}, tokens: {} }, layout: {}, responsiveOverrides: {}, visibility: "visible", bindings: {}, metadata: { displayName: { heading: "Text", paragraph: "Text", text: "Text", image: "Image frame", container: "Group", section: "Section", button: "Button", navigation: "Navigation", lead_form: "Lead form", appointment_booking: "Appointment", ai_sales_assistant: "Sales Assistant", page: "Page" }[type] || type.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()) }, accessibility: {}, interactions: [] });
   var cloneForest = (source, roots, target, parentId) => {
     const map = /* @__PURE__ */ new Map();
     descendants(source, roots).forEach((id) => map.set(id, uid(source[id]?.type || "node")));
@@ -22113,10 +22113,19 @@
       window.addEventListener("pointercancel", cancel);
     };
     const drop = (e) => {
+      if (Array.from(e.dataTransfer.types).includes("Files")) return;
       e.preventDefault();
       e.stopPropagation();
       const dropped = e.dataTransfer.getData("studio/node-id");
       if (dropped && dropped !== nodeId && acceptsChildren(node.type)) dispatch({ type: "REPARENT_NODE", payload: { nodeId: dropped, newParentId: nodeId } });
+      const raw = e.dataTransfer.getData("application/x-zylora-node") || (window.__zyloraDraggingNode ? JSON.stringify(window.__zyloraDraggingNode) : "");
+      if (raw && acceptsChildren(node.type)) {
+        try {
+          const item = JSON.parse(raw);
+          dispatch({ type: "INSERT_NODE", payload: { parentId: nodeId, node: { type: item.type || "text", metadata: { displayName: item.label || "Text" } } } });
+        } catch {
+        }
+      }
     };
     const Tag = node.type === "section" ? "section" : node.type === "heading" ? "h2" : node.type === "button" ? "button" : node.type === "link" ? "a" : node.type === "form" ? "form" : node.type === "navigation" ? "nav" : "div";
     const renderHandle = (pos) => {
@@ -22168,10 +22177,10 @@
   // studio/components/ContextToolbar.tsx
   var import_react5 = __toESM(require_react());
   var fonts = ["Inter", "Arial", "Georgia", "Helvetica Neue", "system-ui", "Space Grotesk"];
-  var effects = ["none", "lift", "scale", "shadow", "underline", "glow"];
-  var motions = ["none", "fade", "rise", "slide", "scale"];
-  var scrollEffects = ["none", "fade", "reveal", "rise", "slide", "scale"];
-  var styleText = `.context-toolbar{display:flex;align-items:center;gap:5px;min-height:32px;max-width:min(720px,48vw);overflow:auto;white-space:nowrap}.context-toolbar button,.context-toolbar select,.context-toolbar input{height:28px;border:1px solid #3a3d45;border-radius:6px;background:#202228;color:#f6f7fb;padding:0 7px;font-size:11px}.context-toolbar button:hover,.context-toolbar button.active{background:#34384a;border-color:#7180ff}.context-toolbar input[type=color]{width:30px;padding:2px}.context-toolbar input[type=number]{width:58px}.context-toolbar select{max-width:150px}.toolbar-selection-label{font-size:11px;color:#aeb5c5;max-width:90px;overflow:hidden;text-overflow:ellipsis}.toolbar-divider{height:18px;width:1px;background:#3a3d45}.studio-resize-handle{box-sizing:border-box;border-radius:3px;touch-action:none}.studio-floating-actions{position:absolute;left:50%;top:-24px;transform:translateX(-50%);height:18px;padding:0 7px;border-radius:5px;background:#4263eb;color:white;font:700 11px/18px system-ui;z-index:1002;pointer-events:none}.canvas-file-drop{position:absolute;inset:24px;border:2px dashed #7180ff;background:#7180ff22;display:grid;place-items:center;color:#fff;font-weight:700;z-index:40;pointer-events:none;border-radius:12px}.studio-canvas [data-studio-id]{touch-action:pan-y}.studio-canvas [data-studio-id][data-studio-selected=true]{touch-action:none}.studio-canvas img{max-width:100%}@media(max-width:820px){.topbar-center{display:flex;max-width:calc(100vw - 70px);overflow:auto}}`;
+  var hover = ["none", "lift", "scale", "shadow", "underline"];
+  var entrance = ["none", "fade", "rise", "slide", "scale"];
+  var scroll = ["none", "fade", "reveal", "rise", "slide", "scale"];
+  var styleText = `.context-toolbar{display:flex;align-items:center;gap:6px;min-height:34px;max-width:min(820px,58vw);overflow:auto;white-space:nowrap}.context-toolbar button,.context-toolbar select,.context-toolbar input{height:30px;border:1px solid #d8dce3;border-radius:7px;background:#fff;color:#17191d;padding:0 8px;font-size:11px}.context-toolbar button:hover,.context-toolbar button.active{background:#f1f3f5;border-color:#15171a}.context-toolbar input[type=color]{width:32px;padding:2px}.context-toolbar input[type=number]{width:58px}.context-toolbar select{max-width:148px}.toolbar-selection-label{font-size:11px;color:#59606b;max-width:130px;overflow:hidden;text-overflow:ellipsis;font-weight:700}.toolbar-divider{height:18px;width:1px;background:#dfe2e7}.studio-resize-handle{box-sizing:border-box;border-radius:4px;touch-action:none}.studio-floating-actions{position:absolute;left:50%;top:-24px;transform:translateX(-50%);height:20px;padding:0 8px;border-radius:6px;background:#111;color:#fff;font:700 11px/20px system-ui;z-index:1002;pointer-events:none}.studio-canvas [data-studio-id]{touch-action:pan-y}.studio-canvas [data-studio-id][data-studio-selected=true]{touch-action:none}.studio-canvas img{max-width:100%}`;
   function ContextToolbar({ onFit, onPreview }) {
     const { state, dispatch } = useStudio();
     const page = state.document?.pages[state.currentPageId];
@@ -22184,6 +22193,11 @@
       const existing = (node.interactions || []).filter((x) => x.trigger !== kind);
       dispatch({ type: "UPDATE_NODE_INTERACTIONS", payload: { nodeId: node.id, interactions: effect === "none" ? existing : [...existing, { trigger: kind, effect }] } });
     };
+    const link = () => {
+      if (!node) return;
+      const href = window.prompt("Link to a page, website, email, phone or section", node.content.href || "");
+      if (href !== null) dispatch({ type: "UPDATE_NODE_CONTENT", payload: { nodeId: node.id, content: { href: href || void 0 } } });
+    };
     const cycleCrop = () => {
       if (!node) return;
       const positions = ["50% 50%", "25% 50%", "75% 50%", "50% 25%", "50% 75%"];
@@ -22191,15 +22205,31 @@
       update({ objectPosition: positions[(positions.indexOf(current) + 1) % positions.length] });
     };
     if (!node) return /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("style", null, styleText), /* @__PURE__ */ import_react5.default.createElement("div", { className: "context-toolbar global-toolbar" }, /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Undo", disabled: state.historyIndex <= 0, onClick: () => dispatch({ type: "UNDO" }) }, "\u21B6"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Redo", disabled: state.historyIndex >= state.history.length - 1, onClick: () => dispatch({ type: "REDO" }) }, "\u21B7"), /* @__PURE__ */ import_react5.default.createElement("span", { className: "toolbar-divider" }), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: onFit }, "Fit"), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: onPreview }, "Preview")));
-    const isText = ["heading", "paragraph", "text", "button", "link"].includes(node.type), isImage = node.type === "image";
-    return /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("style", null, styleText), /* @__PURE__ */ import_react5.default.createElement("div", { className: "context-toolbar selection-toolbar", onPointerDown: (e) => e.stopPropagation() }, /* @__PURE__ */ import_react5.default.createElement("span", { className: "toolbar-selection-label" }, node.metadata?.displayName || node.type), isText && /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Font family", value: node.style.css.fontFamily || "Inter", onChange: (e) => update({ fontFamily: e.target.value }) }, fonts.map((font) => /* @__PURE__ */ import_react5.default.createElement("option", { key: font }, font))), /* @__PURE__ */ import_react5.default.createElement("input", { "aria-label": "Font size", type: "number", min: "8", max: "220", value: parseInt(node.style.css.fontSize || "16") || 16, onChange: (e) => update({ fontSize: `${e.target.value}px` }) }), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Bold", className: node.style.css.fontWeight === "700" ? "active" : "", onClick: () => update({ fontWeight: node.style.css.fontWeight === "700" ? "400" : "700" }) }, "B"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Italic", className: node.style.css.fontStyle === "italic" ? "active" : "", onClick: () => update({ fontStyle: node.style.css.fontStyle === "italic" ? "normal" : "italic" }) }, "I"), /* @__PURE__ */ import_react5.default.createElement("input", { "aria-label": "Text color", type: "color", value: /^#[0-9a-f]{6}$/i.test(node.style.css.color || "") ? node.style.css.color : "#111111", onChange: (e) => update({ color: e.target.value }) })), isImage && /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => document.querySelector(".assets-panel input[type=file]")?.click() }, "Replace"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Crop", onClick: cycleCrop }, "Crop"), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Image fit", value: node.style.css.objectFit || "cover", onChange: (e) => update({ objectFit: e.target.value }) }, /* @__PURE__ */ import_react5.default.createElement("option", { value: "cover" }, "Fill"), /* @__PURE__ */ import_react5.default.createElement("option", { value: "contain" }, "Fit"), /* @__PURE__ */ import_react5.default.createElement("option", { value: "fill" }, "Stretch")), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update({ borderRadius: node.style.css.borderRadius ? "0px" : "16px" }) }, "Radius")), (isText || isImage || node.type === "button" || node.type === "link") && /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => {
-      const href = window.prompt("Optional link URL", node.content.href || "");
-      if (href !== null) dispatch({ type: "UPDATE_NODE_CONTENT", payload: { nodeId: node.id, content: { href: href || void 0 } } });
-    } }, "Link"), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Hover effect", value: (node.interactions || []).find((x) => x.trigger === "hover")?.effect || "none", onChange: (e) => setInteraction("hover", e.target.value) }, effects.map((x) => /* @__PURE__ */ import_react5.default.createElement("option", { key: x, value: x }, "Hover: ", x))), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Animation", value: (node.interactions || []).find((x) => x.trigger === "animation")?.effect || "none", onChange: (e) => setInteraction("animation", e.target.value) }, motions.map((x) => /* @__PURE__ */ import_react5.default.createElement("option", { key: x, value: x }, "Animate: ", x))), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Scroll effect", value: (node.interactions || []).find((x) => x.trigger === "scroll")?.effect || "none", onChange: (e) => setInteraction("scroll", e.target.value) }, scrollEffects.map((x) => /* @__PURE__ */ import_react5.default.createElement("option", { key: x, value: x }, "On scroll: ", x))), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Duplicate", onClick: () => dispatch({ type: "DUPLICATE_NODE", payload: { nodeId: node.id } }) }, "\u29C9"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Delete", onClick: () => dispatch({ type: "DELETE_NODE", payload: { nodeId: node.id } }) }, "\u232B")));
+    const textLike = ["heading", "paragraph", "text", "button", "link"].includes(node.type), image = node.type === "image", card = node.type === "container" || node.metadata?.kind === "card";
+    return /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("style", null, styleText), /* @__PURE__ */ import_react5.default.createElement("div", { className: "context-toolbar selection-toolbar", onPointerDown: (e) => e.stopPropagation() }, /* @__PURE__ */ import_react5.default.createElement("span", { className: "toolbar-selection-label" }, node.metadata?.displayName || (image ? "Image frame" : card ? "Card" : textLike ? "Text" : "Selection")), textLike && /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Font family", value: node.style.css.fontFamily || "Inter", onChange: (e) => update({ fontFamily: e.target.value }) }, fonts.map((font) => /* @__PURE__ */ import_react5.default.createElement("option", { key: font }, font))), /* @__PURE__ */ import_react5.default.createElement("input", { "aria-label": "Font size", type: "number", min: "8", max: "220", value: parseInt(node.style.css.fontSize || "16") || 16, onChange: (e) => update({ fontSize: `${e.target.value}px` }) }), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Bold", className: node.style.css.fontWeight === "700" ? "active" : "", onClick: () => update({ fontWeight: node.style.css.fontWeight === "700" ? "400" : "700" }) }, "B"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Italic", className: node.style.css.fontStyle === "italic" ? "active" : "", onClick: () => update({ fontStyle: node.style.css.fontStyle === "italic" ? "normal" : "italic" }) }, "I"), /* @__PURE__ */ import_react5.default.createElement("input", { "aria-label": "Text color", type: "color", value: /^#[0-9a-f]{6}$/i.test(node.style.css.color || "") ? node.style.css.color : "#111111", onChange: (e) => update({ color: e.target.value }) }), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Text alignment", value: node.style.css.textAlign || "left", onChange: (e) => update({ textAlign: e.target.value }) }, /* @__PURE__ */ import_react5.default.createElement("option", { value: "left" }, "Left"), /* @__PURE__ */ import_react5.default.createElement("option", { value: "center" }, "Center"), /* @__PURE__ */ import_react5.default.createElement("option", { value: "right" }, "Right"))), image && /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => document.querySelector(".assets-panel input[type=file]")?.click() }, "Replace"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Crop", onClick: cycleCrop }, "Crop"), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Image fit", value: node.style.css.objectFit || "cover", onChange: (e) => update({ objectFit: e.target.value }) }, /* @__PURE__ */ import_react5.default.createElement("option", { value: "cover" }, "Fill"), /* @__PURE__ */ import_react5.default.createElement("option", { value: "contain" }, "Fit"), /* @__PURE__ */ import_react5.default.createElement("option", { value: "fill" }, "Stretch")), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update({ borderRadius: node.style.css.borderRadius ? "0px" : "16px" }) }, "Corners")), card && /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("input", { "aria-label": "Card background", type: "color", value: /^#[0-9a-f]{6}$/i.test(node.style.css.background || "") ? node.style.css.background : "#ffffff", onChange: (e) => update({ background: e.target.value }) }), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update({ borderRadius: node.style.css.borderRadius ? "0px" : "16px" }) }, "Corners"), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update({ boxShadow: node.style.css.boxShadow ? "none" : "0 10px 30px rgba(16,24,40,.12)" }) }, "Shadow")), (textLike || image || card || node.type === "shape") && /* @__PURE__ */ import_react5.default.createElement("button", { onClick: link }, "Link"), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Hover effect", value: (node.interactions || []).find((x) => x.trigger === "hover")?.effect || "none", onChange: (e) => setInteraction("hover", e.target.value) }, hover.map((x) => /* @__PURE__ */ import_react5.default.createElement("option", { key: x, value: x }, "Hover: ", x))), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Animation", value: (node.interactions || []).find((x) => x.trigger === "animation")?.effect || "none", onChange: (e) => setInteraction("animation", e.target.value) }, entrance.map((x) => /* @__PURE__ */ import_react5.default.createElement("option", { key: x, value: x }, "Animate: ", x))), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Scroll effect", value: (node.interactions || []).find((x) => x.trigger === "scroll")?.effect || "none", onChange: (e) => setInteraction("scroll", e.target.value) }, scroll.map((x) => /* @__PURE__ */ import_react5.default.createElement("option", { key: x, value: x }, "On scroll: ", x))), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Duplicate", onClick: () => dispatch({ type: "DUPLICATE_NODE", payload: { nodeId: node.id } }) }, "\u29C9"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Delete", onClick: () => dispatch({ type: "DELETE_NODE", payload: { nodeId: node.id } }) }, "\u232B")));
   }
 
   // studio/components/LayersPanel.tsx
   var import_react6 = __toESM(require_react());
+  var technical = /* @__PURE__ */ new Set(["page", "container", "stack", "flex", "grid", "heading", "paragraph", "text", "image", "button", "link", "navigation", "form", "divider", "component_instance"]);
+  var semanticType = (node, index) => {
+    const kind = String(node.metadata?.kind || "").toLowerCase();
+    if (node.metadata?.displayName && !technical.has(String(node.metadata.displayName).toLowerCase())) return String(node.metadata.displayName);
+    if (kind === "card") return index ? `Card ${index + 1}` : "Card";
+    if (kind === "image-frame") return index ? `Image frame ${index + 1}` : "Image frame";
+    if (kind === "shape") return index ? `Shape ${index + 1}` : "Shape";
+    if (node.type === "page") return "Page";
+    if (node.type === "section") return index ? `Section ${index + 1}` : "Section";
+    if (["heading", "paragraph", "text"].includes(node.type)) return index ? `Text ${index + 1}` : "Text";
+    if (node.type === "image") return index ? `Image ${index + 1}` : "Image";
+    if (node.type === "button" || node.type === "link") return node.content?.text ? String(node.content.text).slice(0, 34) : "Button";
+    if (node.type === "navigation") return "Navigation";
+    if (node.type === "lead_form") return "Lead form";
+    if (node.type === "appointment_booking") return "Appointment";
+    if (node.type === "ai_sales_assistant") return "Sales Assistant";
+    if (node.type === "form") return "Form";
+    return node.type.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  };
   function LayersPanel() {
     const { state, dispatch } = useStudio();
     const [query, setQuery] = import_react6.default.useState("");
@@ -22208,124 +22238,72 @@
     import_react6.default.useEffect(() => {
       panelRef.current?.querySelector('[data-layer-selected="true"]')?.scrollIntoView({ block: "nearest" });
     }, [state.selectedNodeIds.join("|")]);
-    if (!state.document) return /* @__PURE__ */ import_react6.default.createElement("div", { style: { padding: "1rem", color: "#888" } }, "Loading...");
+    if (!state.document) return /* @__PURE__ */ import_react6.default.createElement("div", { className: "empty-state" }, /* @__PURE__ */ import_react6.default.createElement("b", null, "Loading your page\u2026"));
     const page = state.document.pages[state.currentPageId];
-    if (!page) return /* @__PURE__ */ import_react6.default.createElement("div", { style: { padding: "1rem", color: "#888" } }, "Loading...");
-    const normalizedQuery = query.trim().toLowerCase();
-    const treeMatches = (nodeId) => {
-      const candidate = page.nodes[nodeId];
-      if (!candidate) return false;
-      const label = String(candidate.metadata?.displayName || candidate.type).toLowerCase();
-      return !normalizedQuery || label.includes(normalizedQuery) || nodeId.toLowerCase().includes(normalizedQuery) || candidate.children.some(treeMatches);
+    if (!page) return /* @__PURE__ */ import_react6.default.createElement("div", { className: "empty-state" }, /* @__PURE__ */ import_react6.default.createElement("b", null, "No page selected"), /* @__PURE__ */ import_react6.default.createElement("p", null, "Choose a page to see its layers."));
+    const normalized = query.trim().toLowerCase();
+    const labelCounts = {};
+    const labelFor = (node) => {
+      const base = semanticType(node, 0), count = labelCounts[base] || 0;
+      labelCounts[base] = count + 1;
+      return count ? `${base} ${count + 1}` : base;
     };
-    const handleDragStart = (e, nodeId) => {
-      e.stopPropagation();
-      e.dataTransfer.setData("studio/layer-node-id", nodeId);
-    };
-    const handleDragOver = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
+    const treeMatches = (id) => {
+      const n = page.nodes[id];
+      if (!n) return false;
+      const label = String(n.metadata?.displayName || semanticType(n, 0)).toLowerCase();
+      return !normalized || label.includes(normalized) || n.children.some(treeMatches);
     };
     const handleDrop = (e, targetNodeId) => {
       e.preventDefault();
       e.stopPropagation();
-      const draggedNodeId = e.dataTransfer.getData("studio/layer-node-id");
-      if (draggedNodeId && draggedNodeId !== targetNodeId) {
-        dispatch({
-          type: "REPARENT_NODE",
-          payload: { nodeId: draggedNodeId, newParentId: targetNodeId }
-        });
-      }
+      const dragged = e.dataTransfer.getData("studio/layer-node-id");
+      if (dragged && dragged !== targetNodeId) dispatch({ type: "REPARENT_NODE", payload: { nodeId: dragged, newParentId: targetNodeId } });
     };
-    const renderLayers = (nodeId, depth = 0) => {
+    const render = (nodeId, depth = 0) => {
       const node = page.nodes[nodeId];
-      if (!node) return null;
-      const isSelected = state.selectedNodeIds.includes(nodeId);
-      const label = String(node.metadata?.displayName || node.type);
-      if (!treeMatches(nodeId)) return null;
-      return /* @__PURE__ */ import_react6.default.createElement("div", { key: nodeId }, /* @__PURE__ */ import_react6.default.createElement(
-        "div",
-        {
-          "data-layer-selected": isSelected ? "true" : "false",
-          tabIndex: 0,
-          onClick: (event) => dispatch({ type: "SELECT_NODE", payload: event.shiftKey ? isSelected ? state.selectedNodeIds.filter((id) => id !== nodeId) : [...state.selectedNodeIds, nodeId] : [nodeId] }),
-          onKeyDown: (event) => {
-            if (event.key === "Enter" || event.key === " ") {
-              event.preventDefault();
-              dispatch({ type: "SELECT_NODE", payload: [nodeId] });
-            } else if (event.key === "Delete") {
-              event.preventDefault();
-              dispatch({ type: "DELETE_NODE", payload: { nodeId } });
-            }
-          },
-          draggable: true,
-          onDragStart: (e) => handleDragStart(e, nodeId),
-          onDragOver: handleDragOver,
-          onDrop: (e) => handleDrop(e, nodeId),
-          style: {
-            padding: "4px",
-            paddingLeft: `${depth * 10 + 4}px`,
-            cursor: "pointer",
-            background: isSelected ? "#333" : "transparent",
-            color: isSelected ? "#fff" : "#ccc",
-            fontSize: "12px",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center"
-          }
-        },
-        /* @__PURE__ */ import_react6.default.createElement("span", { style: { display: "flex", alignItems: "center", gap: "4px", minWidth: 0 } }, !!node.children.length && /* @__PURE__ */ import_react6.default.createElement("button", { onClick: (e) => {
-          e.stopPropagation();
-          setCollapsed((current) => {
-            const next = new Set(current);
-            next.has(nodeId) ? next.delete(nodeId) : next.add(nodeId);
-            return next;
-          });
-        }, "aria-label": collapsed.has(nodeId) ? "Expand layer" : "Collapse layer", style: { background: "none", border: 0, color: "inherit", padding: 0 } }, collapsed.has(nodeId) ? "\u203A" : "\u2304"), /* @__PURE__ */ import_react6.default.createElement("span", { title: nodeId }, label, " (", nodeId.substring(0, 6), ")"), node.metadata?.locked && /* @__PURE__ */ import_react6.default.createElement("span", { title: "Locked" }, "\u{1F512}")),
-        isSelected && /* @__PURE__ */ import_react6.default.createElement("div", { style: { display: "flex", gap: "4px" } }, /* @__PURE__ */ import_react6.default.createElement(
-          "button",
-          {
-            onClick: (e) => {
-              e.stopPropagation();
-              dispatch({ type: "DUPLICATE_NODE", payload: { nodeId } });
-            },
-            style: { background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: "10px" },
-            title: "Duplicate"
-          },
-          "\u29C9"
-        ), /* @__PURE__ */ import_react6.default.createElement(
-          "button",
-          {
-            onClick: (e) => {
-              e.stopPropagation();
-              dispatch({ type: "TOGGLE_NODE_VISIBILITY", payload: { nodeId, breakpoint: state.currentBreakpoint } });
-            },
-            style: { background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: "10px" },
-            title: "Toggle Visibility"
-          },
-          "\u{1F441}"
-        ), /* @__PURE__ */ import_react6.default.createElement("button", { onClick: (e) => {
-          e.stopPropagation();
-          dispatch({ type: "TOGGLE_NODE_LOCK", payload: { nodeId } });
-        }, style: { background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: "10px" }, title: node.metadata?.locked ? "Unlock" : "Lock" }, "\u233E"), /* @__PURE__ */ import_react6.default.createElement("button", { onClick: (e) => {
-          e.stopPropagation();
-          const name = window.prompt("Layer name", label);
-          if (name) dispatch({ type: "RENAME_NODE", payload: { nodeId, name } });
-        }, style: { background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: "10px" }, title: "Rename" }, "\u270E"), /* @__PURE__ */ import_react6.default.createElement(
-          "button",
-          {
-            onClick: (e) => {
-              e.stopPropagation();
-              dispatch({ type: "DELETE_NODE", payload: { nodeId } });
-            },
-            style: { background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: "10px" },
-            title: "Delete"
-          },
-          "\u2715"
-        ))
-      ), !collapsed.has(nodeId) && node.children.map((childId) => renderLayers(childId, depth + 1)));
+      if (!node || !treeMatches(nodeId)) return null;
+      const isSelected = state.selectedNodeIds.includes(nodeId), label = labelFor(node);
+      return /* @__PURE__ */ import_react6.default.createElement("div", { key: nodeId }, /* @__PURE__ */ import_react6.default.createElement("div", { className: `layer-row ${isSelected ? "selected" : ""}`, "data-layer-selected": isSelected ? "true" : "false", tabIndex: 0, onClick: (event) => dispatch({ type: "SELECT_NODE", payload: event.shiftKey ? isSelected ? state.selectedNodeIds.filter((id) => id !== nodeId) : [...state.selectedNodeIds, nodeId] : [nodeId] }), onKeyDown: (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          dispatch({ type: "SELECT_NODE", payload: [nodeId] });
+        } else if (event.key === "Delete") {
+          event.preventDefault();
+          dispatch({ type: "DELETE_NODE", payload: { nodeId } });
+        }
+      }, draggable: true, onDragStart: (e) => {
+        e.stopPropagation();
+        e.dataTransfer.setData("studio/layer-node-id", nodeId);
+      }, onDragOver: (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }, onDrop: (e) => handleDrop(e, nodeId), style: { paddingLeft: `${depth * 14 + 8}px` } }, /* @__PURE__ */ import_react6.default.createElement("span", { className: "layer-label" }, node.children.length > 0 && /* @__PURE__ */ import_react6.default.createElement("button", { className: "layer-toggle", onClick: (e) => {
+        e.stopPropagation();
+        setCollapsed((current) => {
+          const next = new Set(current);
+          next.has(nodeId) ? next.delete(nodeId) : next.add(nodeId);
+          return next;
+        });
+      }, "aria-label": collapsed.has(nodeId) ? "Expand layer" : "Collapse layer" }, collapsed.has(nodeId) ? "\u203A" : "\u2304"), /* @__PURE__ */ import_react6.default.createElement("span", { className: "layer-glyph", "aria-hidden": "true" }, node.type === "section" ? "\u25AD" : node.type === "image" ? "\u25A7" : node.type === "button" ? "\u2197" : node.type === "page" ? "\u2302" : "\u2022"), /* @__PURE__ */ import_react6.default.createElement("span", { className: "layer-name" }, label), node.metadata?.locked && /* @__PURE__ */ import_react6.default.createElement("span", { className: "layer-state", title: "Locked" }, "Locked")), isSelected && /* @__PURE__ */ import_react6.default.createElement("span", { className: "layer-actions" }, /* @__PURE__ */ import_react6.default.createElement("button", { onClick: (e) => {
+        e.stopPropagation();
+        dispatch({ type: "DUPLICATE_NODE", payload: { nodeId } });
+      }, title: "Duplicate" }, "+"), /* @__PURE__ */ import_react6.default.createElement("button", { onClick: (e) => {
+        e.stopPropagation();
+        dispatch({ type: "TOGGLE_NODE_VISIBILITY", payload: { nodeId, breakpoint: state.currentBreakpoint } });
+      }, title: "Hide or show" }, "\u25CC"), /* @__PURE__ */ import_react6.default.createElement("button", { onClick: (e) => {
+        e.stopPropagation();
+        dispatch({ type: "TOGGLE_NODE_LOCK", payload: { nodeId } });
+      }, title: node.metadata?.locked ? "Unlock" : "Lock" }, "\u233E"), /* @__PURE__ */ import_react6.default.createElement("button", { onClick: (e) => {
+        e.stopPropagation();
+        const name = window.prompt("Rename", label);
+        if (name) dispatch({ type: "RENAME_NODE", payload: { nodeId, name } });
+      }, title: "Rename" }, "\u270E"), /* @__PURE__ */ import_react6.default.createElement("button", { onClick: (e) => {
+        e.stopPropagation();
+        dispatch({ type: "DELETE_NODE", payload: { nodeId } });
+      }, title: "Delete" }, "\xD7"))), !collapsed.has(nodeId) && node.children.map((child) => render(child, depth + 1)));
     };
-    return /* @__PURE__ */ import_react6.default.createElement("div", { className: "studio-layers", ref: panelRef }, /* @__PURE__ */ import_react6.default.createElement("input", { "aria-label": "Search layers", placeholder: "Search layers", value: query, onChange: (e) => setQuery(e.target.value), style: { width: "calc(100% - 16px)", margin: "8px", boxSizing: "border-box", background: "#222", color: "#fff", border: "1px solid #444", padding: "6px" } }), renderLayers(page.rootNodeId));
+    return /* @__PURE__ */ import_react6.default.createElement("div", { className: "studio-layers", ref: panelRef }, /* @__PURE__ */ import_react6.default.createElement("div", { className: "layers-intro" }, /* @__PURE__ */ import_react6.default.createElement("b", null, "Layers"), /* @__PURE__ */ import_react6.default.createElement("span", null, "Pick any part of your page.")), /* @__PURE__ */ import_react6.default.createElement("div", { className: "panel-search" }, /* @__PURE__ */ import_react6.default.createElement("span", null, "\u2315"), /* @__PURE__ */ import_react6.default.createElement("input", { "aria-label": "Search layers", placeholder: "Search page", value: query, onChange: (e) => setQuery(e.target.value) })), render(page.rootNodeId));
   }
 
   // studio/components/CMSPanel.tsx
@@ -22490,38 +22468,44 @@
 
   // studio/components/AddPanel.tsx
   var import_react8 = __toESM(require_react());
-  var groups = {
-    Basic: [["Section", "section", "\u25AD"], ["Container", "container", "\u25A1"], ["Stack", "stack", "\u2195"], ["Flex", "flex", "\u2194"], ["Grid", "grid", "\u229E"], ["Text", "text", "T"], ["Heading", "heading", "H"], ["Rich text", "text", "\xB6"], ["Button", "button", "\u25C9"], ["Image", "image", "\u25A7"], ["Video", "video", "\u25B6"], ["Icon", "icon", "\u25C7"], ["Divider", "divider", "\u2014"], ["Spacer", "container", "\u2195"]],
-    Navigation: [["Navbar", "navigation", "\u2630"], ["Menu", "navigation", "\u2261"], ["Mobile navigation", "navigation", "\u2637"], ["Breadcrumb", "navigation", "\u203A"], ["Tabs", "container", "\u25A4"]],
-    Content: [["Card", "container", "\u25A3"], ["Feature block", "section", "\u2726"], ["Testimonial", "container", "\u275D"], ["FAQ", "container", "?"], ["Team member", "container", "\u2659"], ["Logo cloud", "gallery", "\u25EB"], ["Stats", "grid", "#"], ["Badge", "text", "\u25CF"], ["Quote", "text", "\u275E"]],
-    Conversion: [["Form", "form", "\u25A4"], ["Contact form", "form", "\u2709"], ["Lead form", "lead_form", "\u25CE"], ["CTA", "section", "\u2197"], ["Newsletter", "form", "\u2709"], ["Appointment widget", "appointment_booking", "\u25F7"], ["Chatbot widget", "ai_sales_assistant", "\u2726"]],
-    Business: [["Pricing", "grid", "$"], ["Services", "grid", "\u2723"], ["Gallery", "gallery", "\u25A6"], ["Portfolio", "gallery", "\u25A7"], ["Testimonials", "carousel", "\u275D"], ["Location / map", "map", "\u2316"], ["Social links", "navigation", "\u2301"]],
-    CMS: [["Repeater", "repeater", "\u27F3"], ["Dynamic list", "list", "\u2637"], ["Dynamic grid", "grid", "\u229E"], ["Dynamic gallery", "gallery", "\u25A6"], ["CMS table", "table", "\u25A4"], ["Collection field", "text", "{ }"], ["Dynamic page link", "link", "\u2197"]],
-    Advanced: [["Embed", "embed", "</>"], ["Safe HTML", "embed", "<>"], ["Reusable component", "component_instance", "\u25C7"], ["Global section", "section", "\u25CE"]]
-  };
+  var primary = [
+    { label: "Text", type: "text", icon: "T", description: "Add a text box" },
+    { label: "Button", type: "button", icon: "\u2197", description: "Add a call-to-action" },
+    { label: "Card", type: "container", icon: "\u25A3", description: "Add an editable card", style: { css: { padding: "24px", borderRadius: "16px", background: "#ffffff", boxShadow: "0 10px 30px rgba(16,24,40,.08)", minWidth: "240px", minHeight: "160px" }, tokens: {} }, metadata: { kind: "card" } },
+    { label: "Image frame", type: "image", icon: "\u25A7", description: "Add a frame for your image", style: { css: { width: "320px", height: "220px", objectFit: "cover", borderRadius: "12px", background: "#f2f4f7" }, tokens: {} }, content: { src: "", alt: "" }, metadata: { kind: "image-frame" } },
+    { label: "Shape", type: "container", icon: "\u25CB", description: "Add a simple shape", style: { css: { width: "220px", height: "140px", borderRadius: "18px", background: "#eef0f3" }, tokens: {} }, metadata: { kind: "shape" } },
+    { label: "Section", type: "section", icon: "\u25AD", description: "Add a new website section", style: { css: { padding: "64px 40px", minHeight: "240px" }, tokens: {} }, metadata: { kind: "section" } },
+    { label: "Divider", type: "divider", icon: "\u2014", description: "Separate content cleanly" }
+  ];
+  var business = [
+    { label: "Lead form", type: "lead_form", icon: "\u25CE", description: "Capture an enquiry" },
+    { label: "Appointment", type: "appointment_booking", icon: "\u25F7", description: "Let visitors book time" },
+    { label: "Sales Assistant", type: "ai_sales_assistant", icon: "\u2726", description: "Add your AI assistant" },
+    { label: "FAQ", type: "container", icon: "?", description: "Answer common questions", metadata: { kind: "faq" } },
+    { label: "Gallery", type: "gallery", icon: "\u25A6", description: "Show a collection of images" }
+  ];
   var presets = {
-    section: { style: { css: { padding: "80px 40px", minHeight: "240px" }, tokens: {} } },
-    container: { style: { css: { padding: "24px", maxWidth: "1200px", margin: "0 auto" }, tokens: {} } },
-    stack: { style: { css: { display: "flex", flexDirection: "column", gap: "16px" }, tokens: {} } },
-    flex: { style: { css: { display: "flex", gap: "16px", alignItems: "center" }, tokens: {} } },
-    grid: { style: { css: { display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "24px" }, tokens: {} } },
-    heading: { content: { text: "A clear, confident heading" }, style: { css: { fontSize: "48px", lineHeight: "1.05", fontWeight: "700" }, tokens: {} } },
-    text: { content: { text: "Add thoughtful supporting copy here." }, style: { css: { fontSize: "16px", lineHeight: "1.6" }, tokens: {} } },
-    button: { content: { text: "Get started", href: "#" }, style: { css: { padding: "12px 18px", borderRadius: "8px" }, tokens: {} } },
-    image: { content: { src: "", alt: "" }, style: { css: { width: "100%", height: "auto", objectFit: "cover" }, tokens: {} } },
+    text: { content: { text: "Add your text" }, style: { css: { fontSize: "18px", lineHeight: "1.5" }, tokens: {} } },
+    button: { content: { text: "Get started", href: "#" }, style: { css: { padding: "12px 18px", borderRadius: "8px", background: "#111827", color: "#ffffff" }, tokens: {} } },
     divider: { style: { css: { width: "100%", borderWidth: "1px 0 0", borderStyle: "solid" }, tokens: {} } }
   };
   function AddPanel() {
-    const { state, dispatch } = useStudio();
+    const { dispatch } = useStudio();
     const [search, setSearch] = import_react8.default.useState("");
-    const insert = (label, type) => dispatch({ type: "INSERT_NODE", payload: { node: { type, ...presets[type] || {}, metadata: { displayName: label, global: label === "Global section" } } } });
-    return /* @__PURE__ */ import_react8.default.createElement("div", { className: "studio-panel add-panel" }, /* @__PURE__ */ import_react8.default.createElement("div", { className: "panel-search" }, /* @__PURE__ */ import_react8.default.createElement("span", null, "\u2315"), /* @__PURE__ */ import_react8.default.createElement("input", { "aria-label": "Search elements", placeholder: "Search elements", value: search, onChange: (e) => setSearch(e.target.value) })), Object.entries(groups).map(([group, items]) => {
-      const visible = items.filter(([label]) => label.toLowerCase().includes(search.toLowerCase()));
-      return visible.length ? /* @__PURE__ */ import_react8.default.createElement("section", { className: "element-group", key: group }, /* @__PURE__ */ import_react8.default.createElement("h3", null, group), /* @__PURE__ */ import_react8.default.createElement("div", { className: "element-grid" }, visible.map(([label, type, icon]) => /* @__PURE__ */ import_react8.default.createElement("button", { key: label, draggable: true, onDragStart: (e) => {
-        e.dataTransfer.setData("application/x-zylora-node", JSON.stringify({ label, type }));
+    const insert = (item) => dispatch({ type: "INSERT_NODE", payload: { node: { type: item.type, ...presets[item.type] || {}, ...item.style ? { style: item.style } : {}, ...item.content ? { content: item.content } : {}, metadata: { displayName: item.label, ...item.metadata || {} } } } });
+    const renderGroup = (title, items) => {
+      const visible = items.filter((item) => `${item.label} ${item.description}`.toLowerCase().includes(search.toLowerCase()));
+      if (!visible.length) return null;
+      return /* @__PURE__ */ import_react8.default.createElement("section", { className: "element-group", key: title }, /* @__PURE__ */ import_react8.default.createElement("h3", null, title), /* @__PURE__ */ import_react8.default.createElement("div", { className: "element-grid" }, visible.map((item) => /* @__PURE__ */ import_react8.default.createElement("button", { key: item.label, className: "add-item", draggable: true, onDragStart: (e) => {
+        const payload = { label: item.label, type: item.type };
+        e.dataTransfer.setData("application/x-zylora-node", JSON.stringify(payload));
         e.dataTransfer.effectAllowed = "copy";
-      }, onClick: () => insert(label, type), title: `Add ${label}` }, /* @__PURE__ */ import_react8.default.createElement("b", null, icon), /* @__PURE__ */ import_react8.default.createElement("span", null, label))))) : null;
-    }), /* @__PURE__ */ import_react8.default.createElement("p", { className: "panel-hint" }, "Click to add to the selected container, or drag onto a highlighted drop zone."));
+        window.__zyloraDraggingNode = payload;
+      }, onDragEnd: () => {
+        window.setTimeout(() => delete window.__zyloraDraggingNode, 250);
+      }, onClick: () => insert(item), title: `Add ${item.label}`, "aria-label": `Add ${item.label}` }, /* @__PURE__ */ import_react8.default.createElement("b", null, item.icon), /* @__PURE__ */ import_react8.default.createElement("span", null, item.label), /* @__PURE__ */ import_react8.default.createElement("small", null, item.description)))));
+    };
+    return /* @__PURE__ */ import_react8.default.createElement("div", { className: "studio-panel add-panel" }, /* @__PURE__ */ import_react8.default.createElement("div", { className: "panel-intro" }, /* @__PURE__ */ import_react8.default.createElement("b", null, "Build your page"), /* @__PURE__ */ import_react8.default.createElement("span", null, "Drag something onto the page or click to add it.")), /* @__PURE__ */ import_react8.default.createElement("div", { className: "panel-search" }, /* @__PURE__ */ import_react8.default.createElement("span", null, "\u2315"), /* @__PURE__ */ import_react8.default.createElement("input", { "aria-label": "Search elements", placeholder: "Search building blocks", value: search, onChange: (e) => setSearch(e.target.value) })), renderGroup("Essentials", primary), renderGroup("Zylora tools", business), /* @__PURE__ */ import_react8.default.createElement("p", { className: "panel-hint" }, "Your website stays structured automatically \u2014 no layout code needed."));
   }
 
   // studio/components/PagesPanel.tsx
@@ -22598,13 +22582,23 @@
   }
 
   // studio/App.tsx
-  var rails = [["add", "\uFF0B", "Add"], ["pages", "\u25A4", "Pages"], ["layers", "\u2261", "Layers"], ["assets", "\u25A7", "Assets"], ["components", "\u25C7", "Components"], ["cms", "\u25EB", "CMS"], ["content", "T", "Content"], ["ai", "\u2726", "AI"], ["styles", "\u25C9", "Site styles"], ["seo", "\u2699", "SEO / Settings"]];
+  var rails = [
+    ["add", "+", "Add"],
+    ["pages", "\u25A4", "Pages"],
+    ["layers", "\u2261", "Layers"],
+    ["assets", "\u25A7", "Media"],
+    ["cms", "\u25EB", "CMS"],
+    ["ai", "\u2726", "AI"],
+    ["site", "\u25C9", "Site"]
+  ];
+  var acceptsChildren2 = (type) => ["page", "section", "container", "stack", "flex", "grid", "repeater", "list", "gallery"].includes(type);
   function App() {
     const [state, dispatch] = (0, import_react13.useReducer)(studioReducer, initialState);
-    const [rail, setRail] = import_react13.default.useState("layers");
+    const [rail, setRail] = import_react13.default.useState("add");
     const [saveStatus, setSaveStatus] = import_react13.default.useState("Saved");
     const [preview, setPreview] = import_react13.default.useState(false), [leftOpen, setLeftOpen] = import_react13.default.useState(true), [context, setContext] = import_react13.default.useState(null), [toast, setToast] = import_react13.default.useState(""), [fileDrop, setFileDrop] = import_react13.default.useState(false);
     const timer = (0, import_react13.useRef)(null), saving = (0, import_react13.useRef)(false), pending = (0, import_react13.useRef)(null), skipRevision = (0, import_react13.useRef)(null);
+    const pan = (0, import_react13.useRef)(null);
     const siteId = window.ZYLORA_STUDIO_CONTEXT?.siteId, csrf = window.ZYLORA_STUDIO_CONTEXT?.csrfToken, project = window.ZYLORA_STUDIO_CONTEXT?.siteName || "Untitled website";
     (0, import_react13.useEffect)(() => {
       if (!siteId) return;
@@ -22690,6 +22684,12 @@
         } else if (mod && e.key.toLowerCase() === "z") {
           e.preventDefault();
           dispatch({ type: e.shiftKey ? "REDO" : "UNDO" });
+        } else if (mod && (e.key === "=" || e.key === "+")) {
+          e.preventDefault();
+          dispatch({ type: "SET_ZOOM", payload: state.zoom + 0.1 });
+        } else if (mod && e.key === "-") {
+          e.preventDefault();
+          dispatch({ type: "SET_ZOOM", payload: state.zoom - 0.1 });
         } else if (e.key === "Escape") {
           dispatch({ type: "SELECT_NODE", payload: [] });
           setContext(null);
@@ -22697,18 +22697,19 @@
       };
       addEventListener("keydown", key);
       return () => removeEventListener("keydown", key);
-    }, [state.selectedNodeIds]);
+    }, [state.selectedNodeIds, state.zoom]);
     const page = state.document?.pages[state.currentPageId], width = state.currentBreakpoint === "desktop" ? 1440 : state.currentBreakpoint === "tablet" ? 768 : 390;
     const fit = () => {
       const area = document.querySelector(".canvas-workspace")?.getBoundingClientRect();
-      if (area) dispatch({ type: "SET_ZOOM", payload: Math.min(1, (area.width - 96) / width) });
+      if (area) dispatch({ type: "SET_ZOOM", payload: Math.max(0.25, Math.min(1, (area.width - 96) / width)) });
     };
     const publish = async () => {
-      setToast("Running publish checks\u2026");
+      setToast("Publishing your site\u2026");
       const r = await fetch(`/api/sites/${siteId}/publish`, { method: "POST", headers: { "Content-Type": "application/json", "X-CSRF-Token": csrf }, body: "{}" });
       const d = await r.json();
       setToast(r.ok ? "Published" : "Publish failed: " + (d?.detail?.message || d?.detail || "unknown error"));
     };
+    const insertNode = (label, type, parentId) => dispatch({ type: "INSERT_NODE", payload: { parentId, node: { type, metadata: { displayName: label } } } });
     const uploadDropped = async (file, clientX, clientY) => {
       const body = new FormData();
       body.append("file", file);
@@ -22719,41 +22720,73 @@
         setToast("Upload failed");
         return;
       }
-      const workspace = document.querySelector(".studio-canvas")?.getBoundingClientRect();
-      const x = Math.max(0, (clientX - (workspace?.left || 0)) / state.zoom), y = Math.max(0, (clientY - (workspace?.top || 0)) / state.zoom);
-      dispatch({ type: "INSERT_NODE", payload: { node: { type: "image", content: { src: d.asset.url, asset_id: d.asset.id, alt: d.asset.alt_text || "" }, style: { css: { width: "320px", height: "220px", objectFit: "cover", position: "absolute", left: `${Math.round(x - 160)}px`, top: `${Math.round(y - 110)}px` }, tokens: {} }, metadata: { displayName: d.asset.original_filename || "Uploaded image" } } } });
+      const workspace = document.querySelector(".studio-canvas")?.getBoundingClientRect(), x = Math.max(0, (clientX - (workspace?.left || 0)) / state.zoom), y = Math.max(0, (clientY - (workspace?.top || 0)) / state.zoom);
+      dispatch({ type: "INSERT_NODE", payload: { node: { type: "image", content: { src: d.asset.url, asset_id: d.asset.id, alt: d.asset.alt_text || "" }, style: { css: { width: "320px", height: "220px", objectFit: "cover", position: "absolute", left: `${Math.round(x - 160)}px`, top: `${Math.round(y - 110)}px` }, tokens: {} }, metadata: { displayName: "Image frame", kind: "image-frame" } } } });
       setToast("Image added to canvas");
     };
-    const panel = rail === "add" ? /* @__PURE__ */ import_react13.default.createElement(AddPanel, null) : rail === "pages" || rail === "seo" ? /* @__PURE__ */ import_react13.default.createElement(PagesPanel, null) : rail === "layers" ? /* @__PURE__ */ import_react13.default.createElement(LayersPanel, null) : rail === "assets" ? /* @__PURE__ */ import_react13.default.createElement(AssetsPanel, null) : rail === "components" ? /* @__PURE__ */ import_react13.default.createElement(ComponentsPanel, null) : rail === "cms" ? /* @__PURE__ */ import_react13.default.createElement(CMSPanel, null) : rail === "content" ? /* @__PURE__ */ import_react13.default.createElement(CMSPanel, { contentOnly: true }) : rail === "styles" ? /* @__PURE__ */ import_react13.default.createElement(SiteStylesPanel, null) : /* @__PURE__ */ import_react13.default.createElement("div", { className: "studio-panel" }, /* @__PURE__ */ import_react13.default.createElement("div", { className: "empty-state" }, /* @__PURE__ */ import_react13.default.createElement("b", null, "AI design assistant"), /* @__PURE__ */ import_react13.default.createElement("p", null, "Select an element and describe a structured change. Operations are validated and applied atomically."), /* @__PURE__ */ import_react13.default.createElement("textarea", { placeholder: "Make this section feel more premium\u2026" }), /* @__PURE__ */ import_react13.default.createElement("button", { className: "primary wide-button", disabled: !state.selectedNodeIds.length }, "Preview AI operation")));
-    return /* @__PURE__ */ import_react13.default.createElement(StudioContext.Provider, { value: { state, dispatch } }, /* @__PURE__ */ import_react13.default.createElement("div", { className: "zylora-studio-app", onClick: () => context && setContext(null) }, /* @__PURE__ */ import_react13.default.createElement("header", { className: "studio-topbar" }, /* @__PURE__ */ import_react13.default.createElement("div", { className: "topbar-left" }, /* @__PURE__ */ import_react13.default.createElement("a", { href: "/dashboard", className: "studio-logo", "aria-label": "Exit to dashboard" }, /* @__PURE__ */ import_react13.default.createElement("span", null, "Z"), /* @__PURE__ */ import_react13.default.createElement("b", null, "Zylora Studio")), /* @__PURE__ */ import_react13.default.createElement("span", { className: "top-divider" }), /* @__PURE__ */ import_react13.default.createElement("div", { className: "project-crumb" }, /* @__PURE__ */ import_react13.default.createElement("b", null, project), /* @__PURE__ */ import_react13.default.createElement("span", null, "/"), /* @__PURE__ */ import_react13.default.createElement("span", null, page?.name || "Loading"))), /* @__PURE__ */ import_react13.default.createElement("div", { className: "topbar-center" }, /* @__PURE__ */ import_react13.default.createElement(ContextToolbar, { onFit: fit, onPreview: () => setPreview(!preview) }), /* @__PURE__ */ import_react13.default.createElement("span", { className: "top-divider" }), ["desktop", "tablet", "mobile"].map((bp) => /* @__PURE__ */ import_react13.default.createElement("button", { key: bp, className: state.currentBreakpoint === bp ? "active" : "", title: bp, onClick: () => dispatch({ type: "SET_BREAKPOINT", payload: bp }) }, bp === "desktop" ? "\u25B0" : bp === "tablet" ? "\u25AF" : "\u25AF")), /* @__PURE__ */ import_react13.default.createElement("span", { className: "canvas-width" }, width, "px"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "SET_ZOOM", payload: state.zoom - 0.1 }) }, "\u2212"), /* @__PURE__ */ import_react13.default.createElement("button", { className: "zoom-label", onClick: fit }, Math.round(state.zoom * 100), "%"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "SET_ZOOM", payload: state.zoom + 0.1 }) }, "\uFF0B")), /* @__PURE__ */ import_react13.default.createElement("div", { className: "topbar-right" }, /* @__PURE__ */ import_react13.default.createElement("span", { className: `save-state ${saveStatus.toLowerCase().replace(/\W/g, "-")}` }, /* @__PURE__ */ import_react13.default.createElement("i", null), saveStatus), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => setPreview(!preview) }, preview ? "Edit" : "Preview"), /* @__PURE__ */ import_react13.default.createElement("button", { className: "primary", onClick: publish }, "Publish"))), /* @__PURE__ */ import_react13.default.createElement("div", { className: "studio-main" }, /* @__PURE__ */ import_react13.default.createElement("nav", { className: "tool-rail", "aria-label": "Studio tools" }, rails.map(([id, icon, label]) => /* @__PURE__ */ import_react13.default.createElement("button", { key: id, className: rail === id && leftOpen ? "active" : "", onClick: () => {
-      if (rail === id) setLeftOpen(!leftOpen);
+    const panel = rail === "add" ? /* @__PURE__ */ import_react13.default.createElement(AddPanel, null) : rail === "pages" ? /* @__PURE__ */ import_react13.default.createElement(PagesPanel, null) : rail === "layers" ? /* @__PURE__ */ import_react13.default.createElement(LayersPanel, null) : rail === "assets" ? /* @__PURE__ */ import_react13.default.createElement(AssetsPanel, null) : rail === "cms" ? /* @__PURE__ */ import_react13.default.createElement(CMSPanel, null) : rail === "site" ? /* @__PURE__ */ import_react13.default.createElement(import_react13.default.Fragment, null, /* @__PURE__ */ import_react13.default.createElement(SiteStylesPanel, null), /* @__PURE__ */ import_react13.default.createElement(ComponentsPanel, null)) : /* @__PURE__ */ import_react13.default.createElement("div", { className: "studio-panel ai-panel" }, /* @__PURE__ */ import_react13.default.createElement("div", { className: "empty-state" }, /* @__PURE__ */ import_react13.default.createElement("b", null, "AI design assistant"), /* @__PURE__ */ import_react13.default.createElement("p", null, "Ask for a focused change to the selected part of your site. Your layout stays intact."), /* @__PURE__ */ import_react13.default.createElement("textarea", { "aria-label": "AI design request", placeholder: "Make this section feel more premium\u2026" }), /* @__PURE__ */ import_react13.default.createElement("button", { className: "primary wide-button", disabled: !state.selectedNodeIds.length }, "Preview change")));
+    const chooseRail = (id) => {
+      if (rail === id) setLeftOpen((v) => !v);
       else {
         setRail(id);
         setLeftOpen(true);
       }
-    }, title: label }, /* @__PURE__ */ import_react13.default.createElement("b", null, icon), /* @__PURE__ */ import_react13.default.createElement("span", null, label)))), leftOpen && /* @__PURE__ */ import_react13.default.createElement("aside", { className: "studio-sidebar-left" }, /* @__PURE__ */ import_react13.default.createElement("header", null, /* @__PURE__ */ import_react13.default.createElement("div", null, /* @__PURE__ */ import_react13.default.createElement("b", null, rails.find((x) => x[0] === rail)?.[2]), /* @__PURE__ */ import_react13.default.createElement("small", null, rail === "content" ? "Safe content editing" : "Workspace")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => setLeftOpen(false), "aria-label": "Close tool panel" }, "\xD7")), panel), /* @__PURE__ */ import_react13.default.createElement("main", { className: `canvas-workspace ${preview ? "preview-mode" : ""}`, onClick: (e) => {
+    };
+    const onWorkspaceDrop = (e) => {
+      e.preventDefault();
+      setFileDrop(false);
+      const file = e.dataTransfer.files?.[0];
+      if (file) {
+        if (file.type.startsWith("image/")) uploadDropped(file, e.clientX, e.clientY);
+        else setToast("Only image files can be added to the canvas");
+        return;
+      }
+      const raw = e.dataTransfer.getData("application/x-zylora-node") || (window.__zyloraDraggingNode ? JSON.stringify(window.__zyloraDraggingNode) : "");
+      if (raw) {
+        try {
+          const data = JSON.parse(raw), target = e.target.closest("[data-studio-id]"), targetNode = target && state.document?.pages[state.currentPageId]?.nodes[target.dataset.studioId || ""], parentId = targetNode && acceptsChildren2(target.dataset.studioType || "") ? target?.dataset.studioId : void 0;
+          insertNode(data.label || "Text", data.type || "text", parentId);
+        } catch {
+          setToast("That item could not be added");
+        }
+      }
+    };
+    return /* @__PURE__ */ import_react13.default.createElement(StudioContext.Provider, { value: { state, dispatch } }, /* @__PURE__ */ import_react13.default.createElement("div", { className: "zylora-studio-app", onClick: () => context && setContext(null) }, /* @__PURE__ */ import_react13.default.createElement("header", { className: "studio-topbar" }, /* @__PURE__ */ import_react13.default.createElement("div", { className: "topbar-left" }, /* @__PURE__ */ import_react13.default.createElement("a", { href: "/dashboard", className: "studio-logo", "aria-label": "Exit to dashboard" }, /* @__PURE__ */ import_react13.default.createElement("span", null, "Z"), /* @__PURE__ */ import_react13.default.createElement("b", null, "Zylora Studio")), /* @__PURE__ */ import_react13.default.createElement("span", { className: "top-divider" }), /* @__PURE__ */ import_react13.default.createElement("div", { className: "project-crumb" }, /* @__PURE__ */ import_react13.default.createElement("b", null, project), /* @__PURE__ */ import_react13.default.createElement("span", null, "/"), /* @__PURE__ */ import_react13.default.createElement("span", null, page?.name || "Loading"))), /* @__PURE__ */ import_react13.default.createElement("div", { className: "topbar-center" }, /* @__PURE__ */ import_react13.default.createElement(ContextToolbar, { onFit: fit, onPreview: () => setPreview(!preview) }), /* @__PURE__ */ import_react13.default.createElement("span", { className: "top-divider" }), ["desktop", "tablet", "mobile"].map((bp) => /* @__PURE__ */ import_react13.default.createElement("button", { key: bp, className: state.currentBreakpoint === bp ? "active" : "", title: bp, "aria-label": `${bp} preview`, onClick: () => dispatch({ type: "SET_BREAKPOINT", payload: bp }) }, bp === "desktop" ? "\u25B0" : "\u25AF")), /* @__PURE__ */ import_react13.default.createElement("span", { className: "canvas-width" }, width, "px"), /* @__PURE__ */ import_react13.default.createElement("select", { className: "zoom-select", "aria-label": "Canvas zoom", value: Math.round(state.zoom * 100), onChange: (e) => dispatch({ type: "SET_ZOOM", payload: Number(e.target.value) / 100 }) }, [25, 50, 75, 100, 125, 150, 200].map((v) => /* @__PURE__ */ import_react13.default.createElement("option", { key: v, value: v }, v, "%"))), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "SET_ZOOM", payload: state.zoom - 0.1 }), "aria-label": "Zoom out" }, "\u2212"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: fit, "aria-label": "Fit canvas" }, "Fit"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "SET_ZOOM", payload: state.zoom + 0.1 }), "aria-label": "Zoom in" }, "\uFF0B")), /* @__PURE__ */ import_react13.default.createElement("div", { className: "topbar-right" }, /* @__PURE__ */ import_react13.default.createElement("span", { className: `save-state ${saveStatus.toLowerCase().replace(/\W/g, "-")}` }, /* @__PURE__ */ import_react13.default.createElement("i", null), saveStatus), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => setPreview(!preview) }, preview ? "Edit" : "Preview"), /* @__PURE__ */ import_react13.default.createElement("button", { className: "primary", onClick: publish }, "Publish"))), /* @__PURE__ */ import_react13.default.createElement("div", { className: "studio-main" }, /* @__PURE__ */ import_react13.default.createElement("nav", { className: "tool-rail", "aria-label": "Studio tools" }, rails.map(([id, icon, label]) => /* @__PURE__ */ import_react13.default.createElement("button", { key: id, className: rail === id && leftOpen ? "active" : "", onClick: () => chooseRail(id), title: label }, /* @__PURE__ */ import_react13.default.createElement("b", null, icon), /* @__PURE__ */ import_react13.default.createElement("span", null, label)))), leftOpen && /* @__PURE__ */ import_react13.default.createElement("aside", { className: "studio-sidebar-left" }, /* @__PURE__ */ import_react13.default.createElement("header", null, /* @__PURE__ */ import_react13.default.createElement("div", null, /* @__PURE__ */ import_react13.default.createElement("b", null, rails.find((x) => x[0] === rail)?.[2]), /* @__PURE__ */ import_react13.default.createElement("small", null, "Workspace")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => setLeftOpen(false), "aria-label": "Close tool panel" }, "\xD7")), panel), /* @__PURE__ */ import_react13.default.createElement("main", { className: `canvas-workspace ${preview ? "preview-mode" : ""}`, onClick: (e) => {
       if (e.target === e.currentTarget) dispatch({ type: "SELECT_NODE", payload: [] });
+    }, onWheel: (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        dispatch({ type: "SET_ZOOM", payload: state.zoom + (e.deltaY > 0 ? -0.05 : 0.05) });
+      }
+    }, onPointerDown: (e) => {
+      if (e.button === 1) {
+        const el = e.currentTarget;
+        pan.current = { x: e.clientX, y: e.clientY, left: el.scrollLeft, top: el.scrollTop };
+        el.setPointerCapture(e.pointerId);
+      }
+    }, onPointerMove: (e) => {
+      if (pan.current) {
+        const el = e.currentTarget;
+        el.scrollLeft = pan.current.left - (e.clientX - pan.current.x);
+        el.scrollTop = pan.current.top - (e.clientY - pan.current.y);
+      }
+    }, onPointerUp: () => {
+      pan.current = null;
     }, onContextMenu: (e) => {
       if (state.selectedNodeIds.length) {
         e.preventDefault();
         setContext({ x: e.clientX, y: e.clientY });
       }
     }, onDragEnter: (e) => {
-      if (Array.from(e.dataTransfer.types).includes("Files")) {
+      if (Array.from(e.dataTransfer.types).some((t) => t === "Files" || t === "application/x-zylora-node")) {
         e.preventDefault();
         setFileDrop(true);
       }
     }, onDragOver: (e) => {
-      if (Array.from(e.dataTransfer.types).includes("Files")) e.preventDefault();
+      if (Array.from(e.dataTransfer.types).some((t) => t === "Files" || t === "application/x-zylora-node")) e.preventDefault();
     }, onDragLeave: (e) => {
       if (e.currentTarget === e.target) setFileDrop(false);
-    }, onDrop: (e) => {
-      e.preventDefault();
-      setFileDrop(false);
-      const file = e.dataTransfer.files?.[0];
-      if (file?.type.startsWith("image/")) uploadDropped(file, e.clientX, e.clientY);
-      else if (file) setToast("Only image files can be added to the canvas");
-    } }, fileDrop && /* @__PURE__ */ import_react13.default.createElement("div", { className: "canvas-file-drop", "aria-live": "polite" }, "Drop to add image"), /* @__PURE__ */ import_react13.default.createElement("div", { className: "canvas-rulers" }, /* @__PURE__ */ import_react13.default.createElement("span", null, Math.round(width * state.zoom), " px"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: fit }, "Fit"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "SET_ZOOM", payload: 1 }) }, "100%")), /* @__PURE__ */ import_react13.default.createElement("div", { className: "artboard-wrap", style: { width: width * state.zoom } }, /* @__PURE__ */ import_react13.default.createElement("div", { className: "studio-canvas", style: { width, height: "auto", minHeight: 900, transform: `scale(${state.zoom})` } }, page ? /* @__PURE__ */ import_react13.default.createElement(CanvasNode, { nodeId: page.rootNodeId }) : /* @__PURE__ */ import_react13.default.createElement("div", { className: "canvas-loading" }, /* @__PURE__ */ import_react13.default.createElement("span", null), /* @__PURE__ */ import_react13.default.createElement("p", null, "Preparing your canvas\u2026")))), state.snapLines.map((line, i) => /* @__PURE__ */ import_react13.default.createElement("div", { key: i, className: `snap-guide ${line.orientation}`, style: line.orientation === "vertical" ? { left: line.position * state.zoom } : { top: line.position * state.zoom } })), /* @__PURE__ */ import_react13.default.createElement("footer", { className: "canvas-status" }, /* @__PURE__ */ import_react13.default.createElement("span", null, state.selectedNodeIds.length ? `${state.selectedNodeIds.length} selected` : "Ready"), /* @__PURE__ */ import_react13.default.createElement("span", null, state.currentBreakpoint, " \xB7 ", width, "px \xB7 ", Math.round(state.zoom * 100), "%"))), /* @__PURE__ */ import_react13.default.createElement("div", { className: "studio-advanced-anchor", "aria-hidden": "true" })), context && /* @__PURE__ */ import_react13.default.createElement("div", { className: "context-menu", style: { left: context.x, top: context.y }, role: "menu" }, /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "CUT_SELECTED" }) }, "Cut ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Ctrl X")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "COPY_SELECTED" }) }, "Copy ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Ctrl C")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "PASTE" }), disabled: !state.clipboard }, "Paste ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Ctrl V")), /* @__PURE__ */ import_react13.default.createElement("hr", null), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "DUPLICATE_SELECTED" }) }, "Duplicate ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Ctrl D")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "DELETE_SELECTED" }) }, "Delete ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Del")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "GROUP_SELECTED" }), disabled: state.selectedNodeIds.length < 2 }, "Group"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "UNGROUP_SELECTED" }), disabled: state.selectedNodeIds.length !== 1 }, "Ungroup"), /* @__PURE__ */ import_react13.default.createElement("hr", null), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => state.selectedNodeIds[0] && dispatch({ type: "REORDER_NODE", payload: { nodeId: state.selectedNodeIds[0], direction: "front" } }) }, "Bring to front"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => state.selectedNodeIds[0] && dispatch({ type: "REORDER_NODE", payload: { nodeId: state.selectedNodeIds[0], direction: "back" } }) }, "Send to back")), toast && /* @__PURE__ */ import_react13.default.createElement("div", { className: "studio-toast", role: "status" }, /* @__PURE__ */ import_react13.default.createElement("span", null, toast), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => setToast("") }, "\xD7"))));
+    }, onDrop: onWorkspaceDrop }, fileDrop && /* @__PURE__ */ import_react13.default.createElement("div", { className: "canvas-file-drop", "aria-live": "polite" }, "Drop to add to your page"), /* @__PURE__ */ import_react13.default.createElement("div", { className: "canvas-rulers" }, /* @__PURE__ */ import_react13.default.createElement("span", null, Math.round(width * state.zoom), " px"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: fit }, "Fit"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "SET_ZOOM", payload: 1 }) }, "100%")), /* @__PURE__ */ import_react13.default.createElement("div", { className: "artboard-wrap", style: { width: width * state.zoom } }, /* @__PURE__ */ import_react13.default.createElement("div", { className: "studio-canvas", style: { width, height: "auto", minHeight: 900, transform: `scale(${state.zoom})` } }, page ? /* @__PURE__ */ import_react13.default.createElement(CanvasNode, { nodeId: page.rootNodeId }) : /* @__PURE__ */ import_react13.default.createElement("div", { className: "canvas-loading" }, /* @__PURE__ */ import_react13.default.createElement("span", null), /* @__PURE__ */ import_react13.default.createElement("p", null, "Preparing your canvas\u2026")))), state.snapLines.map((line, i) => /* @__PURE__ */ import_react13.default.createElement("div", { key: i, className: `snap-guide ${line.orientation}`, style: line.orientation === "vertical" ? { left: line.position * state.zoom } : { top: line.position * state.zoom } })), /* @__PURE__ */ import_react13.default.createElement("footer", { className: "canvas-status" }, /* @__PURE__ */ import_react13.default.createElement("span", null, state.selectedNodeIds.length ? `${state.selectedNodeIds.length} selected` : "Click an item to edit"), /* @__PURE__ */ import_react13.default.createElement("span", null, state.currentBreakpoint, " \xB7 ", width, "px \xB7 ", Math.round(state.zoom * 100), "%")))), /* @__PURE__ */ import_react13.default.createElement("nav", { className: "studio-mobile-nav", "aria-label": "Mobile Studio tools" }, rails.map(([id, icon, label]) => /* @__PURE__ */ import_react13.default.createElement("button", { key: id, className: rail === id && leftOpen ? "active" : "", onClick: () => chooseRail(id), title: label }, /* @__PURE__ */ import_react13.default.createElement("b", null, icon), /* @__PURE__ */ import_react13.default.createElement("span", null, label)))), context && /* @__PURE__ */ import_react13.default.createElement("div", { className: "context-menu", style: { left: context.x, top: context.y }, role: "menu" }, /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "CUT_SELECTED" }) }, "Cut ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Ctrl X")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "COPY_SELECTED" }) }, "Copy ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Ctrl C")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "PASTE" }), disabled: !state.clipboard }, "Paste ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Ctrl V")), /* @__PURE__ */ import_react13.default.createElement("hr", null), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "DUPLICATE_SELECTED" }) }, "Duplicate ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Ctrl D")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "DELETE_SELECTED" }) }, "Delete ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Del")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "GROUP_SELECTED" }), disabled: state.selectedNodeIds.length < 2 }, "Group"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "UNGROUP_SELECTED" }), disabled: state.selectedNodeIds.length !== 1 }, "Ungroup"), /* @__PURE__ */ import_react13.default.createElement("hr", null), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => state.selectedNodeIds[0] && dispatch({ type: "REORDER_NODE", payload: { nodeId: state.selectedNodeIds[0], direction: "front" } }) }, "Bring forward"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => state.selectedNodeIds[0] && dispatch({ type: "REORDER_NODE", payload: { nodeId: state.selectedNodeIds[0], direction: "back" } }) }, "Send backward")), toast && /* @__PURE__ */ import_react13.default.createElement("div", { className: "studio-toast", role: "status" }, /* @__PURE__ */ import_react13.default.createElement("span", null, toast), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => setToast("") }, "\xD7"))));
   }
 
   // studio/index.tsx
