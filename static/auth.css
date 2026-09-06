@@ -11,6 +11,7 @@
   --zy-green:#1f9d55;
   --zy-red:#d92d20;
 }
+.google-btn{background-image:url('/static/google-g-logo.svg')}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display",Inter,-apple-system,sans-serif;color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased}
 body{display:grid;grid-template-columns:minmax(380px,.95fr) minmax(480px,1.05fr);min-height:100vh}

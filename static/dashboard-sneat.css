@@ -4535,3 +4535,4 @@ table tr:hover td {
 [hidden] {
   display: none !important;
 }
+.rail.sneat-sidebar{overflow:hidden!important}.rail.sneat-sidebar>nav{min-height:0!important;overflow-y:auto!important}.zylora-logo-mark{display:none!important}.zylora-logo-type{font-size:23px;line-height:1;font-weight:700;letter-spacing:-.06em;color:#111211}

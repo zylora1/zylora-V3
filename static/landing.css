@@ -1,4 +1,6 @@
 @import "/static/public-theme.css";
+.hero h1{font-size:clamp(58px,9vw,142px);line-height:.86}
+@media(max-width:650px){.hero h1{font-size:clamp(52px,16vw,78px)}}
 
 /* ==========================================================================
    ZYLORA EDITORIAL RECOVERY STYLESHEET (landing.css)
