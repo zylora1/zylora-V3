@@ -2,6 +2,7 @@ from __future__ import annotations
 from contextlib import asynccontextmanager
 import asyncio
 import time
+import os
 from html import escape
 from pathlib import Path
 from datetime import datetime, timezone
@@ -11,6 +12,7 @@ from urllib.parse import urlparse
 import mimetypes
 
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, Response, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
@@ -90,7 +92,30 @@ async def lifespan(app: FastAPI):
         try: await maintenance
         except asyncio.CancelledError: pass
 
+def _configured_cors_origins() -> list[str]:
+    """Return explicit browser origins allowed to call the API with cookies.
+
+    The dashboard is deployed as a separate Railway service, so its origin must
+    be explicitly allowed in production.  Never use a wildcard with credentials;
+    development-only localhost origins are intentionally excluded from production.
+    """
+    raw = os.getenv('CORS_ALLOWED_ORIGINS', '')
+    candidates = [settings.app_url, settings.super_admin_app_url]
+    candidates.extend(raw.split(','))
+    if settings.app_env != 'production':
+        candidates.extend(['http://127.0.0.1:5174', 'http://localhost:5174'])
+    origins = {str(value).strip().rstrip('/') for value in candidates if str(value or '').strip()}
+    return sorted(origin for origin in origins if origin.startswith(('http://', 'https://')))
+
+
 app=FastAPI(title='Zylora',docs_url='/api/docs' if settings.app_env!='production' else None,redoc_url=None,lifespan=lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_configured_cors_origins(),
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
 app.include_router(router)
 app.include_router(extended_router)
 app.include_router(gap_router)
