@@ -3,8 +3,8 @@
 ## Release
 
 - Starting SHA: `de9cd19377ebda7925d70ebc4efe366d205196e2`
-- Final SHA: pending final commit
-- Deployed SHA: pending Railway verification
+- Final SHA: `067c6e9cba24e40fd838656fbab385c843d43e98`
+- Deployed SHA: `067c6e9cba24e40fd838656fbab385c843d43e98`
 - Branch: `main`
 - Scope: Canva-style Studio interaction completion only; unrelated provider certification was not re-audited.
 
@@ -75,9 +75,11 @@ The journey covers Studio loading, ten workspaces, structured section insertion,
 
 ## Production deployment
 
-- Railway redeployment: pending final commit/push verification.
+- Railway redeployment: **SUCCESS** — deployment `0971b9a2-94fb-458a-b99c-242f32700f09`, branch `main`, exact commit above.
+- Production health: `GET https://zylora-api-production.up.railway.app/api/health` returned `200 {"status":"ok"}` after deployment.
+- Public smoke: `/`, `/templates`, `/choose-plan`, `/api/templates`, and `/static/studio.js` returned HTTP 200. `/studio` without a site ID returned the expected 404.
+- Startup logs showed application startup complete and no migration/import/storage error. Railway service configuration used the existing Dockerfile, pre-deploy migration command `python -m scripts.run_migrations`, and health path `/api/health`.
 - Authenticated live production Studio verification: **BLOCKED** unless a safe production account/test path is available; no Turnstile bypass was used.
-- Public live smoke and deployed SHA must be recorded after the final commit is pushed.
 
 ## Remaining Studio limitations
 
@@ -87,4 +89,4 @@ The journey covers Studio loading, ten workspaces, structured section insertion,
 
 ## Verdict
 
-**CONDITIONALLY CERTIFIED for the tested Studio implementation scope.** The core Canva-style direct-manipulation contract is implemented and empirically verified in all three browser engines. Global production certification remains contingent on the exact Railway deployment SHA, authenticated live verification, and resolution of the unrelated full-suite failures.
+**CONDITIONALLY CERTIFIED for the tested Studio implementation scope.** The core Canva-style direct-manipulation contract is implemented and empirically verified in all three browser engines, and the exact commit is deployed successfully on Railway with a healthy public service. Authenticated Railway Studio verification remains blocked by the available production test path, scroll-triggered effects remain outside this pass, and unrelated full-suite failures remain unresolved.
