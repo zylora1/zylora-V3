@@ -103,3 +103,13 @@ input::placeholder{color:#a1a1a6}
   display: inline-block;
   line-height: 1;
 }
+
+/* Shared family polish for auth utility pages. */
+body:has(.formpane) { background: #f5f7fb; color: #111827; }
+body:has(.formpane) .art { background: linear-gradient(145deg,#eaf2ff 0%,#f7f8fc 58%,#eeeaff 100%); color: #111827; }
+body:has(.formpane) .formpane { background: #f5f7fb; }
+body:has(.formpane) .box { border: 1px solid #e6eaf0; border-radius: 18px; box-shadow: 0 20px 60px rgba(26,44,78,.08); }
+body:has(.formpane) .box h2 { color: #111827; letter-spacing: -.04em; }
+body:has(.formpane) input { border-color: #dce3ed; border-radius: 10px; background: #fff; }
+body:has(.formpane) input:focus { border-color: #2764e7; box-shadow: 0 0 0 3px rgba(39,100,231,.12); }
+body:has(.formpane) .submit { border-radius: 10px; background: #2764e7; }

@@ -47,6 +47,7 @@ from .link_icons import apply_footer_links_html, links_from_seo_json
 from .seo_engine import (active_custom_domain, all_indexable_pages, apply_seo_html, canonical_for_page, indexnow_key_matches,
     page_key_for_path, page_path, published_site_view, resolve_redirect, site_llms, site_origin, site_robots, site_sitemap,
     seo_document, structured_data_for_page)
+from .public_seo import router as public_seo_router, PUBLIC_SEO_PATHS
 
 def _public_base_url() -> str:
     base=settings.app_url.rstrip('/')
@@ -551,6 +552,8 @@ def _platform_sitemap_entries() -> list[dict]:
         {'loc':base+'/freelancers','lastmod':freelancers_lastmod},
         {'loc':base+'/blog','lastmod':blog_lastmod},
     ]
+    rows.extend({'loc':base+path,'lastmod':_path_lastmod(ROOT/'app'/'public_seo.py')} for path in PUBLIC_SEO_PATHS)
+    rows.extend({'loc':base+'/templates/'+str(template['slug']),'lastmod':_template_catalogue_lastmod()} for template in public_templates())
     for profile in freelancers:
         rows.append({'loc':f"{base}/freelancers/{profile['slug']}",'lastmod':_normalise_lastmod(profile.get('updated_at'))})
     for post in posts:
@@ -612,7 +615,9 @@ def _sitemap_chunks(rows: list[dict]) -> list[list[dict]]:
 @app.get('/robots.txt',response_class=PlainTextResponse,include_in_schema=False)
 def robots():
     base=_public_base_url()
-    private='Disallow: /dashboard\nDisallow: /editor/\nDisallow: /api/\n'
+    private=('Disallow: /dashboard\nDisallow: /super-admin\nDisallow: /editor/\nDisallow: /api/\n'
+        'Disallow: /login\nDisallow: /signup\nDisallow: /forgot-password\nDisallow: /reset-password\n'
+        'Disallow: /verify-email\nDisallow: /accept-transfer\n')
     return (
         'User-agent: *\nAllow: /\n'+private+'\n'
         'User-agent: OAI-SearchBot\nAllow: /\n'+private+'\n'
@@ -646,3 +651,7 @@ def sitemap_part(part:int):
 def manifest(): return FileResponse(ROOT/'static'/'manifest.webmanifest',media_type='application/manifest+json')
 @app.get('/llms.txt',response_class=PlainTextResponse,include_in_schema=False)
 def llms(): return (ROOT/'static'/'llms.txt').read_text(encoding='utf-8').replace('{{APP_URL}}',_public_base_url().rstrip('/'))
+
+# Registered last so all existing application, editor, template and API routes
+# remain authoritative; the SEO router only answers its explicit public paths.
+app.include_router(public_seo_router)
