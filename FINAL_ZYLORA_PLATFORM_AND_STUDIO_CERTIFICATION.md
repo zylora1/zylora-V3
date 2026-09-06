@@ -14,7 +14,10 @@ The repository-side release gates completed successfully for the current source 
 - Target Railway service: `zylora-app`
 - Railway URL: https://zylora-api-production.up.railway.app
 - Existing deployed baseline: `6821cba252770522b2daf141cd25c544a5abf09c`, deployment `1f951175-8a5c-4e7a-a9f8-6bb03dc0885c`
-- Final commit/origin/Railway SHA: **pending this release commit and deployment**
+- Final implementation commit: `677f903c6bb522b0e13b0920315a879d3e45e4eb`
+- `origin/main`: `677f903c6bb522b0e13b0920315a879d3e45e4eb`
+- Railway deployment SHA: `677f903c6bb522b0e13b0920315a879d3e45e4eb`
+- Railway deployment ID: `a1976d5b-e61e-4b2f-b06c-27640a5b5d38` — `SUCCESS`
 
 ## P0 accidental-movement gate
 
@@ -66,7 +69,7 @@ Targeted evidence: `6 passed` for Studio renderer plus Sales Assistant owner-bil
 
 ## Production deployment status
 
-The source changes are ready for explicit staging and commit. Railway deployment and remote SHA verification are intentionally not claimed in this artifact until the commit is pushed and Railway reaches terminal `SUCCESS` for that exact SHA.
+Railway auto-deployed the GitHub `main` push for the exact implementation SHA. The deployment reached terminal `SUCCESS`; `/api/health` returned HTTP 200 with `{"status":"ok"}`. Public smoke returned HTTP 200 for `/`, `/pricing`, and `/templates`.
 
 ## Known blockers and limitations
 
@@ -76,4 +79,4 @@ The source changes are ready for explicit staging and commit. Railway deployment
 
 ## Final certification statement
 
-The repository changes have passed the local release gates and the Studio P0 interaction gate. The final public-production verdict remains **CONDITIONALLY CERTIFIED** until the exact committed SHA is pushed, deployed to Railway, and its deployment plus health status are verified. No unsupported production claim is made.
+The exact SHA `677f903c6bb522b0e13b0920315a879d3e45e4eb` is deployed and healthy on Railway. The platform remains **CONDITIONALLY CERTIFIED** because authenticated live production journeys still require a controlled account/Turnstile path; no unsupported production claim is made.
