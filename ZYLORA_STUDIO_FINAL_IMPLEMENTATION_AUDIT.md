@@ -75,7 +75,7 @@ The journey covers Studio loading, ten workspaces, structured section insertion,
 
 ## Production deployment
 
-- Railway redeployment: **SUCCESS** — deployment `0971b9a2-94fb-458a-b99c-242f32700f09`, branch `main`, exact commit above.
+- Railway redeployment: **SUCCESS** — deployment `d57f8474-bec8-4f6e-a45a-32fee3dbe3f2`, branch `main`, exact commit above.
 - Production health: `GET https://zylora-api-production.up.railway.app/api/health` returned `200 {"status":"ok"}` after deployment.
 - Public smoke: `/`, `/templates`, `/choose-plan`, `/api/templates`, and `/static/studio.js` returned HTTP 200. `/studio` without a site ID returned the expected 404.
 - Startup logs showed application startup complete and no migration/import/storage error. Railway service configuration used the existing Dockerfile, pre-deploy migration command `python -m scripts.run_migrations`, and health path `/api/health`.
