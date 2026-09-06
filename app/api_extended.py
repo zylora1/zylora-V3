@@ -398,6 +398,16 @@ def _platform_blog_create(admin: dict, payload: BlogIn):
 
 # Site-level/customer blog CMS intentionally does not exist. Zylora's public
 # platform blog is managed exclusively through the SUPER_ADMIN endpoints below.
+@router.api_route('/sites/{site_id}/blog', methods=['GET', 'POST'])
+def customer_blog_unavailable(site_id: str, request: Request):
+    """Keep customer blog semantics explicit instead of leaking a generic 405.
+
+    Customer sites deliberately do not expose a blog CMS; the platform blog is
+    managed through the SUPER_ADMIN routes below. An explicit 404 makes that
+    contract stable for both reads and attempted writes and avoids suggesting
+    that a method exists but is merely disallowed.
+    """
+    raise HTTPException(status_code=404, detail='Customer-site blog is not available')
 
 # --------------------------- Google Sheets sync ------------------------------
 class GoogleSheetIn(BaseModel):
