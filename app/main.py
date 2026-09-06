@@ -35,6 +35,7 @@ from .config import ROOT, settings, validate_production_settings
 from .db import SessionLocal, migrate
 from .bootstrap import bootstrap_super_admin
 from .security import current_user
+from .template_catalogue import public_templates
 from .templates import BY_SLUG, TEMPLATES, render_template, render_template_page
 from .plans import all_plans
 from .billing_regions import offer_for_request
@@ -114,7 +115,7 @@ def favicon():
 
 @app.get('/template-assets/{slug}/{asset_path:path}',include_in_schema=False)
 def template_asset(slug:str,asset_path:str):
-    if slug not in {str(t.get('slug')) for t in TEMPLATES}: raise HTTPException(404,'Template asset not found')
+    if slug not in {str(t.get('slug')) for t in public_templates()}: raise HTTPException(404,'Template asset not found')
     project=(ROOT/'template_projects'/slug).resolve()
     # Current template projects store portable assets at <project>/assets. Keep fallbacks for double-nested or source assets.
     for rel in (Path('assets'),Path('public')/'assets',Path('assets')/'assets',Path('assets')/'source'):
@@ -277,6 +278,17 @@ def _landing_html(request: Request) -> str:
     for key,value in values.items(): raw=raw.replace(key,str(value))
     return raw
 
+def _google_auth_html(filename: str) -> HTMLResponse:
+    raw=(ROOT/'static'/filename).read_text(encoding='utf-8')
+    raw=raw.replace('/static/auth.css"','/static/auth.css?v=20260902-google1"')
+    raw=raw.replace('</head>','<link rel="icon" href="/static/favicon.svg?v=20260902-brand1" type="image/svg+xml"></head>',1)
+    return HTMLResponse(raw)
+
+def _dashboard_html() -> HTMLResponse:
+    raw=(ROOT/'static'/'dashboard.html').read_text(encoding='utf-8')
+    raw=raw.replace('</head>','<link rel="icon" href="/static/favicon.svg?v=20260902-brand1" type="image/svg+xml"></head>',1)
+    return HTMLResponse(raw)
+
 @app.get('/landing.css',include_in_schema=False)
 def root_landing_css(): return FileResponse(ROOT/'static'/'landing.css',media_type='text/css')
 @app.get('/auth.css',include_in_schema=False)
@@ -294,10 +306,16 @@ def health():
 
 @app.get('/',include_in_schema=False)
 def home(request: Request): return HTMLResponse(_landing_html(request))
+@app.get('/admin',include_in_schema=False)
+def admin_entry(request: Request):
+    user=current_user(request)
+    if user.get('role')!='SUPER_ADMIN': raise HTTPException(403,'Admin only')
+    if settings.super_admin_app_url: return RedirectResponse(settings.super_admin_app_url,status_code=302)
+    return HTMLResponse('<!doctype html><title>Zylora Admin</title><h1>SUPER_ADMIN_APP_URL is not configured.</h1>',status_code=503)
 @app.get('/login',include_in_schema=False)
-def login(): return FileResponse(ROOT/'static'/'login.html')
+def login(): return _google_auth_html('login.html')
 @app.get('/signup',include_in_schema=False)
-def signup(): return FileResponse(ROOT/'static'/'signup.html')
+def signup(): return _google_auth_html('signup.html')
 @app.get('/forgot-password',include_in_schema=False)
 def forgot_password(): return FileResponse(ROOT/'static'/'forgot-password.html')
 @app.get('/reset-password',include_in_schema=False)
@@ -316,10 +334,12 @@ def _require_super_admin(request: Request) -> dict:
 
 @app.get('/dashboard',include_in_schema=False)
 def dashboard(request: Request):
-    u = current_user(request)
-    if u.get('role') == 'SUPER_ADMIN' and request.query_params.get('stay') != '1':
-        return RedirectResponse('/super-admin', status_code=303)
-    return FileResponse(ROOT/'static'/'dashboard.html')
+    user=current_user(request)
+    if user.get('role')=='SUPER_ADMIN':
+        if settings.app_env=='production' and settings.super_admin_app_url:
+            return RedirectResponse(settings.super_admin_app_url, status_code=302)
+        return RedirectResponse('/super-admin', status_code=302)
+    return _dashboard_html()
 
 @app.get('/super-admin',include_in_schema=False)
 @app.get('/super-admin/{subpath:path}',include_in_schema=False)

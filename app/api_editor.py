@@ -606,7 +606,7 @@ def seo_ai_assist(site_id: str, payload: SeoAiAssistIn, request: Request):
             'description':(seo.get('site') or {}).get('description') or site.get('description'),
             'page':page,'page_text':page_text,
         }
-        try: result=ai_seo_metadata(ctx)
+        try: result=ai_seo_metadata(ctx,user_id=u['id'],site_id=site_id)
         except Exception as exc:
             record_operational_event('AI','AI_SEO_UNAVAILABLE',safe_exception_summary(exc),severity='WARNING',user_id=u['id'],site_id=site_id,dedupe_minutes=2)
             raise HTTPException(502,detail={'code':'AI_SEO_UNAVAILABLE','message':'AI SEO assistance is temporarily unavailable. Please try again.'})

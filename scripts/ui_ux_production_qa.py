@@ -87,7 +87,12 @@ def inline_local_styles(html: str) -> str:
         rel = match.group(1).split("/static/", 1)[-1]
         target = STATIC / rel
         return f"<style>{target.read_text(encoding='utf-8')}</style>" if target.exists() else ""
-    html = re.sub(r'<link\b[^>]*href=["\'](/static/[^"\']+\.css)["\'][^>]*?/?>', repl, html, flags=re.I)
+    html = re.sub(
+        r'<link\b[^>]*href=["\'](/static/[^"\'?]+\.css)(?:\?[^"\']*)?["\'][^>]*?/?>',
+        repl,
+        html,
+        flags=re.I,
+    )
     html = re.sub(r'<link[^>]+href=["\']https://fonts\.googleapis\.com/[^>]+>', "", html, flags=re.I)
     html = re.sub(r'<link[^>]+href=["\']https://fonts\.gstatic\.com[^>]*>', "", html, flags=re.I)
     return html

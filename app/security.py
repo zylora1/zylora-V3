@@ -70,6 +70,19 @@ def require_csrf(request: Request, user: dict, x_csrf_token: str | None = Header
         raise HTTPException(403, 'CSRF validation failed')
 
 _RATE: dict[str, list[float]] = {}
+
+
+def session_cookie_samesite() -> str:
+    """Allow the deliberate separate production admin origin to send sessions.
+
+    State-changing endpoints still require the per-session CSRF token. Normal
+    application sessions retain the stricter Lax default.
+    """
+    if settings.app_env == 'production' and settings.super_admin_app_url:
+        return 'none'
+    return 'lax'
+
+
 def rate_limit(key: str, limit: int, window_seconds: int):
     now = time.time()
     values = [t for t in _RATE.get(key, []) if now - t < window_seconds]
@@ -114,4 +127,11 @@ def durable_rate_limit(key: str, limit: int, window_seconds: int):
             raise HTTPException(429,'Too many requests')
 
 def clear_rate_limits() -> None:
+    """Clear only process-local limiter state.
+
+    Durable limits deliberately live in the database so a process restart (or a
+    second application replica) cannot reset an abuse window.  Test fixtures
+    that need a clean database explicitly clear ``rate_limit_buckets`` as part
+    of their database reset.
+    """
     _RATE.clear()

@@ -21,7 +21,7 @@ from .providers import (
     razorpay_create_subscription, razorpay_verify_subscription_payment, razorpay_subscription_signature,
     razorpay_get_subscription, razorpay_cancel_subscription, razorpay_get_payment,
 )
-from .security import hash_password, new_session, durable_rate_limit
+from .security import hash_password, new_session, durable_rate_limit, session_cookie_samesite
 from .settings_store import get_system_setting
 from .billing_regions import offer_for_request, regional_price, provider_plan_id, region_for_country, normalize_country, save_billing_country, INDIA, INTERNATIONAL
 from .credits import ensure_wallet, reset_monthly_for_plan, grant_topup, wallet_summary, TOPUP_PACKS
@@ -29,6 +29,7 @@ from .seo_engine import enqueue_site_change, page_path, site_origin
 from .media import get_asset
 from .operations import safe_exception_summary, record_operational_event
 from .studio_document import validate_studio_document
+from .template_catalogue import admin_templates as catalogue_admin_templates, set_template_published
 
 router = APIRouter(prefix='/api')
 
@@ -199,16 +200,16 @@ def google_callback(state: str, code: str|None=None, mock_email: str|None=None):
     with SessionLocal.begin() as db:
         user=db.execute(text('SELECT * FROM users WHERE google_sub=:s OR lower(email)=lower(:e) LIMIT 1'),{'s':sub,'e':email}).mappings().first()
         if user:
-            uid=user['id']; needs_plan=not bool(user.get('plan_selected',1))
+            uid=user['id']; needs_plan=not bool(user.get('plan_selected',1)); user_role=user.get('role') or 'USER'
             db.execute(text('UPDATE users SET google_sub=:s,email_verified=1,name=:n,profile_image_url=:pic,updated_at=:a WHERE id=:u'),{'s':sub,'n':name,'pic':picture,'a':now_iso(),'u':uid})
         else:
-            uid=str(uuid4()); needs_plan=True; pw=hash_password(secrets.token_urlsafe(48))
+            uid=str(uuid4()); needs_plan=True; user_role='USER'; pw=hash_password(secrets.token_urlsafe(48))
             db.execute(text("INSERT INTO users(id,email,password_hash,name,role,plan,plan_selected,ai_credits,email_verified,google_sub,profile_image_url,updated_at,created_at) VALUES (:i,:e,:p,:n,'USER','FREE',0,20,1,:g,:pic,:c,:c)"),{'i':uid,'e':email,'p':pw,'n':name,'g':sub,'pic':picture,'c':now_iso()})
             ensure_wallet(db,uid,'FREE',int(get_plan('FREE').get('signup_bonus_credits',5)))
             db.execute(text('INSERT INTO notification_settings(id,user_id,site_id,email_to,updated_at,created_at) VALUES (:i,:u,NULL,:e,:c,:c)'),{'i':str(uuid4()),'u':uid,'e':email,'c':now_iso()})
     token,csrf,_=new_session(uid)
-    target=(row['redirect_to'] or '/dashboard'); resp=RedirectResponse(target,status_code=302)
-    resp.set_cookie('zylora_session',token,httponly=True,samesite='lax',secure=settings.app_env=='production',max_age=settings.session_ttl_hours*3600)
+    target=(settings.super_admin_app_url or '/admin') if user_role=='SUPER_ADMIN' else (row['redirect_to'] or '/dashboard'); resp=RedirectResponse(target,status_code=302)
+    resp.set_cookie('zylora_session',token,httponly=True,samesite=session_cookie_samesite(),secure=settings.app_env=='production',max_age=settings.session_ttl_hours*3600)
     resp.set_cookie('zylora_oauth_csrf',csrf,httponly=False,samesite='lax',secure=settings.app_env=='production',max_age=300)
     _audit(uid,'GOOGLE_LOGIN','user',uid)
     return resp
@@ -1088,12 +1089,23 @@ def admin_user_detail(user_id: str, request: Request):
         wallet = db.execute(text('SELECT * FROM credit_wallets WHERE user_id=:u'), {'u': user_id}).mappings().first()
         recent_leads = [dict(r) for r in db.execute(text('SELECT l.id,l.name,l.email,l.source,l.created_at FROM leads l JOIN sites s ON s.id=l.site_id WHERE s.user_id=:u ORDER BY l.created_at DESC LIMIT 10'), {'u': user_id}).mappings().all()]
         recent_audit = [dict(r) for r in db.execute(text('SELECT action,object_type,object_id,created_at FROM audit_log WHERE user_id=:u ORDER BY created_at DESC LIMIT 15'), {'u': user_id}).mappings().all()]
+        stats={
+            'sites':len(sites),
+            'live_sites':sum(1 for site in sites if site.get('status')=='LIVE'),
+            'leads':int(db.execute(text('SELECT count(*) FROM leads l JOIN sites s ON s.id=l.site_id WHERE s.user_id=:u'),{'u':user_id}).scalar_one()),
+            'appointments':int(db.execute(text('SELECT count(*) FROM appointments a JOIN sites s ON s.id=a.site_id WHERE s.user_id=:u'),{'u':user_id}).scalar_one()),
+            'emails_sent':int(db.execute(text("SELECT count(*) FROM notification_deliveries WHERE user_id=:u AND channel='EMAIL' AND status='SENT'"),{'u':user_id}).scalar_one()),
+            'whatsapp_sent':int(db.execute(text("SELECT count(*) FROM notification_deliveries WHERE user_id=:u AND channel='WHATSAPP' AND status='SENT'"),{'u':user_id}).scalar_one()),
+            'chatbot_cost_micros':int(db.execute(text('SELECT COALESCE(sum(estimated_cost_micros),0) FROM assistant_usage au JOIN sites s ON s.id=au.site_id WHERE s.user_id=:u'),{'u':user_id}).scalar_one() or 0),
+            'website_cost_micros':int(db.execute(text("SELECT COALESCE(sum(estimated_cost_micros),0) FROM ai_api_usage WHERE user_id=:u AND surface='WEBSITE'"),{'u':user_id}).scalar_one() or 0),
+        }
     return {
         'user': dict(user_row),
         'sites': sites,
         'wallet': dict(wallet) if wallet else None,
         'recent_leads': recent_leads,
         'recent_audit': recent_audit
+        ,'stats': stats
     }
 
 @router.post('/admin/users/{user_id}/restrict')
@@ -1142,10 +1154,10 @@ def admin_delete_user(user_id: str, request: Request):
 @router.get('/admin/templates')
 def admin_templates(request: Request):
     _admin(request)
-    from .templates import list_all_template_projects
-    return {'items': list_all_template_projects()}
+    return {'items': catalogue_admin_templates()}
 
 class AdminTemplatePatch(BaseModel):
+    published: bool | None = None
     name: str | None = None
     category: str | None = None
     description: str | None = None
@@ -1154,6 +1166,13 @@ class AdminTemplatePatch(BaseModel):
 @router.patch('/admin/templates/{slug}')
 def admin_template_patch(slug: str, payload: AdminTemplatePatch, request: Request):
     admin = _admin(request, True)
+    if payload.published is not None:
+        try:
+            result=set_template_published(slug,payload.published,admin['id'])
+        except KeyError:
+            raise HTTPException(404,'Template not found')
+        _audit(admin['id'],'ADMIN_TEMPLATE_PUBLISH' if payload.published else 'ADMIN_TEMPLATE_UNPUBLISH','template',slug)
+        return result
     from .templates import ROOT, reload_catalogue
     meta_path = ROOT / 'template_projects' / slug / 'metadata.json'
     if not meta_path.exists():
@@ -1171,6 +1190,37 @@ def admin_template_patch(slug: str, payload: AdminTemplatePatch, request: Reques
     reload_catalogue()
     _audit(admin['id'], 'ADMIN_TEMPLATE_UPDATE', 'template', slug, payload.model_dump(exclude_unset=True))
     return {'ok': True, 'template': meta}
+
+@router.get('/admin/analytics')
+def admin_analytics(request: Request, days: int = 30):
+    _admin(request); days=max(7,min(int(days),365))
+    start=(datetime.now(timezone.utc)-timedelta(days=days-1)).date()
+    labels=[(start+timedelta(days=i)).isoformat() for i in range(days)]
+    with SessionLocal() as db:
+        delivery_rows=db.execute(text("""SELECT substr(created_at,1,10) AS day,channel,count(*) AS total
+            FROM notification_deliveries WHERE status='SENT' AND created_at>=:start AND channel IN ('EMAIL','WHATSAPP')
+            GROUP BY substr(created_at,1,10),channel"""),{'start':labels[0]}).mappings().all()
+        cost_rows=db.execute(text("""SELECT substr(created_at,1,10) AS day,COALESCE(sum(estimated_cost_micros),0) AS total
+            FROM ai_api_usage WHERE created_at>=:start AND surface='WEBSITE'
+            GROUP BY substr(created_at,1,10)"""),{'start':labels[0]}).mappings().all()
+        assistant_rows=db.execute(text("""SELECT substr(created_at,1,10) AS day,COALESCE(sum(estimated_cost_micros),0) AS total
+            FROM assistant_usage WHERE created_at>=:start GROUP BY substr(created_at,1,10)"""),{'start':labels[0]}).mappings().all()
+        overview={key:int(db.execute(text(sql)).scalar_one() or 0) for key,sql in {
+            'users':'SELECT count(*) FROM users WHERE role<>\'SUPER_ADMIN\'',
+            'websites':'SELECT count(*) FROM sites',
+            'live_websites':"SELECT count(*) FROM sites WHERE status='LIVE'",
+            'leads':'SELECT count(*) FROM leads',
+        }.items()}
+    daily={day:{'date':day,'emails':0,'whatsapp':0,'chatbot_cost_micros':0,'website_cost_micros':0} for day in labels}
+    for row in delivery_rows:
+        if row['day'] in daily: daily[row['day']]['emails' if row['channel']=='EMAIL' else 'whatsapp']=int(row['total'])
+    for row in cost_rows:
+        if row['day'] in daily: daily[row['day']]['website_cost_micros']+=int(row['total'])
+    for row in assistant_rows:
+        if row['day'] in daily: daily[row['day']]['chatbot_cost_micros']+=int(row['total'])
+    series=list(daily.values())
+    totals={key:sum(int(item[key]) for item in series) for key in ('emails','whatsapp','chatbot_cost_micros','website_cost_micros')}
+    return {'days':days,'overview':overview,'totals':totals,'series':series,'cost_currency':'USD','cost_unit':'micros'}
 
 @router.post('/admin/templates/{slug}/toggle-state')
 def admin_template_toggle_state(slug: str, request: Request):

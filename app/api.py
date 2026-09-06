@@ -8,8 +8,9 @@ from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
 from .db import SessionLocal, now_iso
-from .security import current_user, require_csrf, new_session, hash_password, verify_password, durable_rate_limit
+from .security import current_user, require_csrf, new_session, hash_password, verify_password, durable_rate_limit, session_cookie_samesite
 from .templates import TEMPLATES, BY_SLUG, AI_RUNTIME_SLUG, render_template, render_template_page
+from .template_catalogue import public_templates
 from .providers import ai_generate_site, ai_edit, send_whatsapp, sync_google_sheet_event, plan_site_architecture
 from .notifications import notify
 from .config import settings
@@ -204,7 +205,7 @@ def signup(payload:SignupIn, request:Request, response:Response):
         ensure_wallet(db,uid,'FREE',int(get_plan('FREE').get('signup_bonus_credits',5)))
         db.execute(text('INSERT INTO notification_settings(id,user_id,site_id,email_to,updated_at,created_at) VALUES (:i,:u,NULL,:e,:c,:c)'),{'i':str(uuid4()),'u':uid,'e':str(payload.email).lower(),'c':now_iso()})
     verify_token=issue_auth_token(uid,'VERIFY_EMAIL',str(payload.email).lower())
-    token,csrf,_=new_session(uid); response.set_cookie('zylora_session',token,httponly=True,samesite='lax',secure=settings.app_env=='production',max_age=settings.session_ttl_hours*3600)
+    token,csrf,_=new_session(uid); response.set_cookie('zylora_session',token,httponly=True,samesite=session_cookie_samesite(),secure=settings.app_env=='production',max_age=settings.session_ttl_hours*3600)
     result={'ok':True,'csrf_token':csrf,'email_verification_required':True,'plan_selected':False,'next':'/dashboard'}
     if settings.app_env!='production': result['debug_verification_token']=verify_token
     return result
@@ -215,8 +216,10 @@ def login(payload:LoginIn, request:Request, response:Response):
     durable_rate_limit('login:'+ip,20,900)
     with SessionLocal() as db: row=db.execute(text('SELECT * FROM users WHERE lower(email)=lower(:e)'),{'e':str(payload.email)}).mappings().first()
     if not row or not verify_password(payload.password,row['password_hash']): raise HTTPException(401,'Invalid email or password')
-    token,csrf,_=new_session(row['id']); response.set_cookie('zylora_session',token,httponly=True,samesite='lax',secure=settings.app_env=='production',max_age=settings.session_ttl_hours*3600)
-    return {'ok':True,'csrf_token':csrf,'plan_selected':bool(row.get('plan_selected',1))}
+    token,csrf,_=new_session(row['id']); response.set_cookie('zylora_session',token,httponly=True,samesite=session_cookie_samesite(),secure=settings.app_env=='production',max_age=settings.session_ttl_hours*3600)
+    is_admin=row.get('role')=='SUPER_ADMIN'
+    return {'ok':True,'csrf_token':csrf,'plan_selected':True if is_admin else bool(row.get('plan_selected',1)),
+            'role':row.get('role'),'next':(settings.super_admin_app_url or '/super-admin') if is_admin else '/dashboard'}
 
 @router.post('/auth/logout')
 def logout(request:Request,response:Response):
@@ -229,8 +232,11 @@ def me(request:Request):
     u=_user(request)
     wallet=wallet_summary(u['id'])
     result={k:u[k] for k in ['id','email','name','role','plan','plan_selected','email_verified','csrf_token','account_type','profile_image_url'] if k in u}
-    result['plan_selected']=bool(result.get('plan_selected',1))
-    result['ai_credits']=wallet['total']; result['lead_credits']=wallet['lead_total']; result['credit_wallet']=wallet
+    result['plan_selected']=True if result.get('role')=='SUPER_ADMIN' else bool(result.get('plan_selected',1))
+    if result.get('role')!='SUPER_ADMIN':
+        result['ai_credits']=wallet['total']; result['lead_credits']=wallet['lead_total']; result['credit_wallet']=wallet
+    result['subscription_required']=False if result.get('role')=='SUPER_ADMIN' else not bool(result.get('plan_selected',1))
+    if result.get('role')=='SUPER_ADMIN': result['admin_portal_url']=settings.super_admin_app_url or '/super-admin'
     return result
 
 class ProfilePatch(BaseModel):
@@ -411,7 +417,7 @@ def credits(request:Request):
     u=_user(request); return wallet_summary(u['id'])
 
 @router.get('/templates')
-def templates(): return {'items':TEMPLATES}
+def templates(): return {'items':public_templates()}
 
 @router.get('/sites')
 def sites(request:Request):
@@ -613,7 +619,7 @@ def edit_ai(site_id:str,payload:AiEditIn,request:Request):
             html=instrument_editable_html(render_template_page(s['template_slug'],s,'' if page=='home' else page),page,s['template_slug'])
             context={**s,'assets':list_assets(u['id'],site_id),'editor_nodes':extract_editor_nodes(html)}
             try:
-                operations,provider=generate_operations(context,payload.instruction,page)
+                operations,provider=generate_operations(context,payload.instruction,page,user_id=u['id'],site_id=site_id)
                 if s.get('origin')=='TEMPLATE' and any(validate_operation(op)['type']=='add_section' for op in operations):
                     raise ValueError('Template page structure is fixed; AI cannot add sections to template-origin sites')
                 operations=validate_operations_against_html(html,operations)

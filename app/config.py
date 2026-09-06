@@ -41,6 +41,7 @@ class Settings(BaseSettings):
     super_admin_email: str = ''
     super_admin_mail_id: str = ''
     super_admin_password: str = ''
+    super_admin_app_url: str = ''
 
     @field_validator('super_admin_email', mode='before')
     @classmethod

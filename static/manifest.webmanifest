@@ -1,1 +1,1 @@
-{"name":"Zylora","short_name":"Zylora","start_url":"/","display":"standalone","background_color":"#ffffff","theme_color":"#ffffff"}
+{"name":"Zylora","short_name":"Zylora","start_url":"/","display":"standalone","background_color":"#ffffff","theme_color":"#ffffff","icons":[{"src":"/static/favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}

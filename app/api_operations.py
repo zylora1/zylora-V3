@@ -230,7 +230,7 @@ def sitewide_ai_edit(site_id: str, payload: SitewideAiEditIn, request: Request):
             for page in pages[:20]:
                 html=instrument_editable_html(render_template_page(site['template_slug'],site,'' if page=='home' else page),page,site['template_slug'])
                 context={**site,'assets':assets,'editor_nodes':extract_editor_nodes(html),'sitewide_pages':pages}
-                try: ops,provider=generate_operations(context,payload.instruction,page)
+                try: ops,provider=generate_operations(context,payload.instruction,page,user_id=u['id'],site_id=site_id)
                 except Exception as exc: raise HTTPException(422,f'Could not plan the edit on {page}: {exc}')
                 try:
                     ops=validate_operations_against_html(html,ops); ops=validate_internal_page_links(ops,allowed)
