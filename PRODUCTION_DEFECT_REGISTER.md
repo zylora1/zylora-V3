@@ -23,6 +23,14 @@ No defect is marked FIXED without a rerun of its targeted verification. Environm
 
 Live-gate blockers are recorded in the final certification report and are not marked as defects fixed: authenticated tenant-isolation/CRM/Studio journeys, durable-media restart proof, and CAPTCHA/provider flows require additional controlled credentials or test setup.
 
+## Final live golden-path certification pass (2026-09-06)
+
+| ID | Severity | Subsystem | Defect / Gate | Reproduction | Root Cause / Dependency | Files Changed | Test / Evidence | Final Status |
+|---|---|---|---|---|---|---|---|---|
+| LIVE-TURNSTILE-003 | P1 gate | Public signup | Legitimate normal-user signup could not be completed autonomously. | Production signup UI serves the Turnstile widget; a tokenless request returned `400 TURNSTILE_REQUIRED` and a forged token returned `400 TURNSTILE_FAILED`. | A real browser challenge completion is required; no bypass was used or added. | None | `artifacts/final-production-certification/turnstile.md` | HUMAN ACTION REQUIRED — complete the challenge in an open production browser, then rerun signup/golden-path checks. |
+| LIVE-MEDIA-003 | P0/P1 gate | Durable media | Configured S3-compatible media backend is not currently usable. | A non-mutating Railway-injected `list_objects_v2` check failed with `InvalidArgument: Credential access key has length 54, should be 32`; `head_bucket` also returned 400. | The configured R2/S3 access key is invalid for the provider. | None | `artifacts/final-production-certification/durable-media.md` | BLOCKED — replace the Railway R2/S3 credentials with a valid provider key and rerun upload/redeploy proof. |
+| LIVE-RESEND-003 | P1 gate | Transactional email | Resend provider is configured but not authenticated. | A non-sending `GET /domains` request using the Railway-injected key returned HTTP 401. | Provider credential is invalid/revoked or lacks access. | None | `artifacts/final-production-certification/providers.md` | HUMAN ACTION REQUIRED — replace/authorize the Resend API key and verify `RESEND_FROM`, then rerun one controlled delivery. |
+
 ## Final transformation pass (2026-09-06)
 
 | ID | Severity | Subsystem | Defect | Reproduction | Root Cause | Files Changed | Test Added | Final Status |

@@ -1,0 +1,111 @@
+{
+  "engine": "chromium",
+  "base": "https://zylora-api-production.up.railway.app",
+  "routes": [
+    {
+      "route": "/",
+      "status": 200,
+      "url": "https://zylora-api-production.up.railway.app/",
+      "title": "Zylora \u2014 Build a website that brings you customers",
+      "width": 1440,
+      "viewport": 1440
+    },
+    {
+      "route": "/signup",
+      "status": 200,
+      "url": "https://zylora-api-production.up.railway.app/signup",
+      "title": "Create your Zylora account",
+      "width": 1440,
+      "viewport": 1440
+    },
+    {
+      "route": "/login",
+      "status": 200,
+      "url": "https://zylora-api-production.up.railway.app/login",
+      "title": "Log in to Zylora",
+      "width": 1440,
+      "viewport": 1440
+    },
+    {
+      "route": "/templates",
+      "status": 200,
+      "url": "https://zylora-api-production.up.railway.app/templates",
+      "title": "Curated Website Templates for Real Businesses \u2014 Zylora",
+      "width": 1440,
+      "viewport": 1440
+    },
+    {
+      "route": "/freelancers",
+      "status": 200,
+      "url": "https://zylora-api-production.up.railway.app/freelancers",
+      "title": "Website Freelancers for Zylora Projects \u2014 Zylora",
+      "width": 1440,
+      "viewport": 1440
+    },
+    {
+      "route": "/choose-plan",
+      "status": 200,
+      "url": "https://zylora-api-production.up.railway.app/choose-plan",
+      "title": "Choose Your Zylora Plan \u2014 Transparent Business Pricing",
+      "width": 1440,
+      "viewport": 1440
+    },
+    {
+      "route": "/blog",
+      "status": 200,
+      "url": "https://zylora-api-production.up.railway.app/blog",
+      "title": "Zylora Blog \u2014 Website design, AI and local business growth",
+      "width": 1440,
+      "viewport": 1440
+    },
+    {
+      "route": "/terms",
+      "status": 200,
+      "url": "https://zylora-api-production.up.railway.app/terms",
+      "title": "Terms of Service \u2014 Zylora",
+      "width": 1440,
+      "viewport": 1440
+    },
+    {
+      "route": "/privacy",
+      "status": 200,
+      "url": "https://zylora-api-production.up.railway.app/privacy",
+      "title": "Privacy Policy \u2014 Zylora",
+      "width": 1440,
+      "viewport": 1440
+    },
+    {
+      "route": "/llms.txt",
+      "status": 200,
+      "url": "https://zylora-api-production.up.railway.app/llms.txt",
+      "title": "",
+      "width": 1440,
+      "viewport": 1440
+    },
+    {
+      "route": "/robots.txt",
+      "status": 200,
+      "url": "https://zylora-api-production.up.railway.app/robots.txt",
+      "title": "",
+      "width": 1440,
+      "viewport": 1440
+    },
+    {
+      "route": "/sitemap.xml",
+      "status": 200,
+      "url": "https://zylora-api-production.up.railway.app/sitemap.xml",
+      "title": "",
+      "width": 1440,
+      "viewport": 1440
+    }
+  ],
+  "console_errors": [
+    "Failed to load resource: the server responded with a status of 401 ()",
+    "Failed to load resource: the server responded with a status of 401 ()"
+  ],
+  "page_errors": [],
+  "failed_requests": [
+    "GET https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/f/av0/rch/wqvew/0x4AAAAAAEkz5DE9Df395l1b/auto/fbE/new/normal?lang=auto"
+  ],
+  "unexpected_http": []
+}
