@@ -18,6 +18,20 @@ _ALLOWED_CSS_PROPERTIES={
     'text-transform','top','transform','transform-origin','visibility','white-space','width','z-index'
 }
 
+_HOVER_EFFECTS={
+    'lift':'transform:translateY(-4px);box-shadow:0 12px 28px rgba(15,23,42,.16);',
+    'scale':'transform:scale(1.02);',
+    'shadow':'box-shadow:0 14px 32px rgba(15,23,42,.18);',
+    'underline':'text-decoration:underline;text-underline-offset:4px;',
+    'glow':'box-shadow:0 0 0 2px currentColor,0 0 24px rgba(99,102,241,.25);',
+}
+_ANIMATION_EFFECTS={
+    'fade':'zyStudioFade',
+    'rise':'zyStudioRise',
+    'slide':'zyStudioSlide',
+    'scale':'zyStudioScale',
+}
+
 def _css_name(prop: str) -> str:
     return re.sub(r'([A-Z])',lambda match:'-'+match.group(1).lower(),str(prop).strip())
 
@@ -79,6 +93,20 @@ def _render_node_css(node: Node, doc: SiteDocument) -> str:
                     
     if node.visibility == 'hidden':
         css += f".z-node-{node.id} {{ display: none !important; }}\n"
+    for interaction in node.interactions or []:
+        if not isinstance(interaction,dict):
+            continue
+        trigger=str(interaction.get('trigger') or interaction.get('kind') or '').lower()
+        effect=str(interaction.get('effect') or 'none').lower()
+        if trigger == 'hover' and effect in _HOVER_EFFECTS:
+            css += f".z-node-{node.id} {{ transition: transform .2s ease, box-shadow .2s ease, filter .2s ease, color .2s ease; }}\n.z-node-{node.id}:hover {{ {_HOVER_EFFECTS[effect]} }}\n"
+        elif trigger in {'animation','load','entrance'} and effect in _ANIMATION_EFFECTS:
+            duration=_safe_css_value((interaction.get('duration') or interaction.get('duration_ms') or 650)) or '650'
+            css += f"@keyframes {_ANIMATION_EFFECTS[effect]} {{ from {{ opacity:0; transform: translateY({ '14px' if effect in {'rise','slide'} else '0' }); }} to {{ opacity:1; transform: translateY(0); }} }}\n.z-node-{node.id} {{ animation: {_ANIMATION_EFFECTS[effect]} {duration}ms ease both; }}\n"
+    if node.interactions:
+        css += "@media (prefers-reduced-motion: reduce) {\n"
+        css += f".z-node-{node.id} {{ animation: none !important; transition: none !important; transform: none !important; }}\n"
+        css += "}\n"
     for bp, override in node.responsiveOverrides.items():
         if not override or not override.visibility or bp == 'desktop':
             continue
@@ -115,7 +143,7 @@ def _render_node_html(node: Node, doc: SiteDocument, page: Page, data_context:di
     elif node.type in {"text","paragraph"}: tag = "p"
     elif node.type == "heading": tag = "h2"
     elif node.type == "image": tag = "img"
-    elif node.type == "button": tag = "button"
+    elif node.type == "button": tag = "a" if _safe_url(node.content.href) else "button"
     elif node.type == "link": tag = "a"
     elif node.type == "form" or node.type == "lead_form": tag = "form"
     elif node.type == "form_field": tag = "input"
@@ -148,6 +176,8 @@ def _render_node_html(node: Node, doc: SiteDocument, page: Page, data_context:di
         href=_safe_url(content.href)
         if href:
             attrs += f' href="{html.escape(href,quote=True)}"'
+            if node.metadata.get('linkTarget') == '_blank':
+                attrs += ' target="_blank" rel="noopener noreferrer"'
     elif tag == 'input':
         if content.placeholder:
             attrs += f' placeholder="{html.escape(content.placeholder,quote=True)}"'

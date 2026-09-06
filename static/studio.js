@@ -21487,7 +21487,7 @@
   };
   var topSelection = (nodes, ids) => ids.filter((id) => nodes[id] && !ids.some((other) => other !== id && descendants(nodes, [other]).has(id)));
   var validSlug = (raw) => raw.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "page";
-  var baseNode = (type, parentId) => ({ id: uid(type), type, parentId, children: [], content: { text: ["heading", "text", "paragraph"].includes(type) ? type === "heading" ? "New heading" : "Add your text" : type === "button" ? "Button" : void 0 }, style: { css: {}, tokens: {} }, layout: {}, responsiveOverrides: {}, visibility: "visible", bindings: {}, metadata: { displayName: type.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()) }, accessibility: {}, interactions: [] });
+  var baseNode = (type, parentId) => ({ id: uid(type), type, parentId, children: [], content: { text: ["heading", "text", "paragraph"].includes(type) ? type === "heading" ? "New heading" : "Add your text" : type === "button" ? "Button" : void 0 }, style: { css: type === "image" ? { width: "320px", height: "220px", objectFit: "cover" } : {}, tokens: {} }, layout: {}, responsiveOverrides: {}, visibility: "visible", bindings: {}, metadata: { displayName: type.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()) }, accessibility: {}, interactions: [] });
   var cloneForest = (source, roots, target, parentId) => {
     const map = /* @__PURE__ */ new Map();
     descendants(source, roots).forEach((id) => map.set(id, uid(source[id]?.type || "node")));
@@ -21536,6 +21536,22 @@
               n.responsiveOverrides = { ...n.responsiveOverrides, [state.currentBreakpoint]: { ...o, style: { tokens: { ...o.style?.tokens || {} }, css: { ...o.style?.css || {}, ...style } } } };
             }
           });
+        });
+      case "UPDATE_NODE_GEOMETRY":
+        return withNodes(state, (_p, nodes) => {
+          const n = nodes[action.payload.nodeId];
+          if (!n || n.metadata?.locked) return;
+          const geometry = action.payload.geometry;
+          if (state.currentBreakpoint === "desktop") n.style = { ...n.style, css: { ...n.style.css, ...geometry } };
+          else {
+            const o = n.responsiveOverrides[state.currentBreakpoint] || {};
+            n.responsiveOverrides = { ...n.responsiveOverrides, [state.currentBreakpoint]: { ...o, style: { tokens: { ...o.style?.tokens || {} }, css: { ...o.style?.css || {}, ...geometry } } } };
+          }
+        });
+      case "UPDATE_NODE_INTERACTIONS":
+        return withNodes(state, (_p, nodes) => {
+          const n = nodes[action.payload.nodeId];
+          if (n && !n.metadata?.locked) n.interactions = clone(action.payload.interactions);
         });
       case "UPDATE_NODE_TEXT":
       case "UPDATE_NODE_CONTENT":
@@ -21652,6 +21668,37 @@
           const roots = cloneForest(state.clipboard.nodes, state.clipboard.rootIds, nodes, parent.id);
           parent.children.push(...roots);
           return { selectedNodeIds: roots };
+        });
+      case "GROUP_SELECTED":
+        return withNodes(state, (page, nodes) => {
+          const ids = topSelection(page.nodes, state.selectedNodeIds).filter((id) => id !== page.rootNodeId);
+          const parents = ids.map((id) => nodes[id]?.parentId);
+          if (ids.length < 2 || !parents[0] || parents.some((p) => p !== parents[0])) return;
+          const parent = nodes[parents[0]];
+          if (!parent) return;
+          const ordered = parent.children.filter((id) => ids.includes(id));
+          const wrapper = { ...baseNode("container", parent.id), id: uid("group"), metadata: { displayName: "Group" }, style: { css: { display: "flex", gap: "0px" }, tokens: {} } };
+          const at = parent.children.indexOf(ordered[0]);
+          parent.children = parent.children.filter((id) => !ids.includes(id));
+          ordered.forEach((id) => {
+            nodes[id].parentId = wrapper.id;
+          });
+          wrapper.children = ordered;
+          parent.children.splice(Math.max(0, at), 0, wrapper.id);
+          nodes[wrapper.id] = wrapper;
+          return { selectedNodeIds: [wrapper.id] };
+        });
+      case "UNGROUP_SELECTED":
+        return withNodes(state, (_page, nodes) => {
+          const id = state.selectedNodeIds[0], group = id && nodes[id];
+          if (!group || group.type !== "container" || !group.parentId) return;
+          const parent = nodes[group.parentId], at = parent.children.indexOf(group.id);
+          parent.children.splice(at, 1, ...group.children);
+          group.children.forEach((child) => {
+            nodes[child].parentId = parent.id;
+          });
+          delete nodes[group.id];
+          return { selectedNodeIds: group.children };
         });
       case "ADD_PAGE": {
         if (!state.document) return state;
@@ -21776,23 +21823,33 @@
       event.stopPropagation();
       event.preventDefault();
       cleanup.current?.();
-      const start = { x: event.clientX, y: event.clientY }, base = { ...currentRect };
+      const start = { x: event.clientX, y: event.clientY }, base = { ...currentRect }, pointerId = event.pointerId;
       setResizing(true);
       const calc = (e) => computeResize(base, start, { x: e.clientX, y: e.clientY }, handle, latest.current.zoom);
-      const move = (e) => latest.current.onResizeUpdate(calc(e));
-      const up = (e) => {
-        window.removeEventListener("mousemove", move);
-        window.removeEventListener("mouseup", up);
+      const finish = () => {
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerup", up);
+        window.removeEventListener("pointercancel", cancel);
         cleanup.current = null;
         setResizing(false);
-        latest.current.onResizeEnd(calc(e));
       };
-      window.addEventListener("mousemove", move);
-      window.addEventListener("mouseup", up);
-      cleanup.current = () => {
-        window.removeEventListener("mousemove", move);
-        window.removeEventListener("mouseup", up);
+      const move = (e) => {
+        if (e.pointerId === pointerId) latest.current.onResizeUpdate(calc(e));
       };
+      const up = (e) => {
+        if (e.pointerId !== pointerId) return;
+        const rect = calc(e);
+        finish();
+        latest.current.onResizeEnd(rect);
+      };
+      const cancel = () => {
+        finish();
+        latest.current.onResizeEnd(base);
+      };
+      window.addEventListener("pointermove", move);
+      window.addEventListener("pointerup", up);
+      window.addEventListener("pointercancel", cancel);
+      cleanup.current = finish;
     };
     return { isResizing, startResize };
   }
@@ -21873,41 +21930,48 @@
     latest.current = { onDragUpdate, onDragEnd, zoom, getTargets };
     (0, import_react3.useEffect)(() => () => cleanup.current?.(), []);
     const startDrag = (event, currentRect) => {
-      event.stopPropagation();
-      event.preventDefault();
+      event.stopPropagation?.();
+      event.preventDefault?.();
       cleanup.current?.();
-      const start = { x: event.clientX, y: event.clientY }, base = { ...currentRect };
+      const start = { x: event.clientX, y: event.clientY }, base = { ...currentRect }, pointerId = event.pointerId;
       setDragging(true);
       const calculate = (e) => {
         const api = latest.current, raw = { ...base, x: base.x + (e.clientX - start.x) / api.zoom, y: base.y + (e.clientY - start.y) / api.zoom }, targets = api.getTargets();
         return computeSnapping(raw, targets.peers, targets.parent, 6 / api.zoom);
       };
+      const finish = () => {
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerup", up);
+        window.removeEventListener("pointercancel", cancel);
+        cleanup.current = null;
+        setDragging(false);
+      };
       const move = (e) => {
+        if (pointerId !== void 0 && e.pointerId !== pointerId) return;
         const result = calculate(e);
         latest.current.onDragUpdate(result.snappedRect, result.snapLines);
       };
       const up = (e) => {
+        if (pointerId !== void 0 && e.pointerId !== pointerId) return;
         const result = calculate(e);
-        window.removeEventListener("mousemove", move);
-        window.removeEventListener("mouseup", up);
-        cleanup.current = null;
-        setDragging(false);
+        finish();
         latest.current.onDragEnd(result.snappedRect);
       };
-      window.addEventListener("mousemove", move);
-      window.addEventListener("mouseup", up);
-      cleanup.current = () => {
-        window.removeEventListener("mousemove", move);
-        window.removeEventListener("mouseup", up);
+      const cancel = () => {
+        finish();
+        latest.current.onDragEnd(base);
       };
+      window.addEventListener("pointermove", move);
+      window.addEventListener("pointerup", up);
+      window.addEventListener("pointercancel", cancel);
+      cleanup.current = finish;
     };
     return { isDragging, startDrag };
   }
 
   // studio/components/CanvasNode.tsx
-  function EditableText({ value, onChange }) {
-    const ref = import_react4.default.useRef(null);
-    const editing = import_react4.default.useRef(false);
+  function EditableText({ value, onChange, onEnter }) {
+    const ref = import_react4.default.useRef(null), editing = import_react4.default.useRef(false);
     import_react4.default.useLayoutEffect(() => {
       if (ref.current && !editing.current && ref.current.textContent !== value) ref.current.textContent = value;
     }, [value]);
@@ -21918,8 +21982,25 @@
         className: "studio-text-editor",
         contentEditable: true,
         suppressContentEditableWarning: true,
+        onDoubleClick: (e) => {
+          e.stopPropagation();
+          editing.current = true;
+          ref.current?.focus();
+        },
         onFocus: () => {
           editing.current = true;
+        },
+        onKeyDown: (e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            onEnter();
+          }
+          ;
+          if (e.key === "Escape") {
+            e.preventDefault();
+            ref.current?.blur();
+            onEnter();
+          }
         },
         onInput: (e) => onChange(e.currentTarget.textContent || ""),
         onBlur: (e) => {
@@ -21929,237 +22010,151 @@
       }
     );
   }
+  var acceptsChildren = (type) => ["page", "section", "container", "stack", "flex", "grid", "repeater", "list", "gallery"].includes(type);
+  var editableTypes = ["heading", "paragraph", "text", "button", "link"];
   function CanvasNode({ nodeId }) {
     const { state, dispatch } = useStudio();
     const [rectOverride, setRectOverride] = import_react4.default.useState(null);
-    const handleResizeUpdate = (rect, lines = []) => {
-      setRectOverride(rect);
-      dispatch({ type: "SET_SNAP_LINES", payload: lines });
-    };
-    const handleResizeEnd = (rect) => {
-      setRectOverride(null);
-      dispatch({ type: "SET_SNAP_LINES", payload: [] });
-      if (!state.document) return;
-      const node2 = state.document.pages[state.currentPageId].nodes[nodeId];
-      const cssStyles2 = { ...node2.style.css };
-      const newCss = {
-        width: `${rect.w}px`,
-        height: `${rect.h}px`
-      };
-      if (cssStyles2.position === "absolute" || cssStyles2.position === "fixed") {
-        newCss.left = `${rect.x}px`;
-        newCss.top = `${rect.y}px`;
-      }
-      dispatch({
-        type: "UPDATE_NODE_STYLE",
-        payload: {
-          nodeId,
-          style: newCss
-        }
-      });
-    };
-    const { startResize } = useResize(
-      { x: 0, y: 0, w: 0, h: 0 },
-      handleResizeUpdate,
-      handleResizeEnd,
-      state.zoom
-    );
-    const { startDrag } = useDrag(
-      handleResizeUpdate,
-      handleResizeEnd,
-      state.zoom,
-      () => {
-        const element = document.querySelector(`[data-studio-id="${CSS.escape(nodeId)}"]`);
-        const parent = element?.parentElement;
-        if (!element || !parent) return { peers: [], parent: null };
-        const pr = parent.getBoundingClientRect();
-        const peers = Array.from(parent.children).filter((child) => child !== element).map((child) => {
-          const r = child.getBoundingClientRect();
-          return { x: (r.left - pr.left) / state.zoom, y: (r.top - pr.top) / state.zoom, w: r.width / state.zoom, h: r.height / state.zoom };
-        });
-        return { peers, parent: { x: 0, y: 0, w: pr.width / state.zoom, h: pr.height / state.zoom } };
-      }
-    );
-    if (!state.document) return null;
-    const page = state.document.pages[state.currentPageId];
-    if (!page) return null;
-    const node = page.nodes[nodeId];
-    if (!node) return null;
-    const isSelected = state.selectedNodeIds.indexOf(nodeId) !== -1;
-    const isLocked = !!node.metadata?.locked;
+    const dragBase = import_react4.default.useRef(null);
+    const page = state.document?.pages[state.currentPageId], node = page?.nodes[nodeId];
+    if (!page || !node) return null;
     let cssStyles = { ...node.style.css };
     let effectiveVisibility = node.visibility;
     if (state.currentBreakpoint !== "desktop") {
-      const bp = state.currentBreakpoint;
-      const override = node.responsiveOverrides[bp];
-      if (override && override.style) {
-        cssStyles = { ...cssStyles, ...override.style.css };
-      }
-      if (bp === "mobile") {
-        const tabletOverride = node.responsiveOverrides["tablet"];
-        effectiveVisibility = tabletOverride?.visibility || effectiveVisibility;
-        if (tabletOverride && tabletOverride.style) {
-          cssStyles = { ...cssStyles, ...tabletOverride.style.css, ...override?.style?.css || {} };
-        }
-      }
-      effectiveVisibility = override?.visibility || effectiveVisibility;
+      const override = node.responsiveOverrides[state.currentBreakpoint];
+      const tablet = state.currentBreakpoint === "mobile" ? node.responsiveOverrides.tablet : null;
+      cssStyles = { ...cssStyles, ...tablet?.style?.css || {}, ...override?.style?.css || {} };
+      effectiveVisibility = override?.visibility || tablet?.visibility || effectiveVisibility;
     }
-    const handleClick = (e) => {
+    const isSelected = state.selectedNodeIds.includes(nodeId), isLocked = !!node.metadata?.locked;
+    const isAbsolute = cssStyles.position === "absolute" || cssStyles.position === "fixed";
+    const elementRef = import_react4.default.useRef(null);
+    const getRect = () => {
+      const el = elementRef.current;
+      if (!el) return { x: parseFloat(cssStyles.left) || 0, y: parseFloat(cssStyles.top) || 0, w: 100, h: 40 };
+      const r = el.getBoundingClientRect();
+      const parent = el.parentElement?.getBoundingClientRect();
+      return { x: isAbsolute ? parseFloat(cssStyles.left) || 0 : (r.left - (parent?.left || r.left)) / state.zoom, y: isAbsolute ? parseFloat(cssStyles.top) || 0 : (r.top - (parent?.top || r.top)) / state.zoom, w: r.width / state.zoom, h: r.height / state.zoom };
+    };
+    const previewUpdate = (rect, lines = []) => {
+      setRectOverride(rect);
+      dispatch({ type: "SET_SNAP_LINES", payload: lines });
+    };
+    const endDrag = (rect) => {
+      const base = dragBase.current || getRect();
+      setRectOverride(null);
+      dispatch({ type: "SET_SNAP_LINES", payload: [] });
+      if (!state.document) return;
+      const geometry = isAbsolute ? { left: `${Math.round(rect.x)}px`, top: `${Math.round(rect.y)}px` } : { transform: `translate(${Math.round(rect.x - base.x)}px, ${Math.round(rect.y - base.y)}px)` };
+      dragBase.current = null;
+      dispatch({ type: "UPDATE_NODE_GEOMETRY", payload: { nodeId, geometry } });
+    };
+    const { startDrag } = useDrag(previewUpdate, endDrag, state.zoom, () => {
+      const el = elementRef.current, parent = el?.parentElement;
+      if (!el || !parent) return { peers: [], parent: null };
+      const pr = parent.getBoundingClientRect();
+      const peers = Array.from(parent.children).filter((x) => x !== el).map((x) => {
+        const r = x.getBoundingClientRect();
+        return { x: (r.left - pr.left) / state.zoom, y: (r.top - pr.top) / state.zoom, w: r.width / state.zoom, h: r.height / state.zoom };
+      });
+      return { peers, parent: { x: 0, y: 0, w: pr.width / state.zoom, h: pr.height / state.zoom } };
+    });
+    const endResize = (rect) => {
+      setRectOverride(null);
+      dispatch({ type: "SET_SNAP_LINES", payload: [] });
+      dispatch({ type: "UPDATE_NODE_GEOMETRY", payload: { nodeId, geometry: { width: `${Math.round(rect.w)}px`, height: `${Math.round(rect.h)}px`, ...isAbsolute ? { left: `${Math.round(rect.x)}px`, top: `${Math.round(rect.y)}px` } : {} } } });
+    };
+    const { startResize } = useResize({ x: 0, y: 0, w: 0, h: 0 }, previewUpdate, endResize, state.zoom);
+    const select = (e) => {
       e.stopPropagation();
       dispatch({ type: "SELECT_NODE", payload: e.shiftKey ? isSelected ? state.selectedNodeIds.filter((id) => id !== nodeId) : [...state.selectedNodeIds, nodeId] : [nodeId] });
     };
-    const isAbsolute = cssStyles.position === "absolute" || cssStyles.position === "fixed";
-    const handlePointerDown = (e) => {
-      if (!isAbsolute || isLocked) return;
-      const el = e.currentTarget;
-      startDrag(e, {
-        x: parseInt(cssStyles.left) || 0,
-        y: parseInt(cssStyles.top) || 0,
-        w: el.offsetWidth,
-        h: el.offsetHeight
-      });
+    const pointerDown = (e) => {
+      if (isLocked) return;
+      if (e.target.closest(".studio-resize-handle,.studio-floating-actions")) return;
+      const el = elementRef.current;
+      if (!el) return;
+      dragBase.current = getRect();
+      el.setPointerCapture?.(e.pointerId);
+      startDrag(e, dragBase.current);
     };
-    const handleDragStart = (e) => {
-      if (isAbsolute) {
-        e.preventDefault();
-        return;
-      }
-      e.stopPropagation();
-      e.dataTransfer.setData("studio/node-id", node.id);
-    };
-    let Tag = "div";
-    if (node.type === "section") Tag = "section";
-    else if (node.type === "heading") Tag = "h2";
-    else if (node.type === "text" || node.type === "paragraph") Tag = node.children.length ? "div" : "p";
-    else if (node.type === "image") Tag = node.content.src ? "img" : "div";
-    else if (node.type === "button") Tag = "button";
-    else if (node.type === "link") Tag = "a";
-    else if (node.type === "form") Tag = "form";
-    else if (node.type === "form_field") Tag = "input";
-    else if (node.type === "navigation") Tag = "nav";
-    const handleDragOver = (e) => {
+    const drop = (e) => {
       e.preventDefault();
       e.stopPropagation();
+      const dropped = e.dataTransfer.getData("studio/node-id");
+      if (dropped && dropped !== nodeId && acceptsChildren(node.type)) dispatch({ type: "REPARENT_NODE", payload: { nodeId: dropped, newParentId: nodeId } });
     };
-    const handleDrop = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const droppedNodeId = e.dataTransfer.getData("studio/node-id");
-      const insertData = e.dataTransfer.getData("application/x-zylora-node");
-      const acceptsChildren = ["page", "section", "container", "stack", "flex", "grid", "repeater", "list", "gallery"].includes(node.type);
-      if (insertData && acceptsChildren) {
-        try {
-          const spec = JSON.parse(insertData);
-          dispatch({ type: "INSERT_NODE", payload: { parentId: node.id, node: { type: spec.type, metadata: { displayName: spec.label } } } });
-          return;
-        } catch {
-        }
-      }
-      if (droppedNodeId && droppedNodeId !== node.id && acceptsChildren) {
-        dispatch({
-          type: "REPARENT_NODE",
-          payload: { nodeId: droppedNodeId, newParentId: node.id }
-        });
-      }
-    };
-    const renderProps = {
-      style: {
-        ...cssStyles,
-        ...rectOverride ? {
-          width: `${rectOverride.w}px`,
-          height: `${rectOverride.h}px`,
-          ...isAbsolute ? { left: `${rectOverride.x}px`, top: `${rectOverride.y}px` } : {}
-        } : {},
-        outline: isSelected ? "2px solid #0055ff" : "none",
-        outlineOffset: isSelected ? "-2px" : "0",
-        position: cssStyles.position || "relative",
-        display: effectiveVisibility === "hidden" ? "none" : cssStyles.display
-      },
-      onClick: handleClick,
-      onPointerDown: handlePointerDown,
-      draggable: !isAbsolute && !isLocked,
-      onDragStart: handleDragStart,
-      onDragOver: handleDragOver,
-      onDrop: handleDrop,
-      "data-studio-id": node.id,
-      "data-studio-type": node.type,
-      "aria-label": node.accessibility?.ariaLabel || void 0
-    };
-    const directlyEditable = isSelected && !isLocked && node.children.length === 0 && ["heading", "paragraph", "text", "button", "link"].includes(node.type);
-    const renderResizeHandle = (pos) => {
+    const Tag = node.type === "section" ? "section" : node.type === "heading" ? "h2" : node.type === "button" ? "button" : node.type === "link" ? "a" : node.type === "form" ? "form" : node.type === "navigation" ? "nav" : "div";
+    const renderHandle = (pos) => {
       if (!isSelected || isLocked) return null;
-      const style = {
-        position: "absolute",
-        width: "8px",
-        height: "8px",
-        background: "#fff",
-        border: "1px solid #0055ff",
-        zIndex: 1e3
-      };
-      if (pos.includes("top")) style.top = "-4px";
-      if (pos.includes("bottom")) style.bottom = "-4px";
-      if (pos.includes("left")) style.left = "-4px";
-      if (pos.includes("right")) style.right = "-4px";
-      if (pos === "top-left" || pos === "bottom-right") style.cursor = "nwse-resize";
-      if (pos === "top-right" || pos === "bottom-left") style.cursor = "nesw-resize";
+      const style = { position: "absolute", width: 9, height: 9, background: "#fff", border: "1px solid #4263eb", zIndex: 1e3 };
+      if (pos.includes("top")) style.top = -5;
+      if (pos.includes("bottom")) style.bottom = -5;
+      if (pos.includes("left")) style.left = -5;
+      if (pos.includes("right")) style.right = -5;
       if (pos === "top" || pos === "bottom") {
-        style.cursor = "ns-resize";
         style.left = "calc(50% - 4px)";
+        style.cursor = "ns-resize";
       }
       if (pos === "left" || pos === "right") {
-        style.cursor = "ew-resize";
         style.top = "calc(50% - 4px)";
+        style.cursor = "ew-resize";
       }
-      return /* @__PURE__ */ import_react4.default.createElement("div", { key: pos, style, onMouseDown: (e) => {
-        const el = e.target.parentElement;
-        if (!el) return;
-        const bounds = el.getBoundingClientRect();
-        startResize(e, pos, {
-          x: parseInt(cssStyles.left) || 0,
-          y: parseInt(cssStyles.top) || 0,
-          w: el.offsetWidth,
-          h: el.offsetHeight
-        });
+      if (pos.includes("top") && pos.includes("left") || pos.includes("bottom") && pos.includes("right")) style.cursor = "nwse-resize";
+      if (pos.includes("top") && pos.includes("right") || pos.includes("bottom") && pos.includes("left")) style.cursor = "nesw-resize";
+      return /* @__PURE__ */ import_react4.default.createElement("span", { key: pos, className: "studio-resize-handle", "data-handle": pos, style, onPointerDown: (e) => {
+        e.stopPropagation();
+        const el = elementRef.current;
+        if (el) startResize(e, pos, getRect());
       } });
     };
-    if (node.type === "image" && node.content.src) {
-      renderProps.src = node.content.src;
-      renderProps.alt = node.content.alt;
-      return /* @__PURE__ */ import_react4.default.createElement("img", { ...renderProps });
+    const renderStyle = { ...cssStyles, ...rectOverride ? { width: `${rectOverride.w}px`, height: `${rectOverride.h}px`, ...isAbsolute ? { left: `${rectOverride.x}px`, top: `${rectOverride.y}px` } : { transform: `translate(${rectOverride.x - (dragBase.current?.x || 0)}px, ${rectOverride.y - (dragBase.current?.y || 0)}px)` } } : {}, position: cssStyles.position || "relative", display: effectiveVisibility === "hidden" ? "none" : cssStyles.display };
+    const props = { ref: elementRef, style: renderStyle, onClick: select, onPointerDown: pointerDown, onDragOver: (e) => e.preventDefault(), onDrop: drop, "data-studio-id": node.id, "data-studio-type": node.type, "aria-label": node.accessibility?.ariaLabel || void 0 };
+    if (Tag === "img") {
+      props.src = node.content.src;
+      props.alt = node.content.alt || "";
     }
-    return /* @__PURE__ */ import_react4.default.createElement(Tag, { ...renderProps }, isSelected && isAbsolute && !isLocked && /* @__PURE__ */ import_react4.default.createElement("div", { className: "studio-drag-handle", title: "Drag element", onMouseDown: (e) => {
-      const el = e.currentTarget.parentElement;
-      if (el) startDrag(e, { x: parseInt(cssStyles.left) || 0, y: parseInt(cssStyles.top) || 0, w: el.offsetWidth, h: el.offsetHeight });
-    } }, "\u22EE\u22EE"), isSelected && ["top-left", "top", "top-right", "right", "bottom-right", "bottom", "bottom-left", "left"].map(renderResizeHandle), directlyEditable ? /* @__PURE__ */ import_react4.default.createElement(EditableText, { value: node.content.text || "", onChange: (text) => dispatch({ type: "UPDATE_NODE_TEXT", payload: { nodeId, text } }) }) : node.content.text || node.content.html || null, node.children.map((childId) => /* @__PURE__ */ import_react4.default.createElement(CanvasNode, { key: childId, nodeId: childId })));
+    if (Tag === "a" && node.content.href) {
+      props.href = node.content.href;
+      if (node.metadata?.linkTarget === "_blank") {
+        props.target = "_blank";
+        props.rel = "noopener noreferrer";
+      }
+    }
+    const content = node.type === "image" ? /* @__PURE__ */ import_react4.default.createElement("img", { src: node.content.src || void 0, alt: node.content.alt || "", style: { width: "100%", height: "100%", objectFit: cssStyles.objectFit || "cover", objectPosition: cssStyles.objectPosition || "50% 50%", display: "block" } }) : editableTypes.includes(node.type) && node.children.length === 0 ? /* @__PURE__ */ import_react4.default.createElement(EditableText, { value: node.content.text || "", onChange: (text) => dispatch({ type: "UPDATE_NODE_TEXT", payload: { nodeId, text } }), onEnter: () => elementRef.current?.blur() }) : node.content.text || node.content.html || null;
+    return /* @__PURE__ */ import_react4.default.createElement(Tag, { ...props }, isSelected && /* @__PURE__ */ import_react4.default.createElement("div", { className: "studio-floating-actions", "aria-hidden": "true" }, "\u2022\u2022\u2022"), isSelected && ["top-left", "top", "top-right", "right", "bottom-right", "bottom", "bottom-left", "left"].map(renderHandle), content, node.children.map((id) => /* @__PURE__ */ import_react4.default.createElement(CanvasNode, { key: id, nodeId: id })));
   }
 
-  // studio/components/Inspector.tsx
+  // studio/components/ContextToolbar.tsx
   var import_react5 = __toESM(require_react());
-  var sections = [
-    ["Layout", [["Display", "display", "select", ["block", "flex", "grid", "inline-block", "none"]], ["Width", "width"], ["Min width", "minWidth"], ["Max width", "maxWidth"], ["Height", "height"], ["Min height", "minHeight"], ["Max height", "maxHeight"], ["Position", "position", "select", ["relative", "absolute", "fixed", "sticky"]], ["X / left", "left"], ["Y / top", "top"], ["Overflow", "overflow", "select", ["visible", "hidden", "auto", "scroll"]], ["Direction", "flexDirection", "select", ["row", "column", "row-reverse", "column-reverse"]], ["Justify", "justifyContent"], ["Align", "alignItems"], ["Wrap", "flexWrap"], ["Columns", "gridTemplateColumns"], ["Rows", "gridTemplateRows"], ["Gap", "gap"]]],
-    ["Spacing", [["Margin top", "marginTop"], ["Margin right", "marginRight"], ["Margin bottom", "marginBottom"], ["Margin left", "marginLeft"], ["Padding top", "paddingTop"], ["Padding right", "paddingRight"], ["Padding bottom", "paddingBottom"], ["Padding left", "paddingLeft"]]],
-    ["Typography", [["Font family", "fontFamily"], ["Size", "fontSize"], ["Weight", "fontWeight"], ["Line height", "lineHeight"], ["Letter spacing", "letterSpacing"], ["Align", "textAlign", "select", ["left", "center", "right", "justify"]], ["Transform", "textTransform", "select", ["none", "uppercase", "lowercase", "capitalize"]], ["Decoration", "textDecoration"], ["Color", "color", "color"]]],
-    ["Fill", [["Background", "backgroundColor", "color"], ["Opacity", "opacity"]]],
-    ["Border", [["Width", "borderWidth"], ["Style", "borderStyle", "select", ["none", "solid", "dashed", "dotted"]], ["Color", "borderColor", "color"], ["Radius", "borderRadius"], ["Top left", "borderTopLeftRadius"], ["Top right", "borderTopRightRadius"], ["Bottom right", "borderBottomRightRadius"], ["Bottom left", "borderBottomLeftRadius"]]],
-    ["Effects", [["Shadow", "boxShadow"], ["Transform", "transform"]]]
-  ];
-  function Inspector() {
+  var fonts = ["Inter", "Arial", "Georgia", "Helvetica Neue", "system-ui", "Space Grotesk"];
+  var effects = ["none", "lift", "scale", "shadow", "underline", "glow"];
+  var motions = ["none", "fade", "rise", "slide", "scale"];
+  var styleText = `.context-toolbar{display:flex;align-items:center;gap:5px;min-height:32px;max-width:min(720px,48vw);overflow:auto;white-space:nowrap}.context-toolbar button,.context-toolbar select,.context-toolbar input{height:28px;border:1px solid #3a3d45;border-radius:6px;background:#202228;color:#f6f7fb;padding:0 7px;font-size:11px}.context-toolbar button:hover,.context-toolbar button.active{background:#34384a;border-color:#7180ff}.context-toolbar input[type=color]{width:30px;padding:2px}.context-toolbar input[type=number]{width:58px}.context-toolbar select{max-width:150px}.toolbar-selection-label{font-size:11px;color:#aeb5c5;max-width:90px;overflow:hidden;text-overflow:ellipsis}.toolbar-divider{height:18px;width:1px;background:#3a3d45}.studio-resize-handle{box-sizing:border-box;border-radius:3px;touch-action:none}.studio-floating-actions{position:absolute;left:50%;top:-24px;transform:translateX(-50%);height:18px;padding:0 7px;border-radius:5px;background:#4263eb;color:white;font:700 11px/18px system-ui;z-index:1002;pointer-events:none}.canvas-file-drop{position:absolute;inset:24px;border:2px dashed #7180ff;background:#7180ff22;display:grid;place-items:center;color:#fff;font-weight:700;z-index:40;pointer-events:none;border-radius:12px}.studio-canvas [data-studio-id]{touch-action:none}.studio-canvas img{max-width:100%}@media(max-width:820px){.topbar-center{display:flex;max-width:calc(100vw - 70px);overflow:auto}}`;
+  function ContextToolbar({ onFit, onPreview }) {
     const { state, dispatch } = useStudio();
-    const [open, setOpen] = import_react5.default.useState({ Layout: true, Spacing: true, Typography: true, Content: true, CMS: true });
-    const page = state.document?.pages[state.currentPageId], nodes = state.selectedNodeIds.map((id) => page?.nodes[id]).filter(Boolean);
-    if (!nodes.length) return /* @__PURE__ */ import_react5.default.createElement("div", { className: "empty-state inspector-empty" }, /* @__PURE__ */ import_react5.default.createElement("b", null, "Select something on the canvas"), /* @__PURE__ */ import_react5.default.createElement("p", null, "Layout, content, responsive styles, CMS bindings, and accessibility settings will appear here."));
-    const node = nodes[0], multi = nodes.length > 1, bp = state.currentBreakpoint;
-    const value = (prop) => {
-      const base = node.style.css[prop] || "", tablet = node.responsiveOverrides.tablet?.style?.css[prop], own = node.responsiveOverrides[bp]?.style?.css[prop];
-      return { value: bp === "desktop" ? base : own !== void 0 ? own : bp === "mobile" && tablet !== void 0 ? tablet : base, override: bp !== "desktop" && own !== void 0 };
+    const page = state.document?.pages[state.currentPageId], node = state.selectedNodeIds.length === 1 ? page?.nodes[state.selectedNodeIds[0]] : null;
+    const update = (style) => {
+      if (node) dispatch({ type: "UPDATE_NODE_STYLE", payload: { nodeId: node.id, style } });
     };
-    const update = (prop, v) => dispatch({ type: multi ? "UPDATE_SELECTED_STYLE" : "UPDATE_NODE_STYLE", ...multi ? { payload: { [prop]: v } } : { payload: { nodeId: node.id, style: { [prop]: v } } } });
-    const field = ([label, prop, kind = "text", choices]) => {
-      const current = value(prop);
-      return /* @__PURE__ */ import_react5.default.createElement("label", { className: `inspector-field ${current.override ? "overridden" : ""}`, key: prop }, /* @__PURE__ */ import_react5.default.createElement("span", null, label, current.override && /* @__PURE__ */ import_react5.default.createElement("i", { title: "Overridden at this breakpoint" }, "\u25CF")), /* @__PURE__ */ import_react5.default.createElement("span", { className: "field-control" }, kind === "select" ? /* @__PURE__ */ import_react5.default.createElement("select", { value: current.value, onChange: (e) => update(prop, e.target.value) }, /* @__PURE__ */ import_react5.default.createElement("option", { value: "" }, "Auto"), choices?.map((x) => /* @__PURE__ */ import_react5.default.createElement("option", { key: x }, x))) : kind === "color" ? /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("input", { type: "color", value: /^#[0-9a-f]{6}$/i.test(current.value) ? current.value : "#000000", onChange: (e) => update(prop, e.target.value) }), /* @__PURE__ */ import_react5.default.createElement("input", { value: current.value, placeholder: "Inherited", onChange: (e) => update(prop, e.target.value) })) : /* @__PURE__ */ import_react5.default.createElement("input", { value: current.value, placeholder: "Inherited", onChange: (e) => update(prop, e.target.value) }), " ", current.override && /* @__PURE__ */ import_react5.default.createElement("button", { title: "Reset override", onClick: () => dispatch({ type: "RESET_NODE_STYLE", payload: { nodeId: node.id, prop, breakpoint: bp } }) }, "\u21BA")));
+    const setInteraction = (kind, effect) => {
+      if (!node) return;
+      const existing = (node.interactions || []).filter((x) => x.trigger !== kind);
+      dispatch({ type: "UPDATE_NODE_INTERACTIONS", payload: { nodeId: node.id, interactions: [...existing, { trigger: kind, effect }] } });
     };
-    const section = (name, body) => /* @__PURE__ */ import_react5.default.createElement("section", { className: "inspector-section", key: name }, /* @__PURE__ */ import_react5.default.createElement("button", { className: "section-heading", onClick: () => setOpen((o) => ({ ...o, [name]: o[name] === false })) }, /* @__PURE__ */ import_react5.default.createElement("span", null, name), /* @__PURE__ */ import_react5.default.createElement("span", null, open[name] === false ? "\u203A" : "\u2304")), open[name] !== false && /* @__PURE__ */ import_react5.default.createElement("div", { className: "section-body" }, body));
-    return /* @__PURE__ */ import_react5.default.createElement("div", { className: "inspector" }, /* @__PURE__ */ import_react5.default.createElement("div", { className: "inspector-selection" }, /* @__PURE__ */ import_react5.default.createElement("span", { className: "node-glyph" }, multi ? "\u25EB" : "\u25C7"), /* @__PURE__ */ import_react5.default.createElement("span", null, /* @__PURE__ */ import_react5.default.createElement("b", null, multi ? `${nodes.length} elements` : node.metadata?.displayName || node.type), /* @__PURE__ */ import_react5.default.createElement("small", null, multi ? "Batch changes apply to every selection" : node.type)), !multi && /* @__PURE__ */ import_react5.default.createElement("button", { title: node.metadata?.locked ? "Unlock" : "Lock", onClick: () => dispatch({ type: "TOGGLE_NODE_LOCK", payload: { nodeId: node.id } }) }, node.metadata?.locked ? "\u233E" : "\u25CB")), multi && section("Arrange", /* @__PURE__ */ import_react5.default.createElement("div", { className: "button-grid" }, /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update("alignSelf", "flex-start") }, "Left"), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update("alignSelf", "center") }, "Center"), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update("alignSelf", "flex-end") }, "Right"), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update("justifySelf", "start") }, "Top"), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update("justifySelf", "center") }, "Middle"), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update("justifySelf", "end") }, "Bottom"))), !multi && ["heading", "paragraph", "text", "button", "link"].includes(node.type) && section("Content", /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("label", { className: "inspector-field vertical" }, /* @__PURE__ */ import_react5.default.createElement("span", null, "Text"), /* @__PURE__ */ import_react5.default.createElement("textarea", { value: node.content.text || "", onChange: (e) => dispatch({ type: "UPDATE_NODE_CONTENT", payload: { nodeId: node.id, content: { text: e.target.value, html: void 0 } } }) })), ["button", "link"].includes(node.type) && /* @__PURE__ */ import_react5.default.createElement("label", { className: "inspector-field" }, /* @__PURE__ */ import_react5.default.createElement("span", null, "Link"), /* @__PURE__ */ import_react5.default.createElement("input", { value: node.content.href || "", onChange: (e) => dispatch({ type: "UPDATE_NODE_CONTENT", payload: { nodeId: node.id, content: { href: e.target.value } } }) })))), !multi && node.type === "image" && section("Image", /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("label", { className: "inspector-field" }, /* @__PURE__ */ import_react5.default.createElement("span", null, "Source"), /* @__PURE__ */ import_react5.default.createElement("input", { value: node.content.src || "", onChange: (e) => dispatch({ type: "UPDATE_NODE_CONTENT", payload: { nodeId: node.id, content: { src: e.target.value } } }) })), /* @__PURE__ */ import_react5.default.createElement("label", { className: "inspector-field" }, /* @__PURE__ */ import_react5.default.createElement("span", null, "Alt text"), /* @__PURE__ */ import_react5.default.createElement("input", { value: node.content.alt || "", onChange: (e) => dispatch({ type: "UPDATE_NODE_CONTENT", payload: { nodeId: node.id, content: { alt: e.target.value } } }) })), field(["Fit", "objectFit", "select", ["cover", "contain", "fill", "none"]]), field(["Focal point", "objectPosition"]))), sections.map(([name, fields]) => section(name, fields.map(field))), !multi && section("Responsive", /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("div", { className: "responsive-summary" }, ["desktop", "tablet", "mobile"].map((x) => /* @__PURE__ */ import_react5.default.createElement("button", { className: bp === x ? "active" : "", onClick: () => dispatch({ type: "SET_BREAKPOINT", payload: x }), key: x }, x[0].toUpperCase()))), /* @__PURE__ */ import_react5.default.createElement("button", { className: "wide-button", onClick: () => dispatch({ type: "TOGGLE_NODE_VISIBILITY", payload: { nodeId: node.id, breakpoint: bp } }) }, node.visibility === "hidden" ? "Show" : "Hide", " on ", bp), /* @__PURE__ */ import_react5.default.createElement("p", { className: "panel-hint" }, "Blue dots identify local overrides. Reset any value to inherit it again."))), !multi && section("CMS", /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("div", { className: `binding-status ${Object.keys(node.bindings || {}).length ? "bound" : ""}` }, /* @__PURE__ */ import_react5.default.createElement("span", null, "\u25C9"), /* @__PURE__ */ import_react5.default.createElement("span", null, /* @__PURE__ */ import_react5.default.createElement("b", null, Object.keys(node.bindings || {}).length ? "Connected to CMS" : "Not connected"), /* @__PURE__ */ import_react5.default.createElement("small", null, Object.keys(node.bindings || {}).length ? "Bindings use stable field IDs" : "Choose CMS in the left rail to bind data"))))), !multi && section("Accessibility", /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("label", { className: "inspector-field" }, /* @__PURE__ */ import_react5.default.createElement("span", null, "ARIA label"), /* @__PURE__ */ import_react5.default.createElement("input", { value: node.accessibility?.ariaLabel || "", onChange: (e) => dispatch({ type: "UPDATE_NODE_ACCESSIBILITY", payload: { nodeId: node.id, accessibility: { ariaLabel: e.target.value } } }) })), /* @__PURE__ */ import_react5.default.createElement("label", { className: "inspector-field" }, /* @__PURE__ */ import_react5.default.createElement("span", null, "Element ID"), /* @__PURE__ */ import_react5.default.createElement("input", { readOnly: true, value: node.id })))));
+    const cycleCrop = () => {
+      if (!node) return;
+      const positions = ["50% 50%", "25% 50%", "75% 50%", "50% 25%", "50% 75%"];
+      const current = node.style.css.objectPosition || positions[0];
+      const next = positions[(positions.indexOf(current) + 1) % positions.length];
+      update({ objectPosition: next });
+    };
+    if (!node) return /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("style", null, styleText), /* @__PURE__ */ import_react5.default.createElement("div", { className: "context-toolbar global-toolbar" }, /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Undo", disabled: state.historyIndex <= 0, onClick: () => dispatch({ type: "UNDO" }) }, "\u21B6"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Redo", disabled: state.historyIndex >= state.history.length - 1, onClick: () => dispatch({ type: "REDO" }) }, "\u21B7"), /* @__PURE__ */ import_react5.default.createElement("span", { className: "toolbar-divider" }), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: onFit }, "Fit"), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: onPreview }, "Preview")));
+    const isText = ["heading", "paragraph", "text", "button", "link"].includes(node.type), isImage = node.type === "image";
+    return /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("style", null, styleText), /* @__PURE__ */ import_react5.default.createElement("div", { className: "context-toolbar selection-toolbar", onPointerDown: (e) => e.stopPropagation() }, /* @__PURE__ */ import_react5.default.createElement("span", { className: "toolbar-selection-label" }, node.metadata?.displayName || node.type), isText && /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Font family", value: node.style.css.fontFamily || "Inter", onChange: (e) => update({ fontFamily: e.target.value }) }, fonts.map((font) => /* @__PURE__ */ import_react5.default.createElement("option", { key: font }, font))), /* @__PURE__ */ import_react5.default.createElement("input", { "aria-label": "Font size", type: "number", min: "8", max: "220", value: parseInt(node.style.css.fontSize || "16") || 16, onChange: (e) => update({ fontSize: `${e.target.value}px` }) }), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Bold", className: node.style.css.fontWeight === "700" ? "active" : "", onClick: () => update({ fontWeight: node.style.css.fontWeight === "700" ? "400" : "700" }) }, "B"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Italic", className: node.style.css.fontStyle === "italic" ? "active" : "", onClick: () => update({ fontStyle: node.style.css.fontStyle === "italic" ? "normal" : "italic" }) }, "I"), /* @__PURE__ */ import_react5.default.createElement("input", { "aria-label": "Text color", type: "color", value: /^#[0-9a-f]{6}$/i.test(node.style.css.color || "") ? node.style.css.color : "#111111", onChange: (e) => update({ color: e.target.value }) })), isImage && /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => document.querySelector(".assets-panel input[type=file]")?.click() }, "Replace"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Crop", onClick: cycleCrop }, "Crop"), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Image fit", value: node.style.css.objectFit || "cover", onChange: (e) => update({ objectFit: e.target.value }) }, /* @__PURE__ */ import_react5.default.createElement("option", { value: "cover" }, "Fill"), /* @__PURE__ */ import_react5.default.createElement("option", { value: "contain" }, "Fit"), /* @__PURE__ */ import_react5.default.createElement("option", { value: "fill" }, "Stretch")), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update({ borderRadius: node.style.css.borderRadius ? "0px" : "16px" }) }, "Radius")), (isText || isImage || node.type === "button" || node.type === "link") && /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => {
+      const href = window.prompt("Optional link URL", node.content.href || "");
+      if (href !== null) dispatch({ type: "UPDATE_NODE_CONTENT", payload: { nodeId: node.id, content: { href: href || void 0 } } });
+    } }, "Link"), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Hover effect", value: (node.interactions || []).find((x) => x.trigger === "hover")?.effect || "none", onChange: (e) => setInteraction("hover", e.target.value) }, effects.map((x) => /* @__PURE__ */ import_react5.default.createElement("option", { key: x, value: x }, "Hover: ", x))), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Animation", value: (node.interactions || []).find((x) => x.trigger === "animation")?.effect || "none", onChange: (e) => setInteraction("animation", e.target.value) }, motions.map((x) => /* @__PURE__ */ import_react5.default.createElement("option", { key: x, value: x }, "Animate: ", x))), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Duplicate", onClick: () => dispatch({ type: "DUPLICATE_NODE", payload: { nodeId: node.id } }) }, "\u29C9"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Delete", onClick: () => dispatch({ type: "DELETE_NODE", payload: { nodeId: node.id } }) }, "\u232B")));
   }
 
   // studio/components/LayersPanel.tsx
@@ -22532,11 +22527,12 @@
       setMessage("Upload complete");
       load();
     };
+    const insert = (a) => dispatch({ type: "INSERT_NODE", payload: { node: { type: String(a.mime_type || "").startsWith("video/") ? "video" : "image", content: { src: a.url || `/media/${a.id}/${encodeURIComponent(a.filename || a.original_filename || "asset")}`, asset_id: a.id, alt: a.alt_text || "" }, style: { css: { width: "320px", height: "220px", objectFit: "cover" }, tokens: {} }, metadata: { displayName: a.original_filename || a.filename || "Asset" } } } });
     const visible = items.filter((a) => String(a.original_filename || a.filename || "").toLowerCase().includes(search.toLowerCase()));
     return /* @__PURE__ */ import_react10.default.createElement("div", { className: "studio-panel assets-panel" }, /* @__PURE__ */ import_react10.default.createElement("label", { className: `asset-drop ${busy ? "busy" : ""}`, onDragOver: (e) => e.preventDefault(), onDrop: (e) => {
       e.preventDefault();
       upload(e.dataTransfer.files);
-    } }, /* @__PURE__ */ import_react10.default.createElement("input", { type: "file", multiple: true, accept: "image/*,video/*,.pdf", onChange: (e) => upload(e.target.files) }), /* @__PURE__ */ import_react10.default.createElement("b", null, "\uFF0B Upload media"), /* @__PURE__ */ import_react10.default.createElement("span", null, "or drop files here")), message && /* @__PURE__ */ import_react10.default.createElement("p", { className: "panel-message" }, message), /* @__PURE__ */ import_react10.default.createElement("div", { className: "panel-search" }, /* @__PURE__ */ import_react10.default.createElement("span", null, "\u2315"), /* @__PURE__ */ import_react10.default.createElement("input", { "aria-label": "Search assets", placeholder: "Search assets", value: search, onChange: (e) => setSearch(e.target.value) })), /* @__PURE__ */ import_react10.default.createElement("div", { className: "asset-grid" }, visible.map((a) => /* @__PURE__ */ import_react10.default.createElement("button", { key: a.id, onClick: () => dispatch({ type: "INSERT_NODE", payload: { node: { type: String(a.mime_type || "").startsWith("video/") ? "video" : "image", content: { src: a.url || `/media/${a.id}/${encodeURIComponent(a.filename || a.original_filename || "asset")}`, asset_id: a.id, alt: a.alt_text || "" }, metadata: { displayName: a.original_filename || a.filename || "Asset" } } } }) }, /* @__PURE__ */ import_react10.default.createElement("span", { className: "asset-thumb" }, String(a.mime_type || "").startsWith("image/") ? /* @__PURE__ */ import_react10.default.createElement("img", { src: a.url || `/media/${a.id}/${encodeURIComponent(a.filename || a.original_filename || "asset")}`, alt: "" }) : "\u25B6"), /* @__PURE__ */ import_react10.default.createElement("small", null, a.original_filename || a.filename)))), !items.length && /* @__PURE__ */ import_react10.default.createElement("div", { className: "empty-state" }, /* @__PURE__ */ import_react10.default.createElement("b", null, "Your media, in one place"), /* @__PURE__ */ import_react10.default.createElement("p", null, "Upload brand photography, logos, video, and files. Your own assets stay primary in the editor.")));
+    } }, /* @__PURE__ */ import_react10.default.createElement("input", { type: "file", multiple: true, accept: "image/*,video/*,.pdf", onChange: (e) => upload(e.target.files) }), /* @__PURE__ */ import_react10.default.createElement("b", null, "\uFF0B Upload media"), /* @__PURE__ */ import_react10.default.createElement("span", null, "or drop files here")), message && /* @__PURE__ */ import_react10.default.createElement("p", { className: "panel-message" }, message), /* @__PURE__ */ import_react10.default.createElement("div", { className: "panel-search" }, /* @__PURE__ */ import_react10.default.createElement("span", null, "\u2315"), /* @__PURE__ */ import_react10.default.createElement("input", { "aria-label": "Search assets", placeholder: "Search assets", value: search, onChange: (e) => setSearch(e.target.value) })), /* @__PURE__ */ import_react10.default.createElement("div", { className: "asset-grid" }, visible.map((a) => /* @__PURE__ */ import_react10.default.createElement("button", { key: a.id, onClick: () => insert(a) }, /* @__PURE__ */ import_react10.default.createElement("span", { className: "asset-thumb" }, String(a.mime_type || "").startsWith("image/") ? /* @__PURE__ */ import_react10.default.createElement("img", { src: a.url || `/media/${a.id}/${encodeURIComponent(a.filename || a.original_filename || "asset")}`, alt: "" }) : "\u25B6"), /* @__PURE__ */ import_react10.default.createElement("small", null, a.original_filename || a.filename)))), !items.length && /* @__PURE__ */ import_react10.default.createElement("div", { className: "empty-state" }, /* @__PURE__ */ import_react10.default.createElement("b", null, "Your media, in one place"), /* @__PURE__ */ import_react10.default.createElement("p", null, "Upload brand photography, logos, video, and files. Your own assets stay primary in the editor.")));
   }
 
   // studio/components/ComponentsPanel.tsx
@@ -22564,7 +22560,9 @@
   var rails = [["add", "\uFF0B", "Add"], ["pages", "\u25A4", "Pages"], ["layers", "\u2261", "Layers"], ["assets", "\u25A7", "Assets"], ["components", "\u25C7", "Components"], ["cms", "\u25EB", "CMS"], ["content", "T", "Content"], ["ai", "\u2726", "AI"], ["styles", "\u25C9", "Site styles"], ["seo", "\u2699", "SEO / Settings"]];
   function App() {
     const [state, dispatch] = (0, import_react13.useReducer)(studioReducer, initialState);
-    const [rail, setRail] = import_react13.default.useState("layers"), [saveStatus, setSaveStatus] = import_react13.default.useState("Saved"), [preview, setPreview] = import_react13.default.useState(false), [leftOpen, setLeftOpen] = import_react13.default.useState(true), [context, setContext] = import_react13.default.useState(null), [toast, setToast] = import_react13.default.useState("");
+    const [rail, setRail] = import_react13.default.useState("layers");
+    const [saveStatus, setSaveStatus] = import_react13.default.useState("Saved");
+    const [preview, setPreview] = import_react13.default.useState(false), [leftOpen, setLeftOpen] = import_react13.default.useState(true), [context, setContext] = import_react13.default.useState(null), [toast, setToast] = import_react13.default.useState(""), [fileDrop, setFileDrop] = import_react13.default.useState(false);
     const timer = (0, import_react13.useRef)(null), saving = (0, import_react13.useRef)(false), pending = (0, import_react13.useRef)(null), skipRevision = (0, import_react13.useRef)(null);
     const siteId = window.ZYLORA_STUDIO_CONTEXT?.siteId, csrf = window.ZYLORA_STUDIO_CONTEXT?.csrfToken, project = window.ZYLORA_STUDIO_CONTEXT?.siteName || "Untitled website";
     (0, import_react13.useEffect)(() => {
@@ -22576,14 +22574,14 @@
       }).then((d) => d.document && dispatch({ type: "SET_DOCUMENT", payload: d.document })).catch(() => setSaveStatus(navigator.onLine ? "Save failed" : "Offline"));
     }, [siteId, csrf]);
     (0, import_react13.useEffect)(() => {
-      const online = () => saveStatus === "Offline" && setSaveStatus("Unsaved changes"), offline = () => setSaveStatus("Offline");
+      const online = () => setSaveStatus((s) => s === "Offline" ? "Unsaved changes" : s), offline = () => setSaveStatus("Offline");
       addEventListener("online", online);
       addEventListener("offline", offline);
       return () => {
         removeEventListener("online", online);
         removeEventListener("offline", offline);
       };
-    }, [saveStatus]);
+    }, []);
     (0, import_react13.useEffect)(() => {
       if (!state.document || state.historyIndex <= 0) return;
       if (skipRevision.current === state.document.revision) {
@@ -22623,11 +22621,11 @@
           setSaveStatus(navigator.onLine ? "Save failed" : "Offline");
         });
       };
-      timer.current = setTimeout(() => save(state.document), 800);
+      timer.current = setTimeout(() => save(state.document), 700);
       return () => {
         if (timer.current) clearTimeout(timer.current);
       };
-    }, [state.document]);
+    }, [state.document, siteId, csrf]);
     (0, import_react13.useEffect)(() => {
       const key = (e) => {
         const target = e.target;
@@ -22651,22 +22649,14 @@
         } else if (mod && e.key.toLowerCase() === "z") {
           e.preventDefault();
           dispatch({ type: e.shiftKey ? "REDO" : "UNDO" });
-        } else if (mod && e.key.toLowerCase() === "a") {
-          e.preventDefault();
-          const page2 = state.document?.pages[state.currentPageId];
-          if (page2) dispatch({ type: "SELECT_NODE", payload: page2.nodes[page2.rootNodeId].children });
         } else if (e.key === "Escape") {
           dispatch({ type: "SELECT_NODE", payload: [] });
           setContext(null);
-        } else if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key) && state.selectedNodeIds.length) {
-          e.preventDefault();
-          const step = e.shiftKey ? 10 : 1, prop = e.key === "ArrowLeft" || e.key === "ArrowRight" ? "left" : "top", delta = e.key === "ArrowLeft" || e.key === "ArrowUp" ? -step : step, page2 = state.document?.pages[state.currentPageId], node = page2?.nodes[state.selectedNodeIds[0]], current = parseFloat(node?.style.css[prop] || "0");
-          dispatch({ type: "UPDATE_SELECTED_STYLE", payload: { position: node?.style.css.position || "relative", [prop]: `${current + delta}px` } });
         }
       };
       addEventListener("keydown", key);
       return () => removeEventListener("keydown", key);
-    }, [state]);
+    }, [state.selectedNodeIds]);
     const page = state.document?.pages[state.currentPageId], width = state.currentBreakpoint === "desktop" ? 1440 : state.currentBreakpoint === "tablet" ? 768 : 390;
     const fit = () => {
       const area = document.querySelector(".canvas-workspace")?.getBoundingClientRect();
@@ -22676,26 +22666,53 @@
       setToast("Running publish checks\u2026");
       const r = await fetch(`/api/sites/${siteId}/publish`, { method: "POST", headers: { "Content-Type": "application/json", "X-CSRF-Token": csrf }, body: "{}" });
       const d = await r.json();
-      setToast(r.ok ? "Published with the authoritative legacy renderer" : d?.detail?.message || d?.detail || "Publish failed");
+      setToast(r.ok ? "Published" : "Publish failed: " + (d?.detail?.message || d?.detail || "unknown error"));
+    };
+    const uploadDropped = async (file, clientX, clientY) => {
+      const body = new FormData();
+      body.append("file", file);
+      setToast("Uploading " + file.name + "\u2026");
+      const r = await fetch(`/api/sites/${siteId}/assets`, { method: "POST", headers: { "X-CSRF-Token": csrf }, body });
+      const d = await r.json();
+      if (!r.ok || !d.asset) {
+        setToast("Upload failed");
+        return;
+      }
+      const workspace = document.querySelector(".studio-canvas")?.getBoundingClientRect();
+      const x = Math.max(0, (clientX - (workspace?.left || 0)) / state.zoom), y = Math.max(0, (clientY - (workspace?.top || 0)) / state.zoom);
+      dispatch({ type: "INSERT_NODE", payload: { node: { type: "image", content: { src: d.asset.url, asset_id: d.asset.id, alt: d.asset.alt_text || "" }, style: { css: { width: "320px", height: "220px", objectFit: "cover", position: "absolute", left: `${Math.round(x - 160)}px`, top: `${Math.round(y - 110)}px` }, tokens: {} }, metadata: { displayName: d.asset.original_filename || "Uploaded image" } } } });
+      setToast("Image added to canvas");
     };
     const panel = rail === "add" ? /* @__PURE__ */ import_react13.default.createElement(AddPanel, null) : rail === "pages" || rail === "seo" ? /* @__PURE__ */ import_react13.default.createElement(PagesPanel, null) : rail === "layers" ? /* @__PURE__ */ import_react13.default.createElement(LayersPanel, null) : rail === "assets" ? /* @__PURE__ */ import_react13.default.createElement(AssetsPanel, null) : rail === "components" ? /* @__PURE__ */ import_react13.default.createElement(ComponentsPanel, null) : rail === "cms" ? /* @__PURE__ */ import_react13.default.createElement(CMSPanel, null) : rail === "content" ? /* @__PURE__ */ import_react13.default.createElement(CMSPanel, { contentOnly: true }) : rail === "styles" ? /* @__PURE__ */ import_react13.default.createElement(SiteStylesPanel, null) : /* @__PURE__ */ import_react13.default.createElement("div", { className: "studio-panel" }, /* @__PURE__ */ import_react13.default.createElement("div", { className: "empty-state" }, /* @__PURE__ */ import_react13.default.createElement("b", null, "AI design assistant"), /* @__PURE__ */ import_react13.default.createElement("p", null, "Select an element and describe a structured change. Operations are validated and applied atomically."), /* @__PURE__ */ import_react13.default.createElement("textarea", { placeholder: "Make this section feel more premium\u2026" }), /* @__PURE__ */ import_react13.default.createElement("button", { className: "primary wide-button", disabled: !state.selectedNodeIds.length }, "Preview AI operation")));
-    return /* @__PURE__ */ import_react13.default.createElement(StudioContext.Provider, { value: { state, dispatch } }, /* @__PURE__ */ import_react13.default.createElement("div", { className: "zylora-studio-app", onClick: () => context && setContext(null) }, /* @__PURE__ */ import_react13.default.createElement("header", { className: "studio-topbar" }, /* @__PURE__ */ import_react13.default.createElement("div", { className: "topbar-left" }, /* @__PURE__ */ import_react13.default.createElement("a", { href: "/dashboard", className: "studio-logo", "aria-label": "Exit to dashboard" }, /* @__PURE__ */ import_react13.default.createElement("span", null, "Z"), /* @__PURE__ */ import_react13.default.createElement("b", null, "Zylora Studio")), /* @__PURE__ */ import_react13.default.createElement("span", { className: "top-divider" }), /* @__PURE__ */ import_react13.default.createElement("div", { className: "project-crumb" }, /* @__PURE__ */ import_react13.default.createElement("b", null, project), /* @__PURE__ */ import_react13.default.createElement("span", null, "/"), /* @__PURE__ */ import_react13.default.createElement("span", null, page?.name || "Loading"))), /* @__PURE__ */ import_react13.default.createElement("div", { className: "topbar-center" }, /* @__PURE__ */ import_react13.default.createElement("button", { "aria-label": "Undo", disabled: state.historyIndex <= 0, onClick: () => dispatch({ type: "UNDO" }) }, "\u21B6"), /* @__PURE__ */ import_react13.default.createElement("button", { "aria-label": "Redo", disabled: state.historyIndex >= state.history.length - 1, onClick: () => dispatch({ type: "REDO" }) }, "\u21B7"), /* @__PURE__ */ import_react13.default.createElement("span", { className: "top-divider" }), ["desktop", "tablet", "mobile"].map(([...x]) => null), ["desktop", "tablet", "mobile"].map((bp) => /* @__PURE__ */ import_react13.default.createElement("button", { key: bp, className: state.currentBreakpoint === bp ? "active" : "", title: bp, onClick: () => dispatch({ type: "SET_BREAKPOINT", payload: bp }) }, bp === "desktop" ? "\u25B0" : bp === "tablet" ? "\u25AF" : "\u25AF")), /* @__PURE__ */ import_react13.default.createElement("span", { className: "canvas-width" }, width, "px"), /* @__PURE__ */ import_react13.default.createElement("span", { className: "top-divider" }), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "SET_ZOOM", payload: state.zoom - 0.1 }) }, "\u2212"), /* @__PURE__ */ import_react13.default.createElement("button", { className: "zoom-label", onClick: fit }, Math.round(state.zoom * 100), "%"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "SET_ZOOM", payload: state.zoom + 0.1 }) }, "\uFF0B")), /* @__PURE__ */ import_react13.default.createElement("div", { className: "topbar-right" }, /* @__PURE__ */ import_react13.default.createElement("span", { className: `save-state ${saveStatus.toLowerCase().replace(/\W/g, "-")}` }, /* @__PURE__ */ import_react13.default.createElement("i", null), saveStatus), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => setPreview(!preview) }, preview ? "Edit" : "Preview"), /* @__PURE__ */ import_react13.default.createElement("span", { className: "collab", title: "Collaboration presence placeholder" }, "\u25CF 1"), /* @__PURE__ */ import_react13.default.createElement("button", { className: "primary", onClick: publish }, "Publish"))), /* @__PURE__ */ import_react13.default.createElement("div", { className: "studio-main" }, /* @__PURE__ */ import_react13.default.createElement("nav", { className: "tool-rail", "aria-label": "Studio tools" }, rails.map(([id, icon, label]) => /* @__PURE__ */ import_react13.default.createElement("button", { key: id, className: rail === id && leftOpen ? "active" : "", onClick: () => {
+    return /* @__PURE__ */ import_react13.default.createElement(StudioContext.Provider, { value: { state, dispatch } }, /* @__PURE__ */ import_react13.default.createElement("div", { className: "zylora-studio-app", onClick: () => context && setContext(null) }, /* @__PURE__ */ import_react13.default.createElement("header", { className: "studio-topbar" }, /* @__PURE__ */ import_react13.default.createElement("div", { className: "topbar-left" }, /* @__PURE__ */ import_react13.default.createElement("a", { href: "/dashboard", className: "studio-logo", "aria-label": "Exit to dashboard" }, /* @__PURE__ */ import_react13.default.createElement("span", null, "Z"), /* @__PURE__ */ import_react13.default.createElement("b", null, "Zylora Studio")), /* @__PURE__ */ import_react13.default.createElement("span", { className: "top-divider" }), /* @__PURE__ */ import_react13.default.createElement("div", { className: "project-crumb" }, /* @__PURE__ */ import_react13.default.createElement("b", null, project), /* @__PURE__ */ import_react13.default.createElement("span", null, "/"), /* @__PURE__ */ import_react13.default.createElement("span", null, page?.name || "Loading"))), /* @__PURE__ */ import_react13.default.createElement("div", { className: "topbar-center" }, /* @__PURE__ */ import_react13.default.createElement(ContextToolbar, { onFit: fit, onPreview: () => setPreview(!preview) }), /* @__PURE__ */ import_react13.default.createElement("span", { className: "top-divider" }), ["desktop", "tablet", "mobile"].map((bp) => /* @__PURE__ */ import_react13.default.createElement("button", { key: bp, className: state.currentBreakpoint === bp ? "active" : "", title: bp, onClick: () => dispatch({ type: "SET_BREAKPOINT", payload: bp }) }, bp === "desktop" ? "\u25B0" : bp === "tablet" ? "\u25AF" : "\u25AF")), /* @__PURE__ */ import_react13.default.createElement("span", { className: "canvas-width" }, width, "px"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "SET_ZOOM", payload: state.zoom - 0.1 }) }, "\u2212"), /* @__PURE__ */ import_react13.default.createElement("button", { className: "zoom-label", onClick: fit }, Math.round(state.zoom * 100), "%"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "SET_ZOOM", payload: state.zoom + 0.1 }) }, "\uFF0B")), /* @__PURE__ */ import_react13.default.createElement("div", { className: "topbar-right" }, /* @__PURE__ */ import_react13.default.createElement("span", { className: `save-state ${saveStatus.toLowerCase().replace(/\W/g, "-")}` }, /* @__PURE__ */ import_react13.default.createElement("i", null), saveStatus), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => setPreview(!preview) }, preview ? "Edit" : "Preview"), /* @__PURE__ */ import_react13.default.createElement("button", { className: "primary", onClick: publish }, "Publish"))), /* @__PURE__ */ import_react13.default.createElement("div", { className: "studio-main" }, /* @__PURE__ */ import_react13.default.createElement("nav", { className: "tool-rail", "aria-label": "Studio tools" }, rails.map(([id, icon, label]) => /* @__PURE__ */ import_react13.default.createElement("button", { key: id, className: rail === id && leftOpen ? "active" : "", onClick: () => {
       if (rail === id) setLeftOpen(!leftOpen);
       else {
         setRail(id);
         setLeftOpen(true);
       }
-    }, title: label }, /* @__PURE__ */ import_react13.default.createElement("b", null, icon), /* @__PURE__ */ import_react13.default.createElement("span", null, label)))), leftOpen && /* @__PURE__ */ import_react13.default.createElement("aside", { className: "studio-sidebar-left" }, /* @__PURE__ */ import_react13.default.createElement("header", null, /* @__PURE__ */ import_react13.default.createElement("div", null, /* @__PURE__ */ import_react13.default.createElement("b", null, rails.find((x) => x[0] === rail)?.[2]), /* @__PURE__ */ import_react13.default.createElement("small", null, rail === "content" ? "Safe content editing" : "Workspace")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => setLeftOpen(false) }, "\xD7")), panel), /* @__PURE__ */ import_react13.default.createElement("main", { className: `canvas-workspace ${preview ? "preview-mode" : ""}`, onClick: (e) => {
+    }, title: label }, /* @__PURE__ */ import_react13.default.createElement("b", null, icon), /* @__PURE__ */ import_react13.default.createElement("span", null, label)))), leftOpen && /* @__PURE__ */ import_react13.default.createElement("aside", { className: "studio-sidebar-left" }, /* @__PURE__ */ import_react13.default.createElement("header", null, /* @__PURE__ */ import_react13.default.createElement("div", null, /* @__PURE__ */ import_react13.default.createElement("b", null, rails.find((x) => x[0] === rail)?.[2]), /* @__PURE__ */ import_react13.default.createElement("small", null, rail === "content" ? "Safe content editing" : "Workspace")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => setLeftOpen(false), "aria-label": "Close tool panel" }, "\xD7")), panel), /* @__PURE__ */ import_react13.default.createElement("main", { className: `canvas-workspace ${preview ? "preview-mode" : ""}`, onClick: (e) => {
       if (e.target === e.currentTarget) dispatch({ type: "SELECT_NODE", payload: [] });
     }, onContextMenu: (e) => {
       if (state.selectedNodeIds.length) {
         e.preventDefault();
         setContext({ x: e.clientX, y: e.clientY });
       }
-    } }, /* @__PURE__ */ import_react13.default.createElement("div", { className: "canvas-rulers" }, /* @__PURE__ */ import_react13.default.createElement("span", null, Math.round(width * state.zoom), " px"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: fit }, "Fit"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "SET_ZOOM", payload: 1 }) }, "100%")), /* @__PURE__ */ import_react13.default.createElement("div", { className: "artboard-wrap", style: { width: width * state.zoom } }, /* @__PURE__ */ import_react13.default.createElement("div", { className: "studio-canvas", style: { width, height: "auto", minHeight: 900, transform: `scale(${state.zoom})` } }, page ? /* @__PURE__ */ import_react13.default.createElement(CanvasNode, { nodeId: page.rootNodeId }) : /* @__PURE__ */ import_react13.default.createElement("div", { className: "canvas-loading" }, /* @__PURE__ */ import_react13.default.createElement("span", null), /* @__PURE__ */ import_react13.default.createElement("p", null, "Preparing your canvas\u2026")))), state.snapLines.map((line, i) => /* @__PURE__ */ import_react13.default.createElement("div", { key: i, className: `snap-guide ${line.orientation}`, style: line.orientation === "vertical" ? { left: line.position * state.zoom } : { top: line.position * state.zoom } })), /* @__PURE__ */ import_react13.default.createElement("footer", { className: "canvas-status" }, /* @__PURE__ */ import_react13.default.createElement("span", null, state.selectedNodeIds.length ? `${state.selectedNodeIds.length} selected` : "Ready"), /* @__PURE__ */ import_react13.default.createElement("span", null, state.currentBreakpoint, " \xB7 ", width, "px \xB7 ", Math.round(state.zoom * 100), "%"))), !preview && /* @__PURE__ */ import_react13.default.createElement("aside", { className: "studio-sidebar-right" }, /* @__PURE__ */ import_react13.default.createElement("header", null, /* @__PURE__ */ import_react13.default.createElement("div", null, /* @__PURE__ */ import_react13.default.createElement("b", null, "Inspector"), /* @__PURE__ */ import_react13.default.createElement("small", null, state.selectedNodeIds.length ? `${state.selectedNodeIds.length} selected` : "No selection"))), /* @__PURE__ */ import_react13.default.createElement(Inspector, null))), context && /* @__PURE__ */ import_react13.default.createElement("div", { className: "context-menu", style: { left: context.x, top: context.y }, role: "menu" }, /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "CUT_SELECTED" }) }, "Cut ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Ctrl X")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "COPY_SELECTED" }) }, "Copy ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Ctrl C")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "PASTE" }), disabled: !state.clipboard }, "Paste ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Ctrl V")), /* @__PURE__ */ import_react13.default.createElement("hr", null), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "DUPLICATE_SELECTED" }) }, "Duplicate ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Ctrl D")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "DELETE_SELECTED" }) }, "Delete ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Del")), /* @__PURE__ */ import_react13.default.createElement("hr", null), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => state.selectedNodeIds[0] && dispatch({ type: "REORDER_NODE", payload: { nodeId: state.selectedNodeIds[0], direction: "front" } }) }, "Bring to front"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => state.selectedNodeIds[0] && dispatch({ type: "REORDER_NODE", payload: { nodeId: state.selectedNodeIds[0], direction: "back" } }) }, "Send to back"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => {
-      const name = prompt("Component name", "Reusable section");
-      if (name) dispatch({ type: "CREATE_COMPONENT", payload: { name } });
-    }, disabled: state.selectedNodeIds.length !== 1 }, "Create component")), toast && /* @__PURE__ */ import_react13.default.createElement("div", { className: "studio-toast", role: "status" }, /* @__PURE__ */ import_react13.default.createElement("span", null, toast), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => setToast("") }, "\xD7"))));
+    }, onDragEnter: (e) => {
+      if (Array.from(e.dataTransfer.types).includes("Files")) {
+        e.preventDefault();
+        setFileDrop(true);
+      }
+    }, onDragOver: (e) => {
+      if (Array.from(e.dataTransfer.types).includes("Files")) e.preventDefault();
+    }, onDragLeave: (e) => {
+      if (e.currentTarget === e.target) setFileDrop(false);
+    }, onDrop: (e) => {
+      e.preventDefault();
+      setFileDrop(false);
+      const file = e.dataTransfer.files?.[0];
+      if (file?.type.startsWith("image/")) uploadDropped(file, e.clientX, e.clientY);
+      else if (file) setToast("Only image files can be added to the canvas");
+    } }, fileDrop && /* @__PURE__ */ import_react13.default.createElement("div", { className: "canvas-file-drop", "aria-live": "polite" }, "Drop to add image"), /* @__PURE__ */ import_react13.default.createElement("div", { className: "canvas-rulers" }, /* @__PURE__ */ import_react13.default.createElement("span", null, Math.round(width * state.zoom), " px"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: fit }, "Fit"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "SET_ZOOM", payload: 1 }) }, "100%")), /* @__PURE__ */ import_react13.default.createElement("div", { className: "artboard-wrap", style: { width: width * state.zoom } }, /* @__PURE__ */ import_react13.default.createElement("div", { className: "studio-canvas", style: { width, height: "auto", minHeight: 900, transform: `scale(${state.zoom})` } }, page ? /* @__PURE__ */ import_react13.default.createElement(CanvasNode, { nodeId: page.rootNodeId }) : /* @__PURE__ */ import_react13.default.createElement("div", { className: "canvas-loading" }, /* @__PURE__ */ import_react13.default.createElement("span", null), /* @__PURE__ */ import_react13.default.createElement("p", null, "Preparing your canvas\u2026")))), state.snapLines.map((line, i) => /* @__PURE__ */ import_react13.default.createElement("div", { key: i, className: `snap-guide ${line.orientation}`, style: line.orientation === "vertical" ? { left: line.position * state.zoom } : { top: line.position * state.zoom } })), /* @__PURE__ */ import_react13.default.createElement("footer", { className: "canvas-status" }, /* @__PURE__ */ import_react13.default.createElement("span", null, state.selectedNodeIds.length ? `${state.selectedNodeIds.length} selected` : "Ready"), /* @__PURE__ */ import_react13.default.createElement("span", null, state.currentBreakpoint, " \xB7 ", width, "px \xB7 ", Math.round(state.zoom * 100), "%"))), /* @__PURE__ */ import_react13.default.createElement("div", { className: "studio-advanced-anchor", "aria-hidden": "true" })), context && /* @__PURE__ */ import_react13.default.createElement("div", { className: "context-menu", style: { left: context.x, top: context.y }, role: "menu" }, /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "CUT_SELECTED" }) }, "Cut ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Ctrl X")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "COPY_SELECTED" }) }, "Copy ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Ctrl C")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "PASTE" }), disabled: !state.clipboard }, "Paste ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Ctrl V")), /* @__PURE__ */ import_react13.default.createElement("hr", null), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "DUPLICATE_SELECTED" }) }, "Duplicate ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Ctrl D")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "DELETE_SELECTED" }) }, "Delete ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Del")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "GROUP_SELECTED" }), disabled: state.selectedNodeIds.length < 2 }, "Group"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "UNGROUP_SELECTED" }), disabled: state.selectedNodeIds.length !== 1 }, "Ungroup"), /* @__PURE__ */ import_react13.default.createElement("hr", null), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => state.selectedNodeIds[0] && dispatch({ type: "REORDER_NODE", payload: { nodeId: state.selectedNodeIds[0], direction: "front" } }) }, "Bring to front"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => state.selectedNodeIds[0] && dispatch({ type: "REORDER_NODE", payload: { nodeId: state.selectedNodeIds[0], direction: "back" } }) }, "Send to back")), toast && /* @__PURE__ */ import_react13.default.createElement("div", { className: "studio-toast", role: "status" }, /* @__PURE__ */ import_react13.default.createElement("span", null, toast), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => setToast("") }, "\xD7"))));
   }
 
   // studio/index.tsx
