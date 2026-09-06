@@ -5,7 +5,16 @@ Repository: `main` at starting SHA `aab18bd5e786c8e2273fe60a7128bff075678576` be
 
 ## Verdict
 
-**CONDITIONALLY READY** for the Studio UX implementation in the repository. The simplified editor is regression-tested in isolated authenticated browser journeys, but this pass has not yet deployed a new release SHA to Railway. The production deployment therefore remains the prior release until the intended source changes are committed, pushed and deployed.
+**CONDITIONALLY READY** for the Studio UX implementation. The exact release SHA is committed, pushed to `origin/main`, deployed by the Git-backed Railway production service, and health-verified. The verdict remains conditional because the focused pass did not repeat the full authenticated production journey or every requested manual viewport/crop workflow.
+
+## Railway deployment evidence
+
+- Service: `zylora-app` / production environment
+- Deployment ID: `2b88d3a2-3da9-40ac-bf40-65c3b61f394d`
+- Deployed commit: `9ced8b6a33ac3e60342bff664587bb51586b4adf`
+- Deployment status: `SUCCESS`
+- Production URL: `https://zylora-api-production.up.railway.app`
+- Health check: `GET /api/health` → HTTP 200, `{"status":"ok"}`
 
 ## A. Implemented
 
@@ -104,13 +113,12 @@ The desktop journey includes safe scroll, semantic Add, Add-panel drag/drop, tex
 
 ## O. Remaining limitations
 
-1. The source changes are not yet committed/pushed/deployed in this pass, so live Railway verification of this exact UX build is outstanding.
-2. Full manual visual QA at every requested width (1440, 1366, 1280, 1024, 768, 430, 412, 390, 375, 360) was not repeated here.
-3. Image crop is a compact focal-position cycle, not a full drag-to-crop editing surface.
-4. Middle-mouse pan is implemented but lacks a dedicated automated interaction assertion.
-5. AI model picker, Sales Assistant billing, and external provider certification were intentionally not changed in this focused Studio UX pass.
-6. Grouping, section reordering and advanced layer management remain the existing structured operations; this pass did not add new beginner-facing affordances for every advanced operation.
+1. Full manual visual QA at every requested width (1440, 1366, 1280, 1024, 768, 430, 412, 390, 375, 360) was not repeated here.
+2. Image crop is a compact focal-position cycle, not a full drag-to-crop editing surface.
+3. Middle-mouse pan is implemented but lacks a dedicated automated interaction assertion.
+4. AI model picker, Sales Assistant billing, and external provider certification were intentionally not changed in this focused Studio UX pass.
+5. Grouping, section reordering and advanced layer management remain the existing structured operations; this pass did not add new beginner-facing affordances for every advanced operation.
 
 ## P. Release recommendation
 
-Do not label this exact source state `PRODUCTION READY` until the intended files are committed, the resulting SHA is deployed to Railway, and the same browser matrix is rerun against that deployed SHA. The repository-controlled implementation is green and suitable for that release step.
+The exact source SHA is now committed, pushed and Railway-deployed with a successful health check. The repository-controlled implementation is green and the isolated authenticated browser matrix passes; remaining limitations above prevent an unconditional production-ready verdict for this focused pass.
