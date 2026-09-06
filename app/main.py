@@ -328,6 +328,8 @@ def verify_email_page(): return FileResponse(ROOT/'static'/'verify-email.html')
 def accept_transfer_page(): return FileResponse(ROOT/'static'/'accept-transfer.html')
 @app.get('/choose-plan',include_in_schema=False)
 def choose_plan(): return FileResponse(ROOT/'static'/'choose-plan.html')
+@app.get('/pricing',include_in_schema=False)
+def pricing_alias(): return FileResponse(ROOT/'static'/'choose-plan.html')
 def _require_super_admin(request: Request) -> dict:
     u = current_user(request)
     if u.get('role') != 'SUPER_ADMIN':
