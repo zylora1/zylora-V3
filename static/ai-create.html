@@ -60,6 +60,7 @@
         <div class="chat-controls">
           <div class="design-prompt"><span>✦</span><input id="stylePrompt" placeholder="Optional: describe a custom direction"><button id="styleApply" type="button">Use direction</button></div>
           <div class="direction-grid" id="directionGrid" aria-live="polite"></div>
+          <div class="motion-picker"><div><b>AI model</b><small>Only provider-backed models enabled for this account are shown.</small></div><label><span>Generation model</span><select id="aiModel"><option value="">Loading available models…</option></select></label></div>
           <div class="motion-picker"><div><b>Motion direction</b><small>Shared effects only, with reduced-motion support.</small></div><label><span>Animation style</span><select id="motionStyle"><option value="Subtle" selected>Subtle</option><option value="Editorial">Editorial</option><option value="Immersive">Immersive</option><option value="Energetic">Energetic</option><option value="None">None</option></select></label></div>
           <div class="actions final-actions"><button class="secondary back" data-back="2">Back</button><button class="primary" id="createSite" disabled data-testid="ai-create-final">Create website <span>→</span></button></div>
           <p class="status" id="createStatus" role="status"></p>
@@ -80,7 +81,7 @@
     <footer class="artifact-footer"><span>Preview updates as you answer.</span><span>Final structure is validated on create.</span></footer>
   </aside>
 </main>
-<script src="/static/zylora-ui.js"></script><script src="/static/ai-create.js?v=20260905-premium"></script>
+<script src="/static/zylora-ui.js"></script><script src="/static/ai-create.js?v=20260905-premium"></script><script src="/static/ai-model-picker.js"></script>
 </body>
 </html>
 

@@ -1,3 +1,4 @@
+window.addEventListener('pageshow',async e=>{if(!e.persisted)return;try{const r=await fetch('/api/auth/me',{credentials:'same-origin',cache:'no-store'});if(r.ok){const j=await r.json();if(j.csrf_token)sessionStorage.setItem('csrf',j.csrf_token)}else if(r.status===401){location.replace('/login?next='+encodeURIComponent(location.pathname+location.search+location.hash))}}catch{}});
 const siteId=location.pathname.split('/').pop();
 let me=null,site=null,currentPage='home',currentDevice='desktop',editorDoc=null,selected=null,pendingOps=[],saveTimer=null,basicsTimer=null,basicSaving=false,mediaContext=null,brandAssetTarget=null,seoOgAssetId=null,footerLinks=[],activeDialog=null,dialogReturnFocus=null;
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];

@@ -142,7 +142,7 @@ def _deterministic_ia(description:str,industry:str)->list[dict]:
         if len(result)>=max_pages: break
     return result
 
-def plan_site_architecture(business_name:str,description:str,industry:str,style:str,*,user_id:str|None=None)->dict:
+def plan_site_architecture(business_name:str,description:str,industry:str,style:str,*,user_id:str|None=None,model:str|None=None)->dict:
     """Requirements -> IA -> design direction before SiteDocument generation."""
     local_pages=_deterministic_ia(description,industry)
     design_archetypes=['editorial-asymmetric','cinematic-image-led','swiss-minimal','modular-bento','typography-led','immersive-story','poster-brutalist','soft-organic','technical-grid']
@@ -169,11 +169,12 @@ def plan_site_architecture(business_name:str,description:str,industry:str,style:
       "Do not use or imitate a starting template; derive information architecture and design direction from the brief. No auth, carts, dashboards, stored reviews or other unsupported backend features. Customer sites must not contain Blog, Journal or News pages; Zylora's blog is a SUPER_ADMIN-only platform feature. Maximum 20 pages.\n"+
       f'BUSINESS_NAME:{business_name}\nINDUSTRY:{industry}\nSTYLE:{style}\nBUSINESS_CONTEXT:{description[:6000]}')
     headers={'Authorization':f'Bearer {settings.openai_api_key}','Content-Type':'application/json'}
-    payload={'model':settings.openai_model,'input':prompt,'max_output_tokens':800,'text':{'format':{'type':'json_object'}}}
+    selected_model=model or settings.openai_model
+    payload={'model':selected_model,'input':prompt,'max_output_tokens':800,'text':{'format':{'type':'json_object'}}}
     try:
         with httpx.Client(timeout=35) as client:
             res=client.post('https://api.openai.com/v1/responses',headers=headers,json=payload); res.raise_for_status(); data=res.json(); parsed=json.loads(data.get('output_text','{}'))
-        record_ai_api_usage(surface='WEBSITE',operation='SITE_ARCHITECTURE',model=settings.openai_model,usage=data.get('usage') or {},user_id=user_id)
+        record_ai_api_usage(surface='WEBSITE',operation='SITE_ARCHITECTURE',model=selected_model,usage=data.get('usage') or {},user_id=user_id)
         pages=[]; seen=set()
         for item in (parsed.get('pages') or [])[:20]:
             if not isinstance(item,dict): continue
@@ -188,7 +189,7 @@ def plan_site_architecture(business_name:str,description:str,industry:str,style:
         pass
     return local
 
-def ai_generate_site(business_name:str,description:str,industry:str,style:str,motion_style:str='Subtle',*,user_id:str|None=None)->dict:
+def ai_generate_site(business_name:str,description:str,industry:str,style:str,motion_style:str='Subtle',*,user_id:str|None=None,model:str|None=None)->dict:
     if not settings.openai_api_key:
         if settings.app_env.lower()=='production':
             raise RuntimeError('OpenAI is not configured in production')
@@ -200,10 +201,11 @@ def ai_generate_site(business_name:str,description:str,industry:str,style:str,mo
       "Missing factual values must be omitted or described as editable placeholders. No fake auth/cart/member functionality. Avoid generic filler. Return JSON only with tagline and description.\n"+
       f'BUSINESS_NAME:{business_name}\nINDUSTRY:{industry}\nSTYLE:{style}\nMOTION:{motion_style}\nBUSINESS_CONTEXT:{description[:6000]}')
     headers={'Authorization':f'Bearer {settings.openai_api_key}','Content-Type':'application/json'}
-    payload={'model':settings.openai_model,'input':prompt,'max_output_tokens':500,'text':{'format':{'type':'json_object'}}}
+    selected_model=model or settings.openai_model
+    payload={'model':selected_model,'input':prompt,'max_output_tokens':500,'text':{'format':{'type':'json_object'}}}
     with httpx.Client(timeout=45) as client:
         res=client.post('https://api.openai.com/v1/responses',headers=headers,json=payload); res.raise_for_status(); data=res.json(); parsed=json.loads(data.get('output_text','{}'))
-    record_ai_api_usage(surface='WEBSITE',operation='SITE_COPY',model=settings.openai_model,usage=data.get('usage') or {},user_id=user_id)
+    record_ai_api_usage(surface='WEBSITE',operation='SITE_COPY',model=selected_model,usage=data.get('usage') or {},user_id=user_id)
     return {'tagline':str(parsed.get('tagline') or business_name)[:120],'description':str(parsed.get('description') or description)[:3000],'provider':'openai','motion_style':motion_style}
 
 def ai_edit(current:dict,instruction:str)->dict:
@@ -613,7 +615,7 @@ def cloudflare_delete_hostname(provider_id: str) -> None:
     with httpx.Client(timeout=20) as client:
         r=client.delete(url,headers=headers); r.raise_for_status()
 
-def sales_assistant_completion(*, business_context: dict, visitor_message: str, history: list[dict], tool_results: dict, tone: str='FRIENDLY', max_output_tokens: int=350) -> dict:
+def sales_assistant_completion(*, business_context: dict, visitor_message: str, history: list[dict], tool_results: dict, tone: str='FRIENDLY', max_output_tokens: int=350, model: str|None=None) -> dict:
     """Synthesize a grounded visitor-facing reply from validated server tool results.
 
     The model never receives database capabilities. It can only phrase facts/actions already
@@ -633,9 +635,10 @@ def sales_assistant_completion(*, business_context: dict, visitor_message: str, 
       f"TOOL_RESULTS:{json.dumps(tool_results,ensure_ascii=False)[:10000]}"
     )
     headers={'Authorization':f'Bearer {settings.openai_api_key}','Content-Type':'application/json'}
-    payload={'model':settings.sales_assistant_model,'input':prompt,'max_output_tokens':max(80,min(int(max_output_tokens),800)),'text':{'format':{'type':'json_object'}}}
+    selected_model=model or settings.sales_assistant_model
+    payload={'model':selected_model,'input':prompt,'max_output_tokens':max(80,min(int(max_output_tokens),800)),'text':{'format':{'type':'json_object'}}}
     with httpx.Client(timeout=25) as client:
         res=client.post('https://api.openai.com/v1/responses',headers=headers,json=payload); res.raise_for_status(); data=res.json()
     parsed=json.loads(data.get('output_text','{}') or '{}'); usage=data.get('usage') or {}
     return {'answer':' '.join(str(parsed.get('answer') or '').split())[:1200],
-            'input_tokens':int(usage.get('input_tokens') or 0),'output_tokens':int(usage.get('output_tokens') or 0),'model':settings.sales_assistant_model}
+            'input_tokens':int(usage.get('input_tokens') or 0),'output_tokens':int(usage.get('output_tokens') or 0),'model':selected_model}

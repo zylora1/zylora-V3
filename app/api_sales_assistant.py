@@ -24,6 +24,7 @@ from .sales_assistant import (
     conversation_detail, assistant_funnel, get_contact_options, ensure_conversion_lead,
     link_appointment,
 )
+from .ai_models import enabled_models
 
 router=APIRouter(prefix='/api')
 
@@ -248,13 +249,14 @@ class AssistantSettingsPatch(BaseModel):
     cms_collection_ids:list[str]|None=Field(default=None,max_length=20)
     restricted_topics:list[str]|None=Field(default=None,max_length=30)
     custom_instructions:str|None=Field(default=None,max_length=2000)
+    model:str|None=Field(default=None,max_length=120)
 
 
 @router.get('/sites/{site_id}/assistant/settings')
 def owner_assistant_settings(site_id: str,request: Request):
     u=_user(request)
     with SessionLocal() as db:_owned_site(db,u['id'],site_id)
-    cfg=site_config(site_id);cfg['appointment_configured']=bool(get_appointment_settings(site_id));return cfg
+    cfg=site_config(site_id);cfg['appointment_configured']=bool(get_appointment_settings(site_id));cfg['available_models']=enabled_models();return cfg
 
 
 @router.patch('/sites/{site_id}/assistant/settings')

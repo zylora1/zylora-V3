@@ -40,10 +40,10 @@ def create_live_ai(c,h,name='Hardening Site',description='A consulting studio of
 
 def test_plan_defaults_dual_wallet_and_contact_only_pro_has_no_wallet():
     reset_db(); c,h,uid=signup()
-    assert DEFAULTS['FREE']['ai_credits']==15 and DEFAULTS['FREE']['lead_credits']==20
+    assert DEFAULTS['FREE']['ai_credits']==20 and DEFAULTS['FREE']['lead_credits']==20 and DEFAULTS['FREE']['signup_bonus_credits']==0
     assert DEFAULTS['STARTER']['ai_credits']==100 and DEFAULTS['STARTER']['lead_credits']==100
     assert DEFAULTS['GROWTH']['ai_credits']==300 and DEFAULTS['GROWTH']['lead_credits']==300
-    w=wallet_summary(uid); assert w['ai']['monthly_remaining']==15 and w['lead']['monthly_remaining']==20
+    w=wallet_summary(uid); assert w['ai']['monthly_remaining']==20 and w['lead']['monthly_remaining']==20
     assert w['fallback_order']==['MONTHLY','SIGNUP_BONUS','TOPUP']
     with SessionLocal.begin() as db:
         db.execute(text("UPDATE users SET plan='PRO',plan_selected=1 WHERE id=:u"),{'u':uid})
@@ -87,15 +87,15 @@ def test_exact_topup_catalogue_and_payment_verify_is_idempotent():
 
 def test_super_admin_midcycle_plan_edit_defers_to_rollover_and_audits_old_new():
     reset_db(); c,h,uid=signup('midcycle@example.com')
-    initial=wallet_summary(uid); assert initial['ai']['monthly_remaining']==15 and initial['lead']['monthly_remaining']==20
+    initial=wallet_summary(uid); assert initial['ai']['monthly_remaining']==20 and initial['lead']['monthly_remaining']==20
     # Change live plan configuration. Existing current-period wallet stays stable.
     update_plan('FREE',{'ai_credits':33,'lead_credits':44})
-    same=wallet_summary(uid); assert same['ai']['monthly_remaining']==15 and same['lead']['monthly_remaining']==20
+    same=wallet_summary(uid); assert same['ai']['monthly_remaining']==20 and same['lead']['monthly_remaining']==20
     with SessionLocal.begin() as db:
         db.execute(text("UPDATE credit_wallets SET period_key='2000-01' WHERE user_id=:u"),{'u':uid})
     rolled=wallet_summary(uid); assert rolled['ai']['monthly_remaining']==33 and rolled['lead']['monthly_remaining']==44
     # Restore before fixture teardown for deterministic direct calls.
-    update_plan('FREE',{'ai_credits':15,'lead_credits':20})
+    update_plan('FREE',{'ai_credits':20,'lead_credits':20})
 
 def test_lead_notification_charges_once_failure_refunds_and_contacts_deduplicate(monkeypatch):
     reset_db(); c,h,uid=signup('leadnotify@example.com'); sid=create_live_ai(c,h)

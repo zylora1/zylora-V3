@@ -6,11 +6,11 @@ from .db import SessionLocal, now_iso
 # ZYLORA is retained only as a backwards-compatible legacy entitlement so existing
 # customer rows and historical subscriptions remain readable during migration.
 DEFAULTS = {
-    'FREE': {'plan':'FREE','public_name':'Free','price_inr_minor':0,'price_usd_minor':0,'site_limit':10,'page_limit':2,'ai_credits':15,'lead_credits':20,'signup_bonus_credits':5,'ai_site_cost':5,'ai_edit_cost':2,'contact_only':0},
-    'STARTER': {'plan':'STARTER','public_name':'Starter','price_inr_minor':79900,'price_usd_minor':900,'site_limit':10,'page_limit':5,'ai_credits':100,'lead_credits':100,'signup_bonus_credits':5,'ai_site_cost':5,'ai_edit_cost':2,'contact_only':0},
-    'GROWTH': {'plan':'GROWTH','public_name':'Growth','price_inr_minor':179900,'price_usd_minor':1900,'site_limit':10,'page_limit':8,'ai_credits':300,'lead_credits':300,'signup_bonus_credits':5,'ai_site_cost':5,'ai_edit_cost':2,'contact_only':0},
+    'FREE': {'plan':'FREE','public_name':'Free','price_inr_minor':0,'price_usd_minor':0,'site_limit':10,'page_limit':2,'ai_credits':20,'lead_credits':20,'signup_bonus_credits':0,'ai_site_cost':5,'ai_edit_cost':2,'contact_only':0},
+    'STARTER': {'plan':'STARTER','public_name':'Starter','price_inr_minor':79900,'price_usd_minor':900,'site_limit':10,'page_limit':5,'ai_credits':100,'lead_credits':100,'signup_bonus_credits':0,'ai_site_cost':5,'ai_edit_cost':2,'contact_only':0},
+    'GROWTH': {'plan':'GROWTH','public_name':'Growth','price_inr_minor':179900,'price_usd_minor':1900,'site_limit':10,'page_limit':8,'ai_credits':300,'lead_credits':300,'signup_bonus_credits':0,'ai_site_cost':5,'ai_edit_cost':2,'contact_only':0},
     'PRO': {'plan':'PRO','public_name':'Managed by experts','price_inr_minor':0,'price_usd_minor':0,'site_limit':10,'page_limit':10,'ai_credits':0,'lead_credits':0,'signup_bonus_credits':0,'ai_site_cost':0,'ai_edit_cost':0,'contact_only':1},
-    'ZYLORA': {'plan':'ZYLORA','public_name':'Legacy Zylora','price_inr_minor':79900,'price_usd_minor':900,'site_limit':10,'page_limit':10,'ai_credits':300,'lead_credits':300,'signup_bonus_credits':5,'ai_site_cost':5,'ai_edit_cost':2,'contact_only':0},
+    'ZYLORA': {'plan':'ZYLORA','public_name':'Legacy Zylora','price_inr_minor':79900,'price_usd_minor':900,'site_limit':10,'page_limit':10,'ai_credits':300,'lead_credits':300,'signup_bonus_credits':0,'ai_site_cost':5,'ai_edit_cost':2,'contact_only':0},
 }
 
 PUBLIC_PLAN_KEYS=('FREE','STARTER','GROWTH','PRO')

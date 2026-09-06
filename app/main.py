@@ -359,7 +359,14 @@ def terms(): return FileResponse(ROOT/'static'/'terms.html')
 @app.get('/privacy',include_in_schema=False)
 def privacy(): return FileResponse(ROOT/'static'/'privacy.html')
 @app.get('/editor/{site_id}',include_in_schema=False)
-def editor(site_id:str): return FileResponse(ROOT/'static'/'editor.html')
+def editor(site_id:str,request:Request):
+    # `/studio` is the canonical editor. Keep `/editor` as an authenticated
+    # compatibility alias so old links cannot fork the document model.
+    user=current_user(request)
+    with SessionLocal() as db:
+        site=db.execute(text('SELECT id FROM sites WHERE id=:site AND user_id=:user'),{'site':site_id,'user':user['id']}).first()
+    if not site: raise HTTPException(404,'Site not found')
+    return RedirectResponse(f'/studio/{site_id}',status_code=307)
 @app.get('/studio/{site_id}',include_in_schema=False)
 def studio(site_id:str,request:Request):
     user=current_user(request)
@@ -368,7 +375,8 @@ def studio(site_id:str,request:Request):
     if not site: raise HTTPException(404,'Site not found')
     raw=(ROOT/'static'/'studio.html').read_text(encoding='utf-8')
     context=json.dumps({'siteId':site_id,'siteName':site['name'],'csrfToken':user['csrf_token']},separators=(',',':')).replace('</','<\\/')
-    return HTMLResponse(raw.replace('__ZYLORA_STUDIO_CONTEXT__',context),headers={'Cache-Control':'no-store','X-Robots-Tag':'noindex, nofollow'})
+    rendered=raw.replace('__ZYLORA_STUDIO_CONTEXT__',context).replace('<script src="/static/studio.js">','<script src="/static/session-restore.js"></script><script src="/static/studio.js">')
+    return HTMLResponse(rendered,headers={'Cache-Control':'no-store','X-Robots-Tag':'noindex, nofollow'})
 @app.get('/freelancers',include_in_schema=False)
 def freelancers_page():
     raw=(ROOT/'static'/'freelancers.html').read_text(encoding='utf-8')

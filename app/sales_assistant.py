@@ -17,6 +17,7 @@ from .providers import sales_assistant_completion, estimate_openai_cost_micros
 from .notifications import notify
 from .operations import record_analytics, record_operational_event, safe_exception_summary
 from .appointment_engine import available_slots, slot_is_available
+from .ai_models import default_model, validate_model
 
 INTENTS={
  'PRICE_QUERY':(r'\b(price|pricing|cost|charge|fee|how much|rate)\b',),
@@ -43,7 +44,7 @@ DEFAULT_CONFIG={
  'enabled':1,'tone':'FRIENDLY','primary_goal':'GET_ENQUIRIES','proactive_prompts':1,
  'qualification_fields_json':'[]','contact_collection':'BOTH','human_handoff':1,'whatsapp_handoff':1,
  'appointment_booking':1,'use_business_profile':1,'use_published_site':1,'use_approved_knowledge':1,
- 'cms_collection_ids_json':'[]','restricted_topics_json':'[]','custom_instructions':'','config_revision':1,
+ 'cms_collection_ids_json':'[]','restricted_topics_json':'[]','custom_instructions':'','model':default_model() or '','config_revision':1,
 }
 
 def _j(raw,default):
@@ -74,9 +75,11 @@ def site_config(site_id: str) -> dict:
 
 
 def save_site_config(site_id: str, patch: dict) -> dict:
-    allowed={'enabled','tone','primary_goal','proactive_prompts','qualification_fields','contact_collection','human_handoff','whatsapp_handoff','appointment_booking','use_business_profile','use_published_site','use_approved_knowledge','cms_collection_ids','restricted_topics','custom_instructions'}
+    allowed={'enabled','tone','primary_goal','proactive_prompts','qualification_fields','contact_collection','human_handoff','whatsapp_handoff','appointment_booking','use_business_profile','use_published_site','use_approved_knowledge','cms_collection_ids','restricted_topics','custom_instructions','model'}
     clean={k:v for k,v in patch.items() if k in allowed}
     current=site_config(site_id); current.update(clean)
+    try: current['model']=validate_model(current.get('model')) or ''
+    except ValueError as exc: raise ValueError(str(exc))
     tone=str(current.get('tone') or 'FRIENDLY').upper()
     if tone not in {'PROFESSIONAL','FRIENDLY','CONCISE','CUSTOM'}: raise ValueError('Unsupported assistant tone')
     contact=str(current.get('contact_collection') or 'BOTH').upper()
@@ -96,10 +99,10 @@ def save_site_config(site_id: str, patch: dict) -> dict:
     with SessionLocal.begin() as db:
         row=db.execute(text('SELECT config_revision FROM sales_assistant_configs WHERE site_id=:s'),{'s':site_id}).mappings().first()
         rev=int(row['config_revision'])+1 if row else 1
-        db.execute(text('''INSERT INTO sales_assistant_configs(site_id,enabled,tone,primary_goal,proactive_prompts,qualification_fields_json,contact_collection,human_handoff,whatsapp_handoff,appointment_booking,use_business_profile,use_published_site,use_approved_knowledge,cms_collection_ids_json,restricted_topics_json,custom_instructions,config_revision,updated_at,created_at)
-        VALUES (:s,:e,:t,:g,:p,:q,:c,:h,:w,:a,:bp,:ps,:ak,:cms,:r,:ci,:rev,:n,:n)
-        ON CONFLICT(site_id) DO UPDATE SET enabled=:e,tone=:t,primary_goal=:g,proactive_prompts=:p,qualification_fields_json=:q,contact_collection=:c,human_handoff=:h,whatsapp_handoff=:w,appointment_booking=:a,use_business_profile=:bp,use_published_site=:ps,use_approved_knowledge=:ak,cms_collection_ids_json=:cms,restricted_topics_json=:r,custom_instructions=:ci,config_revision=:rev,updated_at=:n'''),{
-        's':site_id,'e':int(bool(current.get('enabled'))),'t':tone,'g':goal,'p':int(bool(current.get('proactive_prompts'))),'q':json.dumps(q),'c':contact,'h':int(bool(current.get('human_handoff'))),'w':int(bool(current.get('whatsapp_handoff'))),'a':int(bool(current.get('appointment_booking'))),'bp':int(bool(current.get('use_business_profile'))),'ps':int(bool(current.get('use_published_site'))),'ak':int(bool(current.get('use_approved_knowledge'))),'cms':json.dumps(cms_ids),'r':json.dumps(restricted),'ci':custom,'rev':rev,'n':now})
+        db.execute(text('''INSERT INTO sales_assistant_configs(site_id,enabled,tone,primary_goal,proactive_prompts,qualification_fields_json,contact_collection,human_handoff,whatsapp_handoff,appointment_booking,use_business_profile,use_published_site,use_approved_knowledge,cms_collection_ids_json,restricted_topics_json,custom_instructions,model,config_revision,updated_at,created_at)
+        VALUES (:s,:e,:t,:g,:p,:q,:c,:h,:w,:a,:bp,:ps,:ak,:cms,:r,:ci,:model,:rev,:n,:n)
+        ON CONFLICT(site_id) DO UPDATE SET enabled=:e,tone=:t,primary_goal=:g,proactive_prompts=:p,qualification_fields_json=:q,contact_collection=:c,human_handoff=:h,whatsapp_handoff=:w,appointment_booking=:a,use_business_profile=:bp,use_published_site=:ps,use_approved_knowledge=:ak,cms_collection_ids_json=:cms,restricted_topics_json=:r,custom_instructions=:ci,model=:model,config_revision=:rev,updated_at=:n'''),{
+        's':site_id,'e':int(bool(current.get('enabled'))),'t':tone,'g':goal,'p':int(bool(current.get('proactive_prompts'))),'q':json.dumps(q),'c':contact,'h':int(bool(current.get('human_handoff'))),'w':int(bool(current.get('whatsapp_handoff'))),'a':int(bool(current.get('appointment_booking'))),'bp':int(bool(current.get('use_business_profile'))),'ps':int(bool(current.get('use_published_site'))),'ak':int(bool(current.get('use_approved_knowledge'))),'cms':json.dumps(cms_ids),'r':json.dumps(restricted),'ci':custom,'model':current.get('model') or default_model() or '','rev':rev,'n':now})
     return site_config(site_id)
 
 
@@ -342,7 +345,7 @@ def create_conversation(site_id: str, session_id: str, *, page_url: str|None=Non
         cid=str(uuid4()); now=now_iso()
         db.execute(text('''INSERT INTO assistant_conversations(id,site_id,session_id,visitor_id,test_mode,stage,intents_json,qualification_json,page_url,referrer,utm_source,utm_medium,utm_campaign,model_version,prompt_version,tool_schema_version,business_profile_revision,published_site_revision,assistant_config_revision,last_activity_at,created_at)
         VALUES (:i,:s,:x,:v,:t,'DISCOVER','[]','{}',:url,:ref,:us,:um,:uc,:model,'sales-assistant-v1','1',:bp,:ps,:rev,:a,:a)'''),
-        {'i':cid,'s':site_id,'x':sid,'v':visitor_id,'t':1 if test_mode else 0,'url':_clean_text(page_url,500) or None,'ref':_clean_text(referrer,500) or None,'us':_clean_text(utm_source,160) or None,'um':_clean_text(utm_medium,160) or None,'uc':_clean_text(utm_campaign,160) or None,'model':settings.sales_assistant_model,'bp':str(site.get('document_version') or ''),'ps':str(site.get('published_at') or site.get('updated_at') or ''),'rev':int(cfg.get('config_revision') or 1),'a':now})
+        {'i':cid,'s':site_id,'x':sid,'v':visitor_id,'t':1 if test_mode else 0,'url':_clean_text(page_url,500) or None,'ref':_clean_text(referrer,500) or None,'us':_clean_text(utm_source,160) or None,'um':_clean_text(utm_medium,160) or None,'uc':_clean_text(utm_campaign,160) or None,'model':cfg.get('model') or settings.sales_assistant_model,'bp':str(site.get('document_version') or ''),'ps':str(site.get('published_at') or site.get('updated_at') or ''),'rev':int(cfg.get('config_revision') or 1),'a':now})
         row=db.execute(text('SELECT * FROM assistant_conversations WHERE id=:i'),{'i':cid}).mappings().first()
     if not test_mode:
         try:record_analytics(site_id,'ASSISTANT_IMPRESSION',sid,page_url or '/',{})
@@ -375,13 +378,13 @@ def process_message(site_id: str, conversation_id: str, message: str, *, contact
     slots=available_slots(site_id,requested_date=requested_date,daypart=daypart,limit=5) if int(cfg.get('appointment_booking') or 0) and ({'AVAILABILITY_QUERY','APPOINTMENT_INTENT'} & set(intents)) else []
     tools={'knowledge':search_business_knowledge(site,msg,cfg),'business_hours':get_business_hours(site),'location':get_location(site),'contact_options':contacts,'appointment_slots':slots,'qualification_fields':_qualification_defaults(site,cfg)}
     answer,grounded=_answer_from_tools(site,msg,intents,tools)
-    input_tokens=output_tokens=0; model=settings.sales_assistant_model
+    input_tokens=output_tokens=0; model=cfg.get('model') or settings.sales_assistant_model
     # OpenAI is only a grounded language layer over validated tool outputs; actions already ran server-side.
     if settings.openai_api_key:
         try:
             with SessionLocal() as db:
                 hist=[dict(r) for r in db.execute(text('SELECT role,content FROM assistant_messages WHERE conversation_id=:c ORDER BY created_at DESC LIMIT 8'),{'c':conversation_id}).mappings().all()][::-1]
-            result=sales_assistant_completion(business_context={'business_name':site.get('business_name'),'goal':cfg.get('primary_goal')},visitor_message=msg,history=hist,tool_results={**tools,'grounded_fallback_answer':answer},tone=cfg.get('tone') or 'FRIENDLY',max_output_tokens=int(get_system_setting('assistant_output_token_limit','350') or 350))
+            result=sales_assistant_completion(business_context={'business_name':site.get('business_name'),'goal':cfg.get('primary_goal')},visitor_message=msg,history=hist,tool_results={**tools,'grounded_fallback_answer':answer},tone=cfg.get('tone') or 'FRIENDLY',max_output_tokens=int(get_system_setting('assistant_output_token_limit','350') or 350),model=model)
             if result.get('answer'): answer=result['answer']; grounded=True
             input_tokens=int(result.get('input_tokens') or 0);output_tokens=int(result.get('output_tokens') or 0);model=result.get('model') or model
         except Exception as exc:

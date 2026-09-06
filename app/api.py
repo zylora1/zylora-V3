@@ -29,13 +29,14 @@ from .site_policy import policy_response, footer_placement_policy
 from .link_icons import normalize_footer_links
 from .api_editor import render_draft
 from .operations import run_site_qa, record_operational_event
+from .ai_models import enabled_models, validate_model
 
 router=APIRouter(prefix='/api')
 
 class SignupIn(BaseModel):
     name:str=Field(min_length=2,max_length=80); email:EmailStr; password:str=Field(min_length=8,max_length=128); turnstile_token:str|None=None
 class LoginIn(BaseModel): email:EmailStr; password:str=Field(min_length=1)
-class SiteIn(BaseModel): business_name:str=Field(min_length=2,max_length=120); description:str=Field(default='',max_length=6000); template_slug:str|None=None; origin:str='AI'; industry:str=Field(default='Business',max_length=120); style:str=Field(default='Minimal',max_length=120); motion_style:str=Field(default='Subtle',max_length=40)
+class SiteIn(BaseModel): business_name:str=Field(min_length=2,max_length=120); description:str=Field(default='',max_length=6000); template_slug:str|None=None; origin:str='AI'; industry:str=Field(default='Business',max_length=120); style:str=Field(default='Minimal',max_length=120); motion_style:str=Field(default='Subtle',max_length=40); model:str|None=Field(default=None,max_length=120)
 class EditIn(BaseModel): tagline:str|None=None; description:str|None=None; accent:str|None=None
 class AiEditIn(BaseModel):
     instruction:str=Field(min_length=3,max_length=2000)
@@ -425,9 +426,18 @@ def sites(request:Request):
     with SessionLocal() as db: rows=db.execute(text('SELECT * FROM sites WHERE user_id=:u ORDER BY updated_at DESC'),{'u':u['id']}).mappings().all()
     return {'items':[dict(r) for r in rows]}
 
+@router.get('/ai/models')
+def ai_models(request: Request):
+    _user(request)
+    return {'items': enabled_models()}
+
 @router.post('/sites')
 def create_site(payload:SiteIn,request:Request):
     u=_user(request,True)
+    try:
+        selected_model=validate_model(payload.model)
+    except ValueError as exc:
+        raise HTTPException(422,str(exc))
     origin=(payload.origin or 'AI').upper()
     if origin not in {'AI','TEMPLATE'}: raise HTTPException(422,'origin must be AI or TEMPLATE')
     if origin=='AI':
@@ -475,12 +485,12 @@ def create_site(payload:SiteIn,request:Request):
             reservation_id=reserved.get('id')
     try:
         if origin=='AI':
-            architecture=plan_site_architecture(payload.business_name,payload.description,payload.industry,payload.style)
+            architecture=plan_site_architecture(payload.business_name,payload.description,payload.industry,payload.style,user_id=u['id'],model=selected_model)
             pages=architecture.get('pages') or [{'id':'home','title':'Home','purpose':'Primary overview'}]
             page_count=max(1,min(20,len(pages)))
             with SessionLocal.begin() as db:
                 db.execute(text("UPDATE generation_jobs SET status='GENERATING',progress_stage='Creating pages',updated_at=:a WHERE id=:i"),{'a':now_iso(),'i':job_id})
-            copy=ai_generate_site(payload.business_name,payload.description,payload.industry,payload.style,payload.motion_style)
+            copy=ai_generate_site(payload.business_name,payload.description,payload.industry,payload.style,payload.motion_style,user_id=u['id'],model=selected_model)
         else:
             architecture={'pages':[{'id':'home','title':'Home','purpose':'Template home'},*[
                 {'id':p,'title':p.replace('-',' ').title(),'purpose':'Template page'} for p in meta.get('page_slugs',[])]],
@@ -503,7 +513,7 @@ def create_site(payload:SiteIn,request:Request):
             document['pages']=planned; document['navigation']=nav
             document['designPlan']={'archetype':architecture.get('design_direction'),'motion':payload.motion_style,'composition_source':'prompt+business-requirements'}
             document['businessProfile']={'business_name':payload.business_name,'description':payload.description,'industry':payload.industry,'supplied_facts_only':True}
-            document['generationMeta']={'pipeline':'requirements>ia>design>content>site-document>validation','planner_provider':architecture.get('provider'),'model':settings.openai_model if settings.openai_api_key else 'local','prompt_version':'zylora-site-v4-2026-08-25'}
+            document['generationMeta']={'pipeline':'requirements>ia>design>content>site-document>validation','planner_provider':architecture.get('provider'),'model':selected_model or ('local' if not settings.openai_api_key else settings.openai_model),'prompt_version':'zylora-site-v4-2026-08-25'}
             motion_ops=_creation_motion_operations(payload.motion_style)
             if motion_ops: document=merge_operations(document,motion_ops)
             page_count=len(planned)

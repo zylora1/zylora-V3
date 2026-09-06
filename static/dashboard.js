@@ -1,3 +1,4 @@
+window.addEventListener('pageshow',async e=>{if(!e.persisted)return;try{const r=await fetch('/api/auth/me',{credentials:'same-origin',cache:'no-store'});if(r.ok){const j=await r.json();if(j.csrf_token)sessionStorage.setItem('csrf',j.csrf_token)}else if(r.status===401){location.replace('/login?next='+encodeURIComponent(location.pathname+location.search+location.hash))}}catch{}});
 const state={me:null,sites:[],templates:[],leads:[],adminLeads:[],origin:'AI',selectedDomainSite:null,selectedIntegrationSite:null,settingsLoaded:false,pageLimit:null,freelancer:null,analyticsRange:30};
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 function escapeHtml(s=''){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}

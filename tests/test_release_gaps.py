@@ -31,7 +31,7 @@ def reset_db():
         for t in TABLES: db.execute(text(f'DELETE FROM {t}'))
         db.execute(text("UPDATE system_settings SET value='admin@example.com' WHERE key='admin_notification_email'"))
         db.execute(text("UPDATE system_settings SET value='true' WHERE key='public_signup_enabled'"))
-        for plan,limit,ai,lead,contact in [('FREE',2,15,20,0),('STARTER',5,100,100,0),('GROWTH',8,300,300,0),('PRO',10,0,0,1)]:
+        for plan,limit,ai,lead,contact in [('FREE',2,20,20,0),('STARTER',5,100,100,0),('GROWTH',8,300,300,0),('PRO',10,0,0,1)]:
             db.execute(text('UPDATE plan_configs SET site_limit=10,page_limit=:l,ai_credits=:a,lead_credits=:lead,contact_only=:co WHERE plan=:p'),{'l':limit,'a':ai,'lead':lead,'co':contact,'p':plan})
 
 
@@ -116,33 +116,33 @@ def test_chatbot_grounding_zero_credit_and_chatbot_appointment_booking():
 def test_credit_wallet_three_bucket_fallback_and_atomic_exhaustion_mid_edit():
     reset_db(); c,h,_=signup('credits@example.com','Credits User')
     me=c.get('/api/auth/me').json(); assert me['ai_credits']==20
-    w=me['credit_wallet']; assert w['monthly_remaining']==15 and w['signup_remaining']==5 and w['topup_remaining']==0
+    w=me['credit_wallet']; assert w['monthly_remaining']==20 and w['signup_remaining']==0 and w['topup_remaining']==0
     assert w['fallback_order']==['MONTHLY','SIGNUP_BONUS','TOPUP']
 
     sites=[ai_site(c,h,f'AI {n}') for n in range(1,4)]
-    w=c.get('/api/credits').json(); assert (w['monthly_remaining'],w['signup_remaining'],w['topup_remaining'],w['total'])==(0,5,0,5)
+    w=c.get('/api/credits').json(); assert (w['monthly_remaining'],w['signup_remaining'],w['topup_remaining'],w['total'])==(5,0,0,5)
     s=sites[0]
     r=c.post(f'/api/sites/{s}/ai-edit',headers=h,json={'instruction':'Make the headline concise'}); assert r.status_code==200
     r=c.post(f'/api/sites/{s}/ai-edit',headers=h,json={'instruction':'Make the description warmer'}); assert r.status_code==200
-    w=c.get('/api/credits').json(); assert (w['monthly_remaining'],w['signup_remaining'],w['topup_remaining'],w['total'])==(0,1,0,1)
+    w=c.get('/api/credits').json(); assert (w['monthly_remaining'],w['signup_remaining'],w['topup_remaining'],w['total'])==(1,0,0,1)
     before=c.get(f'/api/sites/{s}').json()
     exhausted=c.post(f'/api/sites/{s}/ai-edit',headers=h,json={'instruction':'This edit must not partially apply'})
     assert exhausted.status_code==402
     detail=exhausted.json()['detail']; assert detail['code']=='AI_CREDITS_EXHAUSTED' and detail['available']==1 and detail['required']==2
     after=c.get(f'/api/sites/{s}').json(); assert after['tagline']==before['tagline'] and after['description']==before['description']
-    w=c.get('/api/credits').json(); assert w['total']==1 and w['signup_remaining']==1
+    w=c.get('/api/credits').json(); assert w['total']==1 and w['signup_remaining']==0
 
     admin,ha,_=make_admin(); uid=me['id']
     top=admin.post(f'/api/admin/users/{uid}/credits/topup',headers=ha,json={'credits':3}); assert top.status_code==200,top.text
     mixed=c.post(f'/api/sites/{s}/ai-edit',headers=h,json={'instruction':'Use the remaining signup credit then top-up credit'})
     assert mixed.status_code==200,mixed.text
-    debit=mixed.json()['credits']; assert debit['signup_used']==1 and debit['topup_used']==1 and debit['monthly_used']==0
+    debit=mixed.json()['credits']; assert debit['signup_used']==0 and debit['topup_used']==1 and debit['monthly_used']==1
     w=c.get('/api/credits').json(); assert w['signup_remaining']==0 and w['topup_remaining']==2 and w['total']==2
 
 
 def test_draft_limit_and_ai_page_count_is_plan_independent_while_templates_are_paused():
     reset_db(); c,h,_=signup('limits@example.com','Limits User')
-    billing=c.get('/api/billing').json(); assert billing['limits']['drafts']==10 and billing['limits']['monthly_ai_credits']==15 and billing['limits']['monthly_lead_credits']==20 and billing['limits']['ai_max_pages']==20
+    billing=c.get('/api/billing').json(); assert billing['limits']['drafts']==10 and billing['limits']['monthly_ai_credits']==20 and billing['limits']['monthly_lead_credits']==20 and billing['limits']['ai_max_pages']==20
     legacy=c.post('/api/sites',headers=h,json={'business_name':'Removed Template','description':'A complete business description for removed template validation.','template_slug':'atelier-noir','origin':'TEMPLATE','industry':'Architecture','style':'Editorial'})
     assert legacy.status_code in {400,404,409}
     # AI page count follows the brief rather than the selected plan.
