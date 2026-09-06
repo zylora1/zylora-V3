@@ -21462,7 +21462,7 @@
 
   // studio/store.ts
   var import_react = __toESM(require_react());
-  var initialState = { document: null, currentPageId: "home", selectedNodeIds: [], currentBreakpoint: "desktop", history: [], historyIndex: -1, zoom: 1, clipboard: null, snapLines: [] };
+  var initialState = { document: null, currentPageId: "home", selectedNodeIds: [], currentBreakpoint: "desktop", history: [], historyIndex: -1, zoom: 1, clipboard: null, cropNodeId: null, snapLines: [] };
   var uid = (prefix = "node") => {
     const bytes = new Uint8Array(8);
     if (globalThis.crypto?.getRandomValues) globalThis.crypto.getRandomValues(bytes);
@@ -21511,18 +21511,20 @@
     switch (action.type) {
       case "SET_DOCUMENT": {
         const first = action.payload.pages[state.currentPageId] ? state.currentPageId : Object.keys(action.payload.pages)[0] || "home";
-        return { ...state, document: action.payload, currentPageId: first, selectedNodeIds: [], history: [action.payload], historyIndex: 0 };
+        return { ...state, document: action.payload, currentPageId: first, selectedNodeIds: [], cropNodeId: null, history: [action.payload], historyIndex: 0 };
       }
       case "SELECT_NODE":
         return { ...state, selectedNodeIds: Array.from(new Set(action.payload)) };
       case "SET_PAGE":
-        return state.document?.pages[action.payload] ? { ...state, currentPageId: action.payload, selectedNodeIds: [] } : state;
+        return state.document?.pages[action.payload] ? { ...state, currentPageId: action.payload, selectedNodeIds: [], cropNodeId: null } : state;
       case "SET_BREAKPOINT":
-        return { ...state, currentBreakpoint: action.payload };
+        return { ...state, currentBreakpoint: action.payload, cropNodeId: null };
       case "SET_ZOOM":
         return { ...state, zoom: Math.max(0.25, Math.min(2, action.payload)) };
       case "SET_SNAP_LINES":
         return { ...state, snapLines: action.payload };
+      case "SET_CROP_MODE":
+        return { ...state, cropNodeId: action.payload };
       case "UPDATE_NODE_STYLE":
       case "UPDATE_SELECTED_STYLE":
         return withNodes(state, (_p, nodes) => {
@@ -21560,6 +21562,12 @@
           if (!n || n.metadata?.locked) return;
           n.content = { ...n.content, ...action.type === "UPDATE_NODE_TEXT" ? { text: action.payload.text, html: void 0 } : action.payload.content };
         });
+      case "UPDATE_NODE_CROP":
+        return withNodes(state, (_p, nodes) => {
+          const n = nodes[action.payload.nodeId];
+          if (!n || n.metadata?.locked || n.type !== "image") return;
+          n.content = { ...n.content, crop: { x: Math.max(-50, Math.min(50, Number(action.payload.crop.x) || 0)), y: Math.max(-50, Math.min(50, Number(action.payload.crop.y) || 0)), scale: Math.max(1, Math.min(3, Number(action.payload.crop.scale) || 1)) } };
+        });
       case "UPDATE_NODE_ACCESSIBILITY":
         return withNodes(state, (_p, nodes) => {
           const n = nodes[action.payload.nodeId];
@@ -21582,6 +21590,19 @@
           if (n.parentId && nodes[n.parentId]) nodes[n.parentId].children = nodes[n.parentId].children.filter((id) => id !== n.id);
           n.parentId = parent.id;
           parent.children.splice(Math.max(0, Math.min(action.payload.index ?? parent.children.length, parent.children.length)), 0, n.id);
+        });
+      case "REORDER_SECTION":
+        return withNodes(state, (_p, nodes) => {
+          const section = nodes[action.payload.sectionId], target = nodes[action.payload.targetId];
+          if (!section || !target || section.type !== "section" || target.type !== "section" || section.id === target.id || section.parentId !== target.parentId) return;
+          const parent = section.parentId && nodes[section.parentId];
+          if (!parent) return;
+          const from = parent.children.indexOf(section.id);
+          const targetIndex = parent.children.indexOf(target.id);
+          if (from < 0 || targetIndex < 0) return;
+          parent.children.splice(from, 1);
+          const adjusted = parent.children.indexOf(target.id) + (action.payload.position === "after" ? 1 : 0);
+          parent.children.splice(Math.max(0, Math.min(adjusted, parent.children.length)), 0, section.id);
         });
       case "REORDER_NODE":
         return withNodes(state, (_p, nodes) => {
@@ -22014,10 +22035,19 @@
   var editableTypes = ["heading", "paragraph", "text", "button", "link"];
   function CanvasNode({ nodeId }) {
     const { state, dispatch } = useStudio();
-    const [rectOverride, setRectOverride] = import_react4.default.useState(null);
-    const dragBase = import_react4.default.useRef(null);
     const page = state.document?.pages[state.currentPageId], node = page?.nodes[nodeId];
     if (!page || !node) return null;
+    const [rectOverride, setRectOverride] = import_react4.default.useState(null);
+    const dragBase = import_react4.default.useRef(null);
+    const cropMode = state.cropNodeId === nodeId && node.type === "image";
+    const cropValue = node.content?.crop || { x: 0, y: 0, scale: 1 };
+    const [cropDraft, setCropDraft] = import_react4.default.useState(cropValue);
+    const cropGesture = import_react4.default.useRef(null);
+    const cropCleanup = import_react4.default.useRef(null);
+    import_react4.default.useEffect(() => () => cropCleanup.current?.(), []);
+    import_react4.default.useEffect(() => {
+      if (!cropMode) setCropDraft(node.content?.crop || { x: 0, y: 0, scale: 1 });
+    }, [cropMode, node.content?.crop?.x, node.content?.crop?.y, node.content?.crop?.scale]);
     let cssStyles = { ...node.style.css };
     let effectiveVisibility = node.visibility;
     if (state.currentBreakpoint !== "desktop") {
@@ -22067,12 +22097,56 @@
       dispatch({ type: "UPDATE_NODE_GEOMETRY", payload: { nodeId, geometry: { width: `${Math.round(rect.w)}px`, height: `${Math.round(rect.h)}px`, ...isAbsolute ? { left: `${Math.round(rect.x)}px`, top: `${Math.round(rect.y)}px` } : {} } } });
     };
     const { startResize } = useResize({ x: 0, y: 0, w: 0, h: 0 }, previewUpdate, endResize, state.zoom);
+    const finishCrop = () => {
+      dispatch({ type: "UPDATE_NODE_CROP", payload: { nodeId, crop: cropDraft } });
+      dispatch({ type: "SET_CROP_MODE", payload: null });
+    };
+    const cancelCrop = () => {
+      setCropDraft(cropValue);
+      dispatch({ type: "SET_CROP_MODE", payload: null });
+    };
+    const cropPointerDown = (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      const frame = elementRef.current?.getBoundingClientRect();
+      if (!frame) return;
+      const start = { x: cropDraft.x, y: cropDraft.y };
+      const g = { pointerId: e.pointerId, startX: e.clientX, startY: e.clientY, base: start, width: frame.width, height: frame.height };
+      cropGesture.current = g;
+      const move = (event) => {
+        if (event.pointerId !== g.pointerId) return;
+        const scale = Math.max(1, cropDraft.scale), max = 50 * scale;
+        setCropDraft((previous) => ({ ...previous, x: Math.max(-max, Math.min(max, g.base.x + (event.clientX - g.startX) / g.width * 100)), y: Math.max(-max, Math.min(max, g.base.y + (event.clientY - g.startY) / g.height * 100)) }));
+      };
+      const up = (event) => {
+        if (event.pointerId !== g.pointerId) return;
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerup", up);
+        window.removeEventListener("pointercancel", up);
+        cropCleanup.current = null;
+        cropGesture.current = null;
+      };
+      cropCleanup.current = () => {
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerup", up);
+        window.removeEventListener("pointercancel", up);
+        cropGesture.current = null;
+      };
+      window.addEventListener("pointermove", move);
+      window.addEventListener("pointerup", up);
+      window.addEventListener("pointercancel", up);
+    };
+    const cropPointerMove = (_) => {
+    };
+    const cropPointerUp = (_) => {
+    };
     const select = (e) => {
       e.stopPropagation();
       dispatch({ type: "SELECT_NODE", payload: e.shiftKey ? isSelected ? state.selectedNodeIds.filter((id) => id !== nodeId) : [...state.selectedNodeIds, nodeId] : [nodeId] });
     };
     const pointerDown = (e) => {
       if (isLocked) return;
+      if (e.button === 1 || window.__zyloraSpacePressed) return;
       if (e.target.closest(".studio-resize-handle,.studio-floating-actions")) return;
       e.stopPropagation();
       const el = elementRef.current;
@@ -22170,8 +22244,9 @@
         props.rel = "noopener noreferrer";
       }
     }
-    const content = node.type === "image" ? /* @__PURE__ */ import_react4.default.createElement("img", { src: node.content.src || void 0, alt: node.content.alt || "", style: { width: "100%", height: "100%", objectFit: cssStyles.objectFit || "cover", objectPosition: cssStyles.objectPosition || "50% 50%", display: "block" } }) : editableTypes.includes(node.type) && node.children.length === 0 ? /* @__PURE__ */ import_react4.default.createElement(EditableText, { value: node.content.text || "", onChange: (text) => dispatch({ type: "UPDATE_NODE_TEXT", payload: { nodeId, text } }), onEnter: () => elementRef.current?.blur() }) : node.content.text || node.content.html || null;
-    return /* @__PURE__ */ import_react4.default.createElement(Tag, { ...props }, isSelected && /* @__PURE__ */ import_react4.default.createElement("div", { className: "studio-floating-actions", "aria-hidden": "true" }, "\u2022\u2022\u2022"), isSelected && ["top-left", "top", "top-right", "right", "bottom-right", "bottom", "bottom-left", "left"].map(renderHandle), content, node.children.map((id) => /* @__PURE__ */ import_react4.default.createElement(CanvasNode, { key: id, nodeId: id })));
+    const imageContent = node.type === "image" ? /* @__PURE__ */ import_react4.default.createElement("div", { className: `studio-image-frame${cropMode ? " crop-mode" : ""}`, onPointerDown: cropMode ? cropPointerDown : void 0, onPointerMove: cropMode ? cropPointerMove : void 0, onPointerUp: cropMode ? cropPointerUp : void 0, style: { width: "100%", height: "100%", overflow: "hidden", position: "relative", cursor: cropMode ? "grab" : void 0 } }, /* @__PURE__ */ import_react4.default.createElement("img", { src: node.content.src || void 0, alt: node.content.alt || "", style: { width: "100%", height: "100%", objectFit: cssStyles.objectFit || "cover", objectPosition: `${50 + cropDraft.x}% ${50 + cropDraft.y}%`, transform: `scale(${cropDraft.scale})`, display: "block", pointerEvents: cropMode ? "none" : "auto" } }), cropMode && /* @__PURE__ */ import_react4.default.createElement("div", { className: "crop-toolbar", onPointerDown: (e) => e.stopPropagation() }, /* @__PURE__ */ import_react4.default.createElement("button", { "aria-label": "Zoom out crop", onClick: () => setCropDraft((v) => ({ ...v, scale: Math.max(1, +(v.scale - 0.1).toFixed(2)) })) }, "\u2212"), /* @__PURE__ */ import_react4.default.createElement("input", { "aria-label": "Crop zoom", type: "range", min: "1", max: "3", step: ".05", value: cropDraft.scale, onChange: (e) => setCropDraft((v) => ({ ...v, scale: Number(e.target.value) })) }), /* @__PURE__ */ import_react4.default.createElement("button", { "aria-label": "Zoom in crop", onClick: () => setCropDraft((v) => ({ ...v, scale: Math.min(3, +(v.scale + 0.1).toFixed(2)) })) }, "\uFF0B"), /* @__PURE__ */ import_react4.default.createElement("button", { onClick: () => setCropDraft({ x: 0, y: 0, scale: 1 }) }, "Reset"), /* @__PURE__ */ import_react4.default.createElement("button", { className: "primary", onClick: finishCrop }, "Done"), /* @__PURE__ */ import_react4.default.createElement("button", { onClick: cancelCrop }, "Cancel"))) : null;
+    const content = node.type === "image" ? imageContent : editableTypes.includes(node.type) && node.children.length === 0 ? /* @__PURE__ */ import_react4.default.createElement(EditableText, { value: node.content.text || "", onChange: (text) => dispatch({ type: "UPDATE_NODE_TEXT", payload: { nodeId, text } }), onEnter: () => elementRef.current?.blur() }) : node.content.text || node.content.html || null;
+    return /* @__PURE__ */ import_react4.default.createElement(Tag, { ...props }, isSelected && !cropMode && /* @__PURE__ */ import_react4.default.createElement("div", { className: "studio-floating-actions", "aria-hidden": "true" }, "\u2022\u2022\u2022"), isSelected && !cropMode && ["top-left", "top", "top-right", "right", "bottom-right", "bottom", "bottom-left", "left"].map(renderHandle), content, node.children.map((id) => /* @__PURE__ */ import_react4.default.createElement(CanvasNode, { key: id, nodeId: id })));
   }
 
   // studio/components/ContextToolbar.tsx
@@ -22200,13 +22275,11 @@
     };
     const cycleCrop = () => {
       if (!node) return;
-      const positions = ["50% 50%", "25% 50%", "75% 50%", "50% 25%", "50% 75%"];
-      const current = node.style.css.objectPosition || positions[0];
-      update({ objectPosition: positions[(positions.indexOf(current) + 1) % positions.length] });
+      dispatch({ type: "SET_CROP_MODE", payload: node.id });
     };
     if (!node) return /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("style", null, styleText), /* @__PURE__ */ import_react5.default.createElement("div", { className: "context-toolbar global-toolbar" }, /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Undo", disabled: state.historyIndex <= 0, onClick: () => dispatch({ type: "UNDO" }) }, "\u21B6"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Redo", disabled: state.historyIndex >= state.history.length - 1, onClick: () => dispatch({ type: "REDO" }) }, "\u21B7"), /* @__PURE__ */ import_react5.default.createElement("span", { className: "toolbar-divider" }), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: onFit }, "Fit"), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: onPreview }, "Preview")));
     const textLike = ["heading", "paragraph", "text", "button", "link"].includes(node.type), image = node.type === "image", card = node.type === "container" || node.metadata?.kind === "card";
-    return /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("style", null, styleText), /* @__PURE__ */ import_react5.default.createElement("div", { className: "context-toolbar selection-toolbar", onPointerDown: (e) => e.stopPropagation() }, /* @__PURE__ */ import_react5.default.createElement("span", { className: "toolbar-selection-label" }, node.metadata?.displayName || (image ? "Image frame" : card ? "Card" : textLike ? "Text" : "Selection")), textLike && /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Font family", value: node.style.css.fontFamily || "Inter", onChange: (e) => update({ fontFamily: e.target.value }) }, fonts.map((font) => /* @__PURE__ */ import_react5.default.createElement("option", { key: font }, font))), /* @__PURE__ */ import_react5.default.createElement("input", { "aria-label": "Font size", type: "number", min: "8", max: "220", value: parseInt(node.style.css.fontSize || "16") || 16, onChange: (e) => update({ fontSize: `${e.target.value}px` }) }), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Bold", className: node.style.css.fontWeight === "700" ? "active" : "", onClick: () => update({ fontWeight: node.style.css.fontWeight === "700" ? "400" : "700" }) }, "B"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Italic", className: node.style.css.fontStyle === "italic" ? "active" : "", onClick: () => update({ fontStyle: node.style.css.fontStyle === "italic" ? "normal" : "italic" }) }, "I"), /* @__PURE__ */ import_react5.default.createElement("input", { "aria-label": "Text color", type: "color", value: /^#[0-9a-f]{6}$/i.test(node.style.css.color || "") ? node.style.css.color : "#111111", onChange: (e) => update({ color: e.target.value }) }), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Text alignment", value: node.style.css.textAlign || "left", onChange: (e) => update({ textAlign: e.target.value }) }, /* @__PURE__ */ import_react5.default.createElement("option", { value: "left" }, "Left"), /* @__PURE__ */ import_react5.default.createElement("option", { value: "center" }, "Center"), /* @__PURE__ */ import_react5.default.createElement("option", { value: "right" }, "Right"))), image && /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => document.querySelector(".assets-panel input[type=file]")?.click() }, "Replace"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Crop", onClick: cycleCrop }, "Crop"), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Image fit", value: node.style.css.objectFit || "cover", onChange: (e) => update({ objectFit: e.target.value }) }, /* @__PURE__ */ import_react5.default.createElement("option", { value: "cover" }, "Fill"), /* @__PURE__ */ import_react5.default.createElement("option", { value: "contain" }, "Fit"), /* @__PURE__ */ import_react5.default.createElement("option", { value: "fill" }, "Stretch")), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update({ borderRadius: node.style.css.borderRadius ? "0px" : "16px" }) }, "Corners")), card && /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("input", { "aria-label": "Card background", type: "color", value: /^#[0-9a-f]{6}$/i.test(node.style.css.background || "") ? node.style.css.background : "#ffffff", onChange: (e) => update({ background: e.target.value }) }), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update({ borderRadius: node.style.css.borderRadius ? "0px" : "16px" }) }, "Corners"), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update({ boxShadow: node.style.css.boxShadow ? "none" : "0 10px 30px rgba(16,24,40,.12)" }) }, "Shadow")), (textLike || image || card || node.type === "shape") && /* @__PURE__ */ import_react5.default.createElement("button", { onClick: link }, "Link"), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Hover effect", value: (node.interactions || []).find((x) => x.trigger === "hover")?.effect || "none", onChange: (e) => setInteraction("hover", e.target.value) }, hover.map((x) => /* @__PURE__ */ import_react5.default.createElement("option", { key: x, value: x }, "Hover: ", x))), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Animation", value: (node.interactions || []).find((x) => x.trigger === "animation")?.effect || "none", onChange: (e) => setInteraction("animation", e.target.value) }, entrance.map((x) => /* @__PURE__ */ import_react5.default.createElement("option", { key: x, value: x }, "Animate: ", x))), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Scroll effect", value: (node.interactions || []).find((x) => x.trigger === "scroll")?.effect || "none", onChange: (e) => setInteraction("scroll", e.target.value) }, scroll.map((x) => /* @__PURE__ */ import_react5.default.createElement("option", { key: x, value: x }, "On scroll: ", x))), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Duplicate", onClick: () => dispatch({ type: "DUPLICATE_NODE", payload: { nodeId: node.id } }) }, "\u29C9"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Delete", onClick: () => dispatch({ type: "DELETE_NODE", payload: { nodeId: node.id } }) }, "\u232B")));
+    return /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("style", null, styleText), /* @__PURE__ */ import_react5.default.createElement("div", { className: "context-toolbar selection-toolbar", onPointerDown: (e) => e.stopPropagation() }, /* @__PURE__ */ import_react5.default.createElement("span", { className: "toolbar-selection-label" }, node.metadata?.displayName || (image ? "Image frame" : card ? "Card" : textLike ? "Text" : "Selection")), textLike && /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Font family", value: node.style.css.fontFamily || "Inter", onChange: (e) => update({ fontFamily: e.target.value }) }, fonts.map((font) => /* @__PURE__ */ import_react5.default.createElement("option", { key: font }, font))), /* @__PURE__ */ import_react5.default.createElement("input", { "aria-label": "Font size", type: "number", min: "8", max: "220", value: parseInt(node.style.css.fontSize || "16") || 16, onChange: (e) => update({ fontSize: `${e.target.value}px` }) }), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Bold", className: node.style.css.fontWeight === "700" ? "active" : "", onClick: () => update({ fontWeight: node.style.css.fontWeight === "700" ? "400" : "700" }) }, "B"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Italic", className: node.style.css.fontStyle === "italic" ? "active" : "", onClick: () => update({ fontStyle: node.style.css.fontStyle === "italic" ? "normal" : "italic" }) }, "I"), /* @__PURE__ */ import_react5.default.createElement("input", { "aria-label": "Text color", type: "color", value: /^#[0-9a-f]{6}$/i.test(node.style.css.color || "") ? node.style.css.color : "#111111", onChange: (e) => update({ color: e.target.value }) }), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Text alignment", value: node.style.css.textAlign || "left", onChange: (e) => update({ textAlign: e.target.value }) }, /* @__PURE__ */ import_react5.default.createElement("option", { value: "left" }, "Left"), /* @__PURE__ */ import_react5.default.createElement("option", { value: "center" }, "Center"), /* @__PURE__ */ import_react5.default.createElement("option", { value: "right" }, "Right"))), image && /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => document.querySelector(".assets-panel input[type=file]")?.click() }, "Replace"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Crop", onClick: cycleCrop }, state.cropNodeId === node.id ? "Crop active" : "Crop"), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Image fit", value: node.style.css.objectFit || "cover", onChange: (e) => update({ objectFit: e.target.value }) }, /* @__PURE__ */ import_react5.default.createElement("option", { value: "cover" }, "Fill"), /* @__PURE__ */ import_react5.default.createElement("option", { value: "contain" }, "Fit"), /* @__PURE__ */ import_react5.default.createElement("option", { value: "fill" }, "Stretch")), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update({ borderRadius: node.style.css.borderRadius ? "0px" : "16px" }) }, "Corners")), card && /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("input", { "aria-label": "Card background", type: "color", value: /^#[0-9a-f]{6}$/i.test(node.style.css.background || "") ? node.style.css.background : "#ffffff", onChange: (e) => update({ background: e.target.value }) }), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update({ borderRadius: node.style.css.borderRadius ? "0px" : "16px" }) }, "Corners"), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update({ boxShadow: node.style.css.boxShadow ? "none" : "0 10px 30px rgba(16,24,40,.12)" }) }, "Shadow")), (textLike || image || card || node.type === "shape") && /* @__PURE__ */ import_react5.default.createElement("button", { onClick: link }, "Link"), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Hover effect", value: (node.interactions || []).find((x) => x.trigger === "hover")?.effect || "none", onChange: (e) => setInteraction("hover", e.target.value) }, hover.map((x) => /* @__PURE__ */ import_react5.default.createElement("option", { key: x, value: x }, "Hover: ", x))), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Animation", value: (node.interactions || []).find((x) => x.trigger === "animation")?.effect || "none", onChange: (e) => setInteraction("animation", e.target.value) }, entrance.map((x) => /* @__PURE__ */ import_react5.default.createElement("option", { key: x, value: x }, "Animate: ", x))), /* @__PURE__ */ import_react5.default.createElement("select", { "aria-label": "Scroll effect", value: (node.interactions || []).find((x) => x.trigger === "scroll")?.effect || "none", onChange: (e) => setInteraction("scroll", e.target.value) }, scroll.map((x) => /* @__PURE__ */ import_react5.default.createElement("option", { key: x, value: x }, "On scroll: ", x))), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Duplicate", onClick: () => dispatch({ type: "DUPLICATE_NODE", payload: { nodeId: node.id } }) }, "\u29C9"), /* @__PURE__ */ import_react5.default.createElement("button", { "aria-label": "Delete", onClick: () => dispatch({ type: "DELETE_NODE", payload: { nodeId: node.id } }) }, "\u232B")));
   }
 
   // studio/components/LayersPanel.tsx
@@ -22234,6 +22307,7 @@
     const { state, dispatch } = useStudio();
     const [query, setQuery] = import_react6.default.useState("");
     const [collapsed, setCollapsed] = import_react6.default.useState(/* @__PURE__ */ new Set());
+    const [sectionDropId, setSectionDropId] = import_react6.default.useState(null);
     const panelRef = import_react6.default.useRef(null);
     import_react6.default.useEffect(() => {
       panelRef.current?.querySelector('[data-layer-selected="true"]')?.scrollIntoView({ block: "nearest" });
@@ -22257,14 +22331,22 @@
     const handleDrop = (e, targetNodeId) => {
       e.preventDefault();
       e.stopPropagation();
+      const sectionId = e.dataTransfer.getData("studio/section-id");
+      if (sectionId && sectionId !== targetNodeId && page.nodes[targetNodeId]?.type === "section") {
+        const target = page.nodes[targetNodeId], rect = e.currentTarget.getBoundingClientRect();
+        dispatch({ type: "REORDER_SECTION", payload: { sectionId, targetId: targetNodeId, position: e.clientY > rect.top + rect.height / 2 ? "after" : "before" } });
+        setSectionDropId(null);
+        return;
+      }
       const dragged = e.dataTransfer.getData("studio/layer-node-id");
       if (dragged && dragged !== targetNodeId) dispatch({ type: "REPARENT_NODE", payload: { nodeId: dragged, newParentId: targetNodeId } });
+      setSectionDropId(null);
     };
     const render = (nodeId, depth = 0) => {
       const node = page.nodes[nodeId];
       if (!node || !treeMatches(nodeId)) return null;
-      const isSelected = state.selectedNodeIds.includes(nodeId), label = labelFor(node);
-      return /* @__PURE__ */ import_react6.default.createElement("div", { key: nodeId }, /* @__PURE__ */ import_react6.default.createElement("div", { className: `layer-row ${isSelected ? "selected" : ""}`, "data-layer-selected": isSelected ? "true" : "false", tabIndex: 0, onClick: (event) => dispatch({ type: "SELECT_NODE", payload: event.shiftKey ? isSelected ? state.selectedNodeIds.filter((id) => id !== nodeId) : [...state.selectedNodeIds, nodeId] : [nodeId] }), onKeyDown: (event) => {
+      const isSelected = state.selectedNodeIds.includes(nodeId), label = labelFor(node), isSection = node.type === "section";
+      return /* @__PURE__ */ import_react6.default.createElement("div", { key: nodeId }, /* @__PURE__ */ import_react6.default.createElement("div", { className: `layer-row ${isSelected ? "selected" : ""} ${sectionDropId === nodeId ? "section-drop-target" : ""}`, "data-layer-node-id": nodeId, "data-layer-selected": isSelected ? "true" : "false", tabIndex: 0, onClick: (event) => dispatch({ type: "SELECT_NODE", payload: event.shiftKey ? isSelected ? state.selectedNodeIds.filter((id) => id !== nodeId) : [...state.selectedNodeIds, nodeId] : [nodeId] }), onKeyDown: (event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
           dispatch({ type: "SELECT_NODE", payload: [nodeId] });
@@ -22275,9 +22357,11 @@
       }, draggable: true, onDragStart: (e) => {
         e.stopPropagation();
         e.dataTransfer.setData("studio/layer-node-id", nodeId);
-      }, onDragOver: (e) => {
+        if (isSection) e.dataTransfer.setData("studio/section-id", nodeId);
+      }, onDragEnd: () => setSectionDropId(null), onDragOver: (e) => {
         e.preventDefault();
         e.stopPropagation();
+        if (isSection) setSectionDropId(nodeId);
       }, onDrop: (e) => handleDrop(e, nodeId), style: { paddingLeft: `${depth * 14 + 8}px` } }, /* @__PURE__ */ import_react6.default.createElement("span", { className: "layer-label" }, node.children.length > 0 && /* @__PURE__ */ import_react6.default.createElement("button", { className: "layer-toggle", onClick: (e) => {
         e.stopPropagation();
         setCollapsed((current) => {
@@ -22285,7 +22369,13 @@
           next.has(nodeId) ? next.delete(nodeId) : next.add(nodeId);
           return next;
         });
-      }, "aria-label": collapsed.has(nodeId) ? "Expand layer" : "Collapse layer" }, collapsed.has(nodeId) ? "\u203A" : "\u2304"), /* @__PURE__ */ import_react6.default.createElement("span", { className: "layer-glyph", "aria-hidden": "true" }, node.type === "section" ? "\u25AD" : node.type === "image" ? "\u25A7" : node.type === "button" ? "\u2197" : node.type === "page" ? "\u2302" : "\u2022"), /* @__PURE__ */ import_react6.default.createElement("span", { className: "layer-name" }, label), node.metadata?.locked && /* @__PURE__ */ import_react6.default.createElement("span", { className: "layer-state", title: "Locked" }, "Locked")), isSelected && /* @__PURE__ */ import_react6.default.createElement("span", { className: "layer-actions" }, /* @__PURE__ */ import_react6.default.createElement("button", { onClick: (e) => {
+      }, "aria-label": collapsed.has(nodeId) ? "Expand layer" : "Collapse layer" }, collapsed.has(nodeId) ? "\u203A" : "\u2304"), /* @__PURE__ */ import_react6.default.createElement("span", { className: "layer-glyph", "aria-hidden": "true" }, node.type === "section" ? "\u25AD" : node.type === "image" ? "\u25A7" : node.type === "button" ? "\u2197" : node.type === "page" ? "\u2302" : "\u2022"), /* @__PURE__ */ import_react6.default.createElement("span", { className: "layer-name" }, label), node.metadata?.locked && /* @__PURE__ */ import_react6.default.createElement("span", { className: "layer-state", title: "Locked" }, "Locked")), isSelected && /* @__PURE__ */ import_react6.default.createElement("span", { className: "layer-actions" }, isSection && /* @__PURE__ */ import_react6.default.createElement(import_react6.default.Fragment, null, /* @__PURE__ */ import_react6.default.createElement("button", { onClick: (e) => {
+        e.stopPropagation();
+        dispatch({ type: "REORDER_NODE", payload: { nodeId, direction: "backward" } });
+      }, title: "Move section up" }, "\u2191"), /* @__PURE__ */ import_react6.default.createElement("button", { onClick: (e) => {
+        e.stopPropagation();
+        dispatch({ type: "REORDER_NODE", payload: { nodeId, direction: "forward" } });
+      }, title: "Move section down" }, "\u2193")), /* @__PURE__ */ import_react6.default.createElement("button", { onClick: (e) => {
         e.stopPropagation();
         dispatch({ type: "DUPLICATE_NODE", payload: { nodeId } });
       }, title: "Duplicate" }, "+"), /* @__PURE__ */ import_react6.default.createElement("button", { onClick: (e) => {
@@ -22664,6 +22754,10 @@
     (0, import_react13.useEffect)(() => {
       const key = (e) => {
         const target = e.target;
+        if (e.code === "Space" && !target?.isContentEditable && !["INPUT", "TEXTAREA", "SELECT"].includes(target?.tagName)) {
+          window.__zyloraSpacePressed = true;
+          if (e.type === "keydown") e.preventDefault();
+        }
         if (target?.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target?.tagName)) return;
         const mod = e.ctrlKey || e.metaKey;
         if ((e.key === "Delete" || e.key === "Backspace") && state.selectedNodeIds.length) {
@@ -22691,12 +22785,20 @@
           e.preventDefault();
           dispatch({ type: "SET_ZOOM", payload: state.zoom - 0.1 });
         } else if (e.key === "Escape") {
+          dispatch({ type: "SET_CROP_MODE", payload: null });
           dispatch({ type: "SELECT_NODE", payload: [] });
           setContext(null);
         }
       };
+      const up = (e) => {
+        if (e.code === "Space") window.__zyloraSpacePressed = false;
+      };
       addEventListener("keydown", key);
-      return () => removeEventListener("keydown", key);
+      addEventListener("keyup", up);
+      return () => {
+        removeEventListener("keydown", key);
+        removeEventListener("keyup", up);
+      };
     }, [state.selectedNodeIds, state.zoom]);
     const page = state.document?.pages[state.currentPageId], width = state.currentBreakpoint === "desktop" ? 1440 : state.currentBreakpoint === "tablet" ? 768 : 390;
     const fit = () => {
@@ -22759,18 +22861,26 @@
         dispatch({ type: "SET_ZOOM", payload: state.zoom + (e.deltaY > 0 ? -0.05 : 0.05) });
       }
     }, onPointerDown: (e) => {
-      if (e.button === 1) {
+      if (e.button === 1 || e.button === 0 && window.__zyloraSpacePressed) {
+        e.preventDefault();
         const el = e.currentTarget;
         pan.current = { x: e.clientX, y: e.clientY, left: el.scrollLeft, top: el.scrollTop };
         el.setPointerCapture(e.pointerId);
       }
     }, onPointerMove: (e) => {
       if (pan.current) {
+        e.preventDefault();
         const el = e.currentTarget;
         el.scrollLeft = pan.current.left - (e.clientX - pan.current.x);
         el.scrollTop = pan.current.top - (e.clientY - pan.current.y);
       }
-    }, onPointerUp: () => {
+    }, onPointerUp: (e) => {
+      if (pan.current) {
+        const el = e.currentTarget;
+        el.releasePointerCapture?.(e.pointerId);
+      }
+      pan.current = null;
+    }, onPointerCancel: () => {
       pan.current = null;
     }, onContextMenu: (e) => {
       if (state.selectedNodeIds.length) {

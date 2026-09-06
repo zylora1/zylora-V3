@@ -13,6 +13,11 @@ NODE_TYPES = {
     "repeater", "list", "carousel", "gallery", "table"
 }
 
+class NodeCrop(BaseModel):
+    x: float = 0
+    y: float = 0
+    scale: float = 1
+
 class NodeContent(BaseModel):
     text: Optional[str] = None
     html: Optional[str] = None
@@ -24,6 +29,7 @@ class NodeContent(BaseModel):
     required: Optional[bool] = None
     asset_id: Optional[str] = None
     component_id: Optional[str] = None # For component instances
+    crop: Optional[NodeCrop] = None
 
 class NodeStyle(BaseModel):
     css: Dict[str, Any] = Field(default_factory=dict)

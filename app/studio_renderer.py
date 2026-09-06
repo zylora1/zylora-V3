@@ -186,6 +186,24 @@ def _render_node_html(node: Node, doc: SiteDocument, page: Page, data_context:di
     if scroll_effect:
         attrs += f' data-z-scroll-effect="{html.escape(scroll_effect,quote=True)}"'
     
+    crop_content = content.crop if tag == "img" else None
+    if tag == "img" and content.src and crop_content:
+        # Crop state is persisted on the image content while the frame geometry
+        # remains on the node.  Render a clipped frame so published output keeps
+        # the same focal point and zoom as Studio without exposing editor chrome.
+        src=_safe_url(content.src,image=True)
+        if src:
+            crop_x=max(-50,min(50,float(crop_content.x or 0)))
+            crop_y=max(-50,min(50,float(crop_content.y or 0)))
+            crop_scale=max(1,min(3,float(crop_content.scale or 1)))
+            fit=_safe_css_value(node.style.css.get('object-fit') or node.style.css.get('objectFit') or 'cover') or 'cover'
+            attrs=attrs.replace(f' src="{html.escape(src,quote=True)}"','').replace(f' alt="{html.escape(content.alt or "",quote=True)}"','')
+            attrs += ' style="overflow:hidden;"'
+            cropped_img=(f'<img src="{html.escape(src,quote=True)}" alt="{html.escape(content.alt or "",quote=True)}" '
+                         f'style="width:100%;height:100%;object-fit:{html.escape(fit,quote=True)};'
+                         f'object-position:{50+crop_x}% {50+crop_y}%;transform:scale({crop_scale});'
+                         'transform-origin:center;display:block;" />')
+            return f'<div {attrs}>{cropped_img}</div>'
     if tag == "img" and content.src:
         # Sanitize src to prevent javascript: or data:xss URIs
         src=_safe_url(content.src,image=True)

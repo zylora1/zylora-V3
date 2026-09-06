@@ -19,10 +19,17 @@ const editableTypes=['heading','paragraph','text','button','link'];
 
 export function CanvasNode({nodeId}:{nodeId:string}){
  const {state,dispatch}=useStudio();
- const [rectOverride,setRectOverride]=React.useState<any>(null);
- const dragBase=React.useRef<any>(null);
  const page=state.document?.pages[state.currentPageId],node=page?.nodes[nodeId];
  if(!page||!node)return null;
+ const [rectOverride,setRectOverride]=React.useState<any>(null);
+ const dragBase=React.useRef<any>(null);
+ const cropMode=state.cropNodeId===nodeId&&node.type==='image';
+ const cropValue=node.content?.crop||{x:0,y:0,scale:1};
+ const [cropDraft,setCropDraft]=React.useState<{x:number;y:number;scale:number}>(cropValue);
+ const cropGesture=React.useRef<{pointerId:number;startX:number;startY:number;base:{x:number;y:number};width:number;height:number}|null>(null);
+ const cropCleanup=React.useRef<null|(()=>void)>(null);
+ React.useEffect(()=>()=>cropCleanup.current?.(),[]);
+ React.useEffect(()=>{if(!cropMode)setCropDraft(node.content?.crop||{x:0,y:0,scale:1})},[cropMode,node.content?.crop?.x,node.content?.crop?.y,node.content?.crop?.scale]);
  let cssStyles:any={...node.style.css};let effectiveVisibility=node.visibility;
  if(state.currentBreakpoint!=='desktop'){
   const override=node.responsiveOverrides[state.currentBreakpoint];
@@ -41,9 +48,15 @@ export function CanvasNode({nodeId}:{nodeId:string}){
  const {startDrag}=useDrag(previewUpdate,endDrag,state.zoom,()=>{const el=elementRef.current,parent=el?.parentElement;if(!el||!parent)return{peers:[],parent:null};const pr=parent.getBoundingClientRect();const peers=Array.from(parent.children).filter(x=>x!==el).map(x=>{const r=(x as HTMLElement).getBoundingClientRect();return{x:(r.left-pr.left)/state.zoom,y:(r.top-pr.top)/state.zoom,w:r.width/state.zoom,h:r.height/state.zoom}});return{peers,parent:{x:0,y:0,w:pr.width/state.zoom,h:pr.height/state.zoom}}});
  const endResize=(rect:any)=>{setRectOverride(null);dispatch({type:'SET_SNAP_LINES',payload:[]});dispatch({type:'UPDATE_NODE_GEOMETRY',payload:{nodeId,geometry:{width:`${Math.round(rect.w)}px`,height:`${Math.round(rect.h)}px`,...(isAbsolute?{left:`${Math.round(rect.x)}px`,top:`${Math.round(rect.y)}px`}:{})}}})};
  const {startResize}=useResize({x:0,y:0,w:0,h:0},previewUpdate,endResize,state.zoom);
+ const finishCrop=()=>{dispatch({type:'UPDATE_NODE_CROP',payload:{nodeId,crop:cropDraft}});dispatch({type:'SET_CROP_MODE',payload:null})};
+ const cancelCrop=()=>{setCropDraft(cropValue);dispatch({type:'SET_CROP_MODE',payload:null})};
+ const cropPointerDown=(e:React.PointerEvent)=>{e.stopPropagation();e.preventDefault();const frame=elementRef.current?.getBoundingClientRect();if(!frame)return;const start={x:cropDraft.x,y:cropDraft.y};const g={pointerId:e.pointerId,startX:e.clientX,startY:e.clientY,base:start,width:frame.width,height:frame.height};cropGesture.current=g;const move=(event:PointerEvent)=>{if(event.pointerId!==g.pointerId)return;const scale=Math.max(1,cropDraft.scale),max=50*scale;setCropDraft(previous=>({...previous,x:Math.max(-max,Math.min(max,g.base.x+(event.clientX-g.startX)/g.width*100)),y:Math.max(-max,Math.min(max,g.base.y+(event.clientY-g.startY)/g.height*100))}))};const up=(event:PointerEvent)=>{if(event.pointerId!==g.pointerId)return;window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);cropCleanup.current=null;cropGesture.current=null};cropCleanup.current=()=>{window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);cropGesture.current=null};window.addEventListener('pointermove',move);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up)};
+ const cropPointerMove=(_:React.PointerEvent)=>{};
+ const cropPointerUp=(_:React.PointerEvent)=>{};
  const select=(e:React.MouseEvent)=>{e.stopPropagation();dispatch({type:'SELECT_NODE',payload:e.shiftKey?(isSelected?state.selectedNodeIds.filter(id=>id!==nodeId):[...state.selectedNodeIds,nodeId]):[nodeId]})};
  const pointerDown=(e:React.PointerEvent)=>{
   if(isLocked)return;
+  if(e.button===1||(window as any).__zyloraSpacePressed)return;
   if((e.target as HTMLElement).closest('.studio-resize-handle,.studio-floating-actions'))return;
   // Keep nested node gestures isolated; this does not prevent native scrolling.
   e.stopPropagation();
@@ -91,6 +104,7 @@ export function CanvasNode({nodeId}:{nodeId:string}){
  const props:any={ref:elementRef,style:renderStyle,onClick:(e:React.MouseEvent)=>{if(suppressClick.current){suppressClick.current=false;return}select(e)},onPointerDown:pointerDown,onDragOver:e=>e.preventDefault(),onDrop:drop,'data-studio-id':node.id,'data-studio-type':node.type,'data-studio-selected':isSelected?'true':undefined,'aria-label':node.accessibility?.ariaLabel||undefined};
  if(Tag==='img'){props.src=node.content.src;props.alt=node.content.alt||''}
  if(Tag==='a'&&node.content.href){props.href=node.content.href; if(node.metadata?.linkTarget==='_blank'){props.target='_blank';props.rel='noopener noreferrer'}}
- const content=node.type==='image'?<img src={node.content.src||undefined} alt={node.content.alt||''} style={{width:'100%',height:'100%',objectFit:cssStyles.objectFit||'cover',objectPosition:cssStyles.objectPosition||'50% 50%',display:'block'}}/>:editableTypes.includes(node.type)&&node.children.length===0?<EditableText value={node.content.text||''} onChange={text=>dispatch({type:'UPDATE_NODE_TEXT',payload:{nodeId,text}})} onEnter={()=>elementRef.current?.blur()}/>:node.content.text||node.content.html||null;
- return <Tag {...props}>{isSelected&&<div className="studio-floating-actions" aria-hidden="true">•••</div>}{isSelected&&['top-left','top','top-right','right','bottom-right','bottom','bottom-left','left'].map(renderHandle)}{content}{node.children.map(id=><CanvasNode key={id} nodeId={id}/>)}</Tag>;
+ const imageContent=node.type==='image'?<div className={`studio-image-frame${cropMode?' crop-mode':''}`} onPointerDown={cropMode?cropPointerDown:undefined} onPointerMove={cropMode?cropPointerMove:undefined} onPointerUp={cropMode?cropPointerUp:undefined} style={{width:'100%',height:'100%',overflow:'hidden',position:'relative',cursor:cropMode?'grab':undefined}}><img src={node.content.src||undefined} alt={node.content.alt||''} style={{width:'100%',height:'100%',objectFit:cssStyles.objectFit||'cover',objectPosition:`${50+cropDraft.x}% ${50+cropDraft.y}%`,transform:`scale(${cropDraft.scale})`,display:'block',pointerEvents:cropMode?'none':'auto'}}/>{cropMode&&<div className="crop-toolbar" onPointerDown={e=>e.stopPropagation()}><button aria-label="Zoom out crop" onClick={()=>setCropDraft(v=>({...v,scale:Math.max(1,+(v.scale-.1).toFixed(2))}))}>−</button><input aria-label="Crop zoom" type="range" min="1" max="3" step=".05" value={cropDraft.scale} onChange={e=>setCropDraft(v=>({...v,scale:Number(e.target.value)}))}/><button aria-label="Zoom in crop" onClick={()=>setCropDraft(v=>({...v,scale:Math.min(3,+(v.scale+.1).toFixed(2))}))}>＋</button><button onClick={()=>setCropDraft({x:0,y:0,scale:1})}>Reset</button><button className="primary" onClick={finishCrop}>Done</button><button onClick={cancelCrop}>Cancel</button></div>}</div>:null;
+ const content=node.type==='image'?imageContent:editableTypes.includes(node.type)&&node.children.length===0?<EditableText value={node.content.text||''} onChange={text=>dispatch({type:'UPDATE_NODE_TEXT',payload:{nodeId,text}})} onEnter={()=>elementRef.current?.blur()}/>:node.content.text||node.content.html||null;
+ return <Tag {...props}>{isSelected&&!cropMode&&<div className="studio-floating-actions" aria-hidden="true">•••</div>}{isSelected&&!cropMode&&['top-left','top','top-right','right','bottom-right','bottom','bottom-left','left'].map(renderHandle)}{content}{node.children.map(id=><CanvasNode key={id} nodeId={id}/>)}</Tag>;
 }

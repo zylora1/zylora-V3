@@ -19,20 +19,22 @@ export interface SiteDocument {
 export interface ClipboardPayload { nodes:Record<string,Node>; rootIds:string[]; sourceSiteId?:string; }
 export interface StudioState {
   document:SiteDocument|null; currentPageId:string; selectedNodeIds:string[]; currentBreakpoint:Breakpoint;
-  history:SiteDocument[]; historyIndex:number; zoom:number; clipboard:ClipboardPayload|null;
+  history:SiteDocument[]; historyIndex:number; zoom:number; clipboard:ClipboardPayload|null; cropNodeId:string|null;
   snapLines:Array<{position:number;orientation:'vertical'|'horizontal';type:string}>;
 }
 
 export type StudioAction =
   | {type:'SET_DOCUMENT';payload:SiteDocument}|{type:'SELECT_NODE';payload:string[]}|{type:'SET_PAGE';payload:string}
-  | {type:'SET_BREAKPOINT';payload:Breakpoint}|{type:'SET_ZOOM';payload:number}|{type:'SET_SNAP_LINES';payload:StudioState['snapLines']}
+  | {type:'SET_BREAKPOINT';payload:Breakpoint}|{type:'SET_ZOOM';payload:number}|{type:'SET_SNAP_LINES';payload:StudioState['snapLines']}|{type:'SET_CROP_MODE';payload:string|null}
   | {type:'UPDATE_NODE_STYLE';payload:{nodeId:string;style:Record<string,string>}}|{type:'UPDATE_SELECTED_STYLE';payload:Record<string,string>}
   | {type:'UPDATE_NODE_GEOMETRY';payload:{nodeId:string;geometry:Record<string,string>}}
   | {type:'UPDATE_NODE_INTERACTIONS';payload:{nodeId:string;interactions:Record<string,any>[]}}
   | {type:'UPDATE_NODE_CONTENT';payload:{nodeId:string;content:Record<string,any>}}|{type:'UPDATE_NODE_TEXT';payload:{nodeId:string;text:string}}
+  | {type:'UPDATE_NODE_CROP';payload:{nodeId:string;crop:{x:number;y:number;scale:number}}}
   | {type:'UPDATE_NODE_ACCESSIBILITY';payload:{nodeId:string;accessibility:Record<string,any>}}
   | {type:'INSERT_NODE';payload:{node:Partial<Node>&Pick<Node,'type'>;parentId?:string;index?:number}}
   | {type:'REPARENT_NODE';payload:{nodeId:string;newParentId:string;index?:number}}|{type:'REORDER_NODE';payload:{nodeId:string;direction:'forward'|'backward'|'front'|'back'}}
+  | {type:'REORDER_SECTION';payload:{sectionId:string;targetId:string;position:'before'|'after'}}
   | {type:'DUPLICATE_NODE';payload:{nodeId:string}}|{type:'DUPLICATE_SELECTED'}|{type:'RENAME_NODE';payload:{nodeId:string;name:string}}
   | {type:'TOGGLE_NODE_VISIBILITY';payload:{nodeId:string;breakpoint:Breakpoint}}|{type:'TOGGLE_NODE_LOCK';payload:{nodeId:string}}
   | {type:'DELETE_NODE';payload:{nodeId:string}}|{type:'DELETE_SELECTED'}|{type:'RESET_NODE_STYLE';payload:{nodeId:string;prop:string;breakpoint:Breakpoint}}
@@ -43,7 +45,7 @@ export type StudioAction =
   | {type:'GROUP_SELECTED'}|{type:'UNGROUP_SELECTED'}
   | {type:'UPDATE_TOKENS';payload:Record<string,any>}|{type:'SYNC_REVISION';payload:number}|{type:'UNDO'}|{type:'REDO'};
 
-export const initialState:StudioState={document:null,currentPageId:'home',selectedNodeIds:[],currentBreakpoint:'desktop',history:[],historyIndex:-1,zoom:1,clipboard:null,snapLines:[]};
+export const initialState:StudioState={document:null,currentPageId:'home',selectedNodeIds:[],currentBreakpoint:'desktop',history:[],historyIndex:-1,zoom:1,clipboard:null,cropNodeId:null,snapLines:[]};
 const uid=(prefix='node')=>{const bytes=new Uint8Array(8);if(globalThis.crypto?.getRandomValues)globalThis.crypto.getRandomValues(bytes);else for(let i=0;i<bytes.length;i++)bytes[i]=Math.floor(Math.random()*256);return `${prefix}_${Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('').slice(0,12)}`;};
 const clone=<T,>(value:T):T=>JSON.parse(JSON.stringify(value));
 const commit=(state:StudioState,document:SiteDocument,extra:Partial<StudioState>={}):StudioState=>{const history=state.history.slice(0,state.historyIndex+1).concat(document);return {...state,...extra,document,history,historyIndex:history.length-1};};
@@ -57,17 +59,19 @@ const withNodes=(state:StudioState,mutate:(page:Page,nodes:Record<string,Node>)=
 
 export function studioReducer(state:StudioState,action:StudioAction):StudioState{
  switch(action.type){
-  case 'SET_DOCUMENT':{const first=action.payload.pages[state.currentPageId]?state.currentPageId:Object.keys(action.payload.pages)[0]||'home';return {...state,document:action.payload,currentPageId:first,selectedNodeIds:[],history:[action.payload],historyIndex:0};}
+  case 'SET_DOCUMENT':{const first=action.payload.pages[state.currentPageId]?state.currentPageId:Object.keys(action.payload.pages)[0]||'home';return {...state,document:action.payload,currentPageId:first,selectedNodeIds:[],cropNodeId:null,history:[action.payload],historyIndex:0};}
   case 'SELECT_NODE':return {...state,selectedNodeIds:Array.from(new Set(action.payload))};
-  case 'SET_PAGE':return state.document?.pages[action.payload]?{...state,currentPageId:action.payload,selectedNodeIds:[]}:state;
-  case 'SET_BREAKPOINT':return {...state,currentBreakpoint:action.payload}; case 'SET_ZOOM':return {...state,zoom:Math.max(.25,Math.min(2,action.payload))}; case 'SET_SNAP_LINES':return {...state,snapLines:action.payload};
+  case 'SET_PAGE':return state.document?.pages[action.payload]?{...state,currentPageId:action.payload,selectedNodeIds:[],cropNodeId:null}:state;
+  case 'SET_BREAKPOINT':return {...state,currentBreakpoint:action.payload,cropNodeId:null}; case 'SET_ZOOM':return {...state,zoom:Math.max(.25,Math.min(2,action.payload))}; case 'SET_SNAP_LINES':return {...state,snapLines:action.payload}; case 'SET_CROP_MODE':return {...state,cropNodeId:action.payload};
   case 'UPDATE_NODE_STYLE':case 'UPDATE_SELECTED_STYLE':return withNodes(state,(_p,nodes)=>{const ids=action.type==='UPDATE_NODE_STYLE'?[action.payload.nodeId]:state.selectedNodeIds,style=action.type==='UPDATE_NODE_STYLE'?action.payload.style:action.payload;ids.forEach(id=>{const n=nodes[id];if(!n||n.metadata?.locked)return;if(state.currentBreakpoint==='desktop')n.style={...n.style,css:{...n.style.css,...style}};else{const o=n.responsiveOverrides[state.currentBreakpoint]||{};n.responsiveOverrides={...n.responsiveOverrides,[state.currentBreakpoint]:{...o,style:{tokens:{...(o.style?.tokens||{})},css:{...(o.style?.css||{}),...style}}}}}})});
   case 'UPDATE_NODE_GEOMETRY':return withNodes(state,(_p,nodes)=>{const n=nodes[action.payload.nodeId];if(!n||n.metadata?.locked)return;const geometry=action.payload.geometry;if(state.currentBreakpoint==='desktop')n.style={...n.style,css:{...n.style.css,...geometry}};else{const o=n.responsiveOverrides[state.currentBreakpoint]||{};n.responsiveOverrides={...n.responsiveOverrides,[state.currentBreakpoint]:{...o,style:{tokens:{...(o.style?.tokens||{})},css:{...(o.style?.css||{}),...geometry}}}}}});
   case 'UPDATE_NODE_INTERACTIONS':return withNodes(state,(_p,nodes)=>{const n=nodes[action.payload.nodeId];if(n&&!n.metadata?.locked)n.interactions=clone(action.payload.interactions)});
   case 'UPDATE_NODE_TEXT':case 'UPDATE_NODE_CONTENT':return withNodes(state,(_p,nodes)=>{const n=nodes[action.payload.nodeId];if(!n||n.metadata?.locked)return;n.content={...n.content,...(action.type==='UPDATE_NODE_TEXT'?{text:action.payload.text,html:undefined}:action.payload.content)}});
+  case 'UPDATE_NODE_CROP':return withNodes(state,(_p,nodes)=>{const n=nodes[action.payload.nodeId];if(!n||n.metadata?.locked||n.type!=='image')return;n.content={...n.content,crop:{x:Math.max(-50,Math.min(50,Number(action.payload.crop.x)||0)),y:Math.max(-50,Math.min(50,Number(action.payload.crop.y)||0)),scale:Math.max(1,Math.min(3,Number(action.payload.crop.scale)||1))}}});
   case 'UPDATE_NODE_ACCESSIBILITY':return withNodes(state,(_p,nodes)=>{const n=nodes[action.payload.nodeId];if(n&&!n.metadata?.locked)n.accessibility={...(n.accessibility||{}),...action.payload.accessibility}});
   case 'INSERT_NODE':return withNodes(state,(page,nodes)=>{const parentId=action.payload.parentId||state.selectedNodeIds.find(id=>nodes[id]&&['page','section','container','stack','flex','grid'].includes(nodes[id].type))||page.rootNodeId,parent=nodes[parentId];if(!parent)return;const node={...baseNode(action.payload.node.type,parentId),...clone(action.payload.node),id:action.payload.node.id||uid(action.payload.node.type),parentId,children:action.payload.node.children||[]} as Node;nodes[node.id]=node;const i=Math.max(0,Math.min(action.payload.index??parent.children.length,parent.children.length));parent.children.splice(i,0,node.id);return {selectedNodeIds:[node.id]}});
   case 'REPARENT_NODE':return withNodes(state,(_p,nodes)=>{const n=nodes[action.payload.nodeId],parent=nodes[action.payload.newParentId];if(!n||!parent||n.id===parent.id||descendants(nodes,[n.id]).has(parent.id))return;if(n.parentId&&nodes[n.parentId])nodes[n.parentId].children=nodes[n.parentId].children.filter(id=>id!==n.id);n.parentId=parent.id;parent.children.splice(Math.max(0,Math.min(action.payload.index??parent.children.length,parent.children.length)),0,n.id)});
+  case 'REORDER_SECTION':return withNodes(state,(_p,nodes)=>{const section=nodes[action.payload.sectionId],target=nodes[action.payload.targetId];if(!section||!target||section.type!=='section'||target.type!=='section'||section.id===target.id||section.parentId!==target.parentId)return;const parent=section.parentId&&nodes[section.parentId];if(!parent)return;const from=parent.children.indexOf(section.id);const targetIndex=parent.children.indexOf(target.id);if(from<0||targetIndex<0)return;parent.children.splice(from,1);const adjusted=parent.children.indexOf(target.id)+(action.payload.position==='after'?1:0);parent.children.splice(Math.max(0,Math.min(adjusted,parent.children.length)),0,section.id)});
   case 'REORDER_NODE':return withNodes(state,(_p,nodes)=>{const n=nodes[action.payload.nodeId],parent=n?.parentId&&nodes[n.parentId];if(!n||!parent)return;const from=parent.children.indexOf(n.id);if(from<0)return;let to=from+(action.payload.direction==='forward'?1:action.payload.direction==='backward'?-1:0);if(action.payload.direction==='front')to=parent.children.length-1;if(action.payload.direction==='back')to=0;to=Math.max(0,Math.min(to,parent.children.length-1));parent.children.splice(from,1);parent.children.splice(to,0,n.id)});
   case 'DELETE_NODE':case 'DELETE_SELECTED':return withNodes(state,(page,nodes)=>{const wanted=action.type==='DELETE_NODE'?[action.payload.nodeId]:state.selectedNodeIds,roots=topSelection(nodes,wanted).filter(id=>id!==page.rootNodeId&&!nodes[id]?.metadata?.global),gone=descendants(nodes,roots);roots.forEach(id=>{const p=nodes[id]?.parentId;if(p&&nodes[p])nodes[p].children=nodes[p].children.filter(c=>c!==id)});gone.forEach(id=>delete nodes[id]);return {selectedNodeIds:state.selectedNodeIds.filter(id=>!gone.has(id))}});
   case 'DUPLICATE_NODE':case 'DUPLICATE_SELECTED':return withNodes(state,(page,nodes)=>{const ids=topSelection(page.nodes,action.type==='DUPLICATE_NODE'?[action.payload.nodeId]:state.selectedNodeIds).filter(id=>id!==page.rootNodeId),inserted:string[]=[];ids.forEach(id=>{const original=page.nodes[id],parentId=original?.parentId;if(!original||!parentId||!nodes[parentId])return;const roots=cloneForest(page.nodes,[id],nodes,parentId),at=nodes[parentId].children.indexOf(id)+1;nodes[parentId].children.splice(at,0,...roots);inserted.push(...roots)});return {selectedNodeIds:inserted}});
