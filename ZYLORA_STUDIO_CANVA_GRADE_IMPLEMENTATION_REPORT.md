@@ -75,7 +75,7 @@ One initial sandboxed full-suite attempt hit Windows `WinError 5` while Playwrig
 
 ## Production status
 
-This pass changes the Studio bundle and source, so the exact final SHA must be deployed through the existing Railway pipeline before production certification. The report is complete for repository and browser evidence; deployment identity and live production smoke are recorded after the release commit is pushed.
+The first implementation commit was deployed successfully, and the report/evidence update is being included in the final release commit so the certified SHA contains its own deployment record. The existing live production certification remains separate from this Studio UX evidence and still carries its previously documented Turnstile, Resend, and media-credential limitations.
 
 ## Remaining limitations
 
