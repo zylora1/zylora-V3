@@ -14,10 +14,11 @@ export function computeResize(
     originalRect: Rect,
     pointerStart: Point,
     pointerCurrent: Point,
-    handle: string
+    handle: string,
+    zoom: number = 1
 ): Rect {
-    const dx = pointerCurrent.x - pointerStart.x;
-    const dy = pointerCurrent.y - pointerStart.y;
+    const dx = (pointerCurrent.x - pointerStart.x) / zoom;
+    const dy = (pointerCurrent.y - pointerStart.y) / zoom;
     
     let { x, y, w, h } = originalRect;
 

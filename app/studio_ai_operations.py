@@ -1,4 +1,4 @@
-from .studio_document import SiteDocument, Node, NodeStyle, BreakpointStyle
+from .studio_document import SiteDocument, Node, NodeStyle, BreakpointOverride
 
 def apply_v4_operations(doc: SiteDocument, operations: list[dict]) -> SiteDocument:
     import copy
@@ -36,7 +36,7 @@ def apply_v4_operations(doc: SiteDocument, operations: list[dict]) -> SiteDocume
             if bp not in ['desktop', 'tablet', 'mobile']: raise ValueError(f"Invalid breakpoint: {bp}")
             node = nodes[node_id]
             if bp not in node.responsiveOverrides:
-                node.responsiveOverrides[bp] = BreakpointStyle(style=NodeStyle(css={}))
+                node.responsiveOverrides[bp] = BreakpointOverride(style=NodeStyle(css={}))
             for k, v in op.get('css', {}).items():
                 node.responsiveOverrides[bp].style.css[k] = str(v)
                 
@@ -54,6 +54,7 @@ def apply_v4_operations(doc: SiteDocument, operations: list[dict]) -> SiteDocume
                     
             # Add to new parent
             nodes[new_parent_id].children.append(node_id)
+            nodes[node_id].parentId = new_parent_id
             
         elif op_type == 'DELETE_NODE':
             node_id = op.get('nodeId')
@@ -78,6 +79,9 @@ def apply_v4_operations(doc: SiteDocument, operations: list[dict]) -> SiteDocume
             new_node_data = op.get('node', {})
             new_node = Node(**new_node_data)
             if new_node.id in nodes: raise ValueError(f"Node {new_node.id} already exists")
+            if new_node.children:
+                raise ValueError("Inserted nodes cannot reference children that are not part of the operation")
+            new_node.parentId = parent_id
             nodes[new_node.id] = new_node
             nodes[parent_id].children.append(new_node.id)
             

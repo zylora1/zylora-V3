@@ -306,7 +306,15 @@ def migrate_to_studio(site_id: str, request: Request):
     with SessionLocal.begin() as db:
         site=_owned_site(db,u['id'],site_id)
         if site.get('studio_document_json'):
-            return {'ok': True, 'migrated': False, 'message': 'Already migrated'}
+            try:
+                document=validate_studio_document(json.loads(site['studio_document_json']))
+            except Exception as exc:
+                raise HTTPException(409,detail={'code':'STUDIO_DOCUMENT_INVALID','message':'The saved Studio document is invalid and was not modified.','reason':str(exc)})
+            if int(site.get('studio_revision') or 0) != document.revision:
+                db.execute(text('UPDATE sites SET studio_revision=:revision WHERE id=:site_id AND user_id=:user_id'),{
+                    'revision':document.revision,'site_id':site_id,'user_id':u['id']
+                })
+            return {'ok': True, 'migrated': False, 'message': 'Already migrated', 'document': document.model_dump(exclude_none=True)}
         
         # We must render the base pages to perform the migration correctly
         rendered_pages = {}
@@ -317,10 +325,13 @@ def migrate_to_studio(site_id: str, request: Request):
         v4_doc = migrate_v3_to_v4(v3_doc, rendered_pages)
         
         v4_json = v4_doc.model_dump_json(exclude_none=True)
-        db.execute(text('UPDATE sites SET studio_document_json=:v4 WHERE id=:s'), {'v4': v4_json, 's': site_id})
+        db.execute(text('UPDATE sites SET studio_document_json=:v4,studio_revision=:revision WHERE id=:s'), {
+            'v4':v4_json,'revision':v4_doc.revision,'s':site_id
+        })
         
         # Also backup current to revisions if needed
         create_revision(db,site_id,u['id'],'BACKUP','Studio v4 Migration Backup')
+        return {'ok': True, 'migrated': True, 'document': v4_doc.model_dump(exclude_none=True)}
         
 from .studio_document import SiteDocument, validate_studio_document
 
@@ -338,14 +349,17 @@ def save_studio(site_id: str, document: dict, request: Request):
             client_rev = valid_doc.revision
             
             # Concurrency check
-            if site.studio_document_json:
-                import json
-                current_server_doc = json.loads(site.studio_document_json)
-                server_rev = current_server_doc.get("revision", 1)
+            if site.get('studio_document_json'):
+                current_server_doc = json.loads(site['studio_document_json'])
+                server_rev = int(site.get('studio_revision') or current_server_doc.get("revision", 1))
                 
                 # If client revision is older than server revision, it's a conflict
-                if client_rev < server_rev:
-                    return {'ok': False, 'conflict': True, 'serverRevision': server_rev}
+                if client_rev != server_rev:
+                    raise HTTPException(409,detail={
+                        'code':'STUDIO_REVISION_CONFLICT',
+                        'message':'A newer or different Studio revision is authoritative.',
+                        'serverRevision':server_rev,
+                    })
                 
                 # Bump revision for the successful save
                 valid_doc.revision = server_rev + 1
@@ -353,8 +367,23 @@ def save_studio(site_id: str, document: dict, request: Request):
                 valid_doc.revision = 1
                 
             doc_json = valid_doc.model_dump_json(exclude_none=True)
-            site.studio_document_json = doc_json
+            result=db.execute(text('''UPDATE sites
+                SET studio_document_json=:document, studio_revision=:next_revision, updated_at=:updated
+                WHERE id=:site_id AND user_id=:user_id AND studio_revision=:expected_revision'''),{
+                'document':doc_json,'next_revision':valid_doc.revision,'expected_revision':client_rev,
+                'updated':now_iso(),'site_id':site_id,'user_id':u['id']
+            })
+            if result.rowcount != 1:
+                authoritative=db.execute(text('SELECT studio_revision FROM sites WHERE id=:site_id AND user_id=:user_id'),{
+                    'site_id':site_id,'user_id':u['id']
+                }).scalar_one_or_none()
+                raise HTTPException(409,detail={
+                    'code':'STUDIO_REVISION_CONFLICT','message':'A concurrent Studio save won; this document was not saved.',
+                    'serverRevision':int(authoritative or server_rev),
+                })
             
+        except HTTPException:
+            raise
         except Exception as e:
             raise HTTPException(400, f"Invalid document: {str(e)}")
 

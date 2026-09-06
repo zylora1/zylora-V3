@@ -1333,7 +1333,7 @@
           return dispatcher;
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React5 = require_react(), Internals = {
+        var React12 = require_react(), Internals = {
           d: {
             f: noop,
             r: function() {
@@ -1351,7 +1351,7 @@
           },
           p: 0,
           findDOMNode: null
-        }, REACT_PORTAL_TYPE = /* @__PURE__ */ Symbol.for("react.portal"), ReactSharedInternals = React5.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
+        }, REACT_PORTAL_TYPE = /* @__PURE__ */ Symbol.for("react.portal"), ReactSharedInternals = React12.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
         "function" === typeof Map && null != Map.prototype && "function" === typeof Map.prototype.forEach && "function" === typeof Set && null != Set.prototype && "function" === typeof Set.prototype.clear && "function" === typeof Set.prototype.forEach || console.error(
           "React depends on Map and Set built-in types. Make sure that you load a polyfill in older browsers. https://reactjs.org/link/react-polyfills"
         );
@@ -2886,7 +2886,7 @@
           "number" === type && getActiveElement(node.ownerDocument) === node || node.defaultValue === "" + value || (node.defaultValue = "" + value);
         }
         function validateOptionProps(element, props) {
-          null == props.value && ("object" === typeof props.children && null !== props.children ? React5.Children.forEach(props.children, function(child) {
+          null == props.value && ("object" === typeof props.children && null !== props.children ? React12.Children.forEach(props.children, function(child) {
             null == child || "string" === typeof child || "number" === typeof child || "bigint" === typeof child || didWarnInvalidChild || (didWarnInvalidChild = true, console.error(
               "Cannot infer the option value of complex children. Pass a `value` prop or use a plain string as children to <option>."
             ));
@@ -6598,14 +6598,14 @@
             queue = queue.firstBaseUpdate;
             if (null !== queue) {
               do {
-                var clone = {
+                var clone2 = {
                   lane: queue.lane,
                   tag: queue.tag,
                   payload: queue.payload,
                   callback: null,
                   next: null
                 };
-                null === newLast ? newFirst = newLast = clone : newLast = newLast.next = clone;
+                null === newLast ? newFirst = newLast = clone2 : newLast = newLast.next = clone2;
                 queue = queue.next;
               } while (null !== queue);
               null === newLast ? newFirst = newLast = capturedUpdate : newLast = newLast.next = capturedUpdate;
@@ -17829,7 +17829,7 @@
         }
         function waitForCommitToBeReady(state, timeoutOffset) {
           state.stylesheets && 0 === state.count && insertSuspendedStylesheets(state, state.stylesheets);
-          return 0 < state.count || 0 < state.imgCount ? function(commit) {
+          return 0 < state.count || 0 < state.imgCount ? function(commit2) {
             var stylesheetTimer = setTimeout(function() {
               state.stylesheets && insertSuspendedStylesheets(state, state.stylesheets);
               if (state.unsuspend) {
@@ -17850,7 +17850,7 @@
               },
               (state.imgBytes > estimatedBytesWithinLimit ? 50 : SUSPENSEY_IMAGE_TIMEOUT) + timeoutOffset
             );
-            state.unsuspend = commit;
+            state.unsuspend = commit2;
             return function() {
               state.unsuspend = null;
               clearTimeout(stylesheetTimer);
@@ -18518,14 +18518,14 @@
           ));
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var Scheduler = require_scheduler(), React5 = require_react(), ReactDOM = require_react_dom(), assign = Object.assign, REACT_LEGACY_ELEMENT_TYPE = /* @__PURE__ */ Symbol.for("react.element"), REACT_ELEMENT_TYPE = /* @__PURE__ */ Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = /* @__PURE__ */ Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = /* @__PURE__ */ Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = /* @__PURE__ */ Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = /* @__PURE__ */ Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = /* @__PURE__ */ Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = /* @__PURE__ */ Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = /* @__PURE__ */ Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = /* @__PURE__ */ Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = /* @__PURE__ */ Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = /* @__PURE__ */ Symbol.for("react.memo"), REACT_LAZY_TYPE = /* @__PURE__ */ Symbol.for("react.lazy");
+        var Scheduler = require_scheduler(), React12 = require_react(), ReactDOM = require_react_dom(), assign = Object.assign, REACT_LEGACY_ELEMENT_TYPE = /* @__PURE__ */ Symbol.for("react.element"), REACT_ELEMENT_TYPE = /* @__PURE__ */ Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = /* @__PURE__ */ Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = /* @__PURE__ */ Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = /* @__PURE__ */ Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = /* @__PURE__ */ Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = /* @__PURE__ */ Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = /* @__PURE__ */ Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = /* @__PURE__ */ Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = /* @__PURE__ */ Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = /* @__PURE__ */ Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = /* @__PURE__ */ Symbol.for("react.memo"), REACT_LAZY_TYPE = /* @__PURE__ */ Symbol.for("react.lazy");
         /* @__PURE__ */ Symbol.for("react.scope");
         var REACT_ACTIVITY_TYPE = /* @__PURE__ */ Symbol.for("react.activity");
         /* @__PURE__ */ Symbol.for("react.legacy_hidden");
         /* @__PURE__ */ Symbol.for("react.tracing_marker");
         var REACT_MEMO_CACHE_SENTINEL = /* @__PURE__ */ Symbol.for("react.memo_cache_sentinel");
         /* @__PURE__ */ Symbol.for("react.view_transition");
-        var MAYBE_ITERATOR_SYMBOL = Symbol.iterator, REACT_CLIENT_REFERENCE = /* @__PURE__ */ Symbol.for("react.client.reference"), isArrayImpl = Array.isArray, ReactSharedInternals = React5.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, NotPending = Object.freeze({
+        var MAYBE_ITERATOR_SYMBOL = Symbol.iterator, REACT_CLIENT_REFERENCE = /* @__PURE__ */ Symbol.for("react.client.reference"), isArrayImpl = Array.isArray, ReactSharedInternals = React12.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, NotPending = Object.freeze({
           pending: false,
           data: null,
           method: null,
@@ -21313,7 +21313,7 @@
           }
         };
         (function() {
-          var isomorphicReactPackageVersion = React5.version;
+          var isomorphicReactPackageVersion = React12.version;
           if ("19.2.8" !== isomorphicReactPackageVersion)
             throw Error(
               'Incompatible React versions: The "react" and "react-dom" packages must have the exact same version. Instead got:\n  - react:      ' + (isomorphicReactPackageVersion + "\n  - react-dom:  19.2.8\nLearn more: https://react.dev/warnings/version-mismatch")
@@ -21454,193 +21454,282 @@
   });
 
   // studio/index.tsx
-  var import_react5 = __toESM(require_react());
+  var import_react14 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
   // studio/App.tsx
-  var import_react4 = __toESM(require_react());
+  var import_react13 = __toESM(require_react());
 
   // studio/store.ts
   var import_react = __toESM(require_react());
-  var initialState = {
-    document: null,
-    currentPageId: "home",
-    selectedNodeIds: [],
-    currentBreakpoint: "desktop",
-    history: [],
-    historyIndex: -1
+  var initialState = { document: null, currentPageId: "home", selectedNodeIds: [], currentBreakpoint: "desktop", history: [], historyIndex: -1, zoom: 1, clipboard: null, snapLines: [] };
+  var uid = (prefix = "node") => {
+    const bytes = new Uint8Array(8);
+    if (globalThis.crypto?.getRandomValues) globalThis.crypto.getRandomValues(bytes);
+    else for (let i = 0; i < bytes.length; i++) bytes[i] = Math.floor(Math.random() * 256);
+    return `${prefix}_${Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("").slice(0, 12)}`;
+  };
+  var clone = (value) => JSON.parse(JSON.stringify(value));
+  var commit = (state, document2, extra = {}) => {
+    const history = state.history.slice(0, state.historyIndex + 1).concat(document2);
+    return { ...state, ...extra, document: document2, history, historyIndex: history.length - 1 };
+  };
+  var pageOf = (state) => state.document?.pages[state.currentPageId];
+  var descendants = (nodes, roots) => {
+    const found = /* @__PURE__ */ new Set();
+    const walk = (id) => {
+      if (found.has(id)) return;
+      found.add(id);
+      (nodes[id]?.children || []).forEach(walk);
+    };
+    roots.forEach(walk);
+    return found;
+  };
+  var topSelection = (nodes, ids) => ids.filter((id) => nodes[id] && !ids.some((other) => other !== id && descendants(nodes, [other]).has(id)));
+  var validSlug = (raw) => raw.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "page";
+  var baseNode = (type, parentId) => ({ id: uid(type), type, parentId, children: [], content: { text: ["heading", "text", "paragraph"].includes(type) ? type === "heading" ? "New heading" : "Add your text" : type === "button" ? "Button" : void 0 }, style: { css: {}, tokens: {} }, layout: {}, responsiveOverrides: {}, visibility: "visible", bindings: {}, metadata: { displayName: type.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()) }, accessibility: {}, interactions: [] });
+  var cloneForest = (source, roots, target, parentId) => {
+    const map = /* @__PURE__ */ new Map();
+    descendants(source, roots).forEach((id) => map.set(id, uid(source[id]?.type || "node")));
+    map.forEach((next, id) => {
+      const n = clone(source[id]);
+      n.id = next;
+      n.parentId = map.get(n.parentId || "") || parentId;
+      n.children = n.children.map((c) => map.get(c)).filter(Boolean);
+      target[next] = n;
+    });
+    return roots.map((id) => map.get(id)).filter(Boolean);
+  };
+  var withNodes = (state, mutate) => {
+    if (!state.document) return state;
+    const page = pageOf(state);
+    if (!page) return state;
+    const nodes = clone(page.nodes), extra = mutate(page, nodes) || {};
+    return commit(state, { ...state.document, pages: { ...state.document.pages, [page.id]: { ...page, nodes } } }, extra);
   };
   function studioReducer(state, action) {
     switch (action.type) {
-      case "SET_DOCUMENT":
-        return {
-          ...state,
-          document: action.payload,
-          history: [action.payload],
-          historyIndex: 0
-        };
+      case "SET_DOCUMENT": {
+        const first = action.payload.pages[state.currentPageId] ? state.currentPageId : Object.keys(action.payload.pages)[0] || "home";
+        return { ...state, document: action.payload, currentPageId: first, selectedNodeIds: [], history: [action.payload], historyIndex: 0 };
+      }
       case "SELECT_NODE":
-        return { ...state, selectedNodeIds: action.payload };
+        return { ...state, selectedNodeIds: Array.from(new Set(action.payload)) };
+      case "SET_PAGE":
+        return state.document?.pages[action.payload] ? { ...state, currentPageId: action.payload, selectedNodeIds: [] } : state;
       case "SET_BREAKPOINT":
         return { ...state, currentBreakpoint: action.payload };
-      case "UPDATE_NODE_STYLE": {
-        if (!state.document) return state;
-        const { nodeId, style } = action.payload;
-        const page = state.document.pages[state.currentPageId];
-        if (!page || !page.nodes[nodeId]) return state;
-        const node = page.nodes[nodeId];
-        const newNode = { ...node };
-        if (state.currentBreakpoint === "desktop") {
-          newNode.style = { ...newNode.style, css: { ...newNode.style.css, ...style } };
-        } else {
-          const overrides = newNode.responsiveOverrides[state.currentBreakpoint] || { style: { css: {}, tokens: {} } };
-          const newStyle = overrides.style || { css: {}, tokens: {} };
-          newNode.responsiveOverrides = {
-            ...newNode.responsiveOverrides,
-            [state.currentBreakpoint]: {
-              ...overrides,
-              style: { ...newStyle, css: { ...newStyle.css, ...style } }
+      case "SET_ZOOM":
+        return { ...state, zoom: Math.max(0.25, Math.min(2, action.payload)) };
+      case "SET_SNAP_LINES":
+        return { ...state, snapLines: action.payload };
+      case "UPDATE_NODE_STYLE":
+      case "UPDATE_SELECTED_STYLE":
+        return withNodes(state, (_p, nodes) => {
+          const ids = action.type === "UPDATE_NODE_STYLE" ? [action.payload.nodeId] : state.selectedNodeIds, style = action.type === "UPDATE_NODE_STYLE" ? action.payload.style : action.payload;
+          ids.forEach((id) => {
+            const n = nodes[id];
+            if (!n || n.metadata?.locked) return;
+            if (state.currentBreakpoint === "desktop") n.style = { ...n.style, css: { ...n.style.css, ...style } };
+            else {
+              const o = n.responsiveOverrides[state.currentBreakpoint] || {};
+              n.responsiveOverrides = { ...n.responsiveOverrides, [state.currentBreakpoint]: { ...o, style: { tokens: { ...o.style?.tokens || {} }, css: { ...o.style?.css || {}, ...style } } } };
             }
-          };
-        }
-        const newDoc = {
-          ...state.document,
-          pages: {
-            ...state.document.pages,
-            [state.currentPageId]: {
-              ...page,
-              nodes: {
-                ...page.nodes,
-                [nodeId]: newNode
-              }
-            }
+          });
+        });
+      case "UPDATE_NODE_TEXT":
+      case "UPDATE_NODE_CONTENT":
+        return withNodes(state, (_p, nodes) => {
+          const n = nodes[action.payload.nodeId];
+          if (!n || n.metadata?.locked) return;
+          n.content = { ...n.content, ...action.type === "UPDATE_NODE_TEXT" ? { text: action.payload.text, html: void 0 } : action.payload.content };
+        });
+      case "UPDATE_NODE_ACCESSIBILITY":
+        return withNodes(state, (_p, nodes) => {
+          const n = nodes[action.payload.nodeId];
+          if (n && !n.metadata?.locked) n.accessibility = { ...n.accessibility || {}, ...action.payload.accessibility };
+        });
+      case "INSERT_NODE":
+        return withNodes(state, (page, nodes) => {
+          const parentId = action.payload.parentId || state.selectedNodeIds.find((id) => nodes[id] && ["page", "section", "container", "stack", "flex", "grid"].includes(nodes[id].type)) || page.rootNodeId, parent = nodes[parentId];
+          if (!parent) return;
+          const node = { ...baseNode(action.payload.node.type, parentId), ...clone(action.payload.node), id: action.payload.node.id || uid(action.payload.node.type), parentId, children: action.payload.node.children || [] };
+          nodes[node.id] = node;
+          const i = Math.max(0, Math.min(action.payload.index ?? parent.children.length, parent.children.length));
+          parent.children.splice(i, 0, node.id);
+          return { selectedNodeIds: [node.id] };
+        });
+      case "REPARENT_NODE":
+        return withNodes(state, (_p, nodes) => {
+          const n = nodes[action.payload.nodeId], parent = nodes[action.payload.newParentId];
+          if (!n || !parent || n.id === parent.id || descendants(nodes, [n.id]).has(parent.id)) return;
+          if (n.parentId && nodes[n.parentId]) nodes[n.parentId].children = nodes[n.parentId].children.filter((id) => id !== n.id);
+          n.parentId = parent.id;
+          parent.children.splice(Math.max(0, Math.min(action.payload.index ?? parent.children.length, parent.children.length)), 0, n.id);
+        });
+      case "REORDER_NODE":
+        return withNodes(state, (_p, nodes) => {
+          const n = nodes[action.payload.nodeId], parent = n?.parentId && nodes[n.parentId];
+          if (!n || !parent) return;
+          const from = parent.children.indexOf(n.id);
+          if (from < 0) return;
+          let to = from + (action.payload.direction === "forward" ? 1 : action.payload.direction === "backward" ? -1 : 0);
+          if (action.payload.direction === "front") to = parent.children.length - 1;
+          if (action.payload.direction === "back") to = 0;
+          to = Math.max(0, Math.min(to, parent.children.length - 1));
+          parent.children.splice(from, 1);
+          parent.children.splice(to, 0, n.id);
+        });
+      case "DELETE_NODE":
+      case "DELETE_SELECTED":
+        return withNodes(state, (page, nodes) => {
+          const wanted = action.type === "DELETE_NODE" ? [action.payload.nodeId] : state.selectedNodeIds, roots = topSelection(nodes, wanted).filter((id) => id !== page.rootNodeId && !nodes[id]?.metadata?.global), gone = descendants(nodes, roots);
+          roots.forEach((id) => {
+            const p = nodes[id]?.parentId;
+            if (p && nodes[p]) nodes[p].children = nodes[p].children.filter((c) => c !== id);
+          });
+          gone.forEach((id) => delete nodes[id]);
+          return { selectedNodeIds: state.selectedNodeIds.filter((id) => !gone.has(id)) };
+        });
+      case "DUPLICATE_NODE":
+      case "DUPLICATE_SELECTED":
+        return withNodes(state, (page, nodes) => {
+          const ids = topSelection(page.nodes, action.type === "DUPLICATE_NODE" ? [action.payload.nodeId] : state.selectedNodeIds).filter((id) => id !== page.rootNodeId), inserted = [];
+          ids.forEach((id) => {
+            const original = page.nodes[id], parentId = original?.parentId;
+            if (!original || !parentId || !nodes[parentId]) return;
+            const roots = cloneForest(page.nodes, [id], nodes, parentId), at = nodes[parentId].children.indexOf(id) + 1;
+            nodes[parentId].children.splice(at, 0, ...roots);
+            inserted.push(...roots);
+          });
+          return { selectedNodeIds: inserted };
+        });
+      case "RENAME_NODE":
+        return withNodes(state, (_p, nodes) => {
+          const n = nodes[action.payload.nodeId], name = action.payload.name.trim().slice(0, 80);
+          if (n && name) n.metadata = { ...n.metadata, displayName: name };
+        });
+      case "TOGGLE_NODE_LOCK":
+        return withNodes(state, (_p, nodes) => {
+          const n = nodes[action.payload.nodeId];
+          if (n) n.metadata = { ...n.metadata, locked: !n.metadata?.locked };
+        });
+      case "TOGGLE_NODE_VISIBILITY":
+        return withNodes(state, (_p, nodes) => {
+          const n = nodes[action.payload.nodeId];
+          if (!n) return;
+          if (action.payload.breakpoint === "desktop") n.visibility = n.visibility === "hidden" ? "visible" : "hidden";
+          else {
+            const bp = action.payload.breakpoint, o = n.responsiveOverrides[bp] || {}, inherit = bp === "mobile" ? n.responsiveOverrides.tablet?.visibility || n.visibility : n.visibility;
+            n.responsiveOverrides = { ...n.responsiveOverrides, [bp]: { ...o, visibility: (o.visibility || inherit) === "hidden" ? "visible" : "hidden" } };
           }
-        };
-        const newHistory = state.history.slice(0, state.historyIndex + 1);
-        newHistory.push(newDoc);
-        return {
-          ...state,
-          document: newDoc,
-          history: newHistory,
-          historyIndex: newHistory.length - 1
-        };
+        });
+      case "RESET_NODE_STYLE":
+        return withNodes(state, (_p, nodes) => {
+          if (action.payload.breakpoint === "desktop") return;
+          const n = nodes[action.payload.nodeId], o = n?.responsiveOverrides[action.payload.breakpoint];
+          if (!n || !o?.style) return;
+          const css = { ...o.style.css };
+          delete css[action.payload.prop];
+          n.responsiveOverrides = { ...n.responsiveOverrides, [action.payload.breakpoint]: { ...o, style: { ...o.style, css } } };
+        });
+      case "COPY_SELECTED": {
+        const page = pageOf(state);
+        if (!page) return state;
+        const roots = topSelection(page.nodes, state.selectedNodeIds);
+        if (!roots.length) return state;
+        const ids = descendants(page.nodes, roots), nodes = {};
+        ids.forEach((id) => nodes[id] = clone(page.nodes[id]));
+        return { ...state, clipboard: { nodes, rootIds: roots, sourceSiteId: state.document?.id } };
       }
-      case "REPARENT_NODE": {
+      case "CUT_SELECTED":
+        return studioReducer(studioReducer(state, { type: "COPY_SELECTED" }), { type: "DELETE_SELECTED" });
+      case "PASTE":
+        return withNodes(state, (page, nodes) => {
+          if (!state.clipboard) return;
+          const parentId = action.payload?.parentId || state.selectedNodeIds.find((id) => nodes[id] && ["page", "section", "container", "stack", "flex", "grid"].includes(nodes[id].type)) || page.rootNodeId, parent = nodes[parentId];
+          if (!parent) return;
+          const roots = cloneForest(state.clipboard.nodes, state.clipboard.rootIds, nodes, parent.id);
+          parent.children.push(...roots);
+          return { selectedNodeIds: roots };
+        });
+      case "ADD_PAGE": {
         if (!state.document) return state;
-        const { nodeId, newParentId } = action.payload;
-        const page = state.document.pages[state.currentPageId];
-        if (!page || !page.nodes[nodeId] || !page.nodes[newParentId]) return state;
-        if (nodeId === newParentId) return state;
-        const node = page.nodes[nodeId];
-        const oldParentId = node.parentId;
-        const newNodes = { ...page.nodes };
-        if (oldParentId && newNodes[oldParentId]) {
-          newNodes[oldParentId] = {
-            ...newNodes[oldParentId],
-            children: newNodes[oldParentId].children.filter((id) => id !== nodeId)
-          };
-        }
-        newNodes[newParentId] = {
-          ...newNodes[newParentId],
-          children: [...newNodes[newParentId].children, nodeId]
-        };
-        newNodes[nodeId] = {
-          ...node,
-          parentId: newParentId
-        };
-        const newDoc = {
-          ...state.document,
-          pages: {
-            ...state.document.pages,
-            [state.currentPageId]: {
-              ...page,
-              nodes: newNodes
-            }
-          }
-        };
-        const newHistory = state.history.slice(0, state.historyIndex + 1);
-        newHistory.push(newDoc);
-        return {
-          ...state,
-          document: newDoc,
-          history: newHistory,
-          historyIndex: newHistory.length - 1
-        };
+        const slug = validSlug(action.payload.slug);
+        if (Object.values(state.document.pages).some((p) => p.slug === slug)) return state;
+        const id = uid("page"), root = baseNode("page", null);
+        root.id = uid("root");
+        const page = { id, slug, name: action.payload.name.trim().slice(0, 80) || "Untitled page", rootNodeId: root.id, nodes: { [root.id]: root }, seo: {} };
+        return commit(state, { ...state.document, pages: { ...state.document.pages, [id]: page } }, { currentPageId: id, selectedNodeIds: [] });
       }
-      case "RESET_NODE_STYLE": {
+      case "UPDATE_PAGE": {
         if (!state.document) return state;
-        const { nodeId, prop, breakpoint } = action.payload;
-        if (breakpoint === "desktop") return state;
-        const page = state.document.pages[state.currentPageId];
-        if (!page || !page.nodes[nodeId]) return state;
-        const node = page.nodes[nodeId];
-        const newNode = { ...node };
-        const overrides = newNode.responsiveOverrides[breakpoint];
-        if (overrides && overrides.style && overrides.style.css[prop] !== void 0) {
-          const newCss = { ...overrides.style.css };
-          delete newCss[prop];
-          newNode.responsiveOverrides = {
-            ...newNode.responsiveOverrides,
-            [breakpoint]: {
-              ...overrides,
-              style: { ...overrides.style, css: newCss }
-            }
-          };
-        } else {
-          return state;
-        }
-        const newDoc = {
-          ...state.document,
-          pages: {
-            ...state.document.pages,
-            [state.currentPageId]: {
-              ...page,
-              nodes: {
-                ...page.nodes,
-                [nodeId]: newNode
-              }
-            }
-          }
-        };
-        const newHistory = state.history.slice(0, state.historyIndex + 1);
-        newHistory.push(newDoc);
-        return {
-          ...state,
-          document: newDoc,
-          history: newHistory,
-          historyIndex: newHistory.length - 1
-        };
+        const page = state.document.pages[action.payload.pageId];
+        if (!page) return state;
+        const slug = action.payload.slug === void 0 ? page.slug : validSlug(action.payload.slug);
+        if (Object.values(state.document.pages).some((p) => p.id !== page.id && p.slug === slug)) return state;
+        const updated = { ...page, name: action.payload.name?.trim().slice(0, 80) || page.name, slug, seo: { ...page.seo || {}, ...action.payload.seo || {} } };
+        return commit(state, { ...state.document, pages: { ...state.document.pages, [page.id]: updated } });
       }
-      case "SYNC_REVISION":
-        if (state.document) {
-          const newDoc = { ...state.document, revision: action.payload };
-          const newHistory = [...state.history];
-          newHistory[state.historyIndex] = newDoc;
-          return {
-            ...state,
-            document: newDoc,
-            history: newHistory
-          };
-        }
+      case "DUPLICATE_PAGE": {
+        if (!state.document) return state;
+        const source = state.document.pages[action.payload.pageId];
+        if (!source) return state;
+        const nodes = {}, roots = cloneForest(source.nodes, [source.rootNodeId], nodes, null), id = uid("page");
+        let slug = `${validSlug(source.slug)}-copy`, n = 2;
+        while (Object.values(state.document.pages).some((p) => p.slug === slug)) slug = `${validSlug(source.slug)}-copy-${n++}`;
+        const page = { ...clone(source), id, name: `${source.name} copy`, slug, rootNodeId: roots[0], nodes };
+        return commit(state, { ...state.document, pages: { ...state.document.pages, [id]: page } }, { currentPageId: id, selectedNodeIds: [] });
+      }
+      case "DELETE_PAGE": {
+        if (!state.document || Object.keys(state.document.pages).length <= 1) return state;
+        const page = state.document.pages[action.payload.pageId];
+        if (!page || page.slug === "home") return state;
+        const pages = { ...state.document.pages };
+        delete pages[page.id];
+        return commit(state, { ...state.document, pages }, { currentPageId: state.currentPageId === page.id ? Object.keys(pages)[0] : state.currentPageId, selectedNodeIds: [] });
+      }
+      case "REORDER_PAGE": {
+        if (!state.document) return state;
+        const entries = Object.entries(state.document.pages), from = entries.findIndex(([id]) => id === action.payload.pageId), to = from + action.payload.direction;
+        if (from < 0 || to < 0 || to >= entries.length) return state;
+        [entries[from], entries[to]] = [entries[to], entries[from]];
+        return commit(state, { ...state.document, pages: Object.fromEntries(entries) });
+      }
+      case "CREATE_COMPONENT": {
+        if (!state.document) return state;
+        const page = pageOf(state), rootId = state.selectedNodeIds[0], root = page?.nodes[rootId];
+        if (!page || !root || root.id === page.rootNodeId || !root.parentId) return state;
+        const compNodes = {}, compRoots = cloneForest(page.nodes, [rootId], compNodes, null), componentId = uid("component"), component = { id: componentId, name: action.payload.name.trim().slice(0, 80) || "Component", rootNodeId: compRoots[0], nodes: compNodes, exposedProperties: [] };
+        const instance = { ...baseNode("component_instance", root.parentId), id: uid("instance"), content: { component_id: componentId, componentId }, style: clone(root.style), metadata: { displayName: component.name } };
+        const nodes = clone(page.nodes), parent = nodes[root.parentId], at = parent.children.indexOf(root.id), gone = descendants(nodes, [root.id]);
+        gone.forEach((id) => delete nodes[id]);
+        nodes[instance.id] = instance;
+        parent.children.splice(at, 1, instance.id);
+        return commit(state, { ...state.document, components: { ...state.document.components || {}, [componentId]: component }, pages: { ...state.document.pages, [page.id]: { ...page, nodes } } }, { selectedNodeIds: [instance.id] });
+      }
+      case "DETACH_COMPONENT": {
+        if (!state.document) return state;
+        const page = pageOf(state), instance = page?.nodes[action.payload.nodeId], componentId = instance?.content.component_id || instance?.content.componentId, component = state.document.components?.[componentId];
+        if (!page || !instance || instance.type !== "component_instance" || !component || !instance.parentId) return state;
+        const nodes = clone(page.nodes), parent = nodes[instance.parentId], roots = cloneForest(component.nodes, [component.rootNodeId], nodes, parent.id), at = parent.children.indexOf(instance.id);
+        delete nodes[instance.id];
+        parent.children.splice(at, 1, ...roots);
+        return commit(state, { ...state.document, pages: { ...state.document.pages, [page.id]: { ...page, nodes } } }, { selectedNodeIds: roots });
+      }
+      case "UPDATE_TOKENS":
+        if (state.document) return commit(state, { ...state.document, tokens: { ...state.document.tokens || {}, ...action.payload } });
         return state;
+      case "SYNC_REVISION": {
+        if (!state.document) return state;
+        const document2 = { ...state.document, revision: action.payload }, history = [...state.history];
+        history[state.historyIndex] = document2;
+        return { ...state, document: document2, history };
+      }
       case "UNDO":
-        if (state.historyIndex > 0) {
-          return {
-            ...state,
-            historyIndex: state.historyIndex - 1,
-            document: state.history[state.historyIndex - 1]
-          };
-        }
-        return state;
+        return state.historyIndex > 0 ? { ...state, historyIndex: state.historyIndex - 1, document: state.history[state.historyIndex - 1], selectedNodeIds: [] } : state;
       case "REDO":
-        if (state.historyIndex < state.history.length - 1) {
-          return {
-            ...state,
-            historyIndex: state.historyIndex + 1,
-            document: state.history[state.historyIndex + 1]
-          };
-        }
-        return state;
+        return state.historyIndex < state.history.length - 1 ? { ...state, historyIndex: state.historyIndex + 1, document: state.history[state.historyIndex + 1], selectedNodeIds: [] } : state;
       default:
         return state;
     }
@@ -21649,16 +21738,257 @@
   var useStudio = () => (0, import_react.useContext)(StudioContext);
 
   // studio/components/CanvasNode.tsx
+  var import_react4 = __toESM(require_react());
+
+  // studio/interactions/useResize.ts
   var import_react2 = __toESM(require_react());
+
+  // studio/geometry/math.ts
+  function computeResize(originalRect, pointerStart, pointerCurrent, handle, zoom = 1) {
+    const dx = (pointerCurrent.x - pointerStart.x) / zoom;
+    const dy = (pointerCurrent.y - pointerStart.y) / zoom;
+    let { x, y, w, h } = originalRect;
+    if (handle.includes("right")) {
+      w = Math.max(10, w + dx);
+    }
+    if (handle.includes("left")) {
+      const d = Math.min(w - 10, dx);
+      x += d;
+      w -= d;
+    }
+    if (handle.includes("bottom")) {
+      h = Math.max(10, h + dy);
+    }
+    if (handle.includes("top")) {
+      const d = Math.min(h - 10, dy);
+      y += d;
+      h -= d;
+    }
+    return { x, y, w, h };
+  }
+
+  // studio/interactions/useResize.ts
+  function useResize(_initialRect, onResizeUpdate, onResizeEnd, zoom = 1) {
+    const [isResizing, setResizing] = (0, import_react2.useState)(false), cleanup = (0, import_react2.useRef)(null), latest = (0, import_react2.useRef)({ onResizeUpdate, onResizeEnd, zoom });
+    latest.current = { onResizeUpdate, onResizeEnd, zoom };
+    (0, import_react2.useEffect)(() => () => cleanup.current?.(), []);
+    const startResize = (event, handle, currentRect) => {
+      event.stopPropagation();
+      event.preventDefault();
+      cleanup.current?.();
+      const start = { x: event.clientX, y: event.clientY }, base = { ...currentRect };
+      setResizing(true);
+      const calc = (e) => computeResize(base, start, { x: e.clientX, y: e.clientY }, handle, latest.current.zoom);
+      const move = (e) => latest.current.onResizeUpdate(calc(e));
+      const up = (e) => {
+        window.removeEventListener("mousemove", move);
+        window.removeEventListener("mouseup", up);
+        cleanup.current = null;
+        setResizing(false);
+        latest.current.onResizeEnd(calc(e));
+      };
+      window.addEventListener("mousemove", move);
+      window.addEventListener("mouseup", up);
+      cleanup.current = () => {
+        window.removeEventListener("mousemove", move);
+        window.removeEventListener("mouseup", up);
+      };
+    };
+    return { isResizing, startResize };
+  }
+
+  // studio/interactions/useDrag.ts
+  var import_react3 = __toESM(require_react());
+
+  // studio/geometry/snapping.ts
+  function computeSnapping(rect, peers, parentBounds, threshold = 5) {
+    let bestDx = 0;
+    let bestDy = 0;
+    let minXDist = threshold;
+    let minYDist = threshold;
+    const lines = [];
+    const trySnapX = (targetX, sourceX, type) => {
+      const dist = Math.abs(targetX - sourceX);
+      if (dist < minXDist) {
+        minXDist = dist;
+        bestDx = targetX - sourceX;
+        for (let i = lines.length - 1; i >= 0; i--) {
+          if (lines[i].orientation === "vertical") lines.splice(i, 1);
+        }
+        lines.push({ position: targetX, orientation: "vertical", type });
+      } else if (dist === minXDist && dist < threshold) {
+        lines.push({ position: targetX, orientation: "vertical", type });
+      }
+    };
+    const trySnapY = (targetY, sourceY, type) => {
+      const dist = Math.abs(targetY - sourceY);
+      if (dist < minYDist) {
+        minYDist = dist;
+        bestDy = targetY - sourceY;
+        for (let i = lines.length - 1; i >= 0; i--) {
+          if (lines[i].orientation === "horizontal") lines.splice(i, 1);
+        }
+        lines.push({ position: targetY, orientation: "horizontal", type });
+      } else if (dist === minYDist && dist < threshold) {
+        lines.push({ position: targetY, orientation: "horizontal", type });
+      }
+    };
+    const myCenterX = rect.x + rect.w / 2;
+    const myCenterY = rect.y + rect.h / 2;
+    const myRight = rect.x + rect.w;
+    const myBottom = rect.y + rect.h;
+    if (parentBounds) {
+      trySnapX(0, rect.x, "edge");
+      trySnapX(parentBounds.w, myRight, "edge");
+      trySnapY(0, rect.y, "edge");
+      trySnapY(parentBounds.h, myBottom, "edge");
+      trySnapX(parentBounds.w / 2, myCenterX, "center");
+      trySnapY(parentBounds.h / 2, myCenterY, "center");
+    }
+    for (const peer of peers) {
+      const pCenterX = peer.x + peer.w / 2;
+      const pCenterY = peer.y + peer.h / 2;
+      const pRight = peer.x + peer.w;
+      const pBottom = peer.y + peer.h;
+      trySnapX(peer.x, rect.x, "edge");
+      trySnapX(peer.x, myRight, "edge");
+      trySnapX(pRight, rect.x, "edge");
+      trySnapX(pRight, myRight, "edge");
+      trySnapY(peer.y, rect.y, "edge");
+      trySnapY(peer.y, myBottom, "edge");
+      trySnapY(pBottom, rect.y, "edge");
+      trySnapY(pBottom, myBottom, "edge");
+      trySnapX(pCenterX, myCenterX, "center");
+      trySnapY(pCenterY, myCenterY, "center");
+    }
+    return {
+      snappedRect: { ...rect, x: rect.x + bestDx, y: rect.y + bestDy },
+      snapLines: lines
+    };
+  }
+
+  // studio/interactions/useDrag.ts
+  function useDrag(onDragUpdate, onDragEnd, zoom = 1, getTargets = () => ({ peers: [], parent: null })) {
+    const [isDragging, setDragging] = (0, import_react3.useState)(false), cleanup = (0, import_react3.useRef)(null), latest = (0, import_react3.useRef)({ onDragUpdate, onDragEnd, zoom, getTargets });
+    latest.current = { onDragUpdate, onDragEnd, zoom, getTargets };
+    (0, import_react3.useEffect)(() => () => cleanup.current?.(), []);
+    const startDrag = (event, currentRect) => {
+      event.stopPropagation();
+      event.preventDefault();
+      cleanup.current?.();
+      const start = { x: event.clientX, y: event.clientY }, base = { ...currentRect };
+      setDragging(true);
+      const calculate = (e) => {
+        const api = latest.current, raw = { ...base, x: base.x + (e.clientX - start.x) / api.zoom, y: base.y + (e.clientY - start.y) / api.zoom }, targets = api.getTargets();
+        return computeSnapping(raw, targets.peers, targets.parent, 6 / api.zoom);
+      };
+      const move = (e) => {
+        const result = calculate(e);
+        latest.current.onDragUpdate(result.snappedRect, result.snapLines);
+      };
+      const up = (e) => {
+        const result = calculate(e);
+        window.removeEventListener("mousemove", move);
+        window.removeEventListener("mouseup", up);
+        cleanup.current = null;
+        setDragging(false);
+        latest.current.onDragEnd(result.snappedRect);
+      };
+      window.addEventListener("mousemove", move);
+      window.addEventListener("mouseup", up);
+      cleanup.current = () => {
+        window.removeEventListener("mousemove", move);
+        window.removeEventListener("mouseup", up);
+      };
+    };
+    return { isDragging, startDrag };
+  }
+
+  // studio/components/CanvasNode.tsx
+  function EditableText({ value, onChange }) {
+    const ref = import_react4.default.useRef(null);
+    const editing = import_react4.default.useRef(false);
+    import_react4.default.useLayoutEffect(() => {
+      if (ref.current && !editing.current && ref.current.textContent !== value) ref.current.textContent = value;
+    }, [value]);
+    return /* @__PURE__ */ import_react4.default.createElement(
+      "span",
+      {
+        ref,
+        className: "studio-text-editor",
+        contentEditable: true,
+        suppressContentEditableWarning: true,
+        onFocus: () => {
+          editing.current = true;
+        },
+        onInput: (e) => onChange(e.currentTarget.textContent || ""),
+        onBlur: (e) => {
+          editing.current = false;
+          onChange(e.currentTarget.textContent || "");
+        }
+      }
+    );
+  }
   function CanvasNode({ nodeId }) {
     const { state, dispatch } = useStudio();
+    const [rectOverride, setRectOverride] = import_react4.default.useState(null);
+    const handleResizeUpdate = (rect, lines = []) => {
+      setRectOverride(rect);
+      dispatch({ type: "SET_SNAP_LINES", payload: lines });
+    };
+    const handleResizeEnd = (rect) => {
+      setRectOverride(null);
+      dispatch({ type: "SET_SNAP_LINES", payload: [] });
+      if (!state.document) return;
+      const node2 = state.document.pages[state.currentPageId].nodes[nodeId];
+      const cssStyles2 = { ...node2.style.css };
+      const newCss = {
+        width: `${rect.w}px`,
+        height: `${rect.h}px`
+      };
+      if (cssStyles2.position === "absolute" || cssStyles2.position === "fixed") {
+        newCss.left = `${rect.x}px`;
+        newCss.top = `${rect.y}px`;
+      }
+      dispatch({
+        type: "UPDATE_NODE_STYLE",
+        payload: {
+          nodeId,
+          style: newCss
+        }
+      });
+    };
+    const { startResize } = useResize(
+      { x: 0, y: 0, w: 0, h: 0 },
+      handleResizeUpdate,
+      handleResizeEnd,
+      state.zoom
+    );
+    const { startDrag } = useDrag(
+      handleResizeUpdate,
+      handleResizeEnd,
+      state.zoom,
+      () => {
+        const element = document.querySelector(`[data-studio-id="${CSS.escape(nodeId)}"]`);
+        const parent = element?.parentElement;
+        if (!element || !parent) return { peers: [], parent: null };
+        const pr = parent.getBoundingClientRect();
+        const peers = Array.from(parent.children).filter((child) => child !== element).map((child) => {
+          const r = child.getBoundingClientRect();
+          return { x: (r.left - pr.left) / state.zoom, y: (r.top - pr.top) / state.zoom, w: r.width / state.zoom, h: r.height / state.zoom };
+        });
+        return { peers, parent: { x: 0, y: 0, w: pr.width / state.zoom, h: pr.height / state.zoom } };
+      }
+    );
     if (!state.document) return null;
     const page = state.document.pages[state.currentPageId];
     if (!page) return null;
     const node = page.nodes[nodeId];
     if (!node) return null;
-    const isSelected = state.selectedNodeIds.includes(nodeId);
+    const isSelected = state.selectedNodeIds.indexOf(nodeId) !== -1;
+    const isLocked = !!node.metadata?.locked;
     let cssStyles = { ...node.style.css };
+    let effectiveVisibility = node.visibility;
     if (state.currentBreakpoint !== "desktop") {
       const bp = state.currentBreakpoint;
       const override = node.responsiveOverrides[bp];
@@ -21667,24 +21997,41 @@
       }
       if (bp === "mobile") {
         const tabletOverride = node.responsiveOverrides["tablet"];
+        effectiveVisibility = tabletOverride?.visibility || effectiveVisibility;
         if (tabletOverride && tabletOverride.style) {
           cssStyles = { ...cssStyles, ...tabletOverride.style.css, ...override?.style?.css || {} };
         }
       }
+      effectiveVisibility = override?.visibility || effectiveVisibility;
     }
     const handleClick = (e) => {
       e.stopPropagation();
-      dispatch({ type: "SELECT_NODE", payload: [nodeId] });
+      dispatch({ type: "SELECT_NODE", payload: e.shiftKey ? isSelected ? state.selectedNodeIds.filter((id) => id !== nodeId) : [...state.selectedNodeIds, nodeId] : [nodeId] });
+    };
+    const isAbsolute = cssStyles.position === "absolute" || cssStyles.position === "fixed";
+    const handlePointerDown = (e) => {
+      if (!isAbsolute || isLocked) return;
+      const el = e.currentTarget;
+      startDrag(e, {
+        x: parseInt(cssStyles.left) || 0,
+        y: parseInt(cssStyles.top) || 0,
+        w: el.offsetWidth,
+        h: el.offsetHeight
+      });
     };
     const handleDragStart = (e) => {
+      if (isAbsolute) {
+        e.preventDefault();
+        return;
+      }
       e.stopPropagation();
       e.dataTransfer.setData("studio/node-id", node.id);
     };
     let Tag = "div";
     if (node.type === "section") Tag = "section";
     else if (node.type === "heading") Tag = "h2";
-    else if (node.type === "text") Tag = "p";
-    else if (node.type === "image") Tag = "img";
+    else if (node.type === "text" || node.type === "paragraph") Tag = node.children.length ? "div" : "p";
+    else if (node.type === "image") Tag = node.content.src ? "img" : "div";
     else if (node.type === "button") Tag = "button";
     else if (node.type === "link") Tag = "a";
     else if (node.type === "form") Tag = "form";
@@ -21698,33 +22045,49 @@
       e.preventDefault();
       e.stopPropagation();
       const droppedNodeId = e.dataTransfer.getData("studio/node-id");
-      if (droppedNodeId && droppedNodeId !== node.id) {
+      const insertData = e.dataTransfer.getData("application/x-zylora-node");
+      const acceptsChildren = ["page", "section", "container", "stack", "flex", "grid", "repeater", "list", "gallery"].includes(node.type);
+      if (insertData && acceptsChildren) {
+        try {
+          const spec = JSON.parse(insertData);
+          dispatch({ type: "INSERT_NODE", payload: { parentId: node.id, node: { type: spec.type, metadata: { displayName: spec.label } } } });
+          return;
+        } catch {
+        }
+      }
+      if (droppedNodeId && droppedNodeId !== node.id && acceptsChildren) {
         dispatch({
           type: "REPARENT_NODE",
           payload: { nodeId: droppedNodeId, newParentId: node.id }
         });
       }
     };
-    const isAbsolute = cssStyles.position === "absolute" || cssStyles.position === "fixed";
     const renderProps = {
       style: {
         ...cssStyles,
+        ...rectOverride ? {
+          width: `${rectOverride.w}px`,
+          height: `${rectOverride.h}px`,
+          ...isAbsolute ? { left: `${rectOverride.x}px`, top: `${rectOverride.y}px` } : {}
+        } : {},
         outline: isSelected ? "2px solid #0055ff" : "none",
         outlineOffset: isSelected ? "-2px" : "0",
-        position: cssStyles.position || "relative"
-        // needed for resize handles anchor
+        position: cssStyles.position || "relative",
+        display: effectiveVisibility === "hidden" ? "none" : cssStyles.display
       },
       onClick: handleClick,
-      draggable: !isAbsolute,
-      // Browser native drag for flow elements
+      onPointerDown: handlePointerDown,
+      draggable: !isAbsolute && !isLocked,
       onDragStart: handleDragStart,
       onDragOver: handleDragOver,
       onDrop: handleDrop,
       "data-studio-id": node.id,
-      "data-studio-type": node.type
+      "data-studio-type": node.type,
+      "aria-label": node.accessibility?.ariaLabel || void 0
     };
+    const directlyEditable = isSelected && !isLocked && node.children.length === 0 && ["heading", "paragraph", "text", "button", "link"].includes(node.type);
     const renderResizeHandle = (pos) => {
-      if (!isSelected) return null;
+      if (!isSelected || isLocked) return null;
       const style = {
         position: "absolute",
         width: "8px",
@@ -21747,166 +22110,599 @@
         style.cursor = "ew-resize";
         style.top = "calc(50% - 4px)";
       }
-      return /* @__PURE__ */ import_react2.default.createElement("div", { style, onMouseDown: (e) => {
-        e.stopPropagation();
+      return /* @__PURE__ */ import_react4.default.createElement("div", { key: pos, style, onMouseDown: (e) => {
+        const el = e.target.parentElement;
+        if (!el) return;
+        const bounds = el.getBoundingClientRect();
+        startResize(e, pos, {
+          x: parseInt(cssStyles.left) || 0,
+          y: parseInt(cssStyles.top) || 0,
+          w: el.offsetWidth,
+          h: el.offsetHeight
+        });
       } });
     };
     if (node.type === "image" && node.content.src) {
       renderProps.src = node.content.src;
       renderProps.alt = node.content.alt;
-      return /* @__PURE__ */ import_react2.default.createElement("img", { ...renderProps });
+      return /* @__PURE__ */ import_react4.default.createElement("img", { ...renderProps });
     }
-    return /* @__PURE__ */ import_react2.default.createElement(Tag, { ...renderProps }, isSelected && ["top-left", "top", "top-right", "right", "bottom-right", "bottom", "bottom-left", "left"].map(renderResizeHandle), node.content.text || node.content.html || null, node.children.map((childId) => /* @__PURE__ */ import_react2.default.createElement(CanvasNode, { key: childId, nodeId: childId })));
+    return /* @__PURE__ */ import_react4.default.createElement(Tag, { ...renderProps }, isSelected && isAbsolute && !isLocked && /* @__PURE__ */ import_react4.default.createElement("div", { className: "studio-drag-handle", title: "Drag element", onMouseDown: (e) => {
+      const el = e.currentTarget.parentElement;
+      if (el) startDrag(e, { x: parseInt(cssStyles.left) || 0, y: parseInt(cssStyles.top) || 0, w: el.offsetWidth, h: el.offsetHeight });
+    } }, "\u22EE\u22EE"), isSelected && ["top-left", "top", "top-right", "right", "bottom-right", "bottom", "bottom-left", "left"].map(renderResizeHandle), directlyEditable ? /* @__PURE__ */ import_react4.default.createElement(EditableText, { value: node.content.text || "", onChange: (text) => dispatch({ type: "UPDATE_NODE_TEXT", payload: { nodeId, text } }) }) : node.content.text || node.content.html || null, node.children.map((childId) => /* @__PURE__ */ import_react4.default.createElement(CanvasNode, { key: childId, nodeId: childId })));
   }
 
   // studio/components/Inspector.tsx
-  var import_react3 = __toESM(require_react());
+  var import_react5 = __toESM(require_react());
+  var sections = [
+    ["Layout", [["Display", "display", "select", ["block", "flex", "grid", "inline-block", "none"]], ["Width", "width"], ["Min width", "minWidth"], ["Max width", "maxWidth"], ["Height", "height"], ["Min height", "minHeight"], ["Max height", "maxHeight"], ["Position", "position", "select", ["relative", "absolute", "fixed", "sticky"]], ["X / left", "left"], ["Y / top", "top"], ["Overflow", "overflow", "select", ["visible", "hidden", "auto", "scroll"]], ["Direction", "flexDirection", "select", ["row", "column", "row-reverse", "column-reverse"]], ["Justify", "justifyContent"], ["Align", "alignItems"], ["Wrap", "flexWrap"], ["Columns", "gridTemplateColumns"], ["Rows", "gridTemplateRows"], ["Gap", "gap"]]],
+    ["Spacing", [["Margin top", "marginTop"], ["Margin right", "marginRight"], ["Margin bottom", "marginBottom"], ["Margin left", "marginLeft"], ["Padding top", "paddingTop"], ["Padding right", "paddingRight"], ["Padding bottom", "paddingBottom"], ["Padding left", "paddingLeft"]]],
+    ["Typography", [["Font family", "fontFamily"], ["Size", "fontSize"], ["Weight", "fontWeight"], ["Line height", "lineHeight"], ["Letter spacing", "letterSpacing"], ["Align", "textAlign", "select", ["left", "center", "right", "justify"]], ["Transform", "textTransform", "select", ["none", "uppercase", "lowercase", "capitalize"]], ["Decoration", "textDecoration"], ["Color", "color", "color"]]],
+    ["Fill", [["Background", "backgroundColor", "color"], ["Opacity", "opacity"]]],
+    ["Border", [["Width", "borderWidth"], ["Style", "borderStyle", "select", ["none", "solid", "dashed", "dotted"]], ["Color", "borderColor", "color"], ["Radius", "borderRadius"], ["Top left", "borderTopLeftRadius"], ["Top right", "borderTopRightRadius"], ["Bottom right", "borderBottomRightRadius"], ["Bottom left", "borderBottomLeftRadius"]]],
+    ["Effects", [["Shadow", "boxShadow"], ["Transform", "transform"]]]
+  ];
   function Inspector() {
     const { state, dispatch } = useStudio();
-    if (state.selectedNodeIds.length !== 1 || !state.document) {
-      return /* @__PURE__ */ import_react3.default.createElement("div", { style: { padding: "1rem", color: "#888" } }, "Select exactly one node to inspect.");
-    }
-    const page = state.document.pages[state.currentPageId];
-    const nodeId = state.selectedNodeIds[0];
-    const node = page.nodes[nodeId];
-    if (!node) return null;
-    const bp = state.currentBreakpoint;
-    const getValue = (prop) => {
-      let val = node.style.css[prop] || "";
-      let isOverride = false;
-      if (bp === "tablet") {
-        const override = node.responsiveOverrides["tablet"]?.style?.css[prop];
-        if (override !== void 0) {
-          val = override;
-          isOverride = true;
-        }
-      } else if (bp === "mobile") {
-        const mobileOverride = node.responsiveOverrides["mobile"]?.style?.css[prop];
-        if (mobileOverride !== void 0) {
-          val = mobileOverride;
-          isOverride = true;
-        } else {
-          const tabletOverride = node.responsiveOverrides["tablet"]?.style?.css[prop];
-          if (tabletOverride !== void 0) {
-            val = tabletOverride;
-          }
-        }
-      }
-      return { val, isOverride };
+    const [open, setOpen] = import_react5.default.useState({ Layout: true, Spacing: true, Typography: true, Content: true, CMS: true });
+    const page = state.document?.pages[state.currentPageId], nodes = state.selectedNodeIds.map((id) => page?.nodes[id]).filter(Boolean);
+    if (!nodes.length) return /* @__PURE__ */ import_react5.default.createElement("div", { className: "empty-state inspector-empty" }, /* @__PURE__ */ import_react5.default.createElement("b", null, "Select something on the canvas"), /* @__PURE__ */ import_react5.default.createElement("p", null, "Layout, content, responsive styles, CMS bindings, and accessibility settings will appear here."));
+    const node = nodes[0], multi = nodes.length > 1, bp = state.currentBreakpoint;
+    const value = (prop) => {
+      const base = node.style.css[prop] || "", tablet = node.responsiveOverrides.tablet?.style?.css[prop], own = node.responsiveOverrides[bp]?.style?.css[prop];
+      return { value: bp === "desktop" ? base : own !== void 0 ? own : bp === "mobile" && tablet !== void 0 ? tablet : base, override: bp !== "desktop" && own !== void 0 };
     };
-    const updateStyle = (prop, value) => {
-      dispatch({ type: "UPDATE_NODE_STYLE", payload: { nodeId, style: { [prop]: value } } });
+    const update = (prop, v) => dispatch({ type: multi ? "UPDATE_SELECTED_STYLE" : "UPDATE_NODE_STYLE", ...multi ? { payload: { [prop]: v } } : { payload: { nodeId: node.id, style: { [prop]: v } } } });
+    const field = ([label, prop, kind = "text", choices]) => {
+      const current = value(prop);
+      return /* @__PURE__ */ import_react5.default.createElement("label", { className: `inspector-field ${current.override ? "overridden" : ""}`, key: prop }, /* @__PURE__ */ import_react5.default.createElement("span", null, label, current.override && /* @__PURE__ */ import_react5.default.createElement("i", { title: "Overridden at this breakpoint" }, "\u25CF")), /* @__PURE__ */ import_react5.default.createElement("span", { className: "field-control" }, kind === "select" ? /* @__PURE__ */ import_react5.default.createElement("select", { value: current.value, onChange: (e) => update(prop, e.target.value) }, /* @__PURE__ */ import_react5.default.createElement("option", { value: "" }, "Auto"), choices?.map((x) => /* @__PURE__ */ import_react5.default.createElement("option", { key: x }, x))) : kind === "color" ? /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("input", { type: "color", value: /^#[0-9a-f]{6}$/i.test(current.value) ? current.value : "#000000", onChange: (e) => update(prop, e.target.value) }), /* @__PURE__ */ import_react5.default.createElement("input", { value: current.value, placeholder: "Inherited", onChange: (e) => update(prop, e.target.value) })) : /* @__PURE__ */ import_react5.default.createElement("input", { value: current.value, placeholder: "Inherited", onChange: (e) => update(prop, e.target.value) }), " ", current.override && /* @__PURE__ */ import_react5.default.createElement("button", { title: "Reset override", onClick: () => dispatch({ type: "RESET_NODE_STYLE", payload: { nodeId: node.id, prop, breakpoint: bp } }) }, "\u21BA")));
     };
-    const resetStyle = (prop) => {
-      dispatch({ type: "RESET_NODE_STYLE", payload: { nodeId, prop, breakpoint: bp } });
-    };
-    const renderInput = (label, prop) => {
-      const { val, isOverride } = getValue(prop);
-      return /* @__PURE__ */ import_react3.default.createElement("div", { style: { marginBottom: "0.5rem", display: "flex", alignItems: "center" } }, /* @__PURE__ */ import_react3.default.createElement("label", { style: { flex: 1, fontSize: "0.75rem", color: isOverride ? "#00aaff" : "#aaa" } }, label), /* @__PURE__ */ import_react3.default.createElement(
-        "input",
-        {
-          type: "text",
-          value: val,
-          placeholder: "Inherited",
-          style: {
-            width: "100px",
-            padding: "4px",
-            background: "#222",
-            color: "#fff",
-            border: `1px solid ${isOverride ? "#00aaff" : "#444"}`,
-            borderRadius: "3px"
-          },
-          onChange: (e) => updateStyle(prop, e.target.value)
-        }
-      ), isOverride && bp !== "desktop" && /* @__PURE__ */ import_react3.default.createElement(
-        "button",
-        {
-          onClick: () => resetStyle(prop),
-          style: { background: "transparent", color: "#ff4444", border: "none", marginLeft: "4px", cursor: "pointer", padding: "2px 4px" },
-          title: "Reset override"
-        },
-        "\xD7"
-      ));
-    };
-    return /* @__PURE__ */ import_react3.default.createElement("div", { style: { padding: "1rem" } }, /* @__PURE__ */ import_react3.default.createElement("div", { style: { marginBottom: "1rem", borderBottom: "1px solid #333", paddingBottom: "0.5rem" } }, /* @__PURE__ */ import_react3.default.createElement("div", { style: { fontSize: "0.8rem", fontWeight: "bold", color: "#fff" } }, "Node: ", node.type), /* @__PURE__ */ import_react3.default.createElement("div", { style: { fontSize: "0.7rem", color: "#888" } }, "ID: ", node.id)), /* @__PURE__ */ import_react3.default.createElement("div", { style: { marginBottom: "1rem" } }, /* @__PURE__ */ import_react3.default.createElement("h4", { style: { fontSize: "0.8rem", margin: "0 0 0.5rem 0", color: "#ddd" } }, "Layout"), renderInput("Display", "display"), getValue("display").val === "flex" && /* @__PURE__ */ import_react3.default.createElement(import_react3.default.Fragment, null, renderInput("Direction", "flexDirection"), renderInput("Justify", "justifyContent"), renderInput("Align", "alignItems"), renderInput("Wrap", "flexWrap"), renderInput("Gap", "gap")), getValue("display").val === "grid" && /* @__PURE__ */ import_react3.default.createElement(import_react3.default.Fragment, null, renderInput("Columns", "gridTemplateColumns"), renderInput("Rows", "gridTemplateRows"), renderInput("Gap", "gap"), renderInput("Row Gap", "rowGap"), renderInput("Col Gap", "columnGap"))), /* @__PURE__ */ import_react3.default.createElement("div", { style: { marginBottom: "1rem" } }, /* @__PURE__ */ import_react3.default.createElement("h4", { style: { fontSize: "0.8rem", margin: "0 0 0.5rem 0", color: "#ddd" } }, "Spacing"), renderInput("Padding", "padding"), renderInput("Margin", "margin")), /* @__PURE__ */ import_react3.default.createElement("div", { style: { marginBottom: "1rem" } }, /* @__PURE__ */ import_react3.default.createElement("h4", { style: { fontSize: "0.8rem", margin: "0 0 0.5rem 0", color: "#ddd" } }, "Size & Position"), renderInput("Width", "width"), renderInput("Height", "height"), renderInput("Position", "position"), ["absolute", "fixed", "relative"].includes(getValue("position").val) && /* @__PURE__ */ import_react3.default.createElement(import_react3.default.Fragment, null, renderInput("Top", "top"), renderInput("Right", "right"), renderInput("Bottom", "bottom"), renderInput("Left", "left"), renderInput("Z-Index", "zIndex"))));
+    const section = (name, body) => /* @__PURE__ */ import_react5.default.createElement("section", { className: "inspector-section", key: name }, /* @__PURE__ */ import_react5.default.createElement("button", { className: "section-heading", onClick: () => setOpen((o) => ({ ...o, [name]: o[name] === false })) }, /* @__PURE__ */ import_react5.default.createElement("span", null, name), /* @__PURE__ */ import_react5.default.createElement("span", null, open[name] === false ? "\u203A" : "\u2304")), open[name] !== false && /* @__PURE__ */ import_react5.default.createElement("div", { className: "section-body" }, body));
+    return /* @__PURE__ */ import_react5.default.createElement("div", { className: "inspector" }, /* @__PURE__ */ import_react5.default.createElement("div", { className: "inspector-selection" }, /* @__PURE__ */ import_react5.default.createElement("span", { className: "node-glyph" }, multi ? "\u25EB" : "\u25C7"), /* @__PURE__ */ import_react5.default.createElement("span", null, /* @__PURE__ */ import_react5.default.createElement("b", null, multi ? `${nodes.length} elements` : node.metadata?.displayName || node.type), /* @__PURE__ */ import_react5.default.createElement("small", null, multi ? "Batch changes apply to every selection" : node.type)), !multi && /* @__PURE__ */ import_react5.default.createElement("button", { title: node.metadata?.locked ? "Unlock" : "Lock", onClick: () => dispatch({ type: "TOGGLE_NODE_LOCK", payload: { nodeId: node.id } }) }, node.metadata?.locked ? "\u233E" : "\u25CB")), multi && section("Arrange", /* @__PURE__ */ import_react5.default.createElement("div", { className: "button-grid" }, /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update("alignSelf", "flex-start") }, "Left"), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update("alignSelf", "center") }, "Center"), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update("alignSelf", "flex-end") }, "Right"), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update("justifySelf", "start") }, "Top"), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update("justifySelf", "center") }, "Middle"), /* @__PURE__ */ import_react5.default.createElement("button", { onClick: () => update("justifySelf", "end") }, "Bottom"))), !multi && ["heading", "paragraph", "text", "button", "link"].includes(node.type) && section("Content", /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("label", { className: "inspector-field vertical" }, /* @__PURE__ */ import_react5.default.createElement("span", null, "Text"), /* @__PURE__ */ import_react5.default.createElement("textarea", { value: node.content.text || "", onChange: (e) => dispatch({ type: "UPDATE_NODE_CONTENT", payload: { nodeId: node.id, content: { text: e.target.value, html: void 0 } } }) })), ["button", "link"].includes(node.type) && /* @__PURE__ */ import_react5.default.createElement("label", { className: "inspector-field" }, /* @__PURE__ */ import_react5.default.createElement("span", null, "Link"), /* @__PURE__ */ import_react5.default.createElement("input", { value: node.content.href || "", onChange: (e) => dispatch({ type: "UPDATE_NODE_CONTENT", payload: { nodeId: node.id, content: { href: e.target.value } } }) })))), !multi && node.type === "image" && section("Image", /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("label", { className: "inspector-field" }, /* @__PURE__ */ import_react5.default.createElement("span", null, "Source"), /* @__PURE__ */ import_react5.default.createElement("input", { value: node.content.src || "", onChange: (e) => dispatch({ type: "UPDATE_NODE_CONTENT", payload: { nodeId: node.id, content: { src: e.target.value } } }) })), /* @__PURE__ */ import_react5.default.createElement("label", { className: "inspector-field" }, /* @__PURE__ */ import_react5.default.createElement("span", null, "Alt text"), /* @__PURE__ */ import_react5.default.createElement("input", { value: node.content.alt || "", onChange: (e) => dispatch({ type: "UPDATE_NODE_CONTENT", payload: { nodeId: node.id, content: { alt: e.target.value } } }) })), field(["Fit", "objectFit", "select", ["cover", "contain", "fill", "none"]]), field(["Focal point", "objectPosition"]))), sections.map(([name, fields]) => section(name, fields.map(field))), !multi && section("Responsive", /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("div", { className: "responsive-summary" }, ["desktop", "tablet", "mobile"].map((x) => /* @__PURE__ */ import_react5.default.createElement("button", { className: bp === x ? "active" : "", onClick: () => dispatch({ type: "SET_BREAKPOINT", payload: x }), key: x }, x[0].toUpperCase()))), /* @__PURE__ */ import_react5.default.createElement("button", { className: "wide-button", onClick: () => dispatch({ type: "TOGGLE_NODE_VISIBILITY", payload: { nodeId: node.id, breakpoint: bp } }) }, node.visibility === "hidden" ? "Show" : "Hide", " on ", bp), /* @__PURE__ */ import_react5.default.createElement("p", { className: "panel-hint" }, "Blue dots identify local overrides. Reset any value to inherit it again."))), !multi && section("CMS", /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("div", { className: `binding-status ${Object.keys(node.bindings || {}).length ? "bound" : ""}` }, /* @__PURE__ */ import_react5.default.createElement("span", null, "\u25C9"), /* @__PURE__ */ import_react5.default.createElement("span", null, /* @__PURE__ */ import_react5.default.createElement("b", null, Object.keys(node.bindings || {}).length ? "Connected to CMS" : "Not connected"), /* @__PURE__ */ import_react5.default.createElement("small", null, Object.keys(node.bindings || {}).length ? "Bindings use stable field IDs" : "Choose CMS in the left rail to bind data"))))), !multi && section("Accessibility", /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("label", { className: "inspector-field" }, /* @__PURE__ */ import_react5.default.createElement("span", null, "ARIA label"), /* @__PURE__ */ import_react5.default.createElement("input", { value: node.accessibility?.ariaLabel || "", onChange: (e) => dispatch({ type: "UPDATE_NODE_ACCESSIBILITY", payload: { nodeId: node.id, accessibility: { ariaLabel: e.target.value } } }) })), /* @__PURE__ */ import_react5.default.createElement("label", { className: "inspector-field" }, /* @__PURE__ */ import_react5.default.createElement("span", null, "Element ID"), /* @__PURE__ */ import_react5.default.createElement("input", { readOnly: true, value: node.id })))));
   }
 
-  // studio/App.tsx
-  function App() {
-    const [state, dispatch] = (0, import_react4.useReducer)(studioReducer, initialState);
-    const saveTimeoutRef = (0, import_react4.useRef)(null);
-    const [saveStatus, setSaveStatus] = import_react4.default.useState("Saved");
-    (0, import_react4.useEffect)(() => {
-      const siteId = window.ZYLORA_STUDIO_CONTEXT?.siteId;
-      if (siteId) {
-        fetch(`/api/sites/${siteId}/studio-migrate`, { method: "POST" }).then((res) => res.json()).then((data) => {
-          if (data.ok && data.document) {
-            dispatch({ type: "SET_DOCUMENT", payload: data.document });
-          }
+  // studio/components/LayersPanel.tsx
+  var import_react6 = __toESM(require_react());
+  function LayersPanel() {
+    const { state, dispatch } = useStudio();
+    const [query, setQuery] = import_react6.default.useState("");
+    const [collapsed, setCollapsed] = import_react6.default.useState(/* @__PURE__ */ new Set());
+    const panelRef = import_react6.default.useRef(null);
+    import_react6.default.useEffect(() => {
+      panelRef.current?.querySelector('[data-layer-selected="true"]')?.scrollIntoView({ block: "nearest" });
+    }, [state.selectedNodeIds.join("|")]);
+    if (!state.document) return /* @__PURE__ */ import_react6.default.createElement("div", { style: { padding: "1rem", color: "#888" } }, "Loading...");
+    const page = state.document.pages[state.currentPageId];
+    if (!page) return /* @__PURE__ */ import_react6.default.createElement("div", { style: { padding: "1rem", color: "#888" } }, "Loading...");
+    const normalizedQuery = query.trim().toLowerCase();
+    const treeMatches = (nodeId) => {
+      const candidate = page.nodes[nodeId];
+      if (!candidate) return false;
+      const label = String(candidate.metadata?.displayName || candidate.type).toLowerCase();
+      return !normalizedQuery || label.includes(normalizedQuery) || nodeId.toLowerCase().includes(normalizedQuery) || candidate.children.some(treeMatches);
+    };
+    const handleDragStart = (e, nodeId) => {
+      e.stopPropagation();
+      e.dataTransfer.setData("studio/layer-node-id", nodeId);
+    };
+    const handleDragOver = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    };
+    const handleDrop = (e, targetNodeId) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const draggedNodeId = e.dataTransfer.getData("studio/layer-node-id");
+      if (draggedNodeId && draggedNodeId !== targetNodeId) {
+        dispatch({
+          type: "REPARENT_NODE",
+          payload: { nodeId: draggedNodeId, newParentId: targetNodeId }
         });
       }
-    }, []);
-    (0, import_react4.useEffect)(() => {
-      if (!state.document || state.historyIndex <= 0) return;
-      setSaveStatus("Unsaved");
-      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
-      saveTimeoutRef.current = setTimeout(() => {
-        setSaveStatus("Saving...");
-        const siteId = window.ZYLORA_STUDIO_CONTEXT?.siteId;
-        fetch(`/api/sites/${siteId}/studio-save`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(state.document)
-        }).then((res) => res.json()).then((data) => {
-          if (data.ok) {
-            setSaveStatus("Saved");
-            dispatch({ type: "SYNC_REVISION", payload: data.newRevision });
-          } else if (data.conflict) {
-            setSaveStatus("Conflict detected");
-            alert("A newer version of this document exists on the server. Your changes cannot be saved. Please refresh.");
-          } else {
-            setSaveStatus("Save failed");
-          }
-        }).catch(() => setSaveStatus("Save failed"));
-      }, 1e3);
-    }, [state.document]);
+    };
     const renderLayers = (nodeId, depth = 0) => {
-      if (!state.document) return null;
-      const page = state.document.pages[state.currentPageId];
       const node = page.nodes[nodeId];
       if (!node) return null;
       const isSelected = state.selectedNodeIds.includes(nodeId);
-      return /* @__PURE__ */ import_react4.default.createElement("div", { key: nodeId }, /* @__PURE__ */ import_react4.default.createElement(
+      const label = String(node.metadata?.displayName || node.type);
+      if (!treeMatches(nodeId)) return null;
+      return /* @__PURE__ */ import_react6.default.createElement("div", { key: nodeId }, /* @__PURE__ */ import_react6.default.createElement(
         "div",
         {
-          onClick: () => dispatch({ type: "SELECT_NODE", payload: [nodeId] }),
+          "data-layer-selected": isSelected ? "true" : "false",
+          tabIndex: 0,
+          onClick: (event) => dispatch({ type: "SELECT_NODE", payload: event.shiftKey ? isSelected ? state.selectedNodeIds.filter((id) => id !== nodeId) : [...state.selectedNodeIds, nodeId] : [nodeId] }),
+          onKeyDown: (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              dispatch({ type: "SELECT_NODE", payload: [nodeId] });
+            } else if (event.key === "Delete") {
+              event.preventDefault();
+              dispatch({ type: "DELETE_NODE", payload: { nodeId } });
+            }
+          },
+          draggable: true,
+          onDragStart: (e) => handleDragStart(e, nodeId),
+          onDragOver: handleDragOver,
+          onDrop: (e) => handleDrop(e, nodeId),
           style: {
             padding: "4px",
             paddingLeft: `${depth * 10 + 4}px`,
             cursor: "pointer",
             background: isSelected ? "#333" : "transparent",
             color: isSelected ? "#fff" : "#ccc",
-            fontSize: "12px"
+            fontSize: "12px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center"
           }
         },
-        node.type,
-        " (",
-        nodeId.substring(0, 6),
-        ")"
-      ), node.children.map((childId) => renderLayers(childId, depth + 1)));
+        /* @__PURE__ */ import_react6.default.createElement("span", { style: { display: "flex", alignItems: "center", gap: "4px", minWidth: 0 } }, !!node.children.length && /* @__PURE__ */ import_react6.default.createElement("button", { onClick: (e) => {
+          e.stopPropagation();
+          setCollapsed((current) => {
+            const next = new Set(current);
+            next.has(nodeId) ? next.delete(nodeId) : next.add(nodeId);
+            return next;
+          });
+        }, "aria-label": collapsed.has(nodeId) ? "Expand layer" : "Collapse layer", style: { background: "none", border: 0, color: "inherit", padding: 0 } }, collapsed.has(nodeId) ? "\u203A" : "\u2304"), /* @__PURE__ */ import_react6.default.createElement("span", { title: nodeId }, label, " (", nodeId.substring(0, 6), ")"), node.metadata?.locked && /* @__PURE__ */ import_react6.default.createElement("span", { title: "Locked" }, "\u{1F512}")),
+        isSelected && /* @__PURE__ */ import_react6.default.createElement("div", { style: { display: "flex", gap: "4px" } }, /* @__PURE__ */ import_react6.default.createElement(
+          "button",
+          {
+            onClick: (e) => {
+              e.stopPropagation();
+              dispatch({ type: "DUPLICATE_NODE", payload: { nodeId } });
+            },
+            style: { background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: "10px" },
+            title: "Duplicate"
+          },
+          "\u29C9"
+        ), /* @__PURE__ */ import_react6.default.createElement(
+          "button",
+          {
+            onClick: (e) => {
+              e.stopPropagation();
+              dispatch({ type: "TOGGLE_NODE_VISIBILITY", payload: { nodeId, breakpoint: state.currentBreakpoint } });
+            },
+            style: { background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: "10px" },
+            title: "Toggle Visibility"
+          },
+          "\u{1F441}"
+        ), /* @__PURE__ */ import_react6.default.createElement("button", { onClick: (e) => {
+          e.stopPropagation();
+          dispatch({ type: "TOGGLE_NODE_LOCK", payload: { nodeId } });
+        }, style: { background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: "10px" }, title: node.metadata?.locked ? "Unlock" : "Lock" }, "\u233E"), /* @__PURE__ */ import_react6.default.createElement("button", { onClick: (e) => {
+          e.stopPropagation();
+          const name = window.prompt("Layer name", label);
+          if (name) dispatch({ type: "RENAME_NODE", payload: { nodeId, name } });
+        }, style: { background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: "10px" }, title: "Rename" }, "\u270E"), /* @__PURE__ */ import_react6.default.createElement(
+          "button",
+          {
+            onClick: (e) => {
+              e.stopPropagation();
+              dispatch({ type: "DELETE_NODE", payload: { nodeId } });
+            },
+            style: { background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: "10px" },
+            title: "Delete"
+          },
+          "\u2715"
+        ))
+      ), !collapsed.has(nodeId) && node.children.map((childId) => renderLayers(childId, depth + 1)));
     };
-    return /* @__PURE__ */ import_react4.default.createElement(StudioContext.Provider, { value: { state, dispatch } }, /* @__PURE__ */ import_react4.default.createElement("div", { className: "zylora-studio-app" }, /* @__PURE__ */ import_react4.default.createElement("header", { className: "studio-topbar" }, /* @__PURE__ */ import_react4.default.createElement("div", { className: "studio-brand" }, "Zylora Studio"), /* @__PURE__ */ import_react4.default.createElement("div", { className: "studio-controls" }, /* @__PURE__ */ import_react4.default.createElement("span", { style: { marginRight: "1rem", fontSize: "0.8rem", color: saveStatus === "Save failed" ? "#ff4444" : "#888" } }, saveStatus), /* @__PURE__ */ import_react4.default.createElement("span", { style: { marginRight: "1rem", fontSize: "0.85rem" } }, "Breakpoint: ", state.currentBreakpoint), /* @__PURE__ */ import_react4.default.createElement("button", { onClick: () => dispatch({ type: "UNDO" }) }, "Undo"), /* @__PURE__ */ import_react4.default.createElement("button", { onClick: () => dispatch({ type: "REDO" }) }, "Redo"), /* @__PURE__ */ import_react4.default.createElement("button", null, "Preview"), /* @__PURE__ */ import_react4.default.createElement("button", null, "Publish"))), /* @__PURE__ */ import_react4.default.createElement("div", { className: "studio-main" }, /* @__PURE__ */ import_react4.default.createElement("aside", { className: "studio-sidebar-left" }, /* @__PURE__ */ import_react4.default.createElement("div", { className: "panel-title" }, "Layers"), /* @__PURE__ */ import_react4.default.createElement("div", { style: { padding: "0.5rem 0" } }, state.document && state.document.pages[state.currentPageId] ? renderLayers(state.document.pages[state.currentPageId].rootNodeId) : /* @__PURE__ */ import_react4.default.createElement("div", { style: { padding: "1rem", color: "#888" } }, "Loading..."))), /* @__PURE__ */ import_react4.default.createElement("main", { className: "studio-canvas-container", onClick: () => dispatch({ type: "SELECT_NODE", payload: [] }) }, /* @__PURE__ */ import_react4.default.createElement("div", { className: "studio-canvas", style: {
-      width: state.currentBreakpoint === "desktop" ? "100%" : state.currentBreakpoint === "tablet" ? "768px" : "375px",
-      margin: "0 auto",
-      transition: "width 0.2s"
-    } }, state.document && state.document.pages[state.currentPageId] ? /* @__PURE__ */ import_react4.default.createElement(CanvasNode, { nodeId: state.document.pages[state.currentPageId].rootNodeId }) : /* @__PURE__ */ import_react4.default.createElement("div", { style: { padding: "2rem", textAlign: "center", color: "#666" } }, "Loading Canvas..."))), /* @__PURE__ */ import_react4.default.createElement("aside", { className: "studio-sidebar-right" }, /* @__PURE__ */ import_react4.default.createElement("div", { className: "panel-title" }, "Inspector"), /* @__PURE__ */ import_react4.default.createElement("div", { style: { padding: "1rem" } }, /* @__PURE__ */ import_react4.default.createElement("div", { style: { marginBottom: "1rem", display: "flex", gap: "4px" } }, /* @__PURE__ */ import_react4.default.createElement("button", { style: { flex: 1 }, onClick: () => dispatch({ type: "SET_BREAKPOINT", payload: "desktop" }) }, "Desktop"), /* @__PURE__ */ import_react4.default.createElement("button", { style: { flex: 1 }, onClick: () => dispatch({ type: "SET_BREAKPOINT", payload: "tablet" }) }, "Tablet"), /* @__PURE__ */ import_react4.default.createElement("button", { style: { flex: 1 }, onClick: () => dispatch({ type: "SET_BREAKPOINT", payload: "mobile" }) }, "Mobile"))), /* @__PURE__ */ import_react4.default.createElement(Inspector, null)))));
+    return /* @__PURE__ */ import_react6.default.createElement("div", { className: "studio-layers", ref: panelRef }, /* @__PURE__ */ import_react6.default.createElement("input", { "aria-label": "Search layers", placeholder: "Search layers", value: query, onChange: (e) => setQuery(e.target.value), style: { width: "calc(100% - 16px)", margin: "8px", boxSizing: "border-box", background: "#222", color: "#fff", border: "1px solid #444", padding: "6px" } }), renderLayers(page.rootNodeId));
+  }
+
+  // studio/components/CMSPanel.tsx
+  var import_react7 = __toESM(require_react());
+  var fieldTypes = ["TEXT", "LONG_TEXT", "RICH_TEXT", "NUMBER", "BOOLEAN", "DATE", "DATE_TIME", "EMAIL", "PHONE", "URL", "SLUG", "COLOR", "IMAGE", "VIDEO", "FILE", "MEDIA_GALLERY", "OPTION", "MULTI_OPTION", "REFERENCE", "MULTI_REFERENCE", "JSON_OBJECT", "LOCATION"];
+  function CMSPanel({ contentOnly = false }) {
+    const { state, dispatch } = useStudio();
+    const siteId = window.ZYLORA_STUDIO_CONTEXT?.siteId;
+    const csrf = window.ZYLORA_STUDIO_CONTEXT?.csrfToken;
+    const [collections, setCollections] = (0, import_react7.useState)([]);
+    const [collection, setCollection] = (0, import_react7.useState)(null);
+    const [items, setItems] = (0, import_react7.useState)([]);
+    const [item, setItem] = (0, import_react7.useState)(null);
+    const [values, setValues] = (0, import_react7.useState)({});
+    const [tab, setTab] = (0, import_react7.useState)("content");
+    const [message, setMessage] = (0, import_react7.useState)("");
+    const [proposal, setProposal] = (0, import_react7.useState)(null);
+    const headers = { "Content-Type": "application/json", "X-CSRF-Token": csrf };
+    const api = async (path, options = {}) => {
+      const response = await fetch(`/api/sites/${siteId}/cms${path}`, options);
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data?.detail?.message || data?.detail || "CMS request failed");
+      return data;
+    };
+    const refreshCollections = () => api("/collections").then((data) => setCollections(data.items)).catch((error) => setMessage(String(error.message)));
+    const openCollection = async (id) => {
+      const detail = await api(`/collections/${id}`);
+      setCollection(detail);
+      const listed = await api(`/collections/${id}/items`);
+      setItems(listed.items);
+      setItem(null);
+      setValues({});
+    };
+    (0, import_react7.useEffect)(() => {
+      refreshCollections();
+    }, []);
+    (0, import_react7.useEffect)(() => {
+      if (!collection && collections[0]) openCollection(collections[0].id);
+    }, [collections]);
+    const selectedNode = (0, import_react7.useMemo)(() => {
+      const page = state.document?.pages[state.currentPageId];
+      return state.selectedNodeIds.length === 1 ? page?.nodes[state.selectedNodeIds[0]] : null;
+    }, [state.document, state.currentPageId, state.selectedNodeIds]);
+    const createCollection = async () => {
+      const name = window.prompt("Collection name");
+      if (!name) return;
+      const created = await api("/collections", { method: "POST", headers, body: JSON.stringify({ name }) });
+      await refreshCollections();
+      await openCollection(created.id);
+    };
+    const createField = async () => {
+      if (!collection) return;
+      const name = window.prompt("Field name");
+      if (!name) return;
+      const type = (window.prompt(`Field type: ${fieldTypes.join(", ")}`, "TEXT") || "").toUpperCase();
+      if (!fieldTypes.includes(type)) return setMessage("Unsupported field type");
+      await api(`/collections/${collection.id}/fields`, { method: "POST", headers, body: JSON.stringify({ name, type }) });
+      await openCollection(collection.id);
+    };
+    const newItem = () => {
+      setItem({ id: "", slug: "", status: "DRAFT", values: {}, revision: 1 });
+      setValues({});
+    };
+    const saveItem = async (publish = false) => {
+      if (!collection || !item) return;
+      const body = item.id ? { slug: item.slug, values, expected_revision: item.revision } : { slug: item.slug || void 0, values, status: publish ? "PUBLISHED" : "DRAFT" };
+      let saved = await api(`/collections/${collection.id}/items${item.id ? "/" + item.id : ""}`, { method: item.id ? "PATCH" : "POST", headers, body: JSON.stringify(body) });
+      if (publish && item.id) saved = await api(`/collections/${collection.id}/items/${item.id}/publish`, { method: "POST", headers });
+      setMessage("Saved");
+      await openCollection(collection.id);
+      setItem(saved);
+      setValues(saved.values);
+    };
+    const bindSelected = async (field) => {
+      if (!collection || !selectedNode || !state.document) return;
+      const target = selectedNode.type === "image" || selectedNode.type === "video" ? "src" : selectedNode.type === "link" || selectedNode.type === "button" && ["URL", "SLUG", "EMAIL", "PHONE"].includes(field.type) ? "href" : field.type === "RICH_TEXT" ? "html" : "text";
+      const result = await api("/bindings", { method: "PUT", headers, body: JSON.stringify({
+        collection_id: collection.id,
+        field_id: field.id,
+        page_id: state.currentPageId,
+        node_id: selectedNode.id,
+        target_property: target,
+        binding_kind: "FIELD",
+        expected_revision: state.document.revision
+      }) });
+      dispatch({ type: "SYNC_REVISION", payload: result.newRevision });
+      const migrated = await fetch(`/api/sites/${siteId}/studio-migrate`, { method: "POST", headers: { "X-CSRF-Token": csrf } }).then((r) => r.json());
+      if (migrated.document) dispatch({ type: "SET_DOCUMENT", payload: migrated.document });
+      setMessage(`${field.name} bound to ${target}`);
+    };
+    const repeatSelected = async () => {
+      if (!collection || !selectedNode || !state.document) return;
+      const result = await api("/bindings", { method: "PUT", headers, body: JSON.stringify({
+        collection_id: collection.id,
+        page_id: state.currentPageId,
+        node_id: selectedNode.id,
+        target_property: "items",
+        binding_kind: "REPEATER",
+        config: { limit: 20, sort: "published_at", direction: "desc" },
+        expected_revision: state.document.revision
+      }) });
+      dispatch({ type: "SYNC_REVISION", payload: result.newRevision });
+      const migrated = await fetch(`/api/sites/${siteId}/studio-migrate`, { method: "POST", headers: { "X-CSRF-Token": csrf } }).then((r) => r.json());
+      if (migrated.document) dispatch({ type: "SET_DOCUMENT", payload: migrated.document });
+      setMessage(`${selectedNode.type} repeats ${collection.name} items.`);
+    };
+    const createDynamic = async () => {
+      if (!collection || !state.document) return;
+      const prefix = window.prompt("Public route prefix", collection.slug);
+      if (!prefix) return;
+      const kind = (window.prompt("Page kind: ITEM or COLLECTION", "ITEM") || "ITEM").toUpperCase();
+      await api("/dynamic-pages", { method: "POST", headers, body: JSON.stringify({
+        collection_id: collection.id,
+        page_id: state.currentPageId,
+        page_kind: kind,
+        route_prefix: prefix,
+        status: "PUBLISHED",
+        seo: { title_template: "{{slug}}", description_template: `${collection.name} content` }
+      }) });
+      setMessage(`Published dynamic ${kind.toLowerCase()} route /${prefix}`);
+    };
+    const askAssistant = async () => {
+      if (!collection) return;
+      if (!collection.ai_assistant_enabled) {
+        await api(`/collections/${collection.id}`, { method: "PATCH", headers, body: JSON.stringify({ ai_assistant_enabled: true }) });
+        await openCollection(collection.id);
+      }
+      const instruction = window.prompt("What should the CMS assistant do?");
+      if (!instruction) return;
+      const result = await api("/assistant/proposals", { method: "POST", headers: { ...headers, "Idempotency-Key": crypto.randomUUID() }, body: JSON.stringify({
+        collection_id: collection.id,
+        action: item ? "REWRITE" : "GENERATE_ITEMS",
+        instruction,
+        item_ids: item?.id ? [item.id] : []
+      }) });
+      setProposal(result);
+      setMessage(`Review ${result.operations.length} proposed change(s). Nothing has been written yet.`);
+    };
+    const applyProposal = async () => {
+      if (!proposal) return;
+      await api("/assistant/apply", { method: "POST", headers, body: JSON.stringify({ proposal_id: proposal.id, confirm: true }) });
+      setProposal(null);
+      if (collection) await openCollection(collection.id);
+      setMessage("Confirmed assistant changes applied as CMS revisions.");
+    };
+    const renderField = (field) => {
+      const value = values[field.id] ?? "";
+      if (field.type === "BOOLEAN") return /* @__PURE__ */ import_react7.default.createElement("input", { type: "checkbox", checked: !!value, onChange: (e) => setValues({ ...values, [field.id]: e.target.checked }) });
+      if (["JSON_OBJECT", "LOCATION", "MULTI_OPTION", "MULTI_REFERENCE", "MEDIA_GALLERY"].includes(field.type)) return /* @__PURE__ */ import_react7.default.createElement("textarea", { value: typeof value === "string" ? value : JSON.stringify(value), onChange: (e) => {
+        try {
+          setValues({ ...values, [field.id]: JSON.parse(e.target.value) });
+        } catch {
+        }
+      } });
+      return /* @__PURE__ */ import_react7.default.createElement("input", { type: field.type === "NUMBER" ? "number" : field.type === "DATE" ? "date" : "text", value, onChange: (e) => setValues({ ...values, [field.id]: field.type === "NUMBER" ? Number(e.target.value) : e.target.value }) });
+    };
+    return /* @__PURE__ */ import_react7.default.createElement("div", { className: "cms-panel" }, /* @__PURE__ */ import_react7.default.createElement("div", { className: "cms-panel__title" }, /* @__PURE__ */ import_react7.default.createElement("strong", null, "CMS"), /* @__PURE__ */ import_react7.default.createElement("button", { onClick: createCollection }, "+ Collection")), /* @__PURE__ */ import_react7.default.createElement("select", { value: collection?.id || "", onChange: (e) => openCollection(e.target.value) }, /* @__PURE__ */ import_react7.default.createElement("option", { value: "" }, "Choose collection"), collections.map((c) => /* @__PURE__ */ import_react7.default.createElement("option", { key: c.id, value: c.id }, c.name, " (", c.item_count || 0, ")"))), !contentOnly && /* @__PURE__ */ import_react7.default.createElement("div", { className: "cms-panel__tabs" }, ["content", "schema", "bindings", "pages"].map((name) => /* @__PURE__ */ import_react7.default.createElement("button", { className: tab === name ? "active" : "", onClick: () => setTab(name) }, name))), (contentOnly || tab === "content") && collection && /* @__PURE__ */ import_react7.default.createElement(import_react7.default.Fragment, null, /* @__PURE__ */ import_react7.default.createElement("div", { style: { display: "flex", gap: 4 } }, /* @__PURE__ */ import_react7.default.createElement("button", { onClick: newItem }, "+ New item"), /* @__PURE__ */ import_react7.default.createElement("button", { onClick: askAssistant }, "AI assistant")), /* @__PURE__ */ import_react7.default.createElement("div", { className: "cms-item-list" }, items.map((entry) => /* @__PURE__ */ import_react7.default.createElement("button", { key: entry.id, onClick: () => {
+      setItem(entry);
+      setValues(entry.values);
+    } }, entry.slug, /* @__PURE__ */ import_react7.default.createElement("small", null, entry.status)))), item && /* @__PURE__ */ import_react7.default.createElement("div", { className: "cms-editor" }, /* @__PURE__ */ import_react7.default.createElement("label", null, "Slug", /* @__PURE__ */ import_react7.default.createElement("input", { value: item.slug, onChange: (e) => setItem({ ...item, slug: e.target.value }) })), collection.fields?.map((field) => /* @__PURE__ */ import_react7.default.createElement("label", { key: field.id }, field.name, field.required ? " *" : "", renderField(field))), /* @__PURE__ */ import_react7.default.createElement("div", null, /* @__PURE__ */ import_react7.default.createElement("button", { onClick: () => saveItem(false) }, "Save draft"), /* @__PURE__ */ import_react7.default.createElement("button", { onClick: () => saveItem(true) }, "Publish"))), proposal && /* @__PURE__ */ import_react7.default.createElement("div", { className: "cms-editor" }, /* @__PURE__ */ import_react7.default.createElement("strong", null, "AI proposal"), /* @__PURE__ */ import_react7.default.createElement("pre", { style: { whiteSpace: "pre-wrap", maxHeight: 180, overflow: "auto" } }, JSON.stringify(proposal.operations, null, 2)), /* @__PURE__ */ import_react7.default.createElement("button", { onClick: applyProposal }, "Confirm and apply"), /* @__PURE__ */ import_react7.default.createElement("button", { onClick: () => setProposal(null) }, "Discard"))), !contentOnly && tab === "schema" && collection && /* @__PURE__ */ import_react7.default.createElement(import_react7.default.Fragment, null, /* @__PURE__ */ import_react7.default.createElement("button", { onClick: createField }, "+ Field"), collection.fields?.map((field) => /* @__PURE__ */ import_react7.default.createElement("div", { className: "cms-row", key: field.id }, /* @__PURE__ */ import_react7.default.createElement("span", null, field.name), /* @__PURE__ */ import_react7.default.createElement("code", null, field.type)))), !contentOnly && tab === "bindings" && /* @__PURE__ */ import_react7.default.createElement(import_react7.default.Fragment, null, /* @__PURE__ */ import_react7.default.createElement("p", null, selectedNode ? `Selected: ${selectedNode.type} \xB7 ${selectedNode.id}` : "Select one canvas node."), /* @__PURE__ */ import_react7.default.createElement("button", { disabled: !selectedNode || !["repeater", "list", "carousel", "gallery", "table", "container", "section", "grid", "stack", "flex"].includes(selectedNode.type), onClick: repeatSelected }, "Repeat children from collection"), collection?.fields?.map((field) => /* @__PURE__ */ import_react7.default.createElement("button", { disabled: !selectedNode, key: field.id, onClick: () => bindSelected(field) }, "Bind ", field.name))), !contentOnly && tab === "pages" && /* @__PURE__ */ import_react7.default.createElement(import_react7.default.Fragment, null, /* @__PURE__ */ import_react7.default.createElement("p", null, "Publish the current Studio page as a collection or item template."), /* @__PURE__ */ import_react7.default.createElement("button", { disabled: !collection || !state.document, onClick: createDynamic }, "Create dynamic page")), message && /* @__PURE__ */ import_react7.default.createElement("p", { className: "cms-message" }, message));
+  }
+
+  // studio/components/AddPanel.tsx
+  var import_react8 = __toESM(require_react());
+  var groups = {
+    Basic: [["Section", "section", "\u25AD"], ["Container", "container", "\u25A1"], ["Stack", "stack", "\u2195"], ["Flex", "flex", "\u2194"], ["Grid", "grid", "\u229E"], ["Text", "text", "T"], ["Heading", "heading", "H"], ["Rich text", "text", "\xB6"], ["Button", "button", "\u25C9"], ["Image", "image", "\u25A7"], ["Video", "video", "\u25B6"], ["Icon", "icon", "\u25C7"], ["Divider", "divider", "\u2014"], ["Spacer", "container", "\u2195"]],
+    Navigation: [["Navbar", "navigation", "\u2630"], ["Menu", "navigation", "\u2261"], ["Mobile navigation", "navigation", "\u2637"], ["Breadcrumb", "navigation", "\u203A"], ["Tabs", "container", "\u25A4"]],
+    Content: [["Card", "container", "\u25A3"], ["Feature block", "section", "\u2726"], ["Testimonial", "container", "\u275D"], ["FAQ", "container", "?"], ["Team member", "container", "\u2659"], ["Logo cloud", "gallery", "\u25EB"], ["Stats", "grid", "#"], ["Badge", "text", "\u25CF"], ["Quote", "text", "\u275E"]],
+    Conversion: [["Form", "form", "\u25A4"], ["Contact form", "form", "\u2709"], ["Lead form", "lead_form", "\u25CE"], ["CTA", "section", "\u2197"], ["Newsletter", "form", "\u2709"], ["Appointment widget", "appointment_booking", "\u25F7"], ["Chatbot widget", "ai_sales_assistant", "\u2726"]],
+    Business: [["Pricing", "grid", "$"], ["Services", "grid", "\u2723"], ["Gallery", "gallery", "\u25A6"], ["Portfolio", "gallery", "\u25A7"], ["Testimonials", "carousel", "\u275D"], ["Location / map", "map", "\u2316"], ["Social links", "navigation", "\u2301"]],
+    CMS: [["Repeater", "repeater", "\u27F3"], ["Dynamic list", "list", "\u2637"], ["Dynamic grid", "grid", "\u229E"], ["Dynamic gallery", "gallery", "\u25A6"], ["CMS table", "table", "\u25A4"], ["Collection field", "text", "{ }"], ["Dynamic page link", "link", "\u2197"]],
+    Advanced: [["Embed", "embed", "</>"], ["Safe HTML", "embed", "<>"], ["Reusable component", "component_instance", "\u25C7"], ["Global section", "section", "\u25CE"]]
+  };
+  var presets = {
+    section: { style: { css: { padding: "80px 40px", minHeight: "240px" }, tokens: {} } },
+    container: { style: { css: { padding: "24px", maxWidth: "1200px", margin: "0 auto" }, tokens: {} } },
+    stack: { style: { css: { display: "flex", flexDirection: "column", gap: "16px" }, tokens: {} } },
+    flex: { style: { css: { display: "flex", gap: "16px", alignItems: "center" }, tokens: {} } },
+    grid: { style: { css: { display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "24px" }, tokens: {} } },
+    heading: { content: { text: "A clear, confident heading" }, style: { css: { fontSize: "48px", lineHeight: "1.05", fontWeight: "700" }, tokens: {} } },
+    text: { content: { text: "Add thoughtful supporting copy here." }, style: { css: { fontSize: "16px", lineHeight: "1.6" }, tokens: {} } },
+    button: { content: { text: "Get started", href: "#" }, style: { css: { padding: "12px 18px", borderRadius: "8px" }, tokens: {} } },
+    image: { content: { src: "", alt: "" }, style: { css: { width: "100%", height: "auto", objectFit: "cover" }, tokens: {} } },
+    divider: { style: { css: { width: "100%", borderWidth: "1px 0 0", borderStyle: "solid" }, tokens: {} } }
+  };
+  function AddPanel() {
+    const { state, dispatch } = useStudio();
+    const [search, setSearch] = import_react8.default.useState("");
+    const insert = (label, type) => dispatch({ type: "INSERT_NODE", payload: { node: { type, ...presets[type] || {}, metadata: { displayName: label, global: label === "Global section" } } } });
+    return /* @__PURE__ */ import_react8.default.createElement("div", { className: "studio-panel add-panel" }, /* @__PURE__ */ import_react8.default.createElement("div", { className: "panel-search" }, /* @__PURE__ */ import_react8.default.createElement("span", null, "\u2315"), /* @__PURE__ */ import_react8.default.createElement("input", { "aria-label": "Search elements", placeholder: "Search elements", value: search, onChange: (e) => setSearch(e.target.value) })), Object.entries(groups).map(([group, items]) => {
+      const visible = items.filter(([label]) => label.toLowerCase().includes(search.toLowerCase()));
+      return visible.length ? /* @__PURE__ */ import_react8.default.createElement("section", { className: "element-group", key: group }, /* @__PURE__ */ import_react8.default.createElement("h3", null, group), /* @__PURE__ */ import_react8.default.createElement("div", { className: "element-grid" }, visible.map(([label, type, icon]) => /* @__PURE__ */ import_react8.default.createElement("button", { key: label, draggable: true, onDragStart: (e) => {
+        e.dataTransfer.setData("application/x-zylora-node", JSON.stringify({ label, type }));
+        e.dataTransfer.effectAllowed = "copy";
+      }, onClick: () => insert(label, type), title: `Add ${label}` }, /* @__PURE__ */ import_react8.default.createElement("b", null, icon), /* @__PURE__ */ import_react8.default.createElement("span", null, label))))) : null;
+    }), /* @__PURE__ */ import_react8.default.createElement("p", { className: "panel-hint" }, "Click to add to the selected container, or drag onto a highlighted drop zone."));
+  }
+
+  // studio/components/PagesPanel.tsx
+  var import_react9 = __toESM(require_react());
+  function PagesPanel() {
+    const { state, dispatch } = useStudio();
+    const [adding, setAdding] = import_react9.default.useState(false);
+    const pages = Object.values(state.document?.pages || {});
+    const current = state.document?.pages[state.currentPageId];
+    return /* @__PURE__ */ import_react9.default.createElement("div", { className: "studio-panel pages-panel" }, /* @__PURE__ */ import_react9.default.createElement("div", { className: "panel-action-row" }, /* @__PURE__ */ import_react9.default.createElement("strong", null, "Site pages"), /* @__PURE__ */ import_react9.default.createElement("button", { onClick: () => setAdding(true), "aria-label": "Create page" }, "\uFF0B")), adding && /* @__PURE__ */ import_react9.default.createElement("form", { className: "inline-form", onSubmit: (e) => {
+      e.preventDefault();
+      const data = new FormData(e.currentTarget);
+      dispatch({ type: "ADD_PAGE", payload: { name: String(data.get("name")), slug: String(data.get("slug")) } });
+      setAdding(false);
+    } }, /* @__PURE__ */ import_react9.default.createElement("input", { name: "name", required: true, placeholder: "Page name" }), /* @__PURE__ */ import_react9.default.createElement("input", { name: "slug", required: true, placeholder: "page-slug" }), /* @__PURE__ */ import_react9.default.createElement("div", null, /* @__PURE__ */ import_react9.default.createElement("button", { type: "submit" }, "Create"), /* @__PURE__ */ import_react9.default.createElement("button", { type: "button", onClick: () => setAdding(false) }, "Cancel"))), /* @__PURE__ */ import_react9.default.createElement("div", { className: "page-list" }, pages.map((p, i) => /* @__PURE__ */ import_react9.default.createElement("div", { className: `page-row ${p.id === state.currentPageId ? "active" : ""}`, key: p.id }, /* @__PURE__ */ import_react9.default.createElement("button", { className: "page-open", onClick: () => dispatch({ type: "SET_PAGE", payload: p.id }) }, /* @__PURE__ */ import_react9.default.createElement("span", null, p.slug === "home" ? "\u2302" : "\u25A1"), /* @__PURE__ */ import_react9.default.createElement("span", null, /* @__PURE__ */ import_react9.default.createElement("b", null, p.name), /* @__PURE__ */ import_react9.default.createElement("small", null, "/", p.slug === "home" ? "" : p.slug))), /* @__PURE__ */ import_react9.default.createElement("div", { className: "row-actions" }, /* @__PURE__ */ import_react9.default.createElement("button", { title: "Move up", disabled: i === 0, onClick: () => dispatch({ type: "REORDER_PAGE", payload: { pageId: p.id, direction: -1 } }) }, "\u2191"), /* @__PURE__ */ import_react9.default.createElement("button", { title: "Move down", disabled: i === pages.length - 1, onClick: () => dispatch({ type: "REORDER_PAGE", payload: { pageId: p.id, direction: 1 } }) }, "\u2193"), /* @__PURE__ */ import_react9.default.createElement("button", { title: "Duplicate", onClick: () => dispatch({ type: "DUPLICATE_PAGE", payload: { pageId: p.id } }) }, "\u29C9"), /* @__PURE__ */ import_react9.default.createElement("button", { title: "Delete", disabled: p.slug === "home" || pages.length === 1, onClick: () => dispatch({ type: "DELETE_PAGE", payload: { pageId: p.id } }) }, "\xD7"))))), current && /* @__PURE__ */ import_react9.default.createElement("section", { className: "panel-section" }, /* @__PURE__ */ import_react9.default.createElement("h3", null, "Page settings"), /* @__PURE__ */ import_react9.default.createElement("label", null, "Name", /* @__PURE__ */ import_react9.default.createElement("input", { value: current.name, onChange: (e) => dispatch({ type: "UPDATE_PAGE", payload: { pageId: current.id, name: e.target.value } }) })), /* @__PURE__ */ import_react9.default.createElement("label", null, "Slug", /* @__PURE__ */ import_react9.default.createElement("input", { value: current.slug, disabled: current.slug === "home", onChange: (e) => dispatch({ type: "UPDATE_PAGE", payload: { pageId: current.id, slug: e.target.value } }) })), /* @__PURE__ */ import_react9.default.createElement("label", null, "SEO title", /* @__PURE__ */ import_react9.default.createElement("input", { value: current.seo?.title || "", onChange: (e) => dispatch({ type: "UPDATE_PAGE", payload: { pageId: current.id, seo: { title: e.target.value } } }) })), /* @__PURE__ */ import_react9.default.createElement("label", { className: "check" }, /* @__PURE__ */ import_react9.default.createElement("input", { type: "checkbox", checked: !!current.seo?.noindex, onChange: (e) => dispatch({ type: "UPDATE_PAGE", payload: { pageId: current.id, seo: { noindex: e.target.checked } } }) }), " Hide from search engines")));
+  }
+
+  // studio/components/AssetsPanel.tsx
+  var import_react10 = __toESM(require_react());
+  function AssetsPanel() {
+    const { dispatch } = useStudio();
+    const siteId = window.ZYLORA_STUDIO_CONTEXT?.siteId;
+    const csrf = window.ZYLORA_STUDIO_CONTEXT?.csrfToken;
+    const [items, setItems] = import_react10.default.useState([]), [search, setSearch] = import_react10.default.useState(""), [busy, setBusy] = import_react10.default.useState(false), [message, setMessage] = import_react10.default.useState("");
+    const load = import_react10.default.useCallback(() => siteId && fetch(`/api/sites/${siteId}/assets`).then((r) => r.ok ? r.json() : Promise.reject()).then((d) => setItems(d.items || [])).catch(() => setMessage("Assets could not be loaded.")), [siteId]);
+    import_react10.default.useEffect(() => {
+      load();
+    }, [load]);
+    const upload = async (files) => {
+      if (!files?.length) return;
+      setBusy(true);
+      setMessage("Uploading\u2026");
+      for (const file of Array.from(files)) {
+        const body = new FormData();
+        body.append("file", file);
+        const r = await fetch(`/api/sites/${siteId}/assets`, { method: "POST", headers: { "X-CSRF-Token": csrf }, body });
+        if (!r.ok) {
+          setMessage(`Upload failed: ${file.name}`);
+          setBusy(false);
+          return;
+        }
+      }
+      setBusy(false);
+      setMessage("Upload complete");
+      load();
+    };
+    const visible = items.filter((a) => String(a.original_filename || a.filename || "").toLowerCase().includes(search.toLowerCase()));
+    return /* @__PURE__ */ import_react10.default.createElement("div", { className: "studio-panel assets-panel" }, /* @__PURE__ */ import_react10.default.createElement("label", { className: `asset-drop ${busy ? "busy" : ""}`, onDragOver: (e) => e.preventDefault(), onDrop: (e) => {
+      e.preventDefault();
+      upload(e.dataTransfer.files);
+    } }, /* @__PURE__ */ import_react10.default.createElement("input", { type: "file", multiple: true, accept: "image/*,video/*,.pdf", onChange: (e) => upload(e.target.files) }), /* @__PURE__ */ import_react10.default.createElement("b", null, "\uFF0B Upload media"), /* @__PURE__ */ import_react10.default.createElement("span", null, "or drop files here")), message && /* @__PURE__ */ import_react10.default.createElement("p", { className: "panel-message" }, message), /* @__PURE__ */ import_react10.default.createElement("div", { className: "panel-search" }, /* @__PURE__ */ import_react10.default.createElement("span", null, "\u2315"), /* @__PURE__ */ import_react10.default.createElement("input", { "aria-label": "Search assets", placeholder: "Search assets", value: search, onChange: (e) => setSearch(e.target.value) })), /* @__PURE__ */ import_react10.default.createElement("div", { className: "asset-grid" }, visible.map((a) => /* @__PURE__ */ import_react10.default.createElement("button", { key: a.id, onClick: () => dispatch({ type: "INSERT_NODE", payload: { node: { type: String(a.mime_type || "").startsWith("video/") ? "video" : "image", content: { src: a.url || `/media/${a.id}/${encodeURIComponent(a.filename || a.original_filename || "asset")}`, asset_id: a.id, alt: a.alt_text || "" }, metadata: { displayName: a.original_filename || a.filename || "Asset" } } } }) }, /* @__PURE__ */ import_react10.default.createElement("span", { className: "asset-thumb" }, String(a.mime_type || "").startsWith("image/") ? /* @__PURE__ */ import_react10.default.createElement("img", { src: a.url || `/media/${a.id}/${encodeURIComponent(a.filename || a.original_filename || "asset")}`, alt: "" }) : "\u25B6"), /* @__PURE__ */ import_react10.default.createElement("small", null, a.original_filename || a.filename)))), !items.length && /* @__PURE__ */ import_react10.default.createElement("div", { className: "empty-state" }, /* @__PURE__ */ import_react10.default.createElement("b", null, "Your media, in one place"), /* @__PURE__ */ import_react10.default.createElement("p", null, "Upload brand photography, logos, video, and files. Your own assets stay primary in the editor.")));
+  }
+
+  // studio/components/ComponentsPanel.tsx
+  var import_react11 = __toESM(require_react());
+  function ComponentsPanel() {
+    const { state, dispatch } = useStudio();
+    const components = Object.values(state.document?.components || {});
+    const selected = state.document?.pages[state.currentPageId]?.nodes[state.selectedNodeIds[0]];
+    return /* @__PURE__ */ import_react11.default.createElement("div", { className: "studio-panel" }, /* @__PURE__ */ import_react11.default.createElement("div", { className: "panel-action-row" }, /* @__PURE__ */ import_react11.default.createElement("strong", null, "Components"), /* @__PURE__ */ import_react11.default.createElement("button", { disabled: state.selectedNodeIds.length !== 1, onClick: () => {
+      const name = prompt("Component name", "Reusable section");
+      if (name) dispatch({ type: "CREATE_COMPONENT", payload: { name } });
+    } }, "Create")), selected?.type === "component_instance" && /* @__PURE__ */ import_react11.default.createElement("button", { className: "wide-button", onClick: () => dispatch({ type: "DETACH_COMPONENT", payload: { nodeId: selected.id } }) }, "Detach selected instance"), /* @__PURE__ */ import_react11.default.createElement("div", { className: "component-list" }, components.map((c) => /* @__PURE__ */ import_react11.default.createElement("button", { key: c.id, onClick: () => dispatch({ type: "INSERT_NODE", payload: { node: { type: "component_instance", content: { component_id: c.id, componentId: c.id }, metadata: { displayName: c.name } } } }) }, /* @__PURE__ */ import_react11.default.createElement("span", null, "\u25C7"), /* @__PURE__ */ import_react11.default.createElement("span", null, /* @__PURE__ */ import_react11.default.createElement("b", null, c.name), /* @__PURE__ */ import_react11.default.createElement("small", null, Object.keys(c.nodes).length, " nodes"))))), !components.length && /* @__PURE__ */ import_react11.default.createElement("div", { className: "empty-state" }, /* @__PURE__ */ import_react11.default.createElement("b", null, "No reusable components yet"), /* @__PURE__ */ import_react11.default.createElement("p", null, "Select an element or section, then create a component to reuse it safely across this site.")));
+  }
+
+  // studio/components/SiteStylesPanel.tsx
+  var import_react12 = __toESM(require_react());
+  function SiteStylesPanel() {
+    const { state, dispatch } = useStudio();
+    const tokens = state.document?.tokens || {};
+    const set = (key, value) => dispatch({ type: "UPDATE_TOKENS", payload: { [key]: value } });
+    return /* @__PURE__ */ import_react12.default.createElement("div", { className: "studio-panel" }, /* @__PURE__ */ import_react12.default.createElement("div", { className: "panel-action-row" }, /* @__PURE__ */ import_react12.default.createElement("strong", null, "Site styles"), /* @__PURE__ */ import_react12.default.createElement("span", { className: "status-dot" }, "Token bound")), /* @__PURE__ */ import_react12.default.createElement("section", { className: "panel-section" }, /* @__PURE__ */ import_react12.default.createElement("h3", null, "Colors"), [["Primary", "color.primary", "#635bff"], ["Accent", "color.accent", "#21d4a7"], ["Text", "color.text", "#161719"], ["Muted", "color.muted", "#6c717a"], ["Surface", "color.surface", "#ffffff"], ["Background", "color.background", "#f6f7f9"]].map(([label, key, fallback]) => /* @__PURE__ */ import_react12.default.createElement("label", { key }, label, /* @__PURE__ */ import_react12.default.createElement("span", { className: "color-control" }, /* @__PURE__ */ import_react12.default.createElement("input", { type: "color", value: tokens[key] || fallback, onChange: (e) => set(key, e.target.value) }), /* @__PURE__ */ import_react12.default.createElement("input", { value: tokens[key] || fallback, onChange: (e) => set(key, e.target.value) }))))), /* @__PURE__ */ import_react12.default.createElement("section", { className: "panel-section" }, /* @__PURE__ */ import_react12.default.createElement("h3", null, "Typography"), /* @__PURE__ */ import_react12.default.createElement("label", null, "Heading font", /* @__PURE__ */ import_react12.default.createElement("input", { value: tokens["font.heading"] || "Inter", onChange: (e) => set("font.heading", e.target.value) })), /* @__PURE__ */ import_react12.default.createElement("label", null, "Body font", /* @__PURE__ */ import_react12.default.createElement("input", { value: tokens["font.body"] || "Inter", onChange: (e) => set("font.body", e.target.value) })), /* @__PURE__ */ import_react12.default.createElement("label", null, "Base size", /* @__PURE__ */ import_react12.default.createElement("input", { value: tokens["font.base"] || "16px", onChange: (e) => set("font.base", e.target.value) }))), /* @__PURE__ */ import_react12.default.createElement("section", { className: "panel-section" }, /* @__PURE__ */ import_react12.default.createElement("h3", null, "System"), /* @__PURE__ */ import_react12.default.createElement("label", null, "Radius", /* @__PURE__ */ import_react12.default.createElement("input", { value: tokens["radius.md"] || "8px", onChange: (e) => set("radius.md", e.target.value) })), /* @__PURE__ */ import_react12.default.createElement("label", null, "Spacing unit", /* @__PURE__ */ import_react12.default.createElement("input", { value: tokens["space.unit"] || "8px", onChange: (e) => set("space.unit", e.target.value) })), /* @__PURE__ */ import_react12.default.createElement("label", null, "Container width", /* @__PURE__ */ import_react12.default.createElement("input", { value: tokens["container.max"] || "1200px", onChange: (e) => set("container.max", e.target.value) }))), /* @__PURE__ */ import_react12.default.createElement("p", { className: "panel-hint" }, "Token-bound elements update together. Explicit element overrides are preserved."));
+  }
+
+  // studio/App.tsx
+  var rails = [["add", "\uFF0B", "Add"], ["pages", "\u25A4", "Pages"], ["layers", "\u2261", "Layers"], ["assets", "\u25A7", "Assets"], ["components", "\u25C7", "Components"], ["cms", "\u25EB", "CMS"], ["content", "T", "Content"], ["ai", "\u2726", "AI"], ["styles", "\u25C9", "Site styles"], ["seo", "\u2699", "SEO / Settings"]];
+  function App() {
+    const [state, dispatch] = (0, import_react13.useReducer)(studioReducer, initialState);
+    const [rail, setRail] = import_react13.default.useState("layers"), [saveStatus, setSaveStatus] = import_react13.default.useState("Saved"), [preview, setPreview] = import_react13.default.useState(false), [leftOpen, setLeftOpen] = import_react13.default.useState(true), [context, setContext] = import_react13.default.useState(null), [toast, setToast] = import_react13.default.useState("");
+    const timer = (0, import_react13.useRef)(null), saving = (0, import_react13.useRef)(false), pending = (0, import_react13.useRef)(null), skipRevision = (0, import_react13.useRef)(null);
+    const siteId = window.ZYLORA_STUDIO_CONTEXT?.siteId, csrf = window.ZYLORA_STUDIO_CONTEXT?.csrfToken, project = window.ZYLORA_STUDIO_CONTEXT?.siteName || "Untitled website";
+    (0, import_react13.useEffect)(() => {
+      if (!siteId) return;
+      fetch(`/api/sites/${siteId}/studio-migrate`, { method: "POST", headers: { "X-CSRF-Token": csrf } }).then(async (r) => {
+        const d = await r.json();
+        if (!r.ok) throw new Error(d?.detail?.message || "Studio could not be loaded");
+        return d;
+      }).then((d) => d.document && dispatch({ type: "SET_DOCUMENT", payload: d.document })).catch(() => setSaveStatus(navigator.onLine ? "Save failed" : "Offline"));
+    }, [siteId, csrf]);
+    (0, import_react13.useEffect)(() => {
+      const online = () => saveStatus === "Offline" && setSaveStatus("Unsaved changes"), offline = () => setSaveStatus("Offline");
+      addEventListener("online", online);
+      addEventListener("offline", offline);
+      return () => {
+        removeEventListener("online", online);
+        removeEventListener("offline", offline);
+      };
+    }, [saveStatus]);
+    (0, import_react13.useEffect)(() => {
+      if (!state.document || state.historyIndex <= 0) return;
+      if (skipRevision.current === state.document.revision) {
+        skipRevision.current = null;
+        return;
+      }
+      setSaveStatus(navigator.onLine ? "Unsaved changes" : "Offline");
+      if (timer.current) clearTimeout(timer.current);
+      const save = (document2) => {
+        if (!navigator.onLine) {
+          pending.current = document2;
+          setSaveStatus("Offline");
+          return;
+        }
+        if (saving.current) {
+          pending.current = document2;
+          return;
+        }
+        saving.current = true;
+        setSaveStatus("Saving\u2026");
+        const controller = new AbortController(), timeout = setTimeout(() => controller.abort(), 15e3);
+        fetch(`/api/sites/${siteId}/studio-save`, { method: "POST", headers: { "Content-Type": "application/json", "X-CSRF-Token": csrf }, body: JSON.stringify(document2), signal: controller.signal }).then(async (r) => ({ ok: r.ok, status: r.status, data: await r.json() })).then(({ ok, status, data }) => {
+          clearTimeout(timeout);
+          saving.current = false;
+          if (ok && data.ok) {
+            skipRevision.current = data.newRevision;
+            dispatch({ type: "SYNC_REVISION", payload: data.newRevision });
+            const next = pending.current;
+            pending.current = null;
+            if (next) save({ ...next, revision: data.newRevision });
+            else setSaveStatus("Saved");
+          } else setSaveStatus(status === 409 ? "Conflict detected" : "Save failed");
+        }).catch(() => {
+          clearTimeout(timeout);
+          saving.current = false;
+          pending.current = document2;
+          setSaveStatus(navigator.onLine ? "Save failed" : "Offline");
+        });
+      };
+      timer.current = setTimeout(() => save(state.document), 800);
+      return () => {
+        if (timer.current) clearTimeout(timer.current);
+      };
+    }, [state.document]);
+    (0, import_react13.useEffect)(() => {
+      const key = (e) => {
+        const target = e.target;
+        if (target?.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target?.tagName)) return;
+        const mod = e.ctrlKey || e.metaKey;
+        if ((e.key === "Delete" || e.key === "Backspace") && state.selectedNodeIds.length) {
+          e.preventDefault();
+          dispatch({ type: "DELETE_SELECTED" });
+        } else if (mod && e.key.toLowerCase() === "c") {
+          e.preventDefault();
+          dispatch({ type: "COPY_SELECTED" });
+        } else if (mod && e.key.toLowerCase() === "x") {
+          e.preventDefault();
+          dispatch({ type: "CUT_SELECTED" });
+        } else if (mod && e.key.toLowerCase() === "v") {
+          e.preventDefault();
+          dispatch({ type: "PASTE" });
+        } else if (mod && e.key.toLowerCase() === "d") {
+          e.preventDefault();
+          dispatch({ type: "DUPLICATE_SELECTED" });
+        } else if (mod && e.key.toLowerCase() === "z") {
+          e.preventDefault();
+          dispatch({ type: e.shiftKey ? "REDO" : "UNDO" });
+        } else if (mod && e.key.toLowerCase() === "a") {
+          e.preventDefault();
+          const page2 = state.document?.pages[state.currentPageId];
+          if (page2) dispatch({ type: "SELECT_NODE", payload: page2.nodes[page2.rootNodeId].children });
+        } else if (e.key === "Escape") {
+          dispatch({ type: "SELECT_NODE", payload: [] });
+          setContext(null);
+        } else if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key) && state.selectedNodeIds.length) {
+          e.preventDefault();
+          const step = e.shiftKey ? 10 : 1, prop = e.key === "ArrowLeft" || e.key === "ArrowRight" ? "left" : "top", delta = e.key === "ArrowLeft" || e.key === "ArrowUp" ? -step : step, page2 = state.document?.pages[state.currentPageId], node = page2?.nodes[state.selectedNodeIds[0]], current = parseFloat(node?.style.css[prop] || "0");
+          dispatch({ type: "UPDATE_SELECTED_STYLE", payload: { position: node?.style.css.position || "relative", [prop]: `${current + delta}px` } });
+        }
+      };
+      addEventListener("keydown", key);
+      return () => removeEventListener("keydown", key);
+    }, [state]);
+    const page = state.document?.pages[state.currentPageId], width = state.currentBreakpoint === "desktop" ? 1440 : state.currentBreakpoint === "tablet" ? 768 : 390;
+    const fit = () => {
+      const area = document.querySelector(".canvas-workspace")?.getBoundingClientRect();
+      if (area) dispatch({ type: "SET_ZOOM", payload: Math.min(1, (area.width - 96) / width) });
+    };
+    const publish = async () => {
+      setToast("Running publish checks\u2026");
+      const r = await fetch(`/api/sites/${siteId}/publish`, { method: "POST", headers: { "Content-Type": "application/json", "X-CSRF-Token": csrf }, body: "{}" });
+      const d = await r.json();
+      setToast(r.ok ? "Published with the authoritative legacy renderer" : d?.detail?.message || d?.detail || "Publish failed");
+    };
+    const panel = rail === "add" ? /* @__PURE__ */ import_react13.default.createElement(AddPanel, null) : rail === "pages" || rail === "seo" ? /* @__PURE__ */ import_react13.default.createElement(PagesPanel, null) : rail === "layers" ? /* @__PURE__ */ import_react13.default.createElement(LayersPanel, null) : rail === "assets" ? /* @__PURE__ */ import_react13.default.createElement(AssetsPanel, null) : rail === "components" ? /* @__PURE__ */ import_react13.default.createElement(ComponentsPanel, null) : rail === "cms" ? /* @__PURE__ */ import_react13.default.createElement(CMSPanel, null) : rail === "content" ? /* @__PURE__ */ import_react13.default.createElement(CMSPanel, { contentOnly: true }) : rail === "styles" ? /* @__PURE__ */ import_react13.default.createElement(SiteStylesPanel, null) : /* @__PURE__ */ import_react13.default.createElement("div", { className: "studio-panel" }, /* @__PURE__ */ import_react13.default.createElement("div", { className: "empty-state" }, /* @__PURE__ */ import_react13.default.createElement("b", null, "AI design assistant"), /* @__PURE__ */ import_react13.default.createElement("p", null, "Select an element and describe a structured change. Operations are validated and applied atomically."), /* @__PURE__ */ import_react13.default.createElement("textarea", { placeholder: "Make this section feel more premium\u2026" }), /* @__PURE__ */ import_react13.default.createElement("button", { className: "primary wide-button", disabled: !state.selectedNodeIds.length }, "Preview AI operation")));
+    return /* @__PURE__ */ import_react13.default.createElement(StudioContext.Provider, { value: { state, dispatch } }, /* @__PURE__ */ import_react13.default.createElement("div", { className: "zylora-studio-app", onClick: () => context && setContext(null) }, /* @__PURE__ */ import_react13.default.createElement("header", { className: "studio-topbar" }, /* @__PURE__ */ import_react13.default.createElement("div", { className: "topbar-left" }, /* @__PURE__ */ import_react13.default.createElement("a", { href: "/dashboard", className: "studio-logo", "aria-label": "Exit to dashboard" }, /* @__PURE__ */ import_react13.default.createElement("span", null, "Z"), /* @__PURE__ */ import_react13.default.createElement("b", null, "Zylora Studio")), /* @__PURE__ */ import_react13.default.createElement("span", { className: "top-divider" }), /* @__PURE__ */ import_react13.default.createElement("div", { className: "project-crumb" }, /* @__PURE__ */ import_react13.default.createElement("b", null, project), /* @__PURE__ */ import_react13.default.createElement("span", null, "/"), /* @__PURE__ */ import_react13.default.createElement("span", null, page?.name || "Loading"))), /* @__PURE__ */ import_react13.default.createElement("div", { className: "topbar-center" }, /* @__PURE__ */ import_react13.default.createElement("button", { "aria-label": "Undo", disabled: state.historyIndex <= 0, onClick: () => dispatch({ type: "UNDO" }) }, "\u21B6"), /* @__PURE__ */ import_react13.default.createElement("button", { "aria-label": "Redo", disabled: state.historyIndex >= state.history.length - 1, onClick: () => dispatch({ type: "REDO" }) }, "\u21B7"), /* @__PURE__ */ import_react13.default.createElement("span", { className: "top-divider" }), ["desktop", "tablet", "mobile"].map(([...x]) => null), ["desktop", "tablet", "mobile"].map((bp) => /* @__PURE__ */ import_react13.default.createElement("button", { key: bp, className: state.currentBreakpoint === bp ? "active" : "", title: bp, onClick: () => dispatch({ type: "SET_BREAKPOINT", payload: bp }) }, bp === "desktop" ? "\u25B0" : bp === "tablet" ? "\u25AF" : "\u25AF")), /* @__PURE__ */ import_react13.default.createElement("span", { className: "canvas-width" }, width, "px"), /* @__PURE__ */ import_react13.default.createElement("span", { className: "top-divider" }), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "SET_ZOOM", payload: state.zoom - 0.1 }) }, "\u2212"), /* @__PURE__ */ import_react13.default.createElement("button", { className: "zoom-label", onClick: fit }, Math.round(state.zoom * 100), "%"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "SET_ZOOM", payload: state.zoom + 0.1 }) }, "\uFF0B")), /* @__PURE__ */ import_react13.default.createElement("div", { className: "topbar-right" }, /* @__PURE__ */ import_react13.default.createElement("span", { className: `save-state ${saveStatus.toLowerCase().replace(/\W/g, "-")}` }, /* @__PURE__ */ import_react13.default.createElement("i", null), saveStatus), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => setPreview(!preview) }, preview ? "Edit" : "Preview"), /* @__PURE__ */ import_react13.default.createElement("span", { className: "collab", title: "Collaboration presence placeholder" }, "\u25CF 1"), /* @__PURE__ */ import_react13.default.createElement("button", { className: "primary", onClick: publish }, "Publish"))), /* @__PURE__ */ import_react13.default.createElement("div", { className: "studio-main" }, /* @__PURE__ */ import_react13.default.createElement("nav", { className: "tool-rail", "aria-label": "Studio tools" }, rails.map(([id, icon, label]) => /* @__PURE__ */ import_react13.default.createElement("button", { key: id, className: rail === id && leftOpen ? "active" : "", onClick: () => {
+      if (rail === id) setLeftOpen(!leftOpen);
+      else {
+        setRail(id);
+        setLeftOpen(true);
+      }
+    }, title: label }, /* @__PURE__ */ import_react13.default.createElement("b", null, icon), /* @__PURE__ */ import_react13.default.createElement("span", null, label)))), leftOpen && /* @__PURE__ */ import_react13.default.createElement("aside", { className: "studio-sidebar-left" }, /* @__PURE__ */ import_react13.default.createElement("header", null, /* @__PURE__ */ import_react13.default.createElement("div", null, /* @__PURE__ */ import_react13.default.createElement("b", null, rails.find((x) => x[0] === rail)?.[2]), /* @__PURE__ */ import_react13.default.createElement("small", null, rail === "content" ? "Safe content editing" : "Workspace")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => setLeftOpen(false) }, "\xD7")), panel), /* @__PURE__ */ import_react13.default.createElement("main", { className: `canvas-workspace ${preview ? "preview-mode" : ""}`, onClick: (e) => {
+      if (e.target === e.currentTarget) dispatch({ type: "SELECT_NODE", payload: [] });
+    }, onContextMenu: (e) => {
+      if (state.selectedNodeIds.length) {
+        e.preventDefault();
+        setContext({ x: e.clientX, y: e.clientY });
+      }
+    } }, /* @__PURE__ */ import_react13.default.createElement("div", { className: "canvas-rulers" }, /* @__PURE__ */ import_react13.default.createElement("span", null, Math.round(width * state.zoom), " px"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: fit }, "Fit"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "SET_ZOOM", payload: 1 }) }, "100%")), /* @__PURE__ */ import_react13.default.createElement("div", { className: "artboard-wrap", style: { width: width * state.zoom } }, /* @__PURE__ */ import_react13.default.createElement("div", { className: "studio-canvas", style: { width, height: "auto", minHeight: 900, transform: `scale(${state.zoom})` } }, page ? /* @__PURE__ */ import_react13.default.createElement(CanvasNode, { nodeId: page.rootNodeId }) : /* @__PURE__ */ import_react13.default.createElement("div", { className: "canvas-loading" }, /* @__PURE__ */ import_react13.default.createElement("span", null), /* @__PURE__ */ import_react13.default.createElement("p", null, "Preparing your canvas\u2026")))), state.snapLines.map((line, i) => /* @__PURE__ */ import_react13.default.createElement("div", { key: i, className: `snap-guide ${line.orientation}`, style: line.orientation === "vertical" ? { left: line.position * state.zoom } : { top: line.position * state.zoom } })), /* @__PURE__ */ import_react13.default.createElement("footer", { className: "canvas-status" }, /* @__PURE__ */ import_react13.default.createElement("span", null, state.selectedNodeIds.length ? `${state.selectedNodeIds.length} selected` : "Ready"), /* @__PURE__ */ import_react13.default.createElement("span", null, state.currentBreakpoint, " \xB7 ", width, "px \xB7 ", Math.round(state.zoom * 100), "%"))), !preview && /* @__PURE__ */ import_react13.default.createElement("aside", { className: "studio-sidebar-right" }, /* @__PURE__ */ import_react13.default.createElement("header", null, /* @__PURE__ */ import_react13.default.createElement("div", null, /* @__PURE__ */ import_react13.default.createElement("b", null, "Inspector"), /* @__PURE__ */ import_react13.default.createElement("small", null, state.selectedNodeIds.length ? `${state.selectedNodeIds.length} selected` : "No selection"))), /* @__PURE__ */ import_react13.default.createElement(Inspector, null))), context && /* @__PURE__ */ import_react13.default.createElement("div", { className: "context-menu", style: { left: context.x, top: context.y }, role: "menu" }, /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "CUT_SELECTED" }) }, "Cut ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Ctrl X")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "COPY_SELECTED" }) }, "Copy ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Ctrl C")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "PASTE" }), disabled: !state.clipboard }, "Paste ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Ctrl V")), /* @__PURE__ */ import_react13.default.createElement("hr", null), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "DUPLICATE_SELECTED" }) }, "Duplicate ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Ctrl D")), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => dispatch({ type: "DELETE_SELECTED" }) }, "Delete ", /* @__PURE__ */ import_react13.default.createElement("kbd", null, "Del")), /* @__PURE__ */ import_react13.default.createElement("hr", null), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => state.selectedNodeIds[0] && dispatch({ type: "REORDER_NODE", payload: { nodeId: state.selectedNodeIds[0], direction: "front" } }) }, "Bring to front"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => state.selectedNodeIds[0] && dispatch({ type: "REORDER_NODE", payload: { nodeId: state.selectedNodeIds[0], direction: "back" } }) }, "Send to back"), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => {
+      const name = prompt("Component name", "Reusable section");
+      if (name) dispatch({ type: "CREATE_COMPONENT", payload: { name } });
+    }, disabled: state.selectedNodeIds.length !== 1 }, "Create component")), toast && /* @__PURE__ */ import_react13.default.createElement("div", { className: "studio-toast", role: "status" }, /* @__PURE__ */ import_react13.default.createElement("span", null, toast), /* @__PURE__ */ import_react13.default.createElement("button", { onClick: () => setToast("") }, "\xD7"))));
   }
 
   // studio/index.tsx
   var rootElement = document.getElementById("studio-root");
   if (rootElement) {
     const root = (0, import_client.createRoot)(rootElement);
-    root.render(/* @__PURE__ */ import_react5.default.createElement(App, null));
+    root.render(/* @__PURE__ */ import_react14.default.createElement(App, null));
   }
 })();
 /*! Bundled license information:

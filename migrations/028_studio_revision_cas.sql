@@ -1,0 +1,2 @@
+ALTER TABLE sites ADD COLUMN studio_revision INTEGER NOT NULL DEFAULT 0;
+

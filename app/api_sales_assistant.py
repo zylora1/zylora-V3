@@ -245,6 +245,7 @@ class AssistantSettingsPatch(BaseModel):
     use_business_profile:bool|None=None
     use_published_site:bool|None=None
     use_approved_knowledge:bool|None=None
+    cms_collection_ids:list[str]|None=Field(default=None,max_length=20)
     restricted_topics:list[str]|None=Field(default=None,max_length=30)
     custom_instructions:str|None=Field(default=None,max_length=2000)
 

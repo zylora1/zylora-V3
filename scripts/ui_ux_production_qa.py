@@ -105,8 +105,8 @@ def dashboard_document() -> str:
     html = inline_local_styles((STATIC / "dashboard.html").read_text(encoding="utf-8"))
     shared = (STATIC / "zylora-ui.js").read_text(encoding="utf-8")
     dash = (STATIC / "dashboard.js").read_text(encoding="utf-8").replace("location.href=", "window.__NAV=")
-    html = re.sub(r'<script\b[^>]*src=["\']/static/zylora-ui\.js["\'][^>]*>\s*</script>', lambda _m: f"<script>{shared}</script>", html, flags=re.I)
-    html = re.sub(r'<script\b[^>]*src=["\']/static/dashboard\.js["\'][^>]*>\s*</script>', lambda _m: f"<script>{dash}</script>", html, flags=re.I)
+    html = re.sub(r'<script\b[^>]*src=["\']/static/zylora-ui\.js(?:\?[^"\']*)?["\'][^>]*>\s*</script>', lambda _m: f"<script>{shared}</script>", html, flags=re.I)
+    html = re.sub(r'<script\b[^>]*src=["\']/static/dashboard\.js(?:\?[^"\']*)?["\'][^>]*>\s*</script>', lambda _m: f"<script>{dash}</script>", html, flags=re.I)
     boot = r"""
     <script>(()=>{
       const store={};

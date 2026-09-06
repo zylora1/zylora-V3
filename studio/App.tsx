@@ -1,120 +1,15 @@
-import React, { useEffect, useReducer, useRef } from 'react';
-import { StudioContext, studioReducer, initialState } from './store';
-import { CanvasNode } from './components/CanvasNode';
-import { Inspector } from './components/Inspector';
-import { LayersPanel } from './components/LayersPanel';
-
-export function App() {
-    const [state, dispatch] = useReducer(studioReducer, initialState);
-    const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const [saveStatus, setSaveStatus] = React.useState<'Saved'|'Unsaved'|'Saving...'|'Save failed'>('Saved');
-
-    useEffect(() => {
-        const siteId = (window as any).ZYLORA_STUDIO_CONTEXT?.siteId;
-        if (siteId) {
-            fetch(`/api/sites/${siteId}/studio-migrate`, { method: 'POST' })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.ok && data.document) {
-                        dispatch({ type: 'SET_DOCUMENT', payload: data.document });
-                    }
-                });
-        }
-    }, []);
-
-    // Autosave effect
-    useEffect(() => {
-        if (!state.document || state.historyIndex <= 0) return; // Don't save initial load
-        
-        setSaveStatus('Unsaved');
-        if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
-        
-        saveTimeoutRef.current = setTimeout(() => {
-            setSaveStatus('Saving...');
-            const siteId = (window as any).ZYLORA_STUDIO_CONTEXT?.siteId;
-            fetch(`/api/sites/${siteId}/studio-save`, { 
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(state.document)
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.ok) {
-                    setSaveStatus('Saved');
-                    // Sync the client revision with the newly generated server revision
-                    // so the next save doesn't conflict. We dispatch this without triggering history.
-                    dispatch({ type: 'SYNC_REVISION', payload: data.newRevision });
-                } else if (data.conflict) {
-                    setSaveStatus('Conflict detected');
-                    alert("A newer version of this document exists on the server. Your changes cannot be saved. Please refresh.");
-                } else {
-                    setSaveStatus('Save failed');
-                }
-            })
-            .catch(() => setSaveStatus('Save failed'));
-        }, 1000); // 1s debounce
-    }, [state.document]);
-
-    // Render layers logic moved to LayersPanel component
-
-    return (
-        <StudioContext.Provider value={{ state, dispatch }}>
-            <div className="zylora-studio-app">
-                <header className="studio-topbar">
-                    <div className="studio-brand">Zylora Studio</div>
-                    <div className="studio-controls">
-                        <span style={{marginRight: '1rem', fontSize: '0.8rem', color: saveStatus === 'Save failed' ? '#ff4444' : '#888'}}>
-                            {saveStatus}
-                        </span>
-                        <span style={{marginRight: '1rem', fontSize: '0.85rem'}}>
-                            Breakpoint: {state.currentBreakpoint}
-                        </span>
-                        <button onClick={() => dispatch({type: 'UNDO'})}>Undo</button>
-                        <button onClick={() => dispatch({type: 'REDO'})}>Redo</button>
-                        <button>Preview</button>
-                        <button>Publish</button>
-                    </div>
-                </header>
-                
-                <div className="studio-main">
-                    <aside className="studio-sidebar-left">
-                        <div className="panel-title">Layers</div>
-                        <div style={{padding: '0.5rem 0'}}>
-                            <LayersPanel />
-                        </div>
-                    </aside>
-                    
-                    <main className="studio-canvas-container" onClick={() => dispatch({type: 'SELECT_NODE', payload: []})}>
-                        <div className="studio-canvas" style={{
-                            width: state.currentBreakpoint === 'desktop' ? '100%' : state.currentBreakpoint === 'tablet' ? '768px' : '375px',
-                            margin: '0 auto',
-                            transition: 'width 0.2s'
-                        }}>
-                            {state.document && state.document.pages[state.currentPageId] ? (
-                                <CanvasNode nodeId={state.document.pages[state.currentPageId].rootNodeId} />
-                            ) : (
-                                <div style={{ padding: '2rem', textAlign: 'center', color: '#666' }}>
-                                    Loading Canvas...
-                                </div>
-                            )}
-                        </div>
-                    </main>
-                    
-                    <aside className="studio-sidebar-right">
-                        <div className="panel-title">Inspector</div>
-                        <div style={{padding: '1rem'}}>
-                            <div style={{marginBottom: '1rem', display: 'flex', gap: '4px'}}>
-                                <button style={{flex:1}} onClick={() => dispatch({type: 'SET_BREAKPOINT', payload: 'desktop'})}>Desktop</button>
-                                <button style={{flex:1}} onClick={() => dispatch({type: 'SET_BREAKPOINT', payload: 'tablet'})}>Tablet</button>
-                                <button style={{flex:1}} onClick={() => dispatch({type: 'SET_BREAKPOINT', payload: 'mobile'})}>Mobile</button>
-                            </div>
-                        </div>
-                        <Inspector />
-                    </aside>
-                </div>
-            </div>
-        </StudioContext.Provider>
-    );
-}
-
-
+import React,{useEffect,useReducer,useRef} from 'react';import {StudioContext,studioReducer,initialState} from './store';import {CanvasNode} from './components/CanvasNode';import {Inspector} from './components/Inspector';import {LayersPanel} from './components/LayersPanel';import {CMSPanel} from './components/CMSPanel';import {AddPanel} from './components/AddPanel';import {PagesPanel} from './components/PagesPanel';import {AssetsPanel} from './components/AssetsPanel';import {ComponentsPanel} from './components/ComponentsPanel';import {SiteStylesPanel} from './components/SiteStylesPanel';
+type Rail='add'|'pages'|'layers'|'assets'|'components'|'cms'|'content'|'ai'|'styles'|'seo';
+const rails:Array<[Rail,string,string]>=[['add','＋','Add'],['pages','▤','Pages'],['layers','≡','Layers'],['assets','▧','Assets'],['components','◇','Components'],['cms','◫','CMS'],['content','T','Content'],['ai','✦','AI'],['styles','◉','Site styles'],['seo','⚙','SEO / Settings']];
+export function App(){const [state,dispatch]=useReducer(studioReducer,initialState);const [rail,setRail]=React.useState<Rail>('layers'),[saveStatus,setSaveStatus]=React.useState<'Saved'|'Unsaved changes'|'Saving…'|'Save failed'|'Conflict detected'|'Offline'>('Saved'),[preview,setPreview]=React.useState(false),[leftOpen,setLeftOpen]=React.useState(true),[context,setContext]=React.useState<{x:number;y:number}|null>(null),[toast,setToast]=React.useState('');const timer=useRef<ReturnType<typeof setTimeout>|null>(null),saving=useRef(false),pending=useRef<any>(null),skipRevision=useRef<number|null>(null);const siteId=(window as any).ZYLORA_STUDIO_CONTEXT?.siteId,csrf=(window as any).ZYLORA_STUDIO_CONTEXT?.csrfToken,project=(window as any).ZYLORA_STUDIO_CONTEXT?.siteName||'Untitled website';
+ useEffect(()=>{if(!siteId)return;fetch(`/api/sites/${siteId}/studio-migrate`,{method:'POST',headers:{'X-CSRF-Token':csrf}}).then(async r=>{const d=await r.json();if(!r.ok)throw new Error(d?.detail?.message||'Studio could not be loaded');return d}).then(d=>d.document&&dispatch({type:'SET_DOCUMENT',payload:d.document})).catch(()=>setSaveStatus(navigator.onLine?'Save failed':'Offline'))},[siteId,csrf]);
+ useEffect(()=>{const online=()=>saveStatus==='Offline'&&setSaveStatus('Unsaved changes'),offline=()=>setSaveStatus('Offline');addEventListener('online',online);addEventListener('offline',offline);return()=>{removeEventListener('online',online);removeEventListener('offline',offline)}},[saveStatus]);
+ useEffect(()=>{if(!state.document||state.historyIndex<=0)return;if(skipRevision.current===state.document.revision){skipRevision.current=null;return}setSaveStatus(navigator.onLine?'Unsaved changes':'Offline');if(timer.current)clearTimeout(timer.current);const save=(document:any)=>{if(!navigator.onLine){pending.current=document;setSaveStatus('Offline');return}if(saving.current){pending.current=document;return}saving.current=true;setSaveStatus('Saving…');const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),15000);fetch(`/api/sites/${siteId}/studio-save`,{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':csrf},body:JSON.stringify(document),signal:controller.signal}).then(async r=>({ok:r.ok,status:r.status,data:await r.json()})).then(({ok,status,data})=>{clearTimeout(timeout);saving.current=false;if(ok&&data.ok){skipRevision.current=data.newRevision;dispatch({type:'SYNC_REVISION',payload:data.newRevision});const next=pending.current;pending.current=null;if(next)save({...next,revision:data.newRevision});else setSaveStatus('Saved')}else setSaveStatus(status===409?'Conflict detected':'Save failed')}).catch(()=>{clearTimeout(timeout);saving.current=false;pending.current=document;setSaveStatus(navigator.onLine?'Save failed':'Offline')})};timer.current=setTimeout(()=>save(state.document),800);return()=>{if(timer.current)clearTimeout(timer.current)}},[state.document]);
+ useEffect(()=>{const key=(e:KeyboardEvent)=>{const target=e.target as HTMLElement;if(target?.isContentEditable||['INPUT','TEXTAREA','SELECT'].includes(target?.tagName))return;const mod=e.ctrlKey||e.metaKey;if((e.key==='Delete'||e.key==='Backspace')&&state.selectedNodeIds.length){e.preventDefault();dispatch({type:'DELETE_SELECTED'})}else if(mod&&e.key.toLowerCase()==='c'){e.preventDefault();dispatch({type:'COPY_SELECTED'})}else if(mod&&e.key.toLowerCase()==='x'){e.preventDefault();dispatch({type:'CUT_SELECTED'})}else if(mod&&e.key.toLowerCase()==='v'){e.preventDefault();dispatch({type:'PASTE'})}else if(mod&&e.key.toLowerCase()==='d'){e.preventDefault();dispatch({type:'DUPLICATE_SELECTED'})}else if(mod&&e.key.toLowerCase()==='z'){e.preventDefault();dispatch({type:e.shiftKey?'REDO':'UNDO'})}else if(mod&&e.key.toLowerCase()==='a'){e.preventDefault();const page=state.document?.pages[state.currentPageId];if(page)dispatch({type:'SELECT_NODE',payload:page.nodes[page.rootNodeId].children})}else if(e.key==='Escape'){dispatch({type:'SELECT_NODE',payload:[]});setContext(null)}else if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)&&state.selectedNodeIds.length){e.preventDefault();const step=e.shiftKey?10:1,prop=e.key==='ArrowLeft'||e.key==='ArrowRight'?'left':'top',delta=e.key==='ArrowLeft'||e.key==='ArrowUp'?-step:step,page=state.document?.pages[state.currentPageId],node=page?.nodes[state.selectedNodeIds[0]],current=parseFloat(node?.style.css[prop]||'0');dispatch({type:'UPDATE_SELECTED_STYLE',payload:{position:node?.style.css.position||'relative',[prop]:`${current+delta}px`}})}};addEventListener('keydown',key);return()=>removeEventListener('keydown',key)},[state]);
+ const page=state.document?.pages[state.currentPageId],width=state.currentBreakpoint==='desktop'?1440:state.currentBreakpoint==='tablet'?768:390;const fit=()=>{const area=document.querySelector('.canvas-workspace')?.getBoundingClientRect();if(area)dispatch({type:'SET_ZOOM',payload:Math.min(1,(area.width-96)/width)})};const publish=async()=>{setToast('Running publish checks…');const r=await fetch(`/api/sites/${siteId}/publish`,{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':csrf},body:'{}'});const d=await r.json();setToast(r.ok?'Published with the authoritative legacy renderer':d?.detail?.message||d?.detail||'Publish failed')};
+ const panel=rail==='add'?<AddPanel/>:rail==='pages'||rail==='seo'?<PagesPanel/>:rail==='layers'?<LayersPanel/>:rail==='assets'?<AssetsPanel/>:rail==='components'?<ComponentsPanel/>:rail==='cms'?<CMSPanel/>:rail==='content'?<CMSPanel contentOnly/>:rail==='styles'?<SiteStylesPanel/>:<div className="studio-panel"><div className="empty-state"><b>AI design assistant</b><p>Select an element and describe a structured change. Operations are validated and applied atomically.</p><textarea placeholder="Make this section feel more premium…"/><button className="primary wide-button" disabled={!state.selectedNodeIds.length}>Preview AI operation</button></div></div>;
+ return <StudioContext.Provider value={{state,dispatch}}><div className="zylora-studio-app" onClick={()=>context&&setContext(null)}><header className="studio-topbar"><div className="topbar-left"><a href="/dashboard" className="studio-logo" aria-label="Exit to dashboard"><span>Z</span><b>Zylora Studio</b></a><span className="top-divider"/><div className="project-crumb"><b>{project}</b><span>/</span><span>{page?.name||'Loading'}</span></div></div><div className="topbar-center"><button aria-label="Undo" disabled={state.historyIndex<=0} onClick={()=>dispatch({type:'UNDO'})}>↶</button><button aria-label="Redo" disabled={state.historyIndex>=state.history.length-1} onClick={()=>dispatch({type:'REDO'})}>↷</button><span className="top-divider"/>{(['desktop','tablet','mobile'] as const).map(([...x])=>null)}{(['desktop','tablet','mobile'] as const).map(bp=><button key={bp} className={state.currentBreakpoint===bp?'active':''} title={bp} onClick={()=>dispatch({type:'SET_BREAKPOINT',payload:bp})}>{bp==='desktop'?'▰':bp==='tablet'?'▯':'▯'}</button>)}<span className="canvas-width">{width}px</span><span className="top-divider"/><button onClick={()=>dispatch({type:'SET_ZOOM',payload:state.zoom-.1})}>−</button><button className="zoom-label" onClick={fit}>{Math.round(state.zoom*100)}%</button><button onClick={()=>dispatch({type:'SET_ZOOM',payload:state.zoom+.1})}>＋</button></div><div className="topbar-right"><span className={`save-state ${saveStatus.toLowerCase().replace(/\W/g,'-')}`}><i/>{saveStatus}</span><button onClick={()=>setPreview(!preview)}>{preview?'Edit':'Preview'}</button><span className="collab" title="Collaboration presence placeholder">● 1</span><button className="primary" onClick={publish}>Publish</button></div></header>
+ <div className="studio-main"><nav className="tool-rail" aria-label="Studio tools">{rails.map(([id,icon,label])=><button key={id} className={rail===id&&leftOpen?'active':''} onClick={()=>{if(rail===id)setLeftOpen(!leftOpen);else{setRail(id);setLeftOpen(true)}}} title={label}><b>{icon}</b><span>{label}</span></button>)}</nav>{leftOpen&&<aside className="studio-sidebar-left"><header><div><b>{rails.find(x=>x[0]===rail)?.[2]}</b><small>{rail==='content'?'Safe content editing':'Workspace'}</small></div><button onClick={()=>setLeftOpen(false)}>×</button></header>{panel}</aside>}
+ <main className={`canvas-workspace ${preview?'preview-mode':''}`} onClick={e=>{if(e.target===e.currentTarget)dispatch({type:'SELECT_NODE',payload:[]})}} onContextMenu={e=>{if(state.selectedNodeIds.length){e.preventDefault();setContext({x:e.clientX,y:e.clientY})}}}><div className="canvas-rulers"><span>{Math.round(width*state.zoom)} px</span><button onClick={fit}>Fit</button><button onClick={()=>dispatch({type:'SET_ZOOM',payload:1})}>100%</button></div><div className="artboard-wrap" style={{width:width*state.zoom}}><div className="studio-canvas" style={{width,height:'auto',minHeight:900,transform:`scale(${state.zoom})`}}>{page?<CanvasNode nodeId={page.rootNodeId}/>:<div className="canvas-loading"><span/><p>Preparing your canvas…</p></div>}</div></div>{state.snapLines.map((line,i)=><div key={i} className={`snap-guide ${line.orientation}`} style={line.orientation==='vertical'?{left:line.position*state.zoom}:{top:line.position*state.zoom}}/>)}<footer className="canvas-status"><span>{state.selectedNodeIds.length?`${state.selectedNodeIds.length} selected`:'Ready'}</span><span>{state.currentBreakpoint} · {width}px · {Math.round(state.zoom*100)}%</span></footer></main>
+ {!preview&&<aside className="studio-sidebar-right"><header><div><b>Inspector</b><small>{state.selectedNodeIds.length?`${state.selectedNodeIds.length} selected`:'No selection'}</small></div></header><Inspector/></aside>}</div>
+ {context&&<div className="context-menu" style={{left:context.x,top:context.y}} role="menu"><button onClick={()=>dispatch({type:'CUT_SELECTED'})}>Cut <kbd>Ctrl X</kbd></button><button onClick={()=>dispatch({type:'COPY_SELECTED'})}>Copy <kbd>Ctrl C</kbd></button><button onClick={()=>dispatch({type:'PASTE'})} disabled={!state.clipboard}>Paste <kbd>Ctrl V</kbd></button><hr/><button onClick={()=>dispatch({type:'DUPLICATE_SELECTED'})}>Duplicate <kbd>Ctrl D</kbd></button><button onClick={()=>dispatch({type:'DELETE_SELECTED'})}>Delete <kbd>Del</kbd></button><hr/><button onClick={()=>state.selectedNodeIds[0]&&dispatch({type:'REORDER_NODE',payload:{nodeId:state.selectedNodeIds[0],direction:'front'}})}>Bring to front</button><button onClick={()=>state.selectedNodeIds[0]&&dispatch({type:'REORDER_NODE',payload:{nodeId:state.selectedNodeIds[0],direction:'back'}})}>Send to back</button><button onClick={()=>{const name=prompt('Component name','Reusable section');if(name)dispatch({type:'CREATE_COMPONENT',payload:{name}})}} disabled={state.selectedNodeIds.length!==1}>Create component</button></div>}{toast&&<div className="studio-toast" role="status"><span>{toast}</span><button onClick={()=>setToast('')}>×</button></div>}</div></StudioContext.Provider>}

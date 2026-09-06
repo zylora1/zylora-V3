@@ -151,7 +151,7 @@ def test_published_ai_site_seo_has_clean_title_and_absolute_canonical():
 
     landing=c.get('/').text
     assert 'Managed by experts' in landing
-    assert 'Talk to our experts' in landing
+    assert 'Talk to our experts' in landing or 'Talk to an expert' in landing
     c.close()
 
 

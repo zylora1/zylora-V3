@@ -2,10 +2,13 @@ from __future__ import annotations
 
 import hashlib
 import json
+import logging
 import re
 from datetime import datetime, timedelta, timezone
 from uuid import uuid4
 from sqlalchemy import text
+
+logger = logging.getLogger(__name__)
 
 from .config import settings
 from .db import SessionLocal, now_iso
@@ -40,7 +43,7 @@ DEFAULT_CONFIG={
  'enabled':1,'tone':'FRIENDLY','primary_goal':'GET_ENQUIRIES','proactive_prompts':1,
  'qualification_fields_json':'[]','contact_collection':'BOTH','human_handoff':1,'whatsapp_handoff':1,
  'appointment_booking':1,'use_business_profile':1,'use_published_site':1,'use_approved_knowledge':1,
- 'restricted_topics_json':'[]','custom_instructions':'','config_revision':1,
+ 'cms_collection_ids_json':'[]','restricted_topics_json':'[]','custom_instructions':'','config_revision':1,
 }
 
 def _j(raw,default):
@@ -66,11 +69,12 @@ def site_config(site_id: str) -> dict:
     cfg={**DEFAULT_CONFIG,**(dict(row) if row else {})}
     cfg['qualification_fields']=_j(cfg.pop('qualification_fields_json','[]'),[])
     cfg['restricted_topics']=_j(cfg.pop('restricted_topics_json','[]'),[])
+    cfg['cms_collection_ids']=_j(cfg.pop('cms_collection_ids_json','[]'),[])
     return cfg
 
 
 def save_site_config(site_id: str, patch: dict) -> dict:
-    allowed={'enabled','tone','primary_goal','proactive_prompts','qualification_fields','contact_collection','human_handoff','whatsapp_handoff','appointment_booking','use_business_profile','use_published_site','use_approved_knowledge','restricted_topics','custom_instructions'}
+    allowed={'enabled','tone','primary_goal','proactive_prompts','qualification_fields','contact_collection','human_handoff','whatsapp_handoff','appointment_booking','use_business_profile','use_published_site','use_approved_knowledge','cms_collection_ids','restricted_topics','custom_instructions'}
     clean={k:v for k,v in patch.items() if k in allowed}
     current=site_config(site_id); current.update(clean)
     tone=str(current.get('tone') or 'FRIENDLY').upper()
@@ -81,15 +85,21 @@ def save_site_config(site_id: str, patch: dict) -> dict:
     if goal not in {'GET_ENQUIRIES','BOOK_APPOINTMENTS','GET_PHONE_CALLS','GET_WHATSAPP_MESSAGES','REQUEST_QUOTE','COLLECT_LEADS','SHOW_PORTFOLIO'}: raise ValueError('Unsupported conversion goal')
     q=[str(x)[:60] for x in (current.get('qualification_fields') or [])][:20]
     restricted=[str(x)[:120] for x in (current.get('restricted_topics') or [])][:30]
+    cms_ids=list(dict.fromkeys(str(x) for x in (current.get('cms_collection_ids') or []) if str(x).strip()))[:20]
+    if cms_ids:
+        with SessionLocal() as db:
+            placeholders=','.join(f':c{i}' for i in range(len(cms_ids))); params={'site':site_id}|{f'c{i}':value for i,value in enumerate(cms_ids)}
+            valid={str(row[0]) for row in db.execute(text(f'SELECT id FROM cms_collections WHERE site_id=:site AND ai_assistant_enabled=1 AND id IN ({placeholders})'),params).all()}
+        if valid!=set(cms_ids): raise ValueError('Assistant CMS collections must belong to the site and be explicitly assistant-enabled')
     custom=_clean_text(current.get('custom_instructions'),2000)
     now=now_iso()
     with SessionLocal.begin() as db:
         row=db.execute(text('SELECT config_revision FROM sales_assistant_configs WHERE site_id=:s'),{'s':site_id}).mappings().first()
         rev=int(row['config_revision'])+1 if row else 1
-        db.execute(text('''INSERT INTO sales_assistant_configs(site_id,enabled,tone,primary_goal,proactive_prompts,qualification_fields_json,contact_collection,human_handoff,whatsapp_handoff,appointment_booking,use_business_profile,use_published_site,use_approved_knowledge,restricted_topics_json,custom_instructions,config_revision,updated_at,created_at)
-        VALUES (:s,:e,:t,:g,:p,:q,:c,:h,:w,:a,:bp,:ps,:ak,:r,:ci,:rev,:n,:n)
-        ON CONFLICT(site_id) DO UPDATE SET enabled=:e,tone=:t,primary_goal=:g,proactive_prompts=:p,qualification_fields_json=:q,contact_collection=:c,human_handoff=:h,whatsapp_handoff=:w,appointment_booking=:a,use_business_profile=:bp,use_published_site=:ps,use_approved_knowledge=:ak,restricted_topics_json=:r,custom_instructions=:ci,config_revision=:rev,updated_at=:n'''),{
-        's':site_id,'e':int(bool(current.get('enabled'))),'t':tone,'g':goal,'p':int(bool(current.get('proactive_prompts'))),'q':json.dumps(q),'c':contact,'h':int(bool(current.get('human_handoff'))),'w':int(bool(current.get('whatsapp_handoff'))),'a':int(bool(current.get('appointment_booking'))),'bp':int(bool(current.get('use_business_profile'))),'ps':int(bool(current.get('use_published_site'))),'ak':int(bool(current.get('use_approved_knowledge'))),'r':json.dumps(restricted),'ci':custom,'rev':rev,'n':now})
+        db.execute(text('''INSERT INTO sales_assistant_configs(site_id,enabled,tone,primary_goal,proactive_prompts,qualification_fields_json,contact_collection,human_handoff,whatsapp_handoff,appointment_booking,use_business_profile,use_published_site,use_approved_knowledge,cms_collection_ids_json,restricted_topics_json,custom_instructions,config_revision,updated_at,created_at)
+        VALUES (:s,:e,:t,:g,:p,:q,:c,:h,:w,:a,:bp,:ps,:ak,:cms,:r,:ci,:rev,:n,:n)
+        ON CONFLICT(site_id) DO UPDATE SET enabled=:e,tone=:t,primary_goal=:g,proactive_prompts=:p,qualification_fields_json=:q,contact_collection=:c,human_handoff=:h,whatsapp_handoff=:w,appointment_booking=:a,use_business_profile=:bp,use_published_site=:ps,use_approved_knowledge=:ak,cms_collection_ids_json=:cms,restricted_topics_json=:r,custom_instructions=:ci,config_revision=:rev,updated_at=:n'''),{
+        's':site_id,'e':int(bool(current.get('enabled'))),'t':tone,'g':goal,'p':int(bool(current.get('proactive_prompts'))),'q':json.dumps(q),'c':contact,'h':int(bool(current.get('human_handoff'))),'w':int(bool(current.get('whatsapp_handoff'))),'a':int(bool(current.get('appointment_booking'))),'bp':int(bool(current.get('use_business_profile'))),'ps':int(bool(current.get('use_published_site'))),'ak':int(bool(current.get('use_approved_knowledge'))),'cms':json.dumps(cms_ids),'r':json.dumps(restricted),'ci':custom,'rev':rev,'n':now})
     return site_config(site_id)
 
 
@@ -167,6 +177,20 @@ def search_business_knowledge(site: dict, question: str, config: dict) -> dict:
             for s in _safe_sentence_candidates(row['content']):
                 score=len(terms & set(re.findall(r'[a-z0-9]{3,}',s.lower())))
                 if score:facts.append((score,s,f"KNOWLEDGE:{row['id']}"))
+    cms_ids=[str(value) for value in config.get('cms_collection_ids') or []][:20]
+    if cms_ids:
+        placeholders=','.join(f':c{i}' for i in range(len(cms_ids))); params={'site':site['id']}|{f'c{i}':value for i,value in enumerate(cms_ids)}
+        with SessionLocal() as db:
+            rows=db.execute(text(f'''SELECT i.id,i.values_json FROM cms_items i JOIN cms_collections c ON c.id=i.collection_id
+                WHERE i.site_id=:site AND i.status='PUBLISHED' AND c.ai_assistant_enabled=1 AND i.collection_id IN ({placeholders})
+                ORDER BY i.published_at DESC LIMIT 200'''),params).mappings().all()
+        for row in rows:
+            values=_j(row['values_json'],{})
+            for value in values.values():
+                if isinstance(value,(dict,list,bool,int,float)): continue
+                for sentence in _safe_sentence_candidates(value):
+                    score=len(terms & set(re.findall(r'[a-z0-9]{3,}',sentence.lower())))
+                    if score:facts.append((score,sentence,f"CMS:{row['id']}"))
     facts.sort(key=lambda x:(x[0],len(x[1])),reverse=True)
     for score,s,source in facts[:5]:
         if score<=0 and terms: continue
@@ -268,13 +292,25 @@ def _upsert_lead(db, site: dict, conv: dict, intents: list[str], q: dict, messag
         score,temp,reasons=_lead_score(intents,oldq,conv.get('page_url'))
         db.execute(text('''UPDATE leads SET name=COALESCE(NULLIF(:n,''),name),email=COALESCE(NULLIF(:e,''),email),phone=COALESCE(NULLIF(:p,''),phone),company=COALESCE(:co,company),intent=:intent,service_interest=COALESCE(:sv,service_interest),budget=COALESCE(:b,budget),location=COALESCE(:loc,location),preferred_date=COALESCE(:pd,preferred_date),preferred_time=COALESCE(:pt,preferred_time),qualification_json=:q,lead_score=:sc,lead_temperature=:temp,score_reasons_json=:r,conversation_id=:cv,summary=:sm,page_url=COALESCE(:url,page_url),updated_at=:a WHERE id=:i'''),
           {'n':q.get('name') or '','e':q.get('email') or '','p':q.get('phone') or '','co':q.get('company'),'intent':','.join(intents),'sv':q.get('service_interest'),'b':q.get('budget'),'loc':q.get('location'),'pd':q.get('preferred_date'),'pt':q.get('preferred_time'),'q':json.dumps(oldq),'sc':score,'temp':temp,'r':json.dumps(reasons),'cv':conv['id'],'sm':summary,'url':conv.get('page_url'),'a':now,'i':existing['id']})
-        return existing['id'],False,{'score':score,'temperature':temp,'reasons':reasons,'summary':summary}
-    lid=str(uuid4()); name=q.get('name') or 'Website visitor'; email=(q.get('email') or f'visitor-{hashlib.sha256(conv["session_id"].encode()).hexdigest()[:12]}@assistant.invalid').lower(); phone=q.get('phone')
-    db.execute(text('''INSERT INTO leads(id,site_id,source,status,name,email,phone,message,session_id,visitor_id,company,intent,service_interest,budget,location,preferred_date,preferred_time,qualification_json,lead_score,lead_temperature,score_reasons_json,conversation_id,summary,page_url,utm_source,utm_medium,utm_campaign,referrer,created_at,updated_at)
-      VALUES (:i,:s,'AI_ASSISTANT','NEW',:n,:e,:p,:m,:x,:v,:co,:intent,:sv,:b,:loc,:pd,:pt,:q,:sc,:temp,:r,:cv,:sm,:url,:us,:um,:uc,:ref,:a,:a)'''),
-      {'i':lid,'s':site['id'],'n':name[:80],'e':email[:254],'p':phone,'m':message[:3000],'x':conv['session_id'],'v':conv.get('visitor_id'),'co':q.get('company'),'intent':','.join(intents),'sv':q.get('service_interest'),'b':q.get('budget'),'loc':q.get('location'),'pd':q.get('preferred_date'),'pt':q.get('preferred_time'),'q':json.dumps(q),'sc':score,'temp':temp,'r':json.dumps(reasons),'cv':conv['id'],'sm':summary,'url':conv.get('page_url'),'us':conv.get('utm_source'),'um':conv.get('utm_medium'),'uc':conv.get('utm_campaign'),'ref':conv.get('referrer'),'a':now})
-    db.execute(text('UPDATE assistant_conversations SET lead_id=:l WHERE id=:c'),{'l':lid,'c':conv['id']})
-    return lid,True,{'score':score,'temperature':temp,'reasons':reasons,'summary':summary}
+        lid = existing['id']
+        is_created = False
+    else:
+        lid=str(uuid4()); name=q.get('name') or 'Website visitor'; email=(q.get('email') or f'visitor-{hashlib.sha256(conv["session_id"].encode()).hexdigest()[:12]}@assistant.invalid').lower(); phone=q.get('phone')
+        db.execute(text('''INSERT INTO leads(id,site_id,source,status,name,email,phone,message,session_id,visitor_id,company,intent,service_interest,budget,location,preferred_date,preferred_time,qualification_json,lead_score,lead_temperature,score_reasons_json,conversation_id,summary,page_url,utm_source,utm_medium,utm_campaign,referrer,created_at,updated_at)
+          VALUES (:i,:s,'AI_ASSISTANT','NEW',:n,:e,:p,:m,:x,:v,:co,:intent,:sv,:b,:loc,:pd,:pt,:q,:sc,:temp,:r,:cv,:sm,:url,:us,:um,:uc,:ref,:a,:a)'''),
+          {'i':lid,'s':site['id'],'n':name[:80],'e':email[:254],'p':phone,'m':message[:3000],'x':conv['session_id'],'v':conv.get('visitor_id'),'co':q.get('company'),'intent':','.join(intents),'sv':q.get('service_interest'),'b':q.get('budget'),'loc':q.get('location'),'pd':q.get('preferred_date'),'pt':q.get('preferred_time'),'q':json.dumps(q),'sc':score,'temp':temp,'r':json.dumps(reasons),'cv':conv['id'],'sm':summary,'url':conv.get('page_url'),'us':conv.get('utm_source'),'um':conv.get('utm_medium'),'uc':conv.get('utm_campaign'),'ref':conv.get('referrer'),'a':now})
+        db.execute(text('UPDATE assistant_conversations SET lead_id=:l WHERE id=:c'),{'l':lid,'c':conv['id']})
+        is_created = True
+
+    try:
+        from .crm import ingest_lead_into_crm
+        l_row = db.execute(text('SELECT * FROM leads WHERE id=:i'), {'i': lid}).mappings().first()
+        if l_row and site.get('user_id'):
+            ingest_lead_into_crm(db, site['user_id'], dict(l_row), site_id=site['id'], source='AI_ASSISTANT')
+    except Exception as exc:
+        logger.warning('Failed to ingest assistant lead into CRM: %s', exc)
+
+    return lid,is_created,{'score':score,'temperature':temp,'reasons':reasons,'summary':summary}
 
 
 def _quota(site_id: str, conversation_id: str) -> tuple[bool,str|None]:
@@ -386,6 +422,15 @@ def link_appointment(conversation_id: str, appointment_id: str, lead_id: str|Non
         db.execute(text('UPDATE assistant_conversations SET appointment_id=:a,stage=\'CONVERT\',last_activity_at=:n WHERE id=:c'),{'a':appointment_id,'n':now_iso(),'c':conversation_id})
         if lead_id: db.execute(text('UPDATE leads SET appointment_id=:a,updated_at=:n WHERE id=:l'),{'a':appointment_id,'n':now_iso(),'l':lead_id})
         db.execute(text('UPDATE appointments SET conversation_id=:c,lead_id=:l WHERE id=:a'),{'c':conversation_id,'l':lead_id,'a':appointment_id})
+        try:
+            appt = db.execute(text('SELECT * FROM appointments WHERE id=:a'), {'a': appointment_id}).mappings().first()
+            if appt:
+                site = db.execute(text('SELECT * FROM sites WHERE id=:s'), {'s': appt['site_id']}).mappings().first()
+                if site and site.get('user_id'):
+                    from .crm import link_appointment_to_crm
+                    link_appointment_to_crm(db, site['user_id'], site['id'], dict(appt), event_type='BOOKED')
+        except Exception as exc:
+            logger.warning('Failed to link assistant appointment to CRM: %s', exc)
 
 
 def conversation_detail(site_id: str, conversation_id: str) -> dict:

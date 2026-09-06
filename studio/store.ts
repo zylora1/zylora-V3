@@ -1,317 +1,91 @@
-import { createContext, useContext, useReducer, Dispatch } from 'react';
+import { createContext, useContext, Dispatch } from 'react';
 
-// Simplified Node definitions for the frontend
 export type Breakpoint = 'desktop' | 'tablet' | 'mobile';
-
-export interface NodeStyle {
-  css: Record<string, string>;
-  tokens: Record<string, string>;
-}
-
+export interface NodeStyle { css: Record<string,string>; tokens: Record<string,string>; }
 export interface Node {
-  id: string;
-  type: string;
-  parentId: string | null;
-  children: string[];
-  content: Record<string, any>;
-  style: NodeStyle;
-  layout: Record<string, any>;
-  responsiveOverrides: Record<string, { style?: NodeStyle; content?: Record<string, any>; visibility?: 'visible'|'hidden' }>;
-  visibility: 'visible' | 'hidden';
+  id:string; type:string; parentId:string|null; children:string[]; content:Record<string,any>;
+  style:NodeStyle; layout:Record<string,any>;
+  responsiveOverrides:Record<string,{style?:NodeStyle;content?:Record<string,any>;visibility?:'visible'|'hidden'}>;
+  visibility:'visible'|'hidden'; bindings?:Record<string,any>; metadata?:Record<string,any>;
+  accessibility?:Record<string,any>; interactions?:Record<string,any>[];
 }
-
-export interface Page {
-  id: string;
-  slug: string;
-  name: string;
-  rootNodeId: string;
-  nodes: Record<string, Node>;
-}
-
+export interface Page { id:string; slug:string; name:string; rootNodeId:string; nodes:Record<string,Node>; seo?:Record<string,any>; breakpointConfiguration?:Record<string,any>; }
+export interface ComponentDefinition { id:string; name:string; rootNodeId:string; nodes:Record<string,Node>; exposedProperties?:Record<string,any>[]; }
 export interface SiteDocument {
-  id: string;
-  pages: Record<string, Page>;
-  breakpoints: Record<Breakpoint, number>;
+  id?:string; version?:number; schemaVersion?:number; pages:Record<string,Page>; breakpoints:Record<Breakpoint,number>; revision:number;
+  components?:Record<string,ComponentDefinition>; globalSections?:Record<string,Node>; assets?:Record<string,any>; tokens?:Record<string,any>;
+  theme?:Record<string,any>; metadata?:Record<string,any>; settings?:Record<string,any>; seo?:Record<string,any>; dataSources?:Record<string,any>;
 }
-
+export interface ClipboardPayload { nodes:Record<string,Node>; rootIds:string[]; sourceSiteId?:string; }
 export interface StudioState {
-  document: SiteDocument | null;
-  currentPageId: string;
-  selectedNodeIds: string[];
-  currentBreakpoint: Breakpoint;
-  history: SiteDocument[];
-  historyIndex: number;
+  document:SiteDocument|null; currentPageId:string; selectedNodeIds:string[]; currentBreakpoint:Breakpoint;
+  history:SiteDocument[]; historyIndex:number; zoom:number; clipboard:ClipboardPayload|null;
+  snapLines:Array<{position:number;orientation:'vertical'|'horizontal';type:string}>;
 }
 
-export type StudioAction = 
-  | { type: 'SET_DOCUMENT'; payload: SiteDocument }
-  | { type: 'SELECT_NODE'; payload: string[] }
-  | { type: 'SET_BREAKPOINT'; payload: Breakpoint }
-  | { type: 'UPDATE_NODE_STYLE'; payload: { nodeId: string; style: Record<string, string> } }
-  | { type: 'REPARENT_NODE'; payload: { nodeId: string; newParentId: string } }
-  | { type: 'DELETE_NODE'; payload: { nodeId: string } }
-  | { type: 'RESET_NODE_STYLE'; payload: { nodeId: string; prop: string; breakpoint: Breakpoint } }
-  | { type: 'SYNC_REVISION'; payload: number }
-  | { type: 'UNDO' }
-  | { type: 'REDO' };
+export type StudioAction =
+  | {type:'SET_DOCUMENT';payload:SiteDocument}|{type:'SELECT_NODE';payload:string[]}|{type:'SET_PAGE';payload:string}
+  | {type:'SET_BREAKPOINT';payload:Breakpoint}|{type:'SET_ZOOM';payload:number}|{type:'SET_SNAP_LINES';payload:StudioState['snapLines']}
+  | {type:'UPDATE_NODE_STYLE';payload:{nodeId:string;style:Record<string,string>}}|{type:'UPDATE_SELECTED_STYLE';payload:Record<string,string>}
+  | {type:'UPDATE_NODE_CONTENT';payload:{nodeId:string;content:Record<string,any>}}|{type:'UPDATE_NODE_TEXT';payload:{nodeId:string;text:string}}
+  | {type:'UPDATE_NODE_ACCESSIBILITY';payload:{nodeId:string;accessibility:Record<string,any>}}
+  | {type:'INSERT_NODE';payload:{node:Partial<Node>&Pick<Node,'type'>;parentId?:string;index?:number}}
+  | {type:'REPARENT_NODE';payload:{nodeId:string;newParentId:string;index?:number}}|{type:'REORDER_NODE';payload:{nodeId:string;direction:'forward'|'backward'|'front'|'back'}}
+  | {type:'DUPLICATE_NODE';payload:{nodeId:string}}|{type:'DUPLICATE_SELECTED'}|{type:'RENAME_NODE';payload:{nodeId:string;name:string}}
+  | {type:'TOGGLE_NODE_VISIBILITY';payload:{nodeId:string;breakpoint:Breakpoint}}|{type:'TOGGLE_NODE_LOCK';payload:{nodeId:string}}
+  | {type:'DELETE_NODE';payload:{nodeId:string}}|{type:'DELETE_SELECTED'}|{type:'RESET_NODE_STYLE';payload:{nodeId:string;prop:string;breakpoint:Breakpoint}}
+  | {type:'COPY_SELECTED'}|{type:'CUT_SELECTED'}|{type:'PASTE';payload?:{parentId?:string}}
+  | {type:'ADD_PAGE';payload:{name:string;slug:string}}|{type:'UPDATE_PAGE';payload:{pageId:string;name?:string;slug?:string;seo?:Record<string,any>}}
+  | {type:'DUPLICATE_PAGE';payload:{pageId:string}}|{type:'DELETE_PAGE';payload:{pageId:string}}|{type:'REORDER_PAGE';payload:{pageId:string;direction:-1|1}}
+  | {type:'CREATE_COMPONENT';payload:{name:string}}|{type:'DETACH_COMPONENT';payload:{nodeId:string}}
+  | {type:'UPDATE_TOKENS';payload:Record<string,any>}|{type:'SYNC_REVISION';payload:number}|{type:'UNDO'}|{type:'REDO'};
 
-export const initialState: StudioState = {
-  document: null,
-  currentPageId: 'home',
-  selectedNodeIds: [],
-  currentBreakpoint: 'desktop',
-  history: [],
-  historyIndex: -1,
-};
+export const initialState:StudioState={document:null,currentPageId:'home',selectedNodeIds:[],currentBreakpoint:'desktop',history:[],historyIndex:-1,zoom:1,clipboard:null,snapLines:[]};
+const uid=(prefix='node')=>{const bytes=new Uint8Array(8);if(globalThis.crypto?.getRandomValues)globalThis.crypto.getRandomValues(bytes);else for(let i=0;i<bytes.length;i++)bytes[i]=Math.floor(Math.random()*256);return `${prefix}_${Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('').slice(0,12)}`;};
+const clone=<T,>(value:T):T=>JSON.parse(JSON.stringify(value));
+const commit=(state:StudioState,document:SiteDocument,extra:Partial<StudioState>={}):StudioState=>{const history=state.history.slice(0,state.historyIndex+1).concat(document);return {...state,...extra,document,history,historyIndex:history.length-1};};
+const pageOf=(state:StudioState)=>state.document?.pages[state.currentPageId];
+const descendants=(nodes:Record<string,Node>,roots:string[])=>{const found=new Set<string>();const walk=(id:string)=>{if(found.has(id))return;found.add(id);(nodes[id]?.children||[]).forEach(walk)};roots.forEach(walk);return found};
+const topSelection=(nodes:Record<string,Node>,ids:string[])=>ids.filter(id=>nodes[id]&&!ids.some(other=>other!==id&&descendants(nodes,[other]).has(id)));
+const validSlug=(raw:string)=>raw.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'page';
+const baseNode=(type:string,parentId:string|null):Node=>({id:uid(type),type,parentId,children:[],content:{text:['heading','text','paragraph'].includes(type)?(type==='heading'?'New heading':'Add your text'):(type==='button'?'Button':undefined)},style:{css:{},tokens:{}},layout:{},responsiveOverrides:{},visibility:'visible',bindings:{},metadata:{displayName:type.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase())},accessibility:{},interactions:[]});
+const cloneForest=(source:Record<string,Node>,roots:string[],target:Record<string,Node>,parentId:string|null)=>{const map=new Map<string,string>();descendants(source,roots).forEach(id=>map.set(id,uid(source[id]?.type||'node')));map.forEach((next,id)=>{const n=clone(source[id]);n.id=next;n.parentId=map.get(n.parentId||'')||parentId;n.children=n.children.map((c:string)=>map.get(c)).filter(Boolean);target[next]=n});return roots.map(id=>map.get(id)!).filter(Boolean);};
+const withNodes=(state:StudioState,mutate:(page:Page,nodes:Record<string,Node>)=>Partial<StudioState>|void)=>{if(!state.document)return state;const page=pageOf(state);if(!page)return state;const nodes=clone(page.nodes),extra=mutate(page,nodes)||{};return commit(state,{...state.document,pages:{...state.document.pages,[page.id]:{...page,nodes}}},extra);};
 
-export function studioReducer(state: StudioState, action: StudioAction): StudioState {
-  switch (action.type) {
-    case 'SET_DOCUMENT':
-      return {
-        ...state,
-        document: action.payload,
-        history: [action.payload],
-        historyIndex: 0
-      };
-    case 'SELECT_NODE':
-      return { ...state, selectedNodeIds: action.payload };
-    case 'SET_BREAKPOINT':
-      return { ...state, currentBreakpoint: action.payload };
-    case 'UPDATE_NODE_STYLE': {
-      if (!state.document) return state;
-      const { nodeId, style } = action.payload;
-      const page = state.document.pages[state.currentPageId];
-      if (!page || !page.nodes[nodeId]) return state;
-
-      const node = page.nodes[nodeId];
-      const newNode = { ...node };
-
-      if (state.currentBreakpoint === 'desktop') {
-        newNode.style = { ...newNode.style, css: { ...newNode.style.css, ...style } };
-      } else {
-        const overrides = newNode.responsiveOverrides[state.currentBreakpoint] || { style: { css: {}, tokens: {} } };
-        const newStyle = overrides.style || { css: {}, tokens: {} };
-        newNode.responsiveOverrides = {
-          ...newNode.responsiveOverrides,
-          [state.currentBreakpoint]: {
-            ...overrides,
-            style: { ...newStyle, css: { ...newStyle.css, ...style } }
-          }
-        };
-      }
-
-      const newDoc = {
-        ...state.document,
-        pages: {
-          ...state.document.pages,
-          [state.currentPageId]: {
-            ...page,
-            nodes: {
-              ...page.nodes,
-              [nodeId]: newNode
-            }
-          }
-        }
-      };
-
-      // Push history
-      const newHistory = state.history.slice(0, state.historyIndex + 1);
-      newHistory.push(newDoc);
-
-      return {
-        ...state,
-        document: newDoc,
-        history: newHistory,
-        historyIndex: newHistory.length - 1
-      };
-    }
-    case 'REPARENT_NODE': {
-      if (!state.document) return state;
-      const { nodeId, newParentId } = action.payload;
-      const page = state.document.pages[state.currentPageId];
-      if (!page || !page.nodes[nodeId] || !page.nodes[newParentId]) return state;
-
-      // Prevent reparenting to self or child (circular check would go here ideally)
-      if (nodeId === newParentId) return state;
-
-      const node = page.nodes[nodeId];
-      const oldParentId = node.parentId;
-      
-      const newNodes = { ...page.nodes };
-      
-      if (oldParentId && newNodes[oldParentId]) {
-          newNodes[oldParentId] = {
-              ...newNodes[oldParentId],
-              children: newNodes[oldParentId].children.filter(id => id !== nodeId)
-          };
-      }
-      
-      newNodes[newParentId] = {
-          ...newNodes[newParentId],
-          children: [...newNodes[newParentId].children, nodeId]
-      };
-      
-      newNodes[nodeId] = {
-          ...node,
-          parentId: newParentId
-      };
-      
-      const newDoc = {
-          ...state.document,
-          pages: {
-              ...state.document.pages,
-              [state.currentPageId]: {
-                  ...page,
-                  nodes: newNodes
-              }
-          }
-      };
-      
-      const newHistory = state.history.slice(0, state.historyIndex + 1);
-      newHistory.push(newDoc);
-      
-      return {
-          ...state,
-          document: newDoc,
-          history: newHistory,
-          historyIndex: newHistory.length - 1
-      };
-    }
-    case 'DELETE_NODE': {
-      if (!state.document) return state;
-      const { nodeId } = action.payload;
-      const page = state.document.pages[state.currentPageId];
-      if (!page || !page.nodes[nodeId]) return state;
-
-      // Don't delete root
-      if (nodeId === page.rootNodeId) return state;
-
-      const node = page.nodes[nodeId];
-      const oldParentId = node.parentId;
-      
-      const newNodes = { ...page.nodes };
-      
-      if (oldParentId && newNodes[oldParentId]) {
-          newNodes[oldParentId] = {
-              ...newNodes[oldParentId],
-              children: newNodes[oldParentId].children.filter(id => id !== nodeId)
-          };
-      }
-
-      // Cleanup children recursively could be added here
-      delete newNodes[nodeId];
-      
-      const newDoc = {
-          ...state.document,
-          pages: {
-              ...state.document.pages,
-              [state.currentPageId]: {
-                  ...page,
-                  nodes: newNodes
-              }
-          }
-      };
-      
-      const newHistory = state.history.slice(0, state.historyIndex + 1);
-      newHistory.push(newDoc);
-      
-      return {
-          ...state,
-          document: newDoc,
-          history: newHistory,
-          historyIndex: newHistory.length - 1,
-          selectedNodeIds: state.selectedNodeIds.filter(id => id !== nodeId)
-      };
-    }
-    case 'RESET_NODE_STYLE': {
-      if (!state.document) return state;
-      const { nodeId, prop, breakpoint } = action.payload;
-      if (breakpoint === 'desktop') return state; // Desktop is base, can't reset
-      
-      const page = state.document.pages[state.currentPageId];
-      if (!page || !page.nodes[nodeId]) return state;
-      
-      const node = page.nodes[nodeId];
-      const newNode = { ...node };
-      
-      const overrides = newNode.responsiveOverrides[breakpoint];
-      if (overrides && overrides.style && overrides.style.css[prop] !== undefined) {
-          const newCss = { ...overrides.style.css };
-          delete newCss[prop];
-          newNode.responsiveOverrides = {
-              ...newNode.responsiveOverrides,
-              [breakpoint]: {
-                  ...overrides,
-                  style: { ...overrides.style, css: newCss }
-              }
-          };
-      } else {
-          return state; // Nothing to reset
-      }
-
-      const newDoc = {
-        ...state.document,
-        pages: {
-          ...state.document.pages,
-          [state.currentPageId]: {
-            ...page,
-            nodes: {
-              ...page.nodes,
-              [nodeId]: newNode
-            }
-          }
-        }
-      };
-
-      const newHistory = state.history.slice(0, state.historyIndex + 1);
-      newHistory.push(newDoc);
-
-      return {
-        ...state,
-        document: newDoc,
-        history: newHistory,
-        historyIndex: newHistory.length - 1
-      };
-    }
-    case 'SYNC_REVISION':
-      if (state.document) {
-          const newDoc = { ...state.document, revision: action.payload };
-          // Don't push to history, just update current state document and current history pointer element
-          const newHistory = [...state.history];
-          newHistory[state.historyIndex] = newDoc;
-          return {
-              ...state,
-              document: newDoc,
-              history: newHistory
-          };
-      }
-      return state;
-    case 'UNDO':
-      if (state.historyIndex > 0) {
-        return {
-          ...state,
-          historyIndex: state.historyIndex - 1,
-          document: state.history[state.historyIndex - 1]
-        };
-      }
-      return state;
-    case 'REDO':
-      if (state.historyIndex < state.history.length - 1) {
-        return {
-          ...state,
-          historyIndex: state.historyIndex + 1,
-          document: state.history[state.historyIndex + 1]
-        };
-      }
-      return state;
-    default:
-      return state;
-  }
+export function studioReducer(state:StudioState,action:StudioAction):StudioState{
+ switch(action.type){
+  case 'SET_DOCUMENT':{const first=action.payload.pages[state.currentPageId]?state.currentPageId:Object.keys(action.payload.pages)[0]||'home';return {...state,document:action.payload,currentPageId:first,selectedNodeIds:[],history:[action.payload],historyIndex:0};}
+  case 'SELECT_NODE':return {...state,selectedNodeIds:Array.from(new Set(action.payload))};
+  case 'SET_PAGE':return state.document?.pages[action.payload]?{...state,currentPageId:action.payload,selectedNodeIds:[]}:state;
+  case 'SET_BREAKPOINT':return {...state,currentBreakpoint:action.payload}; case 'SET_ZOOM':return {...state,zoom:Math.max(.25,Math.min(2,action.payload))}; case 'SET_SNAP_LINES':return {...state,snapLines:action.payload};
+  case 'UPDATE_NODE_STYLE':case 'UPDATE_SELECTED_STYLE':return withNodes(state,(_p,nodes)=>{const ids=action.type==='UPDATE_NODE_STYLE'?[action.payload.nodeId]:state.selectedNodeIds,style=action.type==='UPDATE_NODE_STYLE'?action.payload.style:action.payload;ids.forEach(id=>{const n=nodes[id];if(!n||n.metadata?.locked)return;if(state.currentBreakpoint==='desktop')n.style={...n.style,css:{...n.style.css,...style}};else{const o=n.responsiveOverrides[state.currentBreakpoint]||{};n.responsiveOverrides={...n.responsiveOverrides,[state.currentBreakpoint]:{...o,style:{tokens:{...(o.style?.tokens||{})},css:{...(o.style?.css||{}),...style}}}}}})});
+  case 'UPDATE_NODE_TEXT':case 'UPDATE_NODE_CONTENT':return withNodes(state,(_p,nodes)=>{const n=nodes[action.payload.nodeId];if(!n||n.metadata?.locked)return;n.content={...n.content,...(action.type==='UPDATE_NODE_TEXT'?{text:action.payload.text,html:undefined}:action.payload.content)}});
+  case 'UPDATE_NODE_ACCESSIBILITY':return withNodes(state,(_p,nodes)=>{const n=nodes[action.payload.nodeId];if(n&&!n.metadata?.locked)n.accessibility={...(n.accessibility||{}),...action.payload.accessibility}});
+  case 'INSERT_NODE':return withNodes(state,(page,nodes)=>{const parentId=action.payload.parentId||state.selectedNodeIds.find(id=>nodes[id]&&['page','section','container','stack','flex','grid'].includes(nodes[id].type))||page.rootNodeId,parent=nodes[parentId];if(!parent)return;const node={...baseNode(action.payload.node.type,parentId),...clone(action.payload.node),id:action.payload.node.id||uid(action.payload.node.type),parentId,children:action.payload.node.children||[]} as Node;nodes[node.id]=node;const i=Math.max(0,Math.min(action.payload.index??parent.children.length,parent.children.length));parent.children.splice(i,0,node.id);return {selectedNodeIds:[node.id]}});
+  case 'REPARENT_NODE':return withNodes(state,(_p,nodes)=>{const n=nodes[action.payload.nodeId],parent=nodes[action.payload.newParentId];if(!n||!parent||n.id===parent.id||descendants(nodes,[n.id]).has(parent.id))return;if(n.parentId&&nodes[n.parentId])nodes[n.parentId].children=nodes[n.parentId].children.filter(id=>id!==n.id);n.parentId=parent.id;parent.children.splice(Math.max(0,Math.min(action.payload.index??parent.children.length,parent.children.length)),0,n.id)});
+  case 'REORDER_NODE':return withNodes(state,(_p,nodes)=>{const n=nodes[action.payload.nodeId],parent=n?.parentId&&nodes[n.parentId];if(!n||!parent)return;const from=parent.children.indexOf(n.id);if(from<0)return;let to=from+(action.payload.direction==='forward'?1:action.payload.direction==='backward'?-1:0);if(action.payload.direction==='front')to=parent.children.length-1;if(action.payload.direction==='back')to=0;to=Math.max(0,Math.min(to,parent.children.length-1));parent.children.splice(from,1);parent.children.splice(to,0,n.id)});
+  case 'DELETE_NODE':case 'DELETE_SELECTED':return withNodes(state,(page,nodes)=>{const wanted=action.type==='DELETE_NODE'?[action.payload.nodeId]:state.selectedNodeIds,roots=topSelection(nodes,wanted).filter(id=>id!==page.rootNodeId&&!nodes[id]?.metadata?.global),gone=descendants(nodes,roots);roots.forEach(id=>{const p=nodes[id]?.parentId;if(p&&nodes[p])nodes[p].children=nodes[p].children.filter(c=>c!==id)});gone.forEach(id=>delete nodes[id]);return {selectedNodeIds:state.selectedNodeIds.filter(id=>!gone.has(id))}});
+  case 'DUPLICATE_NODE':case 'DUPLICATE_SELECTED':return withNodes(state,(page,nodes)=>{const ids=topSelection(page.nodes,action.type==='DUPLICATE_NODE'?[action.payload.nodeId]:state.selectedNodeIds).filter(id=>id!==page.rootNodeId),inserted:string[]=[];ids.forEach(id=>{const original=page.nodes[id],parentId=original?.parentId;if(!original||!parentId||!nodes[parentId])return;const roots=cloneForest(page.nodes,[id],nodes,parentId),at=nodes[parentId].children.indexOf(id)+1;nodes[parentId].children.splice(at,0,...roots);inserted.push(...roots)});return {selectedNodeIds:inserted}});
+  case 'RENAME_NODE':return withNodes(state,(_p,nodes)=>{const n=nodes[action.payload.nodeId],name=action.payload.name.trim().slice(0,80);if(n&&name)n.metadata={...n.metadata,displayName:name}});
+  case 'TOGGLE_NODE_LOCK':return withNodes(state,(_p,nodes)=>{const n=nodes[action.payload.nodeId];if(n)n.metadata={...n.metadata,locked:!n.metadata?.locked}});
+  case 'TOGGLE_NODE_VISIBILITY':return withNodes(state,(_p,nodes)=>{const n=nodes[action.payload.nodeId];if(!n)return;if(action.payload.breakpoint==='desktop')n.visibility=n.visibility==='hidden'?'visible':'hidden';else{const bp=action.payload.breakpoint,o=n.responsiveOverrides[bp]||{},inherit=bp==='mobile'?(n.responsiveOverrides.tablet?.visibility||n.visibility):n.visibility;n.responsiveOverrides={...n.responsiveOverrides,[bp]:{...o,visibility:(o.visibility||inherit)==='hidden'?'visible':'hidden'}}}});
+  case 'RESET_NODE_STYLE':return withNodes(state,(_p,nodes)=>{if(action.payload.breakpoint==='desktop')return;const n=nodes[action.payload.nodeId],o=n?.responsiveOverrides[action.payload.breakpoint];if(!n||!o?.style)return;const css={...o.style.css};delete css[action.payload.prop];n.responsiveOverrides={...n.responsiveOverrides,[action.payload.breakpoint]:{...o,style:{...o.style,css}}}});
+  case 'COPY_SELECTED':{const page=pageOf(state);if(!page)return state;const roots=topSelection(page.nodes,state.selectedNodeIds);if(!roots.length)return state;const ids=descendants(page.nodes,roots),nodes:Record<string,Node>={};ids.forEach(id=>nodes[id]=clone(page.nodes[id]));return {...state,clipboard:{nodes,rootIds:roots,sourceSiteId:state.document?.id}};}
+  case 'CUT_SELECTED':return studioReducer(studioReducer(state,{type:'COPY_SELECTED'}),{type:'DELETE_SELECTED'});
+  case 'PASTE':return withNodes(state,(page,nodes)=>{if(!state.clipboard)return;const parentId=action.payload?.parentId||state.selectedNodeIds.find(id=>nodes[id]&&['page','section','container','stack','flex','grid'].includes(nodes[id].type))||page.rootNodeId,parent=nodes[parentId];if(!parent)return;const roots=cloneForest(state.clipboard.nodes,state.clipboard.rootIds,nodes,parent.id);parent.children.push(...roots);return {selectedNodeIds:roots}});
+  case 'ADD_PAGE':{if(!state.document)return state;const slug=validSlug(action.payload.slug);if(Object.values(state.document.pages).some(p=>p.slug===slug))return state;const id=uid('page'),root=baseNode('page',null);root.id=uid('root');const page:Page={id,slug,name:action.payload.name.trim().slice(0,80)||'Untitled page',rootNodeId:root.id,nodes:{[root.id]:root},seo:{}};return commit(state,{...state.document,pages:{...state.document.pages,[id]:page}},{currentPageId:id,selectedNodeIds:[]});}
+  case 'UPDATE_PAGE':{if(!state.document)return state;const page=state.document.pages[action.payload.pageId];if(!page)return state;const slug=action.payload.slug===undefined?page.slug:validSlug(action.payload.slug);if(Object.values(state.document.pages).some(p=>p.id!==page.id&&p.slug===slug))return state;const updated={...page,name:action.payload.name?.trim().slice(0,80)||page.name,slug,seo:{...(page.seo||{}),...(action.payload.seo||{})}};return commit(state,{...state.document,pages:{...state.document.pages,[page.id]:updated}});}
+  case 'DUPLICATE_PAGE':{if(!state.document)return state;const source=state.document.pages[action.payload.pageId];if(!source)return state;const nodes:Record<string,Node>={},roots=cloneForest(source.nodes,[source.rootNodeId],nodes,null),id=uid('page');let slug=`${validSlug(source.slug)}-copy`,n=2;while(Object.values(state.document.pages).some(p=>p.slug===slug))slug=`${validSlug(source.slug)}-copy-${n++}`;const page={...clone(source),id,name:`${source.name} copy`,slug,rootNodeId:roots[0],nodes};return commit(state,{...state.document,pages:{...state.document.pages,[id]:page}},{currentPageId:id,selectedNodeIds:[]});}
+  case 'DELETE_PAGE':{if(!state.document||Object.keys(state.document.pages).length<=1)return state;const page=state.document.pages[action.payload.pageId];if(!page||page.slug==='home')return state;const pages={...state.document.pages};delete pages[page.id];return commit(state,{...state.document,pages},{currentPageId:state.currentPageId===page.id?Object.keys(pages)[0]:state.currentPageId,selectedNodeIds:[]});}
+  case 'REORDER_PAGE':{if(!state.document)return state;const entries=Object.entries(state.document.pages),from=entries.findIndex(([id])=>id===action.payload.pageId),to=from+action.payload.direction;if(from<0||to<0||to>=entries.length)return state;[entries[from],entries[to]]=[entries[to],entries[from]];return commit(state,{...state.document,pages:Object.fromEntries(entries)});}
+  case 'CREATE_COMPONENT':{if(!state.document)return state;const page=pageOf(state),rootId=state.selectedNodeIds[0],root=page?.nodes[rootId];if(!page||!root||root.id===page.rootNodeId||!root.parentId)return state;const compNodes:Record<string,Node>={},compRoots=cloneForest(page.nodes,[rootId],compNodes,null),componentId=uid('component'),component:ComponentDefinition={id:componentId,name:action.payload.name.trim().slice(0,80)||'Component',rootNodeId:compRoots[0],nodes:compNodes,exposedProperties:[]};const instance:Node={...baseNode('component_instance',root.parentId),id:uid('instance'),content:{component_id:componentId,componentId},style:clone(root.style),metadata:{displayName:component.name}};const nodes=clone(page.nodes),parent=nodes[root.parentId],at=parent.children.indexOf(root.id),gone=descendants(nodes,[root.id]);gone.forEach(id=>delete nodes[id]);nodes[instance.id]=instance;parent.children.splice(at,1,instance.id);return commit(state,{...state.document,components:{...(state.document.components||{}),[componentId]:component},pages:{...state.document.pages,[page.id]:{...page,nodes}}},{selectedNodeIds:[instance.id]});}
+  case 'DETACH_COMPONENT':{if(!state.document)return state;const page=pageOf(state),instance=page?.nodes[action.payload.nodeId],componentId=instance?.content.component_id||instance?.content.componentId,component=state.document.components?.[componentId];if(!page||!instance||instance.type!=='component_instance'||!component||!instance.parentId)return state;const nodes=clone(page.nodes),parent=nodes[instance.parentId],roots=cloneForest(component.nodes,[component.rootNodeId],nodes,parent.id),at=parent.children.indexOf(instance.id);delete nodes[instance.id];parent.children.splice(at,1,...roots);return commit(state,{...state.document,pages:{...state.document.pages,[page.id]:{...page,nodes}}},{selectedNodeIds:roots});}
+  case 'UPDATE_TOKENS':if(state.document)return commit(state,{...state.document,tokens:{...(state.document.tokens||{}),...action.payload}});return state;
+  case 'SYNC_REVISION':{if(!state.document)return state;const document={...state.document,revision:action.payload},history=[...state.history];history[state.historyIndex]=document;return {...state,document,history};}
+  case 'UNDO':return state.historyIndex>0?{...state,historyIndex:state.historyIndex-1,document:state.history[state.historyIndex-1],selectedNodeIds:[]}:state;
+  case 'REDO':return state.historyIndex<state.history.length-1?{...state,historyIndex:state.historyIndex+1,document:state.history[state.historyIndex+1],selectedNodeIds:[]}:state;
+  default:return state;
+ }
 }
-
-export const StudioContext = createContext<{
-  state: StudioState;
-  dispatch: Dispatch<StudioAction>;
-}>({ state: initialState, dispatch: () => null });
-
-export const useStudio = () => useContext(StudioContext);
+export const StudioContext=createContext<{state:StudioState;dispatch:Dispatch<StudioAction>}>({state:initialState,dispatch:()=>null});
+export const useStudio=()=>useContext(StudioContext);

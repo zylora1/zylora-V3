@@ -1,124 +1,26 @@
-import React, { useState } from 'react';
-import { useStudio, Breakpoint } from '../store';
-
-export function Inspector() {
-    const { state, dispatch } = useStudio();
-    
-    if (state.selectedNodeIds.length !== 1 || !state.document) {
-        return <div style={{padding: '1rem', color: '#888'}}>Select exactly one node to inspect.</div>;
-    }
-    
-    const page = state.document.pages[state.currentPageId];
-    const nodeId = state.selectedNodeIds[0];
-    const node = page.nodes[nodeId];
-    if (!node) return null;
-
-    const bp = state.currentBreakpoint;
-    
-    // Helper to get value and origin
-    const getValue = (prop: string) => {
-        let val = node.style.css[prop] || '';
-        let isOverride = false;
-        
-        if (bp === 'tablet') {
-            const override = node.responsiveOverrides['tablet']?.style?.css[prop];
-            if (override !== undefined) { val = override; isOverride = true; }
-        } else if (bp === 'mobile') {
-            const mobileOverride = node.responsiveOverrides['mobile']?.style?.css[prop];
-            if (mobileOverride !== undefined) { val = mobileOverride; isOverride = true; }
-            else {
-                const tabletOverride = node.responsiveOverrides['tablet']?.style?.css[prop];
-                if (tabletOverride !== undefined) { val = tabletOverride; }
-            }
-        }
-        return { val, isOverride };
-    };
-
-    const updateStyle = (prop: string, value: string) => {
-        dispatch({ type: 'UPDATE_NODE_STYLE', payload: { nodeId, style: { [prop]: value } } });
-    };
-
-    const resetStyle = (prop: string) => {
-        dispatch({ type: 'RESET_NODE_STYLE', payload: { nodeId, prop, breakpoint: bp } });
-    };
-
-    const renderInput = (label: string, prop: string) => {
-        const { val, isOverride } = getValue(prop);
-        return (
-            <div style={{marginBottom: '0.5rem', display: 'flex', alignItems: 'center'}}>
-                <label style={{flex: 1, fontSize: '0.75rem', color: isOverride ? '#00aaff' : '#aaa'}}>{label}</label>
-                <input 
-                    type="text" 
-                    value={val}
-                    placeholder="Inherited"
-                    style={{
-                        width: '100px', padding: '4px', background: '#222', color: '#fff', 
-                        border: `1px solid ${isOverride ? '#00aaff' : '#444'}`, borderRadius: '3px'
-                    }}
-                    onChange={(e) => updateStyle(prop, e.target.value)}
-                />
-                {isOverride && bp !== 'desktop' && (
-                    <button 
-                        onClick={() => resetStyle(prop)}
-                        style={{background:'transparent', color:'#ff4444', border:'none', marginLeft:'4px', cursor:'pointer', padding:'2px 4px'}}
-                        title="Reset override"
-                    >×</button>
-                )}
-            </div>
-        );
-    };
-
-    return (
-        <div style={{padding: '1rem'}}>
-            <div style={{marginBottom: '1rem', borderBottom: '1px solid #333', paddingBottom: '0.5rem'}}>
-                <div style={{fontSize: '0.8rem', fontWeight: 'bold', color: '#fff'}}>Node: {node.type}</div>
-                <div style={{fontSize: '0.7rem', color: '#888'}}>ID: {node.id}</div>
-            </div>
-            
-            <div style={{marginBottom: '1rem'}}>
-                <h4 style={{fontSize: '0.8rem', margin: '0 0 0.5rem 0', color: '#ddd'}}>Layout</h4>
-                {renderInput('Display', 'display')}
-                {getValue('display').val === 'flex' && (
-                    <>
-                        {renderInput('Direction', 'flexDirection')}
-                        {renderInput('Justify', 'justifyContent')}
-                        {renderInput('Align', 'alignItems')}
-                        {renderInput('Wrap', 'flexWrap')}
-                        {renderInput('Gap', 'gap')}
-                    </>
-                )}
-                {getValue('display').val === 'grid' && (
-                    <>
-                        {renderInput('Columns', 'gridTemplateColumns')}
-                        {renderInput('Rows', 'gridTemplateRows')}
-                        {renderInput('Gap', 'gap')}
-                        {renderInput('Row Gap', 'rowGap')}
-                        {renderInput('Col Gap', 'columnGap')}
-                    </>
-                )}
-            </div>
-
-            <div style={{marginBottom: '1rem'}}>
-                <h4 style={{fontSize: '0.8rem', margin: '0 0 0.5rem 0', color: '#ddd'}}>Spacing</h4>
-                {renderInput('Padding', 'padding')}
-                {renderInput('Margin', 'margin')}
-            </div>
-
-            <div style={{marginBottom: '1rem'}}>
-                <h4 style={{fontSize: '0.8rem', margin: '0 0 0.5rem 0', color: '#ddd'}}>Size & Position</h4>
-                {renderInput('Width', 'width')}
-                {renderInput('Height', 'height')}
-                {renderInput('Position', 'position')}
-                {['absolute', 'fixed', 'relative'].includes(getValue('position').val) && (
-                    <>
-                        {renderInput('Top', 'top')}
-                        {renderInput('Right', 'right')}
-                        {renderInput('Bottom', 'bottom')}
-                        {renderInput('Left', 'left')}
-                        {renderInput('Z-Index', 'zIndex')}
-                    </>
-                )}
-            </div>
-        </div>
-    );
-}
+import React from 'react';import {Breakpoint,useStudio} from '../store';
+type Field=[string,string,string?,string[]?];
+const sections:Array<[string,Field[]]>=[
+ ['Layout',[['Display','display','select',['block','flex','grid','inline-block','none']],['Width','width'],['Min width','minWidth'],['Max width','maxWidth'],['Height','height'],['Min height','minHeight'],['Max height','maxHeight'],['Position','position','select',['relative','absolute','fixed','sticky']],['X / left','left'],['Y / top','top'],['Overflow','overflow','select',['visible','hidden','auto','scroll']],['Direction','flexDirection','select',['row','column','row-reverse','column-reverse']],['Justify','justifyContent'],['Align','alignItems'],['Wrap','flexWrap'],['Columns','gridTemplateColumns'],['Rows','gridTemplateRows'],['Gap','gap']]],
+ ['Spacing',[['Margin top','marginTop'],['Margin right','marginRight'],['Margin bottom','marginBottom'],['Margin left','marginLeft'],['Padding top','paddingTop'],['Padding right','paddingRight'],['Padding bottom','paddingBottom'],['Padding left','paddingLeft']]],
+ ['Typography',[['Font family','fontFamily'],['Size','fontSize'],['Weight','fontWeight'],['Line height','lineHeight'],['Letter spacing','letterSpacing'],['Align','textAlign','select',['left','center','right','justify']],['Transform','textTransform','select',['none','uppercase','lowercase','capitalize']],['Decoration','textDecoration'],['Color','color','color']]],
+ ['Fill',[['Background','backgroundColor','color'],['Opacity','opacity']]],
+ ['Border',[['Width','borderWidth'],['Style','borderStyle','select',['none','solid','dashed','dotted']],['Color','borderColor','color'],['Radius','borderRadius'],['Top left','borderTopLeftRadius'],['Top right','borderTopRightRadius'],['Bottom right','borderBottomRightRadius'],['Bottom left','borderBottomLeftRadius']]],
+ ['Effects',[['Shadow','boxShadow'],['Transform','transform']]]
+];
+export function Inspector(){const {state,dispatch}=useStudio();const [open,setOpen]=React.useState<Record<string,boolean>>({Layout:true,Spacing:true,Typography:true,Content:true,CMS:true});const page=state.document?.pages[state.currentPageId],nodes=state.selectedNodeIds.map(id=>page?.nodes[id]).filter(Boolean) as any[];
+ if(!nodes.length)return <div className="empty-state inspector-empty"><b>Select something on the canvas</b><p>Layout, content, responsive styles, CMS bindings, and accessibility settings will appear here.</p></div>;
+ const node=nodes[0],multi=nodes.length>1,bp=state.currentBreakpoint;
+ const value=(prop:string)=>{const base=node.style.css[prop]||'',tablet=node.responsiveOverrides.tablet?.style?.css[prop],own=node.responsiveOverrides[bp]?.style?.css[prop];return {value:bp==='desktop'?base:(own!==undefined?own:(bp==='mobile'&&tablet!==undefined?tablet:base)),override:bp!=='desktop'&&own!==undefined}};
+ const update=(prop:string,v:string)=>dispatch({type:multi?'UPDATE_SELECTED_STYLE':'UPDATE_NODE_STYLE',...(multi?{payload:{[prop]:v}}:{payload:{nodeId:node.id,style:{[prop]:v}}})} as any);
+ const field=([label,prop,kind='text',choices]:Field)=>{const current=value(prop);return <label className={`inspector-field ${current.override?'overridden':''}`} key={prop}><span>{label}{current.override&&<i title="Overridden at this breakpoint">●</i>}</span><span className="field-control">{kind==='select'?<select value={current.value} onChange={e=>update(prop,e.target.value)}><option value="">Auto</option>{choices?.map(x=><option key={x}>{x}</option>)}</select>:kind==='color'?<><input type="color" value={/^#[0-9a-f]{6}$/i.test(current.value)?current.value:'#000000'} onChange={e=>update(prop,e.target.value)}/><input value={current.value} placeholder="Inherited" onChange={e=>update(prop,e.target.value)}/></>:<input value={current.value} placeholder="Inherited" onChange={e=>update(prop,e.target.value)}/>} {current.override&&<button title="Reset override" onClick={()=>dispatch({type:'RESET_NODE_STYLE',payload:{nodeId:node.id,prop,breakpoint:bp}})}>↺</button>}</span></label>};
+ const section=(name:string,body:React.ReactNode)=><section className="inspector-section" key={name}><button className="section-heading" onClick={()=>setOpen(o=>({...o,[name]:o[name]===false}))}><span>{name}</span><span>{open[name]===false?'›':'⌄'}</span></button>{open[name]!==false&&<div className="section-body">{body}</div>}</section>;
+ return <div className="inspector"><div className="inspector-selection"><span className="node-glyph">{multi?'◫':'◇'}</span><span><b>{multi?`${nodes.length} elements`:node.metadata?.displayName||node.type}</b><small>{multi?'Batch changes apply to every selection':node.type}</small></span>{!multi&&<button title={node.metadata?.locked?'Unlock':'Lock'} onClick={()=>dispatch({type:'TOGGLE_NODE_LOCK',payload:{nodeId:node.id}})}>{node.metadata?.locked?'⌾':'○'}</button>}</div>
+ {multi&&section('Arrange',<div className="button-grid"><button onClick={()=>update('alignSelf','flex-start')}>Left</button><button onClick={()=>update('alignSelf','center')}>Center</button><button onClick={()=>update('alignSelf','flex-end')}>Right</button><button onClick={()=>update('justifySelf','start')}>Top</button><button onClick={()=>update('justifySelf','center')}>Middle</button><button onClick={()=>update('justifySelf','end')}>Bottom</button></div>)}
+ {!multi&&['heading','paragraph','text','button','link'].includes(node.type)&&section('Content',<><label className="inspector-field vertical"><span>Text</span><textarea value={node.content.text||''} onChange={e=>dispatch({type:'UPDATE_NODE_CONTENT',payload:{nodeId:node.id,content:{text:e.target.value,html:undefined}}})}/></label>{['button','link'].includes(node.type)&&<label className="inspector-field"><span>Link</span><input value={node.content.href||''} onChange={e=>dispatch({type:'UPDATE_NODE_CONTENT',payload:{nodeId:node.id,content:{href:e.target.value}}})}/></label>}</>)}
+ {!multi&&node.type==='image'&&section('Image',<><label className="inspector-field"><span>Source</span><input value={node.content.src||''} onChange={e=>dispatch({type:'UPDATE_NODE_CONTENT',payload:{nodeId:node.id,content:{src:e.target.value}}})}/></label><label className="inspector-field"><span>Alt text</span><input value={node.content.alt||''} onChange={e=>dispatch({type:'UPDATE_NODE_CONTENT',payload:{nodeId:node.id,content:{alt:e.target.value}}})}/></label>{field(['Fit','objectFit','select',['cover','contain','fill','none']])}{field(['Focal point','objectPosition'])}</>)}
+ {sections.map(([name,fields])=>section(name,fields.map(field)))}
+ {!multi&&section('Responsive',<><div className="responsive-summary">{(['desktop','tablet','mobile'] as Breakpoint[]).map(x=><button className={bp===x?'active':''} onClick={()=>dispatch({type:'SET_BREAKPOINT',payload:x})} key={x}>{x[0].toUpperCase()}</button>)}</div><button className="wide-button" onClick={()=>dispatch({type:'TOGGLE_NODE_VISIBILITY',payload:{nodeId:node.id,breakpoint:bp}})}>{node.visibility==='hidden'?'Show':'Hide'} on {bp}</button><p className="panel-hint">Blue dots identify local overrides. Reset any value to inherit it again.</p></>)}
+ {!multi&&section('CMS',<><div className={`binding-status ${Object.keys(node.bindings||{}).length?'bound':''}`}><span>◉</span><span><b>{Object.keys(node.bindings||{}).length?'Connected to CMS':'Not connected'}</b><small>{Object.keys(node.bindings||{}).length?'Bindings use stable field IDs':'Choose CMS in the left rail to bind data'}</small></span></div></>)}
+ {!multi&&section('Accessibility',<><label className="inspector-field"><span>ARIA label</span><input value={node.accessibility?.ariaLabel||''} onChange={e=>dispatch({type:'UPDATE_NODE_ACCESSIBILITY',payload:{nodeId:node.id,accessibility:{ariaLabel:e.target.value}}})}/></label><label className="inspector-field"><span>Element ID</span><input readOnly value={node.id}/></label></>)}
+ </div>}

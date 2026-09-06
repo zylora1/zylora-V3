@@ -1,7 +1,16 @@
 <html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Zylora Dashboard</title><meta content="noindex,nofollow" name="robots"/><link rel="icon" type="image/png" href="/static/favicon.png"/><link rel="shortcut icon" href="/favicon.ico"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&amp;display=swap" rel="stylesheet"/><link href="/static/zylora-ui.css" rel="stylesheet"/><link href="/static/dashboard.css" rel="stylesheet"/><link href="/static/dashboard-sneat.css" rel="stylesheet"/><link href="/static/zylora-apple.css" rel="stylesheet"/>
+<link href="/static/zylora-crm.css" rel="stylesheet"/>
 <link href="/static/date-range-calendar.css" rel="stylesheet"/>
 <link href="/static/prompt-input.css" rel="stylesheet"/></head><body>
-<div class="app-shell"><aside aria-label="Zylora dashboard navigation" class="rail sneat-sidebar"><a aria-label="Zylora home" class="rail-logo" href="/"><span class="zylora-wordmark">Zylora</span></a><nav aria-label="Dashboard sections"><p class="menu-section">Workspace</p><button class="rail-btn active" data-view="overview" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5.5 9.5V21h13V9.5"></path><path d="M9.5 21v-6h5v6"></path></svg></span><span class="menu-label">Dashboard</span></button><button class="rail-btn" data-view="websites" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="16" rx="2" width="18" x="3" y="4"></rect><path d="M3 9h18M8 4v16"></path></svg></span><span class="menu-label">Websites</span></button><button class="rail-btn" data-view="templates" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="8" rx="1.5" width="8" x="3" y="3"></rect><rect height="8" rx="1.5" width="8" x="13" y="3"></rect><rect height="8" rx="1.5" width="8" x="3" y="13"></rect><rect height="8" rx="1.5" width="8" x="13" y="13"></rect></svg></span><span class="menu-label">Templates</span></button><p class="menu-section">Growth</p><button class="rail-btn" data-view="leads" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="9" cy="8" r="3"></circle><path d="M3.5 20v-1.5A4.5 4.5 0 0 1 8 14h2a4.5 4.5 0 0 1 4.5 4.5V20"></path><path d="M16 11a3 3 0 1 0 0-6M17 14h.5a3.5 3.5 0 0 1 3.5 3.5V20"></path></svg></span><span class="menu-label">Leads</span></button><button class="rail-btn" data-view="assistant" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M12 2a4 4 0 0 1 4 4v1a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4zM6 10a6 6 0 0 0 12 0M12 16v5M8 21h8"></path></svg></span><span class="menu-label">AI Sales Assistant</span></button><button class="rail-btn" data-view="appointments" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="18" rx="2" width="18" x="3" y="4"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg></span><span class="menu-label">Appointments</span></button><button class="rail-btn" data-view="analytics" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg></span><span class="menu-label">Growth Center</span></button><p class="menu-section">Operations</p><button class="rail-btn" data-view="health" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg></span><span class="menu-label">Site Health</span></button><button class="rail-btn" data-view="domains" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"></path></svg></span><span class="menu-label">Domains &amp; SSL</span></button><button class="rail-btn" data-view="integrations" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M8 3v5M16 3v5"></path><path d="M6 8h12v2a6 6 0 0 1-6 6v5"></path><path d="M9 21h6"></path></svg></span><span class="menu-label">Integrations</span></button><button class="rail-btn" data-view="freelancer" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="13" rx="2" width="18" x="3" y="7"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 12h18M9 12v2h6v-2"></path></svg></span><span class="menu-label">Freelancers</span></button><button class="rail-btn" data-view="support" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M4 5h16v12H9l-5 4z"></path><path d="M8 9h8M8 13h5"></path></svg></span><span class="menu-label">Support</span></button><p class="menu-section">Account</p><button class="rail-btn" data-view="billing" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="14" rx="2" width="18" x="3" y="5"></rect><path d="M3 10h18M7 15h4"></path></svg></span><span class="menu-label">Billing &amp; Usage</span></button><button class="rail-btn" data-view="settings" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1v.1H9.6V21a1.7 1.7 0 0 0-.4-1 1.7 1.7 0 0 0-1-.6 1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 3.8 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1-.4H2v-4h.2a1.7 1.7 0 0 0 1-.4 1.7 1.7 0 0 0 .6-1 1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 8.2 3.8a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1V2h4v.2a1.7 1.7 0 0 0 .4 1 1.7 1.7 0 0 0 1 .6 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 8.2c.15.38.36.72.66 1 .3.25.65.4 1.04.4h.1v4h-.1c-.39 0-.74.15-1.04.4-.3.28-.51.62-.66 1Z"></path></svg></span><span class="menu-label">Settings</span></button></nav><div class="sidebar-user"><span class="sidebar-avatar" id="sideAvatar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M4 3h16L4 21h16"></path></svg></span><span class="sidebar-user-copy"><b id="sideUserName">Loading…</b><small id="sideUserRole">User</small></span></div><div class="sidebar-foot"><button class="rail-btn logout" id="logoutBtn" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M10 5H5v14h5M14 8l4 4-4 4M8 12h10"></path></svg></span><span class="menu-label">Log out</span></button></div></aside>
+<div class="app-shell"><aside aria-label="Zylora dashboard navigation" class="rail sneat-sidebar"><a aria-label="Zylora home" class="rail-logo" href="/"><span class="zylora-wordmark">Zylora</span></a><nav aria-label="Dashboard sections"><p class="menu-section">Workspace</p><button class="rail-btn active" data-view="overview" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5.5 9.5V21h13V9.5"></path><path d="M9.5 21v-6h5v6"></path></svg></span><span class="menu-label">Dashboard</span></button><button class="rail-btn" data-view="websites" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="16" rx="2" width="18" x="3" y="4"></rect><path d="M3 9h18M8 4v16"></path></svg></span><span class="menu-label">Websites</span></button><button class="rail-btn" data-view="templates" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="8" rx="1.5" width="8" x="3" y="3"></rect><rect height="8" rx="1.5" width="8" x="13" y="3"></rect><rect height="8" rx="1.5" width="8" x="3" y="13"></rect><rect height="8" rx="1.5" width="8" x="13" y="13"></rect></svg></span><span class="menu-label">Templates</span></button><p class="menu-section">Sales CRM</p>
+<button class="rail-btn" data-view="crm-overview" type="button"><span class="menu-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg></span><span class="menu-label">CRM Hub</span></button>
+<button class="rail-btn" data-view="crm-contacts" type="button"><span class="menu-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="menu-label">Contacts</span></button>
+<button class="rail-btn" data-view="crm-companies" type="button"><span class="menu-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-3M9 9v.01M9 12v.01M9 15v.01M9 18v.01"/></svg></span><span class="menu-label">Companies</span></button>
+<button class="rail-btn" data-view="crm-deals" type="button"><span class="menu-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2 9a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V9z"/><path d="M2 13h20"/><circle cx="12" cy="16" r="1.5"/></svg></span><span class="menu-label">Pipeline &amp; Deals</span></button>
+<button class="rail-btn" data-view="crm-tasks" type="button"><span class="menu-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><span class="menu-label">Tasks &amp; Activity</span></button>
+<button class="rail-btn" data-view="crm-automations" type="button"><span class="menu-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span><span class="menu-label">Automations</span></button>
+<button class="rail-btn" data-view="crm-reports" type="button"><span class="menu-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></span><span class="menu-label">CRM Analytics</span></button>
+<p class="menu-section">Growth</p><button class="rail-btn" data-view="leads" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="9" cy="8" r="3"></circle><path d="M3.5 20v-1.5A4.5 4.5 0 0 1 8 14h2a4.5 4.5 0 0 1 4.5 4.5V20"></path><path d="M16 11a3 3 0 1 0 0-6M17 14h.5a3.5 3.5 0 0 1 3.5 3.5V20"></path></svg></span><span class="menu-label">Leads</span></button><button class="rail-btn" data-view="assistant" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M12 2a4 4 0 0 1 4 4v1a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4zM6 10a6 6 0 0 0 12 0M12 16v5M8 21h8"></path></svg></span><span class="menu-label">AI Sales Assistant</span></button><button class="rail-btn" data-view="appointments" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="18" rx="2" width="18" x="3" y="4"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg></span><span class="menu-label">Appointments</span></button><button class="rail-btn" data-view="analytics" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg></span><span class="menu-label">Growth Center</span></button><p class="menu-section">Operations</p><button class="rail-btn" data-view="health" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg></span><span class="menu-label">Site Health</span></button><button class="rail-btn" data-view="domains" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"></path></svg></span><span class="menu-label">Domains &amp; SSL</span></button><button class="rail-btn" data-view="integrations" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M8 3v5M16 3v5"></path><path d="M6 8h12v2a6 6 0 0 1-6 6v5"></path><path d="M9 21h6"></path></svg></span><span class="menu-label">Integrations</span></button><button class="rail-btn" data-view="freelancer" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="13" rx="2" width="18" x="3" y="7"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 12h18M9 12v2h6v-2"></path></svg></span><span class="menu-label">Freelancers</span></button><button class="rail-btn" data-view="support" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M4 5h16v12H9l-5 4z"></path><path d="M8 9h8M8 13h5"></path></svg></span><span class="menu-label">Support</span></button><p class="menu-section">Account</p><button class="rail-btn" data-view="billing" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="14" rx="2" width="18" x="3" y="5"></rect><path d="M3 10h18M7 15h4"></path></svg></span><span class="menu-label">Billing &amp; Usage</span></button><button class="rail-btn" data-view="settings" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1v.1H9.6V21a1.7 1.7 0 0 0-.4-1 1.7 1.7 0 0 0-1-.6 1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 3.8 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1-.4H2v-4h.2a1.7 1.7 0 0 0 1-.4 1.7 1.7 0 0 0 .6-1 1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 8.2 3.8a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1V2h4v.2a1.7 1.7 0 0 0 .4 1 1.7 1.7 0 0 0 1 .6 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 8.2c.15.38.36.72.66 1 .3.25.65.4 1.04.4h.1v4h-.1c-.39 0-.74.15-1.04.4-.3.28-.51.62-.66 1Z"></path></svg></span><span class="menu-label">Settings</span></button></nav><div class="sidebar-user"><span class="sidebar-avatar" id="sideAvatar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M4 3h16L4 21h16"></path></svg></span><span class="sidebar-user-copy"><b id="sideUserName">Loading…</b><small id="sideUserRole">User</small></span></div><div class="sidebar-foot"><button class="rail-btn logout" id="logoutBtn" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M10 5H5v14h5M14 8l4 4-4 4M8 12h10"></path></svg></span><span class="menu-label">Log out</span></button></div></aside>
 <main class="workspace" aria-label="Zylora workspace"><header class="topbar sneat-navbar">
 <button aria-label="Toggle navigation" class="sidebar-toggle" id="sidebarToggle" type="button"><span></span><span></span><span></span></button>
 <div class="search" id="globalSearchWrapper">
@@ -284,7 +293,7 @@
 <section class="view" id="websites"><div class="view-head"><div><h1>Websites</h1><p>Create, edit, publish, connect domains, transfer ownership and export complete Next.js projects.</p></div><div class="welcome-actions"><button class="accent-btn" data-action="new-site" data-testid="websites-new">＋ Create Website</button></div></div><div class="site-grid" id="siteGrid"></div><div class="empty" id="siteEmpty"><div><b>No websites yet.</b><p>Describe the business and let Zylora derive a prompt-based website from scratch.</p><button class="accent-btn" data-action="new-site">Create your first site</button></div></div></section>
 <section class="view" id="templates"><div class="view-head"><div><h1>Template Catalogue</h1><p>Browse production-ready templates by industry and visual direction. Every published template is preview-verified before it appears here.</p></div><a class="accent-btn" href="/ai-create">Create with AI</a></div><div class="template-grid" id="templateGrid"><div class="dashboard-empty-template"><span>Templates</span><h2>Catalogue unavailable.</h2><p>Template previews could not be loaded. You can still create with AI while Zylora retries the catalogue.</p></div></div></section>
 <section class="view" id="leads">
-<div class="view-head"><div><p class="eyebrow">Lead inbox</p><h1>Leads</h1><p>Form, AI Sales Assistant and appointment enquiries in one conversion pipeline.</p></div><button class="ghost-btn" id="refreshLeads">Refresh</button></div>
+<div class="view-head"><div><p class="eyebrow">Lead inbox</p><h1>Leads</h1><p>Form, AI Sales Assistant and appointment enquiries in one conversion pipeline.</p></div><div style="display:flex;gap:8px;"><button class="ghost-btn" id="refreshLeads">Refresh</button><button class="accent-btn" data-view-jump="crm-contacts" type="button">Open in CRM →</button></div></div>
 <div class="table-wrap lead-table-wrap">
 <table class="lead-table"><thead><tr>
 <th class="check-cell"><input aria-label="Select all leads" class="checkbox" id="leadSelectAll" type="checkbox"/></th>
@@ -446,6 +455,267 @@
 <form class="settings-card assistant-settings-card" id="assistantSettingsForm"><div class="card-head"><div><p class="eyebrow">Conversion</p><h2>AI Sales Assistant</h2><p class="muted-copy">Configure the shared Assistant for each published website. Test mode never creates real leads, notifications or bookings.</p></div><button class="accent-btn" type="submit">Save Assistant</button></div><label>Website<select id="assistantSite"></select></label><div class="form-grid-2"><label>Tone<select id="assistantTone"><option value="PROFESSIONAL">Professional</option><option value="FRIENDLY">Friendly</option><option value="CONCISE">Concise</option><option value="CUSTOM">Custom</option></select></label><label>Primary conversion goal<select id="assistantGoal"><option value="GET_ENQUIRIES">Get enquiries</option><option value="BOOK_APPOINTMENTS">Book appointments</option><option value="GET_PHONE_CALLS">Get phone calls</option><option value="GET_WHATSAPP_MESSAGES">Get WhatsApp messages</option><option value="REQUEST_QUOTE">Request quotes</option><option value="COLLECT_LEADS">Collect leads</option><option value="SHOW_PORTFOLIO">Show portfolio</option></select></label><label>Contact collection<select id="assistantContact"><option value="BOTH">Phone + email</option><option value="PHONE">Phone</option><option value="EMAIL">Email</option><option value="NONE">Only when volunteered</option></select></label><label>Qualification fields<input id="assistantQualification" placeholder="service, preferred_date, phone"></label></div><div class="notification-toggle-list"><label class="notification-toggle-row"><span><b>Assistant enabled</b><small>Show the visitor-facing Assistant on this site.</small></span><input class="toggle-input" id="assistantEnabled" type="checkbox"></label><label class="notification-toggle-row"><span><b>Proactive prompts</b><small>Use subtle contextual prompts after meaningful engagement.</small></span><input class="toggle-input" id="assistantProactive" type="checkbox"></label><label class="notification-toggle-row"><span><b>Human handoff</b><small>Allow the Assistant to route uncertain or sensitive requests to the business.</small></span><input class="toggle-input" id="assistantHuman" type="checkbox"></label><label class="notification-toggle-row"><span><b>WhatsApp handoff</b><small>Available only when the tenant's WhatsApp entitlement and verification allow it.</small></span><input class="toggle-input" id="assistantWhatsapp" type="checkbox"></label><label class="notification-toggle-row"><span><b>Appointment booking</b><small>Use the existing authoritative appointment engine when configured.</small></span><input class="toggle-input" id="assistantAppointment" type="checkbox"></label></div><fieldset class="assistant-knowledge"><legend>Trusted knowledge sources</legend><label class="check-row"><input id="assistantBusinessProfile" type="checkbox"><span>Verified Business Profile</span></label><label class="check-row"><input id="assistantPublishedSite" type="checkbox"><span>Published website content</span></label><label class="check-row"><input id="assistantApprovedKnowledge" type="checkbox"><span>Approved knowledge sources</span></label></fieldset><label>Restricted topics, comma-separated<input id="assistantRestricted" placeholder="discount approvals, legal commitments"></label><label>Custom instructions<textarea id="assistantInstructions" maxlength="2000" placeholder="Business-approved tone or handoff preferences. System safety rules always take priority."></textarea></label><div class="status-msg" id="assistantSettingsMsg"></div><div class="assistant-test-box"><div class="card-head"><div><h3>Test AI Sales Assistant</h3><p class="muted-copy">Test conversations are isolated from production analytics, leads, notifications and appointment inventory.</p></div><button class="ghost-btn" id="assistantStartTest" type="button">New test</button></div><div class="stack-list" id="assistantTestTranscript"><p class="muted-copy">Start a test conversation.</p></div><div id="assistantPromptInputRoot"></div><div class="form-actions" id="legacyAssistantActions" style="display:none;"><input id="assistantTestInput" maxlength="4000" placeholder="Ask a visitor-style question"><button class="accent-btn" id="assistantSendTest" type="button">Send</button></div></div></form>
 <div class="settings-card account-danger-card" id="accountDangerCard"><div><p class="eyebrow">Danger zone</p><h2>Delete account</h2><p class="muted-copy">Permanently delete this Zylora account, its owned websites, leads, appointments, credits, media, billing records and support history. Published websites will go offline and connected custom domains will be removed.</p></div><button class="danger-btn" id="openDeleteAccount" type="button">Delete account</button></div>
 </section>
+
+<!-- ==================== CRM SECTIONS ==================== -->
+<section class="view" id="crm-overview">
+  <div class="crm-container">
+    <div class="crm-header-row">
+      <div class="crm-header-title">
+        <p class="eyebrow">Operating System</p>
+        <h1>CRM Hub</h1>
+        <p>Unified pipeline, contacts, conversion funnel and live sales activity.</p>
+      </div>
+      <div class="crm-header-actions">
+        <button class="ghost-btn crm-btn-sm" onclick="window.open('/api/crm/export/contacts')" type="button">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export CSV
+        </button>
+        <button class="ghost-btn crm-btn-sm" onclick="openModal('crmContactModal')" type="button">+ New Contact</button>
+        <button class="accent-btn crm-btn-sm" onclick="openModal('crmDealModal')" type="button">+ New Deal</button>
+      </div>
+    </div>
+
+    <div class="crm-metrics-grid" id="crmOverviewStats">
+      <div class="crm-stat-card"><div class="crm-stat-label">Loading stats…</div></div>
+    </div>
+
+    <div class="crm-split-grid">
+      <div class="crm-card">
+        <div class="crm-card-title">
+          <span>Conversion Funnel</span>
+          <span style="font-size:12px;font-weight:normal;color:var(--zy-text-3);">Visitor to Closed Won</span>
+        </div>
+        <div class="crm-funnel-bar-wrap" id="crmFunnelBars">
+          <p class="muted-copy">Loading funnel…</p>
+        </div>
+      </div>
+      <div class="crm-card">
+        <div class="crm-card-title">
+          <span>Recent Sales Activity</span>
+          <button class="inline-link-btn" onclick="setView('crm-tasks')" type="button" style="font-size:12px;">View all tasks →</button>
+        </div>
+        <div class="crm-timeline" id="crmOverviewActivityFeed" style="max-height: 320px; overflow-y: auto;">
+          <p class="muted-copy">Loading activities…</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="crm-contacts">
+  <div class="crm-container">
+    <div class="crm-header-row">
+      <div class="crm-header-title">
+        <p class="eyebrow">CRM Registry</p>
+        <h1>Contacts</h1>
+        <p>Attio-grade customer database with deterministic deduplication, scoring and timeline history.</p>
+      </div>
+      <div class="crm-header-actions">
+        <button class="ghost-btn crm-btn-sm" onclick="window.open('/api/crm/export/contacts')" type="button">Export</button>
+        <button class="accent-btn crm-btn-sm" onclick="openModal('crmContactModal')" type="button">+ Add Contact</button>
+      </div>
+    </div>
+
+    <div class="crm-toolbar">
+      <div class="crm-toolbar-left">
+        <div class="crm-search-box">
+          <svg class="crm-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="crmContactsSearch" placeholder="Search contacts, email, company…"/>
+        </div>
+        <select class="crm-select-filter" id="crmContactsStageFilter">
+          <option value="">All Lifecycle Stages</option>
+          <option value="SUBSCRIBER">Subscriber</option>
+          <option value="LEAD">Lead</option>
+          <option value="MQL">Marketing Qualified (MQL)</option>
+          <option value="SQL">Sales Qualified (SQL)</option>
+          <option value="OPPORTUNITY">Opportunity</option>
+          <option value="CUSTOMER">Customer</option>
+        </select>
+        <select class="crm-select-filter" id="crmContactsScoreFilter">
+          <option value="">All Scores</option>
+          <option value="50">Hot (Score ≥ 50)</option>
+          <option value="25">Warm (Score ≥ 25)</option>
+          <option value="0">Cold (Score &lt; 25)</option>
+        </select>
+      </div>
+      <div class="crm-toolbar-right">
+        <span id="crmContactsPageInfo" style="font-size:12px;color:var(--zy-text-3);">Page 1</span>
+        <button class="ghost-btn crm-btn-sm" id="crmContactsPrevBtn" type="button" disabled>Previous</button>
+        <button class="ghost-btn crm-btn-sm" id="crmContactsNextBtn" type="button">Next</button>
+      </div>
+    </div>
+
+    <div class="crm-bulk-bar" id="crmBulkBar" style="display: none;">
+      <span id="crmBulkCount">0 selected</span>
+      <div class="crm-bulk-actions">
+        <button class="danger" id="crmBulkDeleteBtn" type="button">Delete Selected</button>
+      </div>
+    </div>
+
+    <div class="crm-table-container">
+      <table class="crm-table">
+        <thead>
+          <tr>
+            <th style="width: 38px;"><input type="checkbox" id="crmSelectAllContacts"/></th>
+            <th>Contact Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Stage</th>
+            <th>Lead Score</th>
+            <th>Tags</th>
+            <th>Last Updated</th>
+          </tr>
+        </thead>
+        <tbody id="crmContactsTableBody">
+          <tr><td colspan="8" class="muted-copy" style="text-align:center;padding:24px;">Loading contacts…</td></tr>
+        </tbody>
+      </table>
+      <div id="crmContactsEmpty" class="empty" style="display:none;padding:40px 20px;text-align:center;">
+        <p class="muted-copy">No contacts matching your search criteria.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="crm-companies">
+  <div class="crm-container">
+    <div class="crm-header-row">
+      <div class="crm-header-title">
+        <p class="eyebrow">Accounts &amp; Organizations</p>
+        <h1>Companies</h1>
+        <p>B2B organization registry with associated deals, contacts and revenue.</p>
+      </div>
+      <div class="crm-header-actions">
+        <button class="accent-btn crm-btn-sm" onclick="openModal('crmCompanyModal')" type="button">+ New Company</button>
+      </div>
+    </div>
+
+    <div class="crm-table-container">
+      <table class="crm-table">
+        <thead>
+          <tr>
+            <th>Company Name</th>
+            <th>Domain</th>
+            <th>Industry</th>
+            <th>Associated Contacts</th>
+            <th>Annual Revenue</th>
+          </tr>
+        </thead>
+        <tbody id="crmCompaniesTableBody">
+          <tr><td colspan="5" class="muted-copy" style="text-align:center;padding:24px;">Loading companies…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="crm-deals">
+  <div class="crm-container">
+    <div class="crm-header-row">
+      <div class="crm-header-title">
+        <p class="eyebrow">Sales Pipeline</p>
+        <h1>Pipeline &amp; Deals</h1>
+        <p>Linear-style Kanban board with drag-and-drop ergonomics and keyboard accessibility.</p>
+      </div>
+      <div class="crm-header-actions">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:12px;color:var(--zy-text-3);">Total Value:</span>
+          <b id="crmTotalPipelineVal" style="font-size:16px;color:var(--zy-text);">$0</b>
+        </div>
+        <select class="crm-select-filter" id="crmPipelineSelect"></select>
+        <button class="ghost-btn crm-btn-sm" onclick="window.open('/api/crm/export/deals')" type="button">Export Deals</button>
+        <button class="accent-btn crm-btn-sm" onclick="openModal('crmDealModal')" type="button">+ Add Deal</button>
+      </div>
+    </div>
+
+    <div class="crm-kanban-board" id="crmKanbanBoard">
+      <p class="muted-copy" style="padding: 24px;">Loading pipeline stages…</p>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="crm-tasks">
+  <div class="crm-container">
+    <div class="crm-header-row">
+      <div class="crm-header-title">
+        <p class="eyebrow">Execution</p>
+        <h1>Tasks &amp; Activities</h1>
+        <p>Sales follow-ups, calls, emails and meeting reminders.</p>
+      </div>
+      <div class="crm-header-actions">
+        <button class="accent-btn crm-btn-sm" onclick="openModal('crmTaskModal')" type="button">+ New Task</button>
+      </div>
+    </div>
+
+    <div class="crm-card">
+      <div id="crmTasksList" style="display:flex;flex-direction:column;gap:8px;">
+        <p class="muted-copy">Loading tasks…</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="crm-automations">
+  <div class="crm-container">
+    <div class="crm-header-row">
+      <div class="crm-header-title">
+        <p class="eyebrow">AI-Native Engine</p>
+        <h1>Automations</h1>
+        <p>Server-authoritative triggers, scoring workflows, auto-task assignments and notifications.</p>
+      </div>
+      <div class="crm-header-actions">
+        <button class="accent-btn crm-btn-sm" onclick="openModal('crmAutomationModal')" type="button">+ New Automation</button>
+      </div>
+    </div>
+
+    <div class="crm-card">
+      <div class="crm-card-title">
+        <span>Active Rules</span>
+      </div>
+      <div id="crmAutomationsList">
+        <p class="muted-copy">Loading automations…</p>
+      </div>
+    </div>
+
+    <div class="crm-card" style="margin-top: 18px;">
+      <div class="crm-card-title">
+        <span>Automation Run History</span>
+      </div>
+      <div class="crm-table-container">
+        <table class="crm-table">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Trigger</th>
+              <th>Status</th>
+              <th>Outcome / Message</th>
+            </tr>
+          </thead>
+          <tbody id="crmAutomationRunsBody">
+            <tr><td colspan="4" class="muted-copy" style="text-align:center;">Loading runs…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="crm-reports">
+  <div class="crm-container">
+    <div class="crm-header-row">
+      <div class="crm-header-title">
+        <p class="eyebrow">Performance</p>
+        <h1>CRM Analytics &amp; Sales Velocity</h1>
+        <p>Comprehensive win-rate tracking, lead lifecycle velocity and revenue analytics.</p>
+      </div>
+    </div>
+    <div class="crm-card">
+      <p class="muted-copy">Detailed cohort analytics and velocity charts are synced with the CRM Hub.</p>
+      <button class="accent-btn crm-btn-sm" onclick="setView('crm-overview')" type="button">Open CRM Hub Overview</button>
+    </div>
+  </div>
+</section>
+
 </main></div>
 <div aria-hidden="true" class="modal" id="createModal"><div class="modal-card"><button aria-label="Close" class="close" data-close="createModal">×</button><span class="modal-kicker">Create website</span><h2>Start from the business brief.</h2><p class="muted-copy">No starting template. Zylora derives the page structure and design direction from what the business needs.</p><form id="createForm"><label>Business name<input minlength="2" name="business_name" placeholder="Northstar Studio" required=""/></label><label>What does the business do?<textarea minlength="12" name="description" placeholder="Describe the offer, audience, goals, pages or content you need." required=""></textarea></label><div class="ai-fields show" id="aiFields"><label>Industry<input name="industry" placeholder="Clinic, agency, school…" value="Business"/></label><label>Visual direction<select name="style"><option value="swiss-minimal">Swiss minimal</option><option value="editorial-asymmetric">Editorial asymmetric</option><option value="cinematic-image-led">Cinematic image-led</option><option value="soft-organic">Soft organic</option><option value="technical-grid">Technical grid</option><option value="poster-brutalist">Poster brutalist</option><option value="modular-bento">Modular bento</option><option value="typography-led">Typography-led</option></select></label></div><label>Motion<select name="motion_style"><option>Subtle</option><option>Editorial</option><option>Energetic</option><option>Immersive</option><option>None</option></select></label><button class="accent-btn wide" data-testid="create-submit" type="submit">Create with AI</button><div aria-live="polite" class="status-msg" id="createMsg"></div></form></div></div>
 <div aria-hidden="true" class="modal" id="transferModal"><div class="modal-card"><button aria-label="Close" class="close" data-close="transferModal">×</button><span class="modal-kicker">Ownership transfer</span><h2>Transfer this website.</h2><form id="transferForm"><input id="transferSiteId" type="hidden"/><label>New owner's email<input id="transferEmail" required="" type="email"/></label><button class="accent-btn wide" data-testid="transfer-submit" type="submit">Send transfer invitation</button><div class="status-msg" id="transferMsg"></div></form></div></div>
@@ -455,4 +725,205 @@
 <div aria-hidden="true" class="modal" id="deleteDraftModal"><div class="modal-card"><button aria-label="Close" class="close" data-close="deleteDraftModal">×</button><span class="modal-kicker danger-kicker">Delete draft</span><h2>Delete draft website?</h2><p class="muted-copy">Are you sure you want to delete <strong id="deleteDraftSiteName" style="color: var(--z-text-primary);">this website</strong>? This will permanently delete the draft and all its associated data. This action cannot be undone.</p><div class="form-actions" style="margin-top: 24px; display: flex; gap: 10px; justify-content: flex-end;"><button type="button" class="ghost-btn" data-close="deleteDraftModal">Cancel</button><button type="button" class="danger-btn" id="confirmDeleteDraftBtn">Delete draft</button></div><div class="status-msg" id="deleteDraftMsg"></div></div></div>
 <div class="toast" id="toast" role="status"></div><div class="modal" id="assistantConversationModal"><div class="modal-card lead-detail-card"><button aria-label="Close" class="close" data-close="assistantConversationModal">×</button><p class="modal-kicker">AI Sales Assistant</p><h2 id="assistantConversationTitle">Conversation</h2><div class="stack-list assistant-owner-transcript" id="assistantConversationBody"><p class="muted-copy">Loading…</p></div></div></div><div class="modal" id="leadDetailModal"><div class="modal-card lead-detail-card"><button aria-label="Close" class="close" data-close="leadDetailModal">×</button><p class="modal-kicker">Lead details</p><h2 id="leadDetailName">Lead</h2><div class="lead-detail-grid" id="leadDetailBody"></div></div></div><script src="/static/vendor/react.production.min.js"></script><script src="/static/vendor/react-is.production.min.js"></script><script src="/static/vendor/prop-types.min.js"></script><script src="/static/vendor/react-dom.production.min.js"></script>
 <script src="/static/date-range-calendar.js"></script>
-<script src="/static/prompt-input.js"></script><script src="/static/vendor/recharts.js"></script><script src="/static/zylora-shadcn-charts.js"></script><script src="/static/zylora-ui.js"></script><script src="/static/publish-flow.js"></script><script src="/static/dashboard.js?v=20260905-premium2"></script></body></html>
+<script src="/static/prompt-input.js"></script><script src="/static/vendor/recharts.js"></script><script src="/static/zylora-shadcn-charts.js"></script><script src="/static/zylora-ui.js"></script><script src="/static/publish-flow.js"></script><script src="/static/zylora-crm.js"></script>
+<script src="/static/dashboard.js?v=20260905-premium2"></script>
+<!-- ==================== CRM MODALS & DRAWERS ==================== -->
+<div class="crm-drawer-backdrop" id="crmDrawerBackdrop"></div>
+
+<!-- Contact Profile Drawer -->
+<aside class="crm-drawer" id="crmContactDrawer" aria-label="Contact details">
+  <div class="crm-drawer-header">
+    <div>
+      <h3 id="crmDrawerContactName" style="margin:0;font-size:17px;font-weight:650;color:var(--zy-text);">Contact</h3>
+      <p id="crmDrawerContactTitle" style="margin:2px 0 0;font-size:12px;color:var(--zy-text-3);">—</p>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span id="crmDrawerContactScore" class="crm-score-pill cold">Score: 0</span>
+      <button class="crm-drawer-close" id="crmContactDrawerClose" type="button" aria-label="Close">×</button>
+    </div>
+  </div>
+  <div class="crm-drawer-body">
+    <!-- Properties Grid -->
+    <div>
+      <h4 style="font-size:13px;text-transform:uppercase;letter-spacing:0.04em;color:var(--zy-text-3);margin-bottom:12px;">Contact Properties</h4>
+      <div class="crm-prop-list">
+        <span class="crm-prop-name">Email</span>
+        <input class="crm-prop-input" id="drawerEmail" readonly/>
+        <span class="crm-prop-name">Phone</span>
+        <input class="crm-prop-input" id="drawerPhone" readonly/>
+        <span class="crm-prop-name">Company</span>
+        <input class="crm-prop-input" id="drawerCompany" readonly/>
+        <span class="crm-prop-name">Lifecycle Stage</span>
+        <input class="crm-prop-input" id="drawerStage" readonly/>
+      </div>
+    </div>
+
+    <!-- Quick Log Note Box -->
+    <div class="crm-log-box">
+      <div class="crm-log-tabs">
+        <button class="crm-log-tab active" type="button">Note</button>
+      </div>
+      <textarea id="crmDrawerNoteText" placeholder="Write a note, meeting outcome, or log call details…" style="width:100%;height:68px;resize:none;font-size:12.5px;padding:8px;border-radius:6px;"></textarea>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="accent-btn crm-btn-sm" id="crmDrawerAddNoteBtn" type="button">Save Note</button>
+      </div>
+    </div>
+
+    <!-- Activity Timeline -->
+    <div>
+      <h4 style="font-size:13px;text-transform:uppercase;letter-spacing:0.04em;color:var(--zy-text-3);margin-bottom:14px;">Activity Timeline</h4>
+      <div class="crm-timeline" id="crmDrawerTimelineList">
+        <p class="muted-copy">No activities recorded yet.</p>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- Deal Detail Drawer -->
+<aside class="crm-drawer" id="crmDealDrawer" aria-label="Deal details">
+  <div class="crm-drawer-header">
+    <div>
+      <h3 id="crmDealDrawerTitle" style="margin:0;font-size:17px;font-weight:650;color:var(--zy-text);">Deal</h3>
+      <p style="margin:2px 0 0;font-size:12px;color:var(--zy-text-3);">Pipeline Deal</p>
+    </div>
+    <button class="crm-drawer-close" id="crmDealDrawerClose" type="button" aria-label="Close">×</button>
+  </div>
+  <div class="crm-drawer-body">
+    <div class="crm-prop-list">
+      <span class="crm-prop-name">Amount ($)</span>
+      <input class="crm-prop-input" id="crmDealDrawerAmount" type="number"/>
+      <span class="crm-prop-name">Notes</span>
+      <textarea class="crm-prop-input" id="crmDealDrawerNotes" style="height:80px;"></textarea>
+    </div>
+  </div>
+</aside>
+
+<!-- Create Contact Modal -->
+<div aria-hidden="true" class="modal" id="crmContactModal">
+  <div class="modal-card">
+    <button aria-label="Close" class="close" data-close="crmContactModal">×</button>
+    <span class="modal-kicker">CRM Contact</span>
+    <h2>Add New Contact</h2>
+    <form id="crmCreateContactForm">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <label>First Name<input name="first_name" required/></label>
+        <label>Last Name<input name="last_name"/></label>
+      </div>
+      <label>Email Address<input type="email" name="email"/></label>
+      <label>Phone Number<input name="phone"/></label>
+      <label>Company<input name="company_name"/></label>
+      <label>Lifecycle Stage
+        <select name="lifecycle_stage">
+          <option value="LEAD">Lead</option>
+          <option value="MQL">Marketing Qualified (MQL)</option>
+          <option value="SQL">Sales Qualified (SQL)</option>
+          <option value="OPPORTUNITY">Opportunity</option>
+          <option value="CUSTOMER">Customer</option>
+        </select>
+      </label>
+      <button class="accent-btn wide" type="submit" style="margin-top:14px;">Create Contact</button>
+    </form>
+  </div>
+</div>
+
+<!-- Create Deal Modal -->
+<div aria-hidden="true" class="modal" id="crmDealModal">
+  <div class="modal-card">
+    <button aria-label="Close" class="close" data-close="crmDealModal">×</button>
+    <span class="modal-kicker">CRM Pipeline</span>
+    <h2>Create New Deal</h2>
+    <form id="crmCreateDealForm">
+      <label>Deal Title<input name="title" placeholder="Acme Corp - Enterprise License" required/></label>
+      <label>Deal Amount ($)<input name="amount" type="number" step="0.01" value="1000" required/></label>
+      <label>Initial Stage
+        <select name="stage_id" id="crmNewDealStageSelect">
+          <option value="lead">Lead In</option>
+          <option value="contact_made">Contact Made</option>
+          <option value="meeting">Meeting Booked</option>
+          <option value="proposal">Proposal Sent</option>
+          <option value="negotiation">Negotiation</option>
+        </select>
+      </label>
+      <label>Priority
+        <select name="priority">
+          <option value="MEDIUM">Medium</option>
+          <option value="HIGH">High</option>
+          <option value="URGENT">Urgent</option>
+          <option value="LOW">Low</option>
+        </select>
+      </label>
+      <button class="accent-btn wide" type="submit" style="margin-top:14px;">Create Deal</button>
+    </form>
+  </div>
+</div>
+
+<!-- Create Task Modal -->
+<div aria-hidden="true" class="modal" id="crmTaskModal">
+  <div class="modal-card">
+    <button aria-label="Close" class="close" data-close="crmTaskModal">×</button>
+    <span class="modal-kicker">Task Execution</span>
+    <h2>Create New Task</h2>
+    <form id="crmCreateTaskForm">
+      <label>Task Title<input name="title" placeholder="Follow up with prospect on quote" required/></label>
+      <label>Task Type
+        <select name="task_type">
+          <option value="FOLLOW_UP">Follow-up</option>
+          <option value="CALL">Phone Call</option>
+          <option value="EMAIL">Email</option>
+          <option value="MEETING">Meeting</option>
+        </select>
+      </label>
+      <label>Due Date<input type="datetime-local" name="due_date"/></label>
+      <label>Priority
+        <select name="priority">
+          <option value="MEDIUM">Medium</option>
+          <option value="HIGH">High</option>
+          <option value="URGENT">Urgent</option>
+          <option value="LOW">Low</option>
+        </select>
+      </label>
+      <button class="accent-btn wide" type="submit" style="margin-top:14px;">Create Task</button>
+    </form>
+  </div>
+</div>
+
+<!-- Create Automation Modal -->
+<div aria-hidden="true" class="modal" id="crmAutomationModal">
+  <div class="modal-card">
+    <button aria-label="Close" class="close" data-close="crmAutomationModal">×</button>
+    <span class="modal-kicker">Automation Rule</span>
+    <h2>New Automation</h2>
+    <form id="crmCreateAutoForm">
+      <label>Rule Name<input name="name" placeholder="Notify on Hot Lead" required/></label>
+      <label>Trigger Event
+        <select name="trigger_type">
+          <option value="LEAD_CREATED">New Lead Created</option>
+          <option value="SCORE_THRESHOLD">Lead Score Threshold Met</option>
+          <option value="APPOINTMENT_BOOKED">Appointment Booked</option>
+          <option value="DEAL_STAGE_CHANGED">Deal Stage Changed</option>
+        </select>
+      </label>
+      <label>Automated Action
+        <select name="action_type">
+          <option value="SEND_NOTIFICATION">Send In-App Notification</option>
+          <option value="CREATE_TASK">Create Follow-Up Task</option>
+          <option value="ADD_TAG">Add Tag to Contact</option>
+        </select>
+      </label>
+      <button class="accent-btn wide" type="submit" style="margin-top:14px;">Activate Automation</button>
+    </form>
+  </div>
+</div>
+
+<!-- Command Palette (Cmd+K / Ctrl+K) -->
+<div class="crm-spotlight-backdrop" id="crmSpotlightBackdrop">
+  <div class="crm-spotlight">
+    <div class="crm-spotlight-input-wrap">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="crmSpotlightInput" placeholder="Jump to contact, deal, action… (Esc to close)"/>
+    </div>
+    <div class="crm-spotlight-results" id="crmSpotlightResults"></div>
+  </div>
+</div>
+
+</body></html>

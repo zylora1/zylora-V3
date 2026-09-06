@@ -28,8 +28,73 @@ from .credits import ensure_wallet, reset_monthly_for_plan, grant_topup, wallet_
 from .seo_engine import enqueue_site_change, page_path, site_origin
 from .media import get_asset
 from .operations import safe_exception_summary, record_operational_event
+from .studio_document import validate_studio_document
 
 router = APIRouter(prefix='/api')
+
+class RendererStateIn(BaseModel):
+    state: str = Field(max_length=20)
+
+@router.get('/admin/sites/{site_id}/renderer')
+def admin_renderer_state(site_id: str, request: Request):
+    _admin(request)
+    with SessionLocal() as db:
+        row=db.execute(text('''SELECT id,name,slug,status,renderer_state,renderer_updated_at,renderer_last_error,
+            published_revision,studio_revision,published_studio_document_json,published_snapshot_json,published_structure_json
+            FROM sites WHERE id=:site'''),{'site':site_id}).mappings().first()
+    if not row: raise HTTPException(404,'Site not found')
+    item=dict(row); item['has_v4_snapshot']=bool(item.pop('published_studio_document_json',None)); item['has_legacy_snapshot']=bool(item.pop('published_snapshot_json',None) or item.pop('published_structure_json',None))
+    return item
+
+@router.post('/admin/sites/{site_id}/renderer/capture-v4')
+def admin_capture_v4(site_id: str, request: Request):
+    admin=_admin(request,True)
+    with SessionLocal.begin() as db:
+        site=db.execute(text('SELECT * FROM sites WHERE id=:site'),{'site':site_id}).mappings().first()
+        if not site: raise HTTPException(404,'Site not found')
+        if not site.get('studio_document_json'): raise HTTPException(409,detail={'code':'V4_DOCUMENT_REQUIRED','message':'Save a valid Studio document before capturing a V4 publication snapshot.'})
+        try: document=validate_studio_document(json.loads(site['studio_document_json']))
+        except Exception: raise HTTPException(422,detail={'code':'INVALID_V4_DOCUMENT','message':'The saved Studio document is invalid and cannot be published.'})
+        snapshot=document.model_dump_json(exclude_none=True); now=now_iso()
+        db.execute(text('''UPDATE sites SET published_studio_document_json=:snapshot,
+            legacy_snapshot_backup_json=COALESCE(legacy_snapshot_backup_json,published_snapshot_json),
+            legacy_structure_backup_json=COALESCE(legacy_structure_backup_json,published_structure_json),
+            renderer_last_error=NULL,renderer_updated_at=:now WHERE id=:site'''),{'snapshot':snapshot,'now':now,'site':site_id})
+    _audit(admin['id'],'V4_PUBLICATION_SNAPSHOT_CAPTURED','site',site_id,{'studio_revision':document.revision})
+    return {'ok':True,'renderer_state':str(site.get('renderer_state') or 'LEGACY'),'studio_revision':document.revision,'legacy_preserved':True}
+
+@router.post('/admin/sites/{site_id}/renderer')
+def admin_set_renderer(site_id: str, payload: RendererStateIn, request: Request):
+    admin=_admin(request,True); target=payload.state.strip().upper()
+    if target not in {'LEGACY','V4_CANARY','V4'}: raise HTTPException(422,'Renderer state must be LEGACY, V4_CANARY, or V4')
+    with SessionLocal.begin() as db:
+        site=db.execute(text('SELECT * FROM sites WHERE id=:site'),{'site':site_id}).mappings().first()
+        if not site: raise HTTPException(404,'Site not found')
+        previous=str(site.get('renderer_state') or 'LEGACY').upper()
+        if target in {'V4_CANARY','V4'} and not site.get('published_studio_document_json'):
+            raise HTTPException(409,detail={'code':'V4_SNAPSHOT_REQUIRED','message':'Capture a validated V4 publication snapshot before selecting the V4 renderer.'})
+        if target=='LEGACY' and not (site.get('published_snapshot_json') or site.get('published_structure_json') or site.get('legacy_snapshot_backup_json')):
+            raise HTTPException(409,detail={'code':'LEGACY_SNAPSHOT_REQUIRED','message':'No preserved legacy publication is available for rollback.'})
+        now=now_iso();db.execute(text('UPDATE sites SET renderer_state=:state,renderer_updated_at=:now,renderer_last_error=NULL WHERE id=:site'),{'state':target,'now':now,'site':site_id})
+    if target!=previous:_audit(admin['id'],'RENDERER_ROLLBACK' if target=='LEGACY' and previous!='LEGACY' else 'RENDERER_STATE_CHANGED','site',site_id,{'from':previous,'to':target})
+    return {'ok':True,'previous':previous,'renderer_state':target,'legacy_preserved':True}
+
+@router.get('/admin/studio-v4/operations')
+def admin_studio_v4_operations(request: Request):
+    _admin(request)
+    with SessionLocal() as db:
+        distribution={str(row[0] or 'LEGACY'):int(row[1]) for row in db.execute(text('SELECT renderer_state,count(*) FROM sites GROUP BY renderer_state')).all()}
+        counts={
+            'sites_with_v4_documents':int(db.execute(text('SELECT count(*) FROM sites WHERE studio_document_json IS NOT NULL')).scalar_one()),
+            'v4_snapshots':int(db.execute(text('SELECT count(*) FROM sites WHERE published_studio_document_json IS NOT NULL')).scalar_one()),
+            'cms_collections':int(db.execute(text("SELECT count(*) FROM cms_collections WHERE status='ACTIVE'")).scalar_one()),
+            'cms_items':int(db.execute(text('SELECT count(*) FROM cms_items')).scalar_one()),
+            'dynamic_routes':int(db.execute(text("SELECT count(*) FROM cms_dynamic_pages WHERE status='PUBLISHED'")).scalar_one()),
+            'ai_proposals':int(db.execute(text('SELECT count(*) FROM cms_ai_proposals')).scalar_one()),
+        }
+        events=[dict(row) for row in db.execute(text("""SELECT id,user_id,action,object_id,metadata,created_at FROM audit_log
+            WHERE action IN ('V4_PUBLICATION_SNAPSHOT_CAPTURED','RENDERER_STATE_CHANGED','RENDERER_ROLLBACK','SITE_PUBLISH') ORDER BY id DESC LIMIT 100""")).mappings().all()]
+    return {'renderer_distribution':distribution,'counts':counts,'recent_renderer_events':events}
 
 # --------------------------- authentication ---------------------------------
 class EmailOnly(BaseModel):
@@ -1631,5 +1696,4 @@ def admin_campaign_delete(campaign_id: str, request: Request):
         db.execute(text('DELETE FROM platform_campaigns WHERE id=:i'), {'i': campaign_id})
     _audit(admin['id'], 'ADMIN_CAMPAIGN_DELETE', 'campaign', campaign_id)
     return {'ok': True}
-
 

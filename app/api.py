@@ -920,7 +920,17 @@ def lead(payload:LeadIn,request:Request):
         if contact:
             contact_id=contact['id']; db.execute(text('UPDATE contacts SET display_name=:n,phone=COALESCE(:p,phone),updated_at=:a WHERE id=:i'),{'n':payload.name,'p':payload.phone,'a':now,'i':contact_id})
         else:
-            contact_id=str(uuid4()); db.execute(text('INSERT INTO contacts(id,user_id,email,phone,display_name,created_at,updated_at) VALUES (:i,:u,:e,:p,:n,:a,:a)'),{'i':contact_id,'u':s['user_id'],'e':email,'p':payload.phone,'n':payload.name,'a':now})
+            contact_id=str(uuid4())
+            try:
+                with db.begin_nested():
+                    db.execute(text('INSERT INTO contacts(id,user_id,email,phone,display_name,created_at,updated_at) VALUES (:i,:u,:e,:p,:n,:a,:a)'),{'i':contact_id,'u':s['user_id'],'e':email,'p':payload.phone,'n':payload.name,'a':now})
+            except Exception:
+                existing_c=db.execute(text('SELECT id FROM contacts WHERE user_id=:u AND lower(email)=lower(:e)'),{'u':s['user_id'],'e':email}).mappings().first()
+                if existing_c:
+                    contact_id=existing_c['id']
+                    db.execute(text('UPDATE contacts SET display_name=:n,phone=COALESCE(:p,phone),updated_at=:a WHERE id=:i'),{'n':payload.name,'p':payload.phone,'a':now,'i':contact_id})
+                else:
+                    raise
         # Safe form/chat unification: only associate a same-session Assistant lead when a verified
         # contact value agrees. A session identifier alone is never considered identity.
         existing=None
@@ -953,6 +963,11 @@ def lead(payload:LeadIn,request:Request):
                'pd':payload.preferred_date,'pt':payload.preferred_time,'q':json.dumps(qualification,separators=(',',':')),'page':payload.page_url,
                'us':payload.utm_source,'um':payload.utm_medium,'uc':payload.utm_campaign,'ref':payload.referrer})
         site=dict(s)
+        try:
+            from .crm import ingest_lead_into_crm
+            ingest_lead_into_crm(db, s['user_id'], payload.model_dump(), site_id=payload.site_id, source=source)
+        except Exception:
+            pass
     event='CHATBOT_LEAD' if source in {'CHATBOT','AI_ASSISTANT'} else 'FORM_LEAD'
     notify(site['user_id'],payload.site_id,event,f'New {source.lower().replace("_"," ")} lead for {site["business_name"]}',f'{payload.name} ({email})\n{payload.message or "No message"}',idempotency_key='lead:'+lid+(':'+source if merged else ''))
     # A merged form submission is still a form conversion, but it must not become a second lead row.
@@ -1028,6 +1043,11 @@ def book(payload:AppointmentIn,request:Request):
             if conversation_id:
                 db.execute(text('UPDATE assistant_conversations SET appointment_id=:a,lead_id=COALESCE(lead_id,:l),last_activity_at=:u WHERE id=:c AND site_id=:s'),{'a':aid,'l':lead_id,'u':now,'c':conversation_id,'s':payload.site_id})
             site=dict(s)
+            try:
+                from .crm import link_appointment_to_crm
+                link_appointment_to_crm(db, s['user_id'], payload.site_id, {'id': aid, 'starts_at': payload.starts_at, 'name': payload.name, 'email': email, 'phone': payload.phone})
+            except Exception:
+                pass
     except IntegrityError as exc:
         raise HTTPException(409,detail={'code':'APPOINTMENT_SLOT_TAKEN','message':'That appointment slot has already been booked.'}) from exc
     notify(site['user_id'],payload.site_id,'APPOINTMENT',f'New appointment for {site["business_name"]}',f'{payload.name} booked {payload.starts_at}.',idempotency_key='appointment:'+aid)
@@ -1046,6 +1066,11 @@ def cancel_public_appointment(appointment_id:str,payload:AppointmentCancelIn,req
         changed=db.execute(text("UPDATE appointments SET status='CANCELLED' WHERE id=:i AND status='BOOKED'"),{'i':appointment_id})
         if changed.rowcount!=1: raise HTTPException(409,'Appointment can no longer be cancelled')
         data=dict(row)
+        try:
+            from .crm import link_appointment_to_crm
+            link_appointment_to_crm(db, data['user_id'], data['site_id'], {'id': appointment_id, 'starts_at': data['starts_at'], 'name': data['name'], 'email': data['email']}, is_cancellation=True)
+        except Exception:
+            pass
     notify(data['user_id'],data['site_id'],'APPOINTMENT_CHANGE',f'Appointment cancelled for {data["business_name"]}',f'{data["name"]} cancelled {data["starts_at"]}.',idempotency_key='appointment-cancel:'+appointment_id)
     return {'ok':True,'idempotent':False}
 

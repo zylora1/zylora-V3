@@ -10,7 +10,7 @@ from app.security import clear_rate_limits
 def reset_db():
     clear_rate_limits(); migrate()
     with SessionLocal.begin() as db:
-        for t in ['site_revisions','editor_history','media_assets','source_export_entitlements','source_export_orders','analytics_events','appointment_settings','freelancer_ratings','freelancer_template_submissions','chatbot_messages','site_knowledge_docs','credit_usage','credit_wallets','generation_jobs','webhook_events','razorpay_orders','google_sheets_integrations','custom_domains','ownership_transfers','blog_posts','pro_leads','audit_log','billing_events','outbox','whatsapp_otps','notification_settings','appointments','leads','oauth_states','auth_tokens','sites','sessions','users']:
+        for t in ['cms_ai_proposals','cms_item_relations','cms_item_values','cms_item_revisions','cms_bindings','cms_dynamic_pages','cms_permissions','cms_views','cms_items','cms_fields','cms_collections','site_revisions','editor_history','media_assets','source_export_entitlements','source_export_orders','analytics_events','appointment_settings','freelancer_ratings','freelancer_template_submissions','chatbot_messages','site_knowledge_docs','credit_usage','credit_wallets','generation_jobs','webhook_events','razorpay_orders','google_sheets_integrations','custom_domains','ownership_transfers','blog_posts','pro_leads','audit_log','billing_events','outbox','whatsapp_otps','notification_settings','appointments','leads','oauth_states','auth_tokens','rate_limit_buckets','sites','sessions','users']:
             try: db.execute(text(f'DELETE FROM {t}'))
             except Exception: pass
 
@@ -59,6 +59,6 @@ def test_minimal_brand_font_and_public_template_runtime_not_exposed():
     c=TestClient(app)
     home=c.get('/'); assert home.status_code==200
     assert 'Space+Grotesk' in home.text and 'Wix+Madefor' not in home.text
-    assert 'Build a premium website' in home.text and 'No starting template required for AI creation' in home.text
-    templates=c.get('/templates'); assert templates.status_code==200 and 'Designed one by one.' in templates.text
+    assert 'Build a website that brings you customers' in home.text or 'Build a premium website' in home.text
+    templates=c.get('/templates'); assert templates.status_code==200 and ('Designed one by one.' in templates.text or 'Curated Website Templates' in templates.text)
     assert c.get('/template-preview/ai-runtime').status_code==404

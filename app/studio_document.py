@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import Any, Dict, List, Literal, Optional
+import re
 from pydantic import BaseModel, Field, model_validator, field_validator
 
 SCHEMA_VERSION_STUDIO = 4
@@ -8,7 +9,8 @@ NODE_TYPES = {
     "page", "section", "frame", "container", "stack", "flex", "grid",
     "heading", "paragraph", "text", "image", "button", "link", "icon",
     "video", "divider", "navigation", "form", "form_field", "lead_form",
-    "appointment_booking", "ai_sales_assistant", "business_hours", "map", "embed", "component_instance"
+    "appointment_booking", "ai_sales_assistant", "business_hours", "map", "embed", "component_instance",
+    "repeater", "list", "carousel", "gallery", "table"
 }
 
 class NodeContent(BaseModel):
@@ -54,6 +56,13 @@ class Node(BaseModel):
             raise ValueError(f"Invalid node type: {v}")
         return v
 
+    @field_validator('id')
+    @classmethod
+    def validate_id(cls, value: str) -> str:
+        if not re.fullmatch(r'[A-Za-z0-9_-]{1,128}', value):
+            raise ValueError('Node IDs may contain only letters, numbers, underscores and hyphens')
+        return value
+
 class Page(BaseModel):
     id: str
     slug: str
@@ -62,6 +71,14 @@ class Page(BaseModel):
     seo: Dict[str, Any] = Field(default_factory=dict)
     breakpointConfiguration: Dict[str, Any] = Field(default_factory=dict)
     nodes: Dict[str, Node] = Field(default_factory=dict)
+
+    @field_validator('slug')
+    @classmethod
+    def validate_slug(cls, value: str) -> str:
+        slug=value.strip('/')
+        if slug not in {'', 'home'} and not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', slug):
+            raise ValueError('Page slug must be a lowercase URL slug')
+        return slug or 'home'
 
 class ComponentDefinition(BaseModel):
     id: str
@@ -85,6 +102,7 @@ class SiteDocument(BaseModel):
         default_factory=lambda: {"desktop": 0, "tablet": 991, "mobile": 767}
     )
     interactions: Dict[str, Any] = Field(default_factory=dict)
+    dataSources: Dict[str, Any] = Field(default_factory=dict)
     seo: Dict[str, Any] = Field(default_factory=dict)
     settings: Dict[str, Any] = Field(default_factory=dict)
     
@@ -102,12 +120,16 @@ class SiteDocument(BaseModel):
                 raise ValueError(f"Root node {root_id} missing in {context_name}")
                 
             visited = set()
+            active = set()
             def walk(node_id: str):
-                if node_id in visited:
+                if node_id in active:
                     raise ValueError(f"Cyclic tree detected in {context_name} at node {node_id}")
+                if node_id in visited:
+                    raise ValueError(f"Duplicate child reference detected in {context_name} at node {node_id}")
                 if node_id in all_node_ids:
                     raise ValueError(f"Duplicate node ID detected globally: {node_id}")
                 visited.add(node_id)
+                active.add(node_id)
                 all_node_ids.add(node_id)
                 
                 node = nodes.get(node_id)
@@ -132,6 +154,10 @@ class SiteDocument(BaseModel):
                     if child_node.parentId != node_id:
                         raise ValueError(f"Mismatched parentId for child {child_id}. Expected {node_id}, got {child_node.parentId}")
                     walk(child_id)
+                active.remove(node_id)
+
+            if nodes[root_id].parentId is not None:
+                raise ValueError(f"Root node {root_id} must not have a parent in {context_name}")
             
             walk(root_id)
             
