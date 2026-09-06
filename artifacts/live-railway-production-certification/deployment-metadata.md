@@ -3,7 +3,7 @@
 - Project: `zylora-staging`
 - Environment: `production`
 - Service: `zylora-app`
-- Deployment: `79ddcf80-34af-4df7-ab02-6188b8fad666`
+- Deployment: `c636700b-975a-4420-880c-2e148e4e037e`
 - Commit: `91c06d156bdd69e081a7972528e7b50fb9f80963`
 - Status: `SUCCESS`
 - URL: `https://zylora-api-production.up.railway.app`
