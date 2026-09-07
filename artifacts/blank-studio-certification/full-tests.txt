@@ -1,0 +1,9 @@
+python -m pytest -q
+393 passed, 1 skipped, 0 failed, 59 warnings
+
+python -m pytest -q tests/test_blank_studio_and_user_templates.py tests/test_e2e.py
+5 passed, 1 warning
+
+python -m compileall -q app: PASS
+node --check static/dashboard.js: PASS
+npm.cmd run build:studio: PASS

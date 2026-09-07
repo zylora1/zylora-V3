@@ -1,0 +1,6 @@
+Turnstile: HUMAN ACTION REQUIRED for a legitimate production signup challenge.
+OpenAI: repository/provider contracts covered; live provider execution is not claimed without a controlled authenticated production account.
+Durable media: authenticated upload/redeploy proof remains HUMAN ACTION REQUIRED.
+Resend: prior certification tracked provider authorization as unresolved.
+Razorpay: NOT CONFIGURED / paid checkout not certified.
+No secret values are included in this artifact.

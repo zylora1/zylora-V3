@@ -1,0 +1,12 @@
+Chromium: PASS — blank Create Website flow and Studio insertion/persistence; 0 errors
+Firefox: PASS — blank Create Website flow and Studio insertion/persistence; 0 errors
+WebKit: PASS — blank Create Website flow and Studio insertion/persistence; 0 errors
+
+Verified workflow per engine:
+- Dashboard Create Website -> /studio/{site_id}
+- one-page blank Home site
+- beginner-first rail labels
+- Text insertion
+- direct text movement
+- Button/Card/Hero insertion
+- editable child nodes persisted in SiteDocument

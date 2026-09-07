@@ -1,0 +1,8 @@
+Railway project: 0d9ce2ad-9ede-4df7-a6e3-4e8e88d429d4
+Railway environment: production
+Railway service: e4030f96-3196-499d-97b2-79824e63b49b
+Deployment ID: 37c744f9-31ff-4a5a-8aef-dbb6560b0e9b
+Deployment SHA: f04105a509f58a5988a238b55bcaa4804bb23dc6
+Deployment status: SUCCESS
+Production URL: https://zylora-api-production.up.railway.app
+Health evidence: Railway logs recorded GET /api/health HTTP/1.1 200 OK
