@@ -13,3 +13,7 @@ data/*.db-wal
 data/media/*
 *.log
 .template-import-work
+artifacts/
+.codex-tmp/
+static/audit_screenshots/
+data/*.png
