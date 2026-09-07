@@ -33,3 +33,8 @@ def test_crop_is_backward_compatible_in_document_and_renderer():
     assert "crop: Optional[NodeCrop]" in document
     assert "object-position" in renderer
     assert "overflow:hidden" in renderer
+
+
+def test_contextual_more_state_resets_when_selection_changes():
+    toolbar = (ROOT / "studio" / "components" / "ContextToolbar.tsx").read_text(encoding="utf-8")
+    assert "React.useEffect(()=>setMoreOpen(false),[node?.id])" in toolbar

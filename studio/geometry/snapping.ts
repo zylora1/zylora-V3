@@ -1,91 +1,43 @@
 import { Rect } from './math';
 
-export interface SnapLine {
-    position: number;
-    orientation: 'vertical' | 'horizontal';
-    type: 'edge' | 'center';
+export type SnapKind = 'edge' | 'center' | 'spacing' | 'guide';
+export interface SnapLine { position:number; orientation:'vertical'|'horizontal'; type:SnapKind; label?:string; from?:number; to?:number; }
+export interface ExplicitGuide { position:number; orientation:'vertical'|'horizontal'; label?:string; }
+export interface SnapOptions { screenTolerance?:number; disableSnapping?:boolean; explicitGuides?:ExplicitGuide[]; }
+
+const EPSILON=.75;
+const xEdges=(r:Rect)=>[r.x,r.x+r.w]; const yEdges=(r:Rect)=>[r.y,r.y+r.h];
+const xCenter=(r:Rect)=>r.x+r.w/2; const yCenter=(r:Rect)=>r.y+r.h/2;
+
+function addSpacingCandidates(rect:Rect,peers:Rect[],horizontal:boolean,add:(candidate:number,line:SnapLine)=>void){
+  const sorted=peers.slice().sort((a,b)=>(horizontal?a.x-b.x:a.y-b.y));
+  for(let i=0;i<sorted.length;i++)for(let j=i+1;j<sorted.length;j++){
+    const a=sorted[i],b=sorted[j],aEnd=horizontal?a.x+a.w:a.y+a.h,bStart=horizontal?b.x:b.y,gap=bStart-aEnd;
+    const overlap=horizontal?Math.min(a.y+a.h,b.y+b.h)-Math.max(a.y,b.y):Math.min(a.x+a.w,b.x+b.w)-Math.max(a.x,b.x);
+    if(gap<-EPSILON||overlap<=0)continue;
+    const first=aEnd+gap,second=bStart-(horizontal?rect.w:rect.h)-gap,label=`${Math.round(Math.max(0,gap))} px`;
+    const line:SnapLine={position:first,orientation:horizontal?'vertical':'horizontal',type:'spacing',label,from:aEnd,to:bStart};
+    add(first,line);add(second,{...line,position:second});
+  }
 }
 
-export function computeSnapping(
-    rect: Rect,
-    peers: Rect[],
-    parentBounds: Rect | null,
-    threshold: number = 5
-): { snappedRect: Rect; snapLines: SnapLine[] } {
-    let bestDx = 0;
-    let bestDy = 0;
-    let minXDist = threshold;
-    let minYDist = threshold;
-    const lines: SnapLine[] = [];
-
-    const trySnapX = (targetX: number, sourceX: number, type: 'edge' | 'center') => {
-        const dist = Math.abs(targetX - sourceX);
-        if (dist < minXDist) {
-            minXDist = dist;
-            bestDx = targetX - sourceX;
-            // Clear previous vertical lines since we found a closer one
-            for (let i = lines.length - 1; i >= 0; i--) {
-                if (lines[i].orientation === 'vertical') lines.splice(i, 1);
-            }
-            lines.push({ position: targetX, orientation: 'vertical', type });
-        } else if (dist === minXDist && dist < threshold) {
-            lines.push({ position: targetX, orientation: 'vertical', type });
-        }
-    };
-
-    const trySnapY = (targetY: number, sourceY: number, type: 'edge' | 'center') => {
-        const dist = Math.abs(targetY - sourceY);
-        if (dist < minYDist) {
-            minYDist = dist;
-            bestDy = targetY - sourceY;
-            for (let i = lines.length - 1; i >= 0; i--) {
-                if (lines[i].orientation === 'horizontal') lines.splice(i, 1);
-            }
-            lines.push({ position: targetY, orientation: 'horizontal', type });
-        } else if (dist === minYDist && dist < threshold) {
-            lines.push({ position: targetY, orientation: 'horizontal', type });
-        }
-    };
-
-    const myCenterX = rect.x + rect.w / 2;
-    const myCenterY = rect.y + rect.h / 2;
-    const myRight = rect.x + rect.w;
-    const myBottom = rect.y + rect.h;
-
-    if (parentBounds) {
-        // Parent Edges
-        trySnapX(0, rect.x, 'edge'); // Left
-        trySnapX(parentBounds.w, myRight, 'edge'); // Right
-        trySnapY(0, rect.y, 'edge'); // Top
-        trySnapY(parentBounds.h, myBottom, 'edge'); // Bottom
-        // Parent Centers
-        trySnapX(parentBounds.w / 2, myCenterX, 'center');
-        trySnapY(parentBounds.h / 2, myCenterY, 'center');
-    }
-
-    for (const peer of peers) {
-        const pCenterX = peer.x + peer.w / 2;
-        const pCenterY = peer.y + peer.h / 2;
-        const pRight = peer.x + peer.w;
-        const pBottom = peer.y + peer.h;
-
-        // Peer Edges X
-        trySnapX(peer.x, rect.x, 'edge'); // Left to Left
-        trySnapX(peer.x, myRight, 'edge'); // Right to Left
-        trySnapX(pRight, rect.x, 'edge'); // Left to Right
-        trySnapX(pRight, myRight, 'edge'); // Right to Right
-        // Peer Edges Y
-        trySnapY(peer.y, rect.y, 'edge');
-        trySnapY(peer.y, myBottom, 'edge');
-        trySnapY(pBottom, rect.y, 'edge');
-        trySnapY(pBottom, myBottom, 'edge');
-        // Peer Centers
-        trySnapX(pCenterX, myCenterX, 'center');
-        trySnapY(pCenterY, myCenterY, 'center');
-    }
-
-    return {
-        snappedRect: { ...rect, x: rect.x + bestDx, y: rect.y + bestDy },
-        snapLines: lines
-    };
+/** Centralized snap calculation. Tolerance is screen-space when supplied. */
+export function computeSnapping(rect:Rect,peers:Rect[],parentBounds:Rect|null,legacyThreshold=5,options:SnapOptions={}):{snappedRect:Rect;snapLines:SnapLine[];measurements:{width:number;height:number;x:number;y:number}}{
+  // Callers pass screenTolerance/zoom as a world value through legacyThreshold;
+  // keeping this conversion at the boundary prevents zoom-dependent feel.
+  const threshold=options.screenTolerance===undefined?legacyThreshold:options.screenTolerance;
+  let bestX:{delta:number;distance:number;line:SnapLine}|null=null,bestY:{delta:number;distance:number;line:SnapLine}|null=null;
+  const choose=(axis:'x'|'y',delta:number,line:SnapLine)=>{const distance=Math.abs(delta);if(options.disableSnapping||distance>threshold)return;const current=axis==='x'?bestX:bestY;if(!current||distance<current.distance-EPSILON){const next={delta,distance,line};if(axis==='x')bestX=next;else bestY=next;}};
+  const sx=(target:number,source:number,type:SnapKind='edge')=>choose('x',target-source,{position:target,orientation:'vertical',type});
+  const sy=(target:number,source:number,type:SnapKind='edge')=>choose('y',target-source,{position:target,orientation:'horizontal',type});
+  const candidate=(r:Rect)=>{xEdges(r).forEach(v=>{sx(v,rect.x);sx(v,rect.x+rect.w)});yEdges(r).forEach(v=>{sy(v,rect.y);sy(v,rect.y+rect.h)});sx(xCenter(r),xCenter(rect),'center');sy(yCenter(r),yCenter(rect),'center');};
+  if(!options.disableSnapping){if(parentBounds)candidate(parentBounds);peers.forEach(candidate);(options.explicitGuides||[]).forEach(g=>g.orientation==='vertical'?sx(g.position,rect.x,'guide'):sy(g.position,rect.y,'guide'));
+    const xs:Array<{candidate:number;line:SnapLine}>=[],ys:Array<{candidate:number;line:SnapLine}>=[];
+    addSpacingCandidates(rect,peers,true,(c,line)=>xs.push({candidate:c,line}));addSpacingCandidates(rect,peers,false,(c,line)=>ys.push({candidate:c,line}));
+    xs.forEach(v=>choose('x',v.candidate-rect.x,v.line));ys.forEach(v=>choose('y',v.candidate-rect.y,v.line));
+  }
+  const snappedRect={...rect,x:rect.x+(bestX?.delta||0),y:rect.y+(bestY?.delta||0)};
+  return {snappedRect,snapLines:[bestX?.line,bestY?.line].filter(Boolean) as SnapLine[],measurements:{x:snappedRect.x,y:snappedRect.y,width:snappedRect.w,height:snappedRect.h}};
 }
+
+export const guidesAreStable=(a:SnapLine[],b:SnapLine[])=>a.length===b.length&&a.every((line,i)=>{const other=b[i];return !!other&&line.orientation===other.orientation&&line.type===other.type&&Math.abs(line.position-other.position)<=EPSILON;});

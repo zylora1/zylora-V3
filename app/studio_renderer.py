@@ -14,8 +14,8 @@ _ALLOWED_CSS_PROPERTIES={
     'grid-auto-flow','grid-column','grid-row','grid-template-columns','grid-template-rows','height','justify-content',
     'justify-items','left','letter-spacing','line-height','margin','margin-bottom','margin-left','margin-right','margin-top',
     'max-height','max-width','min-height','min-width','object-fit','object-position','opacity','overflow','padding',
-    'padding-bottom','padding-left','padding-right','padding-top','position','right','text-align','text-decoration',
-    'text-transform','top','transform','transform-origin','visibility','white-space','width','z-index'
+    'padding-bottom','padding-left','padding-right','padding-top','position','right','rotate','scale','text-align','text-decoration',
+    'text-transform','top','transform','transform-origin','translate','visibility','white-space','width','z-index'
 }
 
 _HOVER_EFFECTS={
@@ -209,6 +209,23 @@ def _render_node_html(node: Node, doc: SiteDocument, page: Page, data_context:di
         src=_safe_url(content.src,image=True)
         if src:
             attrs += f' src="{html.escape(src,quote=True)}" alt="{html.escape(content.alt or "",quote=True)}"'
+        else:
+            # A legacy/template placeholder can contain a data URI or another
+            # renderer-rejected source. Never emit an empty <img>, which makes
+            # browsers request the current document and fails publish QA. Keep
+            # the editable node visible as a safe, accessible visual placeholder
+            # until the owner replaces it with a managed asset.
+            attrs += (
+                f' role="img" aria-label="{html.escape(content.alt or "Image placeholder", quote=True)}"'
+                ' data-zylora-image-placeholder="true"'
+            )
+            return f'<div {attrs}></div>'
+    elif tag == "img":
+        attrs += (
+            f' role="img" aria-label="{html.escape(content.alt or "Image placeholder", quote=True)}"'
+            ' data-zylora-image-placeholder="true"'
+        )
+        return f'<div {attrs}></div>'
     elif tag == "a" and content.href:
         href=_safe_url(content.href)
         if href:

@@ -17,7 +17,7 @@ export function PageNavigator({onFit}:{onFit:()=>void}) {
       <button className="page-thumb page-thumb-add" onClick={() => dispatch({type:'ADD_PAGE', payload:{name:`Page ${pages.length + 1}`, slug:`page-${pages.length + 1}`}})} aria-label="Add page"><span>＋</span><small>Add page</small></button>
       <div className="navigator-zoom" aria-label="Canvas zoom controls">
         <button onClick={()=>dispatch({type:'SET_ZOOM',payload:state.zoom-.1})} aria-label="Zoom out">−</button>
-        <input className="zoom-range" aria-label="Canvas zoom" type="range" min="25" max="200" step="1" value={Math.round(state.zoom*100)} onChange={e=>dispatch({type:'SET_ZOOM',payload:Number(e.target.value)/100})}/>
+        <input className="zoom-range" aria-label="Canvas zoom" type="range" min="10" max="500" step="1" value={Math.round(state.zoom*100)} onChange={e=>dispatch({type:'SET_ZOOM',payload:Number(e.target.value)/100})}/>
         <button className="zoom-value" onClick={()=>dispatch({type:'SET_ZOOM',payload:1})} aria-label="Reset canvas zoom to 100 percent">{Math.round(state.zoom*100)}%</button>
         <button onClick={onFit} aria-label="Fit canvas">Fit</button>
       </div>

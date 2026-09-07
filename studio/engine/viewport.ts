@@ -1,3 +1,4 @@
+import type {Point} from '../geometry/math';
 export const MIN_ZOOM=.1;
 export const MAX_ZOOM=5;
 export const clampZoom=(value:number)=>Math.max(MIN_ZOOM,Math.min(MAX_ZOOM,value));

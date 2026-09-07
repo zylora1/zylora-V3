@@ -27,7 +27,7 @@ def main(engine_override:str|None=None):
         page=browser.new_page(viewport={'width':390,'height':844}); page.on('console',lambda m: errors.append(m.text) if m.type=='error' else None); page.on('pageerror',lambda e: errors.append(str(e))); page.expose_function('__backendFetch',bridge(client)); page.set_content(inline_shell(shell.text),wait_until='load'); page.wait_for_selector('.studio-canvas [data-studio-id]',timeout=15000)
         assert page.locator('.studio-mobile-nav').is_visible(); assert page.evaluate('document.documentElement.scrollWidth<=document.documentElement.clientWidth')
         page.locator('.studio-mobile-nav button[title="Text"]').click()
-        assert page.locator('.text-reference-panel').is_visible(); page.locator('.purple-action').click(); node=page.locator('[data-studio-type="text"]').last; node.dispatch_event('click'); assert page.locator('.selection-toolbar').is_visible()
+        assert page.locator('.add-text-action').is_visible(); page.locator('.add-text-action').click(); node=page.locator('[data-studio-type="text"]').last; node.dispatch_event('click'); page.wait_for_timeout(100); assert page.locator('.selection-toolbar').is_visible()
         page.locator('.studio-mobile-nav button[title="Uploads"]').click(); assert page.locator('.assets-panel').is_visible(); page.locator('.studio-mobile-nav button[title="Uploads"]').click(); assert not page.locator('.assets-panel').is_visible()
         page.locator('.zoom-range').fill('50'); assert page.locator('.zoom-range').input_value()=='50'; assert not errors
         page.screenshot(path=str(ROOT/'data'/f'studio-mobile-{engine}.png'))
