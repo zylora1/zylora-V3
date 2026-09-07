@@ -39,8 +39,8 @@ def test_platform_sitemap_uses_effective_tags_and_true_lastmod():
         assert r.status_code==200
         assert '<priority>' not in r.text and '<changefreq>' not in r.text
         rows=parse_urls(r.text)
-            assert {x['loc'].rstrip('/').rsplit('/',1)[-1] for x in rows} >= {'127.0.0.1:8000','freelancers','blog'}
-            assert not any('/templates' in x['loc'] for x in rows)
+        assert {x['loc'].rstrip('/').rsplit('/',1)[-1] for x in rows} >= {'127.0.0.1:8000','freelancers','blog'}
+        assert not any('/templates' in x['loc'] for x in rows)
         assert all(x.get('lastmod','').endswith('Z') for x in rows)
         assert rows[0]['loc'].endswith('/')
         robots=c.get('/robots.txt').text
