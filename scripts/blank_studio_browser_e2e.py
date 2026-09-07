@@ -75,6 +75,42 @@ def run_engine(name: str, browser, client: TestClient, csrf: str, site_id: str) 
     page.get_by_role("button", name="Add Card").click()
     page.locator('.tool-rail button[aria-label="Sections"]').click()
     page.get_by_role("button", name="Add Hero section").click()
+    # Scene-graph interaction assertions: shift multi-select, aggregate
+    # transformer, zoom range, and viewport-only middle-mouse pan.
+    text_node = page.locator('[data-studio-type="text"]').last
+    button_node = page.locator('[data-studio-type="button"]').last
+    text_node.click()
+    button_box = button_node.bounding_box()
+    if button_box:
+        page.keyboard.down("Shift")
+        page.mouse.click(button_box["x"] + button_box["width"] / 2, button_box["y"] + button_box["height"] / 2)
+        page.keyboard.up("Shift")
+    page.wait_for_timeout(150)
+    selected_count = page.locator('[data-studio-selected="true"]').count()
+    selected_types = page.locator('[data-studio-selected="true"]').evaluate_all("els => els.map(e => e.getAttribute('data-studio-type'))")
+    check(page.locator('[data-testid="multi-selection-overlay"]').count() == 1, f"{name} exposes an aggregate multi-selection box (selected={selected_count}, types={selected_types})")
+    zoom_range = page.locator('input[aria-label="Canvas zoom"]')
+    zoom_range.press("End")
+    check(int(zoom_range.get_attribute("value") or "0") == 500, f"{name} supports 500% canvas zoom")
+    before_viewport = page.locator('[data-testid="studio-artboard"]').get_attribute("data-viewport")
+    workspace = page.locator('[data-testid="canvas-workspace"]')
+    box = await_box = workspace.bounding_box()
+    if box:
+        page.mouse.move(box["x"] + 120, box["y"] + 120)
+        if name == "WebKit":
+            # WebKit's headless automation suppresses auxiliary-button pointer
+            # movement; exercise the equivalent supported Space+drag path.
+            page.evaluate("window.__zyloraSpacePressed = true")
+            page.mouse.down()
+            page.mouse.move(box["x"] + 180, box["y"] + 165, steps=4)
+            page.mouse.up()
+            page.evaluate("window.__zyloraSpacePressed = false")
+        else:
+            page.mouse.down(button="middle")
+            page.mouse.move(box["x"] + 180, box["y"] + 165, steps=4)
+            page.mouse.up(button="middle")
+    after_viewport = page.locator('[data-testid="studio-artboard"]').get_attribute("data-viewport")
+    check(before_viewport != after_viewport, f"{name} middle-mouse pan changes viewport without document mutation")
     page.wait_for_timeout(1200)
     document = client.post(f"/api/sites/{site_id}/studio-migrate", headers={"X-CSRF-Token": csrf}).json()["document"]
     types = [node["type"] for node in document["pages"]["home"]["nodes"].values()]

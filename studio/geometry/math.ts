@@ -15,7 +15,8 @@ export function computeResize(
     pointerStart: Point,
     pointerCurrent: Point,
     handle: string,
-    zoom: number = 1
+    zoom: number = 1,
+    modifiers: {aspect?:boolean;center?:boolean} = {}
 ): Rect {
     const dx = (pointerCurrent.x - pointerStart.x) / zoom;
     const dy = (pointerCurrent.y - pointerStart.y) / zoom;
@@ -39,5 +40,15 @@ export function computeResize(
         h -= d;
     }
 
+    if(modifiers.aspect){
+        const ratio=Math.max(.01,originalRect.w/Math.max(1,originalRect.h));
+        if(Math.abs(w-originalRect.w)>=Math.abs(h-originalRect.h)) h=Math.max(10,w/ratio); else w=Math.max(10,h*ratio);
+        if(handle.includes('top')) y=originalRect.y+originalRect.h-h;
+        if(handle.includes('left')) x=originalRect.x+originalRect.w-w;
+    }
+    if(modifiers.center){
+        if(handle.includes('left')||handle.includes('right')) x=originalRect.x+(originalRect.w-w)/2;
+        if(handle.includes('top')||handle.includes('bottom')) y=originalRect.y+(originalRect.h-h)/2;
+    }
     return { x, y, w, h };
 }
