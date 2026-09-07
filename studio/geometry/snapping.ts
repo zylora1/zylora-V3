@@ -15,9 +15,20 @@ function addSpacingCandidates(rect:Rect,peers:Rect[],horizontal:boolean,add:(can
     const a=sorted[i],b=sorted[j],aEnd=horizontal?a.x+a.w:a.y+a.h,bStart=horizontal?b.x:b.y,gap=bStart-aEnd;
     const overlap=horizontal?Math.min(a.y+a.h,b.y+b.h)-Math.max(a.y,b.y):Math.min(a.x+a.w,b.x+b.w)-Math.max(a.x,b.x);
     if(gap<-EPSILON||overlap<=0)continue;
-    const first=aEnd+gap,second=bStart-(horizontal?rect.w:rect.h)-gap,label=`${Math.round(Math.max(0,gap))} px`;
-    const line:SnapLine={position:first,orientation:horizontal?'vertical':'horizontal',type:'spacing',label,from:aEnd,to:bStart};
-    add(first,line);add(second,{...line,position:second});
+    const size=horizontal?rect.w:rect.h;
+    // When the moving object fits between two peers, the equal-gap position
+    // is the midpoint of the available gap, not the peer's edge. This keeps
+    // the visible spacing label and snapped geometry mathematically aligned.
+    const betweenGap=(gap-size)/2;
+    if(betweenGap>=-EPSILON){
+      const candidate=aEnd+Math.max(0,betweenGap),line:SnapLine={position:candidate,orientation:horizontal?'vertical':'horizontal',type:'spacing',label:`${Math.round(Math.max(0,betweenGap))} px`,from:aEnd,to:bStart};
+      add(candidate,line);
+    }
+    // Also support placing the moving object before or after an existing
+    // evenly-spaced pair, using the pair's measured gap as the target gap.
+    const before=(horizontal?a.x:b.y)-size-gap,after=(horizontal?b.x+b.w:b.y+b.h)+gap,label=`${Math.round(Math.max(0,gap))} px`,orientation=horizontal?'vertical':'horizontal';
+    add(before,{position:before,orientation,type:'spacing',label,from:before+size,to:horizontal?a.x:b.y});
+    add(after,{position:after,orientation,type:'spacing',label,from:horizontal?b.x+b.w:b.y+b.h,to:after+size});
   }
 }
 

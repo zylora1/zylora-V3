@@ -65,7 +65,11 @@ const distributed = distributeRects([
   {id:'b',rect:{x:120,y:0,w:60,h:10}},
 ], 'horizontal-gap');
 const snapped = computeSnapping({x:492,y:100,w:12,h:80}, [], {x:0,y:0,w:1000,h:600}, 6);
-console.log(JSON.stringify({resize,centered,aligned,distributed,snapped}));
+const spacing = computeSnapping({x:218,y:20,w:60,h:40}, [
+  {x:100,y:10,w:100,h:60},
+  {x:300,y:10,w:100,h:60},
+], null, 6);
+console.log(JSON.stringify({resize,centered,aligned,distributed,snapped,spacing}));
 """
         result = subprocess.run(['node', '-e', script], cwd=out, check=True, capture_output=True, text=True)
         return json.loads(result.stdout)
@@ -80,3 +84,5 @@ def test_geometry_primitives_cover_resize_alignment_distribution_and_screen_thre
     assert [item['x'] for item in vectors['distributed']] == [10, 120, 250]
     assert vectors['snapped']['snappedRect']['x'] == 494
     assert vectors['snapped']['snapLines'][0]['type'] == 'center'
+    assert vectors['spacing']['snappedRect']['x'] == 220
+    assert any(line['type'] == 'spacing' for line in vectors['spacing']['snapLines'])
