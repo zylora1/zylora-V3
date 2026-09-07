@@ -213,16 +213,18 @@ def test_multipage_editor_validation_uses_each_page_schema():
     assert 'Projects edited' in c.get(f'/api/sites/{sid}/preview/projects').text
 
 
-def test_all_five_template_archetypes_keep_image_replacements_site_isolated():
+def test_five_blank_studio_documents_keep_image_assets_site_isolated():
     reset_db(); c,h=auth_client('archetypes@example.com','Archetypes'); activate_zylora(c,h,country='GB')
-    from app.templates import TEMPLATES
-    archetypes = [m for m in TEMPLATES if m['slug'] != 'apex-digital'][:5]
-    for idx,meta in enumerate(archetypes):
-        sid=create_site(c,h,f'Archetype {idx}',meta['slug'],origin='TEMPLATE'); asset=upload(c,h,sid,f'{meta["slug"]}.png',f'{meta["name"]} replacement')
-        doc=c.get(f'/api/sites/{sid}/editor-document?page=home').json(); img=next(n for n in doc['nodes'] if n['kind']=='image'); sel=f'[data-zylora-id="{img["id"]}"]'
-        r=c.post(f'/api/sites/{sid}/editor/actions',headers=h,json={'operations':[{'page':'home','type':'replace_image','selector':sel,'asset_id':asset['id'],'mode':'image','alt':f'{meta["name"]} replacement'}],'action':'ARCHETYPE_IMAGE'}); assert r.status_code==200,(meta['slug'],r.text)
+    for idx in range(5):
+        created=c.post('/api/sites/blank',headers=h,json={'name':f'Blank media {idx}'}); assert created.status_code==200,created.text
+        sid=created.json()['id']; asset=upload(c,h,sid,f'blank-{idx}.png',f'Blank {idx} image')
+        document=c.post(f'/api/sites/{sid}/studio-migrate',headers=h).json()['document']; page=document['pages']['home']; image_id=f'image_{idx}'
+        page['nodes'][image_id]={'id':image_id,'type':'image','parentId':page['rootNodeId'],'children':[],'content':{'src':asset['url'],'asset_id':asset['id'],'alt':f'Blank {idx} image'},'style':{'css':{'position':'absolute','left':'40px','top':'40px','width':'320px','height':'220px','objectFit':'cover'}}}
+        page['nodes'][page['rootNodeId']]['children'].append(image_id)
+        assert c.post(f'/api/sites/{sid}/studio-save',headers=h,json=document).status_code==200
         assert asset['id'] in c.get(f'/api/sites/{sid}/preview').text
-        clone=create_site(c,h,f'Archetype clone {idx}',meta['slug'],origin='TEMPLATE'); assert asset['id'] not in c.get(f'/api/sites/{clone}/preview').text
+        clone=c.post('/api/sites/blank',headers=h,json={'name':f'Blank clone {idx}'}); assert clone.status_code==200
+        assert asset['id'] not in c.get(f"/api/sites/{clone.json()['id']}/preview").text
 
 
 def test_draft_media_is_private_until_published_and_cross_tenant_media_denied():

@@ -67,15 +67,12 @@ def test_removed_freelancer_fee_local_does_not_return_stale_calculation():
     assert "'fees':[]" not in source
     assert "raise HTTPException(410,'Freelancer transfer fees were removed." in source
 
-def test_verified_template_catalogue_uses_current_preview_and_selection_flow():
+def test_primary_creation_flow_has_no_platform_catalogue_or_ai_wizard():
     js=(ROOT/'static/dashboard.js').read_text(encoding='utf-8')
     html=(ROOT/'static/dashboard.html').read_text(encoding='utf-8')
-    assert 'Use template' in js
-    assert 'data-template-use' in js
-    assert '/template-preview/' in js
-    assert 'Only independently verified templates are published here.' in js
-    assert 'data-template-upgrade' not in js
-    assert "opt.disabled=o==='TEMPLATE'" not in js
+    assert '/api/sites/blank' in js
+    assert '/api/templates' not in js and '/template-preview/' not in js and '/ai-create' not in js
+    assert 'Use template' not in js and 'Create with AI' not in html
     assert 'PLAN_UPGRADE_REQUIRED' in js
     assert 'showPublishUpgrade' in js
     assert 'data-view="blog"' not in html

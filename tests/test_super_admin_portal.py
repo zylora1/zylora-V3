@@ -53,7 +53,7 @@ def test_normal_user_cannot_read_admin_analytics_or_manage_templates():
     assert user.patch(f'/api/admin/templates/{slug}',headers=headers,json={'published':False}).status_code==403
 
 
-def test_admin_can_unpublish_and_restore_template_and_drill_into_customer():
+def test_admin_template_compatibility_controls_do_not_republish_retired_catalogue_and_customer_drilldown_works():
     _reset(); customer,_=_signup(f'customer-{uuid4().hex[:8]}@example.com','Detailed Customer')
     customer_id=customer.get('/api/auth/me').json()['id']
     admin,headers=_signup(f'admin-{uuid4().hex[:8]}@example.com','Catalogue Admin')
@@ -66,7 +66,7 @@ def test_admin_can_unpublish_and_restore_template_and_drill_into_customer():
     assert slug not in {item['slug'] for item in customer.get('/api/templates').json()['items']}
     restored=admin.patch(f'/api/admin/templates/{slug}',headers=headers,json={'published':True})
     assert restored.status_code==200 and restored.json()['published'] is True
-    assert slug in {item['slug'] for item in customer.get('/api/templates').json()['items']}
+    assert customer.get('/api/templates').json()=={'items':[],'retired':True}
     detail=admin.get(f'/api/admin/users/{customer_id}')
     assert detail.status_code==200 and detail.json()['user']['email'].startswith('customer-')
     assert {'sites','live_sites','leads','appointments','emails_sent','whatsapp_sent','chatbot_cost_micros','website_cost_micros'} <= detail.json()['stats'].keys()

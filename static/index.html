@@ -122,7 +122,7 @@
     <nav class="z-nav-links" id="primaryNav" aria-label="Primary">
       <a href="/website-builder">Products</a>
       <a href="/solutions/small-business">Solutions</a>
-      <a href="/templates">Templates</a>
+      <a href="#studio">Studio</a>
       <a href="/guides/how-to-build-a-business-website">Resources</a>
       <a href="/pricing">Pricing</a>
     </nav>
@@ -151,21 +151,21 @@
     </h1>
     
     <p class="hero-deck">
-      Generate a bespoke website in seconds with Emergent AI, customize every pixel in Zylora Studio, and turn visitors into paying clients with a 24/7 grounded AI Sales Assistant.
+      Open a blank Zylora Studio, design every detail directly, and turn visitors into customers with publishing, lead capture, CMS and an optional AI assistant.
     </p>
     
     <div class="hero-actions">
-      <a class="z-btn z-btn-primary z-btn-lg" data-testid="hero-ai" href="/ai-create">Create with AI</a>
-      <a class="z-btn z-btn-secondary z-btn-lg" href="/templates">Explore templates</a>
+      <a class="z-btn z-btn-primary z-btn-lg" data-testid="hero-ai" href="/signup">Create Website</a>
+      <a class="z-btn z-btn-secondary z-btn-lg" href="#studio">See the Studio</a>
     </div>
 
     <!-- Live Natural-Language Prompt Composer -->
-    <form id="hero-prompt-form" class="hero-prompt-container" action="/ai-create" method="GET">
+    <form id="hero-prompt-form" class="hero-prompt-container" action="/signup" method="GET">
       <div class="hero-prompt-box">
         <div class="hero-prompt-icon">✦</div>
-        <input id="hero-prompt-input" class="hero-prompt-input" name="prompt" type="text" placeholder="Describe your business (e.g. Modern boutique dental clinic in Mumbai with online booking and patient testimonials)..." autocomplete="off"/>
+        <input id="hero-prompt-input" class="hero-prompt-input" name="idea" type="text" placeholder="What do you want to build? You can start blank and use this idea later inside Studio." autocomplete="off"/>
         <button id="hero-prompt-submit" class="hero-prompt-submit" type="submit">
-          <span>Build with Zylora</span>
+          <span>Open blank Studio</span>
           <span>→</span>
         </button>
       </div>
@@ -331,7 +331,7 @@
 </section>
 
 <!-- 4. Flagship Zylora Studio Section (Dark #0C0D10 Environment) -->
-<section class="studio-flagship-section">
+<section class="studio-flagship-section" id="studio">
   <div class="z-container">
     <div class="studio-flagship-header">
       <span class="eyebrow-pill eyebrow-dark">Direct-Manipulation Studio</span>
@@ -352,7 +352,7 @@
         </div>
         <div style="display:flex;gap:12px;align-items:center">
           <span style="font-size:12px;color:var(--z-dark-muted)">Snapping: ON (8px)</span>
-          <a class="z-btn z-btn-sm" style="background:#fff;color:#000" href="/ai-create">Try Studio Free</a>
+          <a class="z-btn z-btn-sm" style="background:#fff;color:#000" href="/signup">Try Studio Free</a>
         </div>
       </div>
 
@@ -507,88 +507,6 @@
   </div>
 </section>
 
-﻿<!-- 7. Curated Template Library (Wix-Scale Visual Discovery) -->
-<section class="templates-showcase-section">
-  <div class="z-container">
-    <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px">
-      <div>
-        <span class="eyebrow-pill">Curated Catalogue</span>
-        <h2 class="h2-editorial" style="margin:14px 0 8px">Designed one by one for real business outcomes.</h2>
-        <p class="text-intro" style="margin:0">Explore over 40+ independently art-directed website templates.</p>
-      </div>
-      <a class="z-btn z-btn-secondary" href="/templates">View all templates →</a>
-    </div>
-
-    <div class="templates-editorial-grid">
-      <!-- Template 1 -->
-      <article class="template-card-editorial">
-        <a class="template-preview-img-wrap" href="/template-preview/dental-care" target="_blank" rel="noopener" style="background:linear-gradient(135deg, #0D9488 0%, #115E59 100%);display:flex;flex-direction:column;justify-content:space-between;padding:24px;text-decoration:none">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <span style="font-size:12px;font-weight:750;color:#CCFBF1;letter-spacing:0.04em">AURA CLINIC</span>
-            <span style="background:rgba(255,255,255,0.2);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px">ONLINE SCHEDULER</span>
-          </div>
-          <div>
-            <div style="font-size:20px;font-weight:700;color:#FFFFFF;margin-bottom:6px;line-height:1.1">Modern Dental Care</div>
-            <div style="font-size:12px;color:#99F6E4">Patient Portal · Appointments · Reviews</div>
-          </div>
-        </a>
-        <div class="template-card-info">
-          <h3>Aura Dental Clinic</h3>
-          <p>Restorative healthcare template with online booking scheduler and patient portal.</p>
-          <div class="template-actions">
-            <a href="/template-preview/dental-care" target="_blank" rel="noopener" style="font-size:13.5px;font-weight:600;color:var(--z-text);text-decoration:none">Preview</a>
-            <a class="z-btn z-btn-primary z-btn-sm" href="/signup?template=dental-care">Use template</a>
-          </div>
-        </div>
-      </article>
-
-      <!-- Template 2 -->
-      <article class="template-card-editorial">
-        <a class="template-preview-img-wrap" href="/template-preview/creative-agency" target="_blank" rel="noopener" style="background:linear-gradient(135deg, #18181B 0%, #09090B 100%);display:flex;flex-direction:column;justify-content:space-between;padding:24px;text-decoration:none;border:1px solid rgba(255,255,255,0.08)">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <span style="font-size:12px;font-weight:750;color:#A1A1AA;letter-spacing:0.04em">VANGUARD / STUDIO</span>
-            <span style="background:rgba(91,92,240,0.25);color:#A5A6F6;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px">AGENCY PORTFOLIO</span>
-          </div>
-          <div>
-            <div style="font-size:20px;font-weight:700;color:#FFFFFF;margin-bottom:6px;line-height:1.1">Art Direction & Brand</div>
-            <div style="font-size:12px;color:#71717A">Selected Works · Client Inquiries · Case Studies</div>
-          </div>
-        </a>
-        <div class="template-card-info">
-          <h3>Vanguard Creative</h3>
-          <p>Award-winning design studio showcase featuring case study portfolios and lead forms.</p>
-          <div class="template-actions">
-            <a href="/template-preview/creative-agency" target="_blank" rel="noopener" style="font-size:13.5px;font-weight:600;color:var(--z-text);text-decoration:none">Preview</a>
-            <a class="z-btn z-btn-primary z-btn-sm" href="/signup?template=creative-agency">Use template</a>
-          </div>
-        </div>
-      </article>
-
-      <!-- Template 3 -->
-      <article class="template-card-editorial">
-        <a class="template-preview-img-wrap" href="/template-preview/specialty-coffee" target="_blank" rel="noopener" style="background:linear-gradient(135deg, #78350F 0%, #451A03 100%);display:flex;flex-direction:column;justify-content:space-between;padding:24px;text-decoration:none">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <span style="font-size:12px;font-weight:750;color:#FDE68A;letter-spacing:0.04em">ROAST & ORIGIN</span>
-            <span style="background:rgba(255,255,255,0.2);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px">SUBSCRIPTION CAFE</span>
-          </div>
-          <div>
-            <div style="font-size:20px;font-weight:700;color:#FFFFFF;margin-bottom:6px;line-height:1.1">Single Origin Coffee</div>
-            <div style="font-size:12px;color:#FCD34D">Bean Subscriptions · Tasting Room Booking</div>
-          </div>
-        </a>
-        <div class="template-card-info">
-          <h3>Roast & Origin</h3>
-          <p>Artisanal roastery and cafe template with subscription bag ordering and tasting reservations.</p>
-          <div class="template-actions">
-            <a href="/template-preview/specialty-coffee" target="_blank" rel="noopener" style="font-size:13.5px;font-weight:600;color:var(--z-text);text-decoration:none">Preview</a>
-            <a class="z-btn z-btn-primary z-btn-sm" href="/signup?template=specialty-coffee">Use template</a>
-          </div>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-
 <!-- 8. Asymmetric Feature Stories (Zero Uniform Card Grids) -->
 <section class="asymmetric-story-section">
   <div class="z-container">
@@ -731,7 +649,7 @@
     <p>Describe your business, preview the art direction, and launch with full customer acquisition capabilities.</p>
     <div style="display:flex;justify-content:center;gap:18px;flex-wrap:wrap">
       <a class="z-btn z-btn-lg" style="background:#fff;color:#000" href="/signup">Start building free</a>
-      <a class="z-btn z-btn-dark z-btn-lg" href="/templates">Browse 40+ templates</a>
+      <a class="z-btn z-btn-dark z-btn-lg" href="/signup">Open a blank Studio</a>
     </div>
   </div>
 </section>
@@ -757,8 +675,8 @@
       <div class="z-footer-col">
         <h4>Product</h4>
         <ul>
-          <li><a href="/ai-create">AI Builder</a></li>
-          <li><a href="/templates">Template Library</a></li>
+          <li><a href="/signup">Zylora Studio</a></li>
+          <li><a href="#studio">Visual Editor</a></li>
           <li><a href="/choose-plan">Pricing & Plans</a></li>
           <li><a href="/#pricing">Pro Implementation</a></li>
         </ul>
@@ -834,13 +752,13 @@
 
 <script src="/static/landing.js" defer></script>
 <script>
-// Wire up prompt form chips to directly redirect to /ai-create
+// Carry an optional idea into signup; Studio itself always opens blank.
 document.querySelectorAll('.prompt-chip').forEach(chip => {
   chip.addEventListener('click', () => {
     const text = chip.dataset.prompt;
     if (text) {
-      sessionStorage.setItem('initial_ai_prompt', text);
-      location.href = '/ai-create?prompt=' + encodeURIComponent(text);
+      sessionStorage.setItem('studio_optional_idea', text);
+      location.href = '/signup';
     }
   });
 });
@@ -849,7 +767,7 @@ if (promptForm) {
   promptForm.addEventListener('submit', (e) => {
     const input = document.getElementById('hero-prompt-input');
     if (input && input.value.trim()) {
-      sessionStorage.setItem('initial_ai_prompt', input.value.trim());
+      sessionStorage.setItem('studio_optional_idea', input.value.trim());
     }
   });
 }

@@ -14,7 +14,7 @@ def test_combined_browser_product_workflow():
         env['MEDIA_STORAGE_DIR']=str(Path(td) / 'media')
         env['PYTHONIOENCODING']='utf-8'
         result = subprocess.run(
-            [sys.executable, str(ROOT / 'scripts' / 'browser_e2e.py')],
+            [sys.executable, str(ROOT / 'scripts' / 'blank_studio_browser_e2e.py')],
             cwd=ROOT,
             capture_output=True,
             text=True,

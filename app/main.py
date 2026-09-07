@@ -374,7 +374,10 @@ def super_admin_page(request: Request, subpath: str = ''):
     _require_super_admin(request)
     return FileResponse(ROOT/'static'/'super-admin.html')
 @app.get('/ai-create',include_in_schema=False)
-def ai_create(): return FileResponse(ROOT/'static'/'ai-create.html')
+def ai_create():
+    # The AI-first onboarding route is retired. AI remains available inside
+    # Studio after the user opens an ordinary blank website.
+    return RedirectResponse('/signup', status_code=307)
 @app.get('/legal',include_in_schema=False)
 def legal(): return FileResponse(ROOT/'static'/'legal.html')
 @app.get('/terms',include_in_schema=False)
@@ -437,21 +440,15 @@ def freelancer_profile_page(slug:str):
 
 @app.get('/templates',include_in_schema=False)
 def template_catalogue():
-    raw=(ROOT/'static'/'templates.html').read_text(encoding='utf-8')
-    return HTMLResponse(raw.replace('{{APP_URL}}',_public_base_url()))
+    return RedirectResponse('/signup', status_code=307)
 
 @app.get('/template-preview/{slug}',response_class=HTMLResponse,include_in_schema=False)
 def template_preview(slug:str):
-    public_slugs={t['slug'] for t in TEMPLATES}
-    if slug not in public_slugs: raise HTTPException(404,'Template not found')
-    return HTMLResponse(render_template(slug,{}),headers={'X-Robots-Tag':'noindex, nofollow','Cache-Control':'public,max-age=300'})
+    raise HTTPException(404,'Platform template catalogue retired')
 
 @app.get('/template-preview/{slug}/{page_slug}',response_class=HTMLResponse,include_in_schema=False)
 def template_preview_page(slug:str,page_slug:str):
-    public_slugs={t['slug'] for t in TEMPLATES}
-    if slug not in public_slugs: raise HTTPException(404,'Template not found')
-    try: return HTMLResponse(render_template_page(slug,{'slug':'preview'},page_slug),headers={'X-Robots-Tag':'noindex, nofollow','Cache-Control':'public,max-age=300'})
-    except KeyError: raise HTTPException(404,'Template page not found')
+    raise HTTPException(404,'Platform template catalogue retired')
 
 @app.get('/s/{slug}',response_class=HTMLResponse,include_in_schema=False)
 def public_site(slug:str):
@@ -551,12 +548,10 @@ def _platform_sitemap_entries() -> list[dict]:
     freelancers_lastmod=_latest_lastmod(_path_lastmod(ROOT/'static'/'freelancers.html'),*[f.get('updated_at') for f in freelancers])
     rows=[
         {'loc':base+'/', 'lastmod':home_lastmod},
-        {'loc':base+'/templates','lastmod':_template_catalogue_lastmod()},
         {'loc':base+'/freelancers','lastmod':freelancers_lastmod},
         {'loc':base+'/blog','lastmod':blog_lastmod},
     ]
     rows.extend({'loc':base+path,'lastmod':_path_lastmod(ROOT/'app'/'public_seo.py')} for path in PUBLIC_SEO_PATHS)
-    rows.extend({'loc':base+'/templates/'+str(template['slug']),'lastmod':_template_catalogue_lastmod()} for template in public_templates())
     for profile in freelancers:
         rows.append({'loc':f"{base}/freelancers/{profile['slug']}",'lastmod':_normalise_lastmod(profile.get('updated_at'))})
     for post in posts:

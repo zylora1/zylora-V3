@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+import secrets
 from html import escape
 from uuid import uuid4
 
@@ -25,12 +26,14 @@ from .media import (
 from .security import current_user, require_csrf, durable_rate_limit
 from .structured_editor import (
     apply_document, extract_editor_nodes, instrument_editable_html, merge_operations, parse_document, resolve_document_links,
-    validate_operation, validate_operations_against_html, validate_internal_page_links, effect_capabilities
+    validate_operation, validate_operations_against_html, validate_internal_page_links, effect_capabilities, build_site_document
 )
-from .templates import BY_SLUG, render_template_page
+from .templates import BY_SLUG, AI_RUNTIME_SLUG, render_template_page
 from .seo_engine import (apply_seo_html, clean_text, metadata_for_page, normalize_public_slug,
     page_public_slug, seo_document, seo_health, validate_canonical)
 from .link_icons import normalize_footer_links, detect_link_platform, apply_footer_links_html
+from .studio_document import validate_studio_document
+from .studio_renderer import render_page as render_studio_page
 
 router = APIRouter(prefix='/api')
 public_router = APIRouter()
@@ -145,6 +148,12 @@ def apply_page_seo(html: str, site: dict, page: str, canonical: str|None=None) -
 
 
 def render_draft(site: dict, page: str) -> str:
+    if site.get('studio_document_json'):
+        document=validate_studio_document(json.loads(site['studio_document_json']))
+        page_id=next((pid for pid,item in document.pages.items() if item.slug.strip('/')==(page or 'home').strip('/')),None)
+        if page_id is None:
+            raise ValueError('Page not found in Studio document')
+        return render_studio_page(document,page_id,asset_resolver=media_url,seo_override={'noindex':True})
     html=_base_page(site,page); html=apply_brand_html(html,site)
     def draft_link(target: str) -> str:
         return f"/api/sites/{site['id']}/preview" if target=='home' else f"/api/sites/{site['id']}/preview/{target}"
@@ -333,7 +342,113 @@ def migrate_to_studio(site_id: str, request: Request):
         create_revision(db,site_id,u['id'],'BACKUP','Studio v4 Migration Backup')
         return {'ok': True, 'migrated': True, 'document': v4_doc.model_dump(exclude_none=True)}
         
-from .studio_document import SiteDocument, validate_studio_document
+from .studio_document import SiteDocument, create_empty_document, validate_studio_document
+from .user_site_templates import clone_template_document, sanitize_template_document
+
+
+class BlankSiteIn(BaseModel):
+    name: str = Field(default="Untitled website", min_length=2, max_length=120)
+
+
+@router.post('/sites/blank')
+def create_blank_site(payload: BlankSiteIn, request: Request):
+    """Create the authoritative blank-canvas website without AI or a catalogue."""
+    u = _user(request, True)
+    name = payload.name.strip() or 'Untitled website'
+    with SessionLocal() as db:
+        draft_count = int(db.execute(text("SELECT count(*) FROM sites WHERE user_id=:u AND status='DRAFT'"), {'u': u['id']}).scalar_one())
+    limit = int(get_plan(u['plan'])['site_limit'])
+    if draft_count >= limit:
+        raise HTTPException(409, detail={'code': 'DRAFT_LIMIT_REACHED', 'message': 'Delete a draft before creating another website.', 'limit': limit, 'drafts': draft_count})
+    site_id = str(uuid4())
+    slug_base = re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-')[:45] or 'untitled-website'
+    slug = f"{slug_base}-{secrets.token_hex(2)}"
+    now = now_iso()
+    document = create_empty_document()
+    document.id = site_id
+    document_json = document.model_dump_json(exclude_none=True)
+    legacy_shell = build_site_document(AI_RUNTIME_SLUG, [], 1, str(BY_SLUG[AI_RUNTIME_SLUG].get('version') or '1.0.0'))
+    with SessionLocal.begin() as db:
+        db.execute(text('''INSERT INTO sites(
+            id,user_id,name,slug,template_slug,origin,status,business_name,tagline,description,accent,page_count,
+            draft_structure_json,document_schema_version,document_version,generation_state,studio_document_json,studio_revision,updated_at,created_at
+          ) VALUES (
+            :id,:user,:name,:slug,:runtime,'MANUAL','DRAFT',:name,'','',:accent,1,
+            :legacy,3,1,'DRAFT',:document,1,:now,:now
+          )'''), {
+            'id': site_id, 'user': u['id'], 'name': name, 'slug': slug, 'runtime': AI_RUNTIME_SLUG,
+            'accent': BY_SLUG[AI_RUNTIME_SLUG].get('accent') or '#6f7bff', 'legacy': json.dumps(legacy_shell, separators=(',', ':')),
+            'document': document_json, 'now': now,
+        })
+    return {'ok': True, 'id': site_id, 'slug': slug, 'page_count': 1, 'origin': 'MANUAL', 'studio_url': f'/studio/{site_id}'}
+
+
+class UserTemplateIn(BaseModel):
+    name: str = Field(min_length=2, max_length=120)
+    description: str = Field(default='', max_length=500)
+
+
+@router.get('/user-templates')
+def list_user_templates(request: Request):
+    u = _user(request)
+    with SessionLocal() as db:
+        rows = db.execute(text('''SELECT id,source_site_id,name,description,thumbnail_url,visibility,created_at,updated_at
+          FROM user_site_templates WHERE user_id=:user ORDER BY updated_at DESC'''), {'user': u['id']}).mappings().all()
+    return {'items': [dict(row) for row in rows]}
+
+
+@router.post('/sites/{site_id}/user-templates')
+def save_user_template(site_id: str, payload: UserTemplateIn, request: Request):
+    u = _user(request, True)
+    with SessionLocal.begin() as db:
+        site = _owned_site(db, u['id'], site_id)
+        if not site.get('studio_document_json'):
+            raise HTTPException(409, detail={'code': 'STUDIO_DOCUMENT_REQUIRED', 'message': 'Save the design before saving it as a template.'})
+        try:
+            snapshot = sanitize_template_document(json.loads(site['studio_document_json']))
+        except Exception as exc:
+            raise HTTPException(422, f'Invalid Studio document: {exc}')
+        template_id = str(uuid4())
+        now = now_iso()
+        db.execute(text('''INSERT INTO user_site_templates(id,user_id,source_site_id,name,description,document_json,visibility,created_at,updated_at)
+          VALUES (:id,:user,:site,:name,:description,:document,'PRIVATE',:now,:now)'''), {
+            'id': template_id, 'user': u['id'], 'site': site_id, 'name': payload.name.strip(),
+            'description': payload.description.strip(), 'document': json.dumps(snapshot, separators=(',', ':')), 'now': now,
+        })
+    return {'ok': True, 'id': template_id, 'visibility': 'PRIVATE'}
+
+
+@router.post('/user-templates/{template_id}/create')
+def create_from_user_template(template_id: str, payload: BlankSiteIn, request: Request):
+    u = _user(request, True)
+    with SessionLocal() as db:
+        row = db.execute(text('SELECT * FROM user_site_templates WHERE id=:id AND user_id=:user'), {'id': template_id, 'user': u['id']}).mappings().first()
+        draft_count = int(db.execute(text("SELECT count(*) FROM sites WHERE user_id=:u AND status='DRAFT'"), {'u': u['id']}).scalar_one())
+    if not row:
+        raise HTTPException(404, 'Template not found')
+    limit = int(get_plan(u['plan'])['site_limit'])
+    if draft_count >= limit:
+        raise HTTPException(409, detail={'code': 'DRAFT_LIMIT_REACHED', 'message': 'Delete a draft before creating another website.', 'limit': limit, 'drafts': draft_count})
+    site_id = str(uuid4())
+    name = payload.name.strip() or str(row['name'])
+    slug_base = re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-')[:45] or 'website'
+    slug = f"{slug_base}-{secrets.token_hex(2)}"
+    document = clone_template_document(json.loads(row['document_json']), site_id=site_id)
+    now = now_iso()
+    legacy_shell = build_site_document(AI_RUNTIME_SLUG, [], max(1, len(document['pages'])), str(BY_SLUG[AI_RUNTIME_SLUG].get('version') or '1.0.0'))
+    with SessionLocal.begin() as db:
+        db.execute(text('''INSERT INTO sites(
+            id,user_id,name,slug,template_slug,origin,status,business_name,tagline,description,accent,page_count,
+            draft_structure_json,document_schema_version,document_version,generation_state,studio_document_json,studio_revision,updated_at,created_at
+          ) VALUES (
+            :id,:user,:name,:slug,:runtime,'USER_TEMPLATE','DRAFT',:name,'','',:accent,:pages,
+            :legacy,3,1,'DRAFT',:document,1,:now,:now
+          )'''), {
+            'id': site_id, 'user': u['id'], 'name': name, 'slug': slug, 'runtime': AI_RUNTIME_SLUG,
+            'accent': BY_SLUG[AI_RUNTIME_SLUG].get('accent') or '#6f7bff', 'pages': max(1, len(document['pages'])),
+            'legacy': json.dumps(legacy_shell, separators=(',', ':')), 'document': json.dumps(document, separators=(',', ':')), 'now': now,
+        })
+    return {'ok': True, 'id': site_id, 'slug': slug, 'origin': 'USER_TEMPLATE', 'studio_url': f'/studio/{site_id}'}
 
 @router.post('/sites/{site_id}/studio-save')
 def save_studio(site_id: str, document: dict, request: Request):

@@ -96,7 +96,7 @@ def test_immediate_downgrade_entitlement_and_paid_upgrade_fail_closed(monkeypatc
     activated=activate_zylora(c,h,'GB'); assert activated['plan']=='STARTER'
     # Legacy template creation remains governed independently from the paid subscription entitlement.
     legacy=c.post('/api/sites',headers=h,json={'business_name':'Removed Template','description':'A valid removed-template request used for entitlement validation.','template_slug':'atelier-noir','origin':'TEMPLATE','industry':'Consulting','style':'Editorial'})
-    assert legacy.status_code in {200,400,404,409}
+    assert legacy.status_code == 410
     # AI-created page count is independent of subscription page entitlements.
     r=c.post('/api/sites',headers=h,json={'business_name':'AI Paid Site','description':'Create separate Home, About, Services, Work, Team and Contact pages.','origin':'AI','industry':'Consulting','style':'Editorial'}); assert r.status_code==200,r.text
     assert r.json()['page_count']>=5

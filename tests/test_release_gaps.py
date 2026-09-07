@@ -144,7 +144,7 @@ def test_draft_limit_and_ai_page_count_is_plan_independent_while_templates_are_p
     reset_db(); c,h,_=signup('limits@example.com','Limits User')
     billing=c.get('/api/billing').json(); assert billing['limits']['drafts']==10 and billing['limits']['monthly_ai_credits']==20 and billing['limits']['monthly_lead_credits']==20 and billing['limits']['ai_max_pages']==20
     legacy=c.post('/api/sites',headers=h,json={'business_name':'Removed Template','description':'A complete business description for removed template validation.','template_slug':'atelier-noir','origin':'TEMPLATE','industry':'Architecture','style':'Editorial'})
-    assert legacy.status_code in {400,404,409}
+    assert legacy.status_code==410
     # AI page count follows the brief rather than the selected plan.
     detailed=c.post('/api/sites',headers={**h,'Idempotency-Key':'limits-detailed'},json={'business_name':'Detailed Clinic','description':'Create separate Home, About, Services, Doctors, Facilities, Appointments and Contact pages.','origin':'AI','industry':'Clinic','style':'Editorial'})
     assert detailed.status_code==200 and detailed.json()['page_count']>=6

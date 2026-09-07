@@ -6,9 +6,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_studio_uses_beginner_first_workspace_labels():
     source = (ROOT / "studio" / "App.tsx").read_text(encoding="utf-8")
-    for rail in ("Templates", "Elements", "Text", "Brand", "Uploads", "Tools", "Projects", "Apps", "Photos"):
+    for rail in ("Sections", "Elements", "Text", "Uploads", "Draw", "Layers", "AI"):
         assert f"'{rail}']" in source
-    for retired in ("['add', 'Add']", "['pages', 'Pages']", "['layers', 'Layers']", "['cms', 'CMS']", "['site', 'Site']", "['ai', 'AI']"):
+    for retired in ("['templates', 'Templates']", "['brand', 'Brand']", "['tools', 'Tools']", "['projects', 'Projects']", "['apps', 'Apps']", "['photos', 'Photos']"):
         assert retired not in source
     assert "const rails: Array" in source
     assert "<RailIcon id={id}/>" in source
@@ -25,16 +25,12 @@ def test_studio_is_built_by_vite_not_the_retired_esbuild_script():
 
 def test_add_panel_exposes_small_semantic_primitive_set():
     source = (ROOT / "studio" / "components" / "AddPanel.tsx").read_text(encoding="utf-8")
-    assert "buttonItem('Button'" in source
-    assert "sectionItem('Section'" in source
-    for label in ("Card", "Image frame", "Shape"):
-        assert f"label:'{label}'" in source
-    assert "textItem('Add a text box'" in source
-    # Reference heading/subheading choices are visual presets, not distinct DOM
-    # primitives: every one is created by textItem with type:'text'.
-    assert "const textItem=" in source and "type:'text'" in source
-    assert "Container" not in source
-    assert "displayName:item.label" in source
+    for label in ("Button", "Card", "Container", "Icon", "Badge", "Spacer"):
+        assert f"element('{label}'" in source
+    assert "element('Add Text','text'" in source
+    assert "element('Square frame','image'" in source and "'image-frame'" in source
+    assert "const sectionNames=" in source and "Header / Navbar" in source and "Footer" in source
+    assert "displayName:label" in source
 
 
 def test_layers_panel_never_displays_internal_ids_by_default():
@@ -81,7 +77,8 @@ def test_panel_drag_payload_preserves_primitive_and_drop_geometry():
     app = (ROOT / "studio" / "App.tsx").read_text(encoding="utf-8")
     panel = (ROOT / "studio" / "components" / "AddPanel.tsx").read_text(encoding="utf-8")
     canvas = (ROOT / "studio" / "components" / "CanvasNode.tsx").read_text(encoding="utf-8")
-    assert "node:nodeFor(item)" in panel
+    assert "node:item.node" in panel
+    assert "subtree:{rootId:asset.rootId,nodes:asset.nodes}" in panel
     assert "screenToCanvas" in app
     assert "position:'absolute'" in app
     assert "item.node||" in canvas

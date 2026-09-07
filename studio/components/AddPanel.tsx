@@ -1,53 +1,69 @@
 import React from 'react';
 import {Node, useStudio} from '../store';
 
-type AddItem={label:string;type:string;description:string;style?:Node['style'];content?:Node['content'];metadata?:Record<string,any>;interactions?:Record<string,any>[];preview?:string};
-type Category='browse'|'Shapes'|'Buttons'|'Graphics'|'3D'|'Animations'|'Photos'|'Videos'|'Forms'|'Charts'|'Sheets'|'Tables'|'Frames'|'Grids'|'Mockups';
-const textItem=(label:string,fontSize:string,fontWeight='400'):AddItem=>({label,type:'text',description:'Add text',content:{text:label},style:{css:{fontSize,lineHeight:'1.2',fontWeight},tokens:{}},preview:'text'});
-const sectionItem=(label:string,background='#fff'):AddItem=>({label,type:'section',description:'Add website section',style:{css:{padding:'64px 40px',minHeight:'240px',background},tokens:{}},metadata:{kind:'section'},preview:'template'});
-const buttonItem=(label:string,background:string,color='#fff',radius='6px'):AddItem=>({label,type:'button',description:'Add button',content:{text:'Button',href:'#'},style:{css:{width:'140px',padding:'12px 18px',borderRadius:radius,background,color,textAlign:'center'},tokens:{}},preview:'button'});
-const primary:AddItem[]=[
-  textItem('Add a text box','18px'),buttonItem('Button','#111'),
-  {label:'Card',type:'container',description:'Add card',style:{css:{padding:'24px',borderRadius:'16px',background:'#fff',boxShadow:'0 10px 30px rgba(16,24,40,.10)',width:'260px',minHeight:'170px'},tokens:{}},metadata:{kind:'card'},preview:'card'},
-  {label:'Image frame',type:'image',description:'Add image frame',style:{css:{width:'320px',height:'220px',objectFit:'cover',borderRadius:'0',background:'#dff3ff'},tokens:{}},content:{src:'',alt:''},metadata:{kind:'image-frame'},preview:'frame'},
-  {label:'Shape',type:'container',description:'Add shape',style:{css:{width:'180px',height:'140px',background:'#111'},tokens:{}},metadata:{kind:'shape'},preview:'shape'},sectionItem('Section'),
+type AddItem={label:string;description:string;node:Partial<Node>&Pick<Node,'type'>;preview:string};
+type SectionAsset={label:string;description:string;rootId:string;nodes:Record<string,Node>;preview:string};
+type PanelMode='sections'|'elements'|'text'|'draw';
+
+const element=(label:string,type:string,preview:string,css:Record<string,string>,content:Record<string,any>={},kind?:string):AddItem=>({
+  label,description:`Add ${label.toLowerCase()}`,preview,node:{type,content,style:{css,tokens:{}},metadata:{displayName:label,kind:kind||preview}},
+});
+
+const elements:AddItem[]=[
+  element('Rectangle','container','rectangle',{width:'220px',height:'150px',background:'#111827'}, {}, 'shape'),
+  element('Rounded shape','container','rounded',{width:'220px',height:'150px',borderRadius:'24px',background:'#7c3aed'}, {}, 'shape'),
+  element('Circle','container','circle',{width:'170px',height:'170px',borderRadius:'50%',background:'#06b6d4'}, {}, 'shape'),
+  element('Line','divider','line',{width:'240px',height:'1px',background:'#111827'}, {}, 'divider'),
+  element('Button','button','button',{width:'150px',height:'48px',display:'grid',placeItems:'center',borderRadius:'10px',background:'#111827',color:'#fff',fontWeight:'700'}, {text:'Button',href:'#'}, 'button'),
+  element('Card','container','card',{width:'300px',height:'220px',padding:'24px',borderRadius:'20px',background:'#fff',boxShadow:'0 18px 45px rgba(15,23,42,.14)'}, {}, 'card'),
+  element('Container','container','container',{width:'420px',height:'260px',border:'1px dashed #94a3b8',background:'rgba(255,255,255,.4)'}, {}, 'group'),
+  element('Icon','icon','icon',{width:'56px',height:'56px',display:'grid',placeItems:'center',borderRadius:'14px',background:'#111827',color:'#fff',fontSize:'25px'}, {text:'✦'}, 'icon'),
+  element('Badge','text','badge',{padding:'8px 14px',borderRadius:'999px',background:'#eef2ff',color:'#4338ca',fontWeight:'700'}, {text:'New'}, 'badge'),
+  element('Spacer','container','spacer',{width:'200px',height:'48px',border:'1px dashed #cbd5e1',background:'transparent'}, {}, 'spacer'),
 ];
-const categories:Category[]=['Shapes','Buttons','Graphics','3D','Animations','Photos','Videos','Forms','Charts','Sheets','Tables','Frames','Grids','Mockups'];
-const categoryItems:Record<Exclude<Category,'browse'>,AddItem[]>={
-  Shapes:[
-    {label:'Square',type:'container',description:'Square',style:{css:{width:'160px',height:'160px',background:'#000'},tokens:{}},metadata:{kind:'shape'},preview:'square'},
-    {label:'Rounded square',type:'container',description:'Rounded square',style:{css:{width:'160px',height:'160px',borderRadius:'22px',background:'#000'},tokens:{}},metadata:{kind:'shape'},preview:'rounded'},
-    {label:'Circle',type:'container',description:'Circle',style:{css:{width:'160px',height:'160px',borderRadius:'50%',background:'#000'},tokens:{}},metadata:{kind:'shape'},preview:'circle'},
-    {label:'Triangle',type:'container',description:'Triangle',style:{css:{width:'160px',height:'140px',background:'#000',clipPath:'polygon(50% 0,100% 100%,0 100%)'},tokens:{}},metadata:{kind:'shape'},preview:'triangle'},
-    {label:'Line',type:'divider',description:'Line',style:{css:{width:'220px',borderWidth:'1px 0 0',borderStyle:'solid'},tokens:{}},preview:'line'},
-  ],
-  Buttons:[buttonItem('Gray button','#777'),buttonItem('Purple button','linear-gradient(90deg,#8d00ed,#cc70ff)'),buttonItem('Pink button','linear-gradient(90deg,#d12add,#ff86f4)','#fff','999px'),buttonItem('Blue button','#bfe0fa','#111'),buttonItem('Dark button','#171717','#fff','9px'),buttonItem('Indigo button','#4d50ff','#fff','999px'),buttonItem('Green button','#06b45d','#fff','999px'),buttonItem('Outline button','#fff','#111','999px')],
-  Graphics:[{label:'Graphic',type:'container',description:'Graphic',style:{css:{width:'180px',height:'180px',borderRadius:'34% 66% 58% 42%',background:'linear-gradient(135deg,#ff7a18,#ffd200)'},tokens:{}},metadata:{kind:'shape'},preview:'graphic'}],
-  '3D':[{label:'3D shape',type:'container',description:'3D shape',style:{css:{width:'180px',height:'180px',borderRadius:'28px',background:'linear-gradient(145deg,#8d32ff,#1b43d6)',boxShadow:'18px 18px 36px rgba(55,31,150,.35)'},tokens:{}},metadata:{kind:'shape'},preview:'graphic'}],
-  Animations:[{label:'Animated graphic',type:'container',description:'Animated graphic',style:{css:{width:'180px',height:'180px',borderRadius:'50%',background:'#ffdd00'},tokens:{}},metadata:{kind:'shape'},interactions:[{trigger:'animation',effect:'scale'}],preview:'graphic'}],
-  Photos:[{...primary[3],label:'Photo frame'}],
-  Videos:[{label:'Video frame',type:'video',description:'Add video',content:{src:''},style:{css:{width:'320px',height:'180px',background:'#111'},tokens:{}},metadata:{kind:'video-frame'},preview:'video'}],
-  Forms:[{label:'Contact form',type:'lead_form',description:'Capture enquiries',metadata:{kind:'form'},preview:'form'}],
-  Charts:[{label:'Bar chart',type:'container',description:'Bar chart graphic',style:{css:{width:'260px',height:'180px',background:'linear-gradient(90deg,transparent 8%,#4f7ff3 8% 20%,transparent 20% 27%,#4f7ff3 27% 45%,transparent 45% 52%,#8c68e8 52% 70%,transparent 70%)',borderBottom:'2px solid #ccd2dc'},tokens:{}},metadata:{kind:'chart'},preview:'chart'}],
-  Sheets:[{label:'Sheet',type:'table',description:'Editable sheet',style:{css:{width:'360px',height:'220px',background:'repeating-linear-gradient(0deg,#fff 0 31px,#d9dde5 31px 32px),repeating-linear-gradient(90deg,transparent 0 89px,#d9dde5 89px 90px)',border:'1px solid #d9dde5'},tokens:{}},metadata:{kind:'sheet'},preview:'sheet'}],
-  Tables:[{label:'Table',type:'table',description:'Editable table',style:{css:{width:'360px',height:'220px',background:'repeating-linear-gradient(0deg,#fff 0 43px,#d9dde5 43px 44px)',border:'1px solid #d9dde5'},tokens:{}},metadata:{kind:'table'},preview:'sheet'}],
-  Grids:[
-    {label:'Two columns',type:'grid',description:'Two-column grid',style:{css:{display:'grid',gridTemplateColumns:'repeat(2,minmax(0,1fr))',gap:'8px',width:'420px',minHeight:'240px',background:'#dff3ff'},tokens:{}},metadata:{kind:'grid'},preview:'grid-2'},
-    {label:'Three columns',type:'grid',description:'Three-column grid',style:{css:{display:'grid',gridTemplateColumns:'repeat(3,minmax(0,1fr))',gap:'8px',width:'480px',minHeight:'240px',background:'#dff3ff'},tokens:{}},metadata:{kind:'grid'},preview:'grid-3'},
-  ],
-  Frames:[{...primary[3],label:'Rectangle'},{...primary[3],label:'Rounded rectangle',style:{css:{...primary[3].style?.css,borderRadius:'20px'},tokens:{}}},{...primary[3],label:'Circle frame',style:{css:{...primary[3].style?.css,width:'260px',height:'260px',borderRadius:'50%'},tokens:{}}}],
-  Mockups:[{...primary[3],label:'Device mockup',style:{css:{...primary[3].style?.css,width:'220px',height:'380px',border:'10px solid #111',borderRadius:'28px'},tokens:{}}}],
+
+const frames:AddItem[]=[
+  element('Square frame','image','frame-square',{width:'260px',height:'260px',objectFit:'cover',background:'#e2e8f0'}, {src:'',alt:'',crop:{x:0,y:0,scale:1}}, 'image-frame'),
+  element('Portrait frame','image','frame-portrait',{width:'240px',height:'320px',objectFit:'cover',background:'#e2e8f0'}, {src:'',alt:'',crop:{x:0,y:0,scale:1}}, 'image-frame'),
+  element('Landscape frame','image','frame-landscape',{width:'360px',height:'220px',objectFit:'cover',background:'#e2e8f0'}, {src:'',alt:'',crop:{x:0,y:0,scale:1}}, 'image-frame'),
+  element('Circle frame','image','frame-circle',{width:'260px',height:'260px',borderRadius:'50%',objectFit:'cover',background:'#e2e8f0'}, {src:'',alt:'',crop:{x:0,y:0,scale:1}}, 'image-frame'),
+  element('Rounded frame','image','frame-rounded',{width:'340px',height:'240px',borderRadius:'28px',objectFit:'cover',background:'#e2e8f0'}, {src:'',alt:'',crop:{x:0,y:0,scale:1}}, 'image-frame'),
+];
+
+const fullNode=(id:string,type:string,parentId:string|null,children:string[],content:Record<string,any>,css:Record<string,string>,name:string,kind?:string):Node=>({
+  id,type,parentId,children,content,style:{css,tokens:{}},layout:{},responsiveOverrides:{},visibility:'visible',bindings:{},accessibility:{},interactions:[],metadata:{displayName:name,kind:kind||type},
+});
+
+const sectionAsset=(label:string,index:number):SectionAsset=>{
+  const key=label.toLowerCase().replace(/[^a-z]+/g,'_'), root=`${key}_root`,title=`${key}_title`,body=`${key}_body`,action=`${key}_action`,visual=`${key}_visual`;
+  const dark=index%4===0,split=index%3!==2,background=dark?'#0b1020':index%4===1?'#f3f0ff':index%4===2?'#fff7ed':'#ecfeff',color=dark?'#fff':'#111827';
+  const nodes:Record<string,Node>={
+    [root]:fullNode(root,'section',null,[title,body,action,visual],{}, {position:'relative',width:'100%',height:index%3===0?'580px':'500px',overflow:'hidden',background},label,'section'),
+    [title]:fullNode(title,'text',root,[],{text:label==='Header / Navbar'?'Zylora Studio':label==='Footer'?'Let’s build something useful.':`${label} that makes the next step clear.`},{position:'absolute',left:'72px',top:label==='Header / Navbar'?'38px':'110px',width:split?'520px':'760px',fontSize:label==='Header / Navbar'?'28px':'54px',lineHeight:'1.02',fontWeight:'750',letterSpacing:'-0.04em',color},label==='Header / Navbar'?'Logo':`${label} title`,'text'),
+    [body]:fullNode(body,'text',root,[],{text:label==='Header / Navbar'?'Home   Work   About   Contact':`Use this editable ${label.toLowerCase()} arrangement as a starting point. Move, resize, restyle or remove every part.`},{position:'absolute',left:label==='Header / Navbar'?'720px':'72px',top:label==='Header / Navbar'?'46px':'250px',width:split?'490px':'660px',fontSize:label==='Header / Navbar'?'16px':'19px',lineHeight:'1.55',color:dark?'#cbd5e1':'#475569'},label==='Header / Navbar'?'Navigation':`${label} description`,'text'),
+    [action]:fullNode(action,'button',root,[],{text:label==='Footer'?'Contact us':'Get started',href:'#'},{position:'absolute',left:'72px',top:label==='Header / Navbar'?'30px':'360px',width:'152px',height:'48px',display:'grid',placeItems:'center',borderRadius:'10px',background:dark?'#fff':'#111827',color:dark?'#111827':'#fff',fontWeight:'700'},`${label} button`,'button'),
+    [visual]:fullNode(visual,'container',root,[],{}, {position:'absolute',left:split?'780px':'900px',top:label==='Header / Navbar'?'24px':'76px',width:label==='Header / Navbar'?'180px':'430px',height:label==='Header / Navbar'?'56px':'350px',borderRadius:index%2?'999px 32px 32px 999px':'32px',background:dark?'linear-gradient(135deg,#7c3aed,#22d3ee)':'linear-gradient(135deg,#a78bfa,#f0abfc)',opacity:'.92'},`${label} visual`,'shape'),
+  };
+  return {label,description:`Editable ${label.toLowerCase()} section`,rootId:root,nodes,preview:`section-${index%6}`};
 };
 
-export function AddPanel({mode='elements'}:{mode?:'elements'|'text'|'sections'|'apps'}){
-  const {dispatch}=useStudio();const [search,setSearch]=React.useState('');const [category,setCategory]=React.useState<Category>('browse');
-  const nodeFor=(item:AddItem)=>({type:item.type,content:item.content,style:item.style,interactions:item.interactions,metadata:{displayName:item.label,...(item.metadata||{})}});
-  const insert=(item:AddItem)=>dispatch({type:'INSERT_NODE',payload:{node:nodeFor(item)}});
-  const itemButton=(item:AddItem)=><button key={item.label} className={`reference-item ${item.preview||''}`} draggable onDragStart={e=>{const payload={label:item.label,type:item.type,node:nodeFor(item)};e.dataTransfer.setData('application/x-zylora-node',JSON.stringify(payload));e.dataTransfer.effectAllowed='copy';(window as any).__zyloraDraggingNode=payload}} onDragEnd={()=>window.setTimeout(()=>delete (window as any).__zyloraDraggingNode,250)} onClick={()=>insert(item)} title={`Add ${item.label}`} aria-label={`Add ${item.label}`}><i/><span>{item.label}</span></button>;
-  const prompt=<><div className="reference-search"><b>＋</b><input value={search} onChange={e=>setSearch(e.target.value)} aria-label="Describe or search" placeholder={mode==='sections'?'Describe your ideal design':'Describe your ideal element'}/><span aria-hidden="true">♩</span></div>{mode!=='text'&&<div className="reference-generate"><button onClick={()=>setSearch('')}>✦ <b>Generate</b>⌄</button><button onClick={()=>setSearch(search.trim())}>Search</button></div>}</>;
-  if(mode==='text')return <div className="studio-panel reference-panel text-reference-panel"><div className="reference-search compact"><b>⌕</b><input value={search} onChange={e=>setSearch(e.target.value)} aria-label="Search fonts" placeholder="Search fonts and combinations"/></div><button className="purple-action" onClick={()=>insert(textItem('Add a text box','18px'))}>T&nbsp;&nbsp; Add a text box</button><button className="magic-action" onClick={()=>insert(textItem('Write with AI','18px'))}>✎&nbsp;&nbsp; Magic Write</button><div className="reference-heading"><b>▦&nbsp; Brand Kit</b><span>Edit ♛</span></div><button className="brand-fonts" onClick={()=>setSearch('brand')}>Add your brand fonts</button><h3>Default text styles</h3><div className="text-presets">{[textItem('Add a heading','32px','700'),textItem('Add a subheading','21px','600'),textItem('Add a little bit of body text','14px')].map(item=><button key={item.label} onClick={()=>insert(item)} style={{fontSize:item.style?.css?.fontSize,fontWeight:item.style?.css?.fontWeight}}>{item.label}</button>)}</div></div>;
-  if(mode==='sections'){const templates=[sectionItem('Editorial hero','#3f2d20'),sectionItem('Nature hero','#40621f'),sectionItem('Business section','#101115'),sectionItem('Clean story','#f7ece4'),sectionItem('Gallery section','#dceffc'),sectionItem('Contact section','#f7f3ee')];return <div className="studio-panel reference-panel">{prompt}<div className="reference-heading"><b>Recently used</b><span>See all</span></div><div className="template-grid">{templates.slice(0,2).map(item=>itemButton(item))}</div><div className="reference-heading spaced"><b>More templates for you</b></div><div className="template-grid">{templates.map(item=>itemButton(item))}</div></div>}
-  if(mode==='apps')return <div className="studio-panel reference-panel">{prompt}<div className="reference-heading"><b>Website apps</b><span>See all</span></div><div className="category-grid">{[{label:'Form',type:'lead_form',description:'Lead form',preview:'form'},{label:'Gallery',type:'gallery',description:'Gallery',preview:'frame'},{label:'Appointment',type:'appointment_booking',description:'Booking',preview:'button'},{label:'Sales Assistant',type:'ai_sales_assistant',description:'Assistant',preview:'card'}].map(item=>itemButton(item as AddItem))}</div></div>;
-  if(category!=='browse'){const items=categoryItems[category].filter(item=>item.label.toLowerCase().includes(search.toLowerCase()));return <div className="studio-panel reference-panel category-panel"><div className="category-title"><button onClick={()=>setCategory('browse')} aria-label="Back to Elements">←</button><b>{category}</b></div>{category!=='Buttons'&&prompt}<div className={`category-items ${category.toLowerCase()}`}>{items.map(item=>itemButton(item))}</div></div>}
-  return <div className="studio-panel reference-panel">{prompt}<div className="reference-heading"><b>Recently used</b><span>See all</span></div><div className="recent-items">{primary.slice(1,4).map(item=>itemButton(item))}</div><div className="reference-heading spaced"><b>Browse categories</b></div><div className="category-grid">{categories.map((name,index)=><button key={name} onClick={()=>setCategory(name)} aria-label={`Open ${name}`}><i className={`category-icon icon-${index}`}><span/></i><b>{name}</b></button>)}</div></div>;
+const sectionNames=['Header / Navbar','Hero','Features','Services','About','Gallery','Logo strip','Statistics','Testimonials','Pricing','Team','FAQ','Contact','CTA','Footer'];
+const sections=sectionNames.map(sectionAsset);
+const textItem=element('Add Text','text','text',{width:'360px',fontSize:'32px',lineHeight:'1.15',fontWeight:'650',color:'#111827'}, {text:'Add your text'}, 'text');
+
+export function AddPanel({mode='elements'}:{mode?:PanelMode}){
+  const {dispatch}=useStudio();
+  const [query,setQuery]=React.useState('');
+  const insertItem=(item:AddItem)=>dispatch({type:'INSERT_NODE',payload:{node:item.node}});
+  const insertSection=(asset:SectionAsset)=>dispatch({type:'INSERT_SUBTREE',payload:{rootId:asset.rootId,nodes:asset.nodes}});
+  const drag=(event:React.DragEvent,payload:Record<string,any>)=>{event.dataTransfer.setData('application/x-zylora-node',JSON.stringify(payload));event.dataTransfer.effectAllowed='copy';(window as any).__zyloraDraggingNode=payload};
+  const card=(item:AddItem)=><button key={item.label} className={`asset-card ${item.preview}`} onClick={()=>insertItem(item)} draggable onDragStart={event=>drag(event,{label:item.label,type:item.node.type,node:item.node})} onDragEnd={()=>delete (window as any).__zyloraDraggingNode} aria-label={`Add ${item.label}`}><span className="asset-preview" aria-hidden="true"/><b>{item.label}</b><small>{item.description}</small></button>;
+  const sectionCard=(asset:SectionAsset)=><button key={asset.label} className={`section-asset ${asset.preview}`} onClick={()=>insertSection(asset)} draggable onDragStart={event=>drag(event,{label:asset.label,subtree:{rootId:asset.rootId,nodes:asset.nodes}})} onDragEnd={()=>delete (window as any).__zyloraDraggingNode} aria-label={`Add ${asset.label} section`}><span className="section-preview" aria-hidden="true"><i/><i/><i/></span><b>{asset.label}</b><small>{asset.description}</small></button>;
+  const search=<div className="asset-search"><span aria-hidden="true">⌕</span><input value={query} onChange={event=>setQuery(event.target.value)} placeholder={`Search ${mode}`} aria-label={`Search ${mode}`}/></div>;
+  if(mode==='text')return <div className="studio-panel blank-asset-panel"><div className="panel-intro"><b>Text</b><span>Add text, then style it on the canvas.</span></div>{search}<button className="add-text-action" onClick={()=>insertItem(textItem)}>T <span>Add Text</span></button><p className="beginner-tip">Double-click text on the page to type.</p></div>;
+  if(mode==='draw')return <div className="studio-panel blank-asset-panel"><div className="panel-intro"><b>Draw</b><span>Simple visual marks for website compositions.</span></div>{search}<div className="asset-grid">{elements.filter(item=>['rectangle','rounded','circle','line'].includes(item.preview)).filter(item=>item.label.toLowerCase().includes(query.toLowerCase())).map(card)}</div></div>;
+  if(mode==='sections')return <div className="studio-panel blank-asset-panel"><div className="panel-intro"><b>Sections</b><span>Editable starting arrangements—not locked templates.</span></div>{search}<div className="section-assets">{sections.filter(item=>item.label.toLowerCase().includes(query.toLowerCase())).map(sectionCard)}</div></div>;
+  const filtered=elements.filter(item=>item.label.toLowerCase().includes(query.toLowerCase()));
+  const filteredFrames=frames.filter(item=>item.label.toLowerCase().includes(query.toLowerCase()));
+  return <div className="studio-panel blank-asset-panel"><div className="panel-intro"><b>Elements</b><span>Click or drag anything onto your page.</span></div>{search}<h3>Basic elements</h3><div className="asset-grid">{filtered.map(card)}</div><h3>Image frames</h3><div className="frame-strip">{filteredFrames.map(card)}</div></div>;
 }

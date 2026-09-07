@@ -40,13 +40,11 @@ def test_reference_catalogue_is_fail_closed_and_only_verified_projects_publish()
 
 def test_unverified_candidates_are_not_public_routes():
     c=TestClient(app)
-    items=c.get('/api/templates').json()['items']
-    assert len(items)>=40
-    page=c.get('/templates'); assert page.status_code==200
+    assert c.get('/api/templates').json()=={'items':[],'retired':True}
+    page=c.get('/templates',follow_redirects=False); assert page.status_code==307 and page.headers['location']=='/signup'
     for slug in ['bruno-simon-folio-2025','mr-pandas-paper-portfolio','cinder-frame','atelier-noir','ai-runtime']:
         assert c.get(f'/template-preview/{slug}').status_code==404
-    for slug in [x['slug'] for x in items[:3]]:
-        assert c.get(f'/template-preview/{slug}').status_code==200
+        assert c.get(f'/templates/{slug}').status_code==404
 
 
 def test_exact_source_gate_requires_local_source_binary_and_render_evidence(tmp_path: Path):

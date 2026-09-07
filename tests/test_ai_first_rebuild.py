@@ -28,9 +28,9 @@ def auth():
 
 def test_catalogue_removed_ai_is_template_independent_and_exportable():
     reset_db(); c,h=auth()
-    items=c.get('/api/templates').json()['items']; assert len(items)>=40 and all(x.get('publication',{}).get('state')=='public' for x in items)
+    catalogue=c.get('/api/templates').json(); assert catalogue=={'items':[],'retired':True}
     legacy=c.post('/api/sites',headers=h,json={'business_name':'Legacy','description':'A valid business description for a removed legacy template.','template_slug':'atelier-noir','origin':'TEMPLATE'})
-    assert legacy.status_code in {400,404,409}
+    assert legacy.status_code==410
     created=c.post('/api/sites',headers={**h,'Idempotency-Key':'ai-first-rebuild'},json={
         'business_name':'Harbor Dental',
         'description':'Create a dental clinic website with separate Home, About, Services, Dentists, Appointments and Contact pages for families.',
@@ -60,5 +60,5 @@ def test_minimal_brand_font_and_public_template_runtime_not_exposed():
     home=c.get('/'); assert home.status_code==200
     assert 'Space+Grotesk' in home.text and 'Wix+Madefor' not in home.text
     assert 'Build a website that brings you customers' in home.text or 'Build a premium website' in home.text
-    templates=c.get('/templates'); assert templates.status_code==200 and ('Designed one by one.' in templates.text or 'Curated Website Templates' in templates.text)
+    templates=c.get('/templates',follow_redirects=False); assert templates.status_code==307 and templates.headers['location']=='/signup'
     assert c.get('/template-preview/ai-runtime').status_code==404

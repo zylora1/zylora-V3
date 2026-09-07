@@ -419,7 +419,10 @@ def credits(request:Request):
     u=_user(request); return wallet_summary(u['id'])
 
 @router.get('/templates')
-def templates(): return {'items':public_templates()}
+def templates():
+    # Kept as a compatibility endpoint for older clients. The platform-owned
+    # catalogue is retired; reusable designs are private user templates.
+    return {'items': [], 'retired': True}
 
 @router.get('/sites')
 def sites(request:Request):
@@ -441,6 +444,8 @@ def create_site(payload:SiteIn,request:Request):
         raise HTTPException(422,str(exc))
     origin=(payload.origin or 'AI').upper()
     if origin not in {'AI','TEMPLATE'}: raise HTTPException(422,'origin must be AI or TEMPLATE')
+    if origin == 'TEMPLATE':
+        raise HTTPException(410, detail={'code': 'PLATFORM_TEMPLATES_RETIRED', 'message': 'Platform templates are retired. Create a blank website or use one of your own saved templates.'})
     if origin=='AI':
         # AI creation is deliberately independent of the public template catalogue.
         # The runtime slug is an internal renderer, never a selectable template.
@@ -620,9 +625,10 @@ def edit_ai(site_id:str,payload:AiEditIn,request:Request):
             try:
                 doc_dict = json.loads(s.get('studio_document_json') or '{}')
                 doc = SiteDocument(**doc_dict)
-                operations, provider = generate_v4_operations(s.get('studio_document_json') or '{}', payload.instruction, payload.selection or [])
+                operations, provider = generate_v4_operations(s.get('studio_document_json') or '{}', payload.instruction, payload.selection or [], user_id=u['id'], site_id=site_id)
                 updated_doc = apply_v4_operations(doc, operations)
                 document = updated_doc.model_dump(exclude_none=True)
+                document['revision'] = int(doc.revision) + 1
                 document_schema_version = 4
             except Exception as exc:
                 raise HTTPException(422, str(exc))
@@ -648,7 +654,7 @@ def edit_ai(site_id:str,payload:AiEditIn,request:Request):
         debit=debit_wallet(db,u['id'],u['plan'],int(get_plan(u['plan']).get('ai_edit_cost',2)),'AI_EDIT',idem,credit_type='ai',reference_id=site_id)
         ensure_history(db,s,u['id'])
         if is_v4:
-            db.execute(text('UPDATE sites SET tagline=:g,description=:d,studio_document_json=:structure,document_schema_version=:dsv,document_version=document_version+1,updated_at=:c WHERE id=:i AND document_version=:v'),{'g':edited['tagline'],'d':edited['description'],'structure':json.dumps(document,separators=(',',':')),'dsv':document_schema_version,'c':now_iso(),'i':site_id,'v':current_version})
+            db.execute(text('UPDATE sites SET tagline=:g,description=:d,studio_document_json=:structure,studio_revision=:sr,document_schema_version=:dsv,document_version=document_version+1,updated_at=:c WHERE id=:i AND document_version=:v'),{'g':edited['tagline'],'d':edited['description'],'structure':json.dumps(document,separators=(',',':')),'sr':document['revision'],'dsv':document_schema_version,'c':now_iso(),'i':site_id,'v':current_version})
         else:
             db.execute(text('UPDATE sites SET tagline=:g,description=:d,draft_structure_json=:structure,document_schema_version=:dsv,document_version=document_version+1,updated_at=:c WHERE id=:i AND document_version=:v'),{'g':edited['tagline'],'d':edited['description'],'structure':json.dumps(document,separators=(',',':')),'dsv':document_schema_version,'c':now_iso(),'i':site_id,'v':current_version})
         push_history(db,site_id,u['id'],'AI_EDIT'); create_revision(db,site_id,u['id'],'AI','AI structured edit')

@@ -77,9 +77,9 @@ def test_reference_catalogue_runtime_stays_empty_until_exact_source_render_gate_
     from fastapi.testclient import TestClient
     from app.main import app
     with TestClient(app) as client:
-        page=client.get('/templates')
-        assert page.status_code==200
-        items=client.get('/api/templates').json()['items']; assert len(items)>=40 and all(x.get('publication',{}).get('state')=='public' for x in items)
+        page=client.get('/templates',follow_redirects=False)
+        assert page.status_code==307 and page.headers['location']=='/signup'
+        assert client.get('/api/templates').json()=={'items':[],'retired':True}
         for slug in ['bruno-simon-folio-2025','mr-pandas-paper-portfolio','cinder-frame','atelier-noir','ai-runtime']:
             assert client.get(f'/template-preview/{slug}').status_code==404
 
