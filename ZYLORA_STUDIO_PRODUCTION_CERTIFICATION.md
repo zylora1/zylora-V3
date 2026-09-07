@@ -4,11 +4,18 @@
 
 **CONDITIONALLY READY**
 
-The canvas engine, tested interaction workflow, persistence in the controlled authenticated application environment, responsive shell and cross-browser behavior pass. The implementation must not be described as pixel-identical to Canva: exact proprietary icon artwork was not copied, and authenticated testing against the eventual deployed SHA remains outstanding until deployment completes.
+The canvas engine, tested interaction workflow, persistence in the controlled authenticated application environment, responsive shell and cross-browser behavior pass. The implementation must not be described as pixel-identical to Canva: exact proprietary icon artwork was not copied. Railway deployment and public production smoke pass, but authenticated production Studio interaction remains unproven because no controlled production credentials/session were available.
 
-## Release state before deployment
+## Release and deployment
 
 - Baseline: `975a09eb57dd65ac1536e40ac47e4c02d06ea659`
+- Tested implementation commit: `365c53947a348de4294244b3cc519b5c847da793`
+- Railway deployment: `4f74f335-0f98-42db-8a38-7ad87f6e00a0`
+- Railway status: `SUCCESS`
+- Railway deployed implementation SHA: `365c53947a348de4294244b3cc519b5c847da793`
+- Production health: `GET /api/health` returned HTTP 200 with `{"status":"ok"}`.
+- Production Studio bundle: `GET /static/studio.js` returned HTTP 200 and 271,386 bytes; reference header and rail strings were present.
+- Production landing and login browser smoke: PASS with zero captured console warnings/errors.
 - Branch: `main`
 - Full repository: 389 passed, 1 skipped, 0 failed.
 - Build/compile/static checks: PASS.
@@ -22,10 +29,10 @@ Selection, deliberate drag, direct resize, smart guides, overlap, z-order, direc
 
 Multi-selection/group and keyboard nudge: **IMPLEMENTED, NOT ISOLATED IN THE CURRENT BROWSER SCRIPT**.
 
-Preview/publish: **repository-tested; final authenticated deployed-SHA browser proof pending**.
+Preview/publish: **repository-tested; authenticated production browser proof remains unavailable**.
 
 Visual match: measured landmarks **PASS**; overall pixel-identical claim **NOT MADE**. See `ZYLORA_STUDIO_VIDEO_PARITY_REPORT.md`.
 
-## Remaining release steps
+## Remaining certification limitation
 
-Commit only intended Studio/migration/test/evidence files, push `main`, verify the exact Railway SHA and deployment SUCCESS, hit `/api/health`, then rerun the decisive production smoke. Until those facts exist, production certification remains conditional.
+`LIVE PRODUCTION AUTHENTICATED STUDIO VERIFICATION: BLOCKED` by the absence of a controlled production account/session in the certification browser. No authentication or Turnstile bypass was added. This prevents a production-authenticated claim for save/publish even though the same interaction and persistence paths pass in the controlled authenticated application environment.

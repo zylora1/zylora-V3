@@ -1,0 +1,11 @@
+Production service: zylora-app
+Environment: production
+Implementation commit: 365c53947a348de4294244b3cc519b5c847da793
+Deployment ID: 4f74f335-0f98-42db-8a38-7ad87f6e00a0
+Deployment status: SUCCESS
+Image digest: sha256:b02c9519bdf4fa0d7566278482c2f5a2ef2a6a8641998ab90ae97dd96b2edf26
+Production URL: https://zylora-api-production.up.railway.app
+Health: GET /api/health -> HTTP 200, {"status":"ok"}
+Studio bundle: GET /static/studio.js -> HTTP 200, 271386 bytes
+Public browser smoke: landing PASS; login PASS; zero captured console warnings/errors
+Authenticated production Studio: NOT EXECUTED; no controlled production credentials/session available
