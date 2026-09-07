@@ -1,0 +1,65 @@
+[
+  {
+    "browser": "chromium",
+    "selected": "move",
+    "handles": {
+      "left": "ew-resize",
+      "right": "ew-resize",
+      "top": "ns-resize",
+      "bottom": "ns-resize",
+      "top-left": "nwse-resize",
+      "top-right": "nesw-resize",
+      "bottom-left": "nesw-resize",
+      "bottom-right": "nwse-resize"
+    },
+    "rotation": "grab",
+    "workspace": "default",
+    "space_pan": "grab",
+    "active_pan": "grabbing",
+    "text_edit": "text",
+    "errors": [],
+    "pass": true
+  },
+  {
+    "browser": "firefox",
+    "selected": "move",
+    "handles": {
+      "left": "ew-resize",
+      "right": "ew-resize",
+      "top": "ns-resize",
+      "bottom": "ns-resize",
+      "top-left": "nwse-resize",
+      "top-right": "nesw-resize",
+      "bottom-left": "nesw-resize",
+      "bottom-right": "nwse-resize"
+    },
+    "rotation": "grab",
+    "workspace": "default",
+    "space_pan": "grab",
+    "active_pan": "grabbing",
+    "text_edit": "text",
+    "errors": [],
+    "pass": true
+  },
+  {
+    "browser": "webkit",
+    "selected": "move",
+    "handles": {
+      "left": "ew-resize",
+      "right": "ew-resize",
+      "top": "ns-resize",
+      "bottom": "ns-resize",
+      "top-left": "nwse-resize",
+      "top-right": "nesw-resize",
+      "bottom-left": "nesw-resize",
+      "bottom-right": "nwse-resize"
+    },
+    "rotation": "grab",
+    "workspace": "default",
+    "space_pan": "grab",
+    "active_pan": "grabbing",
+    "text_edit": "text",
+    "errors": [],
+    "pass": true
+  }
+]

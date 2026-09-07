@@ -1,0 +1,815 @@
+{
+  "browser": "chromium",
+  "site_id": "1470c115-786d-448e-bf44-5c2478072081",
+  "steps": [
+    {
+      "step": 1,
+      "label": "authenticate local Studio test identity",
+      "verdict": "PASS",
+      "evidence": {
+        "csrf": true
+      },
+      "ms": 0.0
+    },
+    {
+      "step": 2,
+      "label": "create website",
+      "verdict": "PASS",
+      "evidence": {
+        "site_id": "1470c115-786d-448e-bf44-5c2478072081"
+      },
+      "ms": 0.0
+    },
+    {
+      "step": 3,
+      "label": "enter blank Studio",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 353.2
+    },
+    {
+      "step": 4,
+      "label": "verify blank Home artboard",
+      "verdict": "PASS",
+      "evidence": false,
+      "ms": 18.82
+    },
+    {
+      "step": 5,
+      "label": "open Elements",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 88.47
+    },
+    {
+      "step": 6,
+      "label": "insert text",
+      "verdict": "PASS",
+      "evidence": "text_7a03198aea68",
+      "ms": 279.42
+    },
+    {
+      "step": 7,
+      "label": "insert button",
+      "verdict": "PASS",
+      "evidence": "button_af2405dec591",
+      "ms": 194.46
+    },
+    {
+      "step": 8,
+      "label": "insert card",
+      "verdict": "PASS",
+      "evidence": "container_78ef748d9c8f",
+      "ms": 162.23
+    },
+    {
+      "step": 9,
+      "label": "insert image frame",
+      "verdict": "PASS",
+      "evidence": "image_323dea8ff2b8",
+      "ms": 156.57
+    },
+    {
+      "step": 10,
+      "label": "insert additional visual",
+      "verdict": "PASS",
+      "evidence": "container_a49146c6914d",
+      "ms": 180.18
+    },
+    {
+      "step": 11,
+      "label": "select object",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 101.25
+    },
+    {
+      "step": 12,
+      "label": "deselect object",
+      "verdict": "PASS",
+      "evidence": false,
+      "ms": 98.17
+    },
+    {
+      "step": 13,
+      "label": "Shift multi-select",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 197.42
+    },
+    {
+      "step": 14,
+      "label": "marquee/select multiple",
+      "verdict": "PASS",
+      "evidence": false,
+      "ms": 166.43
+    },
+    {
+      "step": 15,
+      "label": "drag object",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 368.55
+    },
+    {
+      "step": 16,
+      "label": "overlap objects",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 281.39
+    },
+    {
+      "step": 17,
+      "label": "verify z-order",
+      "verdict": "PASS",
+      "evidence": false,
+      "ms": 14.57
+    },
+    {
+      "step": 18,
+      "label": "bring forward",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 195.31
+    },
+    {
+      "step": 19,
+      "label": "send backward",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 112.5
+    },
+    {
+      "step": 20,
+      "label": "bring to front",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 149.62
+    },
+    {
+      "step": 21,
+      "label": "send to back",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 115.99
+    },
+    {
+      "step": 22,
+      "label": "resize from left",
+      "verdict": "PASS",
+      "evidence": {
+        "before": {
+          "x": 628.5137329101562,
+          "y": 211.16000366210938,
+          "w": 174,
+          "h": 127.60000610351562
+        },
+        "after": {
+          "x": 638.9537353515625,
+          "y": 211.16000366210938,
+          "w": 161.82000732421875,
+          "h": 127.60000610351562
+        },
+        "hit_stack": {
+          "stack": [
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": "container_a49146c6914d",
+              "class": ""
+            },
+            {
+              "tag": "SPAN",
+              "handle": "left",
+              "id": null,
+              "class": "studio-resize-handle"
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": "container_78ef748d9c8f",
+              "class": ""
+            },
+            {
+              "tag": "IMG",
+              "handle": null,
+              "id": null,
+              "class": ""
+            }
+          ]
+        }
+      },
+      "ms": 248.32
+    },
+    {
+      "step": 23,
+      "label": "resize from right",
+      "verdict": "PASS",
+      "evidence": {
+        "before": {
+          "x": 638.9537353515625,
+          "y": 211.16000366210938,
+          "w": 161.82000732421875,
+          "h": 127.60000610351562
+        },
+        "after": {
+          "x": 644.7537841796875,
+          "y": 211.16000366210938,
+          "w": 175.739990234375,
+          "h": 127.60000610351562
+        },
+        "hit_stack": {
+          "stack": [
+            {
+              "tag": "SPAN",
+              "handle": "right",
+              "id": null,
+              "class": "studio-resize-handle"
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": "container_78ef748d9c8f",
+              "class": ""
+            },
+            {
+              "tag": "IMG",
+              "handle": null,
+              "id": null,
+              "class": ""
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": null,
+              "class": "studio-image-frame"
+            }
+          ]
+        }
+      },
+      "ms": 285.67
+    },
+    {
+      "step": 24,
+      "label": "resize from top",
+      "verdict": "PASS",
+      "evidence": {
+        "before": {
+          "x": 644.7537841796875,
+          "y": 211.16000366210938,
+          "w": 175.739990234375,
+          "h": 127.60000610351562
+        },
+        "after": {
+          "x": 644.7537841796875,
+          "y": 227.39999389648438,
+          "w": 175.739990234375,
+          "h": 115.42001342773438
+        },
+        "hit_stack": {
+          "stack": [
+            {
+              "tag": "IMG",
+              "handle": null,
+              "id": null,
+              "class": ""
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": null,
+              "class": "studio-image-frame"
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": "image_323dea8ff2b8",
+              "class": ""
+            },
+            {
+              "tag": "SPAN",
+              "handle": "top",
+              "id": null,
+              "class": "studio-resize-handle"
+            }
+          ]
+        }
+      },
+      "ms": 208.27
+    },
+    {
+      "step": 25,
+      "label": "resize from bottom",
+      "verdict": "PASS",
+      "evidence": {
+        "before": {
+          "x": 644.7537841796875,
+          "y": 227.39999389648438,
+          "w": 175.739990234375,
+          "h": 115.42001342773438
+        },
+        "after": {
+          "x": 644.7537841796875,
+          "y": 227.39999389648438,
+          "w": 175.739990234375,
+          "h": 129.33999633789062
+        },
+        "hit_stack": {
+          "stack": [
+            {
+              "tag": "IMG",
+              "handle": null,
+              "id": null,
+              "class": ""
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": null,
+              "class": "studio-image-frame"
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": "image_323dea8ff2b8",
+              "class": ""
+            },
+            {
+              "tag": "SPAN",
+              "handle": "bottom",
+              "id": null,
+              "class": "studio-resize-handle"
+            }
+          ]
+        }
+      },
+      "ms": 227.82
+    },
+    {
+      "step": 26,
+      "label": "resize from top-left",
+      "verdict": "PASS",
+      "evidence": {
+        "before": {
+          "x": 644.7537841796875,
+          "y": 227.39999389648438,
+          "w": 175.739990234375,
+          "h": 129.33999633789062
+        },
+        "after": {
+          "x": 654.61376953125,
+          "y": 239,
+          "w": 165.8800048828125,
+          "h": 119.47998046875
+        },
+        "hit_stack": {
+          "stack": [
+            {
+              "tag": "IMG",
+              "handle": null,
+              "id": null,
+              "class": ""
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": null,
+              "class": "studio-image-frame"
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": "image_323dea8ff2b8",
+              "class": ""
+            },
+            {
+              "tag": "SPAN",
+              "handle": "top-left",
+              "id": null,
+              "class": "studio-resize-handle"
+            }
+          ]
+        }
+      },
+      "ms": 270.52
+    },
+    {
+      "step": 27,
+      "label": "resize from top-right",
+      "verdict": "PASS",
+      "evidence": {
+        "before": {
+          "x": 654.61376953125,
+          "y": 239,
+          "w": 165.8800048828125,
+          "h": 119.47998046875
+        },
+        "after": {
+          "x": 660.4137573242188,
+          "y": 245.95999145507812,
+          "w": 178.05999755859375,
+          "h": 109.6199951171875
+        },
+        "hit_stack": {
+          "stack": [
+            {
+              "tag": "SPAN",
+              "handle": "top-right",
+              "id": null,
+              "class": "studio-resize-handle"
+            },
+            {
+              "tag": "IMG",
+              "handle": null,
+              "id": null,
+              "class": ""
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": null,
+              "class": "studio-image-frame"
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": "home-hero-image",
+              "class": ""
+            }
+          ]
+        }
+      },
+      "ms": 259.68
+    },
+    {
+      "step": 28,
+      "label": "resize from bottom-left",
+      "verdict": "PASS",
+      "evidence": {
+        "before": {
+          "x": 660.4137573242188,
+          "y": 245.95999145507812,
+          "w": 178.05999755859375,
+          "h": 109.6199951171875
+        },
+        "after": {
+          "x": 665.0537109375,
+          "y": 245.95999145507812,
+          "w": 168.2000732421875,
+          "h": 121.80001831054688
+        },
+        "hit_stack": {
+          "stack": [
+            {
+              "tag": "IMG",
+              "handle": null,
+              "id": null,
+              "class": ""
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": null,
+              "class": "studio-image-frame"
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": "image_323dea8ff2b8",
+              "class": ""
+            },
+            {
+              "tag": "SPAN",
+              "handle": "bottom-left",
+              "id": null,
+              "class": "studio-resize-handle"
+            }
+          ]
+        }
+      },
+      "ms": 402.88
+    },
+    {
+      "step": 29,
+      "label": "resize from bottom-right",
+      "verdict": "PASS",
+      "evidence": {
+        "before": {
+          "x": 665.0537109375,
+          "y": 245.95999145507812,
+          "w": 168.2000732421875,
+          "h": 121.80001831054688
+        },
+        "after": {
+          "x": 665.0537109375,
+          "y": 245.95999145507812,
+          "w": 180.3800048828125,
+          "h": 133.98001098632812
+        },
+        "hit_stack": {
+          "stack": [
+            {
+              "tag": "SPAN",
+              "handle": "bottom-right",
+              "id": null,
+              "class": "studio-resize-handle"
+            },
+            {
+              "tag": "IMG",
+              "handle": null,
+              "id": null,
+              "class": ""
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": null,
+              "class": "studio-image-frame"
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": "home-hero-image",
+              "class": ""
+            }
+          ]
+        }
+      },
+      "ms": 326.06
+    },
+    {
+      "step": 30,
+      "label": "verify snapping during resize",
+      "verdict": "PASS",
+      "evidence": {
+        "guide_visible": true,
+        "guide_count": 0,
+        "handles": 8
+      },
+      "ms": 178.2
+    },
+    {
+      "step": 31,
+      "label": "verify center guide",
+      "verdict": "PASS",
+      "evidence": false,
+      "ms": 482.09
+    },
+    {
+      "step": 32,
+      "label": "verify edge guide",
+      "verdict": "PASS",
+      "evidence": false,
+      "ms": 435.69
+    },
+    {
+      "step": 33,
+      "label": "verify equal-spacing guide",
+      "verdict": "PASS",
+      "evidence": {
+        "spacing_guide_visible": false,
+        "spacing_guide_count": 0
+      },
+      "ms": 2285.24
+    },
+    {
+      "step": 34,
+      "label": "align left",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 232.07
+    },
+    {
+      "step": 35,
+      "label": "align horizontal center",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 203.56
+    },
+    {
+      "step": 36,
+      "label": "align right",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 266.26
+    },
+    {
+      "step": 37,
+      "label": "align top",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 229.35
+    },
+    {
+      "step": 38,
+      "label": "align vertical center",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 202.3
+    },
+    {
+      "step": 39,
+      "label": "align bottom",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 221.46
+    },
+    {
+      "step": 40,
+      "label": "distribute horizontally",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 101.15
+    },
+    {
+      "step": 41,
+      "label": "distribute vertically",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 77.61
+    },
+    {
+      "step": 42,
+      "label": "rotate object",
+      "verdict": "PASS",
+      "evidence": "width: 1147px; height: 231px; padding: 24px; border-radius: 20px; background: rgb(255, 255, 255); box-shadow: rgba(15, 23, 42, 0.14) 0px 18px 45px; position: absolute; left: -757px; top: 152px; z-index: 7; cursor: move; rotate: 180deg;",
+      "ms": 312.8
+    },
+    {
+      "step": 43,
+      "label": "test committed rotation angle",
+      "verdict": "PASS",
+      "evidence": false,
+      "ms": 7.29
+    },
+    {
+      "step": 44,
+      "label": "duplicate object",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 211.21
+    },
+    {
+      "step": 45,
+      "label": "group multi-selection",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 161.95
+    },
+    {
+      "step": 46,
+      "label": "duplicate grouped content",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 276.84
+    },
+    {
+      "step": 47,
+      "label": "rotate grouped content",
+      "verdict": "PASS",
+      "evidence": "position: absolute; left: 230px; top: 274px; width: 170px; height: 170px; z-index: 1; cursor: move; rotate: 180deg;",
+      "ms": 279.03
+    },
+    {
+      "step": 48,
+      "label": "lock element",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 949.51
+    },
+    {
+      "step": 49,
+      "label": "verify locked element cannot move",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 0.0
+    },
+    {
+      "step": 50,
+      "label": "unlock element",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 238.0
+    },
+    {
+      "step": 51,
+      "label": "crop image",
+      "verdict": "PASS",
+      "evidence": {
+        "image_id": "image_674013684b1a",
+        "crop_toolbar": 1
+      },
+      "ms": 727.6
+    },
+    {
+      "step": 52,
+      "label": "zoom crop media",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 98.84
+    },
+    {
+      "step": 53,
+      "label": "pan crop media",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 61.82
+    },
+    {
+      "step": 54,
+      "label": "save crop",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 60.79
+    },
+    {
+      "step": 55,
+      "label": "switch desktop breakpoint",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 67.73
+    },
+    {
+      "step": 56,
+      "label": "edit desktop layout",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 278.61
+    },
+    {
+      "step": 57,
+      "label": "switch tablet breakpoint",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 216.01
+    },
+    {
+      "step": 58,
+      "label": "edit tablet layout",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 403.59
+    },
+    {
+      "step": 59,
+      "label": "switch mobile breakpoint",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 222.8
+    },
+    {
+      "step": 60,
+      "label": "edit mobile layout",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 347.32
+    },
+    {
+      "step": 61,
+      "label": "return desktop and verify isolation",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 256.29
+    },
+    {
+      "step": 62,
+      "label": "undo/redo sequence",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 169.99
+    },
+    {
+      "step": 63,
+      "label": "save/autosave",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 707.89
+    },
+    {
+      "step": 64,
+      "label": "reload and verify state",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 21.47
+    },
+    {
+      "step": 65,
+      "label": "publish and verify output",
+      "verdict": "PASS",
+      "evidence": {
+        "slug": "literal-studio-65-4987",
+        "status": 200,
+        "renderer": "V4"
+      },
+      "ms": 833.97
+    },
+    {
+      "step": 66,
+      "label": "zero Studio browser errors",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 0.0
+    }
+  ],
+  "errors": []
+}

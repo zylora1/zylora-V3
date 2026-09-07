@@ -146,6 +146,32 @@ def test_studio_concurrent_saves_use_database_compare_and_swap():
     assert current['metadata']['concurrentWriter'] in {'first','second'}
 
 
+def test_regular_publish_uses_the_saved_studio_v4_snapshot():
+    reset_db(); client, headers = auth()
+    created = client.post('/api/sites', headers=headers, json={
+        'business_name': 'Studio Publish Fidelity',
+        'description': 'A controlled Studio publish fidelity regression page.',
+        'origin': 'AI', 'industry': 'Design', 'style': 'Editorial',
+    })
+    assert created.status_code == 200, created.text
+    site_id = created.json()['id']; slug = created.json()['slug']
+    document = client.post(f'/api/sites/{site_id}/studio-migrate', headers=headers).json()['document']
+    heading = next(node for node in document['pages']['home']['nodes'].values() if node['type'] == 'heading')
+    heading['content']['text'] = 'Studio publish snapshot marker'
+    saved = client.post(f'/api/sites/{site_id}/studio-save', headers=headers, json=document)
+    assert saved.status_code == 200, saved.text
+    published = client.post(f'/api/sites/{site_id}/publish', headers=headers, json={})
+    assert published.status_code == 200, published.text
+    live = client.get(f'/s/{slug}')
+    assert live.status_code == 200
+    assert live.headers['X-Zylora-Renderer'] == 'V4'
+    assert 'Studio publish snapshot marker' in live.text
+    with SessionLocal() as db:
+        row = db.execute(text('SELECT renderer_state,published_studio_document_json FROM sites WHERE id=:s'), {'s': site_id}).mappings().one()
+    assert row['renderer_state'] == 'V4'
+    assert 'Studio publish snapshot marker' in row['published_studio_document_json']
+
+
 def test_v4_canary_snapshot_is_immutable_and_legacy_rollback_is_proven():
     reset_db();client,headers=auth()
     created=client.post('/api/sites',headers=headers,json={'business_name':'Legacy Rollback Proof','description':'A complete production rollback verification website.','origin':'AI','industry':'Design','style':'Editorial'})

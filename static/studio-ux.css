@@ -170,3 +170,4 @@ body{background:var(--bg);color:var(--text)}.zylora-studio-app{background:var(--
   .canvas-toolbar-dock .selection-toolbar{position:static;min-width:0;max-width:none;flex:1;overflow-x:auto;overflow-y:visible;pointer-events:auto}
   .canvas-toolbar-dock .device-toolbar{flex:0 0 auto;pointer-events:auto}
 }
+body.studio-space-panning .canvas-workspace{cursor:grab}.canvas-workspace:active{cursor:grabbing}body.studio-pan-active .canvas-workspace{cursor:grabbing}.studio-text-editor[contenteditable=true]{cursor:text!important}

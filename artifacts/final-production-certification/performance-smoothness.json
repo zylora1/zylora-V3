@@ -1,0 +1,198 @@
+[
+  {
+    "requested": 20,
+    "rendered": 76,
+    "dom_nodes": 358,
+    "sequential_insertion_ms": 1371.9,
+    "steady_state": {
+      "drag": {
+        "frames": 58,
+        "average_ms": 16.953103448275865,
+        "p95_ms": 16.799999999999727,
+        "max_ms": 33.30000000000018,
+        "long_tasks": [],
+        "wall_ms": 625.84
+      },
+      "resize": {
+        "frames": 30,
+        "average_ms": 16.664600000000018,
+        "p95_ms": 16.800000000000182,
+        "max_ms": 16.800000000000182,
+        "long_tasks": [],
+        "wall_ms": 139.78
+      },
+      "selection": {
+        "frames": 25,
+        "average_ms": 16.663999999999977,
+        "p95_ms": 16.700000000000728,
+        "max_ms": 16.800000000000182,
+        "long_tasks": [],
+        "wall_ms": 37.26
+      },
+      "layer_panel": {
+        "frames": 37,
+        "average_ms": 16.66486486486485,
+        "p95_ms": 16.700000000000728,
+        "max_ms": 16.800000000000182,
+        "long_tasks": [],
+        "wall_ms": 281.53
+      },
+      "autosave_wait_ms": 12.29
+    },
+    "browser_errors": []
+  },
+  {
+    "requested": 100,
+    "rendered": 156,
+    "dom_nodes": 438,
+    "sequential_insertion_ms": 5340.16,
+    "steady_state": {
+      "drag": {
+        "frames": 62,
+        "average_ms": 16.397032258064517,
+        "p95_ms": 16.700000000000728,
+        "max_ms": 16.800000000000182,
+        "long_tasks": [],
+        "wall_ms": 689.19
+      },
+      "resize": {
+        "frames": 28,
+        "average_ms": 16.66428571428573,
+        "p95_ms": 16.700000000000728,
+        "max_ms": 16.700000000000728,
+        "long_tasks": [],
+        "wall_ms": 92.26
+      },
+      "selection": {
+        "frames": 24,
+        "average_ms": 16.666666666666703,
+        "p95_ms": 16.700000000000728,
+        "max_ms": 16.700000000000728,
+        "long_tasks": [],
+        "wall_ms": 21.81
+      },
+      "layer_panel": {
+        "frames": 37,
+        "average_ms": 16.667567567567588,
+        "p95_ms": 16.700000000000728,
+        "max_ms": 16.80000000000109,
+        "long_tasks": [],
+        "wall_ms": 272.02
+      },
+      "autosave_wait_ms": 6.03
+    },
+    "browser_errors": []
+  },
+  {
+    "requested": 250,
+    "rendered": 306,
+    "dom_nodes": 588,
+    "sequential_insertion_ms": 13520.31,
+    "steady_state": {
+      "drag": {
+        "frames": 55,
+        "average_ms": 16.66545454545455,
+        "p95_ms": 16.799999999999272,
+        "max_ms": 16.799999999999272,
+        "long_tasks": [],
+        "wall_ms": 566.91
+      },
+      "resize": {
+        "frames": 35,
+        "average_ms": 21.9,
+        "p95_ms": 49.899999999999636,
+        "max_ms": 66.70000000000073,
+        "long_tasks": [
+          58,
+          58,
+          61,
+          61
+        ],
+        "wall_ms": 405.0
+      },
+      "selection": {
+        "frames": 24,
+        "average_ms": 16.66391666666671,
+        "p95_ms": 16.700000000000728,
+        "max_ms": 16.700000000000728,
+        "long_tasks": [],
+        "wall_ms": 29.97
+      },
+      "layer_panel": {
+        "frames": 37,
+        "average_ms": 17.565783783783814,
+        "p95_ms": 16.80000000000291,
+        "max_ms": 50,
+        "long_tasks": [
+          66,
+          66,
+          66,
+          66
+        ],
+        "wall_ms": 312.14
+      },
+      "autosave_wait_ms": 8.33
+    },
+    "browser_errors": []
+  },
+  {
+    "requested": 500,
+    "rendered": 556,
+    "dom_nodes": 838,
+    "sequential_insertion_ms": 27901.31,
+    "steady_state": {
+      "drag": {
+        "frames": 59,
+        "average_ms": 16.66579661016948,
+        "p95_ms": 16.700000000000728,
+        "max_ms": 16.80000000000291,
+        "long_tasks": [],
+        "wall_ms": 602.43
+      },
+      "resize": {
+        "frames": 36,
+        "average_ms": 30.55277777777782,
+        "p95_ms": 116.60000000000218,
+        "max_ms": 116.70000000000073,
+        "long_tasks": [
+          91,
+          91,
+          116,
+          116,
+          68,
+          68,
+          52,
+          52,
+          132,
+          132,
+          52,
+          52
+        ],
+        "wall_ms": 747.97
+      },
+      "selection": {
+        "frames": 23,
+        "average_ms": 17.391304347826086,
+        "p95_ms": 16.799999999999272,
+        "max_ms": 33.39999999999782,
+        "long_tasks": [],
+        "wall_ms": 38.25
+      },
+      "layer_panel": {
+        "frames": 38,
+        "average_ms": 17.542105263157953,
+        "p95_ms": 16.799999999999272,
+        "max_ms": 50,
+        "long_tasks": [
+          62,
+          62,
+          62,
+          62
+        ],
+        "wall_ms": 297.09
+      },
+      "autosave_wait_ms": 11.68
+    },
+    "browser_errors": []
+  }
+]

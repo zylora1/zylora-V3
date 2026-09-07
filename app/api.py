@@ -28,6 +28,7 @@ from .seo_engine import create_redirect, enqueue_site_change, page_public_slug, 
 from .site_policy import policy_response, footer_placement_policy
 from .link_icons import normalize_footer_links
 from .api_editor import render_draft
+from .studio_document import validate_studio_document
 from .operations import run_site_qa, record_operational_event
 from .ai_models import enabled_models, validate_model
 
@@ -783,13 +784,27 @@ def publish(site_id:str,request:Request,payload:PublishIn|None=None):
                 'plans':_publish_plan_options(),
             })
 
-        baseline=_structural_snapshot_for_site(db,s)
-        try:
-            published_doc,projection_meta=project_document_for_publish(
-                s.get('draft_structure_json'), is_paid=is_paid, baseline_snapshot=baseline
-            )
-        except ValueError as exc:
-            raise HTTPException(500,detail={'code':'TEMPLATE_BASELINE_MISSING','message':'The template baseline is unavailable. Please try again.'}) from exc
+        # A Studio V4 document is the authoritative draft for free-form sites.
+        # Keep the legacy projection/entitlement path intact for structured-editor
+        # sites, but never publish a stale legacy template over a saved Studio draft.
+        studio_publish = bool(s.get('studio_document_json'))
+        baseline = {}
+        published_studio_document = None
+        if studio_publish:
+            try:
+                published_studio_document = validate_studio_document(json.loads(s.get('studio_document_json') or '{}'))
+                published_doc = published_studio_document.model_dump(exclude_none=True)
+                projection_meta = {'structural_reset_applied': False, 'structural_change_count': 0, 'studio_v4_publish': True}
+            except Exception as exc:
+                raise HTTPException(409, detail={'code':'STUDIO_DOCUMENT_INVALID','message':'The saved Studio document is invalid and cannot be published.','reason':str(exc)}) from exc
+        else:
+            baseline=_structural_snapshot_for_site(db,s)
+            try:
+                published_doc,projection_meta=project_document_for_publish(
+                    s.get('draft_structure_json'), is_paid=is_paid, baseline_snapshot=baseline
+                )
+            except ValueError as exc:
+                raise HTTPException(500,detail={'code':'TEMPLATE_BASELINE_MISSING','message':'The template baseline is unavailable. Please try again.'}) from exc
 
         # Free is activated only at the final publish transaction, after eligibility
         # checks and any required structural-reset confirmation have passed.
@@ -825,7 +840,14 @@ def publish(site_id:str,request:Request,payload:PublishIn|None=None):
         },separators=(',',':'))
         structure=json.dumps(published_doc,separators=(',',':'))
         next_revision=int(s.get('published_revision') or 0)+1
-        db.execute(text("UPDATE sites SET status='LIVE',published_snapshot_json=:snapshot,published_structure_json=:structure,published_revision=:r,updated_at=:c WHERE id=:i"),{'snapshot':snapshot,'structure':structure,'r':next_revision,'c':now_iso(),'i':site_id})
+        db.execute(text("""UPDATE sites SET status='LIVE',published_snapshot_json=:snapshot,
+            published_structure_json=:structure,published_studio_document_json=:studio_document,
+            renderer_state=:renderer,published_revision=:r,updated_at=:c WHERE id=:i"""),{
+            'snapshot':snapshot,'structure':structure,
+            'studio_document':json.dumps(published_doc,separators=(',',':')) if studio_publish else None,
+            'renderer':'V4' if studio_publish else 'LEGACY',
+            'r':next_revision,'c':now_iso(),'i':site_id
+        })
         db.execute(text("INSERT INTO published_versions(id,site_id,revision,snapshot_json,structure_json,created_by,created_at) VALUES (:i,:s,:r,:snap,:st,:u,:a)"),{'i':str(uuid4()),'s':site_id,'r':next_revision,'snap':snapshot,'st':structure,'u':u['id'],'a':now_iso()})
         create_revision(db,site_id,u['id'],'PUBLISH','Published snapshot')
     for old_path,new_path in redirect_pairs:

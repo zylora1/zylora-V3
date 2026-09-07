@@ -1,0 +1,9 @@
+{
+  "drag_snap_repetitions": 20,
+  "autosave_reload_repetitions": 20,
+  "breakpoint_repetitions": 20,
+  "crop_persistence_repetitions": 10,
+  "publish_repetitions": 3,
+  "errors": [],
+  "pass": true
+}
