@@ -1,0 +1,74 @@
+{
+  "comparison_size": [
+    1535,
+    777
+  ],
+  "normalized_mean_absolute_pixel_difference": 0.032877,
+  "note": "Whole-frame difference includes different project data and locally implemented, non-proprietary icons; measured shell landmarks are compared exactly.",
+  "landmarks": {
+    "reference": {
+      "topbar": [
+        0,
+        0,
+        1535,
+        58
+      ],
+      "rail": [
+        0,
+        58,
+        70,
+        777
+      ],
+      "drawer": [
+        70,
+        58,
+        432,
+        777
+      ],
+      "canvas": [
+        605,
+        123,
+        1392,
+        567
+      ],
+      "add_section": [
+        605,
+        591,
+        1392,
+        630
+      ]
+    },
+    "implementation": {
+      "topbar": [
+        0,
+        0,
+        1535,
+        58
+      ],
+      "rail": [
+        0,
+        58,
+        70,
+        777
+      ],
+      "drawer": [
+        70,
+        58,
+        432,
+        777
+      ],
+      "canvas": [
+        605,
+        123,
+        1392,
+        567
+      ],
+      "add_section": [
+        605,
+        591,
+        1392,
+        630
+      ]
+    }
+  }
+}

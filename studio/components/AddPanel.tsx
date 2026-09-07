@@ -1,37 +1,53 @@
 import React from 'react';
 import {Node, useStudio} from '../store';
 
-type AddItem = {label:string; type:string; icon:string; description:string; style?:Node['style']; content?:Node['content']; metadata?:Record<string,any>};
-const primary:AddItem[] = [
-  {label:'Text', type:'text', icon:'T', description:'Add a text box'},
-  {label:'Button', type:'button', icon:'↗', description:'Add a call-to-action'},
-  {label:'Card', type:'container', icon:'▣', description:'Add an editable card', style:{css:{padding:'24px',borderRadius:'16px',background:'#ffffff',boxShadow:'0 10px 30px rgba(16,24,40,.08)',minWidth:'240px',minHeight:'160px'},tokens:{}}, metadata:{kind:'card'}},
-  {label:'Image frame', type:'image', icon:'▧', description:'Add a frame for your image', style:{css:{width:'320px',height:'220px',objectFit:'cover',borderRadius:'12px',background:'#f2f4f7'},tokens:{}}, content:{src:'',alt:''}, metadata:{kind:'image-frame'}},
-  {label:'Shape', type:'container', icon:'○', description:'Add a simple shape', style:{css:{width:'220px',height:'140px',borderRadius:'18px',background:'#eef0f3'},tokens:{}}, metadata:{kind:'shape'}},
-  {label:'Section', type:'section', icon:'▭', description:'Add a new website section', style:{css:{padding:'64px 40px',minHeight:'240px'},tokens:{}}, metadata:{kind:'section'}},
-  {label:'Divider', type:'divider', icon:'—', description:'Separate content cleanly'},
+type AddItem={label:string;type:string;description:string;style?:Node['style'];content?:Node['content'];metadata?:Record<string,any>;interactions?:Record<string,any>[];preview?:string};
+type Category='browse'|'Shapes'|'Buttons'|'Graphics'|'3D'|'Animations'|'Photos'|'Videos'|'Forms'|'Charts'|'Sheets'|'Tables'|'Frames'|'Grids'|'Mockups';
+const textItem=(label:string,fontSize:string,fontWeight='400'):AddItem=>({label,type:'text',description:'Add text',content:{text:label},style:{css:{fontSize,lineHeight:'1.2',fontWeight},tokens:{}},preview:'text'});
+const sectionItem=(label:string,background='#fff'):AddItem=>({label,type:'section',description:'Add website section',style:{css:{padding:'64px 40px',minHeight:'240px',background},tokens:{}},metadata:{kind:'section'},preview:'template'});
+const buttonItem=(label:string,background:string,color='#fff',radius='6px'):AddItem=>({label,type:'button',description:'Add button',content:{text:'Button',href:'#'},style:{css:{width:'140px',padding:'12px 18px',borderRadius:radius,background,color,textAlign:'center'},tokens:{}},preview:'button'});
+const primary:AddItem[]=[
+  textItem('Add a text box','18px'),buttonItem('Button','#111'),
+  {label:'Card',type:'container',description:'Add card',style:{css:{padding:'24px',borderRadius:'16px',background:'#fff',boxShadow:'0 10px 30px rgba(16,24,40,.10)',width:'260px',minHeight:'170px'},tokens:{}},metadata:{kind:'card'},preview:'card'},
+  {label:'Image frame',type:'image',description:'Add image frame',style:{css:{width:'320px',height:'220px',objectFit:'cover',borderRadius:'0',background:'#dff3ff'},tokens:{}},content:{src:'',alt:''},metadata:{kind:'image-frame'},preview:'frame'},
+  {label:'Shape',type:'container',description:'Add shape',style:{css:{width:'180px',height:'140px',background:'#111'},tokens:{}},metadata:{kind:'shape'},preview:'shape'},sectionItem('Section'),
 ];
-const business:AddItem[] = [
-  {label:'Lead form', type:'lead_form', icon:'◎', description:'Capture an enquiry'},
-  {label:'Appointment', type:'appointment_booking', icon:'◷', description:'Let visitors book time'},
-  {label:'Sales Assistant', type:'ai_sales_assistant', icon:'✦', description:'Add your AI assistant'},
-  {label:'FAQ', type:'container', icon:'?', description:'Answer common questions', metadata:{kind:'faq'}},
-  {label:'Gallery', type:'gallery', icon:'▦', description:'Show a collection of images'},
-];
-const presets:Record<string,Partial<Node>> = {
-  text:{content:{text:'Add your text'},style:{css:{fontSize:'18px',lineHeight:'1.5'},tokens:{}}},
-  button:{content:{text:'Get started',href:'#'},style:{css:{padding:'12px 18px',borderRadius:'8px',background:'#111827',color:'#ffffff'},tokens:{}}},
-  divider:{style:{css:{width:'100%',borderWidth:'1px 0 0',borderStyle:'solid'},tokens:{}}},
+const categories:Category[]=['Shapes','Buttons','Graphics','3D','Animations','Photos','Videos','Forms','Charts','Sheets','Tables','Frames','Grids','Mockups'];
+const categoryItems:Record<Exclude<Category,'browse'>,AddItem[]>={
+  Shapes:[
+    {label:'Square',type:'container',description:'Square',style:{css:{width:'160px',height:'160px',background:'#000'},tokens:{}},metadata:{kind:'shape'},preview:'square'},
+    {label:'Rounded square',type:'container',description:'Rounded square',style:{css:{width:'160px',height:'160px',borderRadius:'22px',background:'#000'},tokens:{}},metadata:{kind:'shape'},preview:'rounded'},
+    {label:'Circle',type:'container',description:'Circle',style:{css:{width:'160px',height:'160px',borderRadius:'50%',background:'#000'},tokens:{}},metadata:{kind:'shape'},preview:'circle'},
+    {label:'Triangle',type:'container',description:'Triangle',style:{css:{width:'160px',height:'140px',background:'#000',clipPath:'polygon(50% 0,100% 100%,0 100%)'},tokens:{}},metadata:{kind:'shape'},preview:'triangle'},
+    {label:'Line',type:'divider',description:'Line',style:{css:{width:'220px',borderWidth:'1px 0 0',borderStyle:'solid'},tokens:{}},preview:'line'},
+  ],
+  Buttons:[buttonItem('Gray button','#777'),buttonItem('Purple button','linear-gradient(90deg,#8d00ed,#cc70ff)'),buttonItem('Pink button','linear-gradient(90deg,#d12add,#ff86f4)','#fff','999px'),buttonItem('Blue button','#bfe0fa','#111'),buttonItem('Dark button','#171717','#fff','9px'),buttonItem('Indigo button','#4d50ff','#fff','999px'),buttonItem('Green button','#06b45d','#fff','999px'),buttonItem('Outline button','#fff','#111','999px')],
+  Graphics:[{label:'Graphic',type:'container',description:'Graphic',style:{css:{width:'180px',height:'180px',borderRadius:'34% 66% 58% 42%',background:'linear-gradient(135deg,#ff7a18,#ffd200)'},tokens:{}},metadata:{kind:'shape'},preview:'graphic'}],
+  '3D':[{label:'3D shape',type:'container',description:'3D shape',style:{css:{width:'180px',height:'180px',borderRadius:'28px',background:'linear-gradient(145deg,#8d32ff,#1b43d6)',boxShadow:'18px 18px 36px rgba(55,31,150,.35)'},tokens:{}},metadata:{kind:'shape'},preview:'graphic'}],
+  Animations:[{label:'Animated graphic',type:'container',description:'Animated graphic',style:{css:{width:'180px',height:'180px',borderRadius:'50%',background:'#ffdd00'},tokens:{}},metadata:{kind:'shape'},interactions:[{trigger:'animation',effect:'scale'}],preview:'graphic'}],
+  Photos:[{...primary[3],label:'Photo frame'}],
+  Videos:[{label:'Video frame',type:'video',description:'Add video',content:{src:''},style:{css:{width:'320px',height:'180px',background:'#111'},tokens:{}},metadata:{kind:'video-frame'},preview:'video'}],
+  Forms:[{label:'Contact form',type:'lead_form',description:'Capture enquiries',metadata:{kind:'form'},preview:'form'}],
+  Charts:[{label:'Bar chart',type:'container',description:'Bar chart graphic',style:{css:{width:'260px',height:'180px',background:'linear-gradient(90deg,transparent 8%,#4f7ff3 8% 20%,transparent 20% 27%,#4f7ff3 27% 45%,transparent 45% 52%,#8c68e8 52% 70%,transparent 70%)',borderBottom:'2px solid #ccd2dc'},tokens:{}},metadata:{kind:'chart'},preview:'chart'}],
+  Sheets:[{label:'Sheet',type:'table',description:'Editable sheet',style:{css:{width:'360px',height:'220px',background:'repeating-linear-gradient(0deg,#fff 0 31px,#d9dde5 31px 32px),repeating-linear-gradient(90deg,transparent 0 89px,#d9dde5 89px 90px)',border:'1px solid #d9dde5'},tokens:{}},metadata:{kind:'sheet'},preview:'sheet'}],
+  Tables:[{label:'Table',type:'table',description:'Editable table',style:{css:{width:'360px',height:'220px',background:'repeating-linear-gradient(0deg,#fff 0 43px,#d9dde5 43px 44px)',border:'1px solid #d9dde5'},tokens:{}},metadata:{kind:'table'},preview:'sheet'}],
+  Grids:[
+    {label:'Two columns',type:'grid',description:'Two-column grid',style:{css:{display:'grid',gridTemplateColumns:'repeat(2,minmax(0,1fr))',gap:'8px',width:'420px',minHeight:'240px',background:'#dff3ff'},tokens:{}},metadata:{kind:'grid'},preview:'grid-2'},
+    {label:'Three columns',type:'grid',description:'Three-column grid',style:{css:{display:'grid',gridTemplateColumns:'repeat(3,minmax(0,1fr))',gap:'8px',width:'480px',minHeight:'240px',background:'#dff3ff'},tokens:{}},metadata:{kind:'grid'},preview:'grid-3'},
+  ],
+  Frames:[{...primary[3],label:'Rectangle'},{...primary[3],label:'Rounded rectangle',style:{css:{...primary[3].style?.css,borderRadius:'20px'},tokens:{}}},{...primary[3],label:'Circle frame',style:{css:{...primary[3].style?.css,width:'260px',height:'260px',borderRadius:'50%'},tokens:{}}}],
+  Mockups:[{...primary[3],label:'Device mockup',style:{css:{...primary[3].style?.css,width:'220px',height:'380px',border:'10px solid #111',borderRadius:'28px'},tokens:{}}}],
 };
 
-export function AddPanel() {
-  const {dispatch} = useStudio();
-  const [search, setSearch] = React.useState('');
-  const insert = (item:AddItem) => dispatch({type:'INSERT_NODE', payload:{node:{type:item.type, ...(presets[item.type]||{}), ...(item.style?{style:item.style}:{}), ...(item.content?{content:item.content}:{}), metadata:{displayName:item.label, ...(item.metadata||{})}}}});
-  const renderGroup = (title:string, items:AddItem[]) => {
-    const visible=items.filter(item => `${item.label} ${item.description}`.toLowerCase().includes(search.toLowerCase()));
-    if(!visible.length)return null;
-    return <section className="element-group" key={title}><h3>{title}</h3><div className="element-grid">{visible.map(item=><button key={item.label} className="add-item" draggable onDragStart={e=>{const payload={label:item.label,type:item.type};e.dataTransfer.setData('application/x-zylora-node',JSON.stringify(payload));e.dataTransfer.effectAllowed='copy';(window as any).__zyloraDraggingNode=payload}} onDragEnd={()=>{window.setTimeout(()=>delete (window as any).__zyloraDraggingNode,250)}} onClick={()=>insert(item)} title={`Add ${item.label}`} aria-label={`Add ${item.label}`}><b>{item.icon}</b><span>{item.label}</span><small>{item.description}</small></button>)}</div></section>;
-  };
-    return <div className="studio-panel add-panel"><div className="panel-intro"><b>Build your page</b><span>Drag something onto the page or click to add it.</span></div><div className="panel-search"><span>⌕</span><input aria-label="Search elements" placeholder="Search building blocks" value={search} onChange={e=>setSearch(e.target.value)}/></div>{renderGroup('Essentials',primary)}{renderGroup('Zylora tools',business)}<p className="panel-hint">Your website stays structured automatically — no layout code needed.</p></div>;
+export function AddPanel({mode='elements'}:{mode?:'elements'|'text'|'sections'|'apps'}){
+  const {dispatch}=useStudio();const [search,setSearch]=React.useState('');const [category,setCategory]=React.useState<Category>('browse');
+  const nodeFor=(item:AddItem)=>({type:item.type,content:item.content,style:item.style,interactions:item.interactions,metadata:{displayName:item.label,...(item.metadata||{})}});
+  const insert=(item:AddItem)=>dispatch({type:'INSERT_NODE',payload:{node:nodeFor(item)}});
+  const itemButton=(item:AddItem)=><button key={item.label} className={`reference-item ${item.preview||''}`} draggable onDragStart={e=>{const payload={label:item.label,type:item.type,node:nodeFor(item)};e.dataTransfer.setData('application/x-zylora-node',JSON.stringify(payload));e.dataTransfer.effectAllowed='copy';(window as any).__zyloraDraggingNode=payload}} onDragEnd={()=>window.setTimeout(()=>delete (window as any).__zyloraDraggingNode,250)} onClick={()=>insert(item)} title={`Add ${item.label}`} aria-label={`Add ${item.label}`}><i/><span>{item.label}</span></button>;
+  const prompt=<><div className="reference-search"><b>＋</b><input value={search} onChange={e=>setSearch(e.target.value)} aria-label="Describe or search" placeholder={mode==='sections'?'Describe your ideal design':'Describe your ideal element'}/><span aria-hidden="true">♩</span></div>{mode!=='text'&&<div className="reference-generate"><button onClick={()=>setSearch('')}>✦ <b>Generate</b>⌄</button><button onClick={()=>setSearch(search.trim())}>Search</button></div>}</>;
+  if(mode==='text')return <div className="studio-panel reference-panel text-reference-panel"><div className="reference-search compact"><b>⌕</b><input value={search} onChange={e=>setSearch(e.target.value)} aria-label="Search fonts" placeholder="Search fonts and combinations"/></div><button className="purple-action" onClick={()=>insert(textItem('Add a text box','18px'))}>T&nbsp;&nbsp; Add a text box</button><button className="magic-action" onClick={()=>insert(textItem('Write with AI','18px'))}>✎&nbsp;&nbsp; Magic Write</button><div className="reference-heading"><b>▦&nbsp; Brand Kit</b><span>Edit ♛</span></div><button className="brand-fonts" onClick={()=>setSearch('brand')}>Add your brand fonts</button><h3>Default text styles</h3><div className="text-presets">{[textItem('Add a heading','32px','700'),textItem('Add a subheading','21px','600'),textItem('Add a little bit of body text','14px')].map(item=><button key={item.label} onClick={()=>insert(item)} style={{fontSize:item.style?.css?.fontSize,fontWeight:item.style?.css?.fontWeight}}>{item.label}</button>)}</div></div>;
+  if(mode==='sections'){const templates=[sectionItem('Editorial hero','#3f2d20'),sectionItem('Nature hero','#40621f'),sectionItem('Business section','#101115'),sectionItem('Clean story','#f7ece4'),sectionItem('Gallery section','#dceffc'),sectionItem('Contact section','#f7f3ee')];return <div className="studio-panel reference-panel">{prompt}<div className="reference-heading"><b>Recently used</b><span>See all</span></div><div className="template-grid">{templates.slice(0,2).map(item=>itemButton(item))}</div><div className="reference-heading spaced"><b>More templates for you</b></div><div className="template-grid">{templates.map(item=>itemButton(item))}</div></div>}
+  if(mode==='apps')return <div className="studio-panel reference-panel">{prompt}<div className="reference-heading"><b>Website apps</b><span>See all</span></div><div className="category-grid">{[{label:'Form',type:'lead_form',description:'Lead form',preview:'form'},{label:'Gallery',type:'gallery',description:'Gallery',preview:'frame'},{label:'Appointment',type:'appointment_booking',description:'Booking',preview:'button'},{label:'Sales Assistant',type:'ai_sales_assistant',description:'Assistant',preview:'card'}].map(item=>itemButton(item as AddItem))}</div></div>;
+  if(category!=='browse'){const items=categoryItems[category].filter(item=>item.label.toLowerCase().includes(search.toLowerCase()));return <div className="studio-panel reference-panel category-panel"><div className="category-title"><button onClick={()=>setCategory('browse')} aria-label="Back to Elements">←</button><b>{category}</b></div>{category!=='Buttons'&&prompt}<div className={`category-items ${category.toLowerCase()}`}>{items.map(item=>itemButton(item))}</div></div>}
+  return <div className="studio-panel reference-panel">{prompt}<div className="reference-heading"><b>Recently used</b><span>See all</span></div><div className="recent-items">{primary.slice(1,4).map(item=>itemButton(item))}</div><div className="reference-heading spaced"><b>Browse categories</b></div><div className="category-grid">{categories.map((name,index)=><button key={name} onClick={()=>setCategory(name)} aria-label={`Open ${name}`}><i className={`category-icon icon-${index}`}><span/></i><b>{name}</b></button>)}</div></div>;
 }

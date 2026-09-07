@@ -2,14 +2,15 @@
   "name": "zylora-release-qa",
   "private": true,
   "scripts": {
+    "build:studio": "vite build --config vite.studio.config.mjs",
     "check:nextjs-sources": "node scripts/check_nextjs_sources.js"
   },
   "devDependencies": {
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
-    "esbuild": "^0.28.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vite": "^8.2.2"
   }
 }

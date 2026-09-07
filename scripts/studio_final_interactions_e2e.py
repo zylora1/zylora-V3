@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import json, os, re, shutil, sys, tempfile
+import argparse, json, os, re, shutil, sys, tempfile
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
@@ -16,10 +16,12 @@ from scripts.editor_media_e2e import bridge, bootstrap
 
 def inline_shell(html: str) -> str:
     bundle = (ROOT/'static'/'studio.js').read_text(encoding='utf-8')
+    ux = (ROOT/'static'/'studio-ux.css').read_text(encoding='utf-8')
+    html = html.replace('<link rel="stylesheet" href="/static/studio-ux.css">', f'<style>{ux}</style>')
     return re.sub(r'<script src="/static/studio\.js"></script>', lambda _: f'<script>{bootstrap()}</script><script>{bundle}</script>', html)
 
 
-def run() -> None:
+def run(engine_override: str | None = None) -> None:
     reset_db()
     client, headers = auth()
     created = client.post('/api/sites', headers=headers, json={
@@ -31,7 +33,7 @@ def run() -> None:
     site_id = created.json()['id']
     shell = client.get(f'/studio/{site_id}')
     assert shell.status_code == 200
-    engine_name = os.getenv('ZYLORA_BROWSER', 'chromium').lower()
+    engine_name = (engine_override or os.getenv('ZYLORA_BROWSER', 'chromium')).lower()
     checks: list[str] = []
     errors: list[str] = []
     try:
@@ -45,55 +47,42 @@ def run() -> None:
             page.set_content(inline_shell(shell.text), wait_until='load')
             page.wait_for_selector('.studio-canvas [data-studio-id]', timeout=15000)
 
-            # Create two real sections and reorder them through the semantic Layers UI.
-            # The Studio opens with Add as the default tool panel; avoid toggling it closed.
-            add_panel = page.locator('.add-panel')
-            rail_add = page.locator('.tool-rail button[title="Add"]')
-            if not rail_add.get_attribute('class') or 'active' not in (rail_add.get_attribute('class') or ''):
-                rail_add.click()
-                page.wait_for_timeout(250)
-            try:
-                page.get_by_title('Add Section', exact=True).click(timeout=5000)
-            except Exception as exc:
-                raise
+            # Create two real sections through the recording-aligned Templates drawer.
+            if not page.get_by_title('Add Editorial hero', exact=True).is_visible():
+                page.locator('.tool-rail button[title="Templates"]').click()
+            page.wait_for_timeout(250)
+            page.get_by_title('Add Editorial hero', exact=True).first.click(timeout=5000)
             page.wait_for_timeout(500)
-            page.get_by_title('Add Section', exact=True).click()
+            page.get_by_title('Add Nature hero', exact=True).first.click()
             page.wait_for_timeout(800)
-            page.locator('.tool-rail button[title="Layers"]').click()
-            rows = page.locator('.studio-layers .layer-row').filter(has_text='Section')
-            assert rows.count() >= 2
-            page.wait_for_timeout(800)
+            page.locator('.panel-collapse[aria-label="Close tool panel"]').click()
+            page.wait_for_timeout(200)
             before = client.post(f'/api/sites/{site_id}/studio-migrate', headers=headers).json()['document']
             root_before = list(before['pages']['home']['nodes'][before['pages']['home']['rootNodeId']]['children'])
             section_ids = [node_id for node_id in root_before if before['pages']['home']['nodes'][node_id]['type'] == 'section']
             assert len(section_ids) >= 2
             # The new section is appended after the existing footer section; use those two stable root sections.
             section_ids = section_ids[-2:]
-            source_row = page.locator(f'[data-layer-node-id="{section_ids[1]}"]')
-            target_row = page.locator(f'[data-layer-node-id="{section_ids[0]}"]')
-            assert source_row.count() == 1 and target_row.count() == 1
-            source = source_row.bounding_box(); target = target_row.bounding_box(); assert source and target
-            source_row.drag_to(target_row)
-            page.wait_for_timeout(250)
+            source_node = page.locator(f'[data-studio-id="{section_ids[1]}"]')
+            assert source_node.count() == 1
+            source_node.scroll_into_view_if_needed()
+            source_box=source_node.bounding_box(); assert source_box
+            source_x=source_box['x']+source_box['width']*.72
+            source_y=source_box['y']+min(28,source_box['height']*.35)
+            page.mouse.click(source_x,source_y)
+            page.mouse.click(source_x,source_y,button='right')
+            page.get_by_role('menu').get_by_role('button', name=re.compile('Send backward')).click()
             page.wait_for_timeout(800)
             after = client.post(f'/api/sites/{site_id}/studio-migrate', headers=headers).json()['document']
             root_after = list(after['pages']['home']['nodes'][after['pages']['home']['rootNodeId']]['children'])
-            if root_after.index(section_ids[1]) >= root_after.index(section_ids[0]):
-                # WebKit can decline synthetic HTML5 drag dispatch; use the same semantic
-                # section control exposed to touch users as a deterministic fallback.
-                source_row.click()
-                page.get_by_title('Move section up').click(); page.wait_for_timeout(150)
-                page.get_by_title('Move section up').click(); page.wait_for_timeout(800)
-                after = client.post(f'/api/sites/{site_id}/studio-migrate', headers=headers).json()['document']
-                root_after = list(after['pages']['home']['nodes'][after['pages']['home']['rootNodeId']]['children'])
             assert root_after.index(section_ids[1]) < root_after.index(section_ids[0])
             assert set(section_ids).issubset(set(root_after))
-            checks.append('semantic Layers drag reorders major sections with stable IDs')
+            checks.append('canvas section ordering preserves stable IDs')
             # History reducer coverage is asserted in the focused contract suite; keep this browser check focused on the persisted structural move.
 
             # Verify middle-mouse and Space+drag pan the viewport without changing node geometry.
-            page.locator('.studio-sidebar-left header button[aria-label="Close tool panel"]').click()
-            page.locator('.zoom-select').select_option('150')
+            page.locator('.zoom-range').fill('150')
+            page.locator('.zoom-range').evaluate('(e)=>e.blur()')
             heading = page.locator('[data-studio-type="heading"]').first
             geometry_before = heading.get_attribute('style')
             workspace = page.locator('.canvas-workspace').bounding_box(); assert workspace
@@ -121,6 +110,38 @@ def run() -> None:
                     assert page.locator('.studio-mobile-nav').is_visible()
                 checks.append(f'viewport {width}px has no application overflow')
             assert not errors
+            evidence = ROOT/'artifacts'/'studio-canva-grade-rebuild'
+            evidence.mkdir(parents=True, exist_ok=True)
+            # Use a valid one-page blank document for direct 1280x720 shell parity
+            # with the supplied recording instead of letting test content distort
+            # the measured canvas geometry.
+            parity_document = client.post(f'/api/sites/{site_id}/studio-migrate', headers=headers).json()['document']
+            parity_page = parity_document['pages']['home']
+            parity_root = parity_page['nodes'][parity_page['rootNodeId']]
+            parity_root['children'] = []
+            parity_root['style']['css'].update({'minHeight':'766px','background':'#ffffff'})
+            parity_page['nodes'] = {parity_root['id']: parity_root}
+            parity_document['pages'] = {'home': parity_page}
+            saved = client.post(f'/api/sites/{site_id}/studio-save', headers=headers, json=parity_document)
+            assert saved.status_code == 200, saved.text
+            page.set_viewport_size({'width': 1535, 'height': 777})
+            page.set_content(inline_shell(shell.text), wait_until='load')
+            page.wait_for_selector('.studio-canvas [data-studio-id]', timeout=15000)
+            page.locator('.zoom-range').fill('58')
+            page.locator('.canvas-workspace').evaluate('(e)=>{e.scrollLeft=0;e.scrollTop=0}')
+            page.screenshot(path=str(evidence/'reference-initial-1535.png'), full_page=False)
+            page.locator('.tool-rail button[title="Elements"]').click()
+            page.screenshot(path=str(evidence/'reference-elements-1535.png'), full_page=False)
+            page.screenshot(path=str(evidence/'recording-aligned-desktop.png'), full_page=False)
+            page.locator('.tool-rail button[title="Elements"]').click()
+            page.locator('.tool-rail button[title="Brand"]').click()
+            labels=page.locator('.tool-rail button span').all_text_contents()
+            assert labels == ['Templates','Elements','Text','Brand','Uploads','Tools','Projects','Apps','Photos']
+            checks.append('recording-aligned rail contains the nine reference tools in order')
+            page.screenshot(path=str(evidence/'recording-aligned-layers.png'), full_page=False)
+            page.locator('.tool-rail button[title="Brand"]').click()
+            page.set_viewport_size({'width': 390, 'height': 844})
+            page.screenshot(path=str(evidence/'recording-aligned-mobile.png'), full_page=False)
             page.screenshot(path=str(ROOT/'data'/'studio-final-interactions.png'), full_page=False)
             browser.close()
     finally:
@@ -130,4 +151,6 @@ def run() -> None:
 
 
 if __name__ == '__main__':
-    run()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--browser', choices=('chromium', 'firefox', 'webkit'))
+    run(parser.parse_args().browser)

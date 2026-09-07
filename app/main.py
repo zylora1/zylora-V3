@@ -398,7 +398,10 @@ def studio(site_id:str,request:Request):
     if not site: raise HTTPException(404,'Site not found')
     raw=(ROOT/'static'/'studio.html').read_text(encoding='utf-8')
     context=json.dumps({'siteId':site_id,'siteName':site['name'],'csrfToken':user['csrf_token']},separators=(',',':')).replace('</','<\\/')
-    rendered=raw.replace('__ZYLORA_STUDIO_CONTEXT__',context).replace('</head>','<link rel="stylesheet" href="/static/studio-ux.css"></head>').replace('<script src="/static/studio.js">','<script src="/static/session-restore.js"></script><script src="/static/studio.js">')
+    rendered=raw.replace('__ZYLORA_STUDIO_CONTEXT__',context)
+    if '/static/studio-ux.css' not in rendered:
+        rendered=rendered.replace('</head>','<link rel="stylesheet" href="/static/studio-ux.css"></head>')
+    rendered=rendered.replace('<script src="/static/studio.js">','<script src="/static/session-restore.js"></script><script src="/static/studio.js">')
     return HTMLResponse(rendered,headers={'Cache-Control':'no-store','X-Robots-Tag':'noindex, nofollow'})
 @app.get('/freelancers',include_in_schema=False)
 def freelancers_page():

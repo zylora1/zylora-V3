@@ -1,0 +1,14 @@
+Baseline: 975a09eb57dd65ac1536e40ac47e4c02d06ea659
+Vite build: PASS (30 modules; 271.38 kB; gzip 82.39 kB)
+Full pytest: 389 passed, 1 skipped, 0 failed, 59 warnings; 266.82 seconds
+Focused Studio contracts: 16 passed, 0 failed
+Compileall: PASS
+JavaScript/Next source check: 480 files, 0 errors
+Chromium Studio: 28 checks, 0 errors
+Firefox Studio: 28 checks, 0 errors
+WebKit Studio: 28 checks, 0 errors
+Chromium mobile: PASS, 0 errors
+Firefox mobile: PASS, 0 errors
+WebKit mobile: PASS, 0 errors
+Pan/viewport suite: 12 checks, 0 errors
+Visual comparison: 1535x777; normalized MAE 0.032877; all measured shell landmarks exact

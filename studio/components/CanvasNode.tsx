@@ -2,16 +2,17 @@ import React from 'react';
 import {useStudio} from '../store';
 import {useResize} from '../interactions/useResize';
 import {useDrag} from '../interactions/useDrag';
+import {intentionalDrag,rectFromElement} from '../engine';
 
 function EditableText({value,onChange,onEnter}:{value:string;onChange:(value:string)=>void;onEnter:()=>void}){
- const ref=React.useRef<HTMLSpanElement>(null),editing=React.useRef(false);
- React.useLayoutEffect(()=>{if(ref.current&&!editing.current&&ref.current.textContent!==value)ref.current.textContent=value},[value]);
- return <span ref={ref} className="studio-text-editor" contentEditable suppressContentEditableWarning
-   onDoubleClick={e=>{e.stopPropagation();editing.current=true;ref.current?.focus()}}
-   onFocus={()=>{editing.current=true}}
+ const ref=React.useRef<HTMLSpanElement>(null);const [editing,setEditing]=React.useState(false);
+ React.useLayoutEffect(()=>{if(ref.current&&!editing&&ref.current.textContent!==value)ref.current.textContent=value},[value,editing]);
+ return <span ref={ref} className="studio-text-editor" contentEditable={editing} suppressContentEditableWarning
+   onDoubleClick={e=>{e.stopPropagation();setEditing(true);requestAnimationFrame(()=>ref.current?.focus())}}
+   onFocus={()=>setEditing(true)}
    onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();onEnter()};if(e.key==='Escape'){e.preventDefault();ref.current?.blur();onEnter()}}}
    onInput={e=>onChange(e.currentTarget.textContent||'')}
-   onBlur={e=>{editing.current=false;onChange(e.currentTarget.textContent||'')}}/>;
+   onBlur={e=>{setEditing(false);onChange(e.currentTarget.textContent||'')}}/>;
 }
 
 const acceptsChildren=(type:string)=>['page','section','container','stack','flex','grid','repeater','list','gallery'].includes(type);
@@ -42,7 +43,7 @@ export function CanvasNode({nodeId}:{nodeId:string}){
  const elementRef=React.useRef<HTMLElement|null>(null);
  const gesture=React.useRef<{pointerId:number;startX:number;startY:number;base:any;active:false;kind:'select'|'move'}|null>(null);
  const suppressClick=React.useRef(false);
- const getRect=()=>{const el=elementRef.current;if(!el)return{x:parseFloat(cssStyles.left)||0,y:parseFloat(cssStyles.top)||0,w:100,h:40};const r=el.getBoundingClientRect();const parent=el.parentElement?.getBoundingClientRect();return{x:isAbsolute?parseFloat(cssStyles.left)||0:(r.left-(parent?.left||r.left))/state.zoom,y:isAbsolute?parseFloat(cssStyles.top)||0:(r.top-(parent?.top||r.top))/state.zoom,w:r.width/state.zoom,h:r.height/state.zoom}};
+ const getRect=()=>{const el=elementRef.current;if(!el)return{x:parseFloat(cssStyles.left)||0,y:parseFloat(cssStyles.top)||0,w:100,h:40};return rectFromElement(el,el.parentElement,state.zoom,isAbsolute,cssStyles)};
  const previewUpdate=(rect:any,lines:any[]=[])=>{setRectOverride(rect);dispatch({type:'SET_SNAP_LINES',payload:lines})};
  const endDrag=(rect:any)=>{const base=dragBase.current||getRect();setRectOverride(null);dispatch({type:'SET_SNAP_LINES',payload:[]});if(!state.document)return;const geometry=isAbsolute?{left:`${Math.round(rect.x)}px`,top:`${Math.round(rect.y)}px`}:{transform:`translate(${Math.round(rect.x-base.x)}px, ${Math.round(rect.y-base.y)}px)`};dragBase.current=null;dispatch({type:'UPDATE_NODE_GEOMETRY',payload:{nodeId,geometry}})};
  const {startDrag}=useDrag(previewUpdate,endDrag,state.zoom,()=>{const el=elementRef.current,parent=el?.parentElement;if(!el||!parent)return{peers:[],parent:null};const pr=parent.getBoundingClientRect();const peers=Array.from(parent.children).filter(x=>x!==el).map(x=>{const r=(x as HTMLElement).getBoundingClientRect();return{x:(r.left-pr.left)/state.zoom,y:(r.top-pr.top)/state.zoom,w:r.width/state.zoom,h:r.height/state.zoom}});return{peers,parent:{x:0,y:0,w:pr.width/state.zoom,h:pr.height/state.zoom}}});
@@ -67,8 +68,7 @@ export function CanvasNode({nodeId}:{nodeId:string}){
   gesture.current={pointerId:e.pointerId,startX:e.clientX,startY:e.clientY,base,active:false,kind:isSelected?'move':'select'};
   const move=(event:PointerEvent)=>{
    const g=gesture.current;if(!g||event.pointerId!==g.pointerId)return;
-   const distance=Math.hypot(event.clientX-g.startX,event.clientY-g.startY);
-   if(g.kind==='select'||g.active||distance<6)return;
+   if(g.kind==='select'||g.active||!intentionalDrag({x:g.startX,y:g.startY},{x:event.clientX,y:event.clientY}))return;
    g.active=true;suppressClick.current=true;
    window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',cancel);
    el.setPointerCapture?.(event.pointerId);
@@ -95,7 +95,7 @@ export function CanvasNode({nodeId}:{nodeId:string}){
   if(dropped&&dropped!==nodeId&&acceptsChildren(node.type))dispatch({type:'REPARENT_NODE',payload:{nodeId:dropped,newParentId:nodeId}});
   const raw=e.dataTransfer.getData('application/x-zylora-node')||((window as any).__zyloraDraggingNode?JSON.stringify((window as any).__zyloraDraggingNode):'');
   if(raw&&acceptsChildren(node.type)){
-   try{const item=JSON.parse(raw);dispatch({type:'INSERT_NODE',payload:{parentId:nodeId,node:{type:item.type||'text',metadata:{displayName:item.label||'Text'}}}})}catch{/* invalid drag payloads are ignored safely */}
+   try{const item=JSON.parse(raw),bounds=elementRef.current?.getBoundingClientRect(),visual=!['section','page','navigation','footer'].includes(item.type),base=item.node||{type:item.type||'text'},css={...(base.style?.css||{}),...(visual&&bounds?{position:'absolute',left:`${Math.round(Math.max(0,(e.clientX-bounds.left)/state.zoom-60))}px`,top:`${Math.round(Math.max(0,(e.clientY-bounds.top)/state.zoom-20))}px`}:{})};dispatch({type:'INSERT_NODE',payload:{parentId:nodeId,node:{...base,type:item.type||base.type||'text',style:{css,tokens:{...(base.style?.tokens||{})}},metadata:{displayName:item.label||'Text',...(base.metadata||{})}}}})}catch{/* invalid drag payloads are ignored safely */}
   }
  };
  const Tag:any=node.type==='section'?'section':node.type==='heading'?'h2':node.type==='button'?'button':node.type==='link'?'a':node.type==='form'?'form':node.type==='navigation'?'nav':'div';
