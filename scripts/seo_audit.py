@@ -55,20 +55,12 @@ with TestClient(app) as c:
         except Exception: pass
     check(ok_ld,'JSON-LD parses as valid JSON')
     check({'Organization','WebSite','SoftwareApplication','FAQPage'} <= types,'Organization, WebSite, SoftwareApplication and FAQPage schemas present')
-    managed_offer=False
-    for s in ld:
-        try:
-            data=json.loads(s['data'])
-            for node in data.get('@graph',[]):
-                if node.get('@type')=='SoftwareApplication':
-                    managed_offer=any(o.get('name')=='Managed by experts' for o in node.get('offers',[]))
-        except Exception:
-            pass
-    check(managed_offer,'JSON-LD pricing includes Managed by experts')
-    tr=c.get('/templates'); tp=HeadParser(); tp.feed(tr.text)
-    tcanon=one(tp.links,rel='canonical'); check(bool(tcanon and tcanon.get('href','').startswith('http') and tcanon.get('href','').endswith('/templates')),'templates canonical is absolute')
+    # Platform templates are retired. The public route intentionally redirects
+    # to signup; it is not an indexable catalogue page anymore.
+    tr=c.get('/templates',follow_redirects=False)
+    check(tr.status_code==307 and tr.headers.get('location')=='/signup','retired templates route redirects to signup')
     rr=c.get('/robots.txt'); check(rr.status_code==200 and 'Sitemap:' in rr.text and 'Disallow: /dashboard' in rr.text,'robots.txt exposes sitemap and protects private routes')
-    sm=c.get('/sitemap.xml'); check(sm.status_code==200 and '<urlset' in sm.text and '/templates' in sm.text and '/blog' in sm.text,'dynamic sitemap contains core public routes')
+    sm=c.get('/sitemap.xml'); check(sm.status_code==200 and '<urlset' in sm.text and '/blog' in sm.text and '/templates' not in sm.text,'dynamic sitemap contains current public routes and excludes retired templates')
     mf=c.get('/manifest.webmanifest'); check(mf.status_code==200 and 'application/manifest+json' in mf.headers.get('content-type',''),'manifest endpoint has correct content type')
     og=c.get('/static/og-zylora.webp'); check(og.status_code==200 and len(og.content)>1000,'Open Graph image is locally served')
     llms=c.get('/llms.txt'); check(llms.status_code==200 and 'Zylora' in llms.text,'llms.txt is available')

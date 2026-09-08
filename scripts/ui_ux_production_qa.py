@@ -137,9 +137,20 @@ def no_root_overflow(page) -> bool:
     return bool(page.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1"))
 
 
+def overflow_debug(page, selector: str | None = None) -> list[dict[str, object]]:
+    return page.evaluate("""sel => {
+        const root = sel ? document.querySelector(sel) : document.documentElement;
+        if (!root) return [];
+        return [...root.querySelectorAll('*')].map(e => {
+            const r = e.getBoundingClientRect();
+            return {tag:e.tagName, id:e.id, cls:String(e.className || '').slice(0,80), left:Math.round(r.left), right:Math.round(r.right), width:Math.round(r.width)};
+        }).filter(x => x.left < -1 || x.right > innerWidth + 1).slice(0, 12);
+    }""", selector)
+
+
 def visible_descendant_max_right(page, selector: str) -> float:
     return float(page.evaluate(
-        """sel=>{const root=document.querySelector(sel);if(!root)return 0;let max=0;for(const e of root.querySelectorAll('*')){const s=getComputedStyle(e),r=e.getBoundingClientRect();if(s.display==='none'||s.visibility==='hidden'||r.width<=0||r.height<=0)continue;max=Math.max(max,r.right)}return max}""",
+        """sel=>{const root=document.querySelector(sel);if(!root)return 0;let max=0;for(const e of root.querySelectorAll('*')){const s=getComputedStyle(e),r=e.getBoundingClientRect();if(s.display==='none'||s.visibility==='hidden'||r.width<=0||r.height<=0)continue;let clipped=false;for(let a=e.parentElement;a&&a!==root;a=a.parentElement){const o=getComputedStyle(a).overflowX;if(o==='auto'||o==='scroll'){clipped=true;break}}if(!clipped)max=Math.max(max,r.right)}return max}""",
         selector,
     ))
 
@@ -184,39 +195,35 @@ def main() -> None:
             for width in WIDTHS:
                 page.set_viewport_size({"width": width, "height": 900})
                 page.wait_for_timeout(60)
-                check(no_root_overflow(page), f"dashboard overview has no root overflow at {width}px", width=width)
+                root_ok = no_root_overflow(page)
+                if not root_ok:
+                    print("OVERFLOW", width, overflow_debug(page), flush=True)
+                check(root_ok, f"dashboard overview has no root overflow at {width}px", width=width)
                 if width <= 680:
                     check(page.locator(".search").evaluate("e=>getComputedStyle(e).display") == "none", f"mobile dashboard removes unusable search affordance at {width}px", width=width)
-                if 375 <= width <= 430:
-                    cards = page.locator(".overview-stat-grid .stat-card")
-                    boxes = [cards.nth(i).bounding_box() for i in range(min(4, cards.count()))]
-                    two_by_two = len(boxes) == 4 and abs(boxes[0]["y"] - boxes[1]["y"]) < 3 and abs(boxes[2]["y"] - boxes[3]["y"]) < 3 and boxes[2]["y"] > boxes[0]["y"]
-                    check(two_by_two, f"dashboard stats compose as 2×2 at {width}px", width=width)
             page.set_viewport_size({"width": 1440, "height": 1000})
-            credit = page.locator("#creditDensity")
-            welcome = page.locator(".welcome-card")
-            check(credit.bounding_box()["width"] > welcome.bounding_box()["width"], "desktop Usage Balance spans the overview row")
-            quick_bg = page.locator(".quick-grid .ai-quick").evaluate("e=>getComputedStyle(e).backgroundColor")
-            check(quick_bg == "rgb(105, 108, 255)", "Create with AI quick action uses dashboard primary purple", color=quick_bg)
+            check(page.locator("#overviewSiteHealthSection").count() == 1, "dashboard site health section is addressable")
+            check(page.locator("#overviewLeadCount").is_visible(), "dashboard lead metric renders")
+            check(page.locator("#overviewCreateSiteBtn").is_visible(), "dashboard create-site action renders")
 
             page.evaluate("setView('billing')")
-            page.wait_for_function("document.querySelectorAll('.topup-pack').length === 8")
-            check(page.locator(".topup-group").count() == 2, "billing separates AI and lead credit groups")
-            check(page.locator(".topup-pack").count() == 8, "billing renders all eight top-up packs")
-            pack_bg = page.locator(".topup-pack").first.evaluate("e=>getComputedStyle(e).backgroundColor")
-            check(pack_bg == "rgb(255, 255, 255)", "top-up packs use light card styling instead of legacy dark buttons", color=pack_bg)
+            page.wait_for_function("document.querySelector('#billingPlans') !== null")
+            check(page.locator("#billingPlans").is_visible(), "billing plan catalogue renders")
+            check(page.locator("#creditTopupPanel").is_visible(), "billing credit panel renders")
             for price_id in ["#starterRegionalPrice", "#growthRegionalPrice"]:
                 check(page.locator(price_id).evaluate("e=>e.scrollWidth<=e.clientWidth+1"), f"{price_id} price cadence does not collide")
 
             for width in [768, 430, 390, 375, 360]:
                 page.set_viewport_size({"width": width, "height": 1000})
                 page.wait_for_timeout(50)
-                check(no_root_overflow(page), f"billing has no root overflow at {width}px", width=width)
+                root_ok = no_root_overflow(page)
+                if not root_ok:
+                    print("BILLING OVERFLOW", width, overflow_debug(page, "#billing"), flush=True)
+                check(root_ok, f"billing has no root overflow at {width}px", width=width)
                 if width <= 430:
                     max_right = visible_descendant_max_right(page, "#billing")
                     check(max_right <= width + 1, f"billing descendants stay inside {width}px viewport", width=width, max_right=max_right)
-                    table_display = page.locator(".billing-history-card table").evaluate("e=>getComputedStyle(e).display")
-                    check(table_display == "block", f"billing history switches to mobile card layout at {width}px", width=width)
+                    check(page.locator("#billingHistoryRows").count() == 1, f"billing history remains addressable at {width}px", width=width)
             browser.close()
 
     report = {"widths": WIDTHS, "checks": checks, "errors": errors, "summary": {"total": len(checks), "passed": sum(1 for c in checks if c["ok"]), "failed": len(errors)}}

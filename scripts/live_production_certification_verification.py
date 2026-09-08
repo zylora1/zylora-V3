@@ -77,19 +77,21 @@ def run_verification():
     assert "Import website" not in r_dash.text
     print("STEP 6: Open dashboard: PASS (Customer dashboard rendered, Import Website excluded)")
 
-    # 7. Browse templates
+    # 7. Confirm the retired platform-template contract. Customer sites now
+    # start from the supported AI/blank workflow; old catalogue entries must
+    # not be silently presented as selectable product state.
     r_templates = client.get('/api/templates', cookies=cookies)
     assert r_templates.status_code == 200, f"Templates failed: {r_templates.status_code}"
     templates = r_templates.json().get('items', [])
-    assert len(templates) >= 80, f"Expected 80+ templates, got {len(templates)}"
-    print(f"STEP 7: Browse templates: PASS ({len(templates)} verified templates available)")
+    assert templates == [] and r_templates.json().get('retired') is True
+    print("STEP 7: Retired platform-template contract: PASS (blank/AI creation remains authoritative)")
 
     # 8. Create website
     r_create = client.post('/api/sites', headers=auth_headers, cookies=cookies, json={
         'business_name': 'Horizon Health Clinic',
         'description': 'Modern integrative wellness and medical care clinic.',
-        'template_slug': 'prime-dental',
-        'origin': 'TEMPLATE',
+        'template_slug': None,
+        'origin': 'AI',
         'industry': 'Healthcare',
         'style': 'Clean Minimal'
     })
@@ -348,9 +350,10 @@ def run_verification():
     r_site_b = client.post('/api/sites', headers=headers_b, cookies=cookies_b, json={
         'business_name': 'Bravo Confidential Enterprises',
         'description': 'Proprietary aerospace and intelligence systems.',
-        'template_slug': 'bounties-work',
-        'origin': 'TEMPLATE'
+        'template_slug': None,
+        'origin': 'AI'
     })
+    assert r_site_b.status_code == 200, f"User B site creation failed: {r_site_b.text}"
     site_b_id = r_site_b.json()['id']
 
     r_pub_b = client.post(f'/api/sites/{site_b_id}/publish', headers=headers_b, cookies=cookies_b, json={'selected_plan': 'FREE'})

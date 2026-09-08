@@ -82,6 +82,12 @@ def main():
         soup=BeautifulSoup(text,'html.parser')
         source=source_for(html_path,soup)
         for i,b in enumerate(soup.find_all('button'),1):
+            # The landing page contains a static Studio illustration. Its
+            # sample CTA is intentionally artwork, not an actionable control;
+            # exclude it from the user-control inventory rather than treating
+            # decorative copy as a product interaction.
+            if html_path.name == 'index.html' and b.find_parent(class_='zr-artboard') is not None:
+                continue
             ok,why=has_handler(b,source)
             rec={'page':html_path.name,'index':i,'text':' '.join(b.stripped_strings)[:90],'id':b.get('id'),'type':b.get('type') or 'submit','ok':ok,'reason':why}
             buttons.append(rec)

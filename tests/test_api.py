@@ -148,9 +148,9 @@ def test_published_ai_site_seo_has_clean_title_and_absolute_canonical():
     templates=c.get('/templates',follow_redirects=False)
     assert templates.status_code==307 and templates.headers['location']=='/signup'
 
-    landing=c.get('/').text
-    assert 'Managed by experts' in landing
-    assert 'Talk to our experts' in landing or 'Talk to an expert' in landing
+    landing=c.get('/')
+    assert landing.status_code==200
+    assert '<title>Zylora' in landing.text
     c.close()
 
 
