@@ -1,0 +1,69 @@
+/* Studio chrome only. The .studio-canvas is intentionally excluded so user
+   websites retain their own document colors and backgrounds. */
+:root {
+  --studio-bg: #050505;
+  --studio-surface: #0a0a0a;
+  --studio-panel: #101010;
+  --studio-hover: #1c1c1c;
+  --studio-text: #ffffff;
+  --studio-secondary: #b5b5b5;
+  --studio-muted: #777777;
+  --studio-line: rgba(255,255,255,.1);
+  --studio-line-strong: rgba(255,255,255,.16);
+}
+
+body { background: var(--studio-bg) !important; color: var(--studio-text) !important; color-scheme: dark; }
+.zylora-studio-app { background: var(--studio-bg) !important; color: var(--studio-text) !important; }
+.studio-topbar { background: #000 !important; color: var(--studio-text) !important; border-bottom: 1px solid var(--studio-line) !important; box-shadow: none !important; }
+.studio-topbar button, .studio-topbar select { color: var(--studio-secondary) !important; }
+.studio-topbar button:hover, .studio-topbar button.active { background: var(--studio-hover) !important; border-color: var(--studio-line-strong) !important; color: #fff !important; }
+.studio-logo { color: #fff !important; }
+.studio-logo > span { background: #fff !important; color: #000 !important; border-radius: 5px !important; }
+.project-crumb, .save-state { color: var(--studio-muted) !important; }
+.top-divider { background: var(--studio-line) !important; }
+.tool-rail, .studio-sidebar-left { background: var(--studio-surface) !important; color: var(--studio-text) !important; border-color: var(--studio-line) !important; box-shadow: none !important; }
+.tool-rail button { color: var(--studio-secondary) !important; border-radius: 5px !important; }
+.tool-rail button:hover, .tool-rail button.active { background: var(--studio-hover) !important; color: #fff !important; box-shadow: inset 2px 0 #fff !important; }
+.studio-sidebar-left > header { background: var(--studio-surface) !important; border-color: var(--studio-line) !important; }
+.studio-sidebar-left > header small, .studio-sidebar-left > header button { color: var(--studio-secondary) !important; }
+.studio-panel { background: var(--studio-surface) !important; }
+.panel-intro span, .layers-intro span, .panel-hint, .panel-section h3 { color: var(--studio-muted) !important; }
+.panel-search, .panel-section input, .panel-section select, .inline-form input, .studio-panel textarea,
+.cms-panel input, .cms-panel select, .cms-panel textarea { background: var(--studio-panel) !important; color: #fff !important; border-color: var(--studio-line) !important; }
+.element-grid button, .asset-grid button { background: var(--studio-panel) !important; color: var(--studio-secondary) !important; border-color: var(--studio-line) !important; border-radius: 5px !important; }
+.element-grid button:hover, .asset-grid button:hover { background: var(--studio-hover) !important; border-color: var(--studio-line-strong) !important; color: #fff !important; }
+.element-grid button b { color: #fff !important; }
+.layer-row { color: var(--studio-secondary) !important; }
+.layer-row:hover { background: var(--studio-hover) !important; }
+.layer-row.selected { background: #fff !important; color: #000 !important; }
+.layer-actions button, .layer-toggle { color: inherit !important; }
+.panel-section, .cms-editor { border-color: var(--studio-line) !important; }
+.asset-drop { border-color: var(--studio-line-strong) !important; }
+.canvas-workspace { background-color: var(--studio-bg) !important; background-image: radial-gradient(rgba(255,255,255,.11) 1px, transparent 1px) !important; }
+/* Do not style .studio-canvas here: it is the user's website artboard. */
+.context-toolbar, .context-menu, .context-more-popover, .file-menu,
+.publish-wizard, .canvas-status, .page-strip, .section-strip {
+  background: var(--studio-panel) !important; color: var(--studio-text) !important; border-color: var(--studio-line-strong) !important; box-shadow: 0 18px 50px rgba(0,0,0,.5) !important;
+}
+.context-toolbar button, .context-toolbar select, .context-menu button,
+.context-more-popover button, .file-menu button, .page-thumb, .section-chip { color: var(--studio-secondary) !important; background: transparent !important; border-color: var(--studio-line) !important; }
+.context-toolbar button:hover, .context-menu button:hover, .context-more-popover button:hover,
+.file-menu button:hover, .page-thumb:hover, .page-thumb.active, .section-chip:hover { background: var(--studio-hover) !important; color: #fff !important; border-color: var(--studio-line-strong) !important; }
+.context-toolbar .primary, .publish-wizard .primary, .crop-toolbar button.primary { background: #fff !important; color: #000 !important; border-color: #fff !important; }
+.studio-topbar :focus-visible, .tool-rail :focus-visible, .studio-sidebar-left :focus-visible,
+.context-menu :focus-visible { outline: 2px solid #fff !important; outline-offset: 2px !important; }
+.studio-page-navigator { color: var(--studio-text) !important; }
+.canvas-file-drop { background: rgba(255,255,255,.08) !important; border-color: rgba(255,255,255,.7) !important; color: #fff !important; }
+.snap-guide { background: #fff !important; }
+.studio-mobile-nav { background: #000 !important; border-top-color: var(--studio-line) !important; }
+.studio-mobile-nav button { color: var(--studio-secondary) !important; }
+.studio-mobile-nav button b { color: inherit !important; }
+.studio-mobile-nav button.active { background: #fff !important; color: #000 !important; }
+.studio-toast { background: #fff !important; color: #000 !important; border-color: #fff !important; }
+.studio-toast button { color: #000 !important; }
+.studio-canvas input, .studio-canvas textarea, .studio-canvas select { color-scheme: light; }
+
+@media (max-width: 820px) {
+  .studio-sidebar-left { border-color: var(--studio-line-strong) !important; }
+  .topbar-center .zoom-select { background: var(--studio-panel) !important; color: #fff !important; border-color: var(--studio-line) !important; }
+}

@@ -113,3 +113,26 @@ body:has(.formpane) .box h2 { color: #111827; letter-spacing: -.04em; }
 body:has(.formpane) input { border-color: #dce3ed; border-radius: 10px; background: #fff; }
 body:has(.formpane) input:focus { border-color: #2764e7; box-shadow: 0 0 0 3px rgba(39,100,231,.12); }
 body:has(.formpane) .submit { border-radius: 10px; background: #2764e7; }
+
+/* Auth utility pages use the public black-and-white direction too. */
+:root {
+  --ink: #fff;
+  --muted: #b8b8b8;
+  --muted-light: #858585;
+  --line: rgba(255,255,255,.12);
+  --paper: #111;
+  --surface: #171717;
+  --zy-blue: #fff;
+  --zy-blue-hover: #d8d8d8;
+  --zy-blue-soft: #242424;
+}
+html, body { background: #090909; color: #fff; }
+.art { background: #111; border-color: #2a2a2a; }
+.formpane, body:has(.formpane) .formpane { background: #090909; }
+body:has(.formpane) .art { background: #111; color: #fff; }
+body:has(.formpane) .box { border-color: #2a2a2a; background: #111; box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+body:has(.formpane) .box h2 { color: #fff; }
+body:has(.formpane) input { border-color: #3c3c3c; background: #171717; color: #fff; }
+body:has(.formpane) input:focus { border-color: #fff; box-shadow: 0 0 0 3px rgba(255,255,255,.12); }
+body:has(.formpane) .submit { background: #fff; color: #090909; }
+body:has(.formpane) .submit:hover { background: #d8d8d8; }

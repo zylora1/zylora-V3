@@ -226,3 +226,24 @@ body {
     padding: 24px 18px 60px;
   }
 }
+
+/* Pricing selection follows the same black-and-white public direction. */
+:root {
+  --z-bg: #090909;
+  --z-surface: #111111;
+  --z-text: #ffffff;
+  --z-text-secondary: #b8b8b8;
+  --z-text-tertiary: #858585;
+  --z-border: #2a2a2a;
+  --z-border-strong: #4a4a4a;
+  --z-accent: #ffffff;
+  --z-accent-hover: #d8d8d8;
+  --z-accent-soft: #222222;
+}
+body { background: #090909; color: #fff; }
+.plan-shell header { border-color: #2a2a2a; }
+.plan-card, .rocket-billing-trust { background: #111; border-color: #2a2a2a; }
+.plan-card.recommended { background: #181818; border-color: #fff; }
+.plan-card button { background: #fff; color: #090909; }
+.plan-card button:hover { background: #d8d8d8; }
+.rocket-billing-trust { color: #fff; }
