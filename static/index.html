@@ -4,17 +4,17 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Zylora — Build a website that brings you customers</title>
-  <meta name="description" content="Build, publish and grow a customer-ready website with visual editing, AI Sales Assistant, lead capture, appointments and CRM in one connected workspace."/>
+  <meta name="description" content="Create, publish and grow a premium business website with AI, lead capture, appointments, Zylora Studio and CMS in one connected workspace."/>
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
   <link rel="canonical" href="{{APP_URL}}/"/>
   <meta property="og:type" content="website"/>
   <meta property="og:title" content="Zylora — Build a website that brings you customers"/>
-  <meta property="og:description" content="A website builder, customer conversation layer and CRM in one connected workspace."/>
+  <meta property="og:description" content="Create, publish and grow a premium business website with AI, Studio visual editing, and 24/7 lead qualification."/>
   <meta property="og:url" content="{{APP_URL}}/"/>
   <meta property="og:image" content="{{APP_URL}}/static/og-zylora.webp"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Zylora — AI website and customer growth platform"/>
-  <meta name="twitter:description" content="Create, publish, capture leads and book appointments from one calm workspace."/>
+  <meta name="twitter:description" content="Build, publish, capture leads and book appointments from one calm workspace."/>
   <meta name="twitter:image" content="{{APP_URL}}/static/og-zylora.webp"/>
   <link rel="alternate" type="text/plain" href="{{APP_URL}}/llms.txt" title="LLM context"/>
   <link rel="manifest" href="/static/manifest.webmanifest"/>
@@ -22,104 +22,755 @@
   <link rel="shortcut icon" href="/favicon.ico"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="/static/public-theme.css"/>
-  <link rel="stylesheet" href="/static/zylora-public-rebuild.css?v=black-matrix-20260908"/>
+  <link rel="stylesheet" href="/static/landing.css"/>
+  <link rel="stylesheet" href="/static/public-redesign.css"/>
   <script type="application/ld+json">
   {
-    "@context":"https://schema.org",
-    "@graph":[
-      {"@type":"Organization","@id":"{{APP_URL}}/#organization","name":"Zylora","url":"{{APP_URL}}/","logo":"{{APP_URL}}/static/favicon.png"},
-      {"@type":"WebSite","@id":"{{APP_URL}}/#website","url":"{{APP_URL}}/","name":"Zylora","publisher":{"@id":"{{APP_URL}}/#organization"}},
-      {"@type":"SoftwareApplication","@id":"{{APP_URL}}/#software","name":"Zylora Platform","applicationCategory":"DesignApplication","operatingSystem":"All modern web browsers","description":"Visual website studio, grounded AI Sales Assistant, lead pipeline and appointment booking."},
-      {"@type":"FAQPage","@id":"{{APP_URL}}/#faq","mainEntity":[
-        {"@type":"Question","name":"How does Zylora help my business bring in real customers?","acceptedAnswer":{"@type":"Answer","text":"Zylora connects website creation, publishing, lead capture, appointments, approved business knowledge and optional AI-assisted visitor conversations in one workspace."}},
-        {"@type":"Question","name":"Can I start with a blank Studio?","acceptedAnswer":{"@type":"Answer","text":"Yes. You can open a blank Studio, shape the page directly and use the existing visual editing and publishing workflow."}},
-        {"@type":"Question","name":"Can I use my own custom domain?","acceptedAnswer":{"@type":"Answer","text":"Yes. Connect a custom domain through the workspace domain and publishing workflow; availability and SSL status depend on the configured domain."}},
-        {"@type":"Question","name":"Does the assistant answer from information I approve?","acceptedAnswer":{"@type":"Answer","text":"The AI Sales Assistant is configured to use approved business information and the supported website context for visitor questions and next steps."}}
-      ]}
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "{{APP_URL}}/#organization",
+        "name": "Zylora",
+        "url": "{{APP_URL}}/",
+        "logo": "{{APP_URL}}/static/favicon.png",
+        "description": "Zylora is an AI-powered website and customer growth platform for real businesses."
+      },
+      {
+        "@type": "WebSite",
+        "@id": "{{APP_URL}}/#website",
+        "url": "{{APP_URL}}/",
+        "name": "Zylora",
+        "publisher": { "@id": "{{APP_URL}}/#organization" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "{{APP_URL}}/#software",
+        "name": "Zylora Platform",
+        "applicationCategory": "DesignApplication",
+        "operatingSystem": "All modern web browsers",
+        "description": "Direct-manipulation website studio, instant CMS, grounded AI Sales Assistant, lead pipeline and appointment booking.",
+        "offers": [
+          {
+            "@type": "Offer",
+            "name": "Free",
+            "price": "0",
+            "priceCurrency": "INR"
+          },
+          {
+            "@type": "Offer",
+            "name": "Managed by experts",
+            "price": "0",
+            "priceCurrency": "INR",
+            "description": "Dedicated agency implementation and managed delivery."
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "{{APP_URL}}/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How does Zylora help my business bring in real customers?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Every Zylora website combines search-engine-optimized Next.js output, an integrated 24/7 AI Sales Assistant that qualifies inquiries using your business knowledge, and direct appointment scheduling with Google Sheets synchronization."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I export clean Next.js source code without platform lock-in?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Zylora delivers a production-ready Next.js project with Tailwind CSS and zero proprietary runtime dependencies whenever you choose to export."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does the AI Sales Assistant consume my website editing credits?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. The AI Sales Assistant is completely free and unlimited for your website visitors across all plans and never consumes your monthly AI creation or editing credits."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I use my own custom domain?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Connect any custom domain with automated SSL certificate provisioning and global edge CDN caching."
+            }
+          }
+        ]
+      }
     ]
   }
   </script>
 </head>
-<body class="zr-landing">
-  <header class="zr-header" data-header>
-    <div class="zr-header-inner">
-      <a class="zr-brand" href="/" aria-label="Zylora home"><span class="zr-brand-mark">Z</span><span>Zylora</span></a>
-      <nav class="zr-nav" id="primaryNav" aria-label="Primary navigation">
-        <a href="#product">Product</a>
-        <a href="#solutions">Solutions</a>
-        <a href="#studio">Studio</a>
-        <a href="/guides/how-to-build-a-business-website">Resources</a>
-        <a href="/pricing">Pricing</a>
-      </nav>
-      <div class="zr-header-actions">
-        <a class="zr-login" href="/login">Log in</a>
-        <a class="zr-button zr-button-dark zr-button-small" data-testid="nav-start" href="/signup">Start building <span aria-hidden="true">↗</span></a>
-        <button class="zr-menu-toggle" data-testid="mobile-menu" aria-controls="primaryNav" aria-expanded="false" aria-label="Open navigation"><span></span><span></span></button>
+<body class="landing-page">
+
+<!-- 1. Shared Global Navigation -->
+<header class="z-header site-nav">
+  <div class="z-container z-header-inner">
+    <a class="z-logo" href="/" aria-label="Zylora home">
+      <span class="z-logo-mark">Z</span>
+      <span class="z-logo-wordmark">Zylora</span>
+    </a>
+    <nav class="z-nav-links" id="primaryNav" aria-label="Primary">
+      <a href="/website-builder">Products</a>
+      <a href="/solutions/small-business">Solutions</a>
+      <a href="#studio">Studio</a>
+      <a href="/guides/how-to-build-a-business-website">Resources</a>
+      <a href="/pricing">Pricing</a>
+    </nav>
+    <div class="z-header-actions">
+      <a class="z-nav-login" href="/login">Log in</a>
+      <a class="z-btn z-btn-primary z-btn-sm" data-testid="nav-start" href="/signup">Start free</a>
+      <button class="z-nav-burger" data-testid="mobile-menu" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- 2. Massive Editorial Hero & Multi-Layered Product Experience -->
+<section class="hero-editorial">
+  <div class="z-container hero-content-wrap">
+    <div class="eyebrow-pill">
+      <span>✦</span> Emergent AI Platform · Studio Precision
+    </div>
+    
+    <h1>
+      Build a website that brings you customers.
+      <span class="hero-subhead">Create a website that moves your business forward.</span>
+    </h1>
+    
+    <p class="hero-deck">
+      Open a blank Zylora Studio, design every detail directly, and turn visitors into customers with publishing, lead capture, CMS and an optional AI assistant.
+    </p>
+    
+    <div class="hero-actions">
+      <a class="z-btn z-btn-primary z-btn-lg" data-testid="hero-ai" href="/signup">Create Website</a>
+      <a class="z-btn z-btn-secondary z-btn-lg" href="#studio">See the Studio</a>
+    </div>
+
+    <!-- Live Natural-Language Prompt Composer -->
+    <form id="hero-prompt-form" class="hero-prompt-container" action="/signup" method="GET">
+      <div class="hero-prompt-box">
+        <div class="hero-prompt-icon">✦</div>
+        <input id="hero-prompt-input" class="hero-prompt-input" name="idea" type="text" placeholder="What do you want to build? You can start blank and use this idea later inside Studio." autocomplete="off"/>
+        <button id="hero-prompt-submit" class="hero-prompt-submit" type="submit">
+          <span>Open blank Studio</span>
+          <span>→</span>
+        </button>
+      </div>
+      <div class="hero-prompt-chips">
+        <span class="chips-label">Try an example:</span>
+        <button type="button" class="prompt-chip" data-prompt="Specialty coffee roastery with subscription bags, brewing guides and tasting room reservations.">Coffee Roastery</button>
+        <button type="button" class="prompt-chip" data-prompt="Premier private wealth advisory firm with case studies, appointment booking and client portal.">Wealth Advisory</button>
+        <button type="button" class="prompt-chip" data-prompt="Independent architectural studio specializing in sustainable coastal residences and villas.">Architecture Studio</button>
+        <button type="button" class="prompt-chip" data-prompt="High-growth B2B enterprise software with interactive pricing calculator and demo scheduler.">B2B SaaS</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Multi-Layered Product Stage (Depth: Midground Studio + Foreground Floating CRM & Chat) -->
+  <div class="z-container hero-product-stage">
+    <div class="stage-ambient-glow" aria-hidden="true"></div>
+
+    <!-- Midground: Full Studio Canvas Experience -->
+    <div class="studio-canvas-window">
+      <div class="window-chrome">
+        <div class="window-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="window-url-bar">zylora.com/studio/site_8492</div>
+        <div class="window-actions">
+          <span class="window-action-badge">Desktop 1440px</span>
+          <span class="window-action-badge" style="background:#10B981;color:#fff">LIVE</span>
+        </div>
+      </div>
+
+      <div class="studio-scene-grid">
+        <!-- Left: Layers Hierarchy -->
+        <div class="studio-panel-layers">
+          <span class="studio-panel-title">Layers & Nodes</span>
+          <div class="layer-node"><span>▾</span> <span>Section: Hero</span></div>
+          <div class="layer-node active" style="margin-left:12px"><span>■</span> <span>Heading (Display)</span></div>
+          <div class="layer-node" style="margin-left:12px"><span>■</span> <span>Lead Capture Form</span></div>
+          <div class="layer-node"><span>▸</span> <span>Section: Services Grid</span></div>
+          <div class="layer-node"><span>▸</span> <span>Section: Calendar Booking</span></div>
+          <div class="layer-node"><span>▸</span> <span>Section: Customer Reviews</span></div>
+          <div class="layer-node"><span>▸</span> <span>Section: Footer</span></div>
+        </div>
+
+        <!-- Center: Live Rendered Studio Canvas -->
+        <div class="studio-viewport-canvas">
+          <div class="canvas-site-hero">
+            <span class="selection-badge">Selected: Hero Block · 1120 × 440px</span>
+            <div class="canvas-nav-mock">
+              <span class="canvas-logo-mock">AURA CLINIC</span>
+              <div class="canvas-links-mock">
+                <span>Treatments</span>
+                <span>Specialists</span>
+                <span>Reviews</span>
+                <span>Contact</span>
+              </div>
+            </div>
+            <div class="canvas-heading-mock">Modern Dental Care for Confident Smiles.</div>
+            <p class="canvas-text-mock">Personalized restorative, cosmetic, and preventative dental healthcare delivered in a relaxed, state-of-the-art clinic.</p>
+            <span class="canvas-btn-mock">Book Consultation →</span>
+          </div>
+        </div>
+
+        <!-- Right: Real Property Inspector -->
+        <div class="studio-panel-inspector">
+          <span class="studio-panel-title">Element Inspector</span>
+          <div class="inspector-prop">
+            <div class="inspector-label">Typography Family</div>
+            <div class="inspector-value">Space Grotesk (700)</div>
+          </div>
+          <div class="inspector-prop">
+            <div class="inspector-label">Font Size & Line Height</div>
+            <div class="inspector-value">56px / 1.05</div>
+          </div>
+          <div class="inspector-prop">
+            <div class="inspector-label">Layout Mode</div>
+            <div class="inspector-value">Flexbox (Column)</div>
+          </div>
+          <div class="inspector-prop">
+            <div class="inspector-label">Export Source</div>
+            <div class="inspector-value">Next.js 14 + Tailwind</div>
+          </div>
+        </div>
       </div>
     </div>
-  </header>
 
-  <main>
-    <section class="zr-hero" aria-labelledby="hero-title">
-      <div class="zr-hero-grid zr-container-wide">
-        <div class="zr-hero-copy">
-          <p class="zr-kicker"><span class="zr-live-dot"></span> A website with a pulse</p>
-          <h1 id="hero-title">Build the site.<br/><em>Grow the business.</em></h1>
-          <p class="zr-hero-lede">Zylora brings your website, customer conversations and follow-up into one place—so visitors always have a useful next step.</p>
-          <div class="zr-hero-actions">
-            <a class="zr-button zr-button-accent" data-testid="hero-ai" href="/signup">Create your website <span aria-hidden="true">↗</span></a>
-            <a class="zr-text-link" href="#how-it-works">See how it works <span aria-hidden="true">↓</span></a>
-          </div>
-          <p class="zr-trust-line"><span>Blank Studio</span><span>Lead capture</span><span>Appointments</span><span>CRM follow-up</span></p>
-        </div>
+    <!-- Foreground Layer 1: CMS Collection Binding Card -->
+    <div class="floating-cms-card">
+      <span class="floating-badge">✦ Dynamic CMS Sync</span>
+      <h4>Collection: Services</h4>
+      <p>Bound field: <code>service.headline</code> dynamically updates across 4 template pages.</p>
+      <div class="cms-sync-indicator">✓ 18 items live in production</div>
+    </div>
 
-        <div class="zr-hero-visual" data-sonar-shell>
-          <div class="zr-visual-topline"><span>LIVE CUSTOMER SIGNAL</span><span><i class="zr-live-dot"></i> listening</span></div>
-          <div class="zr-sonar-field" data-sonar-field>
-            <canvas id="sonarCanvas" aria-hidden="true"></canvas>
-            <div class="zr-sonar-center" aria-hidden="true"><span class="zr-center-ring"></span><span class="zr-center-core"></span></div>
-            <div class="zr-signal-label zr-label-a"><b>01</b> New visitor</div>
-            <div class="zr-signal-label zr-label-b"><b>02</b> Question answered</div>
-            <div class="zr-signal-label zr-label-c"><b>03</b> Lead captured</div>
-            <div class="zr-signal-label zr-label-d"><b>04</b> Next step booked</div>
-            <button class="zr-sonar-prompt" type="button" data-sonar-trigger><span class="zr-prompt-dot"></span><span>Click anywhere to send a signal</span><span aria-hidden="true">↗</span></button>
-          </div>
-          <div class="zr-visual-footer"><span>Visitor signal</span><span class="zr-connector"></span><span>Conversation</span><span class="zr-connector"></span><span>Customer</span></div>
+    <!-- Foreground Layer 2: 24/7 AI Sales Assistant Qualified Lead Bubble -->
+    <div class="floating-assistant-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <span style="font-size:11.5px;font-weight:700;letter-spacing:0.08em;color:#A5A6F6;text-transform:uppercase">AI Sales Assistant</span>
+        <span style="font-size:10px;background:rgba(255,255,255,0.1);padding:2px 6px;border-radius:4px">24/7 Live</span>
+      </div>
+      <div class="chat-bubble visitor">
+        "Hi, do you have an opening for a dental veneer consultation this Thursday afternoon?"
+      </div>
+      <div class="chat-bubble assistant">
+        "Yes! Dr. Elena has a 2:30 PM slot open this Thursday. Shall I book that for you?"
+      </div>
+      <div class="lead-qualified-badge">
+        <span>✓ Lead Qualified: 94/100 (HOT)</span>
+        <span>Slot Reserved</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+﻿<!-- 3. Visual Transformation Story: Prompt -> Structure -> Design -> Studio -->
+<section class="transformation-section">
+  <div class="z-container">
+    <div class="transformation-header">
+      <span class="eyebrow-pill">The Creation Engine</span>
+      <h2 class="h2-editorial" style="margin:16px 0 14px">From natural language to production software.</h2>
+      <p class="text-intro">Watch an idea synthesize into an authoritative website with real architectural depth.</p>
+    </div>
+
+    <div class="transformation-pipeline">
+      <div class="pipeline-step">
+        <span class="step-num">STAGE 01</span>
+        <h3>Prompt Brief</h3>
+        <p>You provide your business goals, target audience, and primary services in natural plain English.</p>
+        <div class="pipeline-mock" style="color:var(--z-accent);font-weight:600">
+          "Architecture firm in Mumbai..."
         </div>
       </div>
-      <div class="zr-hero-rail zr-container-wide" aria-label="Connected workflows"><span>One operating system for your next customer</span><span>Website</span><span>→</span><span>Assistant</span><span>→</span><span>Lead</span><span>→</span><span>Appointment</span></div>
-    </section>
 
-    <section class="zr-statement" id="product" aria-labelledby="statement-title"><div class="zr-container zr-statement-grid"><p class="zr-section-index">01 / The premise</p><div><h2 id="statement-title">Your website should<br/><span>do more than exist.</span></h2><p class="zr-statement-body">Make the first impression beautiful. Make the next step obvious. Then keep the context moving when the visitor becomes a lead.</p></div><div class="zr-side-note"><span class="zr-note-line"></span><p>From a visual canvas to a working customer path, Zylora keeps the handoffs close.</p></div></div></section>
+      <div class="pipeline-step">
+        <span class="step-num">STAGE 02</span>
+        <h3>Semantic Structure</h3>
+        <p>Zylora generates high-converting page architecture, conversion funnels, and structured CMS collections.</p>
+        <div class="pipeline-mock" style="display:flex;gap:4px">
+          <span style="background:#eee;padding:2px 6px;border-radius:4px">Hero</span>
+          <span style="background:#eee;padding:2px 6px;border-radius:4px">Projects</span>
+          <span style="background:#eee;padding:2px 6px;border-radius:4px">Booking</span>
+        </div>
+      </div>
 
-    <section class="zr-flow-section" id="how-it-works" aria-labelledby="flow-title"><div class="zr-container zr-flow-grid"><div class="zr-section-intro"><p class="zr-section-index">02 / The path</p><h2 id="flow-title">A clearer way<br/>from idea to <em>action.</em></h2><p>Start with a business direction, shape the experience, and connect the actions that matter to your team.</p><a class="zr-text-link" href="/website-builder">Explore the website builder <span aria-hidden="true">↗</span></a></div><ol class="zr-step-list"><li><span class="zr-step-number">01</span><div><h3>Set the direction</h3><p>Describe the audience, offer and outcome—or open a blank Studio and start with the canvas.</p></div><span class="zr-step-arrow">↗</span></li><li><span class="zr-step-number">02</span><div><h3>Shape the experience</h3><p>Edit content, layout and responsive behavior directly in the visual workspace.</p></div><span class="zr-step-arrow">↗</span></li><li><span class="zr-step-number">03</span><div><h3>Connect the next step</h3><p>Add an enquiry, approved assistant knowledge or appointment path where it helps.</p></div><span class="zr-step-arrow">↗</span></li><li><span class="zr-step-number">04</span><div><h3>Publish and follow up</h3><p>Keep the live site, leads, appointments and activity in the same operating view.</p></div><span class="zr-step-arrow">↗</span></li></ol></div></section>
+      <div class="pipeline-step">
+        <span class="step-num">STAGE 03</span>
+        <h3>Art Direction</h3>
+        <p>Independent visual styling with editorial typography, balanced color palettes, and responsive grids.</p>
+        <div class="pipeline-mock" style="border-left:3px solid var(--z-accent)">
+          Space Grotesk + #F7F7F5
+        </div>
+      </div>
 
-    <section class="zr-dark-section" id="studio" aria-labelledby="studio-title"><div class="zr-container"><div class="zr-dark-heading"><p class="zr-section-index">03 / Studio</p><h2 id="studio-title">The blank canvas<br/>is the <em>feature.</em></h2><p>Start with a clean surface. Move the parts that matter. See the customer path while you design it.</p><a class="zr-button zr-button-light" href="/signup">Open a blank Studio <span aria-hidden="true">↗</span></a></div><div class="zr-studio-frame" aria-label="Illustration of Zylora Studio"><div class="zr-window-bar"><span class="zr-window-dots"><i></i><i></i><i></i></span><span>zylora / studio / homepage</span><span class="zr-window-status">SAVED JUST NOW</span></div><div class="zr-studio-grid"><aside class="zr-studio-tree"><p>LAYERS</p><b>⌄ Home</b><span class="is-selected">▦ Hero / primary</span><span>↳ Heading</span><span>↳ CTA group</span><span>▦ Social proof</span><span>▦ Booking path</span><p class="zr-tree-foot">+ Add section</p></aside><div class="zr-artboard"><div class="zr-artboard-nav"><b>atelier / 01</b><span>Work&nbsp;&nbsp; About&nbsp;&nbsp; Contact</span></div><div class="zr-artboard-copy"><small>SELECTED · HERO</small><strong>Make the<br/><i>first move</i><br/>clear.</strong><p>A focused place for the right people to begin.</p><button>Start a conversation&nbsp; ↗</button></div><div class="zr-guide-line zr-guide-one"></div><div class="zr-guide-line zr-guide-two"></div><span class="zr-selection-label">HERO · 1120 × 640</span></div><aside class="zr-studio-inspector"><p>INSPECTOR</p><span>Typography</span><b>Space Grotesk / 700</b><span>Width</span><b>1120 px</b><span>Spacing</span><b>96 / 24 / 96</b><span>Action</span><b class="zr-inspector-active">Open conversation ↗</b></aside></div><div class="zr-studio-bottom"><span>Desktop 1440</span><span>Tablet 768</span><span class="is-active">Mobile 390</span><span class="zr-studio-bottom-end">● Autosave on&nbsp;&nbsp; · &nbsp;&nbsp;Preview ↗</span></div></div></div></section>
+      <div class="pipeline-step">
+        <span class="step-num">STAGE 04</span>
+        <h3>Studio Ownership</h3>
+        <p>Directly manipulate any node on the visual canvas and export pristine Next.js source code anytime.</p>
+        <div class="pipeline-mock" style="font-weight:600;color:#10B981">
+          ✓ Full Source Export Ready
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <section class="zr-assistant-section" aria-labelledby="assistant-title"><div class="zr-container zr-assistant-grid"><div class="zr-assistant-copy"><p class="zr-section-index">04 / AI Sales Assistant</p><h2 id="assistant-title">When a visitor asks,<br/><em>be there.</em></h2><p>The assistant uses the business information you approve to answer common questions, qualify intent and guide people into the next configured step.</p><div class="zr-assistant-proof"><span class="zr-proof-number">↗</span><span><b>Conversation context stays connected.</b><small>From the first question to the follow-up task.</small></span></div></div><div class="zr-chat-scene"><div class="zr-chat-window"><div class="zr-chat-head"><span class="zr-avatar">Z</span><div><b>Assistant on your site</b><small>Available when you are not</small></div><span class="zr-chat-live"><i></i> live</span></div><div class="zr-chat-body"><p class="zr-chat-time">TODAY · 10:42</p><div class="zr-chat-message visitor">I’m interested in the service. What happens next?</div><div class="zr-chat-message assistant">I can share the approved details and help you choose the right next step. Would you like to ask a question or request a time?</div><div class="zr-chat-message visitor short">Request a time</div><div class="zr-chat-suggestion">Appointment path <span>→</span></div></div></div><div class="zr-chat-card"><span>LEAD SIGNAL</span><b>New enquiry</b><small>Conversation context attached</small><div class="zr-card-line"><i></i><span>Ready for follow-up</span></div></div></div></div></section>
+<!-- 4. Flagship Zylora Studio Section (Dark #0C0D10 Environment) -->
+<section class="studio-flagship-section" id="studio">
+  <div class="z-container">
+    <div class="studio-flagship-header">
+      <span class="eyebrow-pill eyebrow-dark">Direct-Manipulation Studio</span>
+      <h2>Professional website editing without visual constraints.</h2>
+      <p>Move beyond cookie-cutter block editors. Zylora Studio gives designers and founders complete spatial freedom with visual snapping, responsive breakpoints, and instant clean code generation.</p>
+    </div>
 
-    <section class="zr-crm-section" id="solutions" aria-labelledby="crm-title"><div class="zr-container"><div class="zr-section-intro zr-crm-intro"><p class="zr-section-index">05 / CRM</p><h2 id="crm-title">Every handoff,<br/><em>in view.</em></h2><p>A lead should not disappear between the website and the work. See the source, context, owner and next action together.</p><a class="zr-text-link" href="/crm">Explore the CRM <span aria-hidden="true">↗</span></a></div><div class="zr-pipeline-scene"><div class="zr-pipeline-head"><div><span>PIPELINE / DEFAULT</span><b>Active opportunities</b></div><span class="zr-pipeline-filter">This month⌄</span></div><div class="zr-pipeline-columns"><div><span class="zr-column-label">NEW LEAD <b>02</b></span><article><span class="zr-avatar zr-avatar-cyan">MB</span><b>Website enquiry</b><small>Conversation captured</small><strong>Next: qualify lead</strong></article><article><span class="zr-avatar zr-avatar-amber">RS</span><b>Project question</b><small>Form submission</small><strong>Next: reply</strong></article></div><div><span class="zr-column-label">IN MOTION <b>01</b></span><article class="zr-deal-feature"><span class="zr-avatar zr-avatar-purple">AC</span><b>Discovery call</b><small>Appointment requested</small><strong>Next: confirm slot</strong><span class="zr-deal-tag">FOLLOW-UP</span></article></div><div><span class="zr-column-label">CLOSED <b>—</b></span><div class="zr-empty-column"><span>↗</span><p>Your customer history will take shape here.</p></div></div></div><div class="zr-pipeline-foot"><span>Website visitor</span><i>→</i><span>Conversation</span><i>→</i><span>Lead</span><i>→</i><span>Appointment</span><i>→</i><span>Follow-up</span></div></div></div></section>
+    <!-- Massive 1440px Studio Monolith -->
+    <div class="studio-ui-monolith">
+      <div class="studio-bar-top">
+        <div class="studio-bar-left">
+          <span style="font-weight:750;font-size:16px;color:#fff">Zylora Studio</span>
+          <div class="studio-viewport-controls">
+            <button class="studio-vp-btn active" type="button">Desktop 1440</button>
+            <button class="studio-vp-btn" type="button">Tablet 768</button>
+            <button class="studio-vp-btn" type="button">Mobile 390</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <span style="font-size:12px;color:var(--z-dark-muted)">Snapping: ON (8px)</span>
+          <a class="z-btn z-btn-sm" style="background:#fff;color:#000" href="/signup">Try Studio Free</a>
+        </div>
+      </div>
 
-    <section class="zr-capabilities-section" id="capabilities" aria-labelledby="capabilities-title"><div class="zr-container"><div class="zr-capabilities-heading"><p class="zr-section-index">06 / One connected system</p><h2 id="capabilities-title">The tools stay<br/><em>close to the work.</em></h2></div><div class="zr-capability-list"><a href="/analytics"><span>01</span><div><b>See what is happening</b><p>Understand the signals available to your account across traffic, leads and appointments.</p></div><span>↗</span></a><a href="/custom-domains"><span>02</span><div><b>Publish with intent</b><p>Connect the live address, keep the site status visible and make launch part of the workflow.</p></div><span>↗</span></a><a href="/integrations"><span>03</span><div><b>Move data where your team works</b><p>Use supported integrations to keep captured customer activity actionable.</p></div><span>↗</span></a><a href="/ai-sales-assistant"><span>04</span><div><b>Answer the next question</b><p>Give visitors a useful conversation path, grounded in the information you approve.</p></div><span>↗</span></a></div></div></section>
+      <div class="studio-body-layout">
+        <!-- Studio Left Panel -->
+        <div class="studio-side-dark">
+          <div class="studio-panel-title" style="color:var(--z-dark-muted)">Component Tree</div>
+          <div style="color:#fff;font-size:13px;padding:6px 0">▾ Page: Home</div>
+          <div style="color:#fff;font-size:13px;padding:6px 14px;background:rgba(91,92,240,0.2);border-radius:6px">■ Hero Container</div>
+          <div style="color:var(--z-dark-muted);font-size:13px;padding:6px 24px">↳ H1 Headline</div>
+          <div style="color:var(--z-dark-muted);font-size:13px;padding:6px 24px">↳ Lead Form</div>
+          <div style="color:#fff;font-size:13px;padding:6px 0">▸ Collection: Case Studies</div>
+          <div style="color:#fff;font-size:13px;padding:6px 0">▸ Booking Scheduler</div>
+        </div>
 
-    <section class="zr-template-section" aria-labelledby="template-title"><div class="zr-container"><div class="zr-template-head"><div><p class="zr-section-index">07 / Starting points</p><h2 id="template-title">A direction to begin with.<br/><em>Room to make it yours.</em></h2></div><a class="zr-text-link" href="/templates">Browse templates <span aria-hidden="true">↗</span></a></div><div class="zr-template-tabs" role="tablist" aria-label="Template directions"><button class="is-active" data-template-tab="all" type="button">All directions</button><button data-template-tab="services" type="button">Services</button><button data-template-tab="commerce" type="button">Commerce</button><button data-template-tab="studio" type="button">Studios</button></div><div class="zr-template-stage"><div class="zr-template-copy"><span data-template-label>01 / Northline Workshop</span><h3 data-template-heading>Objects for the<br/><i>everyday ritual.</i></h3><p data-template-copy>A considered starting point for a studio, maker or small brand with a clear point of view.</p><a class="zr-button zr-button-dark zr-button-small" href="/templates">See starting points <span aria-hidden="true">↗</span></a></div><div class="zr-template-art" data-template-art><div class="zr-template-browser"><div class="zr-browser-top"><span></span><span></span><span></span><b>northline.zylora.site</b></div><div class="zr-browser-content"><span>NORTHLINE WORKSHOP</span><strong>Made for the<br/><i>daily pause.</i></strong><small>Collection&nbsp;&nbsp; Journal&nbsp;&nbsp; Visit</small><div></div></div></div><div class="zr-template-orbit">NORTHLINE<br/>STARTING<br/>POINT</div></div></div></div></section>
+        <!-- Studio Center Canvas -->
+        <div class="studio-canvas-stage-dark">
+          <div class="rendered-mockup-frame">
+            <div class="canvas-selection-box">
+              <div class="resize-dot tl"></div>
+              <div class="resize-dot tr"></div>
+              <div class="resize-dot bl"></div>
+              <div class="resize-dot br"></div>
+              <div style="font-size:11px;font-weight:700;color:var(--z-accent);margin-bottom:8px">SELECTED: HERO HEADLINE</div>
+              <div style="font-family:var(--font-display);font-size:36px;font-weight:700;line-height:1.05">
+                Architecture that defines contemporary living.
+              </div>
+            </div>
+          </div>
+        </div>
 
-    <section class="zr-insight-section" aria-labelledby="insight-title"><div class="zr-container zr-insight-grid"><div><p class="zr-section-index">08 / Performance</p><h2 id="insight-title">Design for the<br/><em>question after the click.</em></h2><p>Performance is more useful when it connects a visitor signal to a business action. Use the analytics available to your account, then decide what to improve next.</p><a class="zr-text-link" href="/analytics">Explore analytics <span aria-hidden="true">↗</span></a></div><div class="zr-signal-chart"><div class="zr-chart-head"><span>ACCOUNT SIGNALS</span><b>30 days <i>⌄</i></b></div><div class="zr-chart-legend"><span><i class="zr-legend-cyan"></i> Visitors</span><span><i class="zr-legend-purple"></i> Conversations</span><span><i class="zr-legend-lime"></i> Appointments</span></div><svg viewBox="0 0 680 250" role="img" aria-label="Illustrative signal chart showing the relationship between visitors, conversations and appointments"><path class="zr-chart-grid" d="M0 40H680M0 100H680M0 160H680M0 220H680"/><path class="zr-chart-line cyan" d="M0 188 C55 180 68 150 118 164 S180 125 230 142 S282 106 330 126 S395 92 444 112 S500 70 548 92 S620 52 680 62"/><path class="zr-chart-line purple" d="M0 218 C60 216 80 202 124 207 S188 174 236 192 S292 174 342 178 S402 142 450 158 S520 114 565 132 S632 110 680 112"/><path class="zr-chart-line lime" d="M0 236 C72 234 92 230 138 232 S198 220 250 226 S310 214 360 218 S420 196 466 207 S526 178 574 190 S630 176 680 180"/><g class="zr-chart-dots"><circle cx="548" cy="92" r="5"/><circle cx="565" cy="132" r="5"/><circle cx="574" cy="190" r="5"/></g></svg><div class="zr-chart-axis"><span>Start</span><span>Week 1</span><span>Week 2</span><span>Week 3</span><span>Now</span></div></div></div></section>
+        <!-- Studio Right Panel -->
+        <div class="studio-side-dark right">
+          <div class="studio-panel-title" style="color:var(--z-dark-muted)">Layout & Geometry</div>
+          <div style="font-size:12px;color:var(--z-dark-muted);margin:10px 0 4px">Dimensions</div>
+          <div style="background:rgba(255,255,255,0.06);padding:8px;border-radius:6px;font-size:13px;color:#fff">W: 100% · H: Auto</div>
+          <div style="font-size:12px;color:var(--z-dark-muted);margin:14px 0 4px">Padding Scale</div>
+          <div style="background:rgba(255,255,255,0.06);padding:8px;border-radius:6px;font-size:13px;color:#fff">T: 120px · B: 120px</div>
+          <div style="font-size:12px;color:var(--z-dark-muted);margin:14px 0 4px">Code Generation</div>
+          <div style="background:rgba(255,255,255,0.06);padding:8px;border-radius:6px;font-size:12px;font-family:monospace;color:#A5A6F6">export default function Hero()</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <section class="zr-pricing-section" id="pricing" aria-labelledby="pricing-title"><div class="zr-container"><div class="zr-pricing-head"><div><p class="zr-section-index">09 / Pricing</p><h2 id="pricing-title">Start small.<br/><em>Make it useful.</em></h2><p>Plans and entitlements come from the current workspace configuration. Choose capacity when you need it.</p></div><span class="zr-regional-note" id="regionalPriceNote">Regional price · loading</span></div><div class="zr-price-row"><article><span>FREE</span><strong>₹0</strong><p>For exploring the workflow and shaping your first site.</p><a class="zr-text-link" href="/signup">Start free <span>↗</span></a></article><article class="is-featured"><span>MOST POPULAR</span><strong id="starterRegionalPrice">—</strong><p>For a live site with more room to publish, capture and follow up.</p><a class="zr-button zr-button-accent zr-button-small" href="/choose-plan">Choose Starter <span>↗</span></a></article><article><span>GROWTH</span><strong id="growthRegionalPrice">—</strong><p>For a larger active site and a deeper connected workspace.</p><a class="zr-text-link" href="/choose-plan">Choose Growth <span>↗</span></a></article><article class="is-managed"><span>MANAGED PRO</span><strong>Custom</strong><p>For a dedicated implementation delivered by Zylora experts.</p><button class="zr-text-link zr-link-button" id="openPro" type="button">Talk to an expert <span>↗</span></button></article></div></div></section>
+<!-- 5. Instant CMS & Structured Content Story -->
+<section class="cms-story-section">
+  <div class="z-container">
+    <div style="max-width:840px;margin:0 auto;text-align:center">
+      <span class="eyebrow-pill">Instant Content Management</span>
+      <h2 class="h2-editorial" style="margin:16px 0 14px">Dynamic content without database configuration.</h2>
+      <p class="text-intro">Create custom schemas for properties, doctors, menu items, or team members. Edit content easily and watch changes instantly reflect across your entire site.</p>
+    </div>
 
-    <section class="zr-comparison-section" id="comparison" aria-labelledby="comparison-title"><div class="zr-container"><div class="zr-comparison-head"><div><p class="zr-section-index">10 / Compare the workspace</p><h2 id="comparison-title">Capacity without<br/><em>the fine print fog.</em></h2></div><p>Current plan limits, regional billing and feature availability are rendered from the workspace configuration.</p></div><div class="zr-table-wrap"><table class="comparison-table"><caption>Zylora plan comparison</caption><thead><tr><th scope="col">CAPABILITY</th><th scope="col">FREE</th><th scope="col">STARTER</th><th scope="col">GROWTH</th><th scope="col">MANAGED PRO</th></tr></thead><tbody><tr><th scope="row">Price</th><td>₹0</td><td id="starterComparisonPrice">—</td><td id="growthComparisonPrice">—</td><td>Custom</td></tr><tr><th scope="row">Draft sites</th><td>{{FREE_SITE_LIMIT}}</td><td>{{STARTER_SITE_LIMIT}}</td><td>{{GROWTH_SITE_LIMIT}}</td><td>Configured</td></tr><tr><th scope="row">Published pages per site</th><td>{{FREE_PAGE_LIMIT}}</td><td>{{STARTER_PAGE_LIMIT}}</td><td>{{GROWTH_PAGE_LIMIT}}</td><td>Managed</td></tr><tr><th scope="row">AI creation and editing credits / month</th><td>{{FREE_AI_CREDITS}}</td><td>{{STARTER_AI_CREDITS}}</td><td>{{GROWTH_AI_CREDITS}}</td><td>Managed</td></tr><tr><th scope="row">Lead credits / month</th><td>{{FREE_LEAD_CREDITS}}</td><td>{{STARTER_LEAD_CREDITS}}</td><td>{{GROWTH_LEAD_CREDITS}}</td><td>Managed</td></tr><tr><th scope="row">Blank Studio and visual editing</th><td>Included</td><td>Included</td><td>Included</td><td>Included</td></tr><tr><th scope="row">Lead capture and appointments</th><td>Available</td><td>Available</td><td>Available</td><td>Configured</td></tr></tbody></table></div></div></section>
+    <div class="cms-story-grid">
+      <!-- Zone 1: Collection -->
+      <div class="cms-collection-pane">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--z-accent);margin-bottom:10px">Collection Data</div>
+        <h3 style="font-size:18px;margin-bottom:14px">Properties (3 Items)</h3>
+        <div style="background:var(--z-bg);border-radius:8px;padding:12px;margin-bottom:8px">
+          <b>Oceanfront Villa</b>
+          <div style="font-size:12px;color:var(--z-text-secondary)">₹4,50,00,000 · 4 Beds · Goa</div>
+        </div>
+        <div style="background:var(--z-bg);border-radius:8px;padding:12px;margin-bottom:8px">
+          <b>Skyline Penthouse</b>
+          <div style="font-size:12px;color:var(--z-text-secondary)">₹2,80,00,000 · 3 Beds · Mumbai</div>
+        </div>
+        <div style="background:var(--z-bg);border-radius:8px;padding:12px">
+          <b>Hilltop Sanctuary</b>
+          <div style="font-size:12px;color:var(--z-text-secondary)">₹1,95,00,000 · 3 Beds · Kasauli</div>
+        </div>
+      </div>
 
-    <section class="zr-faq-section" id="faq" aria-labelledby="faq-title"><div class="zr-container zr-faq-grid"><div><p class="zr-section-index">11 / FAQ</p><h2 id="faq-title">Questions worth<br/><em>answering.</em></h2></div><div class="zr-faq-list"><details><summary>How does Zylora help my business bring in real customers?<span>+</span></summary><p>Zylora connects website creation, publishing, lead capture, appointments, approved business knowledge and optional AI-assisted visitor conversations in one workspace.</p></details><details><summary>Can I start with a blank Studio?<span>+</span></summary><p>Open a blank Studio, shape the page directly and continue with the existing visual editing and publishing workflow.</p></details><details><summary>Can I use my own custom domain?<span>+</span></summary><p>Connect a custom domain through the workspace domain and publishing workflow; availability and SSL status depend on the configured domain.</p></details><details><summary>Does the assistant answer from information I approve?<span>+</span></summary><p>The assistant is configured to use approved business information and supported website context for visitor questions and next steps.</p></details></div></div></section>
+      <!-- Zone 2: Binding Line -->
+      <div class="cms-binding-flow">
+        <span>───►</span>
+      </div>
 
-    <section class="zr-final-cta"><div class="zr-container zr-final-cta-inner"><p class="zr-section-index">12 / Begin</p><h2>Give your business<br/><em>a better first move.</em></h2><p>Start with the website. Keep the customer path close.</p><div><a class="zr-button zr-button-accent" href="/signup">Start building free <span>↗</span></a><a class="zr-button zr-button-outline-light" href="/login">Log in <span>↗</span></a></div></div></section>
-  </main>
+      <!-- Zone 3: Live Website Output -->
+      <div class="cms-render-pane">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#10B981;margin-bottom:10px">Live Frontend Rendering</div>
+        <div style="background:linear-gradient(135deg, #0F172A 0%, #1E293B 100%);aspect-ratio:16/9;border-radius:10px;margin-bottom:14px;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:16px;border:1px solid rgba(255,255,255,0.1);position:relative">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:11px;font-weight:750;letter-spacing:0.05em;color:#94A3B8">ESTATE SHOWCASE</span>
+            <span style="background:rgba(16,185,129,0.2);color:#34D399;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px">VERIFIED CMS</span>
+          </div>
+          <div>
+            <div style="font-size:18px;font-weight:700;color:#FFFFFF;margin-bottom:4px">Oceanfront Luxury Villa</div>
+            <div style="font-size:12px;color:#94A3B8">Direct Dynamic Binding to `properties` collection</div>
+          </div>
+        </div>
+        <h3 style="font-size:24px;margin-bottom:6px">Oceanfront Villa</h3>
+        <div style="font-size:20px;font-weight:700;color:var(--z-accent);margin-bottom:10px">₹4,50,00,000</div>
+        <p style="font-size:14px;color:var(--z-text-secondary);margin:0">Spacious four-bedroom luxury estate featuring panoramic Arabian Sea views and private infinity pool.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <footer class="zr-footer"><div class="zr-container"><div class="zr-footer-top"><a class="zr-brand zr-brand-light" href="/" aria-label="Zylora home"><span class="zr-brand-mark">Z</span><span>Zylora</span></a><p>The website and customer growth platform for businesses that want the next step to be clear.</p><span class="zr-footer-status"><i class="zr-live-dot"></i> Systems operational</span></div><div class="zr-footer-grid"><div><span>PRODUCT</span><a href="/website-builder">Website builder</a><a href="/ai-website-builder">AI website builder</a><a href="/zylora-studio">Zylora Studio</a><a href="/crm">CRM</a></div><div><span>SOLUTIONS</span><a href="/solutions/small-business">Small business</a><a href="/solutions/clinics">Clinics</a><a href="/solutions/restaurants">Restaurants</a><a href="/solutions/agencies">Agencies</a></div><div><span>RESOURCES</span><a href="/templates">Website examples</a><a href="/guides/how-to-build-a-business-website">Guides</a><a href="/blog">Editorial blog</a><a href="/pricing">Pricing</a></div><div><span>COMPANY</span><a href="/legal">Legal hub</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/login">Log in</a></div></div><div class="zr-footer-bottom"><span>© 2026 Zylora Platforms Inc.</span><span>Built for real business workflows.</span></div></div></footer>
+<!-- 6. Flagship AI Sales Assistant Section (Dark Full-Width) -->
+<section class="assistant-flagship-section">
+  <div class="z-container">
+    <div style="max-width:880px;margin:0 auto;text-align:center">
+      <span class="eyebrow-pill eyebrow-dark">24/7 Conversion Intelligence</span>
+      <h2 style="font-size:clamp(36px,5vw,70px);margin:18px 0 16px">Turn anonymous visitors into booked appointments.</h2>
+      <p style="font-size:clamp(17px,2vw,22px);color:var(--z-dark-muted)">
+        Your AI Sales Assistant answers inquiries using your approved business knowledge, qualifies buyer intent, captures contact details, and confirms real calendar slots.
+      </p>
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#34D399;font-weight:600;font-size:13px;padding:6px 18px;border-radius:999px;margin-top:20px">
+        ✓ 100% Free for Visitors · Never Consumes Owner AI Credits
+      </div>
+    </div>
 
-  <div class="zr-modal" id="proModal" aria-hidden="true"><div class="zr-modal-card" role="dialog" aria-modal="true" aria-labelledby="proTitle"><button class="zr-modal-close" id="closePro" type="button" aria-label="Close">×</button><p class="zr-section-index">MANAGED PRO</p><h2 id="proTitle">Tell us what you need.</h2><p>Share a little context and the Zylora team can follow up.</p><form id="proForm"><label>Name<input id="proName" required/></label><label>Email<input id="proEmail" type="email" required/></label><label>Website type<input id="proType" placeholder="Restaurant, SaaS, portfolio…" required/></label><label>Preferred contact time<input id="proTime" placeholder="Weekdays after 5 PM IST" required/></label><button class="zr-button zr-button-accent" type="submit">Send enquiry <span>↗</span></button><p class="zr-form-message" id="proMsg" aria-live="polite"></p></form></div></div>
-  <script src="/static/zylora-public-rebuild.js?v=black-matrix-20260908"></script>
+    <div class="assistant-flow-grid">
+      <!-- Live Chat Dialog -->
+      <div class="assistant-chat-demonstration">
+        <div style="display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--z-dark-border);padding-bottom:14px;margin-bottom:18px">
+          <div style="width:10px;height:10px;border-radius:50%;background:#10B981"></div>
+          <span style="font-weight:700;font-size:14px;color:#fff">Assistant on Aurora Dental</span>
+        </div>
+        <div class="chat-bubble visitor">
+          "What is the recovery time for dental implants, and do you have a consultation available this week?"
+        </div>
+        <div class="chat-bubble assistant">
+          "Initial recovery typically takes 2 to 3 days with full osseointegration over a few months. Dr. Elena has a consultation slot open this Friday at 11:00 AM. Would you like me to book it?"
+        </div>
+        <div class="chat-bubble visitor">
+          "Yes please! My name is Rahul Sharma, rahul@example.com."
+        </div>
+        <div class="chat-bubble assistant">
+          "All set, Rahul! Your consultation is confirmed for Friday, Sept 11 at 11:00 AM. A confirmation text has been sent to your phone."
+        </div>
+      </div>
+
+      <!-- Resulting CRM Pipeline & Booking -->
+      <div class="lead-and-booking-pipeline">
+        <div class="pipeline-card-dark">
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:#10B981;text-transform:uppercase;margin-bottom:8px">1. Qualified Lead Captured</div>
+          <h4 style="font-size:18px;color:#fff;margin-bottom:4px">Rahul Sharma</h4>
+          <p style="font-size:13px;color:var(--z-dark-muted);margin:0 0 10px">rahul@example.com · Lead Score: 96/100 · Intent: Dental Implants</p>
+          <div style="font-size:12px;color:#A5A6F6">Synced to Google Sheets & WhatsApp alert dispatched</div>
+        </div>
+
+        <div class="pipeline-card-dark">
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:#3B82F6;text-transform:uppercase;margin-bottom:8px">2. Calendar Appointment Booked</div>
+          <h4 style="font-size:18px;color:#fff;margin-bottom:4px">Friday, Sept 11 · 11:00 AM</h4>
+          <p style="font-size:13px;color:var(--z-dark-muted);margin:0">Verified slot confirmed with Dr. Elena · Calendar invite generated</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. Asymmetric Feature Stories (Zero Uniform Card Grids) -->
+<section class="asymmetric-story-section">
+  <div class="z-container">
+    <div style="max-width:840px;margin-bottom:48px">
+      <span class="eyebrow-pill">Conversion Infrastructure</span>
+      <h2 class="h2-editorial" style="margin:14px 0 10px">A complete customer engine, not just a static page.</h2>
+      <p class="text-intro">Every tool your business needs to attract, capture, and retain customers is natively unified.</p>
+    </div>
+
+    <div class="asymmetric-grid">
+      <!-- Major Feature: CRM Lead Management -->
+      <div class="asymmetric-block">
+        <span style="font-size:11px;font-weight:700;color:var(--z-accent);text-transform:uppercase">Unified Lead Pipeline</span>
+        <h3 style="font-size:26px;margin:10px 0 12px">Real-Time Lead Tracking & Google Sheets Sync</h3>
+        <p class="text-body" style="margin-bottom:24px">Capture visitor inquiries from contextual forms and AI conversations. Automatic scoring separates high-intent buyers from casual visitors.</p>
+        <div style="background:var(--z-bg);border:1px solid var(--z-border);border-radius:12px;padding:16px;font-size:13px">
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--z-border)">
+            <span><b>Vikram Anand</b> (Consulting)</span>
+            <span style="color:#10B981;font-weight:600">Hot · 94/100</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--z-border)">
+            <span><b>Priya Mehta</b> (Architecture)</span>
+            <span style="color:#F59E0B;font-weight:600">Warm · 78/100</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0">
+            <span><b>Marcus Vance</b> (Brand Identity)</span>
+            <span style="color:#10B981;font-weight:600">Hot · 91/100</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Secondary Feature: SEO & Generative Engine Optimization -->
+      <div class="asymmetric-block">
+        <span style="font-size:11px;font-weight:700;color:var(--z-accent);text-transform:uppercase">Search & AI Visibility</span>
+        <h3 style="font-size:26px;margin:10px 0 12px">SEO, GEO & Machine-Readable Citations</h3>
+        <p class="text-body" style="margin-bottom:20px">Automated Schema.org structured data, semantic XML sitemaps, and machine-readable <code>/llms.txt</code> ensure your business is cited accurately by Google and AI models.</p>
+        <div style="background:#111113;color:#10B981;border-radius:12px;padding:16px;font-family:monospace;font-size:12px">
+          "@type": "SoftwareApplication",<br/>
+          "name": "Zylora Platform",<br/>
+          "llms_context": "Verified & Cited"
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. Regional Pricing Teaser -->
+<section class="pricing-teaser-section" id="pricing">
+  <div class="z-container">
+    <div style="text-align:center;max-width:840px;margin:0 auto">
+      <span class="eyebrow-pill">Transparent Pricing</span>
+      <h2 class="h2-editorial" style="margin:14px 0 10px">Simple, transparent plans for every stage.</h2>
+      <p class="text-intro">Start free. Upgrade only when you are ready to publish on a custom domain.</p>
+      <div style="font-size:13.5px;color:var(--z-text-tertiary);margin-top:8px">{{REGIONAL_PRICE_NOTE}}</div>
+    </div>
+
+    <div class="pricing-teaser-grid">
+      <!-- Free -->
+      <div class="pricing-teaser-card">
+        <div class="pricing-plan-name">Free</div>
+        <div class="pricing-plan-price">₹0</div>
+        <p class="text-small">Design and preview your entire site with AI and Studio before paying anything.</p>
+        <a class="z-btn z-btn-secondary" style="margin-top:auto" href="/signup">Start Free</a>
+      </div>
+
+      <!-- Starter -->
+      <div class="pricing-teaser-card featured">
+        <div style="font-size:11px;font-weight:700;color:var(--z-accent);text-transform:uppercase;margin-bottom:4px">Most Popular</div>
+        <div class="pricing-plan-name">Starter</div>
+        <div class="pricing-plan-price">{{STARTER_REGIONAL_PRICE}}</div>
+        <p class="text-small">Custom domain, brand removal, 5-page publishing, and unlimited AI Sales Assistant.</p>
+        <a class="z-btn z-btn-accent" style="margin-top:auto" href="/choose-plan">Choose Starter</a>
+      </div>
+
+      <!-- Growth -->
+      <div class="pricing-teaser-card">
+        <div class="pricing-plan-name">Growth</div>
+        <div class="pricing-plan-price">{{GROWTH_REGIONAL_PRICE}}</div>
+        <p class="text-small">High-capacity publishing, 8 pages, 300 monthly credits, and priority edge delivery.</p>
+        <a class="z-btn z-btn-secondary" style="margin-top:auto" href="/choose-plan">Choose Growth</a>
+      </div>
+
+      <!-- Pro -->
+      <div class="pricing-teaser-card">
+        <div class="pricing-plan-name">Managed Pro</div>
+        <div class="pricing-plan-price">Custom</div>
+        <p class="text-small">Bespoke implementation delivered by certified Zylora agency experts.</p>
+        <button class="z-btn z-btn-secondary" id="openPro" style="margin-top:auto" type="button">Talk to an expert</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10. Semantic Accessible FAQ Accordion -->
+<section class="faq-accordion-section faq" id="faq">
+  <div class="z-container">
+    <div style="text-align:center;max-width:840px;margin:0 auto">
+      <span class="eyebrow-pill">Frequently Asked Questions</span>
+      <h2 class="h2-editorial" style="margin:14px 0 10px">Everything you need to know.</h2>
+      <p class="text-intro">Straightforward answers about code ownership, AI capabilities, and hosting.</p>
+    </div>
+
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary class="faq-summary">How does Zylora help my business bring in real customers?</summary>
+        <div class="faq-answer">
+          Every Zylora website combines search-engine-optimized Next.js output, an integrated 24/7 AI Sales Assistant that qualifies inquiries using your business knowledge, and direct appointment scheduling with Google Sheets synchronization.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-summary">Can I export clean Next.js source code without platform lock-in?</summary>
+        <div class="faq-answer">
+          Yes. Zylora delivers a production-ready Next.js project with Tailwind CSS and zero proprietary runtime dependencies whenever you choose to export.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-summary">Does the AI Sales Assistant consume my website editing credits?</summary>
+        <div class="faq-answer">
+          No. The AI Sales Assistant is completely free and unlimited for your website visitors across all plans and never consumes your monthly AI creation or editing credits.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-summary">Can I use my own custom domain?</summary>
+        <div class="faq-answer">
+          Yes. Connect any custom domain with automated SSL certificate provisioning and global edge CDN caching.
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- 11. Final High-Impact CTA Banner -->
+<section class="final-cta-section">
+  <div class="z-container final-cta-wrap">
+    <span class="eyebrow-pill eyebrow-dark">Launch Today</span>
+    <h2>Your new website is two minutes away.</h2>
+    <p>Describe your business, preview the art direction, and launch with full customer acquisition capabilities.</p>
+    <div style="display:flex;justify-content:center;gap:18px;flex-wrap:wrap">
+      <a class="z-btn z-btn-lg" style="background:#fff;color:#000" href="/signup">Start building free</a>
+      <a class="z-btn z-btn-dark z-btn-lg" href="/signup">Open a blank Studio</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- 12. Authoritative Global Dark Footer -->
+<footer class="z-footer">
+  <div class="z-container">
+    <div class="z-footer-grid">
+      <div class="z-footer-brand-col">
+        <a class="z-logo" href="/" style="color:#fff">
+          <span class="z-logo-mark">Z</span>
+          <span class="z-logo-wordmark" style="color:#fff">Zylora</span>
+        </a>
+        <p>The AI website and customer growth platform. Direct-manipulation visual studio, instant CMS, and 24/7 lead qualification.</p>
+        <div class="z-status-badge">
+          <span class="z-status-dot"></span>
+          <span>All systems operational</span>
+        </div>
+      </div>
+
+      <div class="z-footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="/signup">Zylora Studio</a></li>
+          <li><a href="#studio">Visual Editor</a></li>
+          <li><a href="/choose-plan">Pricing & Plans</a></li>
+          <li><a href="/#pricing">Pro Implementation</a></li>
+        </ul>
+      </div>
+
+      <div class="z-footer-col">
+        <h4>Solutions</h4>
+        <ul>
+          <li><a href="/solutions/small-business">Small Business</a></li>
+          <li><a href="/solutions/clinics">Clinics</a></li>
+          <li><a href="/solutions/restaurants">Restaurants</a></li>
+          <li><a href="/solutions/agencies">Agencies</a></li>
+        </ul>
+      </div>
+
+      <div class="z-footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="/website-examples">Website Examples</a></li>
+          <li><a href="/guides/how-to-create-a-website-with-ai">AI Website Guide</a></li>
+          <li><a href="/blog">Editorial Blog</a></li>
+          <li><a href="/guides/small-business-website-checklist">Website Checklist</a></li>
+        </ul>
+      </div>
+
+      <div class="z-footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="/legal">Legal Hub</a></li>
+          <li><a href="/terms">Terms of Service</a></li>
+          <li><a href="/privacy">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="z-footer-bottom">
+      <div>© 2026 Zylora Platforms Inc. All rights reserved. Clean Next.js exportable source code.</div>
+      <div>Designed for real business outcomes.</div>
+    </div>
+  </div>
+</footer>
+
+<!-- 13. Managed by Experts Inquiry Modal Dialog (#proModal) -->
+<div id="proModal" class="pro-modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="proModalTitle">
+  <div class="pro-modal-card">
+    <button id="closePro" class="pro-modal-close" type="button" aria-label="Close dialog">×</button>
+    <span class="eyebrow-pill" style="margin-bottom:12px">Expert Implementation</span>
+    <h3 id="proModalTitle" style="font-size:24px;margin-bottom:8px">Talk to a Zylora Specialist</h3>
+    <p style="font-size:14px;color:var(--z-text-secondary);margin:0 0 20px">Let our design and engineering team deliver a custom website tailored specifically to your business goals.</p>
+    
+    <form id="proForm">
+      <div style="margin-bottom:14px">
+        <label for="proName" style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">Your Name</label>
+        <input id="proName" class="z-input" required placeholder="Dr. Elena Mitchell"/>
+      </div>
+      <div style="margin-bottom:14px">
+        <label for="proEmail" style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">Work Email</label>
+        <input id="proEmail" class="z-input" type="email" required placeholder="elena@auroraclinic.com"/>
+      </div>
+      <div style="margin-bottom:14px">
+        <label for="proType" style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">Website Type</label>
+        <input id="proType" class="z-input" required placeholder="e.g. Healthcare Clinic with booking"/>
+      </div>
+      <div style="margin-bottom:20px">
+        <label for="proTime" style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">Preferred Contact Time</label>
+        <input id="proTime" class="z-input" required placeholder="e.g. Weekday mornings via WhatsApp or phone"/>
+      </div>
+      <button class="z-btn z-btn-accent" style="width:100%" type="submit">Submit Request</button>
+      <div id="proMsg" style="font-size:13px;font-weight:600;color:var(--z-accent);text-align:center;margin-top:12px" role="status"></div>
+    </form>
+  </div>
+</div>
+
+<script src="/static/landing.js" defer></script>
+<script>
+// Carry an optional idea into signup; Studio itself always opens blank.
+document.querySelectorAll('.prompt-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const text = chip.dataset.prompt;
+    if (text) {
+      sessionStorage.setItem('studio_optional_idea', text);
+      location.href = '/signup';
+    }
+  });
+});
+const promptForm = document.getElementById('hero-prompt-form');
+if (promptForm) {
+  promptForm.addEventListener('submit', (e) => {
+    const input = document.getElementById('hero-prompt-input');
+    if (input && input.value.trim()) {
+      sessionStorage.setItem('studio_optional_idea', input.value.trim());
+    }
+  });
+}
+</script>
 </body>
 </html>

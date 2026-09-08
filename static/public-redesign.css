@@ -155,36 +155,3 @@ body.landing-page .pricing-teaser-section { background: #f0f5fb; }
   .guide-section h2 { font-size: 23px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
-
-/* SEO and resource pages inherit the same black/white public shell. */
-:root {
-  --zr-canvas: #090909;
-  --zr-surface: #111111;
-  --zr-soft: #181818;
-  --zr-grid: rgba(255,255,255,.08);
-  --zr-ink: #ffffff;
-  --zr-muted: #b8b8b8;
-  --zr-faint: #858585;
-  --zr-line: #2a2a2a;
-  --zr-blue: #ffffff;
-  --zr-violet: #d0d0d0;
-  --zr-teal: #ffffff;
-}
-
-body:has(.seo-page), body.landing-page { background: #090909; color: #fff; }
-.seo-header, body.landing-page .site-nav { background: rgba(9,9,9,.92); border-color: #2a2a2a; }
-.seo-hero, .seo-section, .seo-tint { background-color: #090909; }
-.seo-product-visual, .seo-related-link, .seo-solution-card, .seo-capabilities li, .seo-solution-banner, .seo-solution-path span { background: #111 !important; border-color: #2a2a2a; }
-.seo-visual-sidebar { background: #181818; border-color: #2a2a2a; }
-.seo-visual-main { background: linear-gradient(145deg, #1a1a1a, #0d0d0d); }
-.seo-visual-main > strong, .seo-two-col h2, .seo-narrow-heading h2, .seo-cta h2, .seo-workflow li, .seo-faq summary, .seo-solution-card h3 { color: #fff; }
-.seo-visual-flow span { background: #171717; border-color: #3a3a3a; color: #fff; }
-.seo-visual-flow span:nth-of-type(2) { background: #272727; border-color: #555; color: #fff; }
-.seo-visual-lines span, .seo-visual-lines span:nth-child(2), .seo-visual-lines span:nth-child(3) { background: #444; }
-.seo-cta { background: #181818; border: 1px solid #2a2a2a; }
-.guide-aside { background: #181818; }
-.seo-related-link span:last-child, .seo-faq summary span, .seo-kicker, .seo-visual-kicker, .seo-workflow li span, .guide-section > span, .seo-solution-card > span { color: #fff; }
-
-@media (max-width: 768px) {
-  .seo-header .z-header-inner, body.landing-page .site-nav .z-header-inner { display: flex; }
-}

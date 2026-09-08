@@ -2,7 +2,7 @@
  * Zylora Shadcn UI + Recharts Custom Chart Components
  * 
  * Heavily customized for Zylora's visual design language:
- * - Zylora dark system palette with neutral series and restrained semantic colors
+ * - Sneat / Modern SaaS palette (--sneat-primary: #696cff, #03c3ec, #71dd37, #ffab00, #ff3e1d)
  * - Shadcn UI Chart container, tooltips, gradients, and typography
  * - Responsive containers with adaptive sizing
  */
@@ -31,24 +31,24 @@
 
   // Zylora Brand Chart Palette - Dark Theme
   const THEME = {
-    primary: '#ffffff',
-    primarySoft: 'rgba(255, 255, 255, 0.14)',
-    primaryGradientStart: 'rgba(255, 255, 255, 0.28)',
+    primary: '#6366f1',
+    primarySoft: 'rgba(99, 102, 241, 0.16)',
+    primaryGradientStart: 'rgba(99, 102, 241, 0.45)',
     primaryGradientEnd: 'rgba(99, 102, 241, 0.00)',
-    cyan: '#b5b5b5',
-    cyanSoft: 'rgba(181, 181, 181, 0.12)',
-    green: '#8bd9aa',
-    greenSoft: 'rgba(139, 217, 170, 0.12)',
-    amber: '#d6aa63',
-    amberSoft: 'rgba(214, 170, 99, 0.12)',
-    danger: '#e77b7b',
-    border: '#2a2a2a',
-    gridLine: '#1c1c1c',
-    axisText: '#858585',
+    cyan: '#06b6d4',
+    cyanSoft: 'rgba(6, 182, 212, 0.16)',
+    green: '#22c55e',
+    greenSoft: 'rgba(34, 197, 94, 0.16)',
+    amber: '#f59e0b',
+    amberSoft: 'rgba(245, 158, 11, 0.16)',
+    danger: '#ef4444',
+    border: '#27272a',
+    gridLine: '#222227',
+    axisText: '#a1a1aa',
     heading: '#ffffff',
-    text: '#d0d0d0',
-    cardBg: '#0a0a0a',
-    tooltipBg: '#161616',
+    text: '#e4e4e7',
+    cardBg: '#111114',
+    tooltipBg: '#18181b',
     font: "'Public Sans', Inter, system-ui, -apple-system, sans-serif"
   };
 
@@ -155,7 +155,7 @@
         e('defs', null,
           e('linearGradient', { id: 'zyloraBarGrad', x1: '0', y1: '0', x2: '0', y2: '1' },
             e('stop', { offset: '0%', stopColor: THEME.primary, stopOpacity: 1 }),
-            e('stop', { offset: '100%', stopColor: '#b5b5b5', stopOpacity: 0.7 })
+            e('stop', { offset: '100%', stopColor: '#818cf8', stopOpacity: 0.85 })
           )
         ),
         e(Recharts.CartesianGrid, {
@@ -323,7 +323,7 @@
   function LeadSourcesDonut(props) {
     const rawData = props.data || [];
     const total = rawData.reduce(function(acc, cur) { return acc + (Number(cur.value) || 0); }, 0);
-    const data = total > 0 ? rawData : [{ name: 'No lead sources yet', value: 1, color: '#262626' }];
+    const data = total > 0 ? rawData : [{ name: 'No lead sources yet', value: 1, color: '#27272a' }];
 
     return e('div', { style: { position: 'relative', width: '100%', height: 210, display: 'flex', alignItems: 'center', justifyContent: 'center' } },
       e(Recharts.ResponsiveContainer, { width: '100%', height: '100%' },

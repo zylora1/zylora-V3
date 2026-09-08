@@ -1,7 +1,7 @@
 <html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Zylora Dashboard</title><meta content="noindex,nofollow" name="robots"/><link rel="icon" type="image/png" href="/static/favicon.png"/><link rel="shortcut icon" href="/favicon.ico"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&amp;display=swap" rel="stylesheet"/><link href="/static/zylora-ui.css" rel="stylesheet"/><link href="/static/dashboard.css" rel="stylesheet"/><link href="/static/dashboard-sneat.css" rel="stylesheet"/><link href="/static/zylora-apple.css" rel="stylesheet"/>
 <link href="/static/zylora-crm.css" rel="stylesheet"/>
 <link href="/static/date-range-calendar.css" rel="stylesheet"/>
-<link href="/static/prompt-input.css" rel="stylesheet"/><link href="/static/zylora-app-theme.css" rel="stylesheet"/><link href="/static/zylora-app-rebuild.css?v=dark-system-cards-20260908" rel="stylesheet"/></head><body class="employee-dashboard">
+<link href="/static/prompt-input.css" rel="stylesheet"/><link href="/static/zylora-app-theme.css" rel="stylesheet"/></head><body class="employee-dashboard">
 <div class="app-shell"><aside aria-label="Zylora dashboard navigation" class="rail sneat-sidebar"><a aria-label="Zylora home" class="rail-logo" href="/"><span class="zylora-wordmark">Zylora</span></a><nav aria-label="Dashboard sections"><p class="menu-section">Workspace</p><button class="rail-btn active" data-view="overview" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5.5 9.5V21h13V9.5"></path><path d="M9.5 21v-6h5v6"></path></svg></span><span class="menu-label">Dashboard</span></button><button class="rail-btn" data-view="websites" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="16" rx="2" width="18" x="3" y="4"></rect><path d="M3 9h18M8 4v16"></path></svg></span><span class="menu-label">Websites</span></button><p class="menu-section">Sales CRM</p>
 <button class="rail-btn" data-view="crm-overview" type="button"><span class="menu-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg></span><span class="menu-label">CRM Hub</span></button>
 <button class="rail-btn" data-view="crm-contacts" type="button"><span class="menu-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="menu-label">Contacts</span></button>
@@ -171,7 +171,7 @@
 <div class="health-sub-grid" id="overviewHealthSubGrid">
   <article class="panel health-sub-card">
     <div class="sub-card-head">
-      <span aria-hidden="true" class="sub-card-icon"><svg viewBox="0 0 24 24"><path d="M13 2 4 13h6l-1 9 9-12h-6l1-8Z"></path></svg></span>
+      <span class="sub-card-icon">⚡</span>
       <div><b>Site Performance</b><small>Loading speed and responsiveness</small></div>
     </div>
     <div class="sub-card-body" id="subCardPerfBody">
@@ -183,7 +183,7 @@
   </article>
   <article class="panel health-sub-card">
     <div class="sub-card-head">
-      <span aria-hidden="true" class="sub-card-icon"><svg viewBox="0 0 24 24"><path d="m12 3 7 3v5c0 4.7-2.9 8.4-7 10-4.1-1.6-7-5.3-7-10V6l7-3Z"></path><path d="m9 12 2 2 4-4"></path></svg></span>
+      <span class="sub-card-icon">🛡</span>
       <div><b>Uptime &amp; Security</b><small>Availability over the past 90 days</small></div>
     </div>
     <div class="sub-card-body">
@@ -196,7 +196,7 @@
   </article>
   <article class="panel health-sub-card">
     <div class="sub-card-head">
-      <span aria-hidden="true" class="sub-card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="4.5" r="2"></circle><path d="M9 9h6l1 4h-3v7M9 9l-2 5 3 3M7 14h6"></path></svg></span>
+      <span class="sub-card-icon">♿</span>
       <div><b>Accessibility</b><small>Help everyone use your site</small></div>
     </div>
     <div class="sub-card-body accessibility-body">
@@ -220,7 +220,7 @@
         <button class="range-pill active" data-overview-range="7" type="button">7D</button>
         <button class="range-pill" data-overview-range="30" type="button">30D</button>
         <button class="range-pill" data-overview-range="90" type="button">90D</button>
-        <button aria-label="Refresh chart" class="icon-action-btn" id="refreshChart" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.7-4L3 10"></path><path d="M3 4v6h6"></path><path d="M4 13a8 8 0 0 0 14.7 4L21 14"></path><path d="M21 20v-6h-6"></path></svg></button>
+        <button aria-label="Refresh chart" class="icon-action-btn" id="refreshChart" type="button">↻</button>
       </div>
     </div>
     <div class="shadcn-chart-container" id="shadcnWebsitePerfRoot" style="min-height:220px;"></div>
@@ -296,7 +296,7 @@
 <th class="check-cell"><input aria-label="Select all leads" class="checkbox" id="leadSelectAll" type="checkbox"/></th>
 <th>Lead</th><th>Source</th><th>Website</th><th>Quality</th><th>Created</th><th><span class="sr-only">Actions</span></th>
 </tr></thead><tbody id="leadRows"></tbody></table>
-<div class="empty mini" id="leadEmpty"><div><b>No leads yet</b><p>Leads captured from website forms, the AI Sales Assistant and appointments will appear here.</p><button class="ghost-btn" data-view-jump="assistant" type="button">Review Assistant setup</button></div></div>
+<div class="empty mini" id="leadEmpty">No leads yet.</div>
 </div>
 </section>
 <section class="view" id="assistant">
@@ -436,7 +436,7 @@
 </section>
 <div class="status-msg" id="billingMsg" role="status" aria-live="polite"></div>
 <div class="settings-card" id="creditTopupPanel"><div class="card-head"><div><h2>Buy extra credits</h2><p class="muted-copy">Credit top-ups are independent add-ons and may be billed in USD even when your Zylora subscription is billed in INR. The exact currency and amount are shown before checkout.</p></div></div><div class="billing-grid topup-grid" id="creditTopupGrid"></div><div class="status-msg" id="creditTopupMsg"></div></div>
-<div class="settings-card billing-history-card"><div class="card-head"><div><h2>Payment history</h2><p class="muted-copy">Verified subscriptions and independent credit purchases made through Zylora checkout.</p></div></div><div class="table-wrap embedded-table"><table><thead><tr><th>Reference</th><th>Date</th><th>Status</th><th>Type</th><th>Amount</th></tr></thead><tbody id="billingHistoryRows"></tbody></table><div class="empty mini" id="billingHistoryEmpty"><div><b>No paid transactions yet</b><p>Completed subscriptions and credit purchases will be listed here.</p></div></div></div></div>
+<div class="settings-card billing-history-card"><div class="card-head"><div><h2>Payment history</h2><p class="muted-copy">Verified subscriptions and independent credit purchases made through Zylora checkout.</p></div></div><div class="table-wrap embedded-table"><table><thead><tr><th>Reference</th><th>Date</th><th>Status</th><th>Type</th><th>Amount</th></tr></thead><tbody id="billingHistoryRows"></tbody></table><div class="empty mini" id="billingHistoryEmpty">No paid transactions yet.</div></div></div>
 </section>
 <section class="view" id="settings">
 <div class="view-head settings-head"><div><p class="eyebrow">Account</p><h1>Settings</h1><p>Profile and notification preferences for this Zylora account.</p></div></div>
@@ -921,5 +921,5 @@
     <div class="crm-spotlight-results" id="crmSpotlightResults"></div>
   </div>
 </div>
-<script src="/static/zylora-app-rebuild.js"></script>
+
 </body></html>
