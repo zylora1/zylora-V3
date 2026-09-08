@@ -247,6 +247,14 @@ def asset_is_publicly_referenced(asset_id: str) -> bool:
     needle = f'"asset_id":"{asset_id}"'
     needle2 = f'"assetId":"{asset_id}"'
     with SessionLocal() as db:
+        # Platform blog media is durable and public only after the post itself
+        # is published. Customer-owned draft media remains private.
+        blog = db.execute(text("""SELECT 1 FROM blog_posts
+            WHERE site_id IS NULL AND status='PUBLISHED' AND
+            (featured_image_asset_id=:i OR og_image_asset_id=:i OR content LIKE :needle)
+            LIMIT 1"""), {'i': asset_id, 'needle': f'%{asset_id}%'}).first()
+        if blog:
+            return True
         direct=db.execute(text("SELECT 1 FROM sites WHERE status='LIVE' AND (published_structure_json LIKE :n OR published_structure_json LIKE :n2 OR published_snapshot_json LIKE :n OR published_snapshot_json LIKE :n2) LIMIT 1"), {'n': f'%{needle}%', 'n2': f'%{needle2}%'}).first()
         if direct: return True
         imported=db.execute(text("SELECT 1 FROM imported_site_pages p JOIN sites s ON s.id=p.site_id WHERE s.status='LIVE' AND (p.html LIKE :aid OR p.asset_manifest_json LIKE :aid) LIMIT 1"),{'aid':f'%{asset_id}%'}).first()

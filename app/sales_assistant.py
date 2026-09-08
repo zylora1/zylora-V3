@@ -16,6 +16,7 @@ from .db import SessionLocal, now_iso
 from .settings_store import get_system_setting
 from .providers import sales_assistant_completion, estimate_openai_cost_micros
 from .credits import reserve_wallet, finalize_wallet, refund_wallet, provider_cost_to_credits
+from .ai_security import PUBLIC_SITE_ASSISTANT, SALES_ASSISTANT, OWNER_ASSISTANT, assert_assistant_type, record_ai_usage_event
 from .notifications import notify
 from .operations import record_analytics, record_operational_event, safe_exception_summary
 from .appointment_engine import available_slots, slot_is_available
@@ -37,6 +38,7 @@ INTENTS={
 }
 HIGH_INTENT={'APPOINTMENT_INTENT','QUOTE_REQUEST','CALLBACK_REQUEST','PURCHASE_INTENT','CONTACT_INTENT'}
 INJECTION=re.compile(r'(?i)(ignore\s+(all\s+)?previous|system\s+prompt|developer\s+message|reveal\s+.*(lead|secret|password|api\s*key)|act\s+as\s+system|override\s+instructions|execute\s+(sql|query)|drop\s+table)')
+SECRET_LIKE=re.compile(r'(?i)(?:api[_ -]?key|access[_ -]?token|refresh[_ -]?token|client[_ -]?secret|password|turnstile|resend[_ -]?api|openai[_ -]?key|authorization:\s*bearer|postgres(?:ql)?://|sk-[A-Za-z0-9_-]{12,})')
 EMAIL_RE=re.compile(r'(?i)\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b')
 PHONE_RE=re.compile(r'(?<!\d)(?:\+?\d[\d ()-]{7,18}\d)(?!\d)')
 BUDGET_RE=re.compile(r'(?i)(?:budget|around|up to|under|about)\s*(?:is\s*)?([₹$€£]?\s?[\d,]+(?:\.\d+)?\s*(?:k|lakh|lakhs|million)?)')
@@ -155,7 +157,7 @@ def _safe_sentence_candidates(text_value: str) -> list[str]:
     out=[]
     for sentence in re.split(r'(?<=[.!?])\s+|\n+',text_value):
         s=sentence.strip()
-        if 8<=len(s)<=500 and not INJECTION.search(s): out.append(s)
+        if 8<=len(s)<=500 and not INJECTION.search(s) and not SECRET_LIKE.search(s): out.append(s)
     return out
 
 
@@ -167,14 +169,14 @@ def search_business_knowledge(site: dict, question: str, config: dict) -> dict:
             for s in _safe_sentence_candidates(profile.get(key) or ''): facts.append((len(terms & set(re.findall(r'[a-z0-9]{3,}',s.lower()))),s,'BUSINESS_PROFILE'))
         for service in profile.get('services') or []:
             s=_clean_text(service,400)
-            if s and not INJECTION.search(s): facts.append((3 if any(t in s.lower() for t in terms) else 1,s,'BUSINESS_PROFILE'))
+            if s and not INJECTION.search(s) and not SECRET_LIKE.search(s): facts.append((3 if any(t in s.lower() for t in terms) else 1,s,'BUSINESS_PROFILE'))
     if int(config.get('use_published_site') or 0):
         # Published structured text is data, never instructions.
         doc=_j(site.get('published_structure_json') or '{}',{})
         for op in doc.get('operations') or []:
             if isinstance(op,dict) and op.get('type')=='set_text':
-                s=_clean_text(op.get('text'),500)
-                if s and not INJECTION.search(s): facts.append((len(terms & set(re.findall(r'[a-z0-9]{3,}',s.lower()))),s,'PUBLISHED_SITE'))
+                for s in _safe_sentence_candidates(_clean_text(op.get('text'),500)):
+                    facts.append((len(terms & set(re.findall(r'[a-z0-9]{3,}',s.lower()))),s,'PUBLISHED_SITE'))
     if int(config.get('use_approved_knowledge') or 0):
         with SessionLocal() as db:
             rows=db.execute(text('SELECT id,title,content FROM site_knowledge_docs WHERE site_id=:s ORDER BY updated_at DESC LIMIT 100'),{'s':site['id']}).mappings().all()
@@ -338,7 +340,7 @@ def _assistant_credit_unit() -> int:
         return 10000
 
 
-def _assistant_reservation(site: dict, model: str, message: str, tools: dict, history: list[dict], max_output_tokens: int, conversation_id: str) -> dict:
+def _assistant_reservation(site: dict, model: str, message: str, tools: dict, history: list[dict], max_output_tokens: int, conversation_id: str, request_id: str) -> dict:
     """Reserve a conservative owner-wallet budget before a paid assistant call."""
     input_estimate=max(1, (len(message)+len(json.dumps(tools, ensure_ascii=False))+sum(len(str(x.get('content') or '')) for x in history[-8:]))//4)
     max_cost=estimate_openai_cost_micros(model,{'input_tokens':input_estimate,'output_tokens':max_output_tokens})
@@ -346,10 +348,10 @@ def _assistant_reservation(site: dict, model: str, message: str, tools: dict, hi
     with SessionLocal.begin() as db:
         owner=db.execute(text('SELECT id,plan,role FROM users WHERE id=:u'),{'u':site.get('user_id')}).mappings().first()
         if not owner: raise HTTPException(404,'Site owner not found')
-        return reserve_wallet(db,owner['id'],owner['plan'],max_credits,'AI_ASSISTANT',idempotency_key=f'assistant:{conversation_id}:{hashlib.sha256(message.encode()).hexdigest()[:24]}',reference_id=site.get('id'))
+        return reserve_wallet(db,owner['id'],owner['plan'],max_credits,'AI_ASSISTANT',idempotency_key=f'assistant:{request_id}',reference_id=site.get('id'))
 
 
-def _settle_assistant_reservation(reservation: dict|None, site: dict, model: str, usage_cost_micros: int, message: str, conversation_id: str) -> dict:
+def _settle_assistant_reservation(reservation: dict|None, site: dict, model: str, usage_cost_micros: int, message: str, conversation_id: str, request_id: str) -> dict:
     if not reservation or reservation.get('skipped') or reservation.get('idempotent'):
         return {'credits':0,'transaction_id':reservation.get('id') if reservation else None,'cost_micros':usage_cost_micros}
     actual=provider_cost_to_credits(usage_cost_micros,credit_usd_micros=_assistant_credit_unit())
@@ -361,25 +363,28 @@ def _settle_assistant_reservation(reservation: dict|None, site: dict, model: str
         refund_wallet(db,reservation['id'],'assistant_usage_reconciliation')
         if actual<=0:
             return {'credits':0,'transaction_id':None,'cost_micros':usage_cost_micros}
-        idem=f'assistant-settle:{conversation_id}:{hashlib.sha256(message.encode()).hexdigest()[:24]}'
+        idem=f'assistant-settle:{request_id}'
         charged=reserve_wallet(db,owner['id'],owner['plan'],actual,'AI_ASSISTANT',idempotency_key=idem,reference_id=site.get('id'))
         if not charged.get('idempotent') and not charged.get('skipped'):
             charged=finalize_wallet(db,charged['id'])
         return {'credits':actual,'transaction_id':charged.get('id'),'cost_micros':usage_cost_micros}
 
 
-def create_conversation(site_id: str, session_id: str, *, page_url: str|None=None, referrer: str|None=None, utm_source: str|None=None, utm_medium: str|None=None, utm_campaign: str|None=None, visitor_id: str|None=None, test_mode: bool=False) -> dict:
+def create_conversation(site_id: str, session_id: str, *, page_url: str|None=None, referrer: str|None=None, utm_source: str|None=None, utm_medium: str|None=None, utm_campaign: str|None=None, visitor_id: str|None=None, test_mode: bool=False, assistant_type: str|None=None) -> dict:
     site=_site(site_id,live_only=not test_mode); cfg=site_config(site_id)
     if not int(cfg.get('enabled') or 0): raise PermissionError('Assistant is disabled')
     sid=_clean_text(session_id,120)
     if len(sid)<8: raise ValueError('session_id is too short')
+    scope = assistant_type or (OWNER_ASSISTANT if test_mode else PUBLIC_SITE_ASSISTANT)
+    if scope not in {SALES_ASSISTANT, PUBLIC_SITE_ASSISTANT, OWNER_ASSISTANT}:
+        raise ValueError('Unsupported Sales Assistant scope')
     with SessionLocal.begin() as db:
         row=db.execute(text('SELECT * FROM assistant_conversations WHERE site_id=:s AND session_id=:x AND test_mode=:t'),{'s':site_id,'x':sid,'t':1 if test_mode else 0}).mappings().first()
         if row:return dict(row)
         cid=str(uuid4()); now=now_iso()
-        db.execute(text('''INSERT INTO assistant_conversations(id,site_id,session_id,visitor_id,test_mode,stage,intents_json,qualification_json,page_url,referrer,utm_source,utm_medium,utm_campaign,model_version,prompt_version,tool_schema_version,business_profile_revision,published_site_revision,assistant_config_revision,last_activity_at,created_at)
-        VALUES (:i,:s,:x,:v,:t,'DISCOVER','[]','{}',:url,:ref,:us,:um,:uc,:model,'sales-assistant-v1','1',:bp,:ps,:rev,:a,:a)'''),
-        {'i':cid,'s':site_id,'x':sid,'v':visitor_id,'t':1 if test_mode else 0,'url':_clean_text(page_url,500) or None,'ref':_clean_text(referrer,500) or None,'us':_clean_text(utm_source,160) or None,'um':_clean_text(utm_medium,160) or None,'uc':_clean_text(utm_campaign,160) or None,'model':cfg.get('model') or settings.sales_assistant_model,'bp':str(site.get('document_version') or ''),'ps':str(site.get('published_at') or site.get('updated_at') or ''),'rev':int(cfg.get('config_revision') or 1),'a':now})
+        db.execute(text('''INSERT INTO assistant_conversations(id,site_id,session_id,visitor_id,test_mode,assistant_type,stage,intents_json,qualification_json,page_url,referrer,utm_source,utm_medium,utm_campaign,model_version,prompt_version,tool_schema_version,business_profile_revision,published_site_revision,assistant_config_revision,last_activity_at,created_at)
+        VALUES (:i,:s,:x,:v,:t,:scope,'DISCOVER','[]','{}',:url,:ref,:us,:um,:uc,:model,'sales-assistant-v1','1',:bp,:ps,:rev,:a,:a)'''),
+        {'i':cid,'s':site_id,'x':sid,'v':visitor_id,'t':1 if test_mode else 0,'scope':scope,'url':_clean_text(page_url,500) or None,'ref':_clean_text(referrer,500) or None,'us':_clean_text(utm_source,160) or None,'um':_clean_text(utm_medium,160) or None,'uc':_clean_text(utm_campaign,160) or None,'model':cfg.get('model') or settings.sales_assistant_model,'bp':str(site.get('document_version') or ''),'ps':str(site.get('published_at') or site.get('updated_at') or ''),'rev':int(cfg.get('config_revision') or 1),'a':now})
         row=db.execute(text('SELECT * FROM assistant_conversations WHERE id=:i'),{'i':cid}).mappings().first()
     if not test_mode:
         try:record_analytics(site_id,'ASSISTANT_IMPRESSION',sid,page_url or '/',{})
@@ -387,7 +392,7 @@ def create_conversation(site_id: str, session_id: str, *, page_url: str|None=Non
     return dict(row)
 
 
-def process_message(site_id: str, conversation_id: str, message: str, *, contact: dict|None=None, test_mode: bool=False, conversion_allowed: bool=True) -> dict:
+def process_message(site_id: str, conversation_id: str, message: str, *, contact: dict|None=None, test_mode: bool=False, conversion_allowed: bool=True, expected_assistant_type: str|None=None) -> dict:
     site=_site(site_id,live_only=not test_mode); cfg=site_config(site_id)
     max_chars=max(200,min(10000,int(get_system_setting('assistant_input_char_limit','2000') or 2000)))
     msg=_clean_text(message,max_chars+1)
@@ -397,6 +402,11 @@ def process_message(site_id: str, conversation_id: str, message: str, *, contact
         convrow=db.execute(text('SELECT * FROM assistant_conversations WHERE id=:c AND site_id=:s AND test_mode=:t'),{'c':conversation_id,'s':site_id,'t':1 if test_mode else 0}).mappings().first()
     if not convrow: raise KeyError(conversation_id)
     conv=dict(convrow)
+    expected = expected_assistant_type or (OWNER_ASSISTANT if test_mode else PUBLIC_SITE_ASSISTANT)
+    try:
+        assert_assistant_type(conv.get('assistant_type'), expected)
+    except PermissionError as exc:
+        raise KeyError(conversation_id) from exc
     # Owner preview/test conversations must not consume production Assistant quota or usage.
     # They still pass through the same validation/grounding/tool pipeline so test mode remains representative.
     ok,reason=(True,None) if test_mode else _quota(site_id,conversation_id)
@@ -414,6 +424,7 @@ def process_message(site_id: str, conversation_id: str, message: str, *, contact
     answer,grounded=_answer_from_tools(site,msg,intents,tools)
     input_tokens=output_tokens=0; model=cfg.get('model') or settings.sales_assistant_model
     reservation=None; credit_info={'credits':0,'transaction_id':None,'cost_micros':0}
+    request_id=str(uuid4()); provider_started=datetime.now(timezone.utc)
     history=[]
     max_output_tokens=int(get_system_setting('assistant_output_token_limit','350') or 350)
     # OpenAI is only a grounded language layer over validated tool outputs; actions already ran server-side.
@@ -421,7 +432,7 @@ def process_message(site_id: str, conversation_id: str, message: str, *, contact
         with SessionLocal() as db:
             history=[dict(r) for r in db.execute(text('SELECT role,content FROM assistant_messages WHERE conversation_id=:c ORDER BY created_at DESC LIMIT 8'),{'c':conversation_id}).mappings().all()][::-1]
         try:
-            reservation=_assistant_reservation(site,model,msg,tools,history,max_output_tokens,conversation_id)
+            reservation=_assistant_reservation(site,model,msg,tools,history,max_output_tokens,conversation_id,request_id)
         except HTTPException as exc:
             if exc.status_code==402:
                 record_operational_event('AI_ASSISTANT','ASSISTANT_CREDITS_EXHAUSTED','owner wallet cannot fund next provider call',severity='WARNING',site_id=site_id,dedupe_minutes=60)
@@ -437,15 +448,38 @@ def process_message(site_id: str, conversation_id: str, message: str, *, contact
             input_tokens=int(result.get('input_tokens') or 0);output_tokens=int(result.get('output_tokens') or 0);model=result.get('model') or model
             measured_cost=estimate_openai_cost_micros(model,{'input_tokens':input_tokens,'output_tokens':output_tokens,'input_tokens_details':result.get('input_tokens_details')})
             if reservation and not test_mode:
-                credit_info=_settle_assistant_reservation(reservation,site,model,measured_cost,msg,conversation_id)
+                credit_info=_settle_assistant_reservation(reservation,site,model,measured_cost,msg,conversation_id,request_id)
+            if not test_mode:
+                record_ai_usage_event(
+                    assistant_type=PUBLIC_SITE_ASSISTANT, status='SUCCEEDED', model=model,
+                    user_id=site.get('user_id'), site_id=site_id, conversation_id=conversation_id,
+                    request_id=request_id, input_tokens=input_tokens,
+                    cached_input_tokens=int((result.get('input_tokens_details') or {}).get('cached_tokens') or 0),
+                    output_tokens=output_tokens, provider_cost_micros=measured_cost,
+                    billable_credits=int(credit_info.get('credits') or 0),
+                    tool_calls=['search_business_knowledge','get_business_hours','get_location'],
+                    duration_ms=round((datetime.now(timezone.utc)-provider_started).total_seconds()*1000),
+                )
         except Exception as exc:
             if reservation and not test_mode:
                 try:
                     with SessionLocal.begin() as db: refund_wallet(db,reservation['id'],'assistant_provider_failure')
                 except Exception: logger.exception('Failed to refund assistant reservation')
             if not test_mode: record_operational_event('AI_ASSISTANT','OPENAI_FALLBACK',safe_exception_summary(exc),severity='WARNING',site_id=site_id,dedupe_minutes=5)
+            if not test_mode:
+                try:
+                    record_ai_usage_event(
+                        assistant_type=PUBLIC_SITE_ASSISTANT, status='FAILED', model=model,
+                        user_id=site.get('user_id'), site_id=site_id, conversation_id=conversation_id,
+                        request_id=request_id, error_code=type(exc).__name__,
+                        tool_calls=['search_business_knowledge','get_business_hours','get_location'],
+                        duration_ms=round((datetime.now(timezone.utc)-provider_started).total_seconds()*1000),
+                    )
+                except Exception:
+                    logger.exception('Failed to record assistant usage failure')
     lead_candidate=bool((set(intents)&HIGH_INTENT) and (q.get('email') or q.get('phone'))) or bool(('COMPLAINT' in intents or 'SUPPORT_QUERY' in intents) and (q.get('email') or q.get('phone')))
-    should_lead=bool(lead_candidate and conversion_allowed)
+    consented_for_enquiry = contact is None or bool(contact.get('service_enquiry_consent', True))
+    should_lead=bool(lead_candidate and conversion_allowed and consented_for_enquiry)
     conversion_deferred=bool(lead_candidate and not conversion_allowed)
     lead_info=None; lead_created=False
     with SessionLocal.begin() as db:
@@ -516,6 +550,8 @@ def assistant_funnel(site_ids: list[str], start_iso: str) -> dict:
 
 def ensure_conversion_lead(site_id: str, conversation_id: str, *, contact: dict, intent: str='APPOINTMENT_INTENT', note: str='Appointment request', test_mode: bool=False) -> dict|None:
     if test_mode:return None
+    if not bool((contact or {}).get('service_enquiry_consent', True)):
+        raise HTTPException(422, 'Service enquiry consent is required before creating a lead')
     site=_site(site_id,live_only=True); q=_extract_qualification(note,contact); intents=[intent]
     with SessionLocal.begin() as db:
         convrow=db.execute(text('SELECT * FROM assistant_conversations WHERE id=:c AND site_id=:s AND test_mode=0'),{'c':conversation_id,'s':site_id}).mappings().first()

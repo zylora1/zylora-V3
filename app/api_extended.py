@@ -5,7 +5,7 @@ from urllib.parse import quote, urlencode, urlparse
 from uuid import uuid4
 
 from fastapi import APIRouter, HTTPException, Request
-from fastapi.responses import RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy import text
 
@@ -27,6 +27,7 @@ from .billing_regions import offer_for_request, regional_price, provider_plan_id
 from .credits import ensure_wallet, reset_monthly_for_plan, grant_topup, wallet_summary, TOPUP_PACKS
 from .seo_engine import enqueue_site_change, page_path, site_origin
 from .media import get_asset
+from .content_safety import sanitize_rich_html, sanitize_email_html
 from .operations import safe_exception_summary, record_operational_event
 from .studio_document import validate_studio_document
 from .template_catalogue import admin_templates as catalogue_admin_templates, set_template_published
@@ -380,6 +381,18 @@ class BlogIn(BaseModel):
     og_image_asset_id: str|None = None
     indexable: bool = True
 
+
+def _validate_platform_asset(admin: dict, asset_id: str | None) -> str | None:
+    value = str(asset_id or '').strip() or None
+    if not value:
+        return None
+    try:
+        # Platform editorial media must be owned by the publishing admin.
+        get_asset(value, user_id=admin['id'])
+    except HTTPException as exc:
+        raise HTTPException(422, 'Blog image must be an asset uploaded by this Super Admin') from exc
+    return value
+
 def _slugify(value: str) -> str:
     return re.sub(r'[^a-z0-9]+','-',value.lower()).strip('-')[:80] or secrets.token_hex(4)
 
@@ -393,7 +406,9 @@ def _platform_blog_create(admin: dict, payload: BlogIn):
             slug=f'{base}-{n+2}'
         canonical=(payload.canonical_url or '').strip() or None
         if canonical and (urlparse(canonical).scheme!='https' or not urlparse(canonical).hostname): raise HTTPException(422,'Blog canonical URL must use HTTPS')
-        db.execute(text('''INSERT INTO blog_posts(id,site_id,author_user_id,title,slug,excerpt,content,status,seo_title,seo_description,featured_image_asset_id,featured_image_alt,author_name,author_bio,canonical_url,og_image_asset_id,indexable,created_at,updated_at) VALUES (:i,:s,:u,:t,:g,:e,:c,'DRAFT',:st,:sd,:fi,:fa,:an,:ab,:cu,:og,:ix,:a,:a)'''),{'i':pid,'s':site_id,'u':admin['id'],'t':payload.title,'g':slug,'e':payload.excerpt,'c':payload.content,'st':payload.seo_title,'sd':payload.seo_description,'fi':payload.featured_image_asset_id,'fa':payload.featured_image_alt,'an':payload.author_name,'ab':payload.author_bio,'cu':canonical,'og':payload.og_image_asset_id,'ix':int(payload.indexable),'a':now_iso()})
+        featured = _validate_platform_asset(admin, payload.featured_image_asset_id)
+        og_image = _validate_platform_asset(admin, payload.og_image_asset_id)
+        db.execute(text('''INSERT INTO blog_posts(id,site_id,author_user_id,title,slug,excerpt,content,status,seo_title,seo_description,featured_image_asset_id,featured_image_alt,author_name,author_bio,canonical_url,og_image_asset_id,indexable,created_at,updated_at) VALUES (:i,:s,:u,:t,:g,:e,:c,'DRAFT',:st,:sd,:fi,:fa,:an,:ab,:cu,:og,:ix,:a,:a)'''),{'i':pid,'s':site_id,'u':admin['id'],'t':payload.title,'g':slug,'e':payload.excerpt,'c':sanitize_rich_html(payload.content),'st':payload.seo_title,'sd':payload.seo_description,'fi':featured,'fa':payload.featured_image_alt,'an':payload.author_name,'ab':payload.author_bio,'cu':canonical,'og':og_image,'ix':int(payload.indexable),'a':now_iso()})
     return {'id':pid,'slug':slug}
 
 # Site-level/customer blog CMS intentionally does not exist. Zylora's public
@@ -1399,6 +1414,8 @@ def admin_platform_blog_update(post_id: str, payload: BlogIn, request: Request):
         canonical = (payload.canonical_url or '').strip() or None
         if canonical and (urlparse(canonical).scheme != 'https' or not urlparse(canonical).hostname):
             raise HTTPException(422, 'Blog canonical URL must use HTTPS')
+        featured = _validate_platform_asset(admin, payload.featured_image_asset_id)
+        og_image = _validate_platform_asset(admin, payload.og_image_asset_id)
         s_slug = payload.slug.strip().lower() if payload.slug else row['slug']
         db.execute(text('''UPDATE blog_posts SET 
             title=:t, slug=:s, excerpt=:e, content=:c,
@@ -1411,15 +1428,15 @@ def admin_platform_blog_update(post_id: str, payload: BlogIn, request: Request):
             't': payload.title.strip(),
             's': s_slug,
             'e': payload.excerpt.strip(),
-            'c': payload.content.strip(),
-            'fi': payload.featured_image_asset_id or ((payload.cover_image or '').strip() or None),
+            'c': sanitize_rich_html(payload.content.strip()),
+            'fi': featured,
             'fa': payload.featured_image_alt,
             'st': (payload.seo_title or payload.title).strip(),
             'sd': (payload.seo_description or payload.excerpt).strip(),
             'an': payload.author_name,
             'ab': payload.author_bio,
             'cu': canonical,
-            'og': payload.og_image_asset_id,
+            'og': og_image,
             'ix': int(payload.indexable),
             'a': now_iso(),
             'i': post_id
@@ -1676,8 +1693,8 @@ def admin_health(request: Request):
 class CampaignIn(BaseModel):
     title: str = Field(min_length=2, max_length=200)
     subject: str = Field(min_length=2, max_length=200)
-    audience: str = Field(default='ALL')
-    body_html: str = Field(min_length=5)
+    audience: str = Field(default='ALL', max_length=30)
+    body_html: str = Field(min_length=5, max_length=100000)
 
 @router.get('/admin/campaigns')
 def admin_campaigns(request: Request):
@@ -1689,6 +1706,10 @@ def admin_campaigns(request: Request):
 @router.post('/admin/campaigns')
 def admin_campaign_create(payload: CampaignIn, request: Request):
     admin = _admin(request, True)
+    audience = payload.audience.strip().upper()
+    allowed_audiences = {'ALL','FREE','STARTER','GROWTH','ZYLORA','PRO','PAYING','PUBLISHED','UNPUBLISHED'}
+    if audience not in allowed_audiences:
+        raise HTTPException(422, 'Unsupported campaign audience')
     cid = f'camp_{uuid4().hex[:12]}'
     now = now_iso()
     with SessionLocal.begin() as db:
@@ -1697,8 +1718,8 @@ def admin_campaign_create(payload: CampaignIn, request: Request):
             'id': cid,
             'title': payload.title.strip(),
             'subject': payload.subject.strip(),
-            'audience': payload.audience.strip().upper(),
-            'body_html': payload.body_html,
+            'audience': audience,
+            'body_html': sanitize_email_html(payload.body_html),
             'created_at': now
         })
     _audit(admin['id'], 'ADMIN_CAMPAIGN_CREATE', 'campaign', cid)
@@ -1721,34 +1742,96 @@ def admin_campaign_test_send(campaign_id: str, request: Request):
 @router.post('/admin/campaigns/{campaign_id}/send')
 def admin_campaign_send(campaign_id: str, request: Request):
     admin = _admin(request, True)
+    deliveries = []
     with SessionLocal.begin() as db:
         c = db.execute(text('SELECT * FROM platform_campaigns WHERE id=:id'), {'id': campaign_id}).mappings().first()
         if not c:
             raise HTTPException(404, 'Campaign not found')
-        audience = c['audience']
-        q = 'SELECT email FROM users WHERE email_verified=1'
-        if audience in ('STARTER', 'GROWTH', 'PRO'):
-            q += f" AND plan='{audience}'"
+        audience = str(c['audience'] or 'ALL').upper()
+        clauses = ["u.email_verified=1", "COALESCE(p.marketing_consent,0)=1", "p.unsubscribed_at IS NULL"]
+        params = {}
+        if audience in {'FREE','STARTER','GROWTH','ZYLORA','PRO'}:
+            clauses.append('u.plan=:plan'); params['plan'] = audience
         elif audience == 'PAYING':
-            q += " AND plan IN ('STARTER','GROWTH','PRO','ZYLORA')"
-        elif audience == 'FREE':
-            q += " AND plan='FREE'"
-        recipients = [r[0] for r in db.execute(text(q)).fetchall()]
-        sent_count = 0
-        for email in recipients[:100]:
-            try:
-                send_email(email, c['subject'], c['body_html'])
-                sent_count += 1
-            except Exception:
-                pass
+            clauses.append("u.plan IN ('STARTER','GROWTH','PRO','ZYLORA')")
+        elif audience == 'PUBLISHED':
+            clauses.append("EXISTS (SELECT 1 FROM sites ps WHERE ps.user_id=u.id AND ps.status='LIVE')")
+        elif audience == 'UNPUBLISHED':
+            clauses.append("EXISTS (SELECT 1 FROM sites ds WHERE ds.user_id=u.id AND ds.status<>'LIVE')")
+        elif audience != 'ALL':
+            raise HTTPException(422, 'Unsupported campaign audience')
+        q = 'SELECT u.id,u.email FROM users u LEFT JOIN email_preferences p ON p.user_id=u.id WHERE ' + ' AND '.join(clauses)
+        recipients = [dict(r) for r in db.execute(text(q), params).mappings().all()]
+        for recipient in recipients[:100]:
+            email = recipient['email']
+            raw_token = secrets.token_urlsafe(32)
+            db.execute(text('''INSERT INTO email_unsubscribe_tokens(id,user_id,token_hash,expires_at,created_at)
+                VALUES (:i,:u,:h,:e,:a)'''), {'i': str(uuid4()), 'u': recipient['id'],
+                'h': hashlib.sha256(raw_token.encode()).hexdigest(),
+                'e': (datetime.now(timezone.utc) + timedelta(days=365)).isoformat(), 'a': now_iso()})
+            deliveries.append((email, c['subject'], c['body_html'], f'{settings.app_url.rstrip("/")}/api/email/unsubscribe/{raw_token}'))
+    sent_count = 0
+    for email, subject, body_html, unsubscribe_url in deliveries:
+        try:
+            send_email(email, subject, body_html, unsubscribe_url=unsubscribe_url)
+            sent_count += 1
+        except Exception as exc:
+            record_operational_event('EMAIL', 'CAMPAIGN_DELIVERY_FAILED', safe_exception_summary(exc), severity='ERROR', metadata={'campaign_id': campaign_id})
+    failed_count = len(deliveries) - sent_count
+    with SessionLocal.begin() as db:
         now = now_iso()
-        db.execute(text("UPDATE platform_campaigns SET status='SENT', sent_count=:s, delivered_count=:s, sent_at=:a WHERE id=:i"), {
-            's': sent_count,
-            'a': now,
-            'i': campaign_id
+        db.execute(text("UPDATE platform_campaigns SET status=:st, sent_count=:s, delivered_count=:s, failed_count=:f, sent_at=:a WHERE id=:i"), {
+            'st': 'SENT' if sent_count else ('FAILED' if failed_count else 'SENT'),
+            's': sent_count, 'f': failed_count, 'a': now, 'i': campaign_id
         })
-    _audit(admin['id'], 'ADMIN_CAMPAIGN_SEND', 'campaign', campaign_id, {'recipients': sent_count})
-    return {'ok': True, 'sent_count': sent_count}
+    _audit(admin['id'], 'ADMIN_CAMPAIGN_SEND', 'campaign', campaign_id, {'recipients': sent_count, 'failed': failed_count})
+    return {'ok': True, 'sent_count': sent_count, 'failed_count': failed_count}
+
+
+class EmailPreferencePatch(BaseModel):
+    marketing_consent: bool
+
+
+@router.get('/email/preferences')
+def email_preferences(request: Request):
+    user = _user(request)
+    with SessionLocal() as db:
+        row = db.execute(text('SELECT marketing_consent,unsubscribed_at,updated_at FROM email_preferences WHERE user_id=:u'), {'u': user['id']}).mappings().first()
+    if not row:
+        return {'marketing_consent': False, 'unsubscribed_at': None, 'updated_at': None}
+    return {'marketing_consent': bool(row['marketing_consent']), 'unsubscribed_at': row['unsubscribed_at'], 'updated_at': row['updated_at']}
+
+
+@router.put('/email/preferences')
+def email_preferences_update(payload: EmailPreferencePatch, request: Request):
+    user = _user(request, True)
+    now = now_iso()
+    with SessionLocal.begin() as db:
+        db.execute(text('''INSERT INTO email_preferences(user_id,marketing_consent,unsubscribed_at,updated_at,created_at)
+            VALUES (:u,:c,:un,:a,:a)
+            ON CONFLICT(user_id) DO UPDATE SET marketing_consent=:c,unsubscribed_at=:un,updated_at=:a'''),
+            {'u': user['id'], 'c': int(payload.marketing_consent), 'un': None if payload.marketing_consent else now, 'a': now})
+    return {'ok': True, 'marketing_consent': bool(payload.marketing_consent), 'unsubscribed_at': None if payload.marketing_consent else now}
+
+
+@router.get('/email/unsubscribe/{token}', response_class=HTMLResponse)
+def email_unsubscribe(token: str):
+    digest = hashlib.sha256(str(token or '').encode()).hexdigest()
+    with SessionLocal.begin() as db:
+        row = db.execute(text('''SELECT user_id,expires_at FROM email_unsubscribe_tokens
+            WHERE token_hash=:h AND used_at IS NULL'''), {'h': digest}).mappings().first()
+        if row:
+            try:
+                expired = datetime.fromisoformat(str(row['expires_at'])) < datetime.now(timezone.utc)
+            except Exception:
+                expired = True
+            if not expired:
+                now = now_iso()
+                db.execute(text('''INSERT INTO email_preferences(user_id,marketing_consent,unsubscribed_at,updated_at,created_at)
+                    VALUES (:u,0,:a,:a,:a)
+                    ON CONFLICT(user_id) DO UPDATE SET marketing_consent=0,unsubscribed_at=:a,updated_at=:a'''), {'u': row['user_id'], 'a': now})
+                db.execute(text('UPDATE email_unsubscribe_tokens SET used_at=:a WHERE token_hash=:h'), {'a': now, 'h': digest})
+    return HTMLResponse('<!doctype html><meta charset="utf-8"><title>Unsubscribed</title><p>You are unsubscribed from Zylora marketing emails.</p>')
 
 @router.delete('/admin/campaigns/{campaign_id}')
 def admin_campaign_delete(campaign_id: str, request: Request):

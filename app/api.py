@@ -967,6 +967,8 @@ def export_site(site_id:str,request:Request):
 def lead(payload:LeadIn,request:Request):
     # Honeypot filtering happens before any credit-consuming/notification work.
     if (payload.website or '').strip(): return {'ok':True,'filtered':True}
+    if not payload.service_enquiry_consent:
+        raise HTTPException(422, detail={'code':'SERVICE_ENQUIRY_CONSENT_REQUIRED','message':'Service enquiry consent is required before submitting a lead.'})
     ip=request.client.host if request.client else 'unknown'
     email=str(payload.email).lower().strip(); source=str(payload.source or 'FORM').upper().strip()
     allowed_sources={'FORM','AI_ASSISTANT','APPOINTMENT','WHATSAPP','PHONE','OTHER','CHATBOT'}

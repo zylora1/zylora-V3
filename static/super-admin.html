@@ -422,7 +422,6 @@
       }
     }
   </style>
-  <link href="/static/zylora-app-theme.css" rel="stylesheet"/>
 </head>
 <body>
 <div class="app-shell super-shell">
@@ -437,6 +436,10 @@
       <button class="rail-btn active" data-admin-tab="adminOverview" type="button">
         <span class="menu-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5.5 9.5V21h13V9.5"></path><path d="M9.5 21v-6h5v6"></path></svg></span>
         <span class="menu-label">Overview</span>
+      </button>
+      <button class="rail-btn" data-admin-tab="adminIntelligence" type="button">
+        <span class="menu-icon" aria-hidden="true">✦</span>
+        <span class="menu-label">Intelligence</span>
       </button>
       <button class="rail-btn" data-admin-tab="adminUsers" type="button">
         <span class="menu-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>
@@ -666,6 +669,26 @@
       </div>
     </div>
 
+    <!-- Read-only, server-authorized Super Admin Intelligence Assistant. -->
+    <div class="admin-pane" id="adminIntelligence">
+      <div class="split-admin" style="grid-template-columns:minmax(0,1.2fr) minmax(260px,.8fr);align-items:start;">
+        <section class="settings-card">
+          <div class="panel-title"><div><span>Zylora Intelligence</span><small>Current platform data through approved read-only tools</small></div><span class="status-pill">SUPER ADMIN ONLY</span></div>
+          <div id="adminAssistantMessages" style="display:grid;gap:12px;margin:20px 0;min-height:180px;"></div>
+          <form id="adminAssistantForm" style="display:flex;gap:10px;align-items:flex-end;">
+            <label style="flex:1;">Ask about the platform<textarea id="adminAssistantInput" rows="3" maxlength="2000" required placeholder="How many published websites exist?"></textarea></label>
+            <button class="accent-btn" type="submit">Ask</button>
+          </form>
+          <div class="status-msg" id="adminAssistantMsg" role="status"></div>
+        </section>
+        <aside class="settings-card">
+          <h2>What it can answer</h2>
+          <p class="muted-copy">Users and plans, publication, AI usage, Sales Assistant leads, appointments, domains, and provider failures.</p>
+          <p class="muted-copy">Answers are grounded in a server-authorized analytics tool. It cannot execute arbitrary SQL or mutate platform data.</p>
+        </aside>
+      </div>
+    </div>
+
     <!-- 2. Users -->
     <div class="admin-pane" id="adminUsers">
       <div class="admin-filter-row">
@@ -866,7 +889,7 @@
           </div>
           <hr/>
           <h3>AI Sales Assistant guardrails</h3>
-          <p class="muted-copy">The Assistant is unlimited as a plan entitlement and does not consume AI or lead credits. The controls below are operational abuse and safety guardrails, not a monthly quota.</p>
+          <p class="muted-copy">Customer Sales Assistant requests consume the owning user's AI credits. Super Admin Intelligence is separately authorized and metered for provider cost, never against customer wallets.</p>
           <div class="form-grid-2">
             <label>Messages / visitor session<input id="assistantSessionLimit" min="1" type="number" value="40"/></label>
             <label>Site messages / hour<input id="assistantSiteHourlyLimit" min="1" type="number" value="500"/></label>

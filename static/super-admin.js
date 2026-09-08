@@ -12,6 +12,7 @@ const state = {
   adminPayments: [],
   adminIntegrations: [],
   adminHealth: null
+  ,adminIntelligence: []
 };
 
 const $ = sel => document.querySelector(sel);
@@ -66,6 +67,7 @@ async function api(path, opts = {}) {
 // Navigation & Tab Switching
 const TAB_MAP = {
   'adminOverview': { title: 'Platform Administration', sub: 'Overview and operating metrics across all platform operations.' },
+  'adminIntelligence': { title: 'Zylora Intelligence', sub: 'Read-only, server-authorized operational answers across the platform.' },
   'adminUsers': { title: 'Platform User Management', sub: 'Inspect accounts, adjust roles, restrict or restore users.' },
   'adminTemplates': { title: 'Template Catalogue & Universal Import', sub: 'Inspect verification readiness, toggle visibility, or import projects.' },
   'adminPlatformBlog': { title: 'Zylora Blog CMS', sub: 'Draft, publish, edit and moderate official blog content.' },
@@ -84,6 +86,7 @@ const TAB_MAP = {
 
 const TAB_ROUTES = {
   'adminOverview': '/super-admin',
+  'adminIntelligence': '/super-admin/intelligence',
   'adminUsers': '/super-admin/users',
   'adminTemplates': '/super-admin/templates',
   'adminPlatformBlog': '/super-admin/blogs',
@@ -120,6 +123,7 @@ function switchAdminTab(tabId, pushState = true) {
 
 function loadTabData(tabId) {
   if (tabId === 'adminOverview') loadAdminOverview();
+  else if (tabId === 'adminIntelligence') loadAdminIntelligence();
   else if (tabId === 'adminUsers') loadAdminUsers();
   else if (tabId === 'adminTemplates') loadAdminTemplates();
   else if (tabId === 'adminLeads') loadAdminLeads();
@@ -140,7 +144,8 @@ function loadTabData(tabId) {
 function syncRouteFromUrl() {
   const path = location.pathname.replace(/\/+$/, '');
   let targetTab = 'adminOverview';
-  if (path === '/super-admin/users') targetTab = 'adminUsers';
+  if (path === '/super-admin/intelligence') targetTab = 'adminIntelligence';
+  else if (path === '/super-admin/users') targetTab = 'adminUsers';
   else if (path === '/super-admin/templates') targetTab = 'adminTemplates';
   else if (path === '/super-admin/blogs' || path === '/super-admin/blog') targetTab = 'adminPlatformBlog';
   else if (path === '/super-admin/pricing' || path === '/super-admin/plans') targetTab = 'adminPlans';
@@ -224,6 +229,46 @@ async function loadAdminOverview() {
   } catch (e) {
     console.error('Failed to load admin overview:', e);
   }
+}
+
+// Super Admin Intelligence Assistant
+function appendAdminAssistantMessage(kind, text, data = null) {
+  const box = $('#adminAssistantMessages');
+  if (!box) return;
+  const item = document.createElement('div');
+  item.style.cssText = 'padding:12px 14px;border-radius:12px;border:1px solid var(--zy-border);background:' + (kind === 'user' ? 'var(--zy-bg-card-inner)' : 'rgba(185,255,56,.08)') + ';';
+  item.innerHTML = `<small style="display:block;color:var(--zy-text-secondary);margin-bottom:4px;">${kind === 'user' ? 'You' : 'Zylora Intelligence'}</small><div>${escapeHtml(text)}</div>`;
+  if (data?.tool_calls?.length) {
+    const meta = document.createElement('small');
+    meta.style.cssText = 'display:block;color:var(--zy-text-secondary);margin-top:8px;';
+    meta.textContent = `Source: ${data.tool_calls.join(', ')} · as of ${data.as_of || 'now'}`;
+    item.appendChild(meta);
+  }
+  box.appendChild(item);
+  box.scrollTop = box.scrollHeight;
+}
+
+async function loadAdminIntelligence() {
+  const form = $('#adminAssistantForm');
+  if (!form || form.dataset.bound === '1') return;
+  form.dataset.bound = '1';
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const input = $('#adminAssistantInput');
+    const msg = $('#adminAssistantMsg');
+    const value = (input?.value || '').trim();
+    if (!value) return;
+    appendAdminAssistantMessage('user', value);
+    if (input) input.value = '';
+    if (msg) msg.textContent = 'Checking approved platform data…';
+    try {
+      const result = await api('/api/super-admin/assistant', { method: 'POST', body: JSON.stringify({ message: value }) });
+      appendAdminAssistantMessage('assistant', result.answer || 'No answer returned.', result);
+      if (msg) msg.textContent = 'Grounded answer returned.';
+    } catch (err) {
+      if (msg) msg.textContent = err.message;
+    }
+  });
 }
 
 // 2. Users Management

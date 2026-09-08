@@ -129,7 +129,7 @@ def public_message(site_id: str,conversation_id: str,payload: MessageIn,request:
         contact['service_enquiry_consent']=bool(contact.get('service_enquiry_consent',True)); contact['marketing_consent']=bool(contact.get('marketing_consent',False))
     turnstile_required = settings.app_env == 'production' or bool(settings.turnstile_secret_key)
     conversion_allowed = bool(payload.turnstile_token) or not turnstile_required
-    try: return process_message(site_id,conversation_id,payload.message,contact=contact,test_mode=False,conversion_allowed=conversion_allowed)
+    try: return process_message(site_id,conversation_id,payload.message,contact=contact,test_mode=False,conversion_allowed=conversion_allowed,expected_assistant_type='PUBLIC_SITE_ASSISTANT')
     except KeyError: raise HTTPException(404,'Conversation not found')
     except OverflowError as exc: raise HTTPException(413,str(exc))
     except ValueError as exc: raise HTTPException(422,str(exc))
@@ -157,6 +157,8 @@ def public_assistant_availability(site_id: str,request: Request,date: str|None=N
 @router.post('/public/sites/{site_id}/assistant/conversations/{conversation_id}/appointments')
 def public_assistant_appointment(site_id: str,conversation_id: str,payload: AppointmentActionIn,request: Request):
     ip=request.client.host if request.client else 'unknown'; durable_rate_limit(f'assistant-book:{ip}',20,3600)
+    if not payload.service_enquiry_consent:
+        raise HTTPException(422, 'Service enquiry consent is required before booking an appointment')
     verify_turnstile(payload.turnstile_token,ip)
     idem=(request.headers.get('Idempotency-Key') or hashlib.sha256(f'{conversation_id}|{payload.starts_at}|{str(payload.email).lower()}'.encode()).hexdigest())[:120]
     # Establish public liveness and conversation ownership before exposing schedule state or creating a lead.
@@ -303,7 +305,7 @@ def owner_test_conversation(site_id: str,payload: PublicConversationIn,request: 
 def owner_test_message(site_id: str,conversation_id: str,payload: MessageIn,request: Request):
     u=_user(request,True)
     with SessionLocal() as db:_owned_site(db,u['id'],site_id)
-    try:return {**process_message(site_id,conversation_id,payload.message,contact=payload.contact.model_dump(mode='json') if payload.contact else None,test_mode=True),'test_mode':True}
+    try:return {**process_message(site_id,conversation_id,payload.message,contact=payload.contact.model_dump(mode='json') if payload.contact else None,test_mode=True,expected_assistant_type='OWNER_ASSISTANT'),'test_mode':True}
     except KeyError:raise HTTPException(404,'Test conversation not found')
     except (ValueError,OverflowError) as exc:raise HTTPException(422,str(exc))
 
