@@ -13,7 +13,8 @@ import mimetypes
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, Response, RedirectResponse
+from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, Response, RedirectResponse, JSONResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 
@@ -110,6 +111,14 @@ def _configured_cors_origins() -> list[str]:
 
 
 app=FastAPI(title='Zylora',docs_url='/api/docs' if settings.app_env!='production' else None,redoc_url=None,lifespan=lifespan)
+
+@app.exception_handler(StarletteHTTPException)
+async def branded_http_exception(request: Request, exc: StarletteHTTPException):
+    if exc.status_code != 404 or request.url.path.startswith(('/api/','/static/','/template-assets/')):
+        detail = exc.detail if isinstance(exc.detail, (str, dict, list)) else 'Request failed'
+        return JSONResponse({'detail': detail}, status_code=exc.status_code, headers=getattr(exc, 'headers', None))
+    body='''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Page not found | Zylora</title><meta name="robots" content="noindex,nofollow"><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0b0d10;color:#f7f8fb;font:16px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}main{width:min(760px,calc(100% - 40px));padding:9vw 0}.eyebrow{font:700 12px ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:#a78bfa}h1{font-size:clamp(56px,11vw,128px);line-height:.86;letter-spacing:-.07em;margin:18px 0 26px}p{max-width:42rem;color:#aeb6c4;font-size:19px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}a{color:#071016;background:#a78bfa;padding:14px 18px;text-decoration:none;font-weight:800;border-radius:6px}a.secondary{background:#20242b;color:#f7f8fb}a:focus-visible{outline:3px solid #fff;outline-offset:4px}</style></head><body><main><div class="eyebrow">Zylora · 404</div><h1>Page not found.</h1><p>The address may have changed or the page may no longer be available.</p><div class="actions"><a href="/">Go home</a><a class="secondary" href="/dashboard">Go to dashboard</a></div></main></body></html>'''
+    return HTMLResponse(body, status_code=404, headers={'Cache-Control':'no-store','X-Robots-Tag':'noindex, nofollow'})
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_configured_cors_origins(),
@@ -293,14 +302,29 @@ def _landing_html(request: Request) -> str:
     raw=raw.replace('/static/landing.css"','/static/landing.css?v=20260901-ui2"')
     starter=offer_for_request(request,plan='STARTER',display_only=True)
     growth=offer_for_request(request,plan='GROWTH',display_only=True)
+    catalogue={str(plan['plan']).upper(): plan for plan in all_plans(include_legacy=False)}
     def _display(offer):
         return (f"₹{offer['amount_minor']//100:,}" if offer['currency']=='INR' else f"US${offer['amount_minor']//100}")
     note='India regional price · INR billing' if starter['billing_region']=='INDIA' else 'International regional price · USD billing'
+    def _limit(plan: str, field: str) -> str:
+        return str(int(catalogue[plan].get(field) or 0))
     values={
         '{{APP_URL}}':_public_base_url(),
         '{{STARTER_REGIONAL_PRICE}}':_display(starter),
         '{{GROWTH_REGIONAL_PRICE}}':_display(growth),
         '{{REGIONAL_PRICE_NOTE}}':note,
+        '{{FREE_SITE_LIMIT}}':_limit('FREE','site_limit'),
+        '{{STARTER_SITE_LIMIT}}':_limit('STARTER','site_limit'),
+        '{{GROWTH_SITE_LIMIT}}':_limit('GROWTH','site_limit'),
+        '{{FREE_PAGE_LIMIT}}':_limit('FREE','page_limit'),
+        '{{STARTER_PAGE_LIMIT}}':_limit('STARTER','page_limit'),
+        '{{GROWTH_PAGE_LIMIT}}':_limit('GROWTH','page_limit'),
+        '{{FREE_AI_CREDITS}}':_limit('FREE','ai_credits'),
+        '{{STARTER_AI_CREDITS}}':_limit('STARTER','ai_credits'),
+        '{{GROWTH_AI_CREDITS}}':_limit('GROWTH','ai_credits'),
+        '{{FREE_LEAD_CREDITS}}':_limit('FREE','lead_credits'),
+        '{{STARTER_LEAD_CREDITS}}':_limit('STARTER','lead_credits'),
+        '{{GROWTH_LEAD_CREDITS}}':_limit('GROWTH','lead_credits'),
     }
     for key,value in values.items(): raw=raw.replace(key,str(value))
     return raw
@@ -397,10 +421,10 @@ def editor(site_id:str,request:Request):
 def studio(site_id:str,request:Request):
     user=current_user(request)
     with SessionLocal() as db:
-        site=db.execute(text('SELECT id,name FROM sites WHERE id=:site AND user_id=:user'),{'site':site_id,'user':user['id']}).mappings().first()
+        site=db.execute(text('SELECT id,name,status FROM sites WHERE id=:site AND user_id=:user'),{'site':site_id,'user':user['id']}).mappings().first()
     if not site: raise HTTPException(404,'Site not found')
     raw=(ROOT/'static'/'studio.html').read_text(encoding='utf-8')
-    context=json.dumps({'siteId':site_id,'siteName':site['name'],'csrfToken':user['csrf_token']},separators=(',',':')).replace('</','<\\/')
+    context=json.dumps({'siteId':site_id,'siteName':site['name'],'published':str(site.get('status') or '').upper()=='LIVE','csrfToken':user['csrf_token']},separators=(',',':')).replace('</','<\\/')
     rendered=raw.replace('__ZYLORA_STUDIO_CONTEXT__',context)
     if '/static/studio-ux.css' not in rendered:
         rendered=rendered.replace('</head>','<link rel="stylesheet" href="/static/studio-ux.css"></head>')

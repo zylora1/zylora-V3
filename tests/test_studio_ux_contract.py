@@ -25,12 +25,12 @@ def test_studio_is_built_by_vite_not_the_retired_esbuild_script():
 
 def test_add_panel_exposes_small_semantic_primitive_set():
     source = (ROOT / "studio" / "components" / "AddPanel.tsx").read_text(encoding="utf-8")
-    for label in ("Button", "Card", "Container", "Icon", "Badge", "Spacer"):
-        assert f"element('{label}'" in source
-    assert "element('Add Text','text'" in source
-    assert "element('Square frame','image'" in source and "'image-frame'" in source
-    assert "const sectionNames=" in source and "Header / Navbar" in source and "Footer" in source
-    assert "displayName:label" in source
+    for label in ("Button", "Circle", "Rectangle", "Icon", "Star burst", "2×2"):
+        assert label in source
+    assert "const textItem=item('Text'" in source
+    assert "'image-frame'" in source and "gridItem" in source
+    assert "Add blank section" in source and "Header / Navbar" not in source
+    assert "displayName:x.label" in source
 
 
 def test_layers_panel_never_displays_internal_ids_by_default():
@@ -68,7 +68,7 @@ def test_studio_has_visual_page_section_navigator_and_progressive_color_controls
     css = (ROOT / "static" / "studio-ux.css").read_text(encoding="utf-8")
     assert "<PageNavigator onFit={fit}/>" in app
     assert "PageNavigator" in navigator and "aria-label=\"Pages and sections\"" in navigator
-    assert "Soft gradient" in toolbar and "Dark gradient" in toolbar
+    assert "GradientEditor" in toolbar and "Gradient type" in toolbar and "Text gradient" in toolbar
     assert ".studio-page-navigator" in css and ".section-add-bar" in css
     assert "zoom-range" in navigator and ".navigator-zoom" in css
 
@@ -77,8 +77,8 @@ def test_panel_drag_payload_preserves_primitive_and_drop_geometry():
     app = (ROOT / "studio" / "App.tsx").read_text(encoding="utf-8")
     panel = (ROOT / "studio" / "components" / "AddPanel.tsx").read_text(encoding="utf-8")
     canvas = (ROOT / "studio" / "components" / "CanvasNode.tsx").read_text(encoding="utf-8")
-    assert "node:item.node" in panel
-    assert "subtree:{rootId:asset.rootId,nodes:asset.nodes}" in panel
+    assert "application/x-zylora-node" in panel
+    assert "subtree" in panel
     assert "screenToCanvas" in app
     assert "position:'absolute'" in app
     assert "item.node||" in canvas

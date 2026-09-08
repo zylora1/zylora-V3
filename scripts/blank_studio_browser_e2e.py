@@ -61,8 +61,7 @@ def run_engine(name: str, browser, client: TestClient, csrf: str, site_id: str) 
     labels = page.locator(".tool-rail button span").all_inner_texts()
     check(labels == ["Sections", "Elements", "Text", "Uploads", "Draw", "Layers", "AI"], f"{name} exposes blank-first Studio rail")
     page.locator('.tool-rail button[aria-label="Text"]').click()
-    page.wait_for_selector(".add-text-action")
-    page.locator(".add-text-action").click()
+    page.get_by_role("button", name="Add Text").click()
     page.wait_for_timeout(100)
     nodes = page.locator('[data-studio-type="text"]')
     check(nodes.count() >= 1, f"{name} inserts an editable Text primitive")
@@ -72,9 +71,9 @@ def run_engine(name: str, browser, client: TestClient, csrf: str, site_id: str) 
     page.mouse.move(box["x"] + 50, box["y"] + 20); page.mouse.down(); page.mouse.move(box["x"] + 180, box["y"] + 80, steps=8); page.mouse.up()
     page.locator('.tool-rail button[aria-label="Elements"]').click()
     page.get_by_role("button", name="Add Button").click()
-    page.get_by_role("button", name="Add Card").click()
+    page.get_by_role("button", name="Add Rectangle").click()
     page.locator('.tool-rail button[aria-label="Sections"]').click()
-    page.get_by_role("button", name="Add Hero section").click()
+    page.get_by_role("button", name="Add blank section").click()
     # Scene-graph interaction assertions: shift multi-select, aggregate
     # transformer, zoom range, and viewport-only middle-mouse pan.
     text_node = page.locator('[data-studio-type="text"]').last
@@ -115,6 +114,8 @@ def run_engine(name: str, browser, client: TestClient, csrf: str, site_id: str) 
     document = client.post(f"/api/sites/{site_id}/studio-migrate", headers={"X-CSRF-Token": csrf}).json()["document"]
     types = [node["type"] for node in document["pages"]["home"]["nodes"].values()]
     check("text" in types and "button" in types and "section" in types, f"{name} persists Text, Button and editable Section nodes")
+    sections = [node for node in document["pages"]["home"]["nodes"].values() if node["type"] == "section"]
+    check(len(sections) == 2 and all(node["parentId"] == document["pages"]["home"]["rootNodeId"] for node in sections), f"{name} inserts a second root-level section")
     check(len(document["pages"]["home"]["nodes"]) >= 6, f"{name} commits child nodes instead of a locked section image")
     page.close()
 

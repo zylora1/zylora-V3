@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Literal, Optional
 import re
 from pydantic import BaseModel, Field, model_validator, field_validator
 
-SCHEMA_VERSION_STUDIO = 4
+SCHEMA_VERSION_STUDIO = 5
 
 NODE_TYPES = {
     "page", "section", "frame", "container", "stack", "flex", "grid",
@@ -12,6 +12,35 @@ NODE_TYPES = {
     "appointment_booking", "ai_sales_assistant", "business_hours", "map", "embed", "component_instance",
     "repeater", "list", "carousel", "gallery", "table"
 }
+
+class GradientStop(BaseModel):
+    position: float = Field(default=0, ge=0, le=1)
+    color: str = Field(default="#ffffff", min_length=1, max_length=64)
+    opacity: float = Field(default=1, ge=0, le=1)
+
+
+class Gradient(BaseModel):
+    type: Literal["linear", "radial"] = "linear"
+    angle: float = 0
+    centerX: float = Field(default=50, ge=0, le=100)
+    centerY: float = Field(default=50, ge=0, le=100)
+    stops: List[GradientStop] = Field(default_factory=lambda: [
+        GradientStop(position=0, color="#ffffff"),
+        GradientStop(position=1, color="#000000"),
+    ], min_length=2, max_length=16)
+
+
+class TextRun(BaseModel):
+    start: int = Field(ge=0)
+    end: int = Field(ge=0)
+    marks: Dict[str, Any] = Field(default_factory=dict)
+
+    @model_validator(mode="after")
+    def valid_range(self) -> "TextRun":
+        if self.end < self.start:
+            raise ValueError("Text run end must be greater than or equal to start")
+        return self
+
 
 class NodeCrop(BaseModel):
     x: float = 0
@@ -30,10 +59,13 @@ class NodeContent(BaseModel):
     asset_id: Optional[str] = None
     component_id: Optional[str] = None # For component instances
     crop: Optional[NodeCrop] = None
+    runs: List[TextRun] = Field(default_factory=list)
 
 class NodeStyle(BaseModel):
     css: Dict[str, Any] = Field(default_factory=dict)
     tokens: Dict[str, str] = Field(default_factory=dict)
+    gradient: Optional[Gradient] = None
+    textGradient: Optional[Gradient] = None
     
 class BreakpointOverride(BaseModel):
     style: Optional[NodeStyle] = None
@@ -182,8 +214,19 @@ class SiteDocument(BaseModel):
 
 def create_empty_document() -> SiteDocument:
     root_node = Node(id="root", type="page", children=[])
+    section = Node(
+        id="section_1",
+        type="section",
+        parentId="root",
+        style=NodeStyle(css={
+            "position": "relative", "width": "1440px", "height": "810px",
+            "minHeight": "810px", "overflow": "hidden", "background": "#ffffff",
+        }),
+        metadata={"displayName": "Section 1", "kind": "root-section"},
+    )
+    root_node.children = [section.id]
     return SiteDocument(
-        pages={"home": Page(id="home", slug="home", name="Home", rootNodeId="root", nodes={"root": root_node})}
+        pages={"home": Page(id="home", slug="home", name="Home", rootNodeId="root", nodes={"root": root_node, section.id: section})}
     )
 
 def validate_studio_document(doc_json: dict) -> SiteDocument:

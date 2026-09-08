@@ -37,7 +37,7 @@ from .studio_renderer import render_page as render_studio_page
 
 router = APIRouter(prefix='/api')
 public_router = APIRouter()
-APPROVED_WEB_FONTS={'Inter','Space Grotesk','IBM Plex Mono','Manrope','Georgia','Arial'}
+APPROVED_WEB_FONTS={'Inter','Manrope','DM Sans','Space Grotesk','Montserrat','Poppins','Nunito Sans','Source Sans 3','Lato','Open Sans','IBM Plex Sans','Work Sans','Raleway','Oswald','Bebas Neue','Archivo','Georgia','Source Serif 4','Libre Baskerville','Lora','Playfair Display','Cormorant Garamond','IBM Plex Mono','JetBrains Mono','Roboto Mono','Arial','Helvetica Neue','system-ui'}
 
 
 def _user(request: Request, csrf: bool=False) -> dict:
@@ -173,8 +173,19 @@ async def upload_asset(site_id: str, request: Request, file: UploadFile=File(...
     u=_user(request,True)
     durable_rate_limit(f'media-upload-user:{u["id"]}',60,3600); durable_rate_limit(f'media-upload-site:{site_id}',120,3600)
     with SessionLocal() as db: _owned_site(db,u['id'],site_id)
-    raw=await file.read(max(1, int(settings.media_max_upload_mb))*1024*1024+1)
-    asset=create_asset(u['id'],site_id,file.filename or 'image',raw,alt_text=alt_text)
+    filename=file.filename or 'image'
+    try:
+        raw=await file.read(max(1, int(settings.media_max_upload_mb))*1024*1024+1)
+        asset=create_asset(u['id'],site_id,filename,raw,alt_text=alt_text)
+    except HTTPException as exc:
+        detail=exc.detail if isinstance(exc.detail,str) else 'The image could not be processed.'
+        raise HTTPException(exc.status_code,detail={'code':'MEDIA_UPLOAD_INVALID','message':f'{filename}: {detail}'}) from exc
+    except Exception as exc:
+        # Do not hide an S3/Railway volume/DB failure behind a generic browser
+        # toast. Keep provider details in operational telemetry, while giving
+        # the editor an actionable, non-secret response.
+        record_operational_event('MEDIA','MEDIA_UPLOAD_STORAGE_FAILED',safe_exception_summary(exc),severity='ERROR',user_id=u['id'],site_id=site_id,dedupe_minutes=2)
+        raise HTTPException(503,detail={'code':'MEDIA_STORAGE_UNAVAILABLE','message':f'{filename}: Image storage is temporarily unavailable. Try again or contact support if it continues.'}) from exc
     return {'asset':asset}
 
 
@@ -392,9 +403,20 @@ class UserTemplateIn(BaseModel):
 def list_user_templates(request: Request):
     u = _user(request)
     with SessionLocal() as db:
-        rows = db.execute(text('''SELECT id,source_site_id,name,description,thumbnail_url,visibility,created_at,updated_at
+        rows = db.execute(text('''SELECT id,source_site_id,name,description,thumbnail_url,visibility,document_json,created_at,updated_at
           FROM user_site_templates WHERE user_id=:user ORDER BY updated_at DESC'''), {'user': u['id']}).mappings().all()
-    return {'items': [dict(row) for row in rows]}
+    items=[]
+    for row in rows:
+        item={key:value for key,value in dict(row).items() if key!='document_json'}
+        try:
+            document=validate_studio_document(json.loads(row['document_json']))
+            item['compatible']=document.schemaVersion>=5
+            item['schema_version']=document.schemaVersion
+        except Exception:
+            item['compatible']=False
+            item['schema_version']=None
+        items.append(item)
+    return {'items': items}
 
 
 @router.post('/sites/{site_id}/user-templates')
@@ -602,6 +624,33 @@ class SeoSitePatch(BaseModel):
     booking_url:str|None=Field(default=None,max_length=1200)
     checkout_url:str|None=Field(default=None,max_length=1200)
     customer_portal_url:str|None=Field(default=None,max_length=1200)
+
+class BusinessProfilePatch(BaseModel):
+    business_name:str|None=Field(default=None,min_length=2,max_length=160)
+    tagline:str|None=Field(default=None,max_length=240)
+    description:str|None=Field(default=None,max_length=6000)
+    email:str|None=Field(default=None,max_length=180)
+    phone:str|None=Field(default=None,max_length=80)
+
+@router.patch('/sites/{site_id}/business-profile')
+def patch_business_profile(site_id:str,payload:BusinessProfilePatch,request:Request):
+    u=_user(request,True)
+    with SessionLocal.begin() as db:
+        site=_owned_site(db,u['id'],site_id); ensure_history(db,site,u['id'])
+        data=payload.model_dump(exclude_none=True)
+        fields=[]; values={'s':site_id,'a':now_iso()}
+        if 'business_name' in data:
+            fields.extend(['name=:n','business_name=:b']); values.update({'n':data['business_name'],'b':data['business_name']})
+        for key,column in (('tagline','tagline'),('description','description')):
+            if key in data: fields.append(f'{column}=:{key}'); values[key]=data[key]
+        if fields: db.execute(text(f"UPDATE sites SET {','.join(fields)},updated_at=:a WHERE id=:s"),values)
+        if 'email' in data or 'phone' in data:
+            seo=seo_document(site); entity=seo['entity']
+            if 'email' in data: entity['email']=data['email'] or ''
+            if 'phone' in data: entity['telephone']=data['phone'] or ''
+            db.execute(text('UPDATE sites SET seo_json=:j,seo_schema_version=2,seo_updated_at=:a,updated_at=:a WHERE id=:s'),{'j':json.dumps(seo,separators=(',',':')),'a':now_iso(),'s':site_id})
+        push_history(db,site_id,u['id'],'BUSINESS_PROFILE_EDIT'); create_revision(db,site_id,u['id'],'AUTOSAVE','Business profile edit')
+    return {'ok':True,'profile':data}
 
 
 @router.patch('/sites/{site_id}/seo')

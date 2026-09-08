@@ -8,7 +8,7 @@ export function PageNavigator({onFit}:{onFit:()=>void}) {
   const pages = Object.values(document.pages);
 
   return <div className="studio-page-navigator" aria-label="Pages and sections">
-    <button className="section-add-bar" onClick={() => dispatch({type:'INSERT_NODE', payload:{node:{type:'section', metadata:{displayName:'Section'}, style:{css:{padding:'64px 40px', minHeight:'240px'}, tokens:{}}}}})}>＋ Add section</button>
+    <button className="section-add-bar" onClick={() => dispatch({type:'ADD_SECTION'})}>＋ Add section</button>
     <div className="page-strip" role="list" aria-label="Pages">
       {pages.map((page, index) => <button key={page.id} role="listitem" className={`page-thumb ${page.id === state.currentPageId ? 'active' : ''}`} onClick={() => dispatch({type:'SET_PAGE', payload:page.id})} aria-label={`Open ${page.name || `Page ${index + 1}`}`}>
         <span className="page-thumb-preview"><i/><i/><i/></span>

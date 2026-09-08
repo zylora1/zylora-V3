@@ -53,7 +53,7 @@ def run(browser_name: str) -> dict:
 
             page.get_by_role('button', name='Elements').click()
             rects = page.locator('[data-studio-type="container"]'); existing_rect_count = rects.count()
-            for _ in range(3): page.get_by_role('button', name='Add Rectangle').click()
+            for _ in range(3): page.get_by_role('button', name='Add Rectangle').last.click()
             check('three free-form rectangles insert', rects.count() >= existing_rect_count + 3)
             first, second, third = rects.nth(existing_rect_count), rects.nth(existing_rect_count + 1), rects.nth(existing_rect_count + 2)
             # Multi-select is a real browser gesture, not a reducer call.

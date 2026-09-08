@@ -103,7 +103,7 @@ def test_studio_migration_load_save_conflict_and_owned_shell():
     migrated=client.post(f'/api/sites/{site_id}/studio-migrate',headers=headers)
     assert migrated.status_code == 200, migrated.text
     document=migrated.json()['document']
-    assert document['schemaVersion'] == 4 and document['revision'] == 1
+    assert document['schemaVersion'] == 5 and document['revision'] == 1
 
     saved=client.post(f'/api/sites/{site_id}/studio-save',headers=headers,json=document)
     assert saved.status_code == 200, saved.text

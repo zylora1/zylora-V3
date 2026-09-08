@@ -38,7 +38,12 @@ class SignupIn(BaseModel):
     name:str=Field(min_length=2,max_length=80); email:EmailStr; password:str=Field(min_length=8,max_length=128); turnstile_token:str|None=None
 class LoginIn(BaseModel): email:EmailStr; password:str=Field(min_length=1)
 class SiteIn(BaseModel): business_name:str=Field(min_length=2,max_length=120); description:str=Field(default='',max_length=6000); template_slug:str|None=None; origin:str='AI'; industry:str=Field(default='Business',max_length=120); style:str=Field(default='Minimal',max_length=120); motion_style:str=Field(default='Subtle',max_length=40); model:str|None=Field(default=None,max_length=120)
-class EditIn(BaseModel): tagline:str|None=None; description:str|None=None; accent:str|None=None
+class EditIn(BaseModel):
+    tagline:str|None=None
+    description:str|None=None
+    accent:str|None=None
+    name:str|None=Field(default=None,min_length=2,max_length=160)
+    business_name:str|None=Field(default=None,min_length=2,max_length=160)
 class AiEditIn(BaseModel):
     instruction:str=Field(min_length=3,max_length=2000)
     page:str=Field(default='home',max_length=80)
@@ -557,10 +562,27 @@ def update_site(site_id:str,payload:EditIn,request:Request):
     u=_user(request,True)
     with SessionLocal.begin() as db:
         s=_owned_site(db,u['id'],site_id); ensure_history(db,s,u['id'])
-        values={'g':payload.tagline if payload.tagline is not None else s['tagline'],'d':payload.description if payload.description is not None else s['description'],'a':payload.accent if payload.accent is not None else s['accent'],'c':now_iso(),'i':site_id}
-        db.execute(text('UPDATE sites SET tagline=:g,description=:d,accent=:a,document_version=document_version+1,updated_at=:c WHERE id=:i'),values)
+        values={'n':payload.name if payload.name is not None else s['name'],'b':payload.business_name if payload.business_name is not None else s['business_name'],'g':payload.tagline if payload.tagline is not None else s['tagline'],'d':payload.description if payload.description is not None else s['description'],'a':payload.accent if payload.accent is not None else s['accent'],'c':now_iso(),'i':site_id}
+        db.execute(text('UPDATE sites SET name=:n,business_name=:b,tagline=:g,description=:d,accent=:a,document_version=document_version+1,updated_at=:c WHERE id=:i'),values)
         push_history(db,site_id,u['id'],'CONTENT_EDIT'); create_revision(db,site_id,u['id'],'SAVE','Manual content save')
     _audit(u['id'],'SITE_UPDATE','site',site_id); return {'ok':True}
+
+class PublishingAddressIn(BaseModel):
+    slug:str=Field(min_length=3,max_length=64,pattern=r'^[a-z0-9]+(?:-[a-z0-9]+)*$')
+
+@router.patch('/sites/{site_id}/publishing-address')
+def patch_publishing_address(site_id:str,payload:PublishingAddressIn,request:Request):
+    u=_user(request,True); slug=payload.slug.strip().lower()
+    if slug in {'www','app','api','admin','dashboard','studio','login','signup','support','help','mail','static'}:
+        raise HTTPException(409,'That website address is reserved.')
+    with SessionLocal.begin() as db:
+        site=_owned_site(db,u['id'],site_id)
+        if str(site.get('status') or '').upper()=='LIVE':
+            raise HTTPException(409,'Published website addresses are changed from domain settings, then published as changes.')
+        conflict=db.execute(text('SELECT id FROM sites WHERE slug=:g AND id<>:i LIMIT 1'),{'g':slug,'i':site_id}).first()
+        if conflict: raise HTTPException(409,'That website address is already in use.')
+        db.execute(text('UPDATE sites SET slug=:g,updated_at=:a WHERE id=:i'),{'g':slug,'a':now_iso(),'i':site_id})
+    return {'ok':True,'slug':slug,'url':f'/s/{slug}'}
 
 @router.delete('/sites/{site_id}')
 def delete_draft_site(site_id: str, request: Request):

@@ -14,7 +14,7 @@ _ALLOWED_CSS_PROPERTIES={
     'grid-auto-flow','grid-column','grid-row','grid-template-columns','grid-template-rows','height','justify-content',
     'justify-items','left','letter-spacing','line-height','margin','margin-bottom','margin-left','margin-right','margin-top',
     'max-height','max-width','min-height','min-width','object-fit','object-position','opacity','overflow','padding',
-    'padding-bottom','padding-left','padding-right','padding-top','position','right','rotate','scale','text-align','text-decoration',
+    'padding-bottom','padding-left','padding-right','padding-top','position','right','rotate','scale','text-align','text-decoration','background-clip','-webkit-background-clip','-webkit-text-fill-color',
     'text-transform','top','transform','transform-origin','translate','visibility','white-space','width','z-index'
 }
 
@@ -62,6 +62,51 @@ def _safe_url(value: str|None, *, image: bool=False) -> str|None:
     allowed=('https://','http://','/') if image else ('https://','http://','/','mailto:','tel:','#')
     return raw if normalized.startswith(allowed) else None
 
+def _gradient_css(gradient: Any) -> str|None:
+    if not gradient: return None
+    kind=(getattr(gradient,'type',None) if not isinstance(gradient,dict) else gradient.get('type')) or 'linear'
+    angle=float((getattr(gradient,'angle',0) if not isinstance(gradient,dict) else gradient.get('angle',0)) or 0)
+    center_x=float((getattr(gradient,'centerX',50) if not isinstance(gradient,dict) else gradient.get('centerX',50)) or 50)
+    center_y=float((getattr(gradient,'centerY',50) if not isinstance(gradient,dict) else gradient.get('centerY',50)) or 50)
+    raw_stops=getattr(gradient,'stops',None) if not isinstance(gradient,dict) else gradient.get('stops')
+    stops=[]
+    for stop in raw_stops or []:
+        pos=float((getattr(stop,'position',0) if not isinstance(stop,dict) else stop.get('position',0)) or 0)*100
+        color=str((getattr(stop,'color','#fff') if not isinstance(stop,dict) else stop.get('color')) or '#fff')
+        opacity=float((getattr(stop,'opacity',1) if not isinstance(stop,dict) else stop.get('opacity',1)) or 0)
+        if opacity < 1 and color.startswith('#') and len(color)==7:
+            color=f'rgba({int(color[1:3],16)},{int(color[3:5],16)},{int(color[5:7],16)},{max(0,min(1,opacity))})'
+        stops.append(f'{color} {max(0,min(100,pos)):.2f}%')
+    if len(stops)<2: return None
+    if str(kind).lower() == 'radial':
+        return f"radial-gradient(circle at {max(0,min(100,center_x)):.2f}% {max(0,min(100,center_y)):.2f}%, {', '.join(stops)})"
+    return f"linear-gradient({angle}deg, {', '.join(stops)})"
+
+def _rich_text_html(text: str, runs: list[Any]) -> str:
+    if not runs: return html.escape(text)
+    length=len(text); boundaries={0,length}; normalized=[]
+    for run in runs:
+        start=max(0,min(length,int(getattr(run,'start',0) if not isinstance(run,dict) else run.get('start',0))))
+        end=max(start,min(length,int(getattr(run,'end',length) if not isinstance(run,dict) else run.get('end',length))))
+        if start==end: continue
+        marks=getattr(run,'marks',{}) if not isinstance(run,dict) else run.get('marks',{}) or {}
+        boundaries.update((start,end)); normalized.append((start,end,marks))
+    points=sorted(boundaries); output=[]
+    for left,right in zip(points,points[1:]):
+        marks={}
+        for start,end,run_marks in normalized:
+            if start<=left and end>=right: marks.update(run_marks)
+        css=[]
+        for key in ('fontFamily','fontSize','fontWeight','fontStyle','textDecoration','letterSpacing','lineHeight','color'):
+            if marks.get(key) is not None:
+                value=_safe_css_value(marks[key])
+                if value: css.append(f'{_css_name(key)}:{value}')
+        gradient=_gradient_css(marks.get('gradient'))
+        if gradient: css.extend([f'background:{gradient}','background-clip:text','-webkit-background-clip:text','-webkit-text-fill-color:transparent'])
+        style=f' style="{html.escape(";".join(css),quote=True)}"' if css else ''
+        output.append(f'<span{style}>{html.escape(text[left:right])}</span>')
+    return ''.join(output)
+
 def _render_node_style(node_id: str, style: NodeStyle) -> str:
     if not style or not style.css:
         return ""
@@ -81,6 +126,12 @@ def _render_node_css(node: Node, doc: SiteDocument) -> str:
     css = ""
     # Base styles
     css += _render_node_style(node.id, node.style)
+    background_gradient=_gradient_css(node.style.gradient)
+    text_gradient=_gradient_css(node.style.textGradient)
+    if background_gradient:
+        css += f'.z-node-{node.id} {{ background: {background_gradient}; }}\n'
+    if text_gradient:
+        css += f'.z-node-{node.id} {{ background: {text_gradient}; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }}\n'
     
     # Responsive overrides
     for bp, bp_val in doc.breakpoints.items():
@@ -256,7 +307,7 @@ def _render_node_html(node: Node, doc: SiteDocument, page: Page, data_context:di
                     tag['href'] = _safe_url(tag['href']) or '#'
         inner_html = str(soup)
     elif content.text:
-        inner_html = html.escape(content.text)
+        inner_html = _rich_text_html(content.text, content.runs or [])
     else:
         inner_html = ""
     

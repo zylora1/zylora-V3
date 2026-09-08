@@ -40,7 +40,10 @@ def test_create_website_opens_a_truly_blank_home_document_without_ai_charge():
     home = document.pages["home"]
     assert home.name == "Home"
     assert home.rootNodeId == "root"
-    assert home.nodes["root"].children == []
+    assert home.nodes["root"].children == ["section_1"]
+    assert home.nodes["section_1"].parentId == "root"
+    assert home.nodes["section_1"].style.css["width"] == "1440px"
+    assert home.nodes["section_1"].style.css["height"] == "810px"
 
 
 def test_private_user_template_is_sanitized_isolated_and_cloned_with_fresh_ids():
@@ -65,6 +68,7 @@ def test_private_user_template_is_sanitized_isolated_and_cloned_with_fresh_ids()
         "style": {"css": {"position": "absolute", "left": "80px", "top": "64px"}},
         "metadata": {"label": "Main title"},
     }
+    del home["nodes"]["section_1"]
     home["nodes"]["root"]["children"] = ["hero_title"]
     raw["dataSources"] = {"private_customer_records": {"token": "never-copy"}}
     raw["settings"] = {"apiKey": "never-copy", "pageBackground": "#fff"}
@@ -166,9 +170,8 @@ def test_studio_source_contract_is_blank_first_and_asset_driven():
     assert "/api/sites/blank" in dashboard and "/ai-create" not in dashboard and "/api/templates" not in dashboard
     assert "'sections', 'Sections'" in app_source and "'ai', 'AI'" in app_source
     assert "INSERT_SUBTREE" in app_source and "Save as Template" in app_source
-    for section in ("Header / Navbar", "Hero", "Features", "Services", "About", "Gallery", "Logo strip", "Statistics", "Testimonials", "Pricing", "Team", "FAQ", "Contact", "CTA", "Footer"):
-        assert section in add_panel
-    for element in ("Rectangle", "Circle", "Line", "Button", "Card", "Container", "Icon", "Badge", "Spacer"):
+    assert "Add blank section" in add_panel and "Header / Navbar" not in add_panel
+    for element in ("Rectangle", "Circle", "Line", "Button", "Icon", "Star burst", "2×2"):
         assert element in add_panel
     for frame in ("Square frame", "Portrait frame", "Landscape frame", "Circle frame", "Rounded frame"):
         assert frame in add_panel
