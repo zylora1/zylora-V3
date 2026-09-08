@@ -207,6 +207,79 @@ END $$;
     """)
     conn.execute(compat_sql)
 
+
+def _ensure_ai_ledger_immutability(conn) -> None:
+    """Install the PostgreSQL guard that makes finalized ledger history append-only.
+
+    The application already writes corrections as compensating entries.  This
+    database-level trigger closes the remaining gap where a normal SQL client
+    could otherwise UPDATE or DELETE historical AI-credit rows.  It is run
+    after migrations as well as during startup so fresh and upgraded databases
+    converge on the same protection.  SQLite test databases intentionally keep
+    the fixture reset path writable; production is PostgreSQL by policy.
+    """
+    if conn.dialect.name != 'postgresql':
+        return
+    conn.execute(text("""
+DO $zylora$
+BEGIN
+    IF to_regclass(current_schema() || '.ai_credit_ledger') IS NOT NULL THEN
+        CREATE OR REPLACE FUNCTION zylora_reject_ai_ledger_mutation()
+        RETURNS trigger
+        LANGUAGE plpgsql
+        AS $fn$
+        BEGIN
+            -- Allow PostgreSQL's own ON DELETE CASCADE while rejecting direct
+            -- operator/application UPDATE or DELETE statements. Account
+            -- deletion already performs explicit privacy cleanup; the parent
+            -- row removal is the one deliberate historical purge.
+            IF TG_OP = 'DELETE' AND pg_trigger_depth() > 1 THEN
+                RETURN OLD;
+            END IF;
+            RAISE EXCEPTION 'ai_credit_ledger is append-only; use a compensating entry';
+        END;
+        $fn$;
+        DROP TRIGGER IF EXISTS trg_ai_credit_ledger_immutable ON ai_credit_ledger;
+        CREATE TRIGGER trg_ai_credit_ledger_immutable
+            BEFORE UPDATE OR DELETE ON ai_credit_ledger
+            FOR EACH ROW EXECUTE FUNCTION zylora_reject_ai_ledger_mutation();
+    END IF;
+END
+$zylora$;
+"""))
+
+def _ensure_fractional_ai_usage_events(conn) -> None:
+    """Upgrade legacy integer assistant telemetry to Decimal credits on PostgreSQL.
+
+    SQLite's dynamic typing can safely store the fractional values in the
+    existing INTEGER-affinity column during local certification. PostgreSQL
+    needs an explicit NUMERIC type so usage telemetry cannot round a real
+    provider charge to a whole credit.
+    """
+    if conn.dialect.name != 'postgresql':
+        return
+    exists = conn.execute(text("""
+        SELECT 1 FROM information_schema.columns
+        WHERE table_schema=current_schema() AND table_name='ai_usage_events'
+          AND column_name='billable_credits'
+    """)).first()
+    if not exists:
+        return
+    dtype = conn.execute(text("""
+        SELECT data_type FROM information_schema.columns
+        WHERE table_schema=current_schema() AND table_name='ai_usage_events'
+          AND column_name='billable_credits'
+    """)).scalar_one_or_none()
+    if dtype in {'smallint', 'integer', 'bigint', 'numeric'}:
+        # NUMERIC is idempotent here; PostgreSQL only executes the conversion
+        # when the current type is still an integer legacy schema.
+        if dtype != 'numeric':
+            conn.execute(text("""
+                ALTER TABLE ai_usage_events
+                ALTER COLUMN billable_credits TYPE NUMERIC(24,6)
+                USING billable_credits::numeric
+            """))
+
 def migrate() -> None:
     if settings.app_env == 'production' and (not settings.database_url or settings.database_url.startswith('sqlite')):
         raise RuntimeError(
@@ -234,6 +307,8 @@ def migrate() -> None:
                 for stmt in _split_sql_statements(sql):
                     conn.execute(text(_postgresize_statement(stmt)))
             conn.execute(text('INSERT INTO schema_migrations(version, applied_at) VALUES (:v,:a)'), {'v': path.stem, 'a': now_iso()})
+        _ensure_fractional_ai_usage_events(conn)
+        _ensure_ai_ledger_immutability(conn)
 
 def db_session():
     db = SessionLocal()

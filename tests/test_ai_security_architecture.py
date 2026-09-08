@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import base64
 import re
+from decimal import Decimal
 
 import pytest
 from fastapi.testclient import TestClient
@@ -11,12 +12,15 @@ from app.config import settings
 from app.content_safety import sanitize_email_html, sanitize_rich_html
 from app.db import SessionLocal, migrate
 from app.main import app
+from app.mail_campaigns import process_due_campaign_jobs
 from app.credits import wallet_summary
 from app.security import clear_rate_limits
 from app.super_admin_assistant import run_safe_admin_tool
 
 
 TABLES = [
+    'email_campaign_events', 'email_campaign_unsubscribe_tokens', 'email_campaign_attachments',
+    'email_campaign_jobs', 'email_campaign_recipients', 'platform_campaigns', 'email_suppressions',
     'email_unsubscribe_tokens', 'email_preferences', 'ai_usage_events', 'assistant_usage',
     'assistant_messages', 'assistant_conversations', 'sales_assistant_configs',
     'site_knowledge_docs', 'media_assets', 'leads', 'appointments', 'sites', 'sessions',
@@ -125,7 +129,11 @@ def test_sales_provider_usage_reserves_settles_and_failed_calls_refund(monkeypat
     with SessionLocal() as db:
         event = db.execute(text("SELECT assistant_type,status,billable_credits,cached_input_tokens FROM ai_usage_events WHERE conversation_id=:c ORDER BY created_at DESC LIMIT 1"), {'c': conv}).mappings().first()
     assert event and event['assistant_type'] == 'PUBLIC_SITE_ASSISTANT' and event['status'] == 'SUCCEEDED'
-    assert event['billable_credits'] == 1 and event['cached_input_tokens'] == 5
+    # 45 uncached input + 5 cached input + 20 output tokens at the active
+    # gpt-4o-mini catalogue price is $0.000019, i.e. 0.001900 credits.
+    # Fractional usage is intentional; the legacy integer transaction remains
+    # only a compatibility projection.
+    assert Decimal(str(event['billable_credits'])) == Decimal('0.001900') and event['cached_input_tokens'] == 5
 
     failed_conv = client.post(f'/api/public/sites/{site_id}/assistant/conversations', json={'session_id': 'credit-session-002'}).json()['id']
     before_failed = wallet_summary(owner_id)['total']
@@ -212,20 +220,22 @@ def test_platform_blog_asset_and_campaign_email_consent_unsubscribe(monkeypatch)
     assert media.status_code == 200 and media.headers.get('content-type', '').startswith('image/')
 
     assert recipient.put('/api/email/preferences', headers=recipient_headers, json={'marketing_consent': True}).status_code == 200
-    monkeypatch.setattr(settings, 'resend_api_key', '')
+    with SessionLocal.begin() as db:
+        db.execute(text("UPDATE users SET email_verified=1 WHERE email='campaign-recipient@example.com'"))
     campaign = admin.post('/api/admin/campaigns', headers=admin_headers, json={
         'title': 'Consent test', 'subject': 'A safe update',
         'audience': 'ALL', 'body_html': '<h1>Update</h1><p style="color: navy"><strong>Hello</strong> <img src="https://cdn.example/hero.png" onerror="alert(1)" alt="hero"></p><script>alert(1)</script>',
     })
     assert campaign.status_code == 200, campaign.text
-    sent = admin.post(f"/api/admin/campaigns/{campaign.json()['id']}/send", headers=admin_headers)
-    assert sent.status_code == 200, sent.text
-    assert sent.json()['sent_count'] == 1
+    campaign_id = campaign.json()['campaign']['id']
+    sent = admin.post(f"/api/admin/campaigns/{campaign_id}/send", headers=admin_headers, json={})
+    assert sent.status_code == 200 and sent.json()['campaign']['status'] == 'QUEUED', sent.text
+    assert process_due_campaign_jobs(1)['processed'] == [campaign_id]
     with SessionLocal() as db:
         outbox = db.execute(text("SELECT body,metadata FROM outbox WHERE channel='EMAIL' ORDER BY created_at DESC LIMIT 1")).mappings().first()
     assert outbox and 'Unsubscribe:' in outbox['body']
     metadata = __import__('json').loads(outbox['metadata'])
     assert metadata.get('has_html') is True and '<script' not in (metadata.get('html') or '').lower()
-    token = re.search(r'/api/email/unsubscribe/([A-Za-z0-9_-]+)', outbox['body']).group(1)
+    token = re.search(r'/api/email/unsubscribe/([A-Za-z0-9_.-]+)', outbox['body']).group(1)
     assert admin.get(f'/api/email/unsubscribe/{token}').status_code == 200
     assert recipient.get('/api/email/preferences', headers=recipient_headers).json()['marketing_consent'] is False

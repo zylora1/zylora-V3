@@ -17,7 +17,7 @@ def _reset_plan_configs():
             vals={**cfg,'updated_at':now_iso()}
             db.execute(text('''UPDATE plan_configs SET public_name=:public_name,price_inr_minor=:price_inr_minor,price_usd_minor=:price_usd_minor,
                 site_limit=:site_limit,page_limit=:page_limit,ai_credits=:ai_credits,lead_credits=:lead_credits,signup_bonus_credits=:signup_bonus_credits,
-                ai_site_cost=:ai_site_cost,ai_edit_cost=:ai_edit_cost,contact_only=:contact_only,updated_at=:updated_at WHERE plan=:plan'''),vals)
+                ai_site_cost=:ai_site_cost,ai_edit_cost=:ai_edit_cost,chatbot_reserved_credits=:chatbot_reserved_credits,contact_only=:contact_only,updated_at=:updated_at WHERE plan=:plan'''),vals)
 
 
 @pytest.fixture(autouse=True)

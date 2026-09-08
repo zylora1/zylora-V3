@@ -4,8 +4,8 @@ from datetime import datetime, timedelta, timezone
 from urllib.parse import quote, urlencode, urlparse
 from uuid import uuid4
 
-from fastapi import APIRouter, HTTPException, Request
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi import APIRouter, File, HTTPException, Request, UploadFile
+from fastapi.responses import HTMLResponse, RedirectResponse, Response
 from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy import text
 
@@ -25,12 +25,17 @@ from .security import hash_password, new_session, durable_rate_limit, session_co
 from .settings_store import get_system_setting
 from .billing_regions import offer_for_request, regional_price, provider_plan_id, region_for_country, normalize_country, save_billing_country, INDIA, INTERNATIONAL
 from .credits import ensure_wallet, reset_monthly_for_plan, grant_topup, wallet_summary, TOPUP_PACKS
+from . import ai_billing
 from .seo_engine import enqueue_site_change, page_path, site_origin
 from .media import get_asset
 from .content_safety import sanitize_rich_html, sanitize_email_html
 from .operations import safe_exception_summary, record_operational_event
 from .studio_document import validate_studio_document
 from .template_catalogue import admin_templates as catalogue_admin_templates, set_template_published
+from .mail_campaigns import (attach_campaign_file, campaign_csv, campaign_detail, create_campaign,
+    parse_csv_recipients, parse_manual_recipients, parse_xlsx_recipients, process_due_campaign_jobs,
+    queue_campaign, resolve_internal_audience, suppress_from_token)
+from .email_service import email_service
 
 router = APIRouter(prefix='/api')
 
@@ -110,7 +115,7 @@ class ResetConfirm(BaseModel):
 @router.post('/auth/email/request-verification')
 def request_email_verification(request: Request):
     u=_user(request, True)
-    durable_rate_limit(f'email-verify-resend:{u["id"]}',5,3600)
+    durable_rate_limit(f'email-verify-smtp:{u["id"]}',5,3600)
     token=issue_auth_token(u['id'],'VERIFY_EMAIL',u['email'])
     result={'ok':True}
     if settings.app_env!='production': result['debug_token']=token
@@ -1044,7 +1049,7 @@ def admin_overview(request: Request):
             'database': 'HEALTHY',
             'redis': 'HEALTHY',
             'openai': 'CONFIGURED' if bool(getattr(settings, 'openai_api_key', '')) else 'NOT_CONFIGURED',
-            'resend': 'CONFIGURED' if bool(getattr(settings, 'resend_api_key', '')) else 'NOT_CONFIGURED',
+            'smtp': 'CONFIGURED' if bool(getattr(settings, 'smtp_host', '') and getattr(settings, 'smtp_from_email', '')) else 'NOT_CONFIGURED',
             'whatsapp': 'CONFIGURED' if bool(getattr(settings, 'whatsapp_access_token', '')) else 'NOT_CONFIGURED',
             'razorpay': 'CONFIGURED' if bool(getattr(settings, 'razorpay_key_id', '')) else 'NOT_CONFIGURED',
             'cloudflare': 'CONFIGURED' if bool(getattr(settings, 'cloudflare_api_token', '')) else 'NOT_CONFIGURED'
@@ -1065,7 +1070,13 @@ def admin_leads(request: Request):
 @router.get('/admin/users')
 def admin_users(request: Request):
     _admin(request)
-    with SessionLocal() as db: rows=db.execute(text('SELECT id,email,name,role,plan,status,ai_credits,lead_credits,email_verified,created_at FROM users ORDER BY created_at DESC LIMIT 500')).mappings().all()
+    with SessionLocal() as db: rows=db.execute(text('''SELECT u.id,u.email,u.name,u.role,u.plan,u.status,
+        u.ai_credits,u.lead_credits,u.email_verified,u.created_at,
+        COALESCE(w.normal_balance - w.normal_reserved, u.ai_credits) AS normal_ai_balance,
+        COALESCE(w.chatbot_reserved_balance, 0) AS chatbot_reserved_balance,
+        COALESCE(w.chatbot_reserved_allocation, 0) AS chatbot_reserved_allocation
+        FROM users u LEFT JOIN credit_wallets w ON w.user_id=u.id
+        ORDER BY u.created_at DESC LIMIT 500''')).mappings().all()
     return {'items':[dict(r) for r in rows]}
 
 class AdminUserPatch(BaseModel):
@@ -1093,7 +1104,15 @@ def admin_user_patch(user_id: str, payload: AdminUserPatch, request: Request):
             ensure_wallet(db,user_id,plan)
         if not contact_only:
             if payload.ai_credits is not None:
-                db.execute(text('UPDATE credit_wallets SET monthly_remaining=:c,signup_remaining=0,topup_remaining=0,period_key=:p,updated_at=:a WHERE user_id=:u'),{'c':int(payload.ai_credits),'p':datetime.now(timezone.utc).strftime('%Y-%m'),'a':now_iso(),'u':user_id})
+                # Keep the legacy endpoint, but route its AI mutation through
+                # the authoritative Decimal ledger instead of rewriting an
+                # integer bucket with no audit trail.
+                current_wallet=ai_billing.wallet_snapshot(db,user_id,plan)
+                current_available=ai_billing._dec(current_wallet.get('normal_available'))
+                delta=ai_billing._dec(payload.ai_credits)-current_available
+                if delta:
+                    ai_billing.adjust_wallet(db,account_id=user_id,plan=plan,amount=delta,wallet_type=ai_billing.NORMAL,feature='ADMIN_USER_PATCH',reason='Legacy admin user patch',actor_id=admin['id'])
+                db.execute(text('UPDATE credit_wallets SET monthly_remaining=:c,signup_remaining=0,topup_remaining=0,period_key=:p,legacy_normal_snapshot=CAST(:c AS NUMERIC),updated_at=:a WHERE user_id=:u'),{'c':int(payload.ai_credits),'p':datetime.now(timezone.utc).strftime('%Y-%m'),'a':now_iso(),'u':user_id})
             if payload.lead_credits is not None:
                 db.execute(text('UPDATE credit_wallets SET lead_monthly_remaining=:c,lead_signup_remaining=0,lead_topup_remaining=0,period_key=:p,updated_at=:a WHERE user_id=:u'),{'c':int(payload.lead_credits),'p':datetime.now(timezone.utc).strftime('%Y-%m'),'a':now_iso(),'u':user_id})
             # Keep legacy aggregate columns synchronized with the wallet.
@@ -1113,6 +1132,8 @@ def admin_user_detail(user_id: str, request: Request):
             raise HTTPException(404, 'User not found')
         sites = [dict(r) for r in db.execute(text('SELECT id,business_name,slug,status,origin,template_slug,created_at,updated_at FROM sites WHERE user_id=:u ORDER BY created_at DESC'), {'u': user_id}).mappings().all()]
         wallet = db.execute(text('SELECT * FROM credit_wallets WHERE user_id=:u'), {'u': user_id}).mappings().first()
+        wallet_snapshot = ai_billing.wallet_snapshot(db, user_id, user_row['plan'])
+        ai_transactions = ai_billing.transaction_history(db, user_id, 200)
         recent_leads = [dict(r) for r in db.execute(text('SELECT l.id,l.name,l.email,l.source,l.created_at FROM leads l JOIN sites s ON s.id=l.site_id WHERE s.user_id=:u ORDER BY l.created_at DESC LIMIT 10'), {'u': user_id}).mappings().all()]
         recent_audit = [dict(r) for r in db.execute(text('SELECT action,object_type,object_id,created_at FROM audit_log WHERE user_id=:u ORDER BY created_at DESC LIMIT 15'), {'u': user_id}).mappings().all()]
         stats={
@@ -1128,11 +1149,113 @@ def admin_user_detail(user_id: str, request: Request):
     return {
         'user': dict(user_row),
         'sites': sites,
-        'wallet': dict(wallet) if wallet else None,
+        'wallet': {**dict(wallet), **wallet_snapshot, 'ai_credits': wallet_snapshot.get('normal_available', user_row['ai_credits'])} if wallet else wallet_snapshot,
+        'ai_transactions': ai_transactions,
         'recent_leads': recent_leads,
         'recent_audit': recent_audit
         ,'stats': stats
     }
+
+@router.get('/admin/ai-credits/users')
+def admin_ai_credit_users(request: Request):
+    _admin(request)
+    with SessionLocal.begin() as db:
+        rows=db.execute(text('''SELECT u.id,u.email,u.name,u.plan,
+          COALESCE(w.normal_balance,0) AS normal_balance,
+          COALESCE(w.chatbot_reserved_balance,0) AS chatbot_reserved_balance,
+          COALESCE(w.normal_allocation,0) AS normal_allocation,
+          COALESCE(w.chatbot_reserved_allocation,0) AS chatbot_reserved_allocation
+          FROM users u LEFT JOIN credit_wallets w ON w.user_id=u.id
+          ORDER BY u.created_at DESC LIMIT 1000''')).mappings().all()
+    return {'items':[dict(r) for r in rows]}
+
+@router.get('/admin/ai-credits/users/{user_id}')
+def admin_ai_credit_user(user_id: str, request: Request):
+    _admin(request)
+    with SessionLocal.begin() as db:
+        user=db.execute(text('SELECT id,email,name,plan,role FROM users WHERE id=:u'),{'u':user_id}).mappings().first()
+        if not user: raise HTTPException(404,'User not found')
+        wallet=ai_billing.wallet_snapshot(db,user_id,user['plan'])
+        usage=ai_billing.usage_summary(db,user_id)
+        transactions=ai_billing.transaction_history(db,user_id,200)
+    return {'user':dict(user),'wallet':wallet,'usage':usage,'transactions':transactions}
+
+@router.get('/admin/ai-credits/users/{user_id}/reconciliation')
+def admin_ai_credit_reconciliation(user_id: str, request: Request):
+    """Return a read-only wallet/ledger reconciliation for operations review."""
+    _admin(request)
+    with SessionLocal() as db:
+        user=db.execute(text('SELECT id,plan FROM users WHERE id=:u'),{'u':user_id}).mappings().first()
+        if not user: raise HTTPException(404,'User not found')
+        return ai_billing.reconcile_wallet(db,user_id)
+
+class AdminAiCreditAdjustment(BaseModel):
+    user_id: str = Field(min_length=1,max_length=120)
+    amount: str = Field(min_length=1,max_length=40)
+    wallet_type: str = Field(default='NORMAL',max_length=30)
+    reason: str = Field(min_length=3,max_length=500)
+
+@router.post('/admin/ai-credits/adjust')
+def admin_ai_credit_adjust(payload: AdminAiCreditAdjustment, request: Request):
+    admin=_admin(request,True)
+    wallet_type=payload.wallet_type.strip().upper()
+    try:
+        from decimal import Decimal
+        amount=Decimal(payload.amount)
+    except Exception: raise HTTPException(422,'amount must be a valid decimal credit quantity')
+    with SessionLocal.begin() as db:
+        user=db.execute(text('SELECT id,plan FROM users WHERE id=:u'),{'u':payload.user_id}).mappings().first()
+        if not user: raise HTTPException(404,'User not found')
+        result=ai_billing.adjust_wallet(db,account_id=payload.user_id,plan=user['plan'],amount=amount,wallet_type=wallet_type,reason=payload.reason,actor_id=admin['id'])
+    _audit(admin['id'],'ADMIN_AI_CREDIT_ADJUSTMENT','user',payload.user_id,{'wallet_type':wallet_type,'amount':str(amount),'reason':payload.reason})
+    return {'ok':True,**result}
+
+@router.get('/admin/ai-credits/analytics')
+def admin_ai_credit_analytics(request: Request, days: int = 30):
+    """Return ledger-backed provider cost and customer-value analytics.
+
+    This endpoint is intentionally Super Admin-only and exposes aggregates,
+    never prompts, keys, or other customer content.  ``days`` is bounded so a
+    dashboard cannot create an unbounded historical query.
+    """
+    _admin(request)
+    days=max(1,min(365,int(days or 30)))
+    since=(datetime.now(timezone.utc)-timedelta(days=days)).isoformat()
+    with SessionLocal() as db:
+        totals=db.execute(text("""SELECT COUNT(*) AS requests,
+          COALESCE(SUM(CASE WHEN amount<0 THEN -amount ELSE 0 END),0) AS credits,
+          COALESCE(SUM(provider_cost_usd_micros),0) AS provider_cost_micros,
+          COALESCE(SUM(customer_usage_value_usd_micros),0) AS customer_value_micros
+          FROM ai_credit_ledger WHERE entry_type='AI_SETTLEMENT' AND created_at>=:since"""),{'since':since}).mappings().one()
+        feature_rows=db.execute(text("""SELECT feature,COUNT(*) AS requests,
+          COALESCE(SUM(CASE WHEN amount<0 THEN -amount ELSE 0 END),0) AS credits,
+          COALESCE(SUM(provider_cost_usd_micros),0) AS provider_cost_micros,
+          COALESCE(SUM(customer_usage_value_usd_micros),0) AS customer_value_micros
+          FROM ai_credit_ledger WHERE entry_type='AI_SETTLEMENT' AND created_at>=:since
+          GROUP BY feature ORDER BY credits DESC"""),{'since':since}).mappings().all()
+        plan_rows=db.execute(text("""SELECT COALESCE(u.plan,'UNKNOWN') AS plan,COUNT(*) AS requests,
+          COALESCE(SUM(CASE WHEN l.amount<0 THEN -l.amount ELSE 0 END),0) AS credits,
+          COALESCE(SUM(l.provider_cost_usd_micros),0) AS provider_cost_micros,
+          COALESCE(SUM(l.customer_usage_value_usd_micros),0) AS customer_value_micros
+          FROM ai_credit_ledger l LEFT JOIN users u ON u.id=l.account_id
+          WHERE l.entry_type='AI_SETTLEMENT' AND l.created_at>=:since
+          GROUP BY COALESCE(u.plan,'UNKNOWN') ORDER BY credits DESC"""),{'since':since}).mappings().all()
+        model_rows=db.execute(text("""SELECT COALESCE(provider,'unknown') AS provider,COALESCE(model,'unknown') AS model,
+          COUNT(*) AS requests,COALESCE(SUM(CASE WHEN amount<0 THEN -amount ELSE 0 END),0) AS credits,
+          COALESCE(SUM(provider_cost_usd_micros),0) AS provider_cost_micros,
+          COALESCE(SUM(customer_usage_value_usd_micros),0) AS customer_value_micros
+          FROM ai_credit_ledger WHERE entry_type='AI_SETTLEMENT' AND created_at>=:since
+          GROUP BY COALESCE(provider,'unknown'),COALESCE(model,'unknown') ORDER BY credits DESC"""),{'since':since}).mappings().all()
+    def clean(row):
+        item=dict(row)
+        item['credits']=ai_billing.public_decimal(ai_billing._dec(item.get('credits')))
+        for key in ('provider_cost_micros','customer_value_micros'):
+            item[key]=int(item.get(key) or 0)
+        item['margin_micros']=item['customer_value_micros']-item['provider_cost_micros']
+        item['requests']=int(item.get('requests') or 0)
+        return item
+    return {'days':days,'since':since,'totals':clean(totals),'by_feature':[clean(x) for x in feature_rows],
+            'by_plan':[clean(x) for x in plan_rows],'by_model':[clean(x) for x in model_rows]}
 
 @router.post('/admin/users/{user_id}/restrict')
 def admin_restrict_user(user_id: str, request: Request):
@@ -1274,7 +1397,7 @@ def public_plans():
         public['ai_page_policy']='PROMPT_DRIVEN'
         if int(public.get('contact_only') or 0):
             # Managed is deliberately outside the self-service wallet model.
-            for key in ('ai_credits','lead_credits','signup_bonus_credits','ai_site_cost','ai_edit_cost'):
+            for key in ('ai_credits','chatbot_reserved_credits','lead_credits','signup_bonus_credits','ai_site_cost','ai_edit_cost'):
                 public.pop(key,None)
         items.append(public)
     return {'items':items}
@@ -1289,6 +1412,7 @@ class PlanPatch(BaseModel):
     site_limit: int|None=Field(default=None,ge=1,le=100)
     page_limit: int|None=Field(default=None,ge=1,le=10)
     ai_credits: int|None=Field(default=None,ge=0,le=1000000)
+    chatbot_reserved_credits: int|None=Field(default=None,ge=0,le=1000000)
     lead_credits: int|None=Field(default=None,ge=0,le=1000000)
     signup_bonus_credits: int|None=Field(default=None,ge=0,le=1000000)
     ai_site_cost: int|None=Field(default=None,ge=0,le=100000)
@@ -1634,12 +1758,12 @@ def admin_integrations(request: Request):
                 'status': 'HEALTHY' if getattr(settings, 'razorpay_key_id', '') else 'MOCK_SANDBOX'
             },
             {
-                'id': 'resend',
-                'name': 'Resend Email API',
+                'id': 'smtp',
+                'name': 'SMTP Email Transport',
                 'category': 'Messaging & Delivery',
-                'configured': bool(getattr(settings, 'resend_api_key', '')),
+                'configured': bool(getattr(settings, 'smtp_host', '') and getattr(settings, 'smtp_from_email', '')),
                 'active_connections': 1,
-                'status': 'HEALTHY' if getattr(settings, 'resend_api_key', '') else 'DEVELOPMENT_FALLBACK'
+                'status': 'HEALTHY' if getattr(settings, 'smtp_host', '') else 'DEVELOPMENT_FALLBACK'
             },
             {
                 'id': 'whatsapp',
@@ -1693,99 +1817,135 @@ def admin_health(request: Request):
 class CampaignIn(BaseModel):
     title: str = Field(min_length=2, max_length=200)
     subject: str = Field(min_length=2, max_length=200)
-    audience: str = Field(default='ALL', max_length=30)
-    body_html: str = Field(min_length=5, max_length=100000)
+    audience: str = Field(default='MANUAL', max_length=30)
+    body_html: str = Field(default='', max_length=100000)
+    body_text: str = Field(default='', max_length=100000)
+    content_format: str = Field(default='HTML', max_length=10)
+    preheader: str = Field(default='', max_length=160)
+    manual_recipients: list[str] = Field(default_factory=list, max_length=10000)
+    idempotency_key: str = Field(default='', max_length=120)
+
+class CampaignTestSendIn(BaseModel):
+    recipients: list[EmailStr] = Field(default_factory=list, max_length=5)
+
+
+class CampaignQueueIn(BaseModel):
+    scheduled_at: str | None = Field(default=None, max_length=64)
 
 @router.get('/admin/campaigns')
 def admin_campaigns(request: Request):
     _admin(request)
     with SessionLocal() as db:
-        items = [dict(r) for r in db.execute(text('SELECT * FROM platform_campaigns ORDER BY created_at DESC')).mappings().all()]
+        items = [dict(r) for r in db.execute(text('''SELECT id,title,subject,audience,status,total_recipients,eligible_count,
+          sent_count,failed_count,suppressed_count,created_at,updated_at,scheduled_at,sent_at,completed_at,content_format
+          FROM platform_campaigns ORDER BY created_at DESC LIMIT 100''')).mappings().all()]
     return {'items': items}
 
 @router.post('/admin/campaigns')
 def admin_campaign_create(payload: CampaignIn, request: Request):
     admin = _admin(request, True)
     audience = payload.audience.strip().upper()
-    allowed_audiences = {'ALL','FREE','STARTER','GROWTH','ZYLORA','PRO','PAYING','PUBLISHED','UNPUBLISHED'}
+    allowed_audiences = {'MANUAL','ALL','FREE','STARTER','GROWTH','ZYLORA','PRO','PAYING','PUBLISHED','UNPUBLISHED'}
     if audience not in allowed_audiences:
         raise HTTPException(422, 'Unsupported campaign audience')
-    cid = f'camp_{uuid4().hex[:12]}'
-    now = now_iso()
-    with SessionLocal.begin() as db:
-        db.execute(text("""INSERT INTO platform_campaigns (id, title, subject, audience, body_html, status, sent_count, delivered_count, failed_count, created_at)
-            VALUES (:id, :title, :subject, :audience, :body_html, 'DRAFT', 0, 0, 0, :created_at)"""), {
-            'id': cid,
-            'title': payload.title.strip(),
-            'subject': payload.subject.strip(),
-            'audience': audience,
-            'body_html': sanitize_email_html(payload.body_html),
-            'created_at': now
-        })
-    _audit(admin['id'], 'ADMIN_CAMPAIGN_CREATE', 'campaign', cid)
-    return {'ok': True, 'id': cid}
+    report=parse_manual_recipients(payload.manual_recipients)
+    candidates=report['recipients'] + (resolve_internal_audience(audience) if audience!='MANUAL' else [])
+    unique={str(item['email']).lower(): item for item in candidates}
+    if not unique:
+        raise HTTPException(422, detail={'message':'Add at least one valid recipient or choose a non-empty internal audience','invalid':report['invalid']})
+    campaign=create_campaign(admin_id=admin['id'],title=payload.title,subject=payload.subject,audience=audience,
+        body_html=payload.body_html,body_text=payload.body_text,content_format=payload.content_format.strip().upper(),
+        recipients=list(unique.values()),idempotency_key=payload.idempotency_key or request.headers.get('Idempotency-Key') or str(uuid4()),preheader=payload.preheader)
+    _audit(admin['id'], 'CAMPAIGN_CREATED', 'campaign', campaign['id'], {'invalid':len(report['invalid']),'duplicates':report['duplicates']})
+    return {'ok': True, 'campaign': campaign, 'import_summary': {'valid':len(unique),'invalid':report['invalid'],'duplicates':report['duplicates']}}
 
 @router.post('/admin/campaigns/{campaign_id}/test-send')
-def admin_campaign_test_send(campaign_id: str, request: Request):
+def admin_campaign_test_send(campaign_id: str, payload: CampaignTestSendIn, request: Request):
     admin = _admin(request, True)
-    with SessionLocal() as db:
-        c = db.execute(text('SELECT * FROM platform_campaigns WHERE id=:id'), {'id': campaign_id}).mappings().first()
-        if not c:
-            raise HTTPException(404, 'Campaign not found')
-    try:
-        send_email(admin['email'], f"[TEST] {c['subject']}", c['body_html'])
-    except Exception:
-        pass
-    _audit(admin['id'], 'ADMIN_CAMPAIGN_TEST_SEND', 'campaign', campaign_id, {'to': admin['email']})
-    return {'ok': True, 'sent_to': admin['email']}
+    campaign=campaign_detail(campaign_id)
+    targets=[str(item) for item in payload.recipients] or [admin['email']]
+    for target in targets:
+        html=(str(campaign.get('body_html') or '') + '<p><em>This is a test email; no campaign recipients were contacted.</em></p>') if campaign.get('content_format')=='HTML' else None
+        email_service.send_campaign(target, f"[TEST] {campaign['subject']}", str(campaign.get('body_text') or ''), html=html)
+    _audit(admin['id'], 'CAMPAIGN_TEST_SENT', 'campaign', campaign_id, {'count':len(targets)})
+    return {'ok': True, 'sent_to': targets}
 
 @router.post('/admin/campaigns/{campaign_id}/send')
-def admin_campaign_send(campaign_id: str, request: Request):
+def admin_campaign_send(campaign_id: str, request: Request, payload: CampaignQueueIn | None = None):
     admin = _admin(request, True)
-    deliveries = []
+    campaign=queue_campaign(campaign_id,admin_id=admin['id'], scheduled_at=payload.scheduled_at if payload else None)
+    _audit(admin['id'], 'CAMPAIGN_QUEUED', 'campaign', campaign_id)
+    return {'ok': True, 'campaign': campaign}
+
+@router.get('/admin/campaigns/{campaign_id}')
+def admin_campaign_detail(campaign_id: str, request: Request):
+    _admin(request)
+    return {'campaign': campaign_detail(campaign_id)}
+
+@router.get('/admin/campaigns/{campaign_id}/recipients')
+def admin_campaign_recipients(campaign_id: str, request: Request, status: str = '', limit: int = 100, offset: int = 0):
+    _admin(request)
+    limit=max(1,min(limit,200)); offset=max(0,offset)
+    with SessionLocal() as db:
+        clauses=['campaign_id=:c']; params={'c':campaign_id,'l':limit,'o':offset}
+        if status:
+            clauses.append('status=:s'); params['s']=status.upper()
+        where=' AND '.join(clauses)
+        items=[dict(row) for row in db.execute(text(f'''SELECT id,email,source,status,attempt_count,last_error,last_attempt_at,sent_at,created_at
+          FROM email_campaign_recipients WHERE {where} ORDER BY created_at LIMIT :l OFFSET :o'''),params).mappings().all()]
+        total=int(db.execute(text(f'SELECT count(*) FROM email_campaign_recipients WHERE {where}'),params).scalar_one())
+    return {'items':items,'total':total,'limit':limit,'offset':offset}
+
+@router.post('/admin/campaigns/import')
+async def admin_campaign_import(request: Request, file: UploadFile = File(...), column: str = ''):
+    _admin(request, True)
+    raw=await file.read()
+    name=str(file.filename or '').lower()
+    if name.endswith('.csv'):
+        return parse_csv_recipients(raw,column or None)
+    if name.endswith('.xlsx'):
+        return parse_xlsx_recipients(raw,column or None)
+    raise HTTPException(415,'Upload a .csv or .xlsx recipient file')
+
+@router.post('/admin/campaigns/{campaign_id}/attachments')
+async def admin_campaign_attachment(campaign_id: str, request: Request, file: UploadFile = File(...)):
+    _admin(request, True); campaign_detail(campaign_id)
+    result=attach_campaign_file(campaign_id,str(file.filename or 'attachment'),str(file.content_type or ''),await file.read())
+    return {'ok':True,'attachment':result}
+
+@router.delete('/admin/campaigns/{campaign_id}/attachments/{attachment_id}')
+def admin_campaign_attachment_delete(campaign_id: str, attachment_id: str, request: Request):
+    _admin(request, True)
     with SessionLocal.begin() as db:
-        c = db.execute(text('SELECT * FROM platform_campaigns WHERE id=:id'), {'id': campaign_id}).mappings().first()
-        if not c:
-            raise HTTPException(404, 'Campaign not found')
-        audience = str(c['audience'] or 'ALL').upper()
-        clauses = ["u.email_verified=1", "COALESCE(p.marketing_consent,0)=1", "p.unsubscribed_at IS NULL"]
-        params = {}
-        if audience in {'FREE','STARTER','GROWTH','ZYLORA','PRO'}:
-            clauses.append('u.plan=:plan'); params['plan'] = audience
-        elif audience == 'PAYING':
-            clauses.append("u.plan IN ('STARTER','GROWTH','PRO','ZYLORA')")
-        elif audience == 'PUBLISHED':
-            clauses.append("EXISTS (SELECT 1 FROM sites ps WHERE ps.user_id=u.id AND ps.status='LIVE')")
-        elif audience == 'UNPUBLISHED':
-            clauses.append("EXISTS (SELECT 1 FROM sites ds WHERE ds.user_id=u.id AND ds.status<>'LIVE')")
-        elif audience != 'ALL':
-            raise HTTPException(422, 'Unsupported campaign audience')
-        q = 'SELECT u.id,u.email FROM users u LEFT JOIN email_preferences p ON p.user_id=u.id WHERE ' + ' AND '.join(clauses)
-        recipients = [dict(r) for r in db.execute(text(q), params).mappings().all()]
-        for recipient in recipients[:100]:
-            email = recipient['email']
-            raw_token = secrets.token_urlsafe(32)
-            db.execute(text('''INSERT INTO email_unsubscribe_tokens(id,user_id,token_hash,expires_at,created_at)
-                VALUES (:i,:u,:h,:e,:a)'''), {'i': str(uuid4()), 'u': recipient['id'],
-                'h': hashlib.sha256(raw_token.encode()).hexdigest(),
-                'e': (datetime.now(timezone.utc) + timedelta(days=365)).isoformat(), 'a': now_iso()})
-            deliveries.append((email, c['subject'], c['body_html'], f'{settings.app_url.rstrip("/")}/api/email/unsubscribe/{raw_token}'))
-    sent_count = 0
-    for email, subject, body_html, unsubscribe_url in deliveries:
-        try:
-            send_email(email, subject, body_html, unsubscribe_url=unsubscribe_url)
-            sent_count += 1
-        except Exception as exc:
-            record_operational_event('EMAIL', 'CAMPAIGN_DELIVERY_FAILED', safe_exception_summary(exc), severity='ERROR', metadata={'campaign_id': campaign_id})
-    failed_count = len(deliveries) - sent_count
+        row=db.execute(text('SELECT storage_key FROM email_campaign_attachments WHERE id=:i AND campaign_id=:c'),{'i':attachment_id,'c':campaign_id}).mappings().first()
+        if not row: raise HTTPException(404,'Attachment not found')
+        db.execute(text('DELETE FROM email_campaign_attachments WHERE id=:i'),{'i':attachment_id})
+    from .media import delete_bytes
+    delete_bytes(str(row['storage_key']))
+    return {'ok':True}
+
+@router.get('/admin/campaigns/{campaign_id}/export.csv')
+def admin_campaign_export(campaign_id: str, request: Request):
+    _admin(request)
+    return Response(campaign_csv(campaign_id),media_type='text/csv',headers={'Content-Disposition':f'attachment; filename="campaign-{campaign_id}.csv"'})
+
+@router.post('/admin/campaigns/{campaign_id}/retry-failed')
+def admin_campaign_retry_failed(campaign_id: str, request: Request):
+    admin=_admin(request, True)
     with SessionLocal.begin() as db:
-        now = now_iso()
-        db.execute(text("UPDATE platform_campaigns SET status=:st, sent_count=:s, delivered_count=:s, failed_count=:f, sent_at=:a WHERE id=:i"), {
-            'st': 'SENT' if sent_count else ('FAILED' if failed_count else 'SENT'),
-            's': sent_count, 'f': failed_count, 'a': now, 'i': campaign_id
-        })
-    _audit(admin['id'], 'ADMIN_CAMPAIGN_SEND', 'campaign', campaign_id, {'recipients': sent_count, 'failed': failed_count})
-    return {'ok': True, 'sent_count': sent_count, 'failed_count': failed_count}
+        found=db.execute(text("SELECT 1 FROM platform_campaigns WHERE id=:c"),{'c':campaign_id}).first()
+        if not found: raise HTTPException(404,'Campaign not found')
+        db.execute(text("UPDATE email_campaign_recipients SET status='PENDING',last_error=NULL,updated_at=:a WHERE campaign_id=:c AND status='FAILED'"),{'a':now_iso(),'c':campaign_id})
+        db.execute(text("UPDATE platform_campaigns SET status='QUEUED',completed_at=NULL,updated_at=:a WHERE id=:c"),{'a':now_iso(),'c':campaign_id})
+        db.execute(text("INSERT INTO email_campaign_jobs(id,campaign_id,status,run_after,created_at,updated_at) VALUES (:i,:c,'QUEUED',:a,:a,:a)"),{'i':str(uuid4()),'c':campaign_id,'a':now_iso()})
+    _audit(admin['id'],'CAMPAIGN_RETRIED','campaign',campaign_id)
+    return {'ok':True,'campaign':campaign_detail(campaign_id)}
+
+@router.post('/admin/campaigns/process')
+def admin_campaign_process(request: Request):
+    """A protected operational nudge; normal delivery is performed by the maintenance worker."""
+    _admin(request, True)
+    return process_due_campaign_jobs(1)
 
 
 class EmailPreferencePatch(BaseModel):
@@ -1816,6 +1976,8 @@ def email_preferences_update(payload: EmailPreferencePatch, request: Request):
 
 @router.get('/email/unsubscribe/{token}', response_class=HTMLResponse)
 def email_unsubscribe(token: str):
+    if suppress_from_token(token):
+        return HTMLResponse('<!doctype html><meta charset="utf-8"><title>Unsubscribed</title><p>You are unsubscribed from Zylora marketing emails.</p>')
     digest = hashlib.sha256(str(token or '').encode()).hexdigest()
     with SessionLocal.begin() as db:
         row = db.execute(text('''SELECT user_id,expires_at FROM email_unsubscribe_tokens

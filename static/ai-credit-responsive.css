@@ -1,0 +1,15 @@
+/* AI-credit billing layout: the sidebar is fixed/hidden below 1200px by the
+   existing shell CSS, so the workspace must occupy the full grid at tablet
+   widths. This prevents a phantom sidebar column from collapsing plan and
+   top-up controls. */
+@media (max-width: 1199px) and (min-width: 841px) {
+  .employee-dashboard .app-shell {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .employee-dashboard .workspace {
+    grid-column: 1;
+    width: 100%;
+    max-width: none;
+  }
+}

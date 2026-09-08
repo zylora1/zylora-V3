@@ -115,7 +115,7 @@ function switchAdminTab(tabId, pushState = true) {
   if ($('#paneSubtitle')) $('#paneSubtitle').textContent = meta.sub;
   if (pushState) {
     const route = TAB_ROUTES[tabId] || '/super-admin';
-    if (location.pathname !== route) {
+    if (location.origin !== 'null' && location.pathname !== route) {
       history.pushState({ tabId }, '', route);
     }
   }
@@ -168,7 +168,10 @@ function syncRouteFromUrl() {
 // 1. Overview
 async function loadAdminOverview() {
   try {
-    const o = await api('/api/admin/overview');
+    const [o, aiAnalytics] = await Promise.all([
+      api('/api/admin/overview'),
+      api('/api/admin/ai-credits/analytics?days=30'),
+    ]);
     if ($('#statTotalUsers')) $('#statTotalUsers').textContent = o.users ?? 0;
     if ($('#statActiveSites')) $('#statActiveSites').textContent = o.live_sites ?? 0;
     if ($('#statTotalTemplates')) $('#statTotalTemplates').textContent = o.templates ?? 43;
@@ -204,6 +207,12 @@ async function loadAdminOverview() {
       if ($('#aiCreatorTokens')) $('#aiCreatorTokens').textContent = `${Number(o.ai_stats.creator_tokens ?? 0).toLocaleString()} tokens`;
       if ($('#aiAssistantTokens')) $('#aiAssistantTokens').textContent = `${Number(o.ai_stats.assistant_tokens ?? 0).toLocaleString()} tokens`;
       if ($('#aiTotalGenerations')) $('#aiTotalGenerations').textContent = o.ai_stats.total_generations ?? 0;
+    }
+    if (aiAnalytics?.totals) {
+      const usd = (micros) => `$${(Number(micros || 0) / 1000000).toFixed(4)}`;
+      if ($('#aiCustomerValue')) $('#aiCustomerValue').textContent = usd(aiAnalytics.totals.customer_value_micros);
+      if ($('#aiProviderCost')) $('#aiProviderCost').textContent = usd(aiAnalytics.totals.provider_cost_micros);
+      if ($('#aiMarginEstimate')) $('#aiMarginEstimate').textContent = usd(aiAnalytics.totals.margin_micros);
     }
 
     // Messaging Stats
@@ -305,7 +314,7 @@ function renderAdminUsers() {
         </td>
         <td><span class="status-badge ${x.role === 'SUPER_ADMIN' ? 'pass' : 'info'}">${escapeHtml(x.role)}</span></td>
         <td><span class="status-badge info">${escapeHtml(x.plan)}</span></td>
-        <td><b>${x.ai_credits ?? 0}</b> <small style="color:var(--z-text-muted);">AI</small></td>
+        <td><b>${x.normal_ai_balance ?? x.ai_credits ?? 0}</b> <small style="color:var(--z-text-muted);">AI · reserve ${x.chatbot_reserved_balance ?? 0}</small></td>
         <td><span class="status-badge ${isRestricted ? 'fail' : 'pass'}">${isRestricted ? 'RESTRICTED' : 'ACTIVE'}</span></td>
         <td><small style="color:var(--z-text-muted);">${new Date(x.created_at).toLocaleDateString()}</small></td>
         <td>
@@ -367,8 +376,8 @@ async function openAdminUserDetail(userId) {
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;">
         <div class="panel" style="padding:12px;background:var(--zy-bg-card-inner);">
           <small style="color:var(--zy-text-secondary);font-size:10.5px;text-transform:uppercase;">AI Wallet</small>
-          <b style="display:block;margin-top:4px;font-size:18px;">${data.wallet?.ai_credits ?? u.ai_credits}</b>
-          <span style="font-size:11px;color:var(--zy-text-secondary);">${data.ai_transactions?.length || 0} usage records</span>
+          <b style="display:block;margin-top:4px;font-size:18px;">${data.wallet?.normal_available ?? data.wallet?.ai_credits ?? u.ai_credits}</b>
+          <span style="font-size:11px;color:var(--zy-text-secondary);">Sales Assistant Protection: ${data.wallet?.chatbot_reserved_available ?? 0} · ${data.ai_transactions?.length || 0} ledger records</span>
         </div>
         <div class="panel" style="padding:12px;background:var(--zy-bg-card-inner);">
           <small style="color:var(--zy-text-secondary);font-size:10.5px;text-transform:uppercase;">Lead Credits</small>
@@ -462,10 +471,12 @@ async function openAdminUserDetail(userId) {
     $('#btnUser360Credits')?.addEventListener('click', async () => {
       const deltaStr = prompt('Enter AI credit adjustment (e.g. +50, -10):', '50');
       if (!deltaStr) return;
-      const delta = parseInt(deltaStr, 10);
-      if (isNaN(delta)) return toast('Invalid credit amount');
+      const reason = prompt('Reason for this audited adjustment:', 'Support correction');
+      if (!reason || reason.trim().length < 3) return toast('A reason is required');
+      const delta = Number(deltaStr);
+      if (!Number.isFinite(delta) || delta === 0) return toast('Invalid credit amount');
       try {
-        await api(`/api/admin/users/${userId}/adjust-credits`, { method: 'POST', body: JSON.stringify({ ai_credits_delta: delta, reason: 'Super Admin adjustment' }) });
+        await api('/api/admin/ai-credits/adjust', { method: 'POST', body: JSON.stringify({ user_id: userId, amount: String(delta), wallet_type: 'NORMAL', reason: reason.trim() }) });
         toast(`Adjusted credits by ${delta}`);
         openAdminUserDetail(userId);
         loadAdminUsers();
@@ -616,6 +627,7 @@ async function loadAdminPlans() {
         <label>Draft/site limit<input name="site_limit" type="number" value="${x.site_limit}"></label>
         <label>Page limit<input name="page_limit" type="number" max="10" value="${x.page_limit}"></label>
         <label>Monthly AI credits<input name="ai_credits" type="number" min="0" value="${x.ai_credits}"></label>
+        <label>Sales Assistant Protection credits<input name="chatbot_reserved_credits" type="number" min="0" value="${x.chatbot_reserved_credits ?? x.ai_credits ?? 0}"></label>
         <label>Monthly lead credits<input name="lead_credits" type="number" min="0" value="${x.lead_credits ?? 0}"></label>
         <label>Signup bonus credits<input name="signup_bonus_credits" type="number" value="${x.signup_bonus_credits ?? 5}"></label>
         <label>AI site cost<input name="ai_site_cost" type="number" value="${x.ai_site_cost ?? 5}"></label>
@@ -629,7 +641,7 @@ async function loadAdminPlans() {
       const plan = f.dataset.plan;
       const data = Object.fromEntries(new FormData(f).entries());
       data.contact_only = f.querySelector('[name="contact_only"]').checked;
-      for (const k of ['price_inr_minor', 'price_usd_minor', 'site_limit', 'page_limit', 'ai_credits', 'lead_credits', 'signup_bonus_credits', 'ai_site_cost', 'ai_edit_cost']) {
+      for (const k of ['price_inr_minor', 'price_usd_minor', 'site_limit', 'page_limit', 'ai_credits', 'chatbot_reserved_credits', 'lead_credits', 'signup_bonus_credits', 'ai_site_cost', 'ai_edit_cost']) {
         if (data[k] !== undefined) data[k] = Number(data[k]);
       }
       try {
@@ -797,108 +809,167 @@ function setupImportForm() {
   };
 }
 
-// 8. Platform Campaigns
+// 8. SMTP Mail Center
+let currentCampaignId = null;
+let importedCampaignRecipients = [];
+
+function campaignIsoSchedule() {
+  const value = $('#campaignScheduleAt')?.value;
+  return value ? new Date(value).toISOString() : null;
+}
+
+function campaignBodyPayload() {
+  const format = ($('#campaignFormat')?.value || 'HTML').toUpperCase();
+  const editor = $('#campaignRichEditor');
+  const html = format === 'HTML' ? (editor?.innerHTML || $('#campaignBodyHtml')?.value || '') : '';
+  const text = format === 'TEXT' ? ($('#campaignBodyText')?.value || '') : ($('#campaignBodyText')?.value || '');
+  return { format, html, text };
+}
+
+function campaignRecipientsFromForm() {
+  return $$('[data-recipient]').map(input => input.value.trim()).filter(Boolean).concat(importedCampaignRecipients.map(r => r.email));
+}
+
+function updateCampaignPreview() {
+  const frame = $('#campaignPreviewFrame');
+  if (!frame) return;
+  const body = campaignBodyPayload();
+  const content = body.format === 'TEXT'
+    ? `<pre style="white-space:pre-wrap;font:14px/1.55 system-ui;padding:20px;color:#172033;">${escapeHtml(body.text)}</pre>`
+    : body.html || '<p style="font:14px system-ui;padding:20px;color:#64748b;">Your preview will appear here.</p>';
+  frame.srcdoc = `<!doctype html><meta charset="utf-8"><meta name="color-scheme" content="light"><style>body{margin:0;background:#fff;color:#172033;font-family:system-ui,-apple-system,Segoe UI,sans-serif}img{max-width:100%;height:auto}a{color:#2563eb}</style>${content}`;
+}
+
+function setCampaignFormat() {
+  const html = ($('#campaignFormat')?.value || 'HTML').toUpperCase() === 'HTML';
+  if ($('#campaignHtmlEditorWrap')) $('#campaignHtmlEditorWrap').hidden = !html;
+  if ($('#campaignTextEditorWrap')) $('#campaignTextEditorWrap').hidden = html;
+  updateCampaignPreview();
+}
+
+async function uploadCampaignImport(file) {
+  if (!file) return;
+  const msg = $('#campaignImportMsg');
+  msg.textContent = `Reading ${file.name}…`;
+  const fd = new FormData(); fd.append('file', file);
+  const csrf = sessionStorage.getItem('csrf') || window.__CSRF;
+  const res = await fetch('/api/admin/campaigns/import', { method: 'POST', credentials: 'same-origin', headers: csrf ? {'X-CSRF-Token': csrf} : {}, body: fd });
+  const result = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(typeof result.detail === 'string' ? result.detail : (result.detail?.message || 'Recipient import failed'));
+  importedCampaignRecipients = importedCampaignRecipients.concat(result.recipients || []);
+  msg.textContent = `${result.recipients?.length || 0} valid addresses imported; ${result.invalid?.length || 0} invalid and ${result.duplicates || 0} duplicate rows skipped.`;
+}
+
+async function queueCampaign(id, scheduledAt = null) {
+  const res = await api(`/api/admin/campaigns/${id}/send`, { method: 'POST', body: JSON.stringify({scheduled_at: scheduledAt}) });
+  toast(res.campaign?.status === 'SCHEDULED' ? 'Campaign scheduled' : 'Campaign queued for SMTP delivery');
+  await loadAdminCampaigns();
+  return res.campaign;
+}
+
 async function loadAdminCampaigns() {
   try {
     const res = await api('/api/admin/campaigns');
     state.adminCampaigns = res.items || [];
     renderAdminCampaigns();
-  } catch (err) {
-    toast(err.message);
-  }
+  } catch (err) { toast(err.message); }
+}
+
+function campaignStatusClass(status) {
+  return ['COMPLETED','SENT'].includes(status) ? 'pass' : ['FAILED','PARTIALLY_FAILED'].includes(status) ? 'error' : 'warn';
 }
 
 function renderAdminCampaigns() {
   const list = $('#campaignList');
   if (!list) return;
   if (!state.adminCampaigns.length) {
-    list.innerHTML = '<div style="text-align:center;padding:40px 20px;background:var(--zy-bg-card-inner);border:1px dashed var(--zy-border);border-radius:14px;margin:12px 0;"><div style="width:44px;height:44px;border-radius:50%;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,0.05);display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;color:var(--zy-text-secondary);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"></path><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></div><h4 style="margin:0 0 6px 0;font-size:14.5px;font-weight:600;color:var(--zy-text-primary);">No campaigns created yet</h4><p style="margin:0;font-size:12px;color:var(--zy-text-secondary);max-width:380px;display:inline-block;line-height:1.45;">Draft an announcement or email broadcast using the form to reach platform users.</p></div>';
+    list.innerHTML = '<div style="text-align:center;padding:28px 16px;background:var(--zy-bg-card-inner);border:1px dashed var(--zy-border);border-radius:10px;"><h4 style="margin:0 0 6px;font-size:14px;color:var(--zy-text-primary);">No campaigns created yet</h4><p class="muted-copy" style="margin:0;font-size:12px;">Saved drafts and delivery history will appear here.</p></div>';
     return;
   }
-  list.innerHTML = state.adminCampaigns.map(c => `
-    <div class="stack-item" style="display:flex;justify-content:space-between;align-items:flex-start;padding:14px;background:var(--zy-bg-card-inner);border:1px solid var(--zy-border);border-radius:8px;margin-bottom:10px;">
-      <div style="flex:1;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
-          <b style="color:var(--zy-text-primary);">${escapeHtml(c.title)}</b>
-          <span class="status-badge ${c.status === 'SENT' ? 'pass' : 'warn'}">${escapeHtml(c.status)}</span>
-          <span style="font-size:11px;color:var(--zy-text-secondary);">${escapeHtml(c.delivery_channel || 'EMAIL')} · ${escapeHtml(c.audience || 'ALL')}</span>
-        </div>
-        <p style="margin:0 0 6px 0;font-size:13px;color:var(--zy-text-secondary);">${escapeHtml(c.subject)}</p>
-        <div style="font-size:11px;color:var(--zy-text-secondary);">
-          Created: ${new Date(c.created_at).toLocaleDateString()} ${c.sent_at ? `· Sent: ${new Date(c.sent_at).toLocaleDateString()} (${c.sent_count ?? 0} recipients)` : ''}
-        </div>
-      </div>
-      <div style="display:flex;gap:8px;">
-        ${c.status !== 'SENT' ? `
-          <button class="ghost-btn compact-btn" onclick="testSendCampaign('${escapeHtml(c.id)}')">Test Send</button>
-          <button class="accent-btn compact-btn" onclick="sendCampaign('${escapeHtml(c.id)}')">Send Now</button>
-        ` : ''}
-        <button class="danger-btn compact-btn" onclick="deleteCampaign('${escapeHtml(c.id)}')">Delete</button>
-      </div>
-    </div>
-  `).join('');
+  list.innerHTML = state.adminCampaigns.map(c => {
+    const sent = Number(c.sent_count || 0), failed = Number(c.failed_count || 0), suppressed = Number(c.suppressed_count || 0);
+    const canQueue = ['DRAFT','FAILED','PARTIALLY_FAILED'].includes(c.status);
+    return `<div class="mail-list-item"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;"><div><b style="color:var(--zy-text-primary);">${escapeHtml(c.title)}</b><span class="status-badge ${campaignStatusClass(c.status)}" style="margin-left:7px;">${escapeHtml(c.status)}</span><div style="font-size:11px;color:var(--zy-text-secondary);margin-top:4px;">${escapeHtml(c.audience || 'MANUAL')} · ${escapeHtml(c.content_format || 'HTML')} · ${escapeHtml(c.subject || '')}</div></div><small style="color:var(--zy-text-secondary);white-space:nowrap;">${c.created_at ? new Date(c.created_at).toLocaleDateString() : '—'}</small></div><div style="font-size:11px;color:var(--zy-text-secondary);margin-top:8px;">${Number(c.total_recipients || 0)} recipients · ${sent} sent · ${failed} failed · ${suppressed} suppressed${c.scheduled_at ? ` · ${c.status === 'SCHEDULED' ? 'Scheduled' : 'Run'} ${new Date(c.scheduled_at).toLocaleString()}` : ''}</div><div class="mail-actions">${canQueue ? `<button class="accent-btn compact-btn" onclick="sendCampaign('${escapeHtml(c.id)}')">Queue</button>` : ''}${['FAILED','PARTIALLY_FAILED'].includes(c.status) ? `<button class="ghost-btn compact-btn" onclick="retryCampaign('${escapeHtml(c.id)}')">Retry failed</button>` : ''}<button class="ghost-btn compact-btn" onclick="testSendCampaign('${escapeHtml(c.id)}')">Test send</button><button class="ghost-btn compact-btn" onclick="viewCampaign('${escapeHtml(c.id)}')">Details</button><a class="ghost-btn compact-btn" href="/api/admin/campaigns/${encodeURIComponent(c.id)}/export.csv" target="_blank" rel="noopener">Export CSV</a><button class="danger-btn compact-btn" onclick="deleteCampaign('${escapeHtml(c.id)}')">Delete</button></div></div>`;
+  }).join('');
 }
 
-window.testSendCampaign = async function(id) {
+window.viewCampaign = async function(id) {
   try {
-    const res = await api(`/api/admin/campaigns/${id}/test-send`, { method: 'POST' });
-    toast(`Test campaign sent to ${res.sent_to}`);
-  } catch (e) {
-    toast(e.message);
-  }
+    const res = await api(`/api/admin/campaigns/${id}`);
+    currentCampaignId = id;
+    const c = res.campaign || res;
+    if ($('#campaignTitle')) $('#campaignTitle').value = c.title || '';
+    if ($('#campaignAudience')) $('#campaignAudience').value = c.audience || 'MANUAL';
+    if ($('#campaignSubject')) $('#campaignSubject').value = c.subject || '';
+    if ($('#campaignPreheader')) $('#campaignPreheader').value = c.preheader || '';
+    if ($('#campaignFormat')) $('#campaignFormat').value = c.content_format || 'HTML';
+    if ($('#campaignRichEditor')) $('#campaignRichEditor').innerHTML = c.body_html || '';
+    if ($('#campaignBodyText')) $('#campaignBodyText').value = c.body_text || '';
+    setCampaignFormat(); updateCampaignPreview();
+    if ($('#queueDraft')) $('#queueDraft').disabled = !['DRAFT','FAILED','PARTIALLY_FAILED'].includes(c.status);
+    if ($('#testCurrentCampaign')) $('#testCurrentCampaign').disabled = false;
+    toast(`Loaded ${c.title}`);
+  } catch (e) { toast(e.message); }
+};
+
+window.testSendCampaign = async function(id) {
+  const raw = prompt('Test recipient addresses (comma-separated). Leave blank to use your admin email:') || '';
+  const recipients = raw.split(/[,;\s]+/).map(v => v.trim()).filter(Boolean);
+  try { const res = await api(`/api/admin/campaigns/${id}/test-send`, { method: 'POST', body: JSON.stringify({recipients}) }); toast(`Test email accepted by SMTP for ${res.sent_to.join(', ')}`); }
+  catch (e) { toast(e.message); }
 };
 
 window.sendCampaign = async function(id) {
-  if (!confirm('Are you sure you want to broadcast this campaign to live users?')) return;
-  try {
-    const res = await api(`/api/admin/campaigns/${id}/send`, { method: 'POST' });
-    toast(`Campaign broadcasted to ${res.sent_count} users`);
-    loadAdminCampaigns();
-  } catch (e) {
-    toast(e.message);
-  }
+  if (!confirm('Queue this campaign for opted-in recipients?')) return;
+  try { await queueCampaign(id); } catch (e) { toast(e.message); }
+};
+
+window.retryCampaign = async function(id) {
+  if (!confirm('Retry failed recipients for this campaign?')) return;
+  try { await api(`/api/admin/campaigns/${id}/retry-failed`, {method:'POST'}); toast('Failed recipients re-queued'); await loadAdminCampaigns(); }
+  catch (e) { toast(e.message); }
 };
 
 window.deleteCampaign = async function(id) {
-  if (!confirm('Delete this campaign?')) return;
-  try {
-    await api(`/api/admin/campaigns/${id}`, { method: 'DELETE' });
-    toast('Campaign deleted');
-    loadAdminCampaigns();
-  } catch (e) {
-    toast(e.message);
-  }
+  if (!confirm('Delete this campaign and its recipient history?')) return;
+  try { await api(`/api/admin/campaigns/${id}`, { method: 'DELETE' }); toast('Campaign deleted'); await loadAdminCampaigns(); }
+  catch (e) { toast(e.message); }
 };
 
 function setupAdminCampaignForm() {
   const form = $('#adminCampaignForm');
   if (!form) return;
+  const recipients = $('#campaignRecipients');
+  const addRecipient = () => {
+    const row = document.createElement('div'); row.className = 'recipient-row';
+    row.innerHTML = '<input data-recipient placeholder="recipient@example.com" type="email"/><button class="ghost-btn compact-btn" data-remove-recipient type="button" aria-label="Remove recipient">×</button>';
+    recipients.appendChild(row);
+  };
+  $('#addCampaignRecipient')?.addEventListener('click', addRecipient);
+  recipients?.addEventListener('click', e => { if (e.target.closest('[data-remove-recipient]')) { const rows = recipients.querySelectorAll('.recipient-row'); if (rows.length > 1) e.target.closest('.recipient-row').remove(); } });
+  $('#campaignFormat')?.addEventListener('change', setCampaignFormat);
+  $('#campaignRichEditor')?.addEventListener('input', updateCampaignPreview);
+  $('#campaignBodyText')?.addEventListener('input', updateCampaignPreview);
+  $('#previewCampaign')?.addEventListener('click', updateCampaignPreview);
+  $('#clearCampaignBody')?.addEventListener('click', () => { if ($('#campaignRichEditor')) $('#campaignRichEditor').innerHTML = ''; if ($('#campaignBodyText')) $('#campaignBodyText').value = ''; updateCampaignPreview(); });
+  $('#importCampaignCsv')?.addEventListener('click', async () => { try { await uploadCampaignImport($('#campaignCsvFile')?.files?.[0]); } catch (e) { $('#campaignImportMsg').textContent = e.message; } });
+  $('#importCampaignXlsx')?.addEventListener('click', async () => { try { await uploadCampaignImport($('#campaignXlsxFile')?.files?.[0]); } catch (e) { $('#campaignImportMsg').textContent = e.message; } });
+  $('#campaignAttachmentFiles')?.addEventListener('change', e => { const names = Array.from(e.target.files || []).map(f => `${f.name} (${Math.ceil(f.size / 1024)} KB)`); $('#campaignAttachmentList').textContent = names.length ? names.join(' · ') : 'Attachments are uploaded after the draft is created.'; });
+  $('#queueDraft')?.addEventListener('click', async () => { if (!currentCampaignId) return; try { await queueCampaign(currentCampaignId, campaignIsoSchedule()); $('#campaignMsg').textContent = 'Campaign queued. The worker will process due batches.'; } catch (e) { $('#campaignMsg').textContent = e.message; } });
+  $('#testCurrentCampaign')?.addEventListener('click', async () => { if (!currentCampaignId) return; const recipients = ($('#campaignTestRecipients')?.value || '').split(/[,;\s]+/).map(v => v.trim()).filter(Boolean); try { const res = await api(`/api/admin/campaigns/${currentCampaignId}/test-send`, {method:'POST', body:JSON.stringify({recipients})}); toast(`Test email accepted by SMTP for ${res.sent_to.join(', ')}`); } catch (e) { toast(e.message); } });
   form.onsubmit = async e => {
     e.preventDefault();
-    const msg = $('#campaignMsg');
-    const submitBtn = form.querySelector('button[type="submit"]');
-    submitBtn.disabled = true;
-    msg.textContent = 'Creating campaign…';
+    const msg = $('#campaignMsg'), submitBtn = form.querySelector('button[type="submit"]'); submitBtn.disabled = true; msg.textContent = 'Validating and saving draft…';
     try {
-      await api('/api/admin/campaigns', {
-        method: 'POST',
-        body: JSON.stringify({
-          title: $('#campaignTitle').value.trim(),
-          audience: $('#campaignAudience').value,
-          subject: $('#campaignSubject').value.trim(),
-          body_html: $('#campaignBody').value
-        })
-      });
-      msg.textContent = 'Campaign created!';
-      toast('Campaign created');
-      form.reset();
-      loadAdminCampaigns();
-    } catch (err) {
-      msg.textContent = err.message;
-    } finally {
-      submitBtn.disabled = false;
-    }
+      const body = campaignBodyPayload();
+      const result = await api('/api/admin/campaigns', { method:'POST', headers:{'Idempotency-Key': (window.crypto?.randomUUID?.() || `mail-${Date.now()}-${Math.random().toString(16).slice(2)}`)}, body:JSON.stringify({title:$('#campaignTitle').value.trim(), audience:$('#campaignAudience').value, subject:$('#campaignSubject').value.trim(), preheader:$('#campaignPreheader').value.trim(), content_format:body.format, body_html:body.html, body_text:body.text, manual_recipients:campaignRecipientsFromForm()}) });
+      currentCampaignId = result.campaign.id; importedCampaignRecipients = []; if ($('#queueDraft')) $('#queueDraft').disabled = false; if ($('#testCurrentCampaign')) $('#testCurrentCampaign').disabled = false;
+      const files = Array.from($('#campaignAttachmentFiles')?.files || []); for (const file of files) { const fd = new FormData(); fd.append('file', file); const csrf = sessionStorage.getItem('csrf') || window.__CSRF; const upload = await fetch(`/api/admin/campaigns/${currentCampaignId}/attachments`, {method:'POST',credentials:'same-origin',headers:csrf ? {'X-CSRF-Token':csrf} : {},body:fd}); if (!upload.ok) { const detail = await upload.json().catch(() => ({})); throw new Error(typeof detail.detail === 'string' ? detail.detail : 'Attachment upload failed'); } }
+      msg.textContent = 'Draft saved. Review the preview, send a test, then queue it when ready.'; toast('Campaign draft saved'); await loadAdminCampaigns();
+    } catch (err) { msg.textContent = err.message; }
+    finally { submitBtn.disabled = false; }
   };
+  setCampaignFormat(); updateCampaignPreview();
 }
 
 // 9. Platform Payments & Revenue

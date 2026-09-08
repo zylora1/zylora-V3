@@ -625,6 +625,18 @@
               <span style="color:var(--zy-text-secondary);">Total Generations</span>
               <b id="aiTotalGenerations" style="color:var(--zy-accent);">0</b>
             </div>
+            <div style="display:flex;justify-content:space-between;font-size:12.5px;">
+              <span style="color:var(--zy-text-secondary);">Customer usage value</span>
+              <b id="aiCustomerValue">$0.00</b>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:12.5px;">
+              <span style="color:var(--zy-text-secondary);">Provider cost</span>
+              <b id="aiProviderCost">$0.00</b>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:12.5px;">
+              <span style="color:var(--zy-text-secondary);">Estimated margin</span>
+              <b id="aiMarginEstimate">$0.00</b>
+            </div>
           </div>
         </div>
 
@@ -907,43 +919,85 @@
       </div>
     </div>
 
-    <!-- Campaigns -->
+    <!-- Mail Center -->
     <div class="admin-pane" id="adminCampaigns">
-      <div class="split-admin">
+      <style>
+        .mail-center-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:18px;align-items:start}
+        .mail-section{padding:16px 0;border-top:1px solid var(--zy-border)}
+        .mail-section:first-of-type{border-top:0;padding-top:0}
+        .mail-section h3{font-size:13px;margin:0 0 10px;color:var(--zy-text-primary)}
+        .mail-editor{min-height:180px;border:1px solid var(--zy-border);border-radius:8px;padding:12px;background:var(--zy-bg-card-inner);color:var(--zy-text-primary);line-height:1.55;outline:none}
+        .mail-editor:focus{border-color:var(--zy-accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--zy-accent) 15%,transparent)}
+        .mail-editor:empty:before{content:attr(data-placeholder);color:var(--zy-text-secondary)}
+        .recipient-row{display:flex;gap:8px;margin:7px 0}.recipient-row input{flex:1}.recipient-row button{min-width:36px}
+        .mail-file-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}.mail-file-row input{max-width:100%}
+        .mail-preview{position:sticky;top:18px}.mail-preview iframe{width:100%;height:310px;border:1px solid var(--zy-border);border-radius:8px;background:white}
+        .mail-list-item{padding:13px 0;border-bottom:1px solid var(--zy-border)}.mail-list-item:last-child{border-bottom:0}
+        .mail-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.mail-actions button{font-size:11px}
+        @media(max-width:980px){.mail-center-grid{grid-template-columns:1fr}.mail-preview{position:static}}
+      </style>
+      <div class="mail-center-grid">
         <form class="settings-card" id="adminCampaignForm">
-          <h2>Create Platform Campaign</h2>
-          <p class="muted-copy">Schedule or broadcast platform announcements to registered users.</p>
-          <label>Campaign Title<input id="campaignTitle" placeholder="Monthly Product Update" required/></label>
-          <div class="form-grid-2">
-            <label>Target Audience
-              <select id="campaignAudience">
-                <option value="ALL">All Registered Users</option>
-                <option value="FREE">Free Plan Users</option>
-                <option value="STARTER">Starter Plan Users</option>
-                <option value="GROWTH">Growth Plan Users</option>
-              </select>
-            </label>
-            <label>Delivery Channel
-              <select id="campaignChannel">
-                <option value="EMAIL">Email</option>
-                <option value="WHATSAPP">WhatsApp</option>
-                <option value="NOTIFICATION">Dashboard Notification</option>
-              </select>
-            </label>
+          <div class="card-head" style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px;">
+            <div><p class="eyebrow" style="margin-bottom:5px;">Transactional SMTP Mail Center</p><h2 style="margin:0;">Compose campaign</h2><p class="muted-copy" style="margin-top:5px;">Draft, validate, preview and queue auditable email batches. Delivery status means SMTP accepted, not inbox delivery.</p></div>
+            <span class="status-badge info">SMTP</span>
           </div>
-          <label>Subject Line<input id="campaignSubject" placeholder="What's new in Zylora" required/></label>
-          <label>Message Content<textarea class="tall" id="campaignBody" placeholder="Write message body…" required></textarea></label>
-          <div class="form-actions" style="margin-top:14px;display:flex;gap:10px;">
-            <button class="accent-btn" type="submit">Create Campaign</button>
+
+          <div class="mail-section">
+            <h3>1. Campaign details</h3>
+            <label>Campaign title<input id="campaignTitle" placeholder="Monthly Product Update" required/></label>
+            <div class="form-grid-2">
+              <label>Audience
+                <select id="campaignAudience">
+                  <option value="MANUAL">Manual list</option><option value="ALL">All opted-in users</option>
+                  <option value="FREE">Free plan</option><option value="STARTER">Starter plan</option><option value="GROWTH">Growth plan</option>
+                  <option value="ZYLORA">Zylora plan</option><option value="PRO">Pro plan</option><option value="PAYING">Any paid plan</option>
+                  <option value="PUBLISHED">Users with a published site</option><option value="UNPUBLISHED">Users without a published site</option>
+                </select>
+              </label>
+              <label>Format
+                <select id="campaignFormat"><option value="HTML">Rich HTML + plain text</option><option value="TEXT">Plain text</option></select>
+              </label>
+            </div>
+            <label>Subject line<input id="campaignSubject" placeholder="What's new in Zylora" required/></label>
+            <label>Preheader <span class="muted-copy">(optional)</span><input id="campaignPreheader" maxlength="160" placeholder="A short inbox preview line"/></label>
           </div>
-          <div class="status-msg" id="campaignMsg"></div>
+
+          <div class="mail-section">
+            <h3>2. Message</h3>
+            <div id="campaignHtmlEditorWrap"><div id="campaignRichEditor" class="mail-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="Write the rich email body…"></div><p class="muted-copy" style="font-size:11px;margin:5px 0 0;">HTML is sanitized before it is stored and sent. Scripts, forms and unsafe URLs are removed.</p></div>
+            <div id="campaignTextEditorWrap" hidden><textarea class="tall" id="campaignBodyText" placeholder="Write the plain-text body…"></textarea></div>
+            <textarea id="campaignBodyHtml" hidden></textarea>
+            <div class="form-actions" style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;"><button class="ghost-btn compact-btn" type="button" id="previewCampaign">Preview</button><button class="ghost-btn compact-btn" type="button" id="clearCampaignBody">Clear body</button></div>
+          </div>
+
+          <div class="mail-section" id="campaignRecipientsSection">
+            <h3>3. Recipients &amp; consent</h3>
+            <p class="muted-copy" style="font-size:11px;">Manual and imported addresses are normalized, deduplicated and checked against the suppression list. Internal audiences include verified users with marketing consent.</p>
+            <div id="campaignRecipients"><div class="recipient-row"><input data-recipient placeholder="recipient@example.com" type="email"/><button class="ghost-btn compact-btn" data-remove-recipient type="button" aria-label="Remove recipient">×</button></div></div>
+            <div class="mail-actions"><button class="ghost-btn compact-btn" type="button" id="addCampaignRecipient">+ Add recipient</button></div>
+            <div class="mail-file-row"><label style="font-size:11px;">CSV <input id="campaignCsvFile" type="file" accept=".csv,text/csv"/></label><button class="ghost-btn compact-btn" type="button" id="importCampaignCsv">Import CSV</button><label style="font-size:11px;">XLSX <input id="campaignXlsxFile" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/></label><button class="ghost-btn compact-btn" type="button" id="importCampaignXlsx">Import XLSX</button></div>
+            <div class="status-msg" id="campaignImportMsg"></div>
+          </div>
+
+          <div class="mail-section">
+            <h3>4. Attachments &amp; scheduling</h3>
+            <div class="mail-file-row"><input id="campaignAttachmentFiles" type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.txt,.csv,.docx,.xlsx,.pptx"/><span class="muted-copy" style="font-size:11px;">10 MB each · 20 MB total</span></div>
+            <div id="campaignAttachmentList" class="muted-copy" style="font-size:11px;margin-top:6px;">Attachments are uploaded after the draft is created.</div>
+            <label style="margin-top:10px;">Schedule (optional)<input id="campaignScheduleAt" type="datetime-local"/></label>
+            <div class="form-actions" style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;"><button class="accent-btn" type="submit">Save draft</button><button class="ghost-btn" type="button" id="queueDraft" disabled>Queue draft</button></div>
+            <div class="status-msg" id="campaignMsg"></div>
+          </div>
         </form>
-        <div class="settings-card">
-          <div class="card-head" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-            <h2>Platform Campaigns</h2>
-            <button class="ghost-btn compact-btn" id="refreshCampaigns">↻ Refresh</button>
+
+        <div>
+          <div class="settings-card mail-preview">
+            <div class="card-head" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><div><h2 style="margin:0;">Safe preview</h2><p class="muted-copy" style="margin-top:4px;">Sandboxed email rendering</p></div><button class="ghost-btn compact-btn" id="refreshCampaigns" type="button">↻ Refresh</button></div>
+            <iframe id="campaignPreviewFrame" sandbox="" title="Campaign preview"></iframe>
+            <div class="mail-actions"><input id="campaignTestRecipients" placeholder="test@example.com, second@example.com" aria-label="Test recipient addresses" style="flex:1;min-width:180px;"/><button class="ghost-btn compact-btn" type="button" id="testCurrentCampaign" disabled>Test send</button></div>
+            <p class="muted-copy" style="font-size:11px;margin-top:8px;">Test sends never contact campaign recipients and are logged separately.</p>
           </div>
-          <div class="stack-list" id="campaignList"><p class="muted-copy">No campaigns created yet.</p></div>
+          <div class="settings-card" style="margin-top:18px;"><div class="card-head" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><div><h2 style="margin:0;">Campaign history</h2><p class="muted-copy" style="margin-top:4px;">Queue state, batch counts and retry controls</p></div></div><div class="stack-list" id="campaignList"><p class="muted-copy">No campaigns created yet.</p></div></div>
         </div>
       </div>
     </div>

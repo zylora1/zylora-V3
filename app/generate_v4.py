@@ -72,13 +72,14 @@ def _validate_operations(document: dict, operations: object, page_id: str) -> li
     return validated
 
 
-def generate_v4_operations(doc_json: str, instruction: str, selection: list[str], *, user_id: str | None = None, site_id: str | None = None) -> tuple[list[dict], str]:
+def generate_v4_operations(doc_json: str, instruction: str, selection: list[str], *, user_id: str | None = None, site_id: str | None = None, return_usage: bool = False):
     document = validate_studio_document(json.loads(doc_json)).model_dump(exclude_none=True)
     page_id = _page_for_selection(document, selection)
     if not settings.openai_api_key:
         if settings.app_env.lower() == "production":
             raise RuntimeError("OpenAI is not configured in production")
-        return _local_operations(document, instruction, selection, page_id), "local"
+        result = (_local_operations(document, instruction, selection, page_id), "local")
+        return (*result, {}) if return_usage else result
     page = document["pages"][page_id]
     node_context = [{"id": node_id, "type": node.get("type"), "name": (node.get("metadata") or {}).get("displayName"), "text": (node.get("content") or {}).get("text"), "parentId": node.get("parentId")} for node_id, node in list((page.get("nodes") or {}).items())[:180]]
     prompt = (
@@ -94,7 +95,9 @@ def generate_v4_operations(doc_json: str, instruction: str, selection: list[str]
     with httpx.Client(timeout=45) as client:
         response = client.post("https://api.openai.com/v1/responses", headers=headers, json=payload)
         response.raise_for_status()
-        result = response.json()
-    record_ai_api_usage(surface="WEBSITE", operation="STUDIO_V4_EDIT", model=selected_model, usage=result.get("usage") or {}, user_id=user_id, site_id=site_id)
-    parsed = json.loads(result.get("output_text") or "{}")
-    return _validate_operations(document, parsed.get("operations"), page_id), "openai"
+        response_data = response.json()
+    usage = response_data.get("usage") or {}
+    record_ai_api_usage(surface="WEBSITE", operation="STUDIO_V4_EDIT", model=selected_model, usage=usage, user_id=user_id, site_id=site_id)
+    parsed = json.loads(response_data.get("output_text") or "{}")
+    result = (_validate_operations(document, parsed.get("operations"), page_id), "openai")
+    return (*result, usage) if return_usage else result

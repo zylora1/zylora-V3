@@ -46,8 +46,8 @@ def record_operational_event(component: str, event_code: str, message: str, *, s
     cutoff=(datetime.now(timezone.utc)-timedelta(minutes=max(0,dedupe_minutes))).isoformat()
     with SessionLocal.begin() as db:
         prior=db.execute(text("""SELECT id FROM operational_events WHERE status='OPEN' AND component=:c AND event_code=:e
-            AND coalesce(site_id,'')=coalesce(:s,'') AND created_at>=:cut ORDER BY created_at DESC LIMIT 1"""),
-            {'c':component,'e':code,'s':site_id,'cut':cutoff}).scalar()
+            AND message=:m AND coalesce(site_id,'')=coalesce(:s,'') AND created_at>=:cut ORDER BY created_at DESC LIMIT 1"""),
+            {'c':component,'e':code,'m':msg,'s':site_id,'cut':cutoff}).scalar()
         if prior: return str(prior)
         eid=str(uuid4())
         db.execute(text("""INSERT INTO operational_events(id,user_id,site_id,component,severity,event_code,message,metadata,status,created_at)
@@ -59,14 +59,14 @@ def record_operational_event(component: str, event_code: str, message: str, *, s
 def provider_readiness() -> dict:
     return {
         'openai': bool(settings.openai_api_key),
-        'email': bool(settings.resend_api_key),
+        'email': bool(settings.smtp_host and settings.smtp_from_email),
         'whatsapp': bool((settings.twilio_account_sid and settings.twilio_auth_token and settings.twilio_whatsapp_from) or (settings.whatsapp_phone_number_id and settings.whatsapp_access_token)),
         'payments': bool(settings.payment_provider=='mock' or (settings.razorpay_key_id and settings.razorpay_key_secret and settings.razorpay_webhook_secret)),
         'turnstile': bool(settings.turnstile_secret_key),
         'cloudflare': bool(settings.cloudflare_api_token and settings.cloudflare_zone_id),
         'production_safe': settings.app_env!='production' or all([
             bool(settings.openai_api_key),
-            bool(settings.resend_api_key),
+            bool(settings.smtp_host and settings.smtp_from_email),
             bool(settings.turnstile_secret_key),
             bool(settings.razorpay_key_id and settings.razorpay_key_secret and settings.razorpay_webhook_secret),
             bool(settings.cloudflare_api_token and settings.cloudflare_zone_id),

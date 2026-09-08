@@ -963,11 +963,12 @@ def _local_operations(current: dict, instruction: str, page: str) -> list[dict]:
     return [validate_operation(x) for x in ops]
 
 
-def generate_operations(current: dict, instruction: str, page: str='home', *, user_id: str|None=None, site_id: str|None=None) -> tuple[list[dict],str]:
+def generate_operations(current: dict, instruction: str, page: str='home', *, user_id: str|None=None, site_id: str|None=None, return_usage: bool=False):
     if not settings.openai_api_key:
         if settings.app_env.lower() == 'production':
             raise RuntimeError('OpenAI is not configured in production')
-        return _local_operations(instruction=instruction,current=current,page=page),'local'
+        result=(_local_operations(instruction=instruction,current=current,page=page),'local',{})
+        return result if return_usage else result[:2]
     context={k:current.get(k) for k in ['business_name','template_slug','tagline','description','accent','page_count']}
     context['editable_nodes']=(current.get('editor_nodes') or [])[:120]
     context['managed_assets']=[{k:a.get(k) for k in ['id','filename','original_filename','alt_text']} for a in (current.get('assets') or [])[:80]]
@@ -984,4 +985,5 @@ def generate_operations(current: dict, instruction: str, page: str='home', *, us
         raise SchemaCapabilityRequired(str(cap.get('capability') or 'site_document_extension'),str(cap.get('reason') or 'The request cannot be represented safely.'),str(cap.get('schema_limitation') or 'The current SiteDocument schema lacks this capability.'),str(cap.get('smallest_schema_extension') or 'Add the smallest typed schema capability required.'))
     raw=parsed.get('operations') or []
     if not isinstance(raw,list) or not raw: raise ValueError('AI did not return edit operations')
-    return [validate_operation({**x,'page':x.get('page') or page}) for x in raw[:40]],'openai'
+    result=([validate_operation({**x,'page':x.get('page') or page}) for x in raw[:40]],'openai',data.get('usage') or {})
+    return result if return_usage else result[:2]

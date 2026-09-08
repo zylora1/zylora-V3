@@ -13,8 +13,14 @@ def _valid_production(monkeypatch):
         'database_url':'postgresql+psycopg://zylora:strong-production-db-password@db:5432/zylora',
         'openai_api_key':'test-openai-key',
         'sales_assistant_model':'gpt-4o-mini',
-        'resend_api_key':'test-resend-key',
-        'resend_from':'Zylora <notifications@zylora.test>',
+        'smtp_host':'smtp.zylora.test',
+        'smtp_port':587,
+        'smtp_username':'smtp-user',
+        'smtp_password':'smtp-password',
+        'smtp_from_email':'notifications@zylora.dev',
+        'smtp_from_name':'Zylora',
+        'smtp_security':'starttls',
+        'email_unsubscribe_secret':'a'*32,
         'twilio_account_sid':'ACtest',
         'twilio_auth_token':'test-twilio-token',
         'twilio_whatsapp_from':'+15551234567',
@@ -41,143 +47,123 @@ def _valid_production(monkeypatch):
         monkeypatch.setattr(settings,key,value)
 
 
-# ---- TEST 1: Resend selected — complete production stack is accepted ----
+# ---- TEST 1: SMTP selected — complete production stack is accepted ----
 
 def test_production_configuration_accepts_complete_delivery_stack(monkeypatch):
     _valid_production(monkeypatch)
     validate_production_settings()
 
 
-# ---- TEST 2: Missing RESEND_API_KEY fails closed in production ----
+# ---- TEST 2: Missing SMTP host fails closed in production ----
 
-def test_production_configuration_fails_closed_without_resend_api_key(monkeypatch):
+def test_production_configuration_fails_closed_without_smtp_host(monkeypatch):
     _valid_production(monkeypatch)
-    monkeypatch.setattr(settings,'resend_api_key','')
+    monkeypatch.setattr(settings,'smtp_host','')
     with pytest.raises(RuntimeError) as exc:
         validate_production_settings()
-    assert 'RESEND_API_KEY' in str(exc.value)
+    assert 'SMTP_HOST' in str(exc.value)
 
 
-# ---- TEST 3: SMTP credentials cannot rescue missing RESEND_API_KEY ----
+# ---- TEST 3: Missing SMTP host cannot be rescued by unrelated providers ----
 
-def test_smtp_credentials_do_not_satisfy_production_email_requirement(monkeypatch):
-    """Absence of RESEND_API_KEY must fail production validation regardless of any
-    legacy SMTP-like environment state. SMTP is not a valid email path.
-    """
+def test_missing_smtp_host_fails_even_with_other_provider_state(monkeypatch):
     _valid_production(monkeypatch)
-    monkeypatch.setattr(settings,'resend_api_key','')
+    monkeypatch.setattr(settings,'smtp_host','')
     with pytest.raises(RuntimeError) as exc:
         validate_production_settings()
-    # Error must reference RESEND_API_KEY, not offer SMTP as a substitute.
-    assert 'RESEND_API_KEY' in str(exc.value)
-    assert 'SMTP_HOST' not in str(exc.value)
+    assert 'SMTP_HOST' in str(exc.value)
 
 
-# ---- TEST 4: send_email uses Resend HTTPS, never SMTP ----
+# ---- TEST 4: send_email uses SMTP and never an HTTP mail provider ----
 
-def test_send_email_uses_resend_https_never_smtp(monkeypatch):
+def test_send_email_uses_smtp_never_http_mail_provider(monkeypatch):
     import httpx, smtplib as _smtplib
-    monkeypatch.setattr(settings,'resend_api_key','test-resend-key')
-    monkeypatch.setattr(settings,'resend_from','Zylora <test@zylora.test>')
+    monkeypatch.setattr(settings,'smtp_host','smtp.test')
+    monkeypatch.setattr(settings,'smtp_from_email','test@zylora.dev')
+    monkeypatch.setattr(settings,'smtp_security','starttls')
     monkeypatch.setattr(settings,'app_env','development')
 
-    posted_to=[]; smtp_called=[]
-
-    class MockResponse:
-        status_code=200
-        def raise_for_status(self): pass
-        def json(self): return {'id':'msg_abc'}
-
-    class MockClient:
+    smtp_called=[]
+    class MockSMTP:
+        def __init__(self,*a,**kw): smtp_called.append(('connect',a,kw))
         def __enter__(self): return self
-        def __exit__(self,*a): pass
-        def post(self,url,**kw): posted_to.append(url); return MockResponse()
-
-    monkeypatch.setattr(httpx,'Client',lambda **kw: MockClient())
-    monkeypatch.setattr(_smtplib,'SMTP',lambda *a,**kw: (_ for _ in ()).throw(AssertionError('SMTP must not be invoked')))
+        def __exit__(self,*a): self.quit()
+        def ehlo(self): smtp_called.append(('ehlo',))
+        def starttls(self,context=None): smtp_called.append(('starttls',))
+        def login(self,user,password): smtp_called.append(('login',user,password))
+        def send_message(self,message,to_addrs=None): smtp_called.append(('send',to_addrs))
+        def quit(self): smtp_called.append(('quit',))
+    monkeypatch.setattr(_smtplib,'SMTP',MockSMTP)
+    monkeypatch.setattr(httpx,'Client',lambda **kw: (_ for _ in ()).throw(AssertionError('HTTP mail provider must not be invoked')))
 
     result=providers.send_email('user@example.com','Test','Body')
-    assert result['provider']=='resend'
+    assert result['provider']=='smtp'
     assert result['status']=='SENT'
-    assert any('api.resend.com' in u for u in posted_to)
-    assert not smtp_called
+    assert any(item[0]=='send' for item in smtp_called)
 
 
-# ---- TEST 5: Resend failure raises, no SMTP fallback ----
+# ---- TEST 5: SMTP failure raises and is recorded ----
 
-def test_resend_failure_raises_no_smtp_fallback(monkeypatch):
-    import httpx, smtplib as _smtplib
-    monkeypatch.setattr(settings,'resend_api_key','test-key')
-    monkeypatch.setattr(settings,'resend_from','Zylora <test@zylora.test>')
+def test_smtp_failure_raises(monkeypatch):
+    import smtplib as _smtplib
+    monkeypatch.setattr(settings,'smtp_host','smtp.test')
+    monkeypatch.setattr(settings,'smtp_from_email','test@zylora.dev')
     monkeypatch.setattr(settings,'app_env','development')
 
     smtp_called=[]
 
-    class FailResponse:
-        status_code=500
-        def raise_for_status(self):
-            raise httpx.HTTPStatusError('500',request=None,response=self)
+    class MockSMTP:
+        def __init__(self,*a,**kw): raise OSError('connection failed')
+    monkeypatch.setattr(_smtplib,'SMTP',MockSMTP)
 
-    class MockClient:
-        def __enter__(self): return self
-        def __exit__(self,*a): pass
-        def post(self,*a,**kw): return FailResponse()
-
-    monkeypatch.setattr(httpx,'Client',lambda **kw: MockClient())
-    monkeypatch.setattr(_smtplib,'SMTP',lambda *a,**kw: smtp_called.append(True) or (_ for _ in ()).throw(AssertionError()))
-
-    with pytest.raises(Exception):
-        providers.send_email('user@example.com','Test','Body')
-    assert not smtp_called, 'SMTP must not be called on Resend failure'
-
-
-# ---- TEST 6: Resend timeout — no SMTP attempt ----
-
-def test_resend_timeout_no_smtp_attempt(monkeypatch):
-    import httpx, smtplib as _smtplib
-    monkeypatch.setattr(settings,'resend_api_key','test-key')
-    monkeypatch.setattr(settings,'resend_from','Zylora <test@zylora.test>')
-    monkeypatch.setattr(settings,'app_env','development')
-
-    smtp_called=[]
-
-    class MockClient:
-        def __enter__(self): return self
-        def __exit__(self,*a): pass
-        def post(self,*a,**kw): raise httpx.TimeoutException('Timeout')
-
-    monkeypatch.setattr(httpx,'Client',lambda **kw: MockClient())
-    monkeypatch.setattr(_smtplib,'SMTP',lambda *a,**kw: smtp_called.append(True) or (_ for _ in ()).throw(AssertionError()))
-
-    with pytest.raises(httpx.TimeoutException):
+    with pytest.raises(OSError):
         providers.send_email('user@example.com','Test','Body')
     assert not smtp_called
 
 
-# ---- TEST 7: No RESEND_API_KEY in production fails closed ----
+# ---- TEST 6: SMTP timeout propagates ----
 
-def test_send_email_fails_closed_in_production_without_resend(monkeypatch):
-    monkeypatch.setattr(settings,'resend_api_key','')
+def test_smtp_timeout(monkeypatch):
+    import smtplib as _smtplib
+    monkeypatch.setattr(settings,'smtp_host','smtp.test')
+    monkeypatch.setattr(settings,'smtp_from_email','test@zylora.dev')
+    monkeypatch.setattr(settings,'app_env','development')
+
+    smtp_called=[]
+
+    monkeypatch.setattr(_smtplib,'SMTP',lambda *a,**kw: smtp_called.append(True) or (_ for _ in ()).throw(TimeoutError('Timeout')))
+
+    with pytest.raises(TimeoutError):
+        providers.send_email('user@example.com','Test','Body')
+    assert smtp_called
+
+
+# ---- TEST 7: No SMTP host in production fails closed ----
+
+def test_send_email_fails_closed_in_production_without_smtp(monkeypatch):
+    monkeypatch.setattr(settings,'smtp_host','')
     monkeypatch.setattr(settings,'app_env','production')
     with pytest.raises(RuntimeError) as exc:
         providers.send_email('user@example.com','Subject','Body')
-    assert 'RESEND_API_KEY' in str(exc.value)
+    assert 'SMTP_HOST' in str(exc.value)
 
 
-# ---- TEST 8: Settings has no SMTP fields ----
+# ---- TEST 8: Settings exposes SMTP fields and no retired provider fields ----
 
-def test_settings_has_no_smtp_fields():
-    for field in ('smtp_host','smtp_port','smtp_username','smtp_password','smtp_from','smtp_use_tls'):
-        assert not hasattr(settings,field), f'Settings still has removed SMTP field: {field}'
+def test_settings_has_smtp_fields_and_no_retired_provider_fields():
+    for field in ('smtp_host','smtp_port','smtp_username','smtp_password','smtp_from_email','smtp_security'):
+        assert hasattr(settings,field)
+    for field in ('resend_api_key','resend_from'):
+        assert not hasattr(settings,field)
 
 
-# ---- TEST 9: Provider readiness reflects Resend only ----
+# ---- TEST 9: Provider readiness reflects SMTP ----
 
-def test_provider_readiness_email_reflects_resend_only(monkeypatch):
+def test_provider_readiness_email_reflects_smtp(monkeypatch):
     from app.operations import provider_readiness
-    monkeypatch.setattr(settings,'resend_api_key','test-key')
+    monkeypatch.setattr(settings,'smtp_host','smtp.test')
     assert provider_readiness()['email'] is True
-    monkeypatch.setattr(settings,'resend_api_key','')
+    monkeypatch.setattr(settings,'smtp_host','')
     assert provider_readiness()['email'] is False
 
 
@@ -185,10 +171,10 @@ def test_provider_readiness_email_reflects_resend_only(monkeypatch):
 
 def test_production_configuration_rejects_placeholder_sender_and_missing_whatsapp(monkeypatch):
     _valid_production(monkeypatch)
-    monkeypatch.setattr(settings,'resend_from','Zylora <notifications@zylora.local>')
+    monkeypatch.setattr(settings,'smtp_from_email','notifications@zylora.local')
     with pytest.raises(RuntimeError) as sender:
         validate_production_settings()
-    assert 'RESEND_FROM' in str(sender.value)
+    assert 'SMTP_FROM_EMAIL' in str(sender.value)
 
     _valid_production(monkeypatch)
     monkeypatch.setattr(settings,'twilio_account_sid','')
@@ -353,5 +339,3 @@ def test_environment_normalization_detects_railway_and_environment(monkeypatch):
     monkeypatch.setenv('RAILWAY_ENVIRONMENT', 'production')
     s2 = Settings()
     assert s2.app_env == 'production'
-
-

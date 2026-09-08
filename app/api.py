@@ -18,6 +18,8 @@ from .plans import get_plan, tier3_page_limit, smallest_self_service_plan_for_pa
 from .settings_store import get_system_setting
 from .auth_flows import issue_auth_token
 from .credits import debit_wallet, ensure_wallet, wallet_summary, reset_monthly_for_plan, reserve_wallet, finalize_wallet, refund_wallet
+from .ai_billing import usage_summary as ai_usage_summary, transaction_history as ai_transaction_history, wallet_snapshot as ai_wallet_snapshot, adjust_wallet as ai_adjust_wallet
+from . import ai_billing
 from .providers import verify_turnstile, cloudflare_delete_hostname
 from .exporter import build_next_export
 from .structured_editor import apply_document, generate_operations, merge_operations, parse_document, validate_operation, instrument_editable_html, extract_editor_nodes, validate_operations_against_html, validate_internal_page_links, build_site_document, SchemaCapabilityRequired
@@ -444,6 +446,7 @@ def ai_models(request: Request):
 @router.post('/sites')
 def create_site(payload:SiteIn,request:Request):
     u=_user(request,True)
+    measured_usage=[]
     try:
         selected_model=validate_model(payload.model)
     except ValueError as exc:
@@ -491,18 +494,33 @@ def create_site(payload:SiteIn,request:Request):
     if origin=='AI':
         job_id=str(uuid4())
         with SessionLocal.begin() as db:
+            reservation_budget = int(plan_cfg.get('ai_site_cost', 5) or 5)
+            if settings.openai_api_key:
+                try:
+                    # The two Creator calls are bounded in providers.py to
+                    # 800 and 500 output tokens.  Reserve the server-side
+                    # maximum for both calls using the active model price,
+                    # rather than relying on a stale plan integer.
+                    reservation_budget = ai_billing.feature_reservation_budget(
+                        db, feature='WEBSITE_CREATOR', provider='openai',
+                        model=selected_model or settings.openai_model,
+                    )
+                except ValueError as exc:
+                    raise HTTPException(503, detail={'code':'AI_PRICING_UNAVAILABLE','message':'AI pricing is not configured for this model.'}) from exc
             db.execute(text("""INSERT INTO generation_jobs(id,user_id,idempotency_key,status,progress_stage,created_at,updated_at)
                 VALUES (:i,:u,:k,'PLANNING','Planning site',:a,:a)"""),{'i':job_id,'u':u['id'],'k':idem,'a':now_iso()})
-            reserved=reserve_wallet(db,u['id'],u['plan'],int(plan_cfg.get('ai_site_cost',5)),'AI_SITE_CREATE','ai',idem,job_id)
+            reserved=reserve_wallet(db,u['id'],u['plan'],int(plan_cfg.get('ai_site_cost',5) or 5),'AI_SITE_CREATE','ai',idem,job_id,estimated_credits=reservation_budget,provider='openai' if settings.openai_api_key else None,model=selected_model if settings.openai_api_key else None)
             reservation_id=reserved.get('id')
     try:
         if origin=='AI':
             architecture=plan_site_architecture(payload.business_name,payload.description,payload.industry,payload.style,user_id=u['id'],model=selected_model)
+            if architecture.get('usage'): measured_usage.append((selected_model or settings.openai_model,architecture['usage']))
             pages=architecture.get('pages') or [{'id':'home','title':'Home','purpose':'Primary overview'}]
             page_count=max(1,min(20,len(pages)))
             with SessionLocal.begin() as db:
                 db.execute(text("UPDATE generation_jobs SET status='GENERATING',progress_stage='Creating pages',updated_at=:a WHERE id=:i"),{'a':now_iso(),'i':job_id})
             copy=ai_generate_site(payload.business_name,payload.description,payload.industry,payload.style,payload.motion_style,user_id=u['id'],model=selected_model)
+            if copy.get('usage'): measured_usage.append((selected_model or settings.openai_model,copy['usage']))
         else:
             architecture={'pages':[{'id':'home','title':'Home','purpose':'Template home'},*[
                 {'id':p,'title':p.replace('-',' ').title(),'purpose':'Template page'} for p in meta.get('page_slugs',[])]],
@@ -539,7 +557,38 @@ def create_site(payload:SiteIn,request:Request):
               'gm':json.dumps(document.get('generationMeta') or {},separators=(',',':')),'bp':json.dumps(document.get('businessProfile') or {},separators=(',',':')),'c':now_iso()})
             created_site=_owned_site(db,u['id'],sid)
             _structural_snapshot_for_site(db,created_site)
-            if origin=='AI' and reservation_id: finalize_wallet(db,reservation_id)
+            if origin=='AI' and reservation_id:
+                actual=None
+                settlement_metadata={}
+                if measured_usage:
+                    total=0
+                    details=[]
+                    for model_name,usage in measured_usage:
+                        inp=int(usage.get('input_tokens') or 0); cached=int((usage.get('input_tokens_details') or {}).get('cached_tokens') or usage.get('cached_input_tokens') or 0); out=int(usage.get('output_tokens') or 0)
+                        try:
+                            measured=ai_billing.calculate_provider_cost(db,provider='openai',model=model_name,input_units=max(0,inp-cached),cached_input_units=cached,output_units=out)
+                            total += measured['credits']
+                            details.append(measured)
+                        except ValueError:
+                            pass
+                    actual=total
+                    if details:
+                        first=details[0]
+                        settlement_metadata={
+                            'provider_cost_micros':sum(int(item['provider_cost_micros']) for item in details),
+                            'customer_usage_value_micros':sum(int(item['customer_usage_value_micros']) for item in details),
+                            'provider':'openai', 'model':selected_model or first['model'],
+                            'pricing_version':first['pricing_version'],
+                            'input_units':sum(int(item['input_units']) for item in details),
+                            'cached_input_units':sum(int(item['cached_input_units']) for item in details),
+                            'output_units':sum(int(item['output_units']) for item in details),
+                        }
+                # A real provider response without usage metadata is not
+                # evidence of billable customer usage.  Local deterministic
+                # development mode retains the established fixed compatibility
+                # charge because it has no provider-usage stream to meter.
+                settled_credits = actual if actual is not None else (0 if settings.openai_api_key else None)
+                finalize_wallet(db,reservation_id,actual_credits=settled_credits,**settlement_metadata)
             if origin=='AI': db.execute(text("UPDATE generation_jobs SET site_id=:s,status='COMPLETED',progress_stage='Ready to edit',updated_at=:a WHERE id=:i"),{'s':sid,'a':now_iso(),'i':job_id})
     except Exception as exc:
         if origin=='AI':
@@ -638,7 +687,22 @@ def edit_ai(site_id:str,payload:AiEditIn,request:Request):
         page=(payload.page or 'home').strip().lower()
         if page not in allowed_pages: raise HTTPException(422,'That page is not available on this website')
 
+        # Reserve the editor budget before invoking generate_operations or any
+        # other provider-backed planning path. The reservation is finalized only
+        # after the document mutation commits; validation failures roll back the
+        # surrounding transaction and therefore cannot charge the user.
+        editor_budget = int(get_plan(u['plan']).get('ai_edit_cost',2) or 2)
+        if settings.openai_api_key:
+            try:
+                editor_budget = ai_billing.feature_reservation_budget(
+                    db, feature='AI_EDIT', provider='openai', model=settings.openai_model,
+                )
+            except ValueError as exc:
+                raise HTTPException(503, detail={'code':'AI_PRICING_UNAVAILABLE','message':'AI pricing is not configured for this model.'}) from exc
+        editor_reservation=reserve_wallet(db,u['id'],u['plan'],int(get_plan(u['plan']).get('ai_edit_cost',2) or 2),'AI_EDIT',credit_type='ai',idempotency_key=idem,reference_id=site_id,estimated_credits=editor_budget,provider='openai' if settings.openai_api_key else None,model=settings.openai_model if settings.openai_api_key else None)
+
         is_v4 = bool(s.get('studio_document_json'))
+        editor_usage = {}
 
         if is_v4:
             from .generate_v4 import generate_v4_operations
@@ -648,7 +712,16 @@ def edit_ai(site_id:str,payload:AiEditIn,request:Request):
             try:
                 doc_dict = json.loads(s.get('studio_document_json') or '{}')
                 doc = SiteDocument(**doc_dict)
-                operations, provider = generate_v4_operations(s.get('studio_document_json') or '{}', payload.instruction, payload.selection or [], user_id=u['id'], site_id=site_id)
+                try:
+                    generated = generate_v4_operations(s.get('studio_document_json') or '{}', payload.instruction, payload.selection or [], user_id=u['id'], site_id=site_id, return_usage=True)
+                except TypeError:
+                    # Preserve compatibility with older monkeypatched/installed
+                    # generators while real providers return usage metadata.
+                    generated = generate_v4_operations(s.get('studio_document_json') or '{}', payload.instruction, payload.selection or [], user_id=u['id'], site_id=site_id)
+                if len(generated) == 3:
+                    operations, provider, editor_usage = generated
+                else:
+                    operations, provider = generated
                 updated_doc = apply_v4_operations(doc, operations)
                 document = updated_doc.model_dump(exclude_none=True)
                 document['revision'] = int(doc.revision) + 1
@@ -659,7 +732,14 @@ def edit_ai(site_id:str,payload:AiEditIn,request:Request):
             html=instrument_editable_html(render_template_page(s['template_slug'],s,'' if page=='home' else page),page,s['template_slug'])
             context={**s,'assets':list_assets(u['id'],site_id),'editor_nodes':extract_editor_nodes(html)}
             try:
-                operations,provider=generate_operations(context,payload.instruction,page,user_id=u['id'],site_id=site_id)
+                try:
+                    generated = generate_operations(context,payload.instruction,page,user_id=u['id'],site_id=site_id,return_usage=True)
+                except TypeError:
+                    generated = generate_operations(context,payload.instruction,page,user_id=u['id'],site_id=site_id)
+                if len(generated) == 3:
+                    operations, provider, editor_usage = generated
+                else:
+                    operations, provider = generated
                 if s.get('origin')=='TEMPLATE' and any(validate_operation(op)['type']=='add_section' for op in operations):
                     raise ValueError('Template page structure is fixed; AI cannot add sections to template-origin sites')
                 operations=validate_operations_against_html(html,operations)
@@ -674,7 +754,36 @@ def edit_ai(site_id:str,payload:AiEditIn,request:Request):
             document_schema_version = 3
 
         edited={'tagline':s['tagline'],'description':s['description']}
-        debit=debit_wallet(db,u['id'],u['plan'],int(get_plan(u['plan']).get('ai_edit_cost',2)),'AI_EDIT',idem,credit_type='ai',reference_id=site_id)
+        actual_editor_credits = None
+        editor_settlement_metadata = {}
+        if editor_usage and provider == 'openai':
+            try:
+                cached = int((editor_usage.get('input_tokens_details') or {}).get('cached_tokens') or editor_usage.get('cached_input_tokens') or 0)
+                editor_cost = ai_billing.calculate_provider_cost(
+                    db,
+                    provider='openai',
+                    model=settings.openai_model,
+                    input_units=max(0, int(editor_usage.get('input_tokens') or 0) - cached),
+                    cached_input_units=cached,
+                    output_units=int(editor_usage.get('output_tokens') or 0),
+                )
+                actual_editor_credits = editor_cost['credits']
+                editor_settlement_metadata = {
+                    'provider_cost_micros':editor_cost['provider_cost_micros'],
+                    'customer_usage_value_micros':editor_cost['customer_usage_value_micros'],
+                    'provider':'openai','model':settings.openai_model,
+                    'pricing_version':editor_cost['pricing_version'],
+                    'input_units':editor_cost['input_units'],
+                    'cached_input_units':editor_cost['cached_input_units'],
+                    'output_units':editor_cost['output_units'],
+                }
+            except (TypeError, ValueError):
+                actual_editor_credits = None
+        # Missing usage from a real provider releases the hold. Local
+        # deterministic mode retains the established fixed compatibility
+        # charge because no provider usage stream exists there.
+        settled_editor_credits = actual_editor_credits if actual_editor_credits is not None else (0 if settings.openai_api_key else None)
+        debit=finalize_wallet(db,editor_reservation['id'],actual_credits=settled_editor_credits,**editor_settlement_metadata) if editor_reservation and not editor_reservation.get('skipped') else editor_reservation
         ensure_history(db,s,u['id'])
         if is_v4:
             db.execute(text('UPDATE sites SET tagline=:g,description=:d,studio_document_json=:structure,studio_revision=:sr,document_schema_version=:dsv,document_version=document_version+1,updated_at=:c WHERE id=:i AND document_version=:v'),{'g':edited['tagline'],'d':edited['description'],'structure':json.dumps(document,separators=(',',':')),'sr':document['revision'],'dsv':document_schema_version,'c':now_iso(),'i':site_id,'v':current_version})
@@ -1221,6 +1330,28 @@ def billing_history(request:Request):
     items=[dict(r) for r in [*plan_rows,*topup_rows,*subscription_rows]]
     items.sort(key=lambda x:str(x.get('created_at') or ''),reverse=True)
     return {'items':items[:100]}
+
+# Unified AI-credit read APIs.  The legacy /billing response remains intact for
+# older clients, while these endpoints expose the Decimal wallet and ledger
+# projection without provider secrets or internal margin details.
+@router.get('/ai-credits')
+def ai_credits(request: Request):
+    u=_user(request)
+    with SessionLocal.begin() as db:
+        wallet=ai_wallet_snapshot(db,u['id'],u['plan'])
+        usage=ai_usage_summary(db,u['id'])
+    return {'wallet':wallet,'usage':usage,'plan':u['plan'],'credits_per_usd':int(get_system_setting('ai_credits_per_usd','100') or 100)}
+
+@router.get('/ai-credits/usage')
+def ai_credits_usage(request: Request):
+    u=_user(request)
+    with SessionLocal() as db: return ai_usage_summary(db,u['id'])
+
+@router.get('/ai-credits/transactions')
+def ai_credits_transactions(request: Request, limit: int = 100):
+    u=_user(request)
+    with SessionLocal() as db: items=ai_transaction_history(db,u['id'],limit)
+    return {'items':items}
 
 @router.post('/billing/select')
 def select_plan(payload:PlanIn,request:Request):

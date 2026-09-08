@@ -33,7 +33,7 @@ def ai_site(c,h,name='Final Site'):
 def test_signup_requires_explicit_plan_choice_and_ai_publish_is_not_page_gated():
     reset_db(); c,h,_=raw_signup()
     me=c.get('/api/auth/me').json(); assert me['plan']=='FREE' and me['plan_selected'] is False
-    chooser=c.get('/choose-plan'); assert chooser.status_code==200 and 'Start free. Upgrade as your business grows.' in chooser.text and '₹799/month' in chooser.text and 'US$9/month' in chooser.text and '₹1,799/month' in chooser.text and 'US$19/month' in chooser.text and 'AI Sales Assistant is unlimited' in chooser.text
+    chooser=c.get('/choose-plan'); assert chooser.status_code==200 and 'Start free. Upgrade as your business grows.' in chooser.text and '₹799/month' in chooser.text and 'US$9/month' in chooser.text and '₹1,799/month' in chooser.text and 'US$19/month' in chooser.text and 'finite Sales Assistant Protection allowance' in chooser.text
     sid,pages=ai_site(c,h); assert pages>=1
     blocked=c.post(f'/api/sites/{sid}/publish',headers=h)
     assert blocked.status_code==409 and blocked.json()['detail']['code']=='PLAN_SELECTION_REQUIRED'

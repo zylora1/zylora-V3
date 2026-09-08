@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+from decimal import ROUND_UP
 import re
 from datetime import datetime, timedelta, timezone
 from uuid import uuid4
@@ -16,6 +17,7 @@ from .db import SessionLocal, now_iso
 from .settings_store import get_system_setting
 from .providers import sales_assistant_completion, estimate_openai_cost_micros
 from .credits import reserve_wallet, finalize_wallet, refund_wallet, provider_cost_to_credits
+from . import ai_billing
 from .ai_security import PUBLIC_SITE_ASSISTANT, SALES_ASSISTANT, OWNER_ASSISTANT, assert_assistant_type, record_ai_usage_event
 from .notifications import notify
 from .operations import record_analytics, record_operational_event, safe_exception_summary
@@ -38,7 +40,7 @@ INTENTS={
 }
 HIGH_INTENT={'APPOINTMENT_INTENT','QUOTE_REQUEST','CALLBACK_REQUEST','PURCHASE_INTENT','CONTACT_INTENT'}
 INJECTION=re.compile(r'(?i)(ignore\s+(all\s+)?previous|system\s+prompt|developer\s+message|reveal\s+.*(lead|secret|password|api\s*key)|act\s+as\s+system|override\s+instructions|execute\s+(sql|query)|drop\s+table)')
-SECRET_LIKE=re.compile(r'(?i)(?:api[_ -]?key|access[_ -]?token|refresh[_ -]?token|client[_ -]?secret|password|turnstile|resend[_ -]?api|openai[_ -]?key|authorization:\s*bearer|postgres(?:ql)?://|sk-[A-Za-z0-9_-]{12,})')
+SECRET_LIKE=re.compile(r'(?i)(?:api[_ -]?key|access[_ -]?token|refresh[_ -]?token|client[_ -]?secret|password|turnstile|openai[_ -]?key|authorization:\s*bearer|postgres(?:ql)?://|sk-[A-Za-z0-9_-]{12,})')
 EMAIL_RE=re.compile(r'(?i)\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b')
 PHONE_RE=re.compile(r'(?<!\d)(?:\+?\d[\d ()-]{7,18}\d)(?!\d)')
 BUDGET_RE=re.compile(r'(?i)(?:budget|around|up to|under|about)\s*(?:is\s*)?([₹$€£]?\s?[\d,]+(?:\.\d+)?\s*(?:k|lakh|lakhs|million)?)')
@@ -341,33 +343,94 @@ def _assistant_credit_unit() -> int:
 
 
 def _assistant_reservation(site: dict, model: str, message: str, tools: dict, history: list[dict], max_output_tokens: int, conversation_id: str, request_id: str) -> dict:
-    """Reserve a conservative owner-wallet budget before a paid assistant call."""
-    input_estimate=max(1, (len(message)+len(json.dumps(tools, ensure_ascii=False))+sum(len(str(x.get('content') or '')) for x in history[-8:]))//4)
-    max_cost=estimate_openai_cost_micros(model,{'input_tokens':input_estimate,'output_tokens':max_output_tokens})
-    max_credits=max(1,provider_cost_to_credits(max_cost,credit_usd_micros=_assistant_credit_unit()))
+    """Reserve a conservative owner-wallet budget before a paid assistant call.
+
+    A published assistant may use the account's NORMAL wallet first, then its
+    CHATBOT_RESERVED protection balance.  Both decisions happen server-side in
+    one atomic wallet transaction; no visitor-provided account identifier is
+    consulted.
+    """
     with SessionLocal.begin() as db:
         owner=db.execute(text('SELECT id,plan,role FROM users WHERE id=:u'),{'u':site.get('user_id')}).mappings().first()
         if not owner: raise HTTPException(404,'Site owner not found')
-        return reserve_wallet(db,owner['id'],owner['plan'],max_credits,'AI_ASSISTANT',idempotency_key=f'assistant:{request_id}',reference_id=site.get('id'))
+        try:
+            # The provider prompt is bounded in providers.sales_assistant_completion
+            # (business context 8k, history 6k, visitor 2k, tool results 10k).
+            # Reserve the configured server-side maximum, not a rough /4
+            # character estimate that could under-hold a multilingual prompt.
+            estimate=ai_billing.feature_reservation_budget(
+                db, feature='SALES_ASSISTANT', provider='openai', model=model,
+            )
+        except ValueError:
+            raise HTTPException(503,'AI pricing is not configured for this model')
+        max_credits=ai_billing.reservation_amount(estimate)
+        # Site-level daily/monthly ceilings are protection guards, not extra
+        # balance.  They fail closed before any provider request is made.
+        now=datetime.now(timezone.utc); day=now.date().isoformat(); month=now.strftime('%Y-%m')
+        daily_limit=ai_billing._dec(get_system_setting('ai_chatbot_daily_credit_limit','50'))
+        monthly_limit=ai_billing._dec(get_system_setting('ai_chatbot_monthly_credit_limit','1000'))
+        used_day=ai_billing._dec(db.execute(text("SELECT COALESCE(SUM(CASE WHEN amount<0 THEN -amount ELSE 0 END),0) FROM ai_credit_ledger WHERE account_id=:a AND feature IN ('SALES_ASSISTANT','PUBLIC_SITE_ASSISTANT') AND entry_type='AI_SETTLEMENT' AND created_at>=:d"),{'a':owner['id'],'d':day+'T00:00:00+00:00'}).scalar_one())
+        used_month=ai_billing._dec(db.execute(text("SELECT COALESCE(SUM(CASE WHEN amount<0 THEN -amount ELSE 0 END),0) FROM ai_credit_ledger WHERE account_id=:a AND feature IN ('SALES_ASSISTANT','PUBLIC_SITE_ASSISTANT') AND entry_type='AI_SETTLEMENT' AND created_at>=:d"),{'a':owner['id'],'d':month+'-01T00:00:00+00:00'}).scalar_one())
+        if (daily_limit>0 and used_day+max_credits>daily_limit) or (monthly_limit>0 and used_month+max_credits>monthly_limit):
+            return None
+        return ai_billing.reserve_ai_operation(db,account_id=owner['id'],user_id=owner['id'],site_id=site.get('id'),plan=owner['plan'],estimated_credits=max_credits,feature='SALES_ASSISTANT',operation_id=request_id,request_id=request_id,idempotency_key=f'assistant:{request_id}',provider='openai',model=model,allow_reserved=True)
 
 
-def _settle_assistant_reservation(reservation: dict|None, site: dict, model: str, usage_cost_micros: int, message: str, conversation_id: str, request_id: str) -> dict:
-    if not reservation or reservation.get('skipped') or reservation.get('idempotent'):
+def _settle_assistant_reservation(reservation: dict|None, site: dict, model: str, usage_cost_micros: int, message: str, conversation_id: str, request_id: str, usage: dict|None = None) -> dict:
+    if not reservation or reservation.get('skipped'):
         return {'credits':0,'transaction_id':reservation.get('id') if reservation else None,'cost_micros':usage_cost_micros}
-    actual=provider_cost_to_credits(usage_cost_micros,credit_usd_micros=_assistant_credit_unit())
     with SessionLocal.begin() as db:
-        owner=db.execute(text('SELECT id,plan FROM users WHERE id=:u'),{'u':site.get('user_id')}).mappings().first()
-        if not owner: raise HTTPException(404,'Site owner not found')
-        # Release the conservative reservation and immediately debit the measured
-        # provider cost in the same transaction, preserving atomicity.
-        refund_wallet(db,reservation['id'],'assistant_usage_reconciliation')
-        if actual<=0:
-            return {'credits':0,'transaction_id':None,'cost_micros':usage_cost_micros}
-        idem=f'assistant-settle:{request_id}'
-        charged=reserve_wallet(db,owner['id'],owner['plan'],actual,'AI_ASSISTANT',idempotency_key=idem,reference_id=site.get('id'))
-        if not charged.get('idempotent') and not charged.get('skipped'):
-            charged=finalize_wallet(db,charged['id'])
-        return {'credits':actual,'transaction_id':charged.get('id'),'cost_micros':usage_cost_micros}
+        measured = usage or {}
+        cached = int((measured.get('input_tokens_details') or {}).get('cached_tokens') or measured.get('cached_input_tokens') or 0)
+        try:
+            cost_details = ai_billing.calculate_provider_cost(
+                db,
+                provider='openai',
+                model=model,
+                input_units=max(0, int(measured.get('input_tokens') or 0) - cached),
+                cached_input_units=cached,
+                output_units=int(measured.get('output_tokens') or 0),
+            )
+        except (TypeError, ValueError):
+            # The reservation was already authorized. If a provider returns
+            # only an opaque cost, retain the measured micros but leave usage
+            # fields/version unset rather than inventing token counts.
+            cost_details = {
+                'credits': ai_billing.provider_cost_to_credits_decimal(usage_cost_micros),
+                'provider_cost_micros': usage_cost_micros,
+                'customer_usage_value_micros': int(ai_billing._dec(usage_cost_micros) * ai_billing._dec(get_system_setting('ai_cost_multiplier','1'))),
+                'pricing_version': None,
+                'input_units': 0,
+                'cached_input_units': 0,
+                'output_units': 0,
+            }
+        settled=ai_billing.settle_ai_operation(
+            db,
+            reservation,
+            cost_details['credits'],
+            provider_cost_micros=cost_details['provider_cost_micros'],
+            customer_usage_value_micros=cost_details['customer_usage_value_micros'],
+            provider='openai', model=model,
+            pricing_version=cost_details.get('pricing_version'),
+            input_units=cost_details.get('input_units', 0),
+            cached_input_units=cost_details.get('cached_input_units', 0),
+            output_units=cost_details.get('output_units', 0),
+            metadata={'conversation_id':conversation_id},
+        )
+        # Compatibility projection for existing admin/billing screens. The
+        # immutable Decimal ledger above remains the financial source of truth;
+        # this legacy row intentionally uses the historical minimum-one display
+        # unit and does not perform a second wallet mutation.
+        settled_credits=ai_billing._dec(settled.get('settled_amount', cost_details['credits']))
+        compat_id=str(uuid4())
+        db.execute(text("""INSERT INTO credit_transactions(id,user_id,credit_type,operation,amount,monthly_used,signup_used,topup_used,reference_id,idempotency_key,status,created_at,finalized_at)
+          VALUES (:i,:u,'ai','AI_ASSISTANT',:amount,0,0,0,:site,:idem,'FINALIZED',:created,:created)"""), {
+            # Keep the historical integer transaction as a display/audit
+            # projection only.  The immutable Decimal ledger above remains
+            # authoritative and records the exact usage-based charge.
+            'i':compat_id,'u':site.get('user_id'),'amount':max(1,int(settled_credits.to_integral_value(rounding=ROUND_UP))) if settled_credits>0 else 0,
+            'site':site.get('id'),'idem':'assistant-compat:'+request_id,'created':now_iso()})
+        return {'credits':ai_billing.public_decimal(settled_credits),'transaction_id':reservation.get('reservation_id') or reservation.get('id'),'cost_micros':usage_cost_micros,'wallet_type':reservation.get('wallet_type')}
 
 
 def create_conversation(site_id: str, session_id: str, *, page_url: str|None=None, referrer: str|None=None, utm_source: str|None=None, utm_medium: str|None=None, utm_campaign: str|None=None, visitor_id: str|None=None, test_mode: bool=False, assistant_type: str|None=None) -> dict:
@@ -392,7 +455,7 @@ def create_conversation(site_id: str, session_id: str, *, page_url: str|None=Non
     return dict(row)
 
 
-def process_message(site_id: str, conversation_id: str, message: str, *, contact: dict|None=None, test_mode: bool=False, conversion_allowed: bool=True, expected_assistant_type: str|None=None) -> dict:
+def process_message(site_id: str, conversation_id: str, message: str, *, contact: dict|None=None, test_mode: bool=False, conversion_allowed: bool=True, expected_assistant_type: str|None=None, request_id: str|None=None) -> dict:
     site=_site(site_id,live_only=not test_mode); cfg=site_config(site_id)
     max_chars=max(200,min(10000,int(get_system_setting('assistant_input_char_limit','2000') or 2000)))
     msg=_clean_text(message,max_chars+1)
@@ -424,7 +487,7 @@ def process_message(site_id: str, conversation_id: str, message: str, *, contact
     answer,grounded=_answer_from_tools(site,msg,intents,tools)
     input_tokens=output_tokens=0; model=cfg.get('model') or settings.sales_assistant_model
     reservation=None; credit_info={'credits':0,'transaction_id':None,'cost_micros':0}
-    request_id=str(uuid4()); provider_started=datetime.now(timezone.utc)
+    request_id=(str(request_id).strip()[:200] if request_id else '') or str(uuid4()); provider_started=datetime.now(timezone.utc)
     history=[]
     max_output_tokens=int(get_system_setting('assistant_output_token_limit','350') or 350)
     # OpenAI is only a grounded language layer over validated tool outputs; actions already ran server-side.
@@ -438,17 +501,29 @@ def process_message(site_id: str, conversation_id: str, message: str, *, contact
                 record_operational_event('AI_ASSISTANT','ASSISTANT_CREDITS_EXHAUSTED','owner wallet cannot fund next provider call',severity='WARNING',site_id=site_id,dedupe_minutes=60)
                 return {'answer':'I can still help you contact the business using the options below.','fallback':fallback,'quota_exhausted':True,'credit_exhausted':True,'conversation_id':conversation_id,'lead':None,'slots':[]}
             raise
-    if settings.openai_api_key:
+        if reservation is None:
+            if not test_mode:
+                record_operational_event('AI_ASSISTANT','ASSISTANT_CREDITS_EXHAUSTED','wallet or chatbot protection limit cannot fund next provider call',severity='WARNING',site_id=site_id,dedupe_minutes=60)
+            return {'answer':'I can help you contact the business using the options below. Please leave your details and a short description, and the team will get back to you.','fallback':fallback,'quota_exhausted':True,'credit_exhausted':True,'conversation_id':conversation_id,'lead':None,'slots':[]}
+        if reservation.get('idempotent'):
+            # Do not replay a provider call for a reused idempotency key.  If
+            # the original response was not available from cache, provide the
+            # deterministic handoff instead of risking an uncharged call.
+            reservation = None
+            answer = 'I can help you contact the business using the options below. Please leave your details and a short description, and the team will get back to you.'
+            grounded = False
+    if settings.openai_api_key and (test_mode or reservation is not None):
         try:
             if not history:
                 with SessionLocal() as db:
                     history=[dict(r) for r in db.execute(text('SELECT role,content FROM assistant_messages WHERE conversation_id=:c ORDER BY created_at DESC LIMIT 8'),{'c':conversation_id}).mappings().all()][::-1]
+            billing_model = model
             result=sales_assistant_completion(business_context={'business_name':site.get('business_name'),'goal':cfg.get('primary_goal')},visitor_message=msg,history=history,tool_results={**tools,'grounded_fallback_answer':answer},tone=cfg.get('tone') or 'FRIENDLY',max_output_tokens=max_output_tokens,model=model)
             if result.get('answer'): answer=result['answer']; grounded=True
             input_tokens=int(result.get('input_tokens') or 0);output_tokens=int(result.get('output_tokens') or 0);model=result.get('model') or model
             measured_cost=estimate_openai_cost_micros(model,{'input_tokens':input_tokens,'output_tokens':output_tokens,'input_tokens_details':result.get('input_tokens_details')})
             if reservation and not test_mode:
-                credit_info=_settle_assistant_reservation(reservation,site,model,measured_cost,msg,conversation_id,request_id)
+                credit_info=_settle_assistant_reservation(reservation,site,billing_model,measured_cost,msg,conversation_id,request_id,result)
             if not test_mode:
                 record_ai_usage_event(
                     assistant_type=PUBLIC_SITE_ASSISTANT, status='SUCCEEDED', model=model,
@@ -456,14 +531,18 @@ def process_message(site_id: str, conversation_id: str, message: str, *, contact
                     request_id=request_id, input_tokens=input_tokens,
                     cached_input_tokens=int((result.get('input_tokens_details') or {}).get('cached_tokens') or 0),
                     output_tokens=output_tokens, provider_cost_micros=measured_cost,
-                    billable_credits=int(credit_info.get('credits') or 0),
+                    # Usage analytics retain the exact Decimal customer charge.
+                    # The legacy credit_transactions row remains an integer
+                    # display projection for older screens, but it is not the
+                    # accounting source of truth.
+                    billable_credits=credit_info.get('credits') if measured_cost else 0,
                     tool_calls=['search_business_knowledge','get_business_hours','get_location'],
                     duration_ms=round((datetime.now(timezone.utc)-provider_started).total_seconds()*1000),
                 )
         except Exception as exc:
             if reservation and not test_mode:
                 try:
-                    with SessionLocal.begin() as db: refund_wallet(db,reservation['id'],'assistant_provider_failure')
+                    with SessionLocal.begin() as db: ai_billing.release_ai_operation(db,reservation,'assistant_provider_failure')
                 except Exception: logger.exception('Failed to refund assistant reservation')
             if not test_mode: record_operational_event('AI_ASSISTANT','OPENAI_FALLBACK',safe_exception_summary(exc),severity='WARNING',site_id=site_id,dedupe_minutes=5)
             if not test_mode:

@@ -8,6 +8,12 @@ from sqlalchemy.exc import IntegrityError
 from .db import SessionLocal, now_iso
 from .plans import get_plan
 
+def _ai_billing():
+    # Lazy import avoids making the legacy credit module part of the pricing
+    # engine's import graph and keeps old lead-credit callers unchanged.
+    from . import ai_billing
+    return ai_billing
+
 FALLBACK_ORDER=['MONTHLY','SIGNUP_BONUS','TOPUP']
 CREDIT_TYPES={'ai','lead'}
 TOPUP_PACKS={
@@ -88,6 +94,8 @@ def wallet_summary(user_id:str)->dict:
             ensure_wallet(db,user_id,user['plan'])
             return {'contact_only':True,'ai':None,'lead':None,'total':0,'lead_total':0,'fallback_order':FALLBACK_ORDER}
         ensure_wallet(db,user_id,user['plan'])
+        billing=_ai_billing()
+        billing.ensure_ai_wallet(db,user_id,user['plan'])
         row=dict(db.execute(text('SELECT * FROM credit_wallets WHERE user_id=:u'),{'u':user_id}).mappings().first())
         ai={
             'monthly_remaining':int(row['monthly_remaining']),'signup_remaining':int(row['signup_remaining']),
@@ -96,21 +104,71 @@ def wallet_summary(user_id:str)->dict:
             'monthly_remaining':int(row['lead_monthly_remaining']),'signup_remaining':int(row['lead_signup_remaining']),
             'topup_remaining':int(row['lead_topup_remaining'])}
         ai['total']=sum(ai.values()); lead['total']=sum(lead.values())
+        extended=billing.wallet_snapshot(db,user_id,user['plan'])
+        # Legacy compatibility endpoints expose whole credits; the new
+        # /api/ai-credits endpoint exposes the fractional authoritative balance.
+        from decimal import Decimal, ROUND_DOWN
+        ai['total']=int(Decimal(str(extended.get('normal_available', ai['total']))).to_integral_value(rounding=ROUND_DOWN))
         # Keep the legacy AI fields while returning both balances together.
-        return {**row,'total':ai['total'],'lead_total':lead['total'],'ai':ai,'lead':lead,'contact_only':False,'fallback_order':FALLBACK_ORDER}
+        return {**row,**extended,'total':ai['total'],'lead_total':lead['total'],'ai':ai,'lead':lead,'contact_only':False,'fallback_order':FALLBACK_ORDER}
 
 def _exhaustion(credit_type:str,cost:int,available:int)->HTTPException:
     code='AI_CREDITS_EXHAUSTED' if credit_type=='ai' else 'LEAD_CREDITS_EXHAUSTED'
     return HTTPException(402,detail={'code':code,'credit_type':credit_type,'required':cost,'available':available,
         'fallback_order':FALLBACK_ORDER,'manual_editing_available':credit_type=='ai'})
 
-def reserve_wallet(db,user_id:str,plan:str,cost:int,operation:str,credit_type:str='ai',idempotency_key:str|None=None,reference_id:str|None=None)->dict:
+def reserve_wallet(db,user_id:str,plan:str,cost:int,operation:str,credit_type:str='ai',idempotency_key:str|None=None,reference_id:str|None=None,estimated_credits=None,provider:str|None=None,model:str|None=None)->dict:
     if credit_type not in CREDIT_TYPES: raise ValueError('credit_type must be ai or lead')
-    if cost<=0: return {'cost':0,'credit_type':credit_type,'monthly_used':0,'signup_used':0,'topup_used':0,'skipped':False}
+    # A provider-backed caller may intentionally pass a zero legacy plan cost
+    # while supplying a server-calculated Decimal estimate.  Only skip when
+    # both the compatibility cost and authoritative estimate are absent.
+    if cost<=0 and (credit_type != 'ai' or estimated_credits is None): return {'cost':0,'credit_type':credit_type,'monthly_used':0,'signup_used':0,'topup_used':0,'skipped':False}
     if _plan_contact_only(plan):
         ensure_wallet(db,user_id,plan)
         return {'cost':0,'credit_type':credit_type,'monthly_used':0,'signup_used':0,'topup_used':0,'skipped':True,'contact_only':True}
     ensure_wallet(db,user_id,plan)
+    if credit_type=='ai':
+        billing=_ai_billing()
+        # ``cost`` remains the legacy/local compatibility charge.  Production
+        # provider paths pass a server-calculated ``estimated_credits`` cap so
+        # the hold covers every legally permitted provider token, rather than a
+        # plan-specific guess.  The client can never supply this value.
+        requested = cost if estimated_credits is None else estimated_credits
+        reservation=billing.reserve_ai_operation(db,account_id=user_id,user_id=user_id,plan=plan,estimated_credits=requested,feature=operation,operation_id=reference_id or str(uuid4()),request_id=idempotency_key or str(uuid4()),idempotency_key=idempotency_key,provider=provider,model=model,allow_reserved=False)
+        if reservation and reservation.get('skipped'): return {'cost':0,'credit_type':'ai','monthly_used':0,'signup_used':0,'topup_used':0,'skipped':True}
+        # Project the historical whole-credit bucket usage for compatibility.
+        # This is deliberately only a display/legacy projection: the Decimal
+        # wallet and immutable ledger above remain the sole financial mutation.
+        mcol,scol,tcol=_bucket_names('ai')
+        row=db.execute(text(f'SELECT {mcol} AS m,{scol} AS s,{tcol} AS t FROM credit_wallets WHERE user_id=:u'),{'u':user_id}).mappings().first()
+        old_m,old_s,old_t=int(row['m']),int(row['s']),int(row['t'])
+        # Keep the legacy integer buckets synchronized for older dashboard/API
+        # clients even when the authoritative provider estimate is fractional.
+        # Their mutation never changes normal_balance and therefore cannot debit
+        # the wallet a second time; legacy_normal_snapshot prevents it from
+        # being re-imported as a new adjustment on the next read.
+        legacy_projection = True
+        legacy_cost=int(cost)
+        remaining=legacy_cost
+        used_m=min(old_m,remaining); remaining-=used_m; used_s=min(old_s,remaining); remaining-=used_s; used_t=min(old_t,remaining)
+        if legacy_projection:
+            db.execute(text(f'''UPDATE credit_wallets SET {mcol}=CASE WHEN {mcol}>=:m THEN {mcol}-:m ELSE 0 END,
+              {scol}=CASE WHEN {scol}>=:s THEN {scol}-:s ELSE 0 END,
+              {tcol}=CASE WHEN {tcol}>=:t THEN {tcol}-:t ELSE 0 END,
+              updated_at=:a WHERE user_id=:u'''), {'m':used_m,'s':used_s,'t':used_t,'a':now_iso(),'u':user_id})
+            projected=db.execute(text(f'SELECT {mcol} AS m,{scol} AS s,{tcol} AS t FROM credit_wallets WHERE user_id=:u'), {'u':user_id}).mappings().first()
+            projected_total=int(projected['m'])+int(projected['s'])+int(projected['t'])
+            db.execute(text('UPDATE credit_wallets SET legacy_normal_snapshot=CAST(:legacy AS NUMERIC) WHERE user_id=:u'), {'legacy':projected_total,'u':user_id})
+            _sync_aggregates(db,user_id)
+        tid=reservation['reservation_id']
+        try:
+            db.execute(text('''INSERT INTO credit_transactions(id,user_id,credit_type,operation,amount,monthly_used,signup_used,topup_used,reference_id,idempotency_key,status,created_at)
+              VALUES (:i,:u,'ai',:o,:c,:m,:s,:t,:r,:k,'RESERVED',:a)'''),{'i':tid,'u':user_id,'o':operation,'c':legacy_cost,'m':used_m,'s':used_s,'t':used_t,'r':reference_id,'k':idempotency_key,'a':now_iso()})
+        except IntegrityError:
+            prior=db.execute(text('SELECT * FROM credit_transactions WHERE id=:i'),{'i':tid}).mappings().first()
+            if prior: return {**dict(prior),'idempotent':True}
+            raise
+        return {'id':tid,'reservation_id':tid,'cost':legacy_cost,'amount':requested,'credit_type':'ai','monthly_used':used_m,'signup_used':used_s,'topup_used':used_t,'total_remaining':billing.wallet_snapshot(db,user_id,plan).get('normal_available',0),'status':'RESERVED','idempotent':False}
     if idempotency_key:
         prior=db.execute(text('''SELECT * FROM credit_transactions WHERE user_id=:u AND credit_type=:ct AND operation=:o AND idempotency_key=:k'''),
             {'u':user_id,'ct':credit_type,'o':operation,'k':idempotency_key}).mappings().first()
@@ -148,7 +206,19 @@ def reserve_wallet(db,user_id:str,plan:str,cost:int,operation:str,credit_type:st
             'topup_used':used_t,'total_remaining':totals[credit_type],'status':'RESERVED','idempotent':False}
     raise HTTPException(409,detail={'code':'CREDIT_CONCURRENCY_CONFLICT','message':'Credit balance changed concurrently; retry safely with the same idempotency key.'})
 
-def finalize_wallet(db,transaction_id:str)->dict:
+def finalize_wallet(db,transaction_id:str,actual_credits=None,**usage_metadata)->dict:
+    billing=_ai_billing()
+    reservation=db.execute(text('SELECT * FROM ai_credit_reservations WHERE id=:i'),{'i':transaction_id}).mappings().first()
+    if reservation:
+        if reservation['status']=='RESERVED':
+            billing.settle_ai_operation(
+                db,
+                transaction_id,
+                reservation['requested_amount'] if actual_credits is None else actual_credits,
+                **usage_metadata,
+            )
+        elif reservation['status'] in {'RELEASED','EXPIRED'}:
+            raise HTTPException(409,'AI credit reservation is no longer active')
     tx=db.execute(text('SELECT * FROM credit_transactions WHERE id=:i'),{'i':transaction_id}).mappings().first()
     if not tx: raise HTTPException(404,'Credit transaction not found')
     if tx['status']=='REFUNDED': raise HTTPException(409,'Credit transaction was already refunded')
@@ -163,6 +233,17 @@ def finalize_wallet(db,transaction_id:str)->dict:
     return dict(db.execute(text('SELECT * FROM credit_transactions WHERE id=:i'),{'i':transaction_id}).mappings().first())
 
 def refund_wallet(db,transaction_id:str,reason:str|None=None)->dict:
+    billing=_ai_billing()
+    reservation=db.execute(text('SELECT * FROM ai_credit_reservations WHERE id=:i'),{'i':transaction_id}).mappings().first()
+    if reservation:
+        if reservation['status']=='RESERVED':
+            billing.release_ai_operation(db,transaction_id,reason or 'legacy_refund')
+        elif reservation['status']=='SETTLED':
+            # A legacy refund after finalization is a compensating credit, never
+            # a rewrite of the historical settlement.
+            amount=reservation['settled_amount']
+            row=db.execute(text('SELECT plan FROM users WHERE id=:u'),{'u':reservation['account_id']}).mappings().first()
+            billing.adjust_wallet(db,account_id=reservation['account_id'],plan=row['plan'],amount=amount,wallet_type='NORMAL',feature='AI_REFUND',reason=reason or 'legacy_refund',actor_id=reservation['account_id'],site_id=reservation['site_id'],entry_type='AI_REFUND')
     tx=db.execute(text('SELECT * FROM credit_transactions WHERE id=:i'),{'i':transaction_id}).mappings().first()
     if not tx: raise HTTPException(404,'Credit transaction not found')
     if tx['status']=='REFUNDED': return {**dict(tx),'idempotent':True}
@@ -172,6 +253,8 @@ def refund_wallet(db,transaction_id:str,reason:str|None=None)->dict:
     if changed.rowcount==1:
         db.execute(text(f'''UPDATE credit_wallets SET {mcol}={mcol}+:m,{scol}={scol}+:s,{tcol}={tcol}+:t,updated_at=:a WHERE user_id=:u'''),
             {'m':int(tx['monthly_used']),'s':int(tx['signup_used']),'t':int(tx['topup_used']),'a':now_iso(),'u':tx['user_id']})
+        if tx['credit_type']=='ai':
+            db.execute(text('UPDATE credit_wallets SET legacy_normal_snapshot=CAST(monthly_remaining+signup_remaining+topup_remaining AS NUMERIC) WHERE user_id=:u'),{'u':tx['user_id']})
         db.execute(text("UPDATE credit_usage SET status='REFUNDED' WHERE id=:i"),{'i':transaction_id})
         _sync_aggregates(db,tx['user_id'])
     return {**dict(tx),'status':'REFUNDED','reason':reason,'idempotent':changed.rowcount!=1}
@@ -187,8 +270,21 @@ def reset_monthly_for_plan(db,user_id:str,plan:str)->int:
     if int(cfg.get('contact_only') or 0):
         ensure_wallet(db,user_id,plan); return 0
     ensure_wallet(db,user_id,plan)
-    db.execute(text('''UPDATE credit_wallets SET monthly_remaining=:am,lead_monthly_remaining=:lm,period_key=:p,updated_at=:a WHERE user_id=:u'''),{
-        'am':int(cfg.get('ai_credits') or 0),'lm':int(cfg.get('lead_credits') or 0),'p':_period_key(),'a':now_iso(),'u':user_id})
+    before=db.execute(text('SELECT normal_balance,chatbot_reserved_balance FROM credit_wallets WHERE user_id=:u'),{'u':user_id}).mappings().first()
+    db.execute(text('''UPDATE credit_wallets SET monthly_remaining=:am,lead_monthly_remaining=:lm,period_key=:p,cycle_key=:p,
+        normal_balance=CAST(:am AS NUMERIC)+signup_remaining+topup_remaining,
+        chatbot_reserved_balance=:reserve,normal_allocation=:allocation,
+        chatbot_reserved_allocation=:reserve,legacy_normal_snapshot=CAST(:am AS NUMERIC)+signup_remaining+topup_remaining,updated_at=:a WHERE user_id=:u'''),{
+        'am':int(cfg.get('ai_credits') or 0),'lm':int(cfg.get('lead_credits') or 0),'reserve':str(_ai_billing()._dec(cfg.get('chatbot_reserved_credits',cfg.get('ai_credits',0)))), 'allocation':str(_ai_billing()._dec(cfg.get('ai_credits') or 0)+_ai_billing()._dec(cfg.get('signup_bonus_credits') or 0)), 'p':_period_key(),'a':now_iso(),'u':user_id})
+    after=db.execute(text('SELECT normal_balance,chatbot_reserved_balance FROM credit_wallets WHERE user_id=:u'),{'u':user_id}).mappings().first()
+    if before and after:
+        billing=_ai_billing()
+        old_normal=billing._dec(before['normal_balance']); new_normal=billing._dec(after['normal_balance'])
+        old_reserve=billing._dec(before['chatbot_reserved_balance']); new_reserve=billing._dec(after['chatbot_reserved_balance'])
+        if new_normal != old_normal:
+            billing._insert_ledger(db,account_id=user_id,user_id=user_id,site_id=None,feature='PLAN_RENEWAL',wallet_type=billing.NORMAL,entry_type='PLAN_RENEWAL',amount=new_normal-old_normal,balance_before=old_normal,balance_after=new_normal,operation_id=f'plan-reset:{_period_key()}')
+        if new_reserve != old_reserve:
+            billing._insert_ledger(db,account_id=user_id,user_id=user_id,site_id=None,feature='CHATBOT_RESERVE_RESET',wallet_type=billing.CHATBOT_RESERVED,entry_type='CHATBOT_RESERVE_RESET',amount=new_reserve-old_reserve,balance_before=old_reserve,balance_after=new_reserve,operation_id=f'plan-reset:{_period_key()}')
     return _sync_aggregates(db,user_id)['ai']
 
 def grant_topup(user_id:str,credits:int,credit_type:str='ai',db=None)->dict:
@@ -205,8 +301,24 @@ def grant_topup(user_id:str,credits:int,credit_type:str='ai',db=None)->dict:
         if not user: raise HTTPException(404,'User not found')
         if _plan_contact_only(user['plan']): raise HTTPException(409,detail={'code':'CREDITS_NOT_APPLICABLE','message':'Managed/contact-only plans do not use credit wallets.'})
         ensure_wallet(tx,user_id,user['plan'])
+        billing=_ai_billing() if credit_type=='ai' else None
+        if billing:
+            # Materialize the authoritative wallet before applying the top-up.
+            # This prevents the legacy-bucket reconciliation hook from treating
+            # the same purchase as a second independent adjustment.
+            billing.ensure_ai_wallet(tx,user_id,user['plan'])
+        before_row=tx.execute(text('SELECT * FROM credit_wallets WHERE user_id=:u'),{'u':user_id}).mappings().first()
+        before_normal=billing._dec(before_row.get('normal_balance')) if billing else None
         _,_,tcol=_bucket_names(credit_type)
-        tx.execute(text(f'UPDATE credit_wallets SET {tcol}={tcol}+:c,updated_at=:a WHERE user_id=:u'),{'c':credits,'a':now_iso(),'u':user_id})
+        if billing:
+            tx.execute(text(f'UPDATE credit_wallets SET {tcol}={tcol}+:c,normal_balance=normal_balance+:c,updated_at=:a WHERE user_id=:u'), {'c':credits,'a':now_iso(),'u':user_id})
+            tx.execute(text('UPDATE credit_wallets SET legacy_normal_snapshot=CAST(monthly_remaining+signup_remaining+topup_remaining AS NUMERIC) WHERE user_id=:u'), {'u':user_id})
+        else:
+            tx.execute(text(f'UPDATE credit_wallets SET {tcol}={tcol}+:c,updated_at=:a WHERE user_id=:u'),{'c':credits,'a':now_iso(),'u':user_id})
+        if credit_type=='ai':
+            after_row=tx.execute(text('SELECT * FROM credit_wallets WHERE user_id=:u'),{'u':user_id}).mappings().first()
+            after_normal=billing._dec(after_row.get('normal_balance'))
+            billing._insert_ledger(tx,account_id=user_id,user_id=user_id,site_id=None,feature='PURCHASE',wallet_type='NORMAL',entry_type='PURCHASE',amount=billing._dec(credits),balance_before=before_normal,balance_after=after_normal,metadata={'credit_type':'ai'})
         totals=_sync_aggregates(tx,user_id)
         return {'ok':True,'credit_type':credit_type,'credits_added':credits,'total':totals[credit_type]}
     if db is not None:

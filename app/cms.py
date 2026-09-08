@@ -17,7 +17,7 @@ from sqlalchemy import text
 
 from .db import SessionLocal, now_iso
 from .config import settings
-from .credits import debit_wallet
+from . import ai_billing
 from .media import get_asset
 from .plans import get_plan
 from .security import current_user, require_csrf
@@ -1226,6 +1226,7 @@ def create_ai_proposal(site_id:str,payload:AiProposalIn,request:Request):
         fields=_fields(db,site_id,payload.collection_id)
         selected=[_public_item(_item(db,site_id,payload.collection_id,item_id)) for item_id in payload.item_ids]
     provider='local'; operations=_local_ai_operations(action,payload.instruction,fields,selected); suggestions=[]
+    reservation=None; usage={}; operation_id=str(uuid4()); idem=(request.headers.get('Idempotency-Key') or '').strip()[:120] or None
     if not settings.openai_api_key and settings.app_env.lower()=='production':
         raise HTTPException(503,detail={'code':'CMS_ASSISTANT_UNAVAILABLE','message':'The CMS assistant is not configured.'})
     if settings.openai_api_key:
@@ -1233,14 +1234,33 @@ def create_ai_proposal(site_id:str,payload:AiProposalIn,request:Request):
             "Return JSON only with operations. Allowed operations are UPDATE_ITEM {item_id,expected_revision,values keyed only by field id} and CREATE_ITEM {slug,status:DRAFT,values keyed only by field id}. Maximum 50 operations. Do not delete or publish content.\n"+
             f"ACTION:{action}\nINSTRUCTION:{payload.instruction}\nSCHEMA:{json.dumps([_public_field(field) for field in fields],ensure_ascii=False)[:12000]}\nITEMS:{json.dumps(selected,ensure_ascii=False)[:30000]}")
         try:
+            with SessionLocal.begin() as db:
+                estimate=ai_billing.feature_reservation_budget(
+                    db, feature='AI_CMS_PROPOSAL', provider='openai', model=settings.openai_model,
+                )
+                reservation=ai_billing.reserve_ai_operation(db,account_id=user['id'],user_id=user['id'],site_id=site_id,plan=user['plan'],estimated_credits=estimate,feature='AI_CMS_PROPOSAL',operation_id=operation_id,request_id=idem or operation_id,idempotency_key=idem,provider='openai',model=settings.openai_model,allow_reserved=False)
+                if reservation and reservation.get('idempotent'):
+                    raise HTTPException(409,detail={'code':'AI_REQUEST_REPLAY','message':'This AI request was already processed. Retry without reusing its idempotency key.'})
             response=httpx.post('https://api.openai.com/v1/responses',headers={'Authorization':f'Bearer {settings.openai_api_key}','Content-Type':'application/json'},
                 json={'model':settings.openai_model,'input':prompt,'max_output_tokens':1600,'text':{'format':{'type':'json_object'}}},timeout=45)
-            response.raise_for_status(); parsed=json.loads(response.json().get('output_text','{}'))
-        except Exception as exc: raise HTTPException(502,detail={'code':'CMS_ASSISTANT_UNAVAILABLE','message':'The CMS assistant is temporarily unavailable.'}) from exc
+            response.raise_for_status(); data=response.json(); parsed=json.loads(data.get('output_text','{}')); usage=data.get('usage') or {}
+        except HTTPException:
+            raise
+        except ValueError as exc:
+            raise HTTPException(503,detail={'code':'CMS_ASSISTANT_UNAVAILABLE','message':'AI pricing is not configured for this model.'}) from exc
+        except Exception as exc:
+            if reservation and not reservation.get('skipped'):
+                with SessionLocal.begin() as db: ai_billing.release_ai_operation(db,reservation,'cms_provider_failure')
+            raise HTTPException(502,detail={'code':'CMS_ASSISTANT_UNAVAILABLE','message':'The CMS assistant is temporarily unavailable.'}) from exc
         candidate=parsed.get('operations')
         if isinstance(candidate,list): operations=candidate[:50]
         suggestions=parsed.get('suggestions') if isinstance(parsed.get('suggestions'),list) else []
         provider='openai'
+        if reservation and not reservation.get('skipped'):
+            cached=int((usage.get('input_tokens_details') or {}).get('cached_tokens') or usage.get('cached_input_tokens') or 0)
+            with SessionLocal.begin() as db:
+                cost=ai_billing.calculate_provider_cost(db,provider='openai',model=settings.openai_model,input_units=max(0,int(usage.get('input_tokens') or 0)-cached),cached_input_units=cached,output_units=int(usage.get('output_tokens') or 0))
+                reservation=ai_billing.settle_ai_operation(db,reservation,cost['credits'],provider_cost_micros=cost['provider_cost_micros'],customer_usage_value_micros=cost['customer_usage_value_micros'],provider='openai',model=settings.openai_model,pricing_version=cost['pricing_version'],input_units=cost['input_units'],cached_input_units=cost['cached_input_units'],output_units=cost['output_units'])
     allowed_items={item['id']:item for item in selected}; clean=[]
     for operation in operations:
         if not isinstance(operation,dict) or operation.get('type') not in {'UPDATE_ITEM','CREATE_ITEM'}: continue
@@ -1249,13 +1269,12 @@ def create_ai_proposal(site_id:str,payload:AiProposalIn,request:Request):
     proposal_id=str(uuid4()); created=now_iso()
     with SessionLocal.begin() as db:
         _site_access(db,user['id'],site_id,'CONTENT_EDITOR',payload.collection_id)
-        cost=max(1,int(get_plan(user['plan']).get('ai_edit_cost',2)))
-        credit=debit_wallet(db,user['id'],user['plan'],cost,'AI_CMS_PROPOSAL',request.headers.get('Idempotency-Key'),reference_id=proposal_id)
         db.execute(text('''INSERT INTO cms_ai_proposals(id,site_id,collection_id,user_id,action,operations_json,status,provider,created_at)
             VALUES (:id,:site,:collection,:user,:action,:operations,'PENDING',:provider,:created)'''),{'id':proposal_id,'site':site_id,
             'collection':payload.collection_id,'user':user['id'],'action':action,'operations':json.dumps(clean,separators=(',',':')),'provider':provider,'created':created})
         _audit(db,user['id'],'CMS_AI_PROPOSAL_CREATE','cms_ai_proposal',proposal_id,{'operation_count':len(clean),'provider':provider})
-    return {'id':proposal_id,'action':action,'operations':clean,'suggestions':suggestions[:20],'provider':provider,'credit_cost':cost,'credits':credit,'requires_confirmation':True}
+    credit_cost=ai_billing.public_decimal(reservation.get('settled_amount',0) if isinstance(reservation,dict) else 0)
+    return {'id':proposal_id,'action':action,'operations':clean,'suggestions':suggestions[:20],'provider':provider,'credit_cost':credit_cost,'credits':reservation,'requires_confirmation':True}
 
 
 @router.post('/sites/{site_id}/cms/assistant/apply')

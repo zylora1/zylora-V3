@@ -6,11 +6,13 @@ from .db import SessionLocal, now_iso
 # ZYLORA is retained only as a backwards-compatible legacy entitlement so existing
 # customer rows and historical subscriptions remain readable during migration.
 DEFAULTS = {
-    'FREE': {'plan':'FREE','public_name':'Free','price_inr_minor':0,'price_usd_minor':0,'site_limit':10,'page_limit':2,'ai_credits':20,'lead_credits':20,'signup_bonus_credits':0,'ai_site_cost':5,'ai_edit_cost':2,'contact_only':0},
-    'STARTER': {'plan':'STARTER','public_name':'Starter','price_inr_minor':79900,'price_usd_minor':900,'site_limit':10,'page_limit':5,'ai_credits':100,'lead_credits':100,'signup_bonus_credits':0,'ai_site_cost':5,'ai_edit_cost':2,'contact_only':0},
-    'GROWTH': {'plan':'GROWTH','public_name':'Growth','price_inr_minor':179900,'price_usd_minor':1900,'site_limit':10,'page_limit':8,'ai_credits':300,'lead_credits':300,'signup_bonus_credits':0,'ai_site_cost':5,'ai_edit_cost':2,'contact_only':0},
-    'PRO': {'plan':'PRO','public_name':'Managed by experts','price_inr_minor':0,'price_usd_minor':0,'site_limit':10,'page_limit':10,'ai_credits':0,'lead_credits':0,'signup_bonus_credits':0,'ai_site_cost':0,'ai_edit_cost':0,'contact_only':1},
-    'ZYLORA': {'plan':'ZYLORA','public_name':'Legacy Zylora','price_inr_minor':79900,'price_usd_minor':900,'site_limit':10,'page_limit':10,'ai_credits':300,'lead_credits':300,'signup_bonus_credits':0,'ai_site_cost':5,'ai_edit_cost':2,'contact_only':0},
+    # Reserved allowance intentionally starts equal to the current normal AI
+    # allocation. It is an independent, non-purchasable chatbot safeguard.
+    'FREE': {'plan':'FREE','public_name':'Free','price_inr_minor':0,'price_usd_minor':0,'site_limit':10,'page_limit':2,'ai_credits':20,'chatbot_reserved_credits':20,'lead_credits':20,'signup_bonus_credits':0,'ai_site_cost':5,'ai_edit_cost':2,'contact_only':0},
+    'STARTER': {'plan':'STARTER','public_name':'Starter','price_inr_minor':79900,'price_usd_minor':900,'site_limit':10,'page_limit':5,'ai_credits':100,'chatbot_reserved_credits':100,'lead_credits':100,'signup_bonus_credits':0,'ai_site_cost':5,'ai_edit_cost':2,'contact_only':0},
+    'GROWTH': {'plan':'GROWTH','public_name':'Growth','price_inr_minor':179900,'price_usd_minor':1900,'site_limit':10,'page_limit':8,'ai_credits':300,'chatbot_reserved_credits':300,'lead_credits':300,'signup_bonus_credits':0,'ai_site_cost':5,'ai_edit_cost':2,'contact_only':0},
+    'PRO': {'plan':'PRO','public_name':'Managed by experts','price_inr_minor':0,'price_usd_minor':0,'site_limit':10,'page_limit':10,'ai_credits':0,'chatbot_reserved_credits':0,'lead_credits':0,'signup_bonus_credits':0,'ai_site_cost':0,'ai_edit_cost':0,'contact_only':1},
+    'ZYLORA': {'plan':'ZYLORA','public_name':'Legacy Zylora','price_inr_minor':79900,'price_usd_minor':900,'site_limit':10,'page_limit':10,'ai_credits':300,'chatbot_reserved_credits':300,'lead_credits':300,'signup_bonus_credits':0,'ai_site_cost':5,'ai_edit_cost':2,'contact_only':0},
 }
 
 PUBLIC_PLAN_KEYS=('FREE','STARTER','GROWTH','PRO')
@@ -19,9 +21,9 @@ PAID_SELF_SERVICE_PLAN_KEYS=('STARTER','GROWTH')
 
 EDITABLE_FIELDS={
     'public_name','price_inr_minor','price_usd_minor','site_limit','page_limit','ai_credits','lead_credits',
-    'signup_bonus_credits','ai_site_cost','ai_edit_cost','contact_only'
+    'signup_bonus_credits','chatbot_reserved_credits','ai_site_cost','ai_edit_cost','contact_only'
 }
-NON_NEGATIVE_FIELDS={'price_inr_minor','price_usd_minor','site_limit','page_limit','ai_credits','lead_credits','signup_bonus_credits','ai_site_cost','ai_edit_cost'}
+NON_NEGATIVE_FIELDS={'price_inr_minor','price_usd_minor','site_limit','page_limit','ai_credits','lead_credits','signup_bonus_credits','chatbot_reserved_credits','ai_site_cost','ai_edit_cost'}
 
 def get_plan(plan: str) -> dict:
     key=plan.upper()
@@ -45,10 +47,11 @@ def update_plan(plan: str, values: dict) -> dict:
     merged={**current,**values,'plan':key,'updated_at':now_iso()}
     if int(merged.get('contact_only') or 0):
         merged['ai_credits']=0; merged['lead_credits']=0; merged['signup_bonus_credits']=0; merged['ai_site_cost']=0; merged['ai_edit_cost']=0
+        merged['chatbot_reserved_credits']=0
     with SessionLocal.begin() as db:
         db.execute(text('''UPDATE plan_configs SET public_name=:public_name,price_inr_minor=:price_inr_minor,price_usd_minor=:price_usd_minor,
           site_limit=:site_limit,page_limit=:page_limit,ai_credits=:ai_credits,lead_credits=:lead_credits,signup_bonus_credits=:signup_bonus_credits,
-          ai_site_cost=:ai_site_cost,ai_edit_cost=:ai_edit_cost,contact_only=:contact_only,updated_at=:updated_at WHERE plan=:plan'''),merged)
+          ai_site_cost=:ai_site_cost,ai_edit_cost=:ai_edit_cost,chatbot_reserved_credits=:chatbot_reserved_credits,contact_only=:contact_only,updated_at=:updated_at WHERE plan=:plan'''),merged)
     return get_plan(key)
 
 def tier3_page_limit() -> int:

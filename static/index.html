@@ -93,7 +93,7 @@
             "name": "Does the AI Sales Assistant consume my website editing credits?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. The AI Sales Assistant is completely free and unlimited for your website visitors across all plans and never consumes your monthly AI creation or editing credits."
+              "text": "Published assistants use normal AI Credits first, then the plan's finite Sales Assistant Protection allowance. If both are exhausted, visitors can still use deterministic contact, lead and appointment flows without seeing the owner's billing state."
             }
           },
           {
@@ -101,7 +101,7 @@
             "name": "Can I use my own custom domain?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Yes. Connect any custom domain with automated SSL certificate provisioning and global edge CDN caching."
+              "text": "Yes. Connect any custom domain with automated SSL certificate provisioning and worldwide edge caching."
             }
           }
         ]
@@ -214,7 +214,7 @@
           <div class="canvas-site-hero">
             <span class="selection-badge">Selected: Hero Block · 1120 × 440px</span>
             <div class="canvas-nav-mock">
-              <span class="canvas-logo-mock">AURA CLINIC</span>
+              <span class="canvas-logo-mock">LUMEN STUDIO</span>
               <div class="canvas-links-mock">
                 <span>Treatments</span>
                 <span>Specialists</span>
@@ -245,7 +245,7 @@
           </div>
           <div class="inspector-prop">
             <div class="inspector-label">Export Source</div>
-            <div class="inspector-value">Next.js 14 + Tailwind</div>
+            <div class="inspector-value">React app + CSS</div>
           </div>
         </div>
       </div>
@@ -269,10 +269,10 @@
         "Hi, do you have an opening for a dental veneer consultation this Thursday afternoon?"
       </div>
       <div class="chat-bubble assistant">
-        "Yes! Dr. Elena has a 2:30 PM slot open this Thursday. Shall I book that for you?"
+        "Yes! Your specialist has a 2:30 PM slot open this Thursday. Shall I book that for you?"
       </div>
       <div class="lead-qualified-badge">
-        <span>✓ Lead Qualified: 94/100 (HOT)</span>
+        <span>✓ Lead captured · High intent</span>
         <span>Slot Reserved</span>
       </div>
     </div>
@@ -280,7 +280,7 @@
 </section>
 
 ﻿<!-- 3. Visual Transformation Story: Prompt -> Structure -> Design -> Studio -->
-<section class="transformation-section">
+<section class="transformation-section" id="how-it-works">
   <div class="z-container">
     <div class="transformation-header">
       <span class="eyebrow-pill">The Creation Engine</span>
@@ -414,7 +414,7 @@
         <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--z-accent);margin-bottom:10px">Collection Data</div>
         <h3 style="font-size:18px;margin-bottom:14px">Properties (3 Items)</h3>
         <div style="background:var(--z-bg);border-radius:8px;padding:12px;margin-bottom:8px">
-          <b>Oceanfront Villa</b>
+          <b>Harbor House</b>
           <div style="font-size:12px;color:var(--z-text-secondary)">₹4,50,00,000 · 4 Beds · Goa</div>
         </div>
         <div style="background:var(--z-bg);border-radius:8px;padding:12px;margin-bottom:8px">
@@ -445,7 +445,7 @@
             <div style="font-size:12px;color:#94A3B8">Direct Dynamic Binding to `properties` collection</div>
           </div>
         </div>
-        <h3 style="font-size:24px;margin-bottom:6px">Oceanfront Villa</h3>
+        <h3 style="font-size:24px;margin-bottom:6px">Harbor House</h3>
         <div style="font-size:20px;font-weight:700;color:var(--z-accent);margin-bottom:10px">₹4,50,00,000</div>
         <p style="font-size:14px;color:var(--z-text-secondary);margin:0">Spacious four-bedroom luxury estate featuring panoramic Arabian Sea views and private infinity pool.</p>
       </div>
@@ -463,7 +463,7 @@
         Your AI Sales Assistant answers inquiries using your approved business knowledge, qualifies buyer intent, captures contact details, and confirms real calendar slots.
       </p>
       <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#34D399;font-weight:600;font-size:13px;padding:6px 18px;border-radius:999px;margin-top:20px">
-        ✓ 100% Free for Visitors · Never Consumes Owner AI Credits
+        ✓ No visitor account required · Protected owner usage with deterministic fallback
       </div>
     </div>
 
@@ -472,16 +472,16 @@
       <div class="assistant-chat-demonstration">
         <div style="display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--z-dark-border);padding-bottom:14px;margin-bottom:18px">
           <div style="width:10px;height:10px;border-radius:50%;background:#10B981"></div>
-          <span style="font-weight:700;font-size:14px;color:#fff">Assistant on Aurora Dental</span>
+        <span style="font-weight:700;font-size:14px;color:#fff">Assistant on Lumen Studio</span>
         </div>
         <div class="chat-bubble visitor">
           "What is the recovery time for dental implants, and do you have a consultation available this week?"
         </div>
         <div class="chat-bubble assistant">
-          "Initial recovery typically takes 2 to 3 days with full osseointegration over a few months. Dr. Elena has a consultation slot open this Friday at 11:00 AM. Would you like me to book it?"
+          "Initial recovery typically takes 2 to 3 days with full results over a few months. Your specialist has a consultation slot open this Friday at 11:00 AM. Would you like me to book it?"
         </div>
         <div class="chat-bubble visitor">
-          "Yes please! My name is Rahul Sharma, rahul@example.com."
+          "Yes please! My name is Maya Patel, maya@example.com."
         </div>
         <div class="chat-bubble assistant">
           "All set, Rahul! Your consultation is confirmed for Friday, Sept 11 at 11:00 AM. A confirmation text has been sent to your phone."
@@ -492,15 +492,15 @@
       <div class="lead-and-booking-pipeline">
         <div class="pipeline-card-dark">
           <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:#10B981;text-transform:uppercase;margin-bottom:8px">1. Qualified Lead Captured</div>
-          <h4 style="font-size:18px;color:#fff;margin-bottom:4px">Rahul Sharma</h4>
-          <p style="font-size:13px;color:var(--z-dark-muted);margin:0 0 10px">rahul@example.com · Lead Score: 96/100 · Intent: Dental Implants</p>
+          <h4 style="font-size:18px;color:#fff;margin-bottom:4px">Maya Patel</h4>
+          <p style="font-size:13px;color:var(--z-dark-muted);margin:0 0 10px">maya@example.com · Contact captured · Intent: Consultation</p>
           <div style="font-size:12px;color:#A5A6F6">Synced to Google Sheets & WhatsApp alert dispatched</div>
         </div>
 
         <div class="pipeline-card-dark">
           <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:#3B82F6;text-transform:uppercase;margin-bottom:8px">2. Calendar Appointment Booked</div>
           <h4 style="font-size:18px;color:#fff;margin-bottom:4px">Friday, Sept 11 · 11:00 AM</h4>
-          <p style="font-size:13px;color:var(--z-dark-muted);margin:0">Verified slot confirmed with Dr. Elena · Calendar invite generated</p>
+          <p style="font-size:13px;color:var(--z-dark-muted);margin:0">Verified slot confirmed with your specialist · Calendar invite generated</p>
         </div>
       </div>
     </div>
@@ -508,7 +508,7 @@
 </section>
 
 <!-- 8. Asymmetric Feature Stories (Zero Uniform Card Grids) -->
-<section class="asymmetric-story-section">
+<section class="asymmetric-story-section" id="capabilities">
   <div class="z-container">
     <div style="max-width:840px;margin-bottom:48px">
       <span class="eyebrow-pill">Conversion Infrastructure</span>
@@ -553,6 +553,29 @@
   </div>
 </section>
 
+<!-- 9. Plan comparison -->
+<section class="comparison-section" id="comparison">
+  <div class="z-container">
+    <div style="text-align:center;max-width:760px;margin:0 auto 28px">
+      <span class="eyebrow-pill">Compare plans</span>
+      <h2 class="h2-editorial" style="margin:14px 0 10px">The right amount of power for your next stage.</h2>
+      <p class="text-intro">Every plan starts with the same visual ownership. Add publishing capacity and managed support as you grow.</p>
+    </div>
+    <div class="comparison-table-wrap" style="overflow-x:auto">
+      <table class="comparison-table">
+        <thead><tr><th scope="col">Capability</th><th scope="col">Free</th><th scope="col">Starter</th><th scope="col">Growth</th><th scope="col">Managed Pro</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Visual Studio editing</th><td>Included</td><td>Included</td><td>Included</td><td>Included</td></tr>
+          <tr><th scope="row">Custom domain publishing</th><td>—</td><td>Included</td><td>Included</td><td>Included</td></tr>
+          <tr><th scope="row">Lead capture, CMS &amp; booking</th><td>Included</td><td>Included</td><td>Included</td><td>Included</td></tr>
+          <tr><th scope="row">AI Sales Assistant</th><td>Optional</td><td>Optional</td><td>Optional</td><td>Managed setup</td></tr>
+          <tr><th scope="row">Source export</th><td>Available</td><td>Available</td><td>Available</td><td>Available</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
 <!-- 9. Regional Pricing Teaser -->
 <section class="pricing-teaser-section" id="pricing">
   <div class="z-container">
@@ -576,16 +599,16 @@
       <div class="pricing-teaser-card featured">
         <div style="font-size:11px;font-weight:700;color:var(--z-accent);text-transform:uppercase;margin-bottom:4px">Most Popular</div>
         <div class="pricing-plan-name">Starter</div>
-        <div class="pricing-plan-price">{{STARTER_REGIONAL_PRICE}}</div>
-        <p class="text-small">Custom domain, brand removal, 5-page publishing, and unlimited AI Sales Assistant.</p>
+        <div class="pricing-plan-price" id="starterRegionalPrice">{{STARTER_REGIONAL_PRICE}}</div>
+        <p class="text-small">Custom domain, brand removal, 5-page publishing, and {{STARTER_CHATBOT_RESERVED_CREDITS}} Sales Assistant Protection credits.</p>
         <a class="z-btn z-btn-accent" style="margin-top:auto" href="/choose-plan">Choose Starter</a>
       </div>
 
       <!-- Growth -->
       <div class="pricing-teaser-card">
         <div class="pricing-plan-name">Growth</div>
-        <div class="pricing-plan-price">{{GROWTH_REGIONAL_PRICE}}</div>
-        <p class="text-small">High-capacity publishing, 8 pages, 300 monthly credits, and priority edge delivery.</p>
+        <div class="pricing-plan-price" id="growthRegionalPrice">{{GROWTH_REGIONAL_PRICE}}</div>
+        <p class="text-small">High-capacity publishing, 8 pages, {{GROWTH_AI_CREDITS}} monthly AI Credits and {{GROWTH_CHATBOT_RESERVED_CREDITS}} Sales Assistant Protection credits.</p>
         <a class="z-btn z-btn-secondary" style="margin-top:auto" href="/choose-plan">Choose Growth</a>
       </div>
 
@@ -627,14 +650,14 @@
       <details class="faq-item">
         <summary class="faq-summary">Does the AI Sales Assistant consume my website editing credits?</summary>
         <div class="faq-answer">
-          No. The AI Sales Assistant is completely free and unlimited for your website visitors across all plans and never consumes your monthly AI creation or editing credits.
+          Published assistants use normal AI Credits first and then the plan's finite Sales Assistant Protection allowance. When both are exhausted, the assistant remains useful through deterministic business facts, contact, lead and appointment flows.
         </div>
       </details>
 
       <details class="faq-item">
         <summary class="faq-summary">Can I use my own custom domain?</summary>
         <div class="faq-answer">
-          Yes. Connect any custom domain with automated SSL certificate provisioning and global edge CDN caching.
+          Yes. Connect any custom domain with automated SSL certificate provisioning and worldwide edge caching.
         </div>
       </details>
     </div>
@@ -730,7 +753,7 @@
     <form id="proForm">
       <div style="margin-bottom:14px">
         <label for="proName" style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">Your Name</label>
-        <input id="proName" class="z-input" required placeholder="Dr. Elena Mitchell"/>
+        <input id="proName" class="z-input" required placeholder="Business owner"/>
       </div>
       <div style="margin-bottom:14px">
         <label for="proEmail" style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">Work Email</label>

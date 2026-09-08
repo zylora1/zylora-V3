@@ -11,6 +11,7 @@ from sqlalchemy import text
 from .api import _audit, _owned_site, _user
 from .config import settings
 from .credits import grant_topup, wallet_summary
+from . import ai_billing
 from .db import SessionLocal, now_iso
 from .providers import grounded_chatbot_answer, sync_google_sheet_event, verify_turnstile
 from .settings_store import get_system_setting
@@ -248,9 +249,9 @@ def _appointment_slots()->list[str]:
 @router.post('/public/chatbot')
 def chatbot(payload:ChatIn,request:Request):
     ip=request.client.host if request.client else 'unknown'
-    durable_rate_limit('chatbot-ip:'+ip,120,3600)
-    durable_rate_limit('chatbot-session:'+payload.site_id+':'+payload.session_id,40,3600)
-    durable_rate_limit('chatbot-site:'+payload.site_id,500,3600)
+    durable_rate_limit('chatbot-ip:'+ip,max(1,int(get_system_setting('ai_chatbot_ip_message_limit','120') or 120)),3600)
+    durable_rate_limit('chatbot-session:'+payload.site_id+':'+payload.session_id,max(1,int(get_system_setting('ai_chatbot_session_message_limit','30') or 30)),3600)
+    durable_rate_limit('chatbot-site:'+payload.site_id,max(1,int(get_system_setting('ai_chatbot_site_hourly_limit','180') or 180)),3600)
     verify_turnstile(payload.turnstile_token,ip)
     with SessionLocal.begin() as db:
         site_row=db.execute(text("SELECT * FROM sites WHERE id=:i AND status='LIVE'"),{'i':payload.site_id}).mappings().first()
@@ -275,15 +276,65 @@ def chatbot(payload:ChatIn,request:Request):
                 answer=str(cached['answer']); doc_id=cached.get('source_doc_id'); route='CACHE'
         if answer:
             _record_chat_metric(db,payload.site_id,owner_id,route,docs,payload.message)
+    provider_reservation=None; provider_request_id=str(uuid4()); provider_model=getattr(settings,'sales_assistant_model','gpt-4o-mini')
     if not answer:
         if settings.app_env.lower()=='production':
+            # Published-site LLM calls are paid work. Reserve from the owner's
+            # NORMAL wallet, then CHATBOT_RESERVED protection, before contacting
+            # the provider. The public visitor never supplies account identity.
+            with SessionLocal.begin() as db:
+                owner=db.execute(text('SELECT id,plan FROM users WHERE id=:u'),{'u':owner_id}).mappings().first()
+                if not owner: raise HTTPException(404,'Live site owner not found')
+                try:
+                    # grounded_chatbot_answer bounds knowledge/history and the
+                    # provider output; reserve that server-side maximum before
+                    # the public request reaches OpenAI.
+                    request_budget=ai_billing.feature_reservation_budget(
+                        db, feature='PUBLIC_SITE_ASSISTANT', provider='openai',
+                        model=provider_model,
+                    )
+                    day=datetime.now(timezone.utc).date().isoformat()+'T00:00:00+00:00'; month=datetime.now(timezone.utc).strftime('%Y-%m')+'-01T00:00:00+00:00'
+                    used_day=ai_billing._dec(db.execute(text("SELECT COALESCE(SUM(CASE WHEN amount<0 THEN -amount ELSE 0 END),0) FROM ai_credit_ledger WHERE account_id=:a AND feature IN ('SALES_ASSISTANT','PUBLIC_SITE_ASSISTANT') AND entry_type='AI_SETTLEMENT' AND created_at>=:d"),{'a':owner['id'],'d':day}).scalar_one())
+                    used_month=ai_billing._dec(db.execute(text("SELECT COALESCE(SUM(CASE WHEN amount<0 THEN -amount ELSE 0 END),0) FROM ai_credit_ledger WHERE account_id=:a AND feature IN ('SALES_ASSISTANT','PUBLIC_SITE_ASSISTANT') AND entry_type='AI_SETTLEMENT' AND created_at>=:d"),{'a':owner['id'],'d':month}).scalar_one())
+                    daily_limit=ai_billing._dec(get_system_setting('ai_chatbot_daily_credit_limit','50')); monthly_limit=ai_billing._dec(get_system_setting('ai_chatbot_monthly_credit_limit','1000'))
+                    if (daily_limit>0 and used_day+request_budget>daily_limit) or (monthly_limit>0 and used_month+request_budget>monthly_limit):
+                        provider_reservation=None
+                    else:
+                        provider_reservation=ai_billing.reserve_ai_operation(db,account_id=owner['id'],user_id=owner['id'],site_id=payload.site_id,plan=owner['plan'],estimated_credits=request_budget,feature='PUBLIC_SITE_ASSISTANT',operation_id=provider_request_id,request_id=provider_request_id,idempotency_key='public-chat:'+payload.site_id+':'+payload.session_id+':'+hashlib.sha256(payload.message.encode()).hexdigest()[:24],provider='openai',model=provider_model,allow_reserved=True)
+                    if provider_reservation and provider_reservation.get('idempotent'):
+                        # A replayed public request may not cause another paid
+                        # provider call.  Prefer the deterministic handoff if
+                        # the original cached response is unavailable.
+                        provider_reservation = None
+                        answer = 'I can help pass this to the team. Please leave your contact details and a short description of what you need.'
+                        route = 'CREDIT_FALLBACK'; doc_id = None
+                except ValueError:
+                    provider_reservation=None
+            if provider_reservation is None:
+                answer='I can help pass this to the team. Please leave your contact details and a short description of what you need.'
+                route='CREDIT_FALLBACK'; doc_id=None
+        if settings.app_env.lower()=='production' and provider_reservation is not None:
             try:
-                answer,doc_id=grounded_chatbot_answer(payload.message,docs,history)
+                try:
+                    answer,doc_id,usage=grounded_chatbot_answer(payload.message,docs,history,return_usage=True)
+                except TypeError:
+                    answer,doc_id=grounded_chatbot_answer(payload.message,docs,history); usage={}
                 route='LLM'
+                with SessionLocal.begin() as db:
+                    cost=ai_billing.calculate_provider_cost(db,provider='openai',model=provider_model,input_units=max(0,int(usage.get('input_tokens') or 0)-int((usage.get('input_tokens_details') or {}).get('cached_tokens') or 0)),cached_input_units=int((usage.get('input_tokens_details') or {}).get('cached_tokens') or 0),output_units=int(usage.get('output_tokens') or 0))
+                    settled=ai_billing.settle_ai_operation(db,provider_reservation,cost['credits'],provider_cost_micros=cost['provider_cost_micros'],customer_usage_value_micros=cost['customer_usage_value_micros'],provider='openai',model=provider_model,pricing_version=cost['pricing_version'],input_units=cost['input_units'],cached_input_units=cost['cached_input_units'],output_units=cost['output_units'])
+                    charged=ai_billing.public_decimal(settled.get('settled_amount',0))
+                    wallet_mode='RESERVED' if provider_reservation.get('wallet_type')==ai_billing.CHATBOT_RESERVED else 'NORMAL'
             except Exception as exc:
+                if provider_reservation:
+                    try:
+                        with SessionLocal.begin() as db: ai_billing.release_ai_operation(db,provider_reservation,'public_provider_failure')
+                    except Exception: pass
                 raise HTTPException(503,'AI assistant is temporarily unavailable') from exc
         else:
-            answer,doc_id=_grounded_answer(payload.message,docs); route='LOCAL_FALLBACK'
+            if not answer:
+                answer,doc_id=_grounded_answer(payload.message,docs); route='LOCAL_FALLBACK'
+        if 'charged' not in locals(): charged=0
         with SessionLocal.begin() as db:
             if route=='LLM' and answer:
                 _cache_store(db,payload.site_id,payload.message,answer,doc_id)
@@ -291,7 +342,7 @@ def chatbot(payload:ChatIn,request:Request):
     with SessionLocal.begin() as db:
         db.execute(text('INSERT INTO chatbot_messages(id,site_id,session_id,role,content,grounded_doc_id,action,created_at) VALUES (:i,:s,:x,\'USER\',:c,NULL,NULL,:a)'),{'i':str(uuid4()),'s':payload.site_id,'x':payload.session_id,'c':payload.message,'a':now_iso()})
         db.execute(text('INSERT INTO chatbot_messages(id,site_id,session_id,role,content,grounded_doc_id,action,created_at) VALUES (:i,:s,:x,\'ASSISTANT\',:c,:d,:o,:a)'),{'i':str(uuid4()),'s':payload.site_id,'x':payload.session_id,'c':answer,'d':doc_id,'o':action,'a':now_iso()})
-    return {'answer':answer,'grounded':bool(doc_id) or route in {'RULE','BOOKING'},'source_doc_id':doc_id,'action':action,'slots':slots,'credit_cost':0,'route':route}
+    return {'answer':answer,'grounded':bool(doc_id) or route in {'RULE','BOOKING'},'source_doc_id':doc_id,'action':action,'slots':slots,'credit_cost':charged if 'charged' in locals() else 0,'route':route,'wallet_mode':locals().get('wallet_mode')}
 
 @router.get('/sites/{site_id}/chatbot-metrics')
 def site_chatbot_metrics(site_id:str,request:Request):

@@ -301,7 +301,10 @@ def test_assistant_zero_owner_balance_uses_public_fallback_without_provider_call
     conv = c.post(f'/api/public/sites/{sid}/assistant/conversations', json={'session_id': 'zero-balance-session-001'}).json()
     uid=c.get('/api/auth/me').json()['id']
     with SessionLocal.begin() as db:
-        db.execute(text("UPDATE credit_wallets SET monthly_remaining=0,signup_remaining=0,topup_remaining=0 WHERE user_id=:u"),{'u':uid})
+        # The unified system has a separate chatbot protection wallet. Exhaust
+        # both wallets here so this regression specifically exercises the
+        # deterministic zero-credit fallback path.
+        db.execute(text("UPDATE credit_wallets SET monthly_remaining=0,signup_remaining=0,topup_remaining=0,normal_balance=0,normal_reserved=0,chatbot_reserved_balance=0,chatbot_reserved_held=0,legacy_normal_snapshot=0 WHERE user_id=:u"),{'u':uid})
         db.execute(text("UPDATE users SET ai_credits=0 WHERE id=:u"),{'u':uid})
     called={'n':0}
     monkeypatch.setattr(sales_assistant.settings, 'openai_api_key', 'controlled-test-key')

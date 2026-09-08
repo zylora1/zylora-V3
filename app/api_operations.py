@@ -11,6 +11,7 @@ from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy import text
 
 from .db import SessionLocal, now_iso
+from .config import settings
 from .security import current_user, require_csrf, durable_rate_limit
 from .editor_state import create_backup, list_backups, restore_backup, ensure_history, push_history, create_revision
 from .operations import run_site_qa, launch_checklist, site_health, growth_report, operations_summary, record_analytics, record_operational_event, safe_exception_summary
@@ -18,7 +19,8 @@ from .settings_store import get_system_setting
 from .structured_editor import parse_document, merge_operations, generate_operations, validate_operations_against_html, validate_internal_page_links, extract_editor_nodes, instrument_editable_html
 from .templates import render_template_page
 from .media import list_assets, get_asset
-from .credits import debit_wallet, wallet_summary
+from .credits import debit_wallet, wallet_summary, reserve_wallet, finalize_wallet, refund_wallet
+from . import ai_billing
 from .plans import get_plan
 from .seo_engine import seo_document
 from .notifications import retry_delivery, retry_due_deliveries
@@ -213,7 +215,25 @@ def sitewide_ai_edit(site_id: str, payload: SitewideAiEditIn, request: Request):
         if payload.expected_version is not None and payload.expected_version!=version:
             raise HTTPException(409,detail={'code':'DOCUMENT_VERSION_CONFLICT','current':version,'expected':payload.expected_version,'message':'The website changed. Reload before applying this site-wide edit.'})
         db.execute(text('DELETE FROM ai_edit_previews WHERE expires_at<:n'),{'n':now_iso()})
-        planned=[]; providers=set()
+        planned=[]; providers=set(); provider_usages=[]
+        configured_cost=max(1,min(100,int(get_system_setting('ai_sitewide_edit_cost','5') or 5)))
+        cost=configured_cost; apply_reservation=None
+        # Preview generation itself invokes the provider. Reserve the whole
+        # bounded site-wide budget before those calls; applying a saved preview
+        # does not call AI and therefore creates no second reservation.
+        pages=_page_keys(site)
+        if settings.openai_api_key and (payload.preview_only or not payload.preview_id):
+            try:
+                estimate=ai_billing.feature_reservation_budget(
+                    db, feature='AI_SITEWIDE_EDIT', provider='openai',
+                    model=settings.openai_model, page_count=len(pages),
+                )
+                cost=ai_billing.public_decimal(estimate)
+                apply_reservation=ai_billing.reserve_ai_operation(db,account_id=u['id'],user_id=u['id'],site_id=site_id,plan=u['plan'],estimated_credits=estimate,feature='AI_SITEWIDE_EDIT',operation_id=str(uuid4()),request_id=request.headers.get('Idempotency-Key') or str(uuid4()),idempotency_key=request.headers.get('Idempotency-Key'),provider='openai',model=settings.openai_model,allow_reserved=False)
+                if apply_reservation and apply_reservation.get('idempotent'):
+                    raise HTTPException(409,detail={'code':'AI_REQUEST_REPLAY','message':'This AI request was already processed. Retry without reusing its idempotency key.'})
+            except ValueError as exc:
+                raise HTTPException(503,'AI pricing is not configured for this model') from exc
         if not payload.preview_only and payload.preview_id:
             preview=db.execute(text("SELECT operations_json,providers_json,document_version FROM ai_edit_previews WHERE id=:i AND user_id=:u AND site_id=:s AND instruction_hash=:h AND expires_at>=:n"),
               {'i':payload.preview_id,'u':u['id'],'s':site_id,'h':instruction_hash,'n':now_iso()}).mappings().first()
@@ -226,12 +246,15 @@ def sitewide_ai_edit(site_id: str, payload: SitewideAiEditIn, request: Request):
             try: providers=set(json.loads(preview['providers_json'] or '[]'))
             except Exception: providers=set()
         else:
-            pages=_page_keys(site); allowed=set(pages); assets=list_assets(u['id'],site_id)
+            allowed=set(pages); assets=list_assets(u['id'],site_id)
             for page in pages[:20]:
                 html=instrument_editable_html(render_template_page(site['template_slug'],site,'' if page=='home' else page),page,site['template_slug'])
                 context={**site,'assets':assets,'editor_nodes':extract_editor_nodes(html),'sitewide_pages':pages}
-                try: ops,provider=generate_operations(context,payload.instruction,page,user_id=u['id'],site_id=site_id)
+                try:
+                    generated=generate_operations(context,payload.instruction,page,user_id=u['id'],site_id=site_id,return_usage=True)
+                    ops,provider=(generated[0],generated[1]); usage=generated[2] if len(generated)>2 else {}
                 except Exception as exc: raise HTTPException(422,f'Could not plan the edit on {page}: {exc}')
+                provider_usages.append((provider,usage or {}))
                 try:
                     ops=validate_operations_against_html(html,ops); ops=validate_internal_page_links(ops,allowed)
                 except ValueError as exc: raise HTTPException(422,f'{page}: {exc}')
@@ -241,18 +264,38 @@ def sitewide_ai_edit(site_id: str, payload: SitewideAiEditIn, request: Request):
                     if op.get('type')=='replace_image': get_asset(op['asset_id'],user_id=u['id'],site_id=site_id)
                 if ops: planned.extend(ops); providers.add(provider)
         impact={'pages':sorted({str(x.get('page') or 'home') for x in planned}),'operations':len(planned),'operation_types':sorted({str(x.get('type')) for x in planned})}
-        cost=max(1,min(100,int(get_system_setting('ai_sitewide_edit_cost','5') or 5)))
+        if apply_reservation and not apply_reservation.get('skipped'):
+            actual=ai_billing._dec(0)
+            cost_details=[]
+            for provider_name,usage in provider_usages:
+                if provider_name!='openai': continue
+                cached=int((usage.get('input_tokens_details') or {}).get('cached_tokens') or usage.get('cached_input_tokens') or 0)
+                try:
+                    measured=ai_billing.calculate_provider_cost(db,provider='openai',model=settings.openai_model,input_units=max(0,int(usage.get('input_tokens') or 0)-cached),cached_input_units=cached,output_units=int(usage.get('output_tokens') or 0))
+                except ValueError: measured=None
+                if measured: actual += measured['credits']; cost_details.append(measured)
+            if cost_details:
+                first=cost_details[0]
+                debit=ai_billing.settle_ai_operation(db,apply_reservation,actual,provider_cost_micros=sum(x['provider_cost_micros'] for x in cost_details),customer_usage_value_micros=sum(x['customer_usage_value_micros'] for x in cost_details),provider='openai',model=settings.openai_model,pricing_version=first['pricing_version'],input_units=sum(x['input_units'] for x in cost_details),cached_input_units=sum(x['cached_input_units'] for x in cost_details),output_units=sum(x['output_units'] for x in cost_details))
+            else:
+                debit=ai_billing.settle_ai_operation(db,apply_reservation,0,metadata={'provider_usage_unavailable':True})
+        else:
+            debit=apply_reservation
         if payload.preview_only:
             preview_id=str(uuid4()); expires=(datetime.now(timezone.utc)+timedelta(minutes=15)).isoformat()
             db.execute(text("INSERT INTO ai_edit_previews(id,user_id,site_id,document_version,instruction_hash,operations_json,providers_json,expires_at,created_at) VALUES (:i,:u,:s,:v,:h,:o,:p,:e,:c)"),
               {'i':preview_id,'u':u['id'],'s':site_id,'v':version,'h':instruction_hash,'o':json.dumps(planned,separators=(',',':')),'p':json.dumps(sorted(providers),separators=(',',':')),'e':expires,'c':now_iso()})
             return {'preview_only':True,'preview_id':preview_id,'preview_expires_at':expires,'instruction':payload.instruction,'impact':impact,'operations':planned,'providers':sorted(providers),'credit_cost_on_apply':cost,'document_version':version}
         if not planned:
+            if apply_reservation and not apply_reservation.get('skipped'):
+                # The reservation was settled above; a zero-operation plan is
+                # a no-cost outcome and has already released its full hold.
+                pass
             if payload.preview_id: db.execute(text('DELETE FROM ai_edit_previews WHERE id=:i'),{'i':payload.preview_id})
             return {'preview_only':False,'applied':False,'impact':impact,'operations':[],'credits':wallet_summary(u['id']),'document_version':version}
         # Applying a preview never regenerates AI operations: the exact validated plan is reused atomically.
         create_backup(db,site_id,u['id'],'PRE_AI_SITEWIDE','Before site-wide AI edit'); ensure_history(db,site,u['id'])
-        debit=debit_wallet(db,u['id'],u['plan'],cost,'AI_SITEWIDE_EDIT',request.headers.get('Idempotency-Key'),credit_type='ai',reference_id=site_id)
+        debit=debit
         document=merge_operations(parse_document(site.get('draft_structure_json')),planned)
         changed=db.execute(text('UPDATE sites SET draft_structure_json=:j,document_version=document_version+1,updated_at=:a WHERE id=:s AND document_version=:v'),{'j':json.dumps(document,separators=(',',':')),'a':now_iso(),'s':site_id,'v':version})
         if changed.rowcount!=1: raise HTTPException(409,'Website changed while applying the edit')

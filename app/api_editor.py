@@ -14,7 +14,7 @@ from sqlalchemy import text
 
 from .db import SessionLocal, now_iso
 from .config import settings
-from .credits import debit_wallet
+from . import ai_billing
 from .plans import get_plan
 from .providers import ai_seo_metadata
 from .operations import safe_exception_summary, record_operational_event
@@ -759,6 +759,8 @@ class SeoAiAssistIn(BaseModel):
 @router.post('/sites/{site_id}/seo/ai-assist')
 def seo_ai_assist(site_id: str, payload: SeoAiAssistIn, request: Request):
     u=_user(request,True)
+    # Commit the pre-provider reservation before leaving this scope; the
+    # provider call and settlement intentionally run in separate transactions.
     with SessionLocal.begin() as db:
         site=_owned_site(db,u['id'],site_id); page=_page_allowed(site,payload.page); seo=seo_document(site)
         html=render_draft(site,page); page_text=' '.join(BeautifulSoup(html,'html.parser').stripped_strings)[:6000]
@@ -770,13 +772,37 @@ def seo_ai_assist(site_id: str, payload: SeoAiAssistIn, request: Request):
             'description':(seo.get('site') or {}).get('description') or site.get('description'),
             'page':page,'page_text':page_text,
         }
-        try: result=ai_seo_metadata(ctx,user_id=u['id'],site_id=site_id)
-        except Exception as exc:
-            record_operational_event('AI','AI_SEO_UNAVAILABLE',safe_exception_summary(exc),severity='WARNING',user_id=u['id'],site_id=site_id,dedupe_minutes=2)
-            raise HTTPException(502,detail={'code':'AI_SEO_UNAVAILABLE','message':'AI SEO assistance is temporarily unavailable. Please try again.'})
-        cost=max(1,int(get_plan(u['plan']).get('ai_edit_cost',2)))
-        debit=debit_wallet(db,u['id'],u['plan'],cost,'AI_SEO_ASSIST',request.headers.get('Idempotency-Key'))
-    return {**result,'credit_cost':cost,'credits':debit}
+        model=settings.openai_model
+        if not settings.openai_api_key:
+            reservation=None
+        else:
+            try:
+                estimate=ai_billing.feature_reservation_budget(
+                    db, feature='AI_SEO_METADATA', provider='openai', model=model,
+                )
+            except ValueError as exc:
+                raise HTTPException(503,detail={'code':'AI_SEO_UNAVAILABLE','message':'AI pricing is not configured for this model.'}) from exc
+            reservation=ai_billing.reserve_ai_operation(db,account_id=u['id'],user_id=u['id'],site_id=site_id,plan=u['plan'],estimated_credits=estimate,feature='AI_SEO_METADATA',operation_id=str(uuid4()),request_id=request.headers.get('Idempotency-Key') or str(uuid4()),idempotency_key=request.headers.get('Idempotency-Key'),provider='openai',model=model,allow_reserved=False)
+            if reservation and reservation.get('idempotent'):
+                # An idempotency-key replay must never invoke the provider a
+                # second time.  The original response is not persisted here,
+                # so fail closed and let the client retry without that key.
+                raise HTTPException(409,detail={'code':'AI_REQUEST_REPLAY','message':'This AI request was already processed. Retry without reusing its idempotency key.'})
+    try:
+        result=ai_seo_metadata(ctx,user_id=u['id'],site_id=site_id)
+    except Exception as exc:
+        if reservation and not reservation.get('skipped'):
+            with SessionLocal.begin() as db: ai_billing.release_ai_operation(db,reservation,'seo_provider_failure')
+        record_operational_event('AI','AI_SEO_UNAVAILABLE',safe_exception_summary(exc),severity='WARNING',user_id=u['id'],site_id=site_id,dedupe_minutes=2)
+        raise HTTPException(502,detail={'code':'AI_SEO_UNAVAILABLE','message':'AI SEO assistance is temporarily unavailable. Please try again.'})
+    debit=reservation
+    if reservation and not reservation.get('skipped'):
+        usage=result.get('usage') or {}
+        cached=int((usage.get('input_tokens_details') or {}).get('cached_tokens') or usage.get('cached_input_tokens') or 0)
+        with SessionLocal.begin() as db:
+            cost=ai_billing.calculate_provider_cost(db,provider='openai',model=model,input_units=max(0,int(usage.get('input_tokens') or 0)-cached),cached_input_units=cached,output_units=int(usage.get('output_tokens') or 0))
+            debit=ai_billing.settle_ai_operation(db,reservation,cost['credits'],provider_cost_micros=cost['provider_cost_micros'],customer_usage_value_micros=cost['customer_usage_value_micros'],provider='openai',model=model,pricing_version=cost['pricing_version'],input_units=cost['input_units'],cached_input_units=cost['cached_input_units'],output_units=cost['output_units'])
+    return {**result,'credit_cost':ai_billing.public_decimal(debit.get('settled_amount',0) if isinstance(debit,dict) else 0),'credits':debit}
 
 
 @router.get('/sites/{site_id}/seo/health')

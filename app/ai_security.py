@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from uuid import uuid4
 
 from sqlalchemy import text
@@ -20,10 +21,15 @@ def record_ai_usage_event(*, assistant_type: str, status: str, model: str, user_
                           site_id: str | None = None, conversation_id: str | None = None,
                           request_id: str | None = None, input_tokens: int = 0,
                           cached_input_tokens: int = 0, output_tokens: int = 0,
-                          provider_cost_micros: int = 0, billable_credits: int = 0,
+                          provider_cost_micros: int = 0, billable_credits: Decimal | int | float = 0,
                           tool_calls: list[str] | None = None, error_code: str | None = None,
                           duration_ms: int | None = None) -> str:
     """Write a privacy-minimized, non-secret AI usage record."""
+    try:
+        credits = Decimal(str(billable_credits or 0)).quantize(Decimal('0.000001'), rounding=ROUND_HALF_UP)
+    except (InvalidOperation, TypeError, ValueError):
+        credits = Decimal('0')
+    credits = max(Decimal('0'), credits)
     event_id = str(uuid4())
     with SessionLocal.begin() as db:
         db.execute(text('''INSERT INTO ai_usage_events(
@@ -35,7 +41,7 @@ def record_ai_usage_event(*, assistant_type: str, status: str, model: str, user_
             'c': conversation_id, 'at': assistant_type, 'st': str(status or 'UNKNOWN')[:30],
             'm': str(model or 'unknown')[:120], 'tin': max(0, int(input_tokens or 0)),
             'cached': max(0, int(cached_input_tokens or 0)), 'tout': max(0, int(output_tokens or 0)),
-            'cost': max(0, int(provider_cost_micros or 0)), 'credits': max(0, int(billable_credits or 0)),
+            'cost': max(0, int(provider_cost_micros or 0)), 'credits': str(credits),
             'tools': json.dumps([str(x)[:80] for x in (tool_calls or [])[:40]], separators=(',', ':')),
             'err': str(error_code or '')[:120] or None, 'duration': max(0, int(duration_ms or 0)) if duration_ms is not None else None,
             'a': now_iso(),

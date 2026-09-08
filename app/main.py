@@ -72,6 +72,10 @@ async def _maintenance_loop():
         try: await asyncio.to_thread(retry_due_deliveries,25)
         except Exception as exc: record_operational_event('NOTIFICATIONS','RETRY_LOOP_FAILED',safe_exception_summary(exc),severity='ERROR')
         try:
+            from .mail_campaigns import process_due_campaign_jobs
+            await asyncio.to_thread(process_due_campaign_jobs, 1)
+        except Exception as exc: record_operational_event('EMAIL','CAMPAIGN_WORKER_FAILED',safe_exception_summary(exc),severity='ERROR')
+        try:
             await asyncio.to_thread(scan_stale_payment_orders)
             await asyncio.to_thread(reconcile_due_payment_cases,25)
         except Exception as exc: record_operational_event('PAYMENTS','RECOVERY_SCAN_FAILED',safe_exception_summary(exc),severity='ERROR')
@@ -325,6 +329,9 @@ def _landing_html(request: Request) -> str:
         '{{FREE_AI_CREDITS}}':_limit('FREE','ai_credits'),
         '{{STARTER_AI_CREDITS}}':_limit('STARTER','ai_credits'),
         '{{GROWTH_AI_CREDITS}}':_limit('GROWTH','ai_credits'),
+        '{{FREE_CHATBOT_RESERVED_CREDITS}}':_limit('FREE','chatbot_reserved_credits'),
+        '{{STARTER_CHATBOT_RESERVED_CREDITS}}':_limit('STARTER','chatbot_reserved_credits'),
+        '{{GROWTH_CHATBOT_RESERVED_CREDITS}}':_limit('GROWTH','chatbot_reserved_credits'),
         '{{FREE_LEAD_CREDITS}}':_limit('FREE','lead_credits'),
         '{{STARTER_LEAD_CREDITS}}':_limit('STARTER','lead_credits'),
         '{{GROWTH_LEAD_CREDITS}}':_limit('GROWTH','lead_credits'),

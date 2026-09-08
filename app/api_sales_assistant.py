@@ -129,7 +129,9 @@ def public_message(site_id: str,conversation_id: str,payload: MessageIn,request:
         contact['service_enquiry_consent']=bool(contact.get('service_enquiry_consent',True)); contact['marketing_consent']=bool(contact.get('marketing_consent',False))
     turnstile_required = settings.app_env == 'production' or bool(settings.turnstile_secret_key)
     conversion_allowed = bool(payload.turnstile_token) or not turnstile_required
-    try: return process_message(site_id,conversation_id,payload.message,contact=contact,test_mode=False,conversion_allowed=conversion_allowed,expected_assistant_type='PUBLIC_SITE_ASSISTANT')
+    idem=(request.headers.get('Idempotency-Key') or '').strip()[:120]
+    request_id=f'{conversation_id}:{idem}' if idem else None
+    try: return process_message(site_id,conversation_id,payload.message,contact=contact,test_mode=False,conversion_allowed=conversion_allowed,expected_assistant_type='PUBLIC_SITE_ASSISTANT',request_id=request_id)
     except KeyError: raise HTTPException(404,'Conversation not found')
     except OverflowError as exc: raise HTTPException(413,str(exc))
     except ValueError as exc: raise HTTPException(422,str(exc))
