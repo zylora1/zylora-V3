@@ -168,6 +168,14 @@ def public_assistant_appointment(site_id: str,conversation_id: str,payload: Appo
         live=db.execute(text("SELECT 1 FROM sites WHERE id=:s AND status='LIVE'"),{'s':site_id}).first()
         conv_exists=db.execute(text('SELECT 1 FROM assistant_conversations WHERE id=:c AND site_id=:s AND test_mode=0'),{'c':conversation_id,'s':site_id}).first()
     if not live or not conv_exists: raise HTTPException(404,'Conversation not found')
+    # Idempotent replays must return the original booking before checking the
+    # now-occupied slot.  Otherwise a client retry receives a misleading 409
+    # and cannot recover the successful result.
+    with SessionLocal() as db:
+        prior=db.execute(text("SELECT result_id FROM assistant_action_keys WHERE site_id=:s AND conversation_id=:c AND action_type='CREATE_APPOINTMENT' AND idempotency_key=:k"),{'s':site_id,'c':conversation_id,'k':idem}).mappings().first()
+        if prior:
+            row=db.execute(text('SELECT * FROM appointments WHERE id=:i'),{'i':prior['result_id']}).mappings().first()
+            return {'ok':True,'id':prior['result_id'],'idempotent':True,'starts_at':row['starts_at'] if row else payload.starts_at}
     ok,why=slot_is_available(site_id,payload.starts_at,require_settings=True)
     if not ok: raise HTTPException(409,detail={'code':'APPOINTMENT_SLOT_UNAVAILABLE','message':why or 'That slot is unavailable'})
     contact={'name':payload.name,'email':str(payload.email).lower(),'phone':payload.phone,'service_interest':payload.service_interest,'preferred_date':payload.starts_at,'service_enquiry_consent':payload.service_enquiry_consent}
@@ -180,7 +188,7 @@ def public_assistant_appointment(site_id: str,conversation_id: str,payload: Appo
             if not conv: raise HTTPException(404,'Conversation not found')
             site=db.execute(text("SELECT * FROM sites WHERE id=:s AND status='LIVE'"),{'s':site_id}).mappings().first()
             if not site: raise HTTPException(404,'Live site not found')
-            prior=db.execute(text("SELECT result_id FROM assistant_action_keys WHERE site_id=:s AND action_type='CREATE_APPOINTMENT' AND idempotency_key=:k"),{'s':site_id,'k':idem}).mappings().first()
+            prior=db.execute(text("SELECT result_id FROM assistant_action_keys WHERE site_id=:s AND conversation_id=:c AND action_type='CREATE_APPOINTMENT' AND idempotency_key=:k"),{'s':site_id,'c':conversation_id,'k':idem}).mappings().first()
             if prior:
                 row=db.execute(text('SELECT * FROM appointments WHERE id=:i'),{'i':prior['result_id']}).mappings().first()
                 return {'ok':True,'id':prior['result_id'],'idempotent':True,'starts_at':row['starts_at'] if row else payload.starts_at}

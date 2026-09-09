@@ -6,6 +6,7 @@ import logging
 from decimal import ROUND_UP
 import re
 from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 from uuid import uuid4
 from fastapi import HTTPException
 from sqlalchemy import text
@@ -21,7 +22,7 @@ from . import ai_billing
 from .ai_security import PUBLIC_SITE_ASSISTANT, SALES_ASSISTANT, OWNER_ASSISTANT, assert_assistant_type, record_ai_usage_event
 from .notifications import notify
 from .operations import record_analytics, record_operational_event, safe_exception_summary
-from .appointment_engine import available_slots, slot_is_available
+from .appointment_engine import available_slots, slot_is_available, get_appointment_settings
 from .ai_models import default_model, validate_model
 
 INTENTS={
@@ -152,6 +153,36 @@ def _extract_qualification(message: str, contact: dict|None=None) -> dict:
         m=DATE_RE.search(message)
         if m:q['preferred_date']=m.group(1)
     return q
+
+
+def _resolve_requested_date(raw: str|None, message: str, site_id: str) -> str|None:
+    """Resolve relative/weekday appointment language in the business timezone."""
+    value=str(raw or '').strip().lower()
+    if not value:
+        return None
+    try:
+        if re.fullmatch(r'\d{4}-\d{2}-\d{2}', value):
+            datetime.fromisoformat(value)
+            return value
+    except ValueError:
+        return None
+    settings=get_appointment_settings(site_id) or {}
+    try:
+        zone=ZoneInfo(str(settings.get('timezone') or 'UTC'))
+    except Exception:
+        zone=timezone.utc
+    today=datetime.now(timezone.utc).astimezone(zone).date()
+    if value == 'today':
+        return today.isoformat()
+    if value == 'tomorrow':
+        return (today+timedelta(days=1)).isoformat()
+    names={name.lower(): index for index,name in enumerate(('monday','tuesday','wednesday','thursday','friday','saturday','sunday'))}
+    if value not in names:
+        return None
+    delta=(names[value]-today.weekday()) % 7
+    if re.search(r'\bnext\s+'+re.escape(value)+r'\b', message.lower()) and delta == 0:
+        delta=7
+    return (today+timedelta(days=delta)).isoformat()
 
 
 def _safe_sentence_candidates(text_value: str) -> list[str]:
@@ -480,7 +511,9 @@ def process_message(site_id: str, conversation_id: str, message: str, *, contact
             record_operational_event('AI_ASSISTANT','ASSISTANT_QUOTA_EXHAUSTED',reason or 'quota',severity='WARNING',site_id=site_id,dedupe_minutes=60)
         return {'answer':'I can still help you contact the business using the options below.','fallback':fallback,'quota_exhausted':True,'conversation_id':conversation_id,'lead':None,'slots':[]}
     intents=classify_intents(msg); q=_extract_qualification(msg,contact); previous_q=_j(conv.get('qualification_json') or '{}',{}); previous_q.update(q); q=previous_q
-    requested_date=q.get('preferred_date') if re.fullmatch(r'\d{4}-\d{2}-\d{2}',str(q.get('preferred_date') or '')) else None
+    requested_date=_resolve_requested_date(q.get('preferred_date'),msg,site_id)
+    if requested_date:
+        q['preferred_date']=requested_date
     daypart='afternoon' if 'afternoon' in msg.lower() else ('morning' if 'morning' in msg.lower() else ('evening' if 'evening' in msg.lower() else None))
     slots=available_slots(site_id,requested_date=requested_date,daypart=daypart,limit=5) if int(cfg.get('appointment_booking') or 0) and ({'AVAILABILITY_QUERY','APPOINTMENT_INTENT'} & set(intents)) else []
     tools={'knowledge':search_business_knowledge(site,msg,cfg),'business_hours':get_business_hours(site),'location':get_location(site),'contact_options':contacts,'appointment_slots':slots,'qualification_fields':_qualification_defaults(site,cfg)}
@@ -491,7 +524,13 @@ def process_message(site_id: str, conversation_id: str, message: str, *, contact
     history=[]
     max_output_tokens=int(get_system_setting('assistant_output_token_limit','350') or 350)
     # OpenAI is only a grounded language layer over validated tool outputs; actions already ran server-side.
-    if settings.openai_api_key and not test_mode:
+    # Appointment/availability replies stay deterministic so a model can never
+    # invent a slot or date. Other requests may still incur measured provider
+    # usage, but the model output is accepted only when the server selected
+    # grounded facts below.
+    model_safe_intents = {'APPOINTMENT_INTENT', 'AVAILABILITY_QUERY'}
+    allow_model_synthesis = not (model_safe_intents & set(intents))
+    if settings.openai_api_key and not test_mode and allow_model_synthesis:
         with SessionLocal() as db:
             history=[dict(r) for r in db.execute(text('SELECT role,content FROM assistant_messages WHERE conversation_id=:c ORDER BY created_at DESC LIMIT 8'),{'c':conversation_id}).mappings().all()][::-1]
         try:
@@ -507,19 +546,22 @@ def process_message(site_id: str, conversation_id: str, message: str, *, contact
             return {'answer':'I can help you contact the business using the options below. Please leave your details and a short description, and the team will get back to you.','fallback':fallback,'quota_exhausted':True,'credit_exhausted':True,'conversation_id':conversation_id,'lead':None,'slots':[]}
         if reservation.get('idempotent'):
             # Do not replay a provider call for a reused idempotency key.  If
-            # the original response was not available from cache, provide the
-            # deterministic handoff instead of risking an uncharged call.
-            reservation = None
-            answer = 'I can help you contact the business using the options below. Please leave your details and a short description, and the team will get back to you.'
-            grounded = False
-    if settings.openai_api_key and (test_mode or reservation is not None):
+            # the original response is not cached, return the same safe,
+            # server-derived answer without writing a duplicate message.
+            return {'answer':answer,'grounded':grounded,'intents':intents,
+                    'conversation_id':conversation_id,'lead':None,'slots':slots,
+                    'fallback':fallback,'idempotent':True,
+                    'qualification':q,'qualification_fields':tools['qualification_fields'],
+                    'conversion_deferred':False}
+    if settings.openai_api_key and (test_mode or reservation is not None) and (test_mode or allow_model_synthesis):
         try:
             if not history:
                 with SessionLocal() as db:
                     history=[dict(r) for r in db.execute(text('SELECT role,content FROM assistant_messages WHERE conversation_id=:c ORDER BY created_at DESC LIMIT 8'),{'c':conversation_id}).mappings().all()][::-1]
             billing_model = model
             result=sales_assistant_completion(business_context={'business_name':site.get('business_name'),'goal':cfg.get('primary_goal')},visitor_message=msg,history=history,tool_results={**tools,'grounded_fallback_answer':answer},tone=cfg.get('tone') or 'FRIENDLY',max_output_tokens=max_output_tokens,model=model)
-            if result.get('answer'): answer=result['answer']; grounded=True
+            if result.get('answer') and grounded:
+                answer=result['answer']; grounded=True
             input_tokens=int(result.get('input_tokens') or 0);output_tokens=int(result.get('output_tokens') or 0);model=result.get('model') or model
             measured_cost=estimate_openai_cost_micros(model,{'input_tokens':input_tokens,'output_tokens':output_tokens,'input_tokens_details':result.get('input_tokens_details')})
             if reservation and not test_mode:
