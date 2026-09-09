@@ -43,8 +43,10 @@ def _outbox(channel: str, recipient: str, body: str, subject: str | None = None,
         db.execute(text('INSERT INTO outbox(channel,recipient,subject,body,status,metadata,created_at) VALUES (:c,:r,:s,:b,:st,:m,:a)'),
                    {'c':channel,'r':recipient,'s':subject,'b':body,'st':status,'m':json.dumps(metadata or {}),'a':now_iso()})
 
-def send_email(recipient: str, subject: str, body: str, *, html: str | None = None, unsubscribe_url: str | None = None, attachments=()):
-    """Compatibility facade for the single authoritative SMTP EmailService."""
+def send_email(recipient: str, subject: str, body: str, *, html: str | None = None,
+               unsubscribe_url: str | None = None, attachments=(),
+               idempotency_key: str | None = None):
+    """Compatibility facade for the single authoritative Resend EmailService."""
     html_body = sanitize_email_html(html if html is not None else body) if (html is not None or looks_like_html(body)) else None
     text_body = ' '.join(str(body or '').split()) or (html_to_text(html_body) if html_body is not None else '')
     if unsubscribe_url:
@@ -52,7 +54,10 @@ def send_email(recipient: str, subject: str, body: str, *, html: str | None = No
         if html_body is not None:
             safe_url = str(unsubscribe_url).replace('"', '%22')
             html_body += f'<p><a href="{safe_url}">Unsubscribe from marketing emails</a></p>'
-    return email_service.send_transactional(recipient, subject, text_body, html=html_body, attachments=attachments)
+    return email_service.send_transactional(
+        recipient, subject, text_body, html=html_body, attachments=attachments,
+        idempotency_key=idempotency_key,
+    )
 
 def send_whatsapp(recipient_e164: str, body: str):
     """Send WhatsApp through Twilio first, then the legacy Meta provider."""

@@ -53,17 +53,12 @@ class Settings(BaseSettings):
     openai_model: str = 'gpt-5-mini'
     sales_assistant_model: str = 'gpt-4o-mini'
 
-    # Email transport. Credentials remain server-side and are never exposed by API responses.
-    smtp_host: str = ''
-    smtp_port: int = 587
-    smtp_username: str = ''
-    smtp_password: str = ''
-    smtp_from_email: str = 'notifications@zylora.dev'
-    smtp_from_name: str = 'Zylora'
-    smtp_reply_to: str = ''
-    smtp_security: str = 'starttls'
-    smtp_connection_timeout: int = 10
-    smtp_send_timeout: int = 20
+    # Resend is the only email transport. Credentials remain server-side and
+    # are never exposed by API responses.
+    resend_api_key: str = ''
+    email_from: str = 'Zylora <notifications@zylora.dev>'
+    email_reply_to: str = ''
+    email_send_timeout: int = 20
     email_batch_size: int = 25
     email_max_sends_per_minute: int = 60
     email_max_retries: int = 4
@@ -147,11 +142,8 @@ def validate_production_settings() -> None:
             need(False, 'DATABASE_URL')
     need(bool(settings.openai_api_key), 'OPENAI_API_KEY')
     need(bool(settings.sales_assistant_model), 'SALES_ASSISTANT_MODEL')
-    need(bool(settings.smtp_host), 'SMTP_HOST')
-    need(1 <= int(settings.smtp_port) <= 65535, 'SMTP_PORT')
-    need(settings.smtp_security.strip().lower() in {'starttls','tls','none'}, 'SMTP_SECURITY=starttls, tls, or none')
-    need(bool(settings.smtp_from_email and '@' in settings.smtp_from_email and '.local' not in settings.smtp_from_email and '.example' not in settings.smtp_from_email), 'SMTP_FROM_EMAIL')
-    need(bool(settings.smtp_username) == bool(settings.smtp_password), 'SMTP_USERNAME/SMTP_PASSWORD (set both or neither)')
+    need(bool(settings.resend_api_key), 'RESEND_API_KEY')
+    need(bool(settings.email_from and '@' in settings.email_from and '.local' not in settings.email_from and '.example' not in settings.email_from), 'EMAIL_FROM')
     need(bool(settings.email_unsubscribe_secret) and len(settings.email_unsubscribe_secret) >= 32, 'EMAIL_UNSUBSCRIBE_SECRET (32+ characters)')
     twilio_ready=bool(settings.twilio_account_sid and settings.twilio_auth_token and settings.twilio_whatsapp_from)
     meta_whatsapp_ready=bool(settings.whatsapp_phone_number_id and settings.whatsapp_access_token)

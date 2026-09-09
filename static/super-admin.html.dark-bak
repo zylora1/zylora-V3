@@ -821,7 +821,7 @@
           </div>
           <hr/>
           <h3>AI Sales Assistant guardrails</h3>
-          <p class="muted-copy">The Assistant is unlimited as a plan entitlement and does not consume AI or lead credits. The controls below are operational abuse and safety guardrails, not a monthly quota.</p>
+          <p class="muted-copy">The Assistant uses a finite Sales Assistant Protection allowance and does not consume lead credits. The controls below are operational abuse and safety guardrails.</p>
           <div class="form-grid-2">
             <label>Messages / visitor session<input id="assistantSessionLimit" min="1" type="number" value="40"/></label>
             <label>Site messages / hour<input id="assistantSiteHourlyLimit" min="1" type="number" value="500"/></label>
@@ -834,7 +834,7 @@
         </form>
         <div class="settings-card">
           <h2>Provider operations</h2>
-          <p class="muted-copy">OAuth, Razorpay, Cloudflare, SMTP, WhatsApp, Turnstile, Google Sheets and OpenAI credentials are injected through environment variables. Production providers fail closed when required credentials are missing.</p>
+          <p class="muted-copy">OAuth, Razorpay, Cloudflare, Resend, WhatsApp, Turnstile, Google Sheets and OpenAI credentials are injected through environment variables. Production providers fail closed when required credentials are missing.</p>
         </div>
       </div>
     </div>

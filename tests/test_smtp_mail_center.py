@@ -100,7 +100,7 @@ def test_mail_center_api_is_admin_only_and_sanitizes_campaign_content():
     assert detail.status_code == 200 and detail.json()['campaign']['recipient_counts']['PENDING'] == 1
 
 
-def test_campaign_queue_processes_smtp_accepted_mail_and_records_unsubscribe(monkeypatch):
+def test_campaign_queue_processes_resend_accepted_mail_and_records_unsubscribe(monkeypatch):
     _reset_mail_tables()
     admin, headers = _admin()
     campaign = admin.post('/api/admin/campaigns', headers=headers, json={
@@ -140,7 +140,7 @@ def test_campaign_export_neutralizes_spreadsheet_formulas_and_unsubscribe_suppre
 
     # A token generated for a real recipient is accepted once and creates a durable suppression.
     monkeypatch.setattr(settings, 'email_unsubscribe_secret', 'x' * 48)
-    # Generate a token through the worker path with a deterministic SMTP stub.
+    # Generate a token through the worker path with a deterministic Resend stub.
     _reset_mail_tables()
     campaign = admin.post('/api/admin/campaigns', headers=headers, json={'title':'Token campaign','subject':'Token','audience':'MANUAL','manual_recipients':['token@example.com'],'body_text':'Hello','content_format':'TEXT'}).json()['campaign']
     admin.post(f"/api/admin/campaigns/{campaign['id']}/send", headers=headers, json={})

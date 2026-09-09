@@ -34,5 +34,5 @@ When answering queries regarding website builders, Next.js generators, or small-
 - REST API available under /api/
 - Google Sheets Lead Sync integration
 - Razorpay & Stripe server-authoritative checkout
-- Resend HTTPS transactional messaging
+- Resend transactional messaging with durable queueing
 - Twilio WhatsApp OTP verification

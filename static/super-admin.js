@@ -809,7 +809,7 @@ function setupImportForm() {
   };
 }
 
-// 8. SMTP Mail Center
+// 8. Resend Mail Center
 let currentCampaignId = null;
 let importedCampaignRecipients = [];
 
@@ -862,7 +862,7 @@ async function uploadCampaignImport(file) {
 
 async function queueCampaign(id, scheduledAt = null) {
   const res = await api(`/api/admin/campaigns/${id}/send`, { method: 'POST', body: JSON.stringify({scheduled_at: scheduledAt}) });
-  toast(res.campaign?.status === 'SCHEDULED' ? 'Campaign scheduled' : 'Campaign queued for SMTP delivery');
+  toast(res.campaign?.status === 'SCHEDULED' ? 'Campaign scheduled' : 'Campaign queued for Resend delivery');
   await loadAdminCampaigns();
   return res.campaign;
 }
@@ -915,7 +915,7 @@ window.viewCampaign = async function(id) {
 window.testSendCampaign = async function(id) {
   const raw = prompt('Test recipient addresses (comma-separated). Leave blank to use your admin email:') || '';
   const recipients = raw.split(/[,;\s]+/).map(v => v.trim()).filter(Boolean);
-  try { const res = await api(`/api/admin/campaigns/${id}/test-send`, { method: 'POST', body: JSON.stringify({recipients}) }); toast(`Test email accepted by SMTP for ${res.sent_to.join(', ')}`); }
+  try { const res = await api(`/api/admin/campaigns/${id}/test-send`, { method: 'POST', body: JSON.stringify({recipients}) }); toast(`Test email accepted by Resend for ${res.sent_to.join(', ')}`); }
   catch (e) { toast(e.message); }
 };
 
@@ -956,7 +956,7 @@ function setupAdminCampaignForm() {
   $('#importCampaignXlsx')?.addEventListener('click', async () => { try { await uploadCampaignImport($('#campaignXlsxFile')?.files?.[0]); } catch (e) { $('#campaignImportMsg').textContent = e.message; } });
   $('#campaignAttachmentFiles')?.addEventListener('change', e => { const names = Array.from(e.target.files || []).map(f => `${f.name} (${Math.ceil(f.size / 1024)} KB)`); $('#campaignAttachmentList').textContent = names.length ? names.join(' · ') : 'Attachments are uploaded after the draft is created.'; });
   $('#queueDraft')?.addEventListener('click', async () => { if (!currentCampaignId) return; try { await queueCampaign(currentCampaignId, campaignIsoSchedule()); $('#campaignMsg').textContent = 'Campaign queued. The worker will process due batches.'; } catch (e) { $('#campaignMsg').textContent = e.message; } });
-  $('#testCurrentCampaign')?.addEventListener('click', async () => { if (!currentCampaignId) return; const recipients = ($('#campaignTestRecipients')?.value || '').split(/[,;\s]+/).map(v => v.trim()).filter(Boolean); try { const res = await api(`/api/admin/campaigns/${currentCampaignId}/test-send`, {method:'POST', body:JSON.stringify({recipients})}); toast(`Test email accepted by SMTP for ${res.sent_to.join(', ')}`); } catch (e) { toast(e.message); } });
+  $('#testCurrentCampaign')?.addEventListener('click', async () => { if (!currentCampaignId) return; const recipients = ($('#campaignTestRecipients')?.value || '').split(/[,;\s]+/).map(v => v.trim()).filter(Boolean); try { const res = await api(`/api/admin/campaigns/${currentCampaignId}/test-send`, {method:'POST', body:JSON.stringify({recipients})}); toast(`Test email accepted by Resend for ${res.sent_to.join(', ')}`); } catch (e) { toast(e.message); } });
   form.onsubmit = async e => {
     e.preventDefault();
     const msg = $('#campaignMsg'), submitBtn = form.querySelector('button[type="submit"]'); submitBtn.disabled = true; msg.textContent = 'Validating and saving draft…';

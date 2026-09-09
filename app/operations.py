@@ -59,14 +59,14 @@ def record_operational_event(component: str, event_code: str, message: str, *, s
 def provider_readiness() -> dict:
     return {
         'openai': bool(settings.openai_api_key),
-        'email': bool(settings.smtp_host and settings.smtp_from_email),
+        'email': bool(settings.resend_api_key and settings.email_from),
         'whatsapp': bool((settings.twilio_account_sid and settings.twilio_auth_token and settings.twilio_whatsapp_from) or (settings.whatsapp_phone_number_id and settings.whatsapp_access_token)),
         'payments': bool(settings.payment_provider=='mock' or (settings.razorpay_key_id and settings.razorpay_key_secret and settings.razorpay_webhook_secret)),
         'turnstile': bool(settings.turnstile_secret_key),
         'cloudflare': bool(settings.cloudflare_api_token and settings.cloudflare_zone_id),
         'production_safe': settings.app_env!='production' or all([
             bool(settings.openai_api_key),
-            bool(settings.smtp_host and settings.smtp_from_email),
+            bool(settings.resend_api_key and settings.email_from),
             bool(settings.turnstile_secret_key),
             bool(settings.razorpay_key_id and settings.razorpay_key_secret and settings.razorpay_webhook_secret),
             bool(settings.cloudflare_api_token and settings.cloudflare_zone_id),

@@ -278,7 +278,11 @@ def process_due_campaign_jobs(limit: int = 1) -> dict:
             html=(str(campaign.get('body_html') or '') + _public_unsubscribe_html(url)) if str(campaign.get('content_format'))=='HTML' else None
             body=str(campaign.get('body_text') or '') + f'\n\nUnsubscribe: {url}'
             try:
-                email_service.send_campaign(str(row['email']),str(campaign['subject']),body,html=html,attachments=attachments)
+                email_service.send_campaign(
+                    str(row['email']), str(campaign['subject']), body, html=html,
+                    attachments=attachments,
+                    idempotency_key=f"campaign:{campaign['id']}:recipient:{row['id']}",
+                )
                 with SessionLocal.begin() as db:
                     db.execute(text("UPDATE email_campaign_recipients SET status='SENT',sent_at=:a,last_error=NULL,updated_at=:a WHERE id=:i"), {'a':now_iso(),'i':row['id']})
                     _event(db,str(campaign['id']),'RECIPIENT_SENT',recipient_id=str(row['id']))

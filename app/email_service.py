@@ -1,21 +1,20 @@
-"""Authoritative SMTP email transport for transactional and campaign mail.
+"""Authoritative Resend email transport for transactional and campaign mail.
 
-Feature code calls this module (directly or through the backwards-compatible
-``providers.send_email`` facade); it must never create its own SMTP connection.
+All product email flows call this service (directly or through the backwards
+compatible ``providers.send_email`` facade). No feature opens another transport.
 """
 from __future__ import annotations
 
+import base64
 import hashlib
 import json
 import re
-import smtplib
-import ssl
 import time
 from dataclasses import dataclass
-from email.message import EmailMessage
-from email.utils import formataddr, make_msgid
+from email.utils import formataddr, make_msgid, parseaddr
 from typing import Iterable
 
+import httpx
 from email_validator import EmailNotValidError, validate_email
 from sqlalchemy import text
 
@@ -25,10 +24,15 @@ from .db import SessionLocal, now_iso
 from .operations import record_operational_event, safe_exception_summary
 
 _HEADER_BREAK = re.compile(r"[\r\n]")
+_RESEND_ENDPOINT = 'https://api.resend.com/emails'
 
 
 class EmailConfigurationError(RuntimeError):
-    """Raised when a live SMTP delivery was requested without usable settings."""
+    """Raised when live Resend delivery was requested without usable settings."""
+
+
+class EmailDeliveryError(RuntimeError):
+    """Raised when Resend rejects a message or returns an unusable response."""
 
 
 @dataclass(frozen=True)
@@ -46,17 +50,30 @@ def normalize_recipient(value: str) -> str:
 
 
 def _clean_header(value: str, label: str, limit: int) -> str:
-    cleaned = ' '.join(str(value or '').split())
-    if not cleaned or _HEADER_BREAK.search(str(value or '')):
+    raw = str(value or '')
+    if not raw.strip() or _HEADER_BREAK.search(raw):
         raise ValueError(f'Invalid {label}')
-    return cleaned[:limit]
+    return ' '.join(raw.split())[:limit]
 
 
-def smtp_is_configured() -> bool:
-    return bool(settings.smtp_host and settings.smtp_from_email)
+def _sender() -> tuple[str, str]:
+    """Return a Resend-safe display name and normalized sender address."""
+    configured = _clean_header(settings.email_from, 'EMAIL_FROM', 254)
+    name, address = parseaddr(configured)
+    address = normalize_recipient(address or configured)
+    return (_clean_header(name, 'sender name', 120) if name else 'Zylora', address)
 
 
-def _outbox(recipient: str, subject: str, body: str, *, category: str, metadata: dict, status: str = 'SENT') -> None:
+def resend_is_configured() -> bool:
+    try:
+        _sender()
+    except (ValueError, EmailNotValidError):
+        return False
+    return bool(settings.resend_api_key.strip())
+
+
+def _outbox(recipient: str, subject: str, body: str, *, category: str, metadata: dict,
+            status: str = 'SENT') -> None:
     with SessionLocal.begin() as db:
         db.execute(
             text('''INSERT INTO outbox(channel,recipient,subject,body,status,metadata,created_at)
@@ -68,90 +85,100 @@ def _outbox(recipient: str, subject: str, body: str, *, category: str, metadata:
 
 
 class EmailService:
-    """Composes MIME mail and delivers it through one SMTP transport."""
+    """Compose and deliver mail through the single Resend HTTP API boundary."""
 
-    def _message(self, recipient: str, subject: str, body: str, *, html: str | None,
-                 reply_to: str | None, attachments: Iterable[EmailAttachment]) -> tuple[EmailMessage, str, str]:
-        recipient = normalize_recipient(recipient)
+    def _payload(self, recipient: str, subject: str, body: str, *, html: str | None,
+                 reply_to: str | None, attachments: Iterable[EmailAttachment],
+                 idempotency_key: str | None = None) -> tuple[dict, str, str, str, str]:
+        normalized = normalize_recipient(recipient)
         subject = _clean_header(subject, 'subject', 200)
         if _HEADER_BREAK.search(str(reply_to or '')):
             raise ValueError('Invalid reply-to address')
         html_body = sanitize_email_html(html if html is not None else body) if (html is not None or looks_like_html(body)) else None
-        # Preserve the caller's explicit plain-text alternative (campaigns use
-        # it for the unsubscribe URL); only derive text from HTML when no
-        # plain-text content was supplied.
+        # Preserve explicit plain text (campaigns include the unsubscribe URL).
         text_body = str(body or '').strip() or (html_to_text(html_body) if html_body is not None else '')
         if not text_body:
             raise ValueError('Email body is required')
-        message = EmailMessage()
-        message['From'] = formataddr((_clean_header(settings.smtp_from_name or 'Zylora', 'from name', 120), normalize_recipient(settings.smtp_from_email)))
-        message['To'] = recipient
-        message['Subject'] = subject
-        message['Message-ID'] = make_msgid(domain=normalize_recipient(settings.smtp_from_email).split('@', 1)[1])
-        configured_reply = reply_to if reply_to is not None else settings.smtp_reply_to
-        if configured_reply:
-            message['Reply-To'] = normalize_recipient(configured_reply)
-        message.set_content(text_body, charset='utf-8')
+        display_name, sender_address = _sender()
+        message_id = make_msgid(domain=sender_address.split('@', 1)[1])
+        configured_reply = reply_to if reply_to is not None else settings.email_reply_to
+        payload: dict[str, object] = {
+            'from': formataddr((display_name, sender_address)),
+            'to': [normalized],
+            'subject': subject,
+            'text': text_body,
+        }
         if html_body is not None:
-            message.add_alternative(html_body, subtype='html', charset='utf-8')
+            payload['html'] = html_body
+        if configured_reply:
+            payload['reply_to'] = [normalize_recipient(configured_reply)]
+        encoded_attachments = []
         for attachment in attachments:
             filename = re.sub(r'[^A-Za-z0-9._ -]+', '-', str(attachment.filename or 'attachment')).strip(' .')[:120] or 'attachment'
-            main, _, sub = str(attachment.content_type or 'application/octet-stream').partition('/')
-            message.add_attachment(attachment.content, maintype=main or 'application', subtype=sub or 'octet-stream', filename=filename)
-        return message, text_body, html_body or ''
+            encoded_attachments.append({
+                'filename': filename,
+                'content': base64.b64encode(bytes(attachment.content)).decode('ascii'),
+            })
+        if encoded_attachments:
+            payload['attachments'] = encoded_attachments
+        if idempotency_key:
+            payload['headers'] = {'X-Entity-Ref-ID': _clean_header(idempotency_key, 'idempotency key', 200)}
+        return payload, normalized, text_body, html_body or '', message_id
 
-    def _smtp_send(self, message: EmailMessage, recipient: str) -> None:
-        if not smtp_is_configured():
-            raise EmailConfigurationError('SMTP_HOST and SMTP_FROM_EMAIL are required for email delivery')
-        security = settings.smtp_security.strip().lower()
-        if security not in {'starttls', 'tls', 'none'}:
-            raise EmailConfigurationError('SMTP_SECURITY must be starttls, tls, or none')
-        timeout = max(1, min(int(settings.smtp_connection_timeout or settings.smtp_send_timeout), 120))
-        context = ssl.create_default_context()
-        client = None
+    def _resend_send(self, payload: dict, message_id: str, idempotency_key: str | None = None) -> str:
+        if not resend_is_configured():
+            raise EmailConfigurationError('RESEND_API_KEY and EMAIL_FROM are required for email delivery')
+        timeout = max(1, min(int(settings.email_send_timeout or 20), 120))
+        headers = {
+            'Authorization': f'Bearer {settings.resend_api_key.strip()}',
+            'Content-Type': 'application/json',
+            # Stable provider correlation/idempotency key for retries.
+            'Idempotency-Key': (idempotency_key or message_id).strip('<>')[:200],
+        }
+        with httpx.Client(timeout=timeout) as client:
+            response = client.post(_RESEND_ENDPOINT, headers=headers, json=payload)
+        if response.status_code >= 400:
+            raise EmailDeliveryError(f'Resend API rejected email (HTTP {response.status_code})')
         try:
-            if security == 'tls':
-                client = smtplib.SMTP_SSL(settings.smtp_host, int(settings.smtp_port), timeout=timeout, context=context)
-            else:
-                client = smtplib.SMTP(settings.smtp_host, int(settings.smtp_port), timeout=timeout)
-                client.ehlo()
-                if security == 'starttls':
-                    client.starttls(context=context)
-                    client.ehlo()
-            if bool(settings.smtp_username) != bool(settings.smtp_password):
-                raise EmailConfigurationError('SMTP_USERNAME and SMTP_PASSWORD must be supplied together')
-            if settings.smtp_username:
-                client.login(settings.smtp_username, settings.smtp_password)
-            client.send_message(message, to_addrs=[recipient])
-        finally:
-            if client is not None:
-                try:
-                    client.quit()
-                except Exception:
-                    try: client.close()
-                    except Exception: pass
+            data = response.json()
+        except ValueError as exc:
+            raise EmailDeliveryError('Resend API returned invalid JSON') from exc
+        provider_id = str(data.get('id') or '').strip()
+        if not provider_id:
+            raise EmailDeliveryError('Resend API response did not include a message id')
+        return provider_id
 
     def send(self, recipient: str, subject: str, body: str, *, html: str | None = None,
              category: str = 'TRANSACTIONAL', reply_to: str | None = None,
-             attachments: Iterable[EmailAttachment] = ()) -> dict:
-        message, text_body, html_body = self._message(recipient, subject, body, html=html, reply_to=reply_to, attachments=attachments)
-        normalized = normalize_recipient(recipient)
-        message_id = str(message['Message-ID'])
+             attachments: Iterable[EmailAttachment] = (),
+             idempotency_key: str | None = None) -> dict:
+        payload, normalized, text_body, html_body, message_id = self._payload(
+            recipient, subject, body, html=html, reply_to=reply_to,
+            attachments=attachments, idempotency_key=idempotency_key,
+        )
         started = time.monotonic()
-        if not smtp_is_configured() and settings.app_env != 'production':
-            _outbox(normalized, subject, text_body, category=category, metadata={'provider': 'local', 'message_id': message_id, 'has_html': bool(html_body)})
+        # Development/test retain deterministic local outbox behavior. Production
+        # never silently falls back when Resend is unavailable.
+        if not settings.resend_api_key.strip() and settings.app_env != 'production':
+            _outbox(normalized, subject, text_body, category=category,
+                     metadata={'provider': 'local', 'message_id': message_id, 'has_html': bool(html_body)})
             return {'provider': 'local', 'status': 'SENT', 'message_id': message_id}
         try:
-            self._smtp_send(message, normalized)
+            provider_id = self._resend_send(payload, message_id, idempotency_key)
         except Exception as exc:
-            record_operational_event('EMAIL', 'SMTP_SEND_FAILED', safe_exception_summary(exc), severity='ERROR', metadata={
-                'category': category, 'recipient_sha256': hashlib.sha256(normalized.encode()).hexdigest()[:16],
+            record_operational_event('EMAIL', 'RESEND_SEND_FAILED', safe_exception_summary(exc), severity='ERROR', metadata={
+                'category': category,
+                'recipient_sha256': hashlib.sha256(normalized.encode()).hexdigest()[:16],
             })
-            _outbox(normalized, subject, text_body, category=category, metadata={'provider': 'smtp', 'error': safe_exception_summary(exc)}, status='FAILED')
+            _outbox(normalized, subject, text_body, category=category,
+                    metadata={'provider': 'resend', 'error': safe_exception_summary(exc)}, status='FAILED')
             raise
         duration_ms = round((time.monotonic() - started) * 1000, 1)
-        _outbox(normalized, subject, text_body, category=category, metadata={'provider': 'smtp', 'message_id': message_id, 'has_html': bool(html_body), 'duration_ms': duration_ms})
-        return {'provider': 'smtp', 'status': 'SENT', 'message_id': message_id}
+        _outbox(normalized, subject, text_body, category=category, metadata={
+            'provider': 'resend', 'message_id': provider_id, 'has_html': bool(html_body),
+            'duration_ms': duration_ms,
+        })
+        return {'provider': 'resend', 'status': 'SENT', 'message_id': provider_id}
 
     def send_transactional(self, recipient: str, subject: str, body: str, **kwargs) -> dict:
         return self.send(recipient, subject, body, category='TRANSACTIONAL', **kwargs)

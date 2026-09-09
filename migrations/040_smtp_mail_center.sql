@@ -1,4 +1,4 @@
--- SMTP Mail Center: persistent campaign queues, attachments, suppression and auditable recipient state.
+-- Mail Center: persistent campaign queues, attachments, suppression and auditable recipient state.
 
 ALTER TABLE platform_campaigns ADD COLUMN created_by_user_id TEXT;
 ALTER TABLE platform_campaigns ADD COLUMN preheader TEXT;

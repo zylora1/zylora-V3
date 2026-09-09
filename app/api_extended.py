@@ -115,7 +115,7 @@ class ResetConfirm(BaseModel):
 @router.post('/auth/email/request-verification')
 def request_email_verification(request: Request):
     u=_user(request, True)
-    durable_rate_limit(f'email-verify-smtp:{u["id"]}',5,3600)
+    durable_rate_limit(f'email-verify-resend:{u["id"]}',5,3600)
     token=issue_auth_token(u['id'],'VERIFY_EMAIL',u['email'])
     result={'ok':True}
     if settings.app_env!='production': result['debug_token']=token
@@ -1049,7 +1049,7 @@ def admin_overview(request: Request):
             'database': 'HEALTHY',
             'redis': 'HEALTHY',
             'openai': 'CONFIGURED' if bool(getattr(settings, 'openai_api_key', '')) else 'NOT_CONFIGURED',
-            'smtp': 'CONFIGURED' if bool(getattr(settings, 'smtp_host', '') and getattr(settings, 'smtp_from_email', '')) else 'NOT_CONFIGURED',
+            'resend': 'CONFIGURED' if bool(getattr(settings, 'resend_api_key', '') and getattr(settings, 'email_from', '')) else 'NOT_CONFIGURED',
             'whatsapp': 'CONFIGURED' if bool(getattr(settings, 'whatsapp_access_token', '')) else 'NOT_CONFIGURED',
             'razorpay': 'CONFIGURED' if bool(getattr(settings, 'razorpay_key_id', '')) else 'NOT_CONFIGURED',
             'cloudflare': 'CONFIGURED' if bool(getattr(settings, 'cloudflare_api_token', '')) else 'NOT_CONFIGURED'
@@ -1758,12 +1758,12 @@ def admin_integrations(request: Request):
                 'status': 'HEALTHY' if getattr(settings, 'razorpay_key_id', '') else 'MOCK_SANDBOX'
             },
             {
-                'id': 'smtp',
-                'name': 'SMTP Email Transport',
+                'id': 'resend',
+                'name': 'Resend Email Transport',
                 'category': 'Messaging & Delivery',
-                'configured': bool(getattr(settings, 'smtp_host', '') and getattr(settings, 'smtp_from_email', '')),
+                'configured': bool(getattr(settings, 'resend_api_key', '') and getattr(settings, 'email_from', '')),
                 'active_connections': 1,
-                'status': 'HEALTHY' if getattr(settings, 'smtp_host', '') else 'DEVELOPMENT_FALLBACK'
+                'status': 'HEALTHY' if getattr(settings, 'resend_api_key', '') else 'DEVELOPMENT_FALLBACK'
             },
             {
                 'id': 'whatsapp',

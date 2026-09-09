@@ -60,7 +60,7 @@ def _delivery(user_id:str,site_id:str,event_type:str,channel:str,recipient:str,s
             return {'status':'SKIPPED_CREDITS','error':exc.detail,'credit_type':'lead'}
         raise
     try:
-        result=send_email(recipient,subject,body) if channel=='EMAIL' else send_whatsapp(recipient,body)
+        result=send_email(recipient,subject,body,idempotency_key=idem) if channel=='EMAIL' else send_whatsapp(recipient,body)
         with SessionLocal.begin() as db:
             if txid: finalize_wallet(db,txid)
             db.execute(text("UPDATE notification_deliveries SET provider=:p,provider_message_id=:m,status='SENT',attempt_count=attempt_count+1,updated_at=:a WHERE id=:i"),
@@ -133,7 +133,10 @@ def retry_delivery(delivery_id: str, *, force: bool=False) -> dict:
             db.execute(text("UPDATE notification_deliveries SET status='SKIPPED_CREDITS',last_error=:x,next_attempt_at=NULL,updated_at=:a WHERE id=:i"),{'x':str(exc.detail)[:1000],'a':now_iso(),'i':delivery_id})
             return {'status':'SKIPPED_CREDITS','id':delivery_id}
     try:
-        result=send_email(row['recipient'],row.get('subject') or 'Zylora notification',row.get('body') or '') if row['channel']=='EMAIL' else send_whatsapp(row['recipient'],row.get('body') or '')
+        result=send_email(
+            row['recipient'], row.get('subject') or 'Zylora notification',
+            row.get('body') or '', idempotency_key=str(row['idempotency_key'] or ''),
+        ) if row['channel']=='EMAIL' else send_whatsapp(row['recipient'],row.get('body') or '')
         with SessionLocal.begin() as db:
             if txid: finalize_wallet(db,txid)
             db.execute(text("UPDATE notification_deliveries SET provider=:p,provider_message_id=:m,status='SENT',attempt_count=attempt_count+1,last_error=NULL,next_attempt_at=NULL,dead_lettered_at=NULL,updated_at=:a WHERE id=:i"),{'p':result.get('provider'),'m':result.get('message_id'),'a':now_iso(),'i':delivery_id})
