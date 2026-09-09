@@ -103,7 +103,8 @@ def test_lead_notification_charges_once_failure_refunds_and_contacts_deduplicate
     with SessionLocal.begin() as db:
         db.execute(text('''UPDATE credit_wallets SET lead_monthly_remaining=3,lead_signup_remaining=0,lead_topup_remaining=0 WHERE user_id=:u'''),{'u':uid})
     import app.notifications as n
-    monkeypatch.setattr(n,'send_email',lambda recipient,subject,body:{'provider':'test','message_id':'m1'})
+    # The notification facade now forwards the persisted provider idempotency key.
+    monkeypatch.setattr(n,'send_email',lambda recipient,subject,body,**kwargs:{'provider':'test','message_id':'m1'})
     one=c.post('/api/leads',json={'site_id':sid,'name':'Alex Person','email':'alex@client.org','message':'Interested in services','session_id':'session-001'}); assert one.status_code==200,one.text
     assert wallet_summary(uid)['lead_total']==2
     two=c.post('/api/leads',json={'site_id':sid,'name':'Alex Person','email':'alex@client.org','message':'A second enquiry','session_id':'session-002'}); assert two.status_code==200

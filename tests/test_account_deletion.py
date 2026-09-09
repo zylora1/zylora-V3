@@ -1,11 +1,21 @@
 from datetime import datetime, timedelta, timezone
 from uuid import uuid4
 
+import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import text
 
 from app.db import SessionLocal
 from app.main import app
+
+
+@pytest.fixture(autouse=True)
+def isolate_persistent_rate_limits():
+    """Keep independent signup flows from sharing the SQLite rate-limit bucket."""
+    from app.security import clear_rate_limits
+    clear_rate_limits()
+    yield
+    clear_rate_limits()
 
 
 def _signup(client: TestClient, email: str):
