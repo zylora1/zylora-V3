@@ -129,8 +129,12 @@ def main() -> None:
     payload = signup.json(); csrf = payload["csrf_token"]
     if payload.get("debug_verification_token"):
         assert client.post("/api/auth/email/verify", json={"token": payload["debug_verification_token"]}).status_code == 200
-    with sync_playwright() as playwright:
-        for name, launcher in (("Chromium", playwright.chromium), ("Firefox", playwright.firefox), ("WebKit", playwright.webkit)):
+    # Keep each engine in its own driver process. This avoids leaking browser
+    # process state across engines on constrained Windows CI runners while
+    # retaining identical cross-browser assertions.
+    for name, launcher_name in (("Chromium", "chromium"), ("Firefox", "firefox"), ("WebKit", "webkit")):
+        with sync_playwright() as playwright:
+            launcher = getattr(playwright, launcher_name)
             browser = launcher.launch(headless=True)
             page = new_page(browser, client, (1440, 900))
             page.set_content(dashboard_html(), wait_until="load")

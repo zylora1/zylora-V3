@@ -224,6 +224,45 @@ def _with_public_runtime(html: str, site_id: str) -> str:
     return html.replace('</body>',runtime+'</body>')
 
 
+_HOSTING_ATTRIBUTION_MARKER = re.compile(
+    r'''<(?:a|span|div|p)\b[^>]*data-zylora-hosting-brand=["']true["'][^>]*>.*?</(?:a|span|div|p)>''',
+    re.IGNORECASE | re.DOTALL,
+)
+_HOSTING_ATTRIBUTION_TEXT = re.compile(
+    r'''<(?:a|span|div|p)\b[^>]*>\s*(?:built with|powered by)\s+zylora\s*</(?:a|span|div|p)>''',
+    re.IGNORECASE | re.DOTALL,
+)
+
+
+def _apply_hosting_attribution(html: str, site: dict) -> str:
+    """Enforce the hosting attribution from the immutable published entitlement.
+
+    This runs on every public response instead of trusting draft HTML or browser
+    state. It also removes the legacy unmarked attribution emitted by older
+    generated documents before applying the current Free/paid policy.
+    """
+    cleaned = _HOSTING_ATTRIBUTION_MARKER.sub('', html)
+    cleaned = _HOSTING_ATTRIBUTION_TEXT.sub('', cleaned)
+    paid_value = site.get('is_paid')
+    is_paid = paid_value is True or str(paid_value).strip().lower() in {'1', 'true', 'yes', 'on'}
+    if is_paid:
+        return cleaned
+    href = escape(_public_base_url(), quote=True)
+    marker = (
+        f'<a data-zylora-hosting-brand="true" class="zylora-hosting-attribution" '
+        f'href="{href}" rel="nofollow noopener" target="_blank">Built with Zylora</a>'
+    )
+    if '</footer>' in cleaned:
+        return cleaned.replace('</footer>', marker + '</footer>', 1)
+    if '</body>' in cleaned:
+        return cleaned.replace(
+            '</body>',
+            f'<footer class="zylora-hosting-footer">{marker}</footer></body>',
+            1,
+        )
+    return cleaned + marker
+
+
 def _site_not_found(site: dict, custom_host: str|None=None) -> HTMLResponse:
     name=escape(str(site.get('business_name') or site.get('name') or 'Website'))
     accent=str(site.get('accent') or BY_SLUG.get(str(site.get('template_slug') or ''),{}).get('accent') or '#6f7bff')
@@ -253,6 +292,7 @@ def _render_live_site_path(site: dict, path: str, *, request_host: str|None=None
     dynamic=render_dynamic_path(site,clean,origin)
     if dynamic is not None:
         if not dynamic: return _site_not_found(render_site,request_host)
+        dynamic=_apply_hosting_attribution(dynamic,render_site)
         return HTMLResponse(_with_public_runtime(dynamic,site['id']),headers={'Cache-Control':'public,max-age=60,stale-while-revalidate=300','X-Zylora-Renderer':'V4-DYNAMIC'})
     renderer=str(site.get('renderer_state') or 'LEGACY').upper()
     if renderer in {'V4_CANARY','V4'} and site.get('published_studio_document_json'):
@@ -261,6 +301,7 @@ def _render_live_site_path(site: dict, path: str, *, request_host: str|None=None
             page_id=next((pid for pid,page in document.pages.items() if (not clean and page.slug in {'','home'}) or clean==page.slug.strip('/')),None)
             if page_id is None: return _site_not_found(render_site,request_host)
             rendered=render_studio_page(document,page_id,asset_resolver=media_url,seo_override={'canonical':origin+('/'+clean if clean else '')})
+            rendered=_apply_hosting_attribution(rendered,render_site)
             return HTMLResponse(_with_public_runtime(rendered,site['id']),headers={'Cache-Control':'public,max-age=60,stale-while-revalidate=300','X-Zylora-Renderer':renderer})
         except Exception as exc:
             record_operational_event('RENDERER','V4_RENDER_FAILED',safe_exception_summary(exc),severity='ERROR',site_id=site['id'],metadata={'renderer_state':renderer,'path':clean},dedupe_minutes=1)
@@ -279,6 +320,7 @@ def _render_live_site_path(site: dict, path: str, *, request_host: str|None=None
     html=resolve_document_links(html,public_link)
     html=apply_footer_links_html(html,links_from_seo_json(render_site.get('seo_json')))
     html=apply_seo_html(html,render_site,page_key,custom_host=request_host)
+    html=_apply_hosting_attribution(html,render_site)
     return HTMLResponse(_with_public_runtime(html,site['id']),headers={'Cache-Control':'public,max-age=60,stale-while-revalidate=300'})
 
 
