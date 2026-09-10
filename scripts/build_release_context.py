@@ -57,13 +57,19 @@ def build_templates(source_root: Path, target_root: Path, reachability: dict) ->
 
 def sha256_tree(root: Path) -> str:
     digest = hashlib.sha256()
+    # Reuse one small buffer so hashing remains reliable on constrained
+    # Windows runners even when the compact context contains many images.
+    buffer = bytearray(64 * 1024)
     for path in sorted(path for path in root.rglob("*") if path.is_file()):
         relative = path.relative_to(root).as_posix().encode("utf-8")
         digest.update(relative)
         digest.update(str(path.stat().st_size).encode("ascii"))
         with path.open("rb") as handle:
-            for block in iter(lambda: handle.read(1024 * 1024), b""):
-                digest.update(block)
+            while True:
+                read = handle.readinto(buffer)
+                if not read:
+                    break
+                digest.update(memoryview(buffer)[:read])
     return digest.hexdigest()
 
 
