@@ -707,11 +707,13 @@ def edit_ai(site_id:str,payload:AiEditIn,request:Request):
         if is_v4:
             from .generate_v4 import generate_v4_operations
             from .studio_ai_operations import apply_v4_operations
-            from .studio_document import SiteDocument, validate_studio_document
+            from .studio_document import validate_studio_document
             
             try:
                 doc_dict = json.loads(s.get('studio_document_json') or '{}')
-                doc = SiteDocument(**doc_dict)
+                # Normalize legacy v5 documents before applying engine-v2 AI
+                # operations so AI and manual Studio edits share one model.
+                doc = validate_studio_document(doc_dict)
                 try:
                     generated = generate_v4_operations(s.get('studio_document_json') or '{}', payload.instruction, payload.selection or [], user_id=u['id'], site_id=site_id, return_usage=True)
                 except TypeError:
@@ -725,7 +727,9 @@ def edit_ai(site_id:str,payload:AiEditIn,request:Request):
                 updated_doc = apply_v4_operations(doc, operations)
                 document = updated_doc.model_dump(exclude_none=True)
                 document['revision'] = int(doc.revision) + 1
-                document_schema_version = 4
+                # Studio remains on schema v5 for rollback compatibility;
+                # engineVersion=2 is an additive, normalized document extension.
+                document_schema_version = 5
             except Exception as exc:
                 raise HTTPException(422, str(exc))
         else:

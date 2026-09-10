@@ -10,6 +10,8 @@ are supplied. It never prints secret values.
 import json
 import os
 import socket
+import smtplib
+import ssl
 import sys
 from dataclasses import dataclass, asdict
 from typing import Callable
@@ -108,20 +110,41 @@ def check_google_oauth() -> str:
 
 
 
-def check_resend() -> str:
-    dns_probe('api.resend.com')
-    key=os.environ['RESEND_API_KEY']
-    target=(os.getenv('EXTERNAL_SMOKE_EMAIL_TO') or '').strip()
-    headers={'Authorization':f'Bearer {key}','Content-Type':'application/json'}
-    with httpx.Client(timeout=20) as c:
-        if target:
-            payload={'from':os.getenv('RESEND_FROM','Zylora <notifications@zylora.example>'),'to':[target],'subject':'Zylora staging smoke test','text':'ZYLORA_SMOKE_OK'}
-            r=c.post('https://api.resend.com/emails',headers=headers,json=payload); r.raise_for_status(); data=r.json()
-            if not data.get('id'): raise RuntimeError('Resend send returned no message id')
-            return 'Resend authentication and real test-email send succeeded'
-        r=c.get('https://api.resend.com/domains',headers=headers); r.raise_for_status(); data=r.json()
-        if not isinstance(data,dict): raise RuntimeError('Resend credential check returned unexpected payload')
-    return 'Resend authenticated read succeeded; send skipped because EXTERNAL_SMOKE_EMAIL_TO is unset'
+def check_smtp() -> str:
+    host = os.environ['SMTP_HOST'].strip()
+    port = int(os.getenv('SMTP_PORT', '587'))
+    security = (os.getenv('SMTP_SECURITY', 'starttls') or 'starttls').strip().lower()
+    username = (os.getenv('SMTP_USERNAME') or '').strip()
+    password = os.getenv('SMTP_PASSWORD') or ''
+    if security not in {'starttls', 'tls', 'none'}:
+        raise RuntimeError('SMTP_SECURITY must be starttls, tls, or none')
+    if bool(username) != bool(password):
+        raise RuntimeError('SMTP_USERNAME and SMTP_PASSWORD must be supplied together')
+    dns_probe(host, port)
+    timeout = max(1, min(int(os.getenv('SMTP_CONNECTION_TIMEOUT', '10')), 120))
+    client = None
+    try:
+        context = ssl.create_default_context()
+        if security == 'tls':
+            client = smtplib.SMTP_SSL(host, port, timeout=timeout, context=context)
+        else:
+            client = smtplib.SMTP(host, port, timeout=timeout)
+            client.ehlo()
+            if security == 'starttls':
+                client.starttls(context=context)
+                client.ehlo()
+        if username:
+            client.login(username, password)
+    finally:
+        if client is not None:
+            try:
+                client.quit()
+            except Exception:
+                try:
+                    client.close()
+                except Exception:
+                    pass
+    return 'SMTP connection and authentication succeeded; send skipped by this read-only smoke check'
 
 
 def check_twilio() -> str:
@@ -159,11 +182,11 @@ def main() -> int:
         'Cloudflare':['CLOUDFLARE_API_TOKEN','CLOUDFLARE_ZONE_ID'],
         'Turnstile':['TURNSTILE_SECRET_KEY'],
         'Google OAuth':['GOOGLE_CLIENT_ID','GOOGLE_CLIENT_SECRET'],
-        'Resend':['RESEND_API_KEY'],
+        'Email (SMTP)':['SMTP_HOST','SMTP_FROM_EMAIL'],
         'Twilio WhatsApp':['TWILIO_ACCOUNT_SID','TWILIO_AUTH_TOKEN','TWILIO_WHATSAPP_FROM'],
         'Meta WhatsApp fallback':['WHATSAPP_PHONE_NUMBER_ID','WHATSAPP_ACCESS_TOKEN'],
     }
-    funcs={'OpenAI':check_openai,'Razorpay':check_razorpay,'Cloudflare':check_cloudflare,'Turnstile':check_turnstile,'Google OAuth':check_google_oauth,'Resend':check_resend,'Twilio WhatsApp':check_twilio,'Meta WhatsApp fallback':check_whatsapp}
+    funcs={'OpenAI':check_openai,'Razorpay':check_razorpay,'Cloudflare':check_cloudflare,'Turnstile':check_turnstile,'Google OAuth':check_google_oauth,'Email (SMTP)':check_smtp,'Twilio WhatsApp':check_twilio,'Meta WhatsApp fallback':check_whatsapp}
     for provider,names in requirements.items():
         missing=[n for n in names if not present(n)]
         if missing:

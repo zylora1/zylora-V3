@@ -23,7 +23,17 @@ from tests.test_ai_first_rebuild import auth, reset_db
 
 
 OUT = ROOT / "artifacts" / "final-production-certification" / "publish-fidelity"
-VIEWPORTS = (1440, 1280, 1024, 768, 430, 390, 375, 360)
+VIEWPORTS = (
+    (1440, 900),
+    (1366, 768),
+    (1280, 720),
+    (1024, 768),
+    (768, 1024),
+    (430, 932),
+    (390, 844),
+    (375, 812),
+    (360, 800),
+)
 
 
 def inline_shell(html: str) -> str:
@@ -176,8 +186,7 @@ def run(browser_name: str) -> dict:
     errors=[]
     with sync_playwright() as pw:
         browser=getattr(pw,browser_name).launch(headless=True,args=["--no-sandbox"] if browser_name=="chromium" else None)
-        for width in VIEWPORTS:
-            height=900 if width>800 else 850
+        for width, height in VIEWPORTS:
             studio=browser.new_page(viewport={"width":width,"height":height}); studio.expose_function("__backendFetch",bridge(client))
             studio.on("console",lambda msg: errors.append(f"studio:{msg.text}") if msg.type=="error" else None); studio.on("pageerror",lambda exc: errors.append(f"studio:{exc}"))
             studio.set_content(inline_shell(shell.text),wait_until="load"); studio.wait_for_selector('.studio-canvas [data-studio-id="fidelity-heading"]',timeout=15000)
@@ -191,7 +200,7 @@ def run(browser_name: str) -> dict:
             public.set_content(public_html.replace("<head>",'<head><base href="http://testserver/">'),wait_until="load"); public.wait_for_selector('body > .z-node',timeout=10000)
             pm=browser_metrics(public,manifest["nodes"],'body > .z-node',studio=False)
             pp=OUT/f"published-{browser_name}-{width}.png"; public.locator('body > .z-node').screenshot(path=str(pp))
-            result=compare_metrics(sm,pm); result.update({"viewport":width,"breakpoint":bp,"studio_nodes":len(sm),"published_nodes":len(pm),"screenshot_mae":screenshot_mae(sp,pp),"studio_metrics":sm,"published_metrics":pm})
+            result=compare_metrics(sm,pm); result.update({"viewport":{"width":width,"height":height},"breakpoint":bp,"studio_nodes":len(sm),"published_nodes":len(pm),"screenshot_mae":screenshot_mae(sp,pp),"studio_metrics":sm,"published_metrics":pm})
             viewport_results.append(result); screenshots.extend([str(sp),str(pp)])
             studio.close(); public.close()
         browser.close()

@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup, Tag, NavigableString
-from .studio_document import SiteDocument, Page, Node, NodeContent, NodeStyle
+from .studio_document import SiteDocument, Page, Node, NodeContent, NodeStyle, NodeGeometry, normalize_studio_document_json
 import uuid
 
 def _map_tag_to_type(tag_name: str, classes: list[str]) -> str:
@@ -74,7 +74,8 @@ def migrate_html_to_v4_page(page_id: str, slug: str, title: str, html: str) -> P
             type=node_type,
             parentId=parent_id,
             content=node_content,
-            style=NodeStyle(css=inline_css)
+            style=NodeStyle(css=inline_css),
+            geometry=NodeGeometry(**_geometry_from_css(inline_css, node_type)),
         )
         nodes[node_id] = node
         
@@ -122,3 +123,30 @@ def migrate_v3_to_v4(v3_doc: dict, rendered_pages_html: dict[str, str]) -> SiteD
             v4.pages[p_id] = migrate_html_to_v4_page(p_id, p_slug, p_title, html)
             
     return v4
+
+
+def _geometry_from_css(css: dict, node_type: str) -> dict:
+    def number(*keys: str, fallback: float) -> float:
+        for key in keys:
+            value = css.get(key)
+            if value is None:
+                continue
+            try:
+                return float(str(value).replace('px', '').strip())
+            except (TypeError, ValueError):
+                continue
+        return fallback
+
+    return {
+        'x': number('left', fallback=0),
+        'y': number('top', fallback=0),
+        'width': max(1, number('width', fallback=1440 if node_type in {'page', 'section'} else 100)),
+        'height': max(1, number('height', 'minHeight', fallback=810 if node_type in {'page', 'section'} else 40)),
+        'rotation': number('rotate', fallback=0),
+        'mode': 'flow' if css.get('position') not in {'absolute', 'fixed'} else 'freeform',
+    }
+
+
+def normalize_document(document: dict) -> SiteDocument:
+    """Public migration boundary used by load/save/publish callers."""
+    return SiteDocument(**normalize_studio_document_json(document))

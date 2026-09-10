@@ -1,4 +1,5 @@
 import React from 'react';
+import {isNodeLocked} from '../store';
 import {Node, useStudio} from '../store';
 
 const technical = new Set(['page','container','stack','flex','grid','heading','paragraph','text','image','button','link','navigation','form','divider','component_instance']);
@@ -28,10 +29,15 @@ const semanticType = (node:Node, index:number) => {
 };
 
 export function LayersPanel() {
-  const {state,dispatch}=useStudio(); const [query,setQuery]=React.useState(''); const [collapsed,setCollapsed]=React.useState<Set<string>>(new Set()); const [sectionDropId,setSectionDropId]=React.useState<string|null>(null); const panelRef=React.useRef<HTMLDivElement>(null);
+  const {state,dispatch}=useStudio(); const page=state.document?.pages[state.currentPageId]; const nodeCount=page?Object.keys(page.nodes).length:0; const initiallyCollapsed=page&&nodeCount>=250?Object.values(page.nodes).filter(node=>node.children.length>100).map(node=>node.id):[]; const [query,setQuery]=React.useState(''); const [collapsed,setCollapsed]=React.useState<Set<string>>(()=>new Set(initiallyCollapsed)); const [sectionDropId,setSectionDropId]=React.useState<string|null>(null); const panelRef=React.useRef<HTMLDivElement>(null); const autoCollapsedPage=React.useRef<string|null>(page&&nodeCount>=250?page.id:null);
   React.useEffect(()=>{panelRef.current?.querySelector<HTMLElement>('[data-layer-selected="true"]')?.scrollIntoView({block:'nearest'})},[state.selectedNodeIds.join('|')]);
+  React.useEffect(()=>{
+    if(!page||nodeCount<250||autoCollapsedPage.current===page.id)return;
+    const largeContainers=Object.values(page.nodes).filter(node=>node.children.length>100).map(node=>node.id);
+    if(largeContainers.length){setCollapsed(current=>new Set([...current,...largeContainers]));autoCollapsedPage.current=page.id;}
+  },[page?.id,nodeCount]);
   if(!state.document)return <div className="empty-state"><b>Loading your page…</b></div>;
-  const page=state.document.pages[state.currentPageId]; if(!page)return <div className="empty-state"><b>No page selected</b><p>Choose a page to see its layers.</p></div>;
+  if(!page)return <div className="empty-state"><b>No page selected</b><p>Choose a page to see its layers.</p></div>;
   const normalized=query.trim().toLowerCase();
   const labelCounts:Record<string,number>={};
   const sectionNames=['Hero','About','Services','Features','Gallery','Testimonials','Pricing','FAQ','Contact','Footer'];

@@ -1,0 +1,62 @@
+/* Zylora expressive product tokens. Route skins can choose their own surface
+   treatment while sharing one semantic vocabulary and scale. */
+:root {
+  --primary: #635bff;
+  --onPrimary: #ffffff;
+  --primaryContainer: #ebe9ff;
+  --onPrimaryContainer: #211a68;
+  --secondary: #586174;
+  --secondaryContainer: #e6e9f0;
+  --onSecondaryContainer: #151b27;
+  --tertiary: #8c4d72;
+  --tertiaryContainer: #ffd9eb;
+  --onTertiaryContainer: #3b1029;
+  --surface: #ffffff;
+  --surfaceContainerLow: #f8f8fb;
+  --surfaceContainer: #f1f2f6;
+  --surfaceContainerHigh: #e8eaf0;
+  --surfaceContainerHighest: #dde0e8;
+  --onSurface: #17191f;
+  --onSurfaceVariant: #5f6470;
+  --outline: #777d89;
+  --outlineVariant: #c6c9d2;
+  --error: #ba1a1a;
+  --success: #168b57;
+  --warning: #a56500;
+  --inverseSurface: #2c2f36;
+  --inverseOnSurface: #f0f1f7;
+  --radiusXS: 4px;
+  --radiusS: 8px;
+  --radiusM: 12px;
+  --radiusL: 16px;
+  --radiusXL: 24px;
+  --radiusFull: 999px;
+  --space4: 4px;
+  --space8: 8px;
+  --space12: 12px;
+  --space16: 16px;
+  --space20: 20px;
+  --space24: 24px;
+  --space32: 32px;
+  --space40: 40px;
+  --space48: 48px;
+  --space64: 64px;
+  --motion-fast: 120ms;
+  --motion-standard: 220ms;
+  --motion-slow: 420ms;
+  --spring-standard: cubic-bezier(.2, .75, .2, 1);
+  --spring-expressive: cubic-bezier(.16, 1.2, .3, 1);
+  --type-display: clamp(42px, 6vw, 88px);
+  --type-headline: clamp(30px, 4vw, 56px);
+  --type-title: 24px;
+  --type-body: 16px;
+  --type-label: 13px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 1ms;
+    --motion-standard: 1ms;
+    --motion-slow: 1ms;
+  }
+}

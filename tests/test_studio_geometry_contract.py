@@ -78,7 +78,8 @@ console.log(JSON.stringify({resize,centered,aligned,distributed,snapped,spacing}
 def test_geometry_primitives_cover_resize_alignment_distribution_and_screen_threshold():
     vectors = _compiled_geometry_vectors()
     assert vectors['resize']['w'] == 220 and vectors['resize']['h'] == 110
-    assert vectors['centered']['x'] == 80 and vectors['centered']['w'] == 240
+    # The dragged edge follows the pointer; its opposite moves equally from centre.
+    assert vectors['centered']['x'] == 60 and vectors['centered']['w'] == 280
     assert [item['x'] for item in vectors['aligned']] == [10, 10, 10]
     assert [item['id'] for item in vectors['distributed']] == ['a', 'b', 'c']
     assert [item['x'] for item in vectors['distributed']] == [10, 120, 250]

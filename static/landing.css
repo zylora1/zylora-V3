@@ -60,7 +60,7 @@
   margin-bottom: 40px;
 }
 
-/* Emergent-Style Live Prompt Composer */
+/* Live prompt composer */
 .hero-prompt-container {
   max-width: 860px;
   margin: 0 auto 48px;
@@ -432,7 +432,7 @@
   font-weight: 600;
 }
 
-/* Floating Layer 2 (Foreground Right): AI Sales Assistant Live Chat & Lead Qualified Card */
+/* Floating Layer 2 (Foreground Right): AI Sales Assistant Live Chat */
 .floating-assistant-card {
   position: absolute;
   right: -20px;
@@ -1086,6 +1086,7 @@
 }
 
 @media (max-width: 768px) {
+  body.nav-open { overflow: hidden; }
   .hero-editorial h1 {
     font-size: clamp(40px, 11vw, 56px);
   }
@@ -1124,4 +1125,155 @@
     gap: 16px;
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
   }
+}
+
+/* Connected-workspace sections and source-of-truth plan comparison */
+.workflow-section,
+.comparison-section {
+  padding: clamp(80px, 9vw, 132px) 0;
+  background: var(--z-surface);
+  border-top: 1px solid var(--z-border);
+}
+
+.workflow-intro,
+.comparison-heading,
+.capability-strip-heading {
+  max-width: 760px;
+  margin: 0 auto 44px;
+  text-align: center;
+}
+
+.workflow-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.workflow-step {
+  min-height: 190px;
+  padding: 24px;
+  background: var(--z-bg);
+  border: 1px solid var(--z-border);
+  border-radius: 16px;
+}
+
+.workflow-step > span,
+.capability-index {
+  display: block;
+  margin-bottom: 26px;
+  color: var(--z-accent);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+
+.workflow-step h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.workflow-step p,
+.capability-item span:last-child {
+  margin: 0;
+  color: var(--z-text-secondary);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.capability-strip-section {
+  padding: clamp(80px, 9vw, 132px) 0;
+  background: var(--z-bg);
+  border-top: 1px solid var(--z-border);
+}
+
+.capability-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  border-top: 1px solid var(--z-border-strong);
+  border-bottom: 1px solid var(--z-border-strong);
+}
+
+.capability-item {
+  display: flex;
+  min-height: 180px;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 24px;
+  color: var(--z-text);
+  border-right: 1px solid var(--z-border-strong);
+  text-decoration: none;
+  transition: background-color .16s ease, color .16s ease;
+}
+
+.capability-item:last-child { border-right: 0; }
+.capability-item:hover { background: var(--z-surface); }
+.capability-item strong { margin-bottom: 8px; font-size: 16px; }
+.capability-item span:last-child { margin-top: auto; }
+
+.comparison-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--z-border-strong);
+  border-radius: 16px;
+  background: var(--z-surface);
+}
+
+.comparison-table {
+  width: 100%;
+  min-width: 820px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 17px 18px;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--z-border);
+}
+
+.comparison-table thead th {
+  color: var(--z-text-secondary);
+  background: var(--z-bg);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.comparison-table tbody th { width: 31%; font-weight: 600; color: var(--z-text); }
+.comparison-table tbody td { color: var(--z-text-secondary); }
+.comparison-table tbody tr:last-child th,
+.comparison-table tbody tr:last-child td { border-bottom: 0; }
+.comparison-note { margin: 16px 0 0; color: var(--z-text-tertiary); font-size: 12px; text-align: center; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 1024px) {
+  .workflow-grid,
+  .capability-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .capability-item:nth-child(2) { border-right: 0; }
+  .capability-item:nth-child(-n+2) { border-bottom: 1px solid var(--z-border-strong); }
+}
+
+@media (max-width: 600px) {
+  .workflow-grid,
+  .capability-strip { grid-template-columns: 1fr; }
+  .workflow-step { min-height: 0; }
+  .capability-item,
+  .capability-item:nth-child(2) { min-height: 140px; border-right: 0; border-bottom: 1px solid var(--z-border-strong); }
+  .capability-item:last-child { border-bottom: 0; }
+  .comparison-table th,
+  .comparison-table td { padding: 14px 12px; }
 }

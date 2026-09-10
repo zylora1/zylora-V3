@@ -13,3 +13,13 @@ data/*.db-wal
 data/media/*
 *.log
 .template-import-work
+*.map
+*.tsbuildinfo
+artifacts/
+.codex-tmp/
+browser-results/
+screenshots/
+static/audit_screenshots/
+release_context/
+data/*.png
+data/studio-rebuild/

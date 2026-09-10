@@ -24,3 +24,6 @@ data/media/
 .DS_Store
 Thumbs.db
 .template-import-work/
+release_context/
+static/*.map
+*.tsbuildinfo

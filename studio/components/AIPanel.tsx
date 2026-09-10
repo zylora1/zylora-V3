@@ -17,7 +17,7 @@ export function AIPanel(){
       const response=await fetch(`/api/sites/${siteId}/ai-edit`,{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':csrf,'Idempotency-Key':crypto.randomUUID()},body:JSON.stringify({instruction:prompt,page:state.document.pages[state.currentPageId]?.slug||'home',selection:state.selectedNodeIds})});
       const result=await response.json();
       if(!response.ok)throw new Error(result?.detail?.message||result?.detail||'AI edit failed');
-      if(result.structure?.schemaVersion===4)dispatch({type:'APPLY_EXTERNAL_DOCUMENT',payload:result.structure as SiteDocument});
+      if(result.structure?.schemaVersion>=5||result.structure?.engineVersion>=2)dispatch({type:'APPLY_EXTERNAL_DOCUMENT',payload:result.structure as SiteDocument});
       setInstruction('');setStatus(result.operations?.length?'Edit applied. You can undo it from the toolbar.':result.message||'No safe change was needed.');
     }catch(error){setStatus(error instanceof Error?error.message:'AI edit failed');}
     finally{setBusy(false)}

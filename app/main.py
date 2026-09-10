@@ -347,6 +347,8 @@ def _google_auth_html(filename: str) -> HTMLResponse:
 
 def _dashboard_html() -> HTMLResponse:
     raw=(ROOT/'static'/'dashboard.html').read_text(encoding='utf-8')
+    if '/static/zylora-tokens.css' not in raw:
+        raw=raw.replace('</head>','<link href="/static/zylora-tokens.css" rel="stylesheet">\n</head>',1)
     raw=raw.replace('/static/dashboard-sneat.css?v=20260901-ui2"','/static/dashboard-sneat.css?v=20260902-brand1"')
     raw=raw.replace('</head>','<link rel="icon" href="/static/favicon.svg?v=20260902-brand1" type="image/svg+xml"></head>',1)
     return HTMLResponse(raw)

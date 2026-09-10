@@ -21,7 +21,7 @@ from scripts.editor_media_e2e import bootstrap, bridge
 from tests.test_ai_first_rebuild import auth, reset_db
 
 
-OUT = ROOT / "artifacts" / "final-production-certification" / "performance-smoothness.json"
+OUT = ROOT / "artifacts" / "repository-audit" / "performance-smoothness.json"
 
 
 def inline_shell(html: str) -> str:
@@ -78,7 +78,7 @@ def run(count: int) -> dict:
         resize_handle=target.locator('.studio-resize-handle[data-handle="bottom-right"]'); target.evaluate("e=>e.click()"); page.wait_for_timeout(40); hx=resize_handle.bounding_box();
         resize=action_probe(page,lambda:(resize_handle.dispatch_event("pointerdown",{"clientX":hx["x"]+hx["width"]/2,"clientY":hx["y"]+hx["height"]/2,"pointerId":811,"button":0,"pointerType":"mouse"}),[page.evaluate("([x,y,i])=>document.body.dispatchEvent(new PointerEvent('pointermove',{bubbles:true,clientX:x+i*2,clientY:y+i,pointerId:811,pointerType:'mouse'}))",[hx["x"]+hx["width"]/2,hx["y"]+hx["height"]/2,i]) for i in range(1,8)],page.evaluate("([x,y])=>document.body.dispatchEvent(new PointerEvent('pointerup',{bubbles:true,clientX:x,clientY:y,pointerId:811,pointerType:'mouse'}))",[hx["x"]+hx["width"]/2+14,hx["y"]+hx["height"]/2+7])))
         selection=action_probe(page,lambda:target.evaluate("e=>e.click()")); layer=action_probe(page,lambda:(page.get_by_role("button",name="Layers").click(),page.wait_for_timeout(100),page.get_by_role("button",name="Elements").click()))
-        serial_started=time.perf_counter(); page.wait_for_function("document.querySelector('.cloud-save')?.getAttribute('title')==='Saved'",timeout=20000); autosave_ms=(time.perf_counter()-serial_started)*1000
+        serial_started=time.perf_counter(); page.wait_for_function("document.querySelector('.save-status-control')?.getAttribute('title')==='Saved'",timeout=20000); autosave_ms=(time.perf_counter()-serial_started)*1000
         result={"requested":count,"rendered":actual,"dom_nodes":page.locator("*").count(),"sequential_insertion_ms":round(insertion_ms,2),"steady_state":{"drag":drag,"resize":resize,"selection":selection,"layer_panel":layer,"autosave_wait_ms":round(autosave_ms,2)},"browser_errors":errors}
         browser.close(); return result
 

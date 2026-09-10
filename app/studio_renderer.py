@@ -62,6 +62,51 @@ def _safe_url(value: str|None, *, image: bool=False) -> str|None:
     allowed=('https://','http://','/') if image else ('https://','http://','/','mailto:','tel:','#')
     return raw if normalized.startswith(allowed) else None
 
+
+def _action_value(action: Any, key: str) -> Any:
+    if isinstance(action, dict):
+        return action.get(key)
+    return getattr(action, key, None)
+
+
+def _action_href(node: Node, doc: SiteDocument, page: Page, content: Any) -> str|None:
+    """Resolve a typed action to a safe published URL.
+
+    Legacy documents still use ``content.href``.  Typed actions take
+    precedence and are resolved against stable page/node IDs at render time.
+    """
+    action = getattr(content, "action", None)
+    action_type = str(_action_value(action, "type") or "").lower()
+    if action_type == "page":
+        target_id = str(_action_value(action, "pageId") or "")
+        target = doc.pages.get(target_id)
+        if target:
+            return "/" if target.slug == "home" else f"/{target.slug}"
+        return None
+    if action_type == "section":
+        target_id = str(_action_value(action, "sectionId") or "")
+        return f"#{target_id}" if re.fullmatch(r"[A-Za-z0-9_-]{1,128}", target_id) else None
+    if action_type == "external":
+        return _safe_url(str(_action_value(action, "url") or _action_value(action, "value") or ""))
+    if action_type == "email":
+        value = str(_action_value(action, "value") or _action_value(action, "url") or "").strip()
+        if value.lower().startswith("mailto:"):
+            return _safe_url(value)
+        return _safe_url(f"mailto:{value}") if value else None
+    if action_type == "phone":
+        value = str(_action_value(action, "value") or _action_value(action, "url") or "").strip()
+        if value.lower().startswith("tel:"):
+            return _safe_url(value)
+        return _safe_url(f"tel:{value}") if value else None
+    if action_type in {"booking", "form"}:
+        value = str(_action_value(action, "url") or _action_value(action, "value") or "").strip()
+        if value:
+            return _safe_url(value)
+        return "#booking" if action_type == "booking" else "#form"
+    if action_type == "none":
+        return None
+    return _safe_url(getattr(content, "href", None))
+
 def _gradient_css(gradient: Any) -> str|None:
     if not gradient: return None
     kind=(getattr(gradient,'type',None) if not isinstance(gradient,dict) else gradient.get('type')) or 'linear'
@@ -122,10 +167,64 @@ def _render_node_style(node_id: str, style: NodeStyle) -> str:
         return f".z-node-{node_id} {{ {' '.join(rules)} }}\n"
     return ""
 
-def _render_node_css(node: Node, doc: SiteDocument) -> str:
+def _geometry_value(node: Node, breakpoint: str = "desktop") -> dict[str, Any] | None:
+    raw = node.geometry.model_dump(exclude_none=True) if node.geometry else None
+    override = node.responsiveOverrides.get(breakpoint)
+    if breakpoint == "mobile":
+        tablet = node.responsiveOverrides.get("tablet")
+        if tablet and tablet.geometry:
+            raw = {**(raw or {}), **tablet.geometry.model_dump(exclude_none=True)}
+    if override and override.geometry:
+        raw = {**(raw or {}), **override.geometry.model_dump(exclude_none=True)}
+    return raw
+
+
+def _parent_width(node: Node, page: Page, doc: SiteDocument, breakpoint: str = "desktop") -> float:
+    parent = page.nodes.get(node.parentId or "") if node.parentId else None
+    parent_geometry = _geometry_value(parent, breakpoint) if parent else None
+    if parent_geometry and parent_geometry.get("width"):
+        return max(1, float(parent_geometry["width"]))
+    configured = doc.breakpoints.get("desktop") if breakpoint == "desktop" else None
+    return max(1, float(configured or 1440))
+
+
+def _geometry_css(node: Node, page: Page, doc: SiteDocument, breakpoint: str = "desktop") -> dict[str, Any]:
+    geometry = _geometry_value(node, breakpoint)
+    if not geometry:
+        return {}
+    mode = geometry.get("mode") or "freeform"
+    if mode == "flow":
+        result: dict[str, Any] = {"position": "relative"}
+        if node.type in {"page", "section"}:
+            result.update({"width": "100%", "maxWidth": "100%"})
+            result.pop("height", None)
+            result["minHeight"] = f"{max(1, float(geometry.get('height') or 40)):.2f}px"
+        return result
+    parent_width = _parent_width(node, page, doc, breakpoint)
+    return {
+        "position": "absolute",
+        "left": f"{float(geometry.get('x') or 0) / parent_width * 100:.5f}%",
+        "top": f"{float(geometry.get('y') or 0):.2f}px",
+        "width": f"{float(geometry.get('width') or 100) / parent_width * 100:.5f}%",
+        "height": f"{max(1, float(geometry.get('height') or 40)):.2f}px",
+        "rotate": f"{float(geometry.get('rotation') or 0):.2f}deg",
+    }
+
+
+def _style_for_breakpoint(node: Node, page: Page, doc: SiteDocument, breakpoint: str = "desktop") -> NodeStyle:
+    if breakpoint == "desktop":
+        style = node.style.model_copy(deep=True)
+    else:
+        override = node.responsiveOverrides.get(breakpoint)
+        style = (override.style if override and override.style else NodeStyle()).model_copy(deep=True)
+    style.css = {**style.css, **_geometry_css(node, page, doc, breakpoint)}
+    return style
+
+
+def _render_node_css(node: Node, doc: SiteDocument, page: Page) -> str:
     css = ""
     # Base styles
-    css += _render_node_style(node.id, node.style)
+    css += _render_node_style(node.id, _style_for_breakpoint(node, page, doc))
     background_gradient=_gradient_css(node.style.gradient)
     text_gradient=_gradient_css(node.style.textGradient)
     if background_gradient:
@@ -136,7 +235,7 @@ def _render_node_css(node: Node, doc: SiteDocument) -> str:
     # Responsive overrides
     for bp, bp_val in doc.breakpoints.items():
         override = node.responsiveOverrides.get(bp)
-        if override and override.style:
+        if override and (override.style or override.geometry):
             # Simple approach: emit media queries for breakpoints
             if bp == 'tablet':
                 mq = "@media (max-width: 991px)"
@@ -146,7 +245,7 @@ def _render_node_css(node: Node, doc: SiteDocument) -> str:
                 mq = None # Desktop is base, usually no media query needed unless min-width
                 
             if mq:
-                inner_css = _render_node_style(node.id, override.style)
+                inner_css = _render_node_style(node.id, _style_for_breakpoint(node, page, doc, bp))
                 if inner_css:
                     css += f"{mq} {{\n  {inner_css}}}\n"
                     
@@ -203,12 +302,17 @@ def _bound_content(node:Node,data_context:dict|None,asset_resolver=None):
 
 
 def _render_node_html(node: Node, doc: SiteDocument, page: Page, data_context:dict|None=None, collection_items:list[dict]|None=None, asset_resolver=None, instance_suffix:str='') -> str:
+    content=_bound_content(node,data_context,asset_resolver)
+    action_href = _action_href(node, doc, page, content)
     tag = "div" # default
-    if node.type == "section": tag = "section"
+    if node.type == "page": tag = "main"
+    elif node.type == "section": tag = "section"
     elif node.type in {"text","paragraph"}: tag = "p"
-    elif node.type == "heading": tag = "h2"
+    elif node.type == "heading":
+        level = int(node.metadata.get("headingLevel") or 2) if str(node.metadata.get("headingLevel") or "").isdigit() else 2
+        tag = f"h{max(1, min(6, level))}"
     elif node.type == "image": tag = "img"
-    elif node.type == "button": tag = "a" if _safe_url(node.content.href) else "button"
+    elif node.type == "button": tag = "a" if action_href else "button"
     elif node.type == "link": tag = "a"
     elif node.type == "form" or node.type == "lead_form": tag = "form"
     elif node.type == "form_field": tag = "input"
@@ -218,7 +322,6 @@ def _render_node_html(node: Node, doc: SiteDocument, page: Page, data_context:di
     elif node.type == "appointment_booking": tag = "div"
     elif node.type == "ai_sales_assistant": tag = "div"
     
-    content=_bound_content(node,data_context,asset_resolver)
     classes = f"z-node z-node-{node.id}"
     
     # Add business component markers for frontend hydration scripts
@@ -234,6 +337,13 @@ def _render_node_html(node: Node, doc: SiteDocument, page: Page, data_context:di
     if scroll_effect:
         classes += ' z-scroll-target'
     attrs = f'class="{classes}" id="{html.escape(rendered_id,quote=True)}" data-studio-type="{html.escape(node.type,quote=True)}"'
+    aria = node.accessibility or {}
+    if aria.get("ariaLabel"):
+        attrs += f' aria-label="{html.escape(str(aria["ariaLabel"]), quote=True)}"'
+    if aria.get("role"):
+        attrs += f' role="{html.escape(str(aria["role"]), quote=True)}"'
+    if aria.get("tabIndex") is not None:
+        attrs += f' tabindex="{html.escape(str(aria["tabIndex"]), quote=True)}"'
     if scroll_effect:
         attrs += f' data-z-scroll-effect="{html.escape(scroll_effect,quote=True)}"'
     
@@ -277,13 +387,15 @@ def _render_node_html(node: Node, doc: SiteDocument, page: Page, data_context:di
             ' data-zylora-image-placeholder="true"'
         )
         return f'<div {attrs}></div>'
-    elif tag == "a" and content.href:
-        href=_safe_url(content.href)
+    elif tag == "a" and action_href:
+        href=action_href
         if href:
             attrs += f' href="{html.escape(href,quote=True)}"'
             if node.metadata.get('linkTarget') == '_blank':
                 attrs += ' target="_blank" rel="noopener noreferrer"'
     elif tag == 'input':
+        input_type = _safe_css_value(node.metadata.get('inputType') or 'text') or 'text'
+        attrs += f' type="{html.escape(input_type, quote=True)}"'
         if content.placeholder:
             attrs += f' placeholder="{html.escape(content.placeholder,quote=True)}"'
         if content.required:
@@ -352,7 +464,7 @@ def render_page(doc: SiteDocument, page_id: str, *, data_context:dict|None=None,
     # Generate CSS
     all_css = ""
     for node in page.nodes.values():
-        all_css += _render_node_css(node, doc)
+        all_css += _render_node_css(node, doc, page)
         
     # Generate HTML
     body_html = _render_node_html(root,doc,page,data_context,collection_items,asset_resolver)

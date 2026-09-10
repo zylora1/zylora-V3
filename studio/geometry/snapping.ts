@@ -11,8 +11,11 @@ const xCenter=(r:Rect)=>r.x+r.w/2; const yCenter=(r:Rect)=>r.y+r.h/2;
 
 function addSpacingCandidates(rect:Rect,peers:Rect[],horizontal:boolean,add:(candidate:number,line:SnapLine)=>void){
   const sorted=peers.slice().sort((a,b)=>(horizontal?a.x-b.x:a.y-b.y));
-  for(let i=0;i<sorted.length;i++)for(let j=i+1;j<sorted.length;j++){
-    const a=sorted[i],b=sorted[j],aEnd=horizontal?a.x+a.w:a.y+a.h,bStart=horizontal?b.x:b.y,gap=bStart-aEnd;
+  // Only adjacent intervals can form a visible gap. Considering every pair
+  // made resize cost quadratic on large documents without adding a useful
+  // guide, because non-adjacent pairs contain another peer in the interval.
+  for(let i=0;i<sorted.length-1;i++){
+    const a=sorted[i],b=sorted[i+1],aEnd=horizontal?a.x+a.w:a.y+a.h,bStart=horizontal?b.x:b.y,gap=bStart-aEnd;
     const overlap=horizontal?Math.min(a.y+a.h,b.y+b.h)-Math.max(a.y,b.y):Math.min(a.x+a.w,b.x+b.w)-Math.max(a.x,b.x);
     if(gap<-EPSILON||overlap<=0)continue;
     const size=horizontal?rect.w:rect.h;
@@ -26,8 +29,8 @@ function addSpacingCandidates(rect:Rect,peers:Rect[],horizontal:boolean,add:(can
     }
     // Also support placing the moving object before or after an existing
     // evenly-spaced pair, using the pair's measured gap as the target gap.
-    const before=(horizontal?a.x:b.y)-size-gap,after=(horizontal?b.x+b.w:b.y+b.h)+gap,label=`${Math.round(Math.max(0,gap))} px`,orientation=horizontal?'vertical':'horizontal';
-    add(before,{position:before,orientation,type:'spacing',label,from:before+size,to:horizontal?a.x:b.y});
+    const before=(horizontal?a.x:a.y)-size-gap,after=(horizontal?b.x+b.w:b.y+b.h)+gap,label=`${Math.round(Math.max(0,gap))} px`,orientation=horizontal?'vertical':'horizontal';
+    add(before,{position:before,orientation,type:'spacing',label,from:before+size,to:horizontal?a.x:a.y});
     add(after,{position:after,orientation,type:'spacing',label,from:horizontal?b.x+b.w:b.y+b.h,to:after+size});
   }
 }
@@ -47,8 +50,13 @@ export function computeSnapping(rect:Rect,peers:Rect[],parentBounds:Rect|null,le
     addSpacingCandidates(rect,peers,true,(c,line)=>xs.push({candidate:c,line}));addSpacingCandidates(rect,peers,false,(c,line)=>ys.push({candidate:c,line}));
     xs.forEach(v=>choose('x',v.candidate-rect.x,v.line));ys.forEach(v=>choose('y',v.candidate-rect.y,v.line));
   }
-  const snappedRect={...rect,x:rect.x+(bestX?.delta||0),y:rect.y+(bestY?.delta||0)};
-  return {snappedRect,snapLines:[bestX?.line,bestY?.line].filter(Boolean) as SnapLine[],measurements:{x:snappedRect.x,y:snappedRect.y,width:snappedRect.w,height:snappedRect.h}};
+  const snapX=bestX as {delta:number;distance:number;line:SnapLine}|null;
+  const snapY=bestY as {delta:number;distance:number;line:SnapLine}|null;
+  const snappedRect={...rect,x:rect.x+(snapX?snapX.delta:0),y:rect.y+(snapY?snapY.delta:0)};
+  const snapLines:SnapLine[]=[];
+  if(snapX)snapLines.push(snapX.line);
+  if(snapY)snapLines.push(snapY.line);
+  return {snappedRect,snapLines,measurements:{x:snappedRect.x,y:snappedRect.y,width:snappedRect.w,height:snappedRect.h}};
 }
 
 export const guidesAreStable=(a:SnapLine[],b:SnapLine[])=>a.length===b.length&&a.every((line,i)=>{const other=b[i];return !!other&&line.orientation===other.orientation&&line.type===other.type&&Math.abs(line.position-other.position)<=EPSILON;});

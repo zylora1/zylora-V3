@@ -28,10 +28,12 @@ OUT = ROOT / "artifacts" / "final-production-certification" / "browser-results" 
 def inline_shell(html: str) -> str:
     bundle = (ROOT / "static" / "studio.js").read_text(encoding="utf-8")
     css = (ROOT / "static" / "studio-ux.css").read_text(encoding="utf-8")
+    publish_flow = (ROOT / "static" / "publish-flow.js").read_text(encoding="utf-8")
     html = html.replace('<link rel="stylesheet" href="/static/studio-ux.css">', f"<style>{css}</style>")
+    html = html.replace('<script src="/static/publish-flow.js"></script>', f"<script>{publish_flow}</script>")
     return re.sub(
         r'<script src="/static/studio\.js"></script>',
-        lambda _: f"<script>{bootstrap()}</script><script>{bundle}</script>",
+        lambda _: f"<script>{bootstrap()}</script><script>sessionStorage.setItem('csrf',window.ZYLORA_STUDIO_CONTEXT?.csrfToken||'')</script><script>{bundle}</script>",
         html,
     )
 
@@ -78,10 +80,12 @@ def add(page, label: str):
     else:
         page.get_by_role("button", name=f"Add {label}", exact=True).click()
     page.wait_for_timeout(90)
-    # The last rendered non-page node is authoritative for insertion identity.
+    # Insertion selects its authoritative root. For subtree primitives such as
+    # Cards, the last rendered descendant is not the object the user inserted.
     all_nodes = page.locator('.studio-canvas [data-studio-id]:not([data-studio-type="page"])')
     assert all_nodes.count() > before - 1, f"Add {label} did not create a node"
-    node = all_nodes.last
+    selected = page.locator('.studio-canvas [data-studio-selected="true"]')
+    node = selected.last if selected.count() else all_nodes.last
     return node.get_attribute("data-studio-id")
 
 
@@ -410,9 +414,27 @@ def run(browser_name: str = "chromium") -> dict:
 
             def publish_and_verify():
                 page.get_by_role("button", name="Publish website", exact=True).click()
-                page.wait_for_timeout(500)
-                response = client.get(f"/api/sites/{site_id}", headers=headers)
+                wizard = page.get_by_role("dialog", name="Publish website")
+                wizard.wait_for(state="visible")
+                wizard.get_by_role("button", name="Continue", exact=True).click()
+                wizard.locator(".publish-plan-grid article").first.click()
+                wizard.get_by_role("button", name="Continue", exact=True).click()
+                wizard.get_by_role("button", name="Review", exact=True).click()
+                wizard.get_by_role("button", name="Publish website", exact=True).click()
+                free_confirmation = page.locator("[data-zpf-free]")
+                response = None
+                confirmed_free = False
+                for _ in range(40):
+                    page.wait_for_timeout(250)
+                    if not confirmed_free and free_confirmation.count() and free_confirmation.is_visible():
+                        free_confirmation.click()
+                        confirmed_free = True
+                    response = client.get(f"/api/sites/{site_id}", headers=headers)
+                    if response.json().get("status") == "LIVE":
+                        break
+                assert response is not None
                 response.raise_for_status()
+                assert response.json()["status"] == "LIVE", {"site": response.json(), "publish_ui": page.locator("body").inner_text()[-1200:], "browser_errors": errors}
                 slug = response.json()["slug"]
                 public = client.get(f"/s/{slug}")
                 public.raise_for_status()

@@ -1,6 +1,14 @@
 const $=s=>document.querySelector(s);
 const menu=$('[data-testid="mobile-menu"]'),nav=$('#primaryNav');
-if(menu)menu.onclick=()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',open?'true':'false')};
+if(menu&&nav){
+  menu.setAttribute('aria-controls','primaryNav');
+  menu.setAttribute('aria-expanded','false');
+  const closeNav=()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false');document.body.classList.remove('nav-open')};
+  menu.onclick=()=>{const open=!nav.classList.contains('open');nav.classList.toggle('open',open);menu.setAttribute('aria-expanded',open?'true':'false');document.body.classList.toggle('nav-open',open)};
+  nav.querySelectorAll('a').forEach(link=>link.addEventListener('click',closeNav));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&nav.classList.contains('open')){closeNav();menu.focus()}});
+  window.addEventListener('resize',()=>{if(window.innerWidth>768)closeNav()});
+}
 
 const openPro=$('#openPro'),closePro=$('#closePro'),proModal=$('#proModal');
 if(openPro)openPro.onclick=()=>{proModal.classList.add('open');proModal.setAttribute('aria-hidden','false')};

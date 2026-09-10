@@ -29,6 +29,29 @@ def test_marketing_surfaces_do_not_ship_fabricated_proof():
         assert "AggregateRating" not in json.dumps(payload)
 
 
+def test_landing_page_uses_neutral_product_examples_and_full_plan_comparison():
+    landing = (STATIC / "index.html").read_text(encoding="utf-8")
+    for fictional_detail in (
+        "AURA CLINIC",
+        "Aurora Dental",
+        "Dr. Elena",
+        "Rahul Sharma",
+        "rahul@example.com",
+        "Lead Score:",
+        "Lead Qualified:",
+        "Oceanfront Villa",
+        "Next.js 14 + Tailwind",
+        "global edge CDN",
+        "priority edge delivery",
+    ):
+        assert fictional_detail not in landing
+    for section_id in ("how-it-works", "capabilities", "pricing", "comparison", "faq"):
+        assert f'id="{section_id}"' in landing
+    assert 'class="comparison-table"' in landing
+    assert 'id="starterRegionalPrice"' in landing
+    assert 'id="growthRegionalPrice"' in landing
+
+
 def test_dashboard_empty_state_is_honest_and_actionable():
     html = (STATIC / "dashboard.html").read_text(encoding="utf-8")
     js = (STATIC / "dashboard.js").read_text(encoding="utf-8")
@@ -50,4 +73,3 @@ def test_ai_creator_keeps_a_native_prompt_fallback():
     assert '<label class="prompt-box">' in html
     assert "const aiCreatePromptInputRoot = $('#aiCreatePromptInputRoot')" in js
     assert "&& #aiCreatePromptInputRoot" not in js
-

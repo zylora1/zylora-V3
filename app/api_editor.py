@@ -32,7 +32,7 @@ from .templates import BY_SLUG, AI_RUNTIME_SLUG, render_template_page
 from .seo_engine import (apply_seo_html, clean_text, metadata_for_page, normalize_public_slug,
     page_public_slug, seo_document, seo_health, validate_canonical)
 from .link_icons import normalize_footer_links, detect_link_platform, apply_footer_links_html
-from .studio_document import validate_studio_document
+from .studio_document import normalize_studio_document_json, validate_studio_document
 from .studio_renderer import render_page as render_studio_page
 
 router = APIRouter(prefix='/api')
@@ -327,14 +327,21 @@ def migrate_to_studio(site_id: str, request: Request):
         site=_owned_site(db,u['id'],site_id)
         if site.get('studio_document_json'):
             try:
-                document=validate_studio_document(json.loads(site['studio_document_json']))
+                raw_document=json.loads(site['studio_document_json'])
+                document=validate_studio_document(raw_document)
             except Exception as exc:
                 raise HTTPException(409,detail={'code':'STUDIO_DOCUMENT_INVALID','message':'The saved Studio document is invalid and was not modified.','reason':str(exc)})
+            normalized_json=document.model_dump_json(exclude_none=True)
+            migrated=normalized_json != site['studio_document_json']
+            if migrated:
+                db.execute(text('UPDATE sites SET studio_document_json=:document,studio_revision=:revision WHERE id=:site_id AND user_id=:user_id'),{
+                    'document':normalized_json,'revision':document.revision,'site_id':site_id,'user_id':u['id']
+                })
             if int(site.get('studio_revision') or 0) != document.revision:
                 db.execute(text('UPDATE sites SET studio_revision=:revision WHERE id=:site_id AND user_id=:user_id'),{
                     'revision':document.revision,'site_id':site_id,'user_id':u['id']
                 })
-            return {'ok': True, 'migrated': False, 'message': 'Already migrated', 'document': document.model_dump(exclude_none=True)}
+            return {'ok': True, 'migrated': migrated, 'message': 'Studio document normalized', 'document': document.model_dump(exclude_none=True)}
         
         # We must render the base pages to perform the migration correctly
         rendered_pages = {}
@@ -345,8 +352,8 @@ def migrate_to_studio(site_id: str, request: Request):
         v4_doc = migrate_v3_to_v4(v3_doc, rendered_pages)
         
         v4_json = v4_doc.model_dump_json(exclude_none=True)
-        db.execute(text('UPDATE sites SET studio_document_json=:v4,studio_revision=:revision WHERE id=:s'), {
-            'v4':v4_json,'revision':v4_doc.revision,'s':site_id
+        db.execute(text('UPDATE sites SET studio_document_json=:v4,studio_revision=:revision,document_schema_version=5 WHERE id=:s AND user_id=:user'), {
+            'v4':v4_json,'revision':v4_doc.revision,'s':site_id,'user':u['id']
         })
         
         # Also backup current to revisions if needed
@@ -482,13 +489,14 @@ def save_studio(site_id: str, document: dict, request: Request):
             raise HTTPException(404, "Site not found")
             
         try:
-            valid_doc = validate_studio_document(document)
+            valid_doc = validate_studio_document(normalize_studio_document_json(document))
             client_rev = valid_doc.revision
             
             # Concurrency check
             if site.get('studio_document_json'):
                 current_server_doc = json.loads(site['studio_document_json'])
-                server_rev = int(site.get('studio_revision') or current_server_doc.get("revision", 1))
+                authoritative_doc = validate_studio_document(current_server_doc)
+                server_rev = int(site.get('studio_revision') or authoritative_doc.revision or 1)
                 
                 # If client revision is older than server revision, it's a conflict
                 if client_rev != server_rev:
@@ -496,6 +504,8 @@ def save_studio(site_id: str, document: dict, request: Request):
                         'code':'STUDIO_REVISION_CONFLICT',
                         'message':'A newer or different Studio revision is authoritative.',
                         'serverRevision':server_rev,
+                        'serverDocument':authoritative_doc.model_dump(exclude_none=True),
+                        'conflict':'reload_or_rebase_required',
                     })
                 
                 # Bump revision for the successful save
@@ -514,9 +524,22 @@ def save_studio(site_id: str, document: dict, request: Request):
                 authoritative=db.execute(text('SELECT studio_revision FROM sites WHERE id=:site_id AND user_id=:user_id'),{
                     'site_id':site_id,'user_id':u['id']
                 }).scalar_one_or_none()
+                authoritative_raw=db.execute(text('SELECT studio_document_json,studio_revision FROM sites WHERE id=:site_id AND user_id=:user_id'),{
+                    'site_id':site_id,'user_id':u['id']
+                }).mappings().first()
+                authoritative_document=None
+                authoritative_revision=int(authoritative or server_rev)
+                if authoritative_raw and authoritative_raw.get('studio_document_json'):
+                    try:
+                        authoritative_document=validate_studio_document(json.loads(authoritative_raw['studio_document_json'])).model_dump(exclude_none=True)
+                        authoritative_revision=int(authoritative_raw.get('studio_revision') or authoritative_revision)
+                    except Exception:
+                        authoritative_document=None
                 raise HTTPException(409,detail={
                     'code':'STUDIO_REVISION_CONFLICT','message':'A concurrent Studio save won; this document was not saved.',
-                    'serverRevision':int(authoritative or server_rev),
+                    'serverRevision':authoritative_revision,
+                    'serverDocument':authoritative_document,
+                    'conflict':'reload_or_rebase_required',
                 })
             
         except HTTPException:

@@ -113,6 +113,8 @@ def test_studio_migration_load_save_conflict_and_owned_shell():
     assert stale.status_code == 409
     assert stale.json()['detail']['code'] == 'STUDIO_REVISION_CONFLICT'
     assert stale.json()['detail']['serverRevision'] == 2
+    assert stale.json()['detail']['conflict'] == 'reload_or_rebase_required'
+    assert stale.json()['detail']['serverDocument']['revision'] == 2
 
     anonymous=TestClient(app)
     assert anonymous.get(f'/studio/{site_id}').status_code == 401

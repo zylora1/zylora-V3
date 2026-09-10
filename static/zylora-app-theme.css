@@ -1,4 +1,1300 @@
-/* Shared authenticated surfaces: the same light, spacious Zylora family as the public site. */
-:root { --app-canvas:#f5f7fb; --app-surface:#fff; --app-surface-soft:#f8faff; --app-ink:#111827; --app-muted:#667085; --app-faint:#98a2b3; --app-line:#e6eaf0; --app-accent:#2764e7; --app-accent-soft:#edf3ff; --app-success:#169b72; --app-warning:#c78319; --app-danger:#d94a4a; --app-radius:14px; }
-.app-shell,.super-shell{background:var(--app-canvas)!important;color:var(--app-ink)!important}.rail,.rail.sneat-sidebar{background:var(--app-surface)!important;border-right:1px solid var(--app-line)!important;box-shadow:none!important}.rail-logo,.zylora-wordmark,.zylora-logo-type{color:var(--app-ink)!important}.zylora-logo-mark{background:var(--app-ink)!important;color:#fff!important;box-shadow:none!important}.menu-section{color:var(--app-faint)!important}.rail-btn{color:var(--app-muted)!important;border-radius:10px!important}.rail-btn:hover{background:var(--app-surface-soft)!important;color:var(--app-ink)!important}.rail-btn.active{background:var(--app-accent-soft)!important;color:var(--app-accent)!important;border-left-color:var(--app-accent)!important}.workspace{background:var(--app-canvas)!important;color:var(--app-ink)!important}.topbar,.sneat-navbar{background:rgba(245,247,251,.9)!important;border-bottom:1px solid var(--app-line)!important;box-shadow:none!important}.search{background:var(--app-surface)!important;border-color:var(--app-line)!important;border-radius:10px!important}.view-head h1,.dashboard-heading h1{color:var(--app-ink)!important;font-weight:650!important;letter-spacing:-.045em!important}.view-head p,.dashboard-heading p,.section-title-info p{color:var(--app-muted)!important}.panel,.website-hero-card,.metric-card,.chart-panel,.table-wrap,.health-card,.empty-state,.admin-stats article{background:var(--app-surface)!important;border-color:var(--app-line)!important;box-shadow:none!important;border-radius:var(--app-radius)!important}.panel h2,.panel h3,.metric-card b,.website-hero-title{color:var(--app-ink)!important}.panel small,.panel .muted,.metric-card small{color:var(--app-muted)!important}.accent-btn,.btn-primary{background:var(--app-accent)!important;border-color:var(--app-accent)!important;color:#fff!important;border-radius:10px!important;box-shadow:none!important}.accent-btn:hover,.btn-primary:hover{background:#1f54c7!important}.ghost-btn,.btn-secondary{background:var(--app-surface)!important;border-color:var(--app-line)!important;color:var(--app-ink)!important;border-radius:10px!important}input,select,textarea{background:var(--app-surface)!important;border-color:var(--app-line)!important;color:var(--app-ink)!important;border-radius:10px!important}input:focus,select:focus,textarea:focus{border-color:var(--app-accent)!important;box-shadow:0 0 0 3px rgba(39,100,231,.13)!important}table th{background:var(--app-surface-soft)!important;color:var(--app-muted)!important;border-bottom-color:var(--app-line)!important}table td{color:var(--app-ink)!important;border-bottom-color:var(--app-line)!important}table tr:hover td{background:#f8faff!important}.status-pill,.status-badge,.status-chip{border-radius:999px!important}.admin-tabs{border-bottom-color:var(--app-line)!important}.admin-tabs button.active{background:var(--app-accent-soft)!important;color:var(--app-accent)!important}.stack-item{background:var(--app-surface)!important;border-color:var(--app-line)!important}
-@media(max-width:840px){.rail,.rail.sneat-sidebar{background:var(--app-surface)!important;border-top-color:var(--app-line)!important;box-shadow:0 -8px 24px rgba(27,46,79,.08)!important}.workspace{padding-bottom:86px!important}}
+/*
+ * Employee Dashboard visual system.
+ *
+ * This file is deliberately scoped to body.employee-dashboard. It is a skin
+ * over the existing dashboard DOM; IDs, data attributes and interactions are
+ * not part of this layer.
+ */
+.employee-dashboard {
+  --ed-bg: #f8f9fa;
+  --ed-surface: #ffffff;
+  --ed-surface-subtle: #f5f6f7;
+  --ed-surface-muted: #fafafa;
+  --ed-text-primary: #151515;
+  --ed-text-secondary: #60646c;
+  --ed-text-muted: #92979f;
+  --ed-border: #e6e8eb;
+  --ed-border-strong: #d9dce1;
+  --ed-brand: #2563eb;
+  --ed-brand-hover: #1d4ed8;
+  --ed-brand-soft: #eff6ff;
+  --ed-success: #168b57;
+  --ed-success-soft: #ecfdf3;
+  --ed-warning: #b7791f;
+  --ed-warning-soft: #fffaeb;
+  --ed-danger: #d92d20;
+  --ed-danger-soft: #fef3f2;
+  --ed-radius-sm: 8px;
+  --ed-radius-md: 10px;
+  --ed-radius-card: 14px;
+  --ed-shadow-card: 0 1px 2px rgba(16, 24, 40, .03), 0 4px 12px rgba(16, 24, 40, .025);
+  --ed-space-1: 4px;
+  --ed-space-2: 8px;
+  --ed-space-3: 12px;
+  --ed-space-4: 16px;
+  --ed-space-5: 20px;
+  --ed-space-6: 24px;
+  --ed-space-7: 32px;
+  --ed-space-8: 40px;
+  --ed-space-9: 48px;
+  --ed-space-10: 64px;
+  min-height: 100%;
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--ed-bg) !important;
+  color: var(--ed-text-primary) !important;
+  font-family: Inter, "SF Pro Text", "SF Pro Display", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.employee-dashboard::before,
+.employee-dashboard::after {
+  display: none !important;
+  content: none !important;
+}
+
+.employee-dashboard *,
+.employee-dashboard *::before,
+.employee-dashboard *::after {
+  box-sizing: border-box;
+}
+
+.employee-dashboard button,
+.employee-dashboard input,
+.employee-dashboard select,
+.employee-dashboard textarea {
+  font: inherit;
+}
+
+.employee-dashboard a {
+  color: inherit;
+}
+
+.employee-dashboard :focus-visible {
+  outline: 3px solid rgba(37, 99, 235, .22) !important;
+  outline-offset: 2px;
+}
+
+/* Shell and navigation */
+.employee-dashboard .app-shell {
+  display: grid !important;
+  grid-template-columns: 240px minmax(0, 1fr) !important;
+  min-height: 100vh !important;
+  background: var(--ed-bg) !important;
+}
+
+.employee-dashboard .rail,
+.employee-dashboard .rail.sneat-sidebar {
+  position: sticky !important;
+  top: 0 !important;
+  width: 240px !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: stretch !important;
+  flex-direction: column !important;
+  background: var(--ed-surface) !important;
+  border: 0 !important;
+  border-right: 1px solid var(--ed-border) !important;
+  box-shadow: none !important;
+  color: var(--ed-text-secondary) !important;
+  z-index: 60 !important;
+  overflow: hidden !important;
+}
+
+.employee-dashboard .rail-logo {
+  flex: 0 0 64px !important;
+  height: 64px !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 22px !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--ed-border) !important;
+  background: var(--ed-surface) !important;
+  color: var(--ed-text-primary) !important;
+  text-decoration: none !important;
+}
+
+.employee-dashboard .zylora-wordmark,
+.employee-dashboard .rail-logo .zylora-wordmark {
+  display: inline-flex !important;
+  align-items: center !important;
+  color: var(--ed-text-primary) !important;
+  font-family: Inter, system-ui, sans-serif !important;
+  font-size: 21px !important;
+  font-weight: 700 !important;
+  letter-spacing: -.045em !important;
+}
+
+.employee-dashboard .rail nav {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  width: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 2px !important;
+  padding: 18px 12px 12px !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ed-border-strong) transparent;
+}
+
+.employee-dashboard .menu-section {
+  margin: 18px 10px 7px !important;
+  color: var(--ed-text-muted) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: .08em !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase !important;
+}
+
+.employee-dashboard .rail-btn,
+.employee-dashboard .rail .logout {
+  width: 100% !important;
+  min-height: 40px !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 11px !important;
+  padding: 0 11px !important;
+  margin: 0 !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--ed-radius-sm) !important;
+  background: transparent !important;
+  color: var(--ed-text-secondary) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease !important;
+}
+
+.employee-dashboard .rail-btn:hover,
+.employee-dashboard .rail .logout:hover {
+  background: var(--ed-surface-subtle) !important;
+  color: var(--ed-text-primary) !important;
+}
+
+.employee-dashboard .rail-btn.active {
+  border-left: 3px solid var(--ed-brand) !important;
+  padding-left: 9px !important;
+  background: var(--ed-brand-soft) !important;
+  color: var(--ed-brand-hover) !important;
+  font-weight: 600 !important;
+}
+
+.employee-dashboard .menu-icon {
+  width: 18px !important;
+  height: 18px !important;
+  display: grid !important;
+  flex: 0 0 18px !important;
+  place-items: center !important;
+}
+
+.employee-dashboard .menu-icon svg,
+.employee-dashboard .rail-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 1.7 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+.employee-dashboard .menu-label {
+  overflow: hidden !important;
+  color: inherit !important;
+  font-size: 14px !important;
+  font-weight: inherit !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.employee-dashboard .sidebar-user {
+  flex: 0 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 14px 16px 12px !important;
+  margin: 0 !important;
+  border-top: 1px solid var(--ed-border) !important;
+  background: var(--ed-surface) !important;
+}
+
+.employee-dashboard .sidebar-avatar,
+.employee-dashboard .avatar {
+  display: grid !important;
+  flex: 0 0 auto !important;
+  place-items: center !important;
+  width: 36px !important;
+  height: 36px !important;
+  border: 1px solid var(--ed-border) !important;
+  border-radius: 50% !important;
+  background: var(--ed-surface-subtle) !important;
+  color: var(--ed-brand) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+.employee-dashboard .sidebar-user-copy b,
+.employee-dashboard .profile b {
+  display: block !important;
+  overflow: hidden !important;
+  color: var(--ed-text-primary) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.employee-dashboard .sidebar-user-copy small,
+.employee-dashboard .profile small {
+  display: block !important;
+  margin-top: 3px !important;
+  color: var(--ed-text-muted) !important;
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+}
+
+.employee-dashboard .sidebar-foot {
+  flex: 0 0 auto !important;
+  padding: 4px 12px 16px !important;
+  background: var(--ed-surface) !important;
+}
+
+.employee-dashboard .rail-btn.logout {
+  color: var(--ed-danger) !important;
+}
+
+.employee-dashboard .rail-btn.logout:hover {
+  background: var(--ed-danger-soft) !important;
+}
+
+/* Top bar and page frame */
+.employee-dashboard .workspace {
+  min-width: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 36px 48px !important;
+  background: var(--ed-bg) !important;
+  color: var(--ed-text-primary) !important;
+}
+
+.employee-dashboard .topbar,
+.employee-dashboard .topbar.sneat-navbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 45 !important;
+  height: 64px !important;
+  min-height: 64px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  margin: 0 -36px 32px !important;
+  padding: 0 36px !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--ed-border) !important;
+  border-radius: 0 !important;
+  background: rgba(248, 249, 250, .94) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+.employee-dashboard .sidebar-toggle {
+  width: 38px !important;
+  height: 38px !important;
+  border: 1px solid var(--ed-border) !important;
+  border-radius: var(--ed-radius-sm) !important;
+  background: var(--ed-surface) !important;
+}
+
+.employee-dashboard .sidebar-toggle span {
+  background: var(--ed-text-secondary) !important;
+}
+
+.employee-dashboard .search {
+  width: min(480px, 48vw) !important;
+  height: 42px !important;
+  min-width: 220px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 0 12px !important;
+  border: 1px solid var(--ed-border) !important;
+  border-radius: var(--ed-radius-md) !important;
+  background: var(--ed-surface) !important;
+  color: var(--ed-text-secondary) !important;
+  box-shadow: none !important;
+}
+
+.employee-dashboard .search:focus-within {
+  border-color: var(--ed-brand) !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .10) !important;
+}
+
+.employee-dashboard .search input {
+  width: 100% !important;
+  height: 100% !important;
+  padding: 0 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  color: var(--ed-text-primary) !important;
+  font-size: 14px !important;
+}
+
+.employee-dashboard .search input::placeholder {
+  color: var(--ed-text-muted) !important;
+}
+
+.employee-dashboard .search-kbd {
+  color: var(--ed-text-muted) !important;
+  font-size: 11px !important;
+}
+
+.employee-dashboard .topbar-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  margin-left: auto !important;
+}
+
+.employee-dashboard .bell {
+  width: 40px !important;
+  height: 40px !important;
+  display: grid !important;
+  place-items: center !important;
+  border: 1px solid transparent !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  color: var(--ed-text-secondary) !important;
+}
+
+.employee-dashboard .bell:hover {
+  border-color: var(--ed-border) !important;
+  background: var(--ed-surface) !important;
+  color: var(--ed-text-primary) !important;
+}
+
+.employee-dashboard .indicator-badge {
+  border: 2px solid var(--ed-bg) !important;
+  background: var(--ed-danger) !important;
+  color: #fff !important;
+}
+
+.employee-dashboard .profile {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 4px 0 !important;
+}
+
+/* Page headings and buttons */
+.employee-dashboard .view {
+  width: 100% !important;
+  max-width: 1480px !important;
+  margin: 0 auto !important;
+}
+
+.employee-dashboard .view-head {
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+  gap: 20px !important;
+  margin: 0 0 32px !important;
+}
+
+.employee-dashboard .view-head h1,
+.employee-dashboard .dashboard-heading h1 {
+  margin: 0 !important;
+  color: var(--ed-text-primary) !important;
+  font-size: 32px !important;
+  font-weight: 650 !important;
+  line-height: 1.15 !important;
+  letter-spacing: -.025em !important;
+}
+
+.employee-dashboard .view-head p,
+.employee-dashboard .dashboard-heading p {
+  max-width: 760px !important;
+  margin: 8px 0 0 !important;
+  color: var(--ed-text-secondary) !important;
+  font-size: 15px !important;
+  line-height: 1.55 !important;
+}
+
+.employee-dashboard .eyebrow,
+.employee-dashboard .modal-kicker {
+  margin: 0 0 8px !important;
+  color: var(--ed-text-muted) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: .06em !important;
+  line-height: 1.3 !important;
+  text-transform: uppercase !important;
+}
+
+.employee-dashboard .view-head-actions,
+.employee-dashboard .hero-site-actions,
+.employee-dashboard .welcome-actions,
+.employee-dashboard .form-actions,
+.employee-dashboard .verification-actions,
+.employee-dashboard .stack-actions {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+}
+
+.employee-dashboard .accent-btn,
+.employee-dashboard .ghost-btn,
+.employee-dashboard .danger-btn,
+.employee-dashboard .compact-btn,
+.employee-dashboard .mini-btn,
+.employee-dashboard .crm-btn-sm {
+  min-height: 40px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 0 16px !important;
+  border-radius: 9px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease, transform 160ms ease !important;
+}
+
+.employee-dashboard .accent-btn,
+.employee-dashboard .btn-primary {
+  border: 1px solid var(--ed-brand) !important;
+  background: var(--ed-brand) !important;
+  color: #fff !important;
+}
+
+.employee-dashboard .accent-btn:hover,
+.employee-dashboard .btn-primary:hover {
+  border-color: var(--ed-brand-hover) !important;
+  background: var(--ed-brand-hover) !important;
+}
+
+.employee-dashboard .ghost-btn,
+.employee-dashboard .btn-secondary,
+.employee-dashboard .mini-btn,
+.employee-dashboard .crm-btn-sm {
+  border: 1px solid var(--ed-border-strong) !important;
+  background: var(--ed-surface) !important;
+  color: var(--ed-text-primary) !important;
+}
+
+.employee-dashboard .ghost-btn:hover,
+.employee-dashboard .btn-secondary:hover,
+.employee-dashboard .mini-btn:hover,
+.employee-dashboard .crm-btn-sm:hover {
+  border-color: #c4c9d1 !important;
+  background: var(--ed-surface-subtle) !important;
+}
+
+.employee-dashboard .danger-btn,
+.employee-dashboard .btn-destructive,
+.employee-dashboard .inline-danger {
+  border-color: #f1b6b0 !important;
+  background: var(--ed-danger-soft) !important;
+  color: var(--ed-danger) !important;
+}
+
+.employee-dashboard .danger-btn:hover,
+.employee-dashboard .btn-destructive:hover {
+  border-color: #e99b93 !important;
+  background: #fce8e6 !important;
+}
+
+/* Shared surfaces and dashboard cards */
+.employee-dashboard .panel,
+.employee-dashboard .settings-card,
+.employee-dashboard .analytics-card,
+.employee-dashboard .analytics-cards article,
+.employee-dashboard .site-card,
+.employee-dashboard .template-item,
+.employee-dashboard .table-wrap,
+.employee-dashboard .embedded-table,
+.employee-dashboard .billing-grid article,
+.employee-dashboard .plan-card-grid article,
+.employee-dashboard .admin-stats article,
+.employee-dashboard .plan-admin-card,
+.employee-dashboard .stack-item,
+.employee-dashboard .crm-card,
+.employee-dashboard .crm-stat-card,
+.employee-dashboard .support-thread,
+.employee-dashboard .support-layout > *,
+.employee-dashboard .health-sub-card,
+.employee-dashboard .health-gauge-card,
+.employee-dashboard .appointments-overview-card,
+.employee-dashboard .assistant-kpi-card,
+.employee-dashboard .assistant-settings-card,
+.employee-dashboard .assistant-test-box {
+  border: 1px solid var(--ed-border) !important;
+  border-radius: var(--ed-radius-card) !important;
+  background: var(--ed-surface) !important;
+  color: var(--ed-text-primary) !important;
+  box-shadow: var(--ed-shadow-card) !important;
+}
+
+.employee-dashboard .panel,
+.employee-dashboard .settings-card,
+.employee-dashboard .analytics-card,
+.employee-dashboard .analytics-cards article,
+.employee-dashboard .billing-grid article,
+.employee-dashboard .plan-card-grid article,
+.employee-dashboard .crm-card,
+.employee-dashboard .support-thread {
+  padding: 22px !important;
+}
+
+.employee-dashboard .panel:hover,
+.employee-dashboard .settings-card:hover,
+.employee-dashboard .analytics-card:hover,
+.employee-dashboard .site-card:hover,
+.employee-dashboard .template-item:hover {
+  border-color: var(--ed-border-strong) !important;
+}
+
+.employee-dashboard .panel-title,
+.employee-dashboard .card-head,
+.employee-dashboard .section-title-row,
+.employee-dashboard .section-mini-head,
+.employee-dashboard .crm-header-row,
+.employee-dashboard .crm-toolbar,
+.employee-dashboard .settings-head {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+}
+
+.employee-dashboard .panel-title,
+.employee-dashboard .section-title-row,
+.employee-dashboard .settings-head {
+  margin-bottom: 20px !important;
+}
+
+.employee-dashboard .panel-title > span,
+.employee-dashboard .panel-title > div > span,
+.employee-dashboard .section-title-info h3,
+.employee-dashboard .card-head h2,
+.employee-dashboard .settings-card h2,
+.employee-dashboard .analytics-card h2,
+.employee-dashboard .crm-header-title h2,
+.employee-dashboard .icon-title h3 {
+  margin: 0 !important;
+  color: var(--ed-text-primary) !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+  letter-spacing: -.01em !important;
+}
+
+.employee-dashboard .panel-title small,
+.employee-dashboard .section-title-info p,
+.employee-dashboard .card-head p,
+.employee-dashboard .muted-copy,
+.employee-dashboard .panel small,
+.employee-dashboard .section-mini-head p,
+.employee-dashboard .crm-header-title p,
+.employee-dashboard .analytics-card .card-head p {
+  color: var(--ed-text-secondary) !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+
+.employee-dashboard .panel-title small {
+  display: block !important;
+  margin-top: 5px !important;
+}
+
+/* Overview and KPI presentation; all values remain JS/data supplied. */
+.employee-dashboard .sneat-overview-top,
+.employee-dashboard .overview-grid,
+.employee-dashboard .overview-bottom-grid,
+.employee-dashboard .overview-growth-grid,
+.employee-dashboard .assistant-funnel-grid,
+.employee-dashboard .growth-side-col,
+.employee-dashboard .site-grid,
+.employee-dashboard .plan-card-grid,
+.employee-dashboard .billing-summary-grid,
+.employee-dashboard .analytics-grid,
+.employee-dashboard .settings-grid,
+.employee-dashboard .profile-fields,
+.employee-dashboard .notification-delivery,
+.employee-dashboard .crm-split-grid {
+  gap: 20px !important;
+}
+
+.employee-dashboard .website-hero-card {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr) !important;
+  gap: 28px !important;
+  min-height: 260px !important;
+  margin-bottom: 20px !important;
+  padding: 28px !important;
+  overflow: hidden !important;
+}
+
+.employee-dashboard .hero-site-kicker,
+.employee-dashboard .hero-site-plan-tag,
+.employee-dashboard .hero-plan-tag,
+.employee-dashboard .site-meta,
+.employee-dashboard .hero-site-domain-link {
+  color: var(--ed-text-secondary) !important;
+  font-size: 13px !important;
+}
+
+.employee-dashboard .hero-site-title {
+  margin: 14px 0 8px !important;
+  color: var(--ed-text-primary) !important;
+  font-size: 28px !important;
+  font-weight: 650 !important;
+  line-height: 1.15 !important;
+  letter-spacing: -.025em !important;
+}
+
+.employee-dashboard .hero-site-kicker-row,
+.employee-dashboard .hero-site-domain-row,
+.employee-dashboard .site-meta {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+
+.employee-dashboard .hero-site-domain-row {
+  margin-bottom: 22px !important;
+}
+
+.employee-dashboard .hero-site-domain-link,
+.employee-dashboard .inline-link-btn,
+.employee-dashboard .gauge-card-action,
+.employee-dashboard .deep-link-btn {
+  color: var(--ed-brand-hover) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+.employee-dashboard .icon-action-btn,
+.employee-dashboard .search-clear-btn,
+.employee-dashboard .dropdown-toggle {
+  border: 1px solid var(--ed-border-strong) !important;
+  border-radius: var(--ed-radius-sm) !important;
+  background: var(--ed-surface) !important;
+  color: var(--ed-text-secondary) !important;
+}
+
+.employee-dashboard .site-preview-frame,
+.employee-dashboard .site-preview-fallback {
+  border-color: var(--ed-border) !important;
+  border-radius: 12px !important;
+  background: var(--ed-surface-subtle) !important;
+}
+
+.employee-dashboard .preview-badge,
+.employee-dashboard .status-pill,
+.employee-dashboard .status-badge,
+.employee-dashboard .status-chip,
+.employee-dashboard .status,
+.employee-dashboard .billing-status,
+.employee-dashboard .plan-badge,
+.employee-dashboard .plan-state-badge,
+.employee-dashboard .source-pill,
+.employee-dashboard .integration-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  min-height: 24px !important;
+  padding: 4px 9px !important;
+  border: 1px solid var(--ed-border) !important;
+  border-radius: 999px !important;
+  background: var(--ed-surface-subtle) !important;
+  color: var(--ed-text-secondary) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+}
+
+.employee-dashboard .status-pill.live,
+.employee-dashboard .status.live,
+.employee-dashboard .billing-status.paid,
+.employee-dashboard .billing-status.succeeded,
+.employee-dashboard .site-meta .status.live {
+  border-color: #abefc6 !important;
+  background: var(--ed-success-soft) !important;
+  color: #137a4d !important;
+}
+
+.employee-dashboard .status-pill.draft,
+.employee-dashboard .status.draft,
+.employee-dashboard .billing-status.created,
+.employee-dashboard .billing-status.pending {
+  border-color: #fedf89 !important;
+  background: var(--ed-warning-soft) !important;
+  color: #996515 !important;
+}
+
+.employee-dashboard .billing-status.failed,
+.employee-dashboard .status.danger,
+.employee-dashboard .status.error {
+  border-color: #fda29b !important;
+  background: var(--ed-danger-soft) !important;
+  color: #b42318 !important;
+}
+
+.employee-dashboard .overview-stat-grid,
+.employee-dashboard .analytics-metrics,
+.employee-dashboard .admin-stats,
+.employee-dashboard .crm-metrics-grid {
+  gap: 16px !important;
+}
+
+.employee-dashboard .stat-card,
+.employee-dashboard .metric-card,
+.employee-dashboard .analytics-metrics article,
+.employee-dashboard .admin-stats article,
+.employee-dashboard .crm-stat-card {
+  min-height: 132px !important;
+  padding: 20px !important;
+  border: 1px solid var(--ed-border) !important;
+  border-radius: var(--ed-radius-card) !important;
+  background: var(--ed-surface) !important;
+  box-shadow: var(--ed-shadow-card) !important;
+}
+
+.employee-dashboard .stat-icon,
+.employee-dashboard .sub-card-icon,
+.employee-dashboard .health-header-icon,
+.employee-dashboard .payment-provider,
+.employee-dashboard .lead-avatar,
+.employee-dashboard .chat-avatar {
+  border-radius: var(--ed-radius-sm) !important;
+  background: var(--ed-brand-soft) !important;
+  color: var(--ed-brand-hover) !important;
+}
+
+.employee-dashboard .stat-card b,
+.employee-dashboard .metric-huge,
+.employee-dashboard .kpi-main-number,
+.employee-dashboard .analytics-cards b,
+.employee-dashboard .analytics-metrics b,
+.employee-dashboard .admin-stats b,
+.employee-dashboard .crm-stat-card b,
+.employee-dashboard .current-plan-price,
+.employee-dashboard .gauge-val {
+  color: var(--ed-text-primary) !important;
+  font-size: 28px !important;
+  font-weight: 650 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -.03em !important;
+}
+
+.employee-dashboard .stat-card small,
+.employee-dashboard .stat-card span,
+.employee-dashboard .metric-trend,
+.employee-dashboard .analytics-total,
+.employee-dashboard .admin-stats small,
+.employee-dashboard .crm-stat-label {
+  color: var(--ed-text-muted) !important;
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+}
+
+.employee-dashboard .site-health-section {
+  margin-bottom: 20px !important;
+}
+
+/* Forms, tables and dense operational surfaces */
+.employee-dashboard input:not([type="checkbox"]):not([type="radio"]),
+.employee-dashboard select,
+.employee-dashboard textarea,
+.employee-dashboard .table-wrap select,
+.employee-dashboard .table-wrap input {
+  min-height: 42px !important;
+  border: 1px solid var(--ed-border-strong) !important;
+  border-radius: 9px !important;
+  background: var(--ed-surface) !important;
+  color: var(--ed-text-primary) !important;
+  font-size: 14px !important;
+  box-shadow: none !important;
+}
+
+.employee-dashboard input:not([type="checkbox"]):not([type="radio"]),
+.employee-dashboard select {
+  padding: 0 12px !important;
+}
+
+.employee-dashboard textarea {
+  padding: 11px 12px !important;
+}
+
+.employee-dashboard input:not([type="checkbox"]):not([type="radio"]):focus,
+.employee-dashboard select:focus,
+.employee-dashboard textarea:focus {
+  border-color: var(--ed-brand) !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .10) !important;
+  outline: 0 !important;
+}
+
+.employee-dashboard label {
+  color: var(--ed-text-secondary) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+}
+
+.employee-dashboard table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+}
+
+.employee-dashboard table th {
+  padding: 13px 16px !important;
+  border-bottom: 1px solid var(--ed-border) !important;
+  background: var(--ed-surface-muted) !important;
+  color: var(--ed-text-secondary) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  text-align: left !important;
+}
+
+.employee-dashboard table td {
+  min-height: 52px !important;
+  padding: 14px 16px !important;
+  border-bottom: 1px solid #eceef0 !important;
+  background: var(--ed-surface) !important;
+  color: var(--ed-text-primary) !important;
+  font-size: 14px !important;
+  vertical-align: middle !important;
+}
+
+.employee-dashboard table tr:hover td {
+  background: #fbfcfd !important;
+}
+
+.employee-dashboard .lead-table-wrap,
+.employee-dashboard .crm-table-container,
+.employee-dashboard .table-wrap {
+  overflow-x: auto !important;
+}
+
+.employee-dashboard .lead-table,
+.employee-dashboard .crm-table {
+  min-width: 760px !important;
+}
+
+.employee-dashboard .dropdown-menu,
+.employee-dashboard .site-overflow-menu,
+.employee-dashboard .search-dropdown {
+  border: 1px solid var(--ed-border) !important;
+  border-radius: var(--ed-radius-md) !important;
+  background: var(--ed-surface) !important;
+  box-shadow: 0 12px 30px rgba(16, 24, 40, .10) !important;
+}
+
+.employee-dashboard .dropdown-menu button,
+.employee-dashboard .site-overflow-menu button,
+.employee-dashboard .site-overflow-menu a,
+.employee-dashboard .search-dropdown button {
+  min-height: 38px !important;
+  border-radius: 7px !important;
+  color: var(--ed-text-secondary) !important;
+  font-size: 13px !important;
+}
+
+.employee-dashboard .dropdown-menu button:hover,
+.employee-dashboard .site-overflow-menu button:hover,
+.employee-dashboard .site-overflow-menu a:hover,
+.employee-dashboard .search-dropdown button:hover {
+  background: var(--ed-surface-subtle) !important;
+  color: var(--ed-text-primary) !important;
+}
+
+/* Charts and semantic feedback */
+.employee-dashboard .chart-grid line {
+  stroke: var(--ed-border) !important;
+}
+
+.employee-dashboard .chart-area {
+  fill: rgba(37, 99, 235, .08) !important;
+}
+
+.employee-dashboard .chart-line,
+.employee-dashboard .chart-point {
+  stroke: var(--ed-brand) !important;
+}
+
+.employee-dashboard .chart-point {
+  fill: var(--ed-brand) !important;
+}
+
+.employee-dashboard .chart-axis,
+.employee-dashboard .donut-legend,
+.employee-dashboard .analytics-recent-row,
+.employee-dashboard .plan-feature-list {
+  color: var(--ed-text-secondary) !important;
+  font-size: 12px !important;
+}
+
+.employee-dashboard .metric-trend.positive,
+.employee-dashboard .success-text,
+.employee-dashboard .success-fill {
+  color: var(--ed-success) !important;
+}
+
+.employee-dashboard .metric-trend.neutral,
+.employee-dashboard .neutral {
+  background: var(--ed-surface-subtle) !important;
+  color: var(--ed-text-secondary) !important;
+}
+
+.employee-dashboard .warning-text,
+.employee-dashboard .warning-fill {
+  color: var(--ed-warning) !important;
+}
+
+.employee-dashboard .error-text,
+.employee-dashboard .error-fill {
+  color: var(--ed-danger) !important;
+}
+
+/* Modals, drawers, support and account-danger presentation */
+.employee-dashboard .modal,
+.employee-dashboard .crm-drawer-backdrop,
+.employee-dashboard .crm-spotlight-backdrop {
+  background: rgba(21, 21, 21, .28) !important;
+  backdrop-filter: blur(6px) !important;
+}
+
+.employee-dashboard .modal-card,
+.employee-dashboard .crm-drawer,
+.employee-dashboard .crm-spotlight {
+  border: 1px solid var(--ed-border) !important;
+  border-radius: 16px !important;
+  background: var(--ed-surface) !important;
+  color: var(--ed-text-primary) !important;
+  box-shadow: 0 18px 48px rgba(16, 24, 40, .16) !important;
+}
+
+.employee-dashboard .modal-card .close,
+.employee-dashboard .crm-drawer-close {
+  border: 1px solid var(--ed-border) !important;
+  border-radius: 50% !important;
+  background: var(--ed-surface-subtle) !important;
+  color: var(--ed-text-secondary) !important;
+}
+
+.employee-dashboard .modal-card .close:hover,
+.employee-dashboard .crm-drawer-close:hover {
+  background: var(--ed-border) !important;
+  color: var(--ed-text-primary) !important;
+}
+
+.employee-dashboard .account-danger-card {
+  border-color: #f1b6b0 !important;
+  background: var(--ed-surface) !important;
+}
+
+.employee-dashboard .account-danger-card .eyebrow,
+.employee-dashboard .danger-kicker {
+  color: var(--ed-danger) !important;
+}
+
+.employee-dashboard .toast,
+.employee-dashboard .z-alert,
+.employee-dashboard .verify-banner {
+  border-color: var(--ed-border) !important;
+  border-radius: var(--ed-radius-md) !important;
+  background: var(--ed-surface) !important;
+  color: var(--ed-text-primary) !important;
+  box-shadow: var(--ed-shadow-card) !important;
+}
+
+.employee-dashboard .verify-banner {
+  margin: 0 0 24px !important;
+  padding: 14px 16px !important;
+}
+
+/* Existing responsive strategy retained: fixed, horizontally scrollable nav. */
+@media (max-width: 1200px) {
+  .employee-dashboard .app-shell {
+    grid-template-columns: 220px minmax(0, 1fr) !important;
+  }
+
+  .employee-dashboard .rail,
+  .employee-dashboard .rail.sneat-sidebar {
+    width: 220px !important;
+  }
+
+  .employee-dashboard .workspace {
+    padding-inline: 28px !important;
+  }
+
+  .employee-dashboard .topbar,
+  .employee-dashboard .topbar.sneat-navbar {
+    margin-inline: -28px !important;
+    padding-inline: 28px !important;
+  }
+
+  .employee-dashboard .website-hero-card {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, .8fr) !important;
+  }
+}
+
+@media (max-width: 840px) {
+  .employee-dashboard .app-shell {
+    display: block !important;
+  }
+
+  .employee-dashboard .rail,
+  .employee-dashboard .rail.sneat-sidebar {
+    position: fixed !important;
+    inset: auto 0 0 0 !important;
+    width: auto !important;
+    height: 72px !important;
+    min-height: 72px !important;
+    flex-direction: row !important;
+    border: 0 !important;
+    border-top: 1px solid var(--ed-border) !important;
+    box-shadow: 0 -8px 24px rgba(16, 24, 40, .07) !important;
+    overflow: hidden !important;
+  }
+
+  .employee-dashboard .rail-logo,
+  .employee-dashboard .sidebar-user,
+  .employee-dashboard .sidebar-foot,
+  .employee-dashboard .menu-section {
+    display: none !important;
+  }
+
+  .employee-dashboard .rail nav {
+    width: 100% !important;
+    flex: 1 1 auto !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 4px !important;
+    padding: 8px 10px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+  }
+
+  .employee-dashboard .rail-btn,
+  .employee-dashboard .rail .logout {
+    flex: 0 0 42px !important;
+    width: 42px !important;
+    height: 42px !important;
+    min-height: 42px !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    border-left: 1px solid transparent !important;
+  }
+
+  .employee-dashboard .rail-btn.active {
+    padding-left: 0 !important;
+    border-left-color: transparent !important;
+    background: var(--ed-brand-soft) !important;
+    color: var(--ed-brand-hover) !important;
+  }
+
+  .employee-dashboard .menu-label {
+    display: none !important;
+  }
+
+  .employee-dashboard .workspace {
+    padding: 0 24px 96px !important;
+  }
+
+  .employee-dashboard .topbar,
+  .employee-dashboard .topbar.sneat-navbar {
+    margin: 0 -24px 28px !important;
+    padding: 12px 24px !important;
+    min-height: 68px !important;
+    height: auto !important;
+    flex-wrap: wrap !important;
+  }
+
+  .employee-dashboard .search {
+    flex: 1 1 220px !important;
+    width: auto !important;
+  }
+
+  .employee-dashboard .view-head {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+    margin-bottom: 24px !important;
+  }
+
+  .employee-dashboard .view-head-actions {
+    width: 100% !important;
+  }
+
+  .employee-dashboard .view-head-actions > * {
+    flex: 1 1 auto !important;
+  }
+
+  .employee-dashboard .website-hero-card,
+  .employee-dashboard .overview-grid,
+  .employee-dashboard .overview-bottom-grid,
+  .employee-dashboard .overview-growth-grid,
+  .employee-dashboard .analytics-grid,
+  .employee-dashboard .crm-split-grid,
+  .employee-dashboard .support-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .employee-dashboard .site-grid,
+  .employee-dashboard .plan-card-grid,
+  .employee-dashboard .billing-summary-grid,
+  .employee-dashboard .settings-grid,
+  .employee-dashboard .profile-fields,
+  .employee-dashboard .notification-delivery {
+    grid-template-columns: 1fr !important;
+  }
+
+  .employee-dashboard .overview-stat-grid,
+  .employee-dashboard .analytics-metrics,
+  .employee-dashboard .admin-stats,
+  .employee-dashboard .crm-metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .employee-dashboard .workspace {
+    padding-inline: 16px !important;
+  }
+
+  .employee-dashboard .topbar,
+  .employee-dashboard .topbar.sneat-navbar {
+    margin-inline: -16px !important;
+    padding-inline: 16px !important;
+  }
+
+  .employee-dashboard .search {
+    display: none !important;
+  }
+
+  .employee-dashboard .view-head h1,
+  .employee-dashboard .dashboard-heading h1 {
+    font-size: 27px !important;
+  }
+
+  .employee-dashboard .hero-site-title {
+    font-size: 24px !important;
+  }
+
+  .employee-dashboard .overview-stat-grid,
+  .employee-dashboard .analytics-metrics,
+  .employee-dashboard .admin-stats,
+  .employee-dashboard .crm-metrics-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .employee-dashboard .panel,
+  .employee-dashboard .settings-card,
+  .employee-dashboard .analytics-card,
+  .employee-dashboard .analytics-cards article,
+  .employee-dashboard .billing-grid article,
+  .employee-dashboard .crm-card,
+  .employee-dashboard .support-thread {
+    padding: 18px !important;
+  }
+
+  .employee-dashboard .view-head-actions,
+  .employee-dashboard .hero-site-actions,
+  .employee-dashboard .welcome-actions,
+  .employee-dashboard .form-actions,
+  .employee-dashboard .verification-actions {
+    align-items: stretch !important;
+    flex-direction: column !important;
+  }
+
+  .employee-dashboard .view-head-actions > *,
+  .employee-dashboard .hero-site-actions > *,
+  .employee-dashboard .welcome-actions > *,
+  .employee-dashboard .form-actions > *,
+  .employee-dashboard .verification-actions > * {
+    width: 100% !important;
+  }
+
+  .employee-dashboard .lead-table,
+  .employee-dashboard .crm-table,
+  .employee-dashboard .embedded-table table {
+    min-width: 680px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .employee-dashboard *,
+  .employee-dashboard *::before,
+  .employee-dashboard *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* Billing is the densest account surface. Keep every card child shrinkable
+   on narrow screens while leaving transaction tables scrollable in their
+   existing clipped container. */
+@media (max-width: 520px) {
+  .employee-dashboard #billing,
+  .employee-dashboard #billing > *,
+  .employee-dashboard #billing .billing-summary-grid,
+  .employee-dashboard #billing .billing-plan-section,
+  .employee-dashboard #billing .billing-grid,
+  .employee-dashboard #billing #creditTopupGrid,
+  .employee-dashboard #billing .settings-card,
+  .employee-dashboard #billing .card-head,
+  .employee-dashboard #billing .card-head > div,
+  .employee-dashboard #billing .payment-method-row,
+  .employee-dashboard #billing .payment-method-row > div,
+  .employee-dashboard #billing .section-mini-head,
+  .employee-dashboard #billing .section-mini-head > div,
+  .employee-dashboard #billing .topup-group,
+  .employee-dashboard #billing .topup-pack,
+  .employee-dashboard #billing .topup-pack-left {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .employee-dashboard #billing .card-head > div,
+  .employee-dashboard #billing .payment-method-row > div,
+  .employee-dashboard #billing .section-mini-head > div {
+    overflow-wrap: anywhere !important;
+  }
+
+  .employee-dashboard #billing .card-head > button,
+  .employee-dashboard #billing .topup-pack-price {
+    flex: 0 0 auto !important;
+  }
+
+  .employee-dashboard #billing .topup-pack {
+    gap: 10px !important;
+  }
+
+  .employee-dashboard #billing .topup-pack-left {
+    overflow-wrap: anywhere !important;
+  }
+}

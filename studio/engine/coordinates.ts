@@ -28,7 +28,7 @@ export const rectFromElement=(element:HTMLElement,parent:HTMLElement|null,zoom:n
   return {
     x:absolute?(parseFloat(String(css.left||0))||0):(rect.left-(parentRect?.left||rect.left))/zoom,
     y:absolute?(parseFloat(String(css.top||0))||0):(rect.top-(parentRect?.top||rect.top))/zoom,
-    w:rect.width/zoom,
-    h:rect.height/zoom,
+    w:element.offsetWidth,
+    h:element.offsetHeight,
   };
 };

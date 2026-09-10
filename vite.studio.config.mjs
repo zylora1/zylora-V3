@@ -8,7 +8,9 @@ export default defineConfig({
   build: {
     outDir: 'static',
     emptyOutDir: false,
-    sourcemap: true,
+    // The backend serves the browser bundle directly; source maps are not
+    // needed at runtime and add avoidable release payload/404 noise.
+    sourcemap: false,
     target: ['chrome100', 'safari15'],
     lib: {entry,name:'ZyloraStudio',formats:['iife'],fileName:()=> 'studio.js'},
     rollupOptions: {output:{assetFileNames:'studio-[name][extname]'}},

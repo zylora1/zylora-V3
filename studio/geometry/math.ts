@@ -16,10 +16,14 @@ export function computeResize(
     pointerCurrent: Point,
     handle: string,
     zoom: number = 1,
-    modifiers: {aspect?:boolean;center?:boolean} = {}
+    modifiers: {aspect?:boolean;center?:boolean;rotation?:number} = {}
 ): Rect {
-    const dx = (pointerCurrent.x - pointerStart.x) / zoom;
-    const dy = (pointerCurrent.y - pointerStart.y) / zoom;
+    const angle=(modifiers.rotation||0)*Math.PI/180;
+    const screenX=(pointerCurrent.x-pointerStart.x)/Math.max(.01,zoom);
+    const screenY=(pointerCurrent.y-pointerStart.y)/Math.max(.01,zoom);
+    const factor=modifiers.center?2:1;
+    const dx = (screenX*Math.cos(angle)+screenY*Math.sin(angle))*factor;
+    const dy = (-screenX*Math.sin(angle)+screenY*Math.cos(angle))*factor;
     
     let { x, y, w, h } = originalRect;
 
@@ -47,8 +51,14 @@ export function computeResize(
         if(handle.includes('left')) x=originalRect.x+originalRect.w-w;
     }
     if(modifiers.center){
-        if(handle.includes('left')||handle.includes('right')) x=originalRect.x+(originalRect.w-w)/2;
-        if(handle.includes('top')||handle.includes('bottom')) y=originalRect.y+(originalRect.h-h)/2;
+        x=originalRect.x+(originalRect.w-w)/2;
+        y=originalRect.y+(originalRect.h-h)/2;
     }
+    // CSS rotates around the centre. Rotate the centre displacement so the
+    // opposite handle stays fixed in parent coordinates throughout the resize.
+    const cx=x+w/2-(originalRect.x+originalRect.w/2);
+    const cy=y+h/2-(originalRect.y+originalRect.h/2);
+    x=originalRect.x+originalRect.w/2+cx*Math.cos(angle)-cy*Math.sin(angle)-w/2;
+    y=originalRect.y+originalRect.h/2+cx*Math.sin(angle)+cy*Math.cos(angle)-h/2;
     return { x, y, w, h };
 }

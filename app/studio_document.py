@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import Any, Dict, List, Literal, Optional
+from copy import deepcopy
 import re
 from pydantic import BaseModel, Field, model_validator, field_validator
 
@@ -47,12 +48,65 @@ class NodeCrop(BaseModel):
     y: float = 0
     scale: float = 1
 
+
+class NodeGeometry(BaseModel):
+    """Canonical parent-local geometry for Studio engine v2.
+
+    The legacy CSS fields remain mirrored for backwards-compatible readers,
+    but all new editing operations resolve and write this value first.
+    """
+
+    x: float = 0
+    y: float = 0
+    width: float = Field(default=100, ge=1)
+    height: float = Field(default=40, ge=1)
+    rotation: float = 0
+    mode: Literal["freeform", "flow"] = "freeform"
+    minWidth: Optional[float] = Field(default=None, ge=1)
+    maxWidth: Optional[float] = Field(default=None, ge=1)
+    minHeight: Optional[float] = Field(default=None, ge=1)
+    maxHeight: Optional[float] = Field(default=None, ge=1)
+    lockAspectRatio: Optional[bool] = None
+
+
+class GeometryOverride(BaseModel):
+    """Partial breakpoint geometry; unspecified values inherit upstream."""
+
+    x: Optional[float] = None
+    y: Optional[float] = None
+    width: Optional[float] = Field(default=None, ge=1)
+    height: Optional[float] = Field(default=None, ge=1)
+    rotation: Optional[float] = None
+    mode: Optional[Literal["freeform", "flow"]] = None
+    minWidth: Optional[float] = Field(default=None, ge=1)
+    maxWidth: Optional[float] = Field(default=None, ge=1)
+    minHeight: Optional[float] = Field(default=None, ge=1)
+    maxHeight: Optional[float] = Field(default=None, ge=1)
+    lockAspectRatio: Optional[bool] = None
+
+
+class NodeAction(BaseModel):
+    """Stable action target for buttons and links.
+
+    ``pageId`` and ``sectionId`` deliberately reference document IDs rather
+    than slugs or DOM positions.  The renderer resolves those references at
+    publish time, so renaming a page does not strand an existing link.
+    """
+
+    type: Literal["none", "page", "section", "external", "email", "phone", "booking", "form"] = "none"
+    pageId: Optional[str] = None
+    sectionId: Optional[str] = None
+    url: Optional[str] = None
+    value: Optional[str] = None
+
+
 class NodeContent(BaseModel):
     text: Optional[str] = None
     html: Optional[str] = None
     src: Optional[str] = None
     alt: Optional[str] = None
     href: Optional[str] = None
+    action: Optional[NodeAction] = None
     value: Optional[str] = None
     placeholder: Optional[str] = None
     required: Optional[bool] = None
@@ -68,6 +122,7 @@ class NodeStyle(BaseModel):
     textGradient: Optional[Gradient] = None
     
 class BreakpointOverride(BaseModel):
+    geometry: Optional[GeometryOverride] = None
     style: Optional[NodeStyle] = None
     content: Optional[NodeContent] = None
     visibility: Optional[Literal["visible", "hidden"]] = None
@@ -86,6 +141,8 @@ class Node(BaseModel):
     accessibility: Dict[str, Any] = Field(default_factory=dict)
     bindings: Dict[str, Any] = Field(default_factory=dict)
     metadata: Dict[str, Any] = Field(default_factory=dict)
+    geometry: Optional[NodeGeometry] = None
+    locked: Optional[bool] = None
 
     @field_validator('type')
     @classmethod
@@ -143,6 +200,7 @@ class SiteDocument(BaseModel):
     dataSources: Dict[str, Any] = Field(default_factory=dict)
     seo: Dict[str, Any] = Field(default_factory=dict)
     settings: Dict[str, Any] = Field(default_factory=dict)
+    engineVersion: int = 2
     
     # Task 7 & 12 extensions
     revision: int = 1
@@ -212,6 +270,101 @@ class SiteDocument(BaseModel):
 
         return self
 
+def _css_number(css: dict, *keys: str, default: float) -> float:
+    for key in keys:
+        value = css.get(key)
+        if value is None:
+            continue
+        try:
+            parsed = float(str(value).replace("px", "").replace("deg", "").strip())
+        except (TypeError, ValueError):
+            continue
+        if parsed == parsed and abs(parsed) != float("inf"):
+            return parsed
+    return default
+
+
+def _geometry_from_css(node: dict) -> dict:
+    css = (node.get("style") or {}).get("css") or {}
+    node_type = str(node.get("type") or "")
+    default_width = 1440 if node_type in {"page", "section"} else 100
+    default_height = 810 if node_type in {"page", "section"} else 40
+    position = str(css.get("position") or "absolute")
+    return {
+        "x": _css_number(css, "left", default=0),
+        "y": _css_number(css, "top", default=0),
+        "width": max(1, _css_number(css, "width", default=default_width)),
+        "height": max(1, _css_number(css, "height", "minHeight", default=default_height)),
+        "rotation": _css_number(css, "rotate", default=0),
+        "mode": "flow" if position not in {"absolute", "fixed"} else "freeform",
+    }
+
+
+def _normalize_node_json(raw: dict) -> dict:
+    node = deepcopy(raw)
+    metadata = dict(node.get("metadata") or {})
+    if node.get("locked") is None and "locked" in metadata:
+        node["locked"] = bool(metadata.get("locked"))
+    node.setdefault("locked", False)
+    # Keep the legacy UI/readers in sync while the top-level field becomes
+    # canonical for engine v2.
+    metadata["locked"] = bool(node["locked"])
+
+    derived = _geometry_from_css(node)
+    existing = node.get("geometry") if isinstance(node.get("geometry"), dict) else {}
+    node["geometry"] = {**derived, **existing}
+
+    overrides = {}
+    for breakpoint, override_raw in (node.get("responsiveOverrides") or {}).items():
+        override = deepcopy(override_raw or {})
+        style_css = ((override.get("style") or {}).get("css") or {})
+        geometry = dict(override.get("geometry") or {})
+        css_keys = {"left": "x", "top": "y", "width": "width", "height": "height", "rotate": "rotation"}
+        for css_key, geometry_key in css_keys.items():
+            if geometry_key not in geometry and css_key in style_css:
+                fallback = 0 if geometry_key in {"x", "y", "rotation"} else (100 if geometry_key == "width" else 40)
+                geometry[geometry_key] = _css_number(style_css, css_key, default=fallback)
+        if geometry:
+            override["geometry"] = geometry
+        overrides[breakpoint] = override
+    node["responsiveOverrides"] = overrides
+    node["metadata"] = metadata
+    return node
+
+
+def normalize_studio_document_json(doc_json: dict) -> dict:
+    """Normalize legacy Studio JSON without changing its public schema version."""
+
+    document = deepcopy(doc_json or {})
+    document.setdefault("schemaVersion", SCHEMA_VERSION_STUDIO)
+    document.setdefault("version", document["schemaVersion"])
+    document["engineVersion"] = max(2, int(document.get("engineVersion") or 0))
+    metadata = dict(document.get("metadata") or {})
+    metadata["studioEngineVersion"] = document["engineVersion"]
+    document["metadata"] = metadata
+
+    pages = {}
+    for page_id, page_raw in (document.get("pages") or {}).items():
+        page = deepcopy(page_raw)
+        page["nodes"] = {
+            node_id: _normalize_node_json(node_raw)
+            for node_id, node_raw in (page.get("nodes") or {}).items()
+        }
+        pages[page_id] = page
+    document["pages"] = pages
+
+    components = {}
+    for component_id, component_raw in (document.get("components") or {}).items():
+        component = deepcopy(component_raw)
+        component["nodes"] = {
+            node_id: _normalize_node_json(node_raw)
+            for node_id, node_raw in (component.get("nodes") or {}).items()
+        }
+        components[component_id] = component
+    document["components"] = components
+    return document
+
+
 def create_empty_document() -> SiteDocument:
     root_node = Node(id="root", type="page", children=[])
     section = Node(
@@ -223,6 +376,7 @@ def create_empty_document() -> SiteDocument:
             "minHeight": "810px", "overflow": "hidden", "background": "#ffffff",
         }),
         metadata={"displayName": "Section 1", "kind": "root-section"},
+        geometry=NodeGeometry(x=0, y=0, width=1440, height=810, mode="flow"),
     )
     root_node.children = [section.id]
     return SiteDocument(
@@ -230,4 +384,4 @@ def create_empty_document() -> SiteDocument:
     )
 
 def validate_studio_document(doc_json: dict) -> SiteDocument:
-    return SiteDocument(**doc_json)
+    return SiteDocument(**normalize_studio_document_json(doc_json))
