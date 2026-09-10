@@ -14,7 +14,7 @@ from .template_catalogue import public_templates
 from .providers import ai_generate_site, ai_edit, send_whatsapp, sync_google_sheet_event, plan_site_architecture
 from .notifications import notify
 from .config import settings
-from .plans import get_plan, tier3_page_limit, smallest_self_service_plan_for_pages, SELF_SERVICE_PLAN_KEYS, PAID_SELF_SERVICE_PLAN_KEYS
+from .plans import MAX_PAGES_PER_SITE, get_plan, tier3_page_limit, smallest_self_service_plan_for_pages, SELF_SERVICE_PLAN_KEYS, PAID_SELF_SERVICE_PLAN_KEYS
 from .settings_store import get_system_setting
 from .auth_flows import issue_auth_token
 from .credits import debit_wallet, ensure_wallet, wallet_summary, reset_monthly_for_plan, reserve_wallet, finalize_wallet, refund_wallet
@@ -897,16 +897,13 @@ def publish(site_id:str,request:Request,payload:PublishIn|None=None):
                 if requested=='FREE' and plan_is_paid(active_plan):
                     raise HTTPException(409,detail={'code':'ACTIVE_PAID_PLAN','message':f'Your active {active_plan.title()} plan already preserves structural edits. Manage downgrades from Billing.'})
 
-        current_plan=get_plan(active_plan)
-        eligible=smallest_self_service_plan_for_pages(page_count)
-        if str(s.get('origin') or '').upper()!='AI' and page_count>int(current_plan['page_limit']):
-            recommendation=eligible or get_plan('PRO')
-            suitable=[]
-            for plan_key in PAID_SELF_SERVICE_PLAN_KEYS:
-                cfg=get_plan(plan_key)
-                if page_count<=int(cfg['page_limit']):
-                    suitable.append({'plan':plan_key,'name':cfg.get('public_name') or plan_key.title(),'page_limit':int(cfg['page_limit']),'price_inr_minor':int(cfg.get('price_inr_minor') or 0),'price_usd_minor':int(cfg.get('price_usd_minor') or 0),'is_paid':True})
-            raise HTTPException(402,detail={'code':'PLAN_UPGRADE_REQUIRED','message':f"The {active_plan.title()} plan supports {current_plan['page_limit']} pages, but this website has {page_count}. Choose an eligible paid plan to publish.",'current_plan':active_plan,'page_count':page_count,'page_limit':int(current_plan['page_limit']),'recommended_plan':recommendation['plan'],'recommended_page_limit':int(recommendation['page_limit']),'managed':recommendation['plan']=='PRO','suitable_plans':suitable})
+        if page_count > MAX_PAGES_PER_SITE:
+            raise HTTPException(422,detail={
+                'code':'PAGE_LIMIT_EXCEEDED',
+                'message':f'Each website supports a maximum of {MAX_PAGES_PER_SITE} pages.',
+                'page_count':page_count,
+                'page_limit':MAX_PAGES_PER_SITE,
+            })
 
         is_paid=plan_is_paid(active_plan)
         if not is_paid and has_structural and not confirm_free:

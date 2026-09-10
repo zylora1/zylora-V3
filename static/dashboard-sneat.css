@@ -4536,3 +4536,144 @@ table tr:hover td {
   display: none !important;
 }
 .rail.sneat-sidebar{overflow:hidden!important}.rail.sneat-sidebar>nav{min-height:0!important;overflow-y:auto!important}.zylora-logo-mark{display:none!important}.zylora-logo-type{font-size:23px;line-height:1;font-weight:700;letter-spacing:-.06em;color:#111211}
+
+/* Supplied TailAdmin reference parity: white drafting surface, Outfit-like
+   density, indigo action states, 290/90px sidebar modes, and restrained
+   bordered cards. Zylora content and workflows remain data-driven. */
+body.employee-dashboard {
+  --reference-brand: #465fff;
+  --reference-brand-soft: #ecf3ff;
+  --reference-page: #f9fafb;
+  --reference-border: #e4e7ec;
+  --reference-heading: #101828;
+  --reference-muted: #667085;
+  --reference-shadow: 0 4px 8px -2px rgba(16,24,40,.10), 0 2px 4px -2px rgba(16,24,40,.06);
+  background: var(--reference-page) !important;
+  color: var(--reference-heading) !important;
+  font-family: Inter, system-ui, sans-serif !important;
+}
+body.employee-dashboard .app-shell {
+  grid-template-columns: 290px minmax(0, 1fr) !important;
+  background: var(--reference-page) !important;
+}
+body.employee-dashboard .workspace {
+  background: var(--reference-page) !important;
+  padding: 0 32px 48px !important;
+}
+body.employee-dashboard .rail.sneat-sidebar {
+  width: 290px !important;
+  background: #fff !important;
+  border-right: 1px solid var(--reference-border) !important;
+  box-shadow: none !important;
+}
+body.employee-dashboard .rail-logo {
+  height: 72px !important;
+  padding: 0 24px !important;
+  border-bottom: 1px solid var(--reference-border) !important;
+}
+body.employee-dashboard .zylora-wordmark,
+body.employee-dashboard .sidebar-user-copy b,
+body.employee-dashboard #userName {
+  color: var(--reference-heading) !important;
+}
+body.employee-dashboard .menu-section {
+  color: #98a2b3 !important;
+  font-size: 12px !important;
+  letter-spacing: .06em !important;
+}
+body.employee-dashboard .rail-btn {
+  height: 44px !important;
+  border-radius: 8px !important;
+  color: #475467 !important;
+  gap: 12px !important;
+}
+body.employee-dashboard .rail-btn:hover {
+  background: #f2f4f7 !important;
+  color: var(--reference-heading) !important;
+}
+body.employee-dashboard .rail-btn.active {
+  background: var(--reference-brand-soft) !important;
+  border-left: 0 !important;
+  color: var(--reference-brand) !important;
+}
+body.employee-dashboard .rail-btn.active .menu-icon svg,
+body.employee-dashboard .rail-btn.active .menu-label {
+  stroke: var(--reference-brand) !important;
+  color: var(--reference-brand) !important;
+}
+body.employee-dashboard .menu-icon svg { stroke: #667085 !important; }
+body.employee-dashboard .sidebar-user { border-top: 1px solid var(--reference-border) !important; }
+body.employee-dashboard .topbar.sneat-navbar {
+  min-height: 72px !important;
+  background: rgba(255,255,255,.96) !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--reference-border) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+body.employee-dashboard .search {
+  min-height: 44px !important;
+  max-width: 430px !important;
+  background: #fff !important;
+  border: 1px solid var(--reference-border) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 1px 2px rgba(16,24,40,.05) !important;
+}
+body.employee-dashboard .search input { color: var(--reference-heading) !important; }
+body.employee-dashboard .search-kbd,
+body.employee-dashboard .bell,
+body.employee-dashboard .avatar,
+body.employee-dashboard .sidebar-avatar { border-color: var(--reference-border) !important; }
+body.employee-dashboard .bell,
+body.employee-dashboard .avatar,
+body.employee-dashboard .sidebar-avatar { background: #fff !important; color: #667085 !important; }
+body.employee-dashboard .website-hero-card,
+body.employee-dashboard .health-gauge-card,
+body.employee-dashboard .stat-card,
+body.employee-dashboard .health-detail-card,
+body.employee-dashboard .analytics-card,
+body.employee-dashboard .settings-card,
+body.employee-dashboard .topup-group,
+body.employee-dashboard .plan-card-grid article,
+body.employee-dashboard .modal-card,
+body.employee-dashboard .table-wrap,
+body.employee-dashboard .embedded-table {
+  border: 1px solid var(--reference-border) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--reference-shadow) !important;
+}
+body.employee-dashboard .accent-btn,
+body.employee-dashboard .primary-btn {
+  background: var(--reference-brand) !important;
+  border-color: var(--reference-brand) !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+}
+body.employee-dashboard .ghost-btn,
+body.employee-dashboard .inline-link-btn { border-radius: 8px !important; }
+
+@media (min-width: 921px) {
+  body.employee-dashboard .sidebar-toggle { display: inline-flex !important; }
+  body.employee-dashboard .app-shell.sidebar-collapsed { grid-template-columns: 90px minmax(0, 1fr) !important; }
+  body.employee-dashboard .app-shell.sidebar-collapsed .rail.sneat-sidebar { width: 90px !important; }
+  body.employee-dashboard .app-shell.sidebar-collapsed .rail-logo { padding: 0 !important; justify-content: center !important; }
+  body.employee-dashboard .app-shell.sidebar-collapsed .zylora-wordmark { font-size: 0 !important; }
+  body.employee-dashboard .app-shell.sidebar-collapsed .zylora-wordmark::before {
+    content: 'Z'; display: grid; place-items: center; width: 32px; height: 32px;
+    border-radius: 8px; background: var(--reference-brand); color: #fff;
+    font-size: 18px; font-weight: 800; letter-spacing: 0;
+  }
+  body.employee-dashboard .app-shell.sidebar-collapsed .menu-section,
+  body.employee-dashboard .app-shell.sidebar-collapsed .menu-label,
+  body.employee-dashboard .app-shell.sidebar-collapsed .sidebar-user,
+  body.employee-dashboard .app-shell.sidebar-collapsed .sidebar-foot { display: none !important; }
+  body.employee-dashboard .app-shell.sidebar-collapsed .rail nav { padding-inline: 12px !important; }
+  body.employee-dashboard .app-shell.sidebar-collapsed .rail-btn { justify-content: center !important; padding-inline: 0 !important; }
+}
+
+@media (max-width: 920px) {
+  body.employee-dashboard .workspace { padding: 0 16px 26px !important; }
+  body.employee-dashboard .rail.sneat-sidebar { width: 290px !important; left: -302px !important; }
+  body.employee-dashboard .app-shell.sidebar-open .rail.sneat-sidebar { left: 0 !important; box-shadow: 8px 0 30px rgba(16,24,40,.16) !important; }
+}

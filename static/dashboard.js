@@ -917,7 +917,25 @@ document.addEventListener('keydown', e => {
 // Sneat-inspired responsive navigation shell.
 const dashboardShell=document.querySelector('.app-shell');
 const sidebarToggle=document.querySelector('#sidebarToggle');
-if(sidebarToggle&&dashboardShell){sidebarToggle.addEventListener('click',()=>dashboardShell.classList.toggle('sidebar-open'));}
+if(sidebarToggle&&dashboardShell){
+  const preferenceKey='zylora.dashboard.sidebarCollapsed';
+  let collapsed=false;
+  try{collapsed=localStorage.getItem(preferenceKey)==='1'}catch{}
+  const syncSidebar=()=>{
+    const desktop=window.innerWidth>920;
+    dashboardShell.classList.toggle('sidebar-collapsed',desktop&&collapsed);
+    sidebarToggle.setAttribute('aria-expanded',String(!(desktop&&collapsed)));
+  };
+  syncSidebar();
+  sidebarToggle.addEventListener('click',()=>{
+    if(window.innerWidth>920){
+      collapsed=!collapsed;
+      try{localStorage.setItem(preferenceKey,collapsed?'1':'0')}catch{}
+      syncSidebar();
+    }else dashboardShell.classList.toggle('sidebar-open');
+  });
+  window.addEventListener('resize',syncSidebar,{passive:true});
+}
 $$('.rail-btn[data-view]').forEach(b=>b.addEventListener('click',()=>dashboardShell?.classList.remove('sidebar-open')));
 document.addEventListener('keydown',e=>{if(e.key==='Escape')dashboardShell?.classList.remove('sidebar-open')});
 

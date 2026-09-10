@@ -1,11 +1,25 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import tempfile
 from pathlib import Path
 
 from PIL import Image
+
+METADATA_FILES = {"release-manifest.json", "release-size.json", "release-media-optimization.json"}
+
+
+def context_hash(root: Path) -> str:
+    digest = hashlib.sha256()
+    for path in sorted(path for path in root.rglob("*") if path.is_file() and path.name not in METADATA_FILES):
+        digest.update(path.relative_to(root).as_posix().encode("utf-8"))
+        digest.update(str(path.stat().st_size).encode("ascii"))
+        with path.open("rb") as handle:
+            for block in iter(lambda: handle.read(1024 * 1024), b""):
+                digest.update(block)
+    return digest.hexdigest()
 
 
 def optimize(root: Path) -> dict[str, object]:
@@ -51,6 +65,18 @@ def main() -> int:
         raise SystemExit(f"Refusing non-release_context path: {root}")
     result = optimize(root)
     (root / "release-media-optimization.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
+    manifest_path = root / "release-manifest.json"
+    if manifest_path.is_file():
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest["context_sha256"] = context_hash(root)
+        manifest["media_optimization"] = {key: value for key, value in result.items() if key != "files"}
+        manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+        size_path = root / "release-size.json"
+        size = json.loads(size_path.read_text(encoding="utf-8")) if size_path.is_file() else {}
+        files = [path for path in root.rglob("*") if path.is_file()]
+        total = sum(path.stat().st_size for path in files)
+        size.update({"files": len(files), "bytes": total, "mib": round(total / (1024 * 1024), 3), "manifest": manifest})
+        size_path.write_text(json.dumps(size, indent=2), encoding="utf-8")
     print(json.dumps({key: value for key, value in result.items() if key != "files"}, sort_keys=True))
     return 0
 

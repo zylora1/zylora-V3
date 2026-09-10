@@ -15,7 +15,7 @@ from sqlalchemy import text
 from .db import SessionLocal, now_iso
 from .config import settings
 from . import ai_billing
-from .plans import get_plan
+from .plans import MAX_PAGES_PER_SITE, get_plan
 from .providers import ai_seo_metadata
 from .operations import safe_exception_summary, record_operational_event
 from .editor_state import create_revision, ensure_history, list_revisions, push_history, redo as history_redo, restore_revision, undo as history_undo
@@ -328,7 +328,11 @@ def migrate_to_studio(site_id: str, request: Request):
         if site.get('studio_document_json'):
             try:
                 raw_document=json.loads(site['studio_document_json'])
+                if len(raw_document.get('pages') or {}) > MAX_PAGES_PER_SITE:
+                    raise HTTPException(422,detail={'code':'PAGE_LIMIT_EXCEEDED','message':f'Each website supports a maximum of {MAX_PAGES_PER_SITE} pages.','page_count':len(raw_document.get('pages') or {}),'page_limit':MAX_PAGES_PER_SITE})
                 document=validate_studio_document(raw_document)
+            except HTTPException:
+                raise
             except Exception as exc:
                 raise HTTPException(409,detail={'code':'STUDIO_DOCUMENT_INVALID','message':'The saved Studio document is invalid and was not modified.','reason':str(exc)})
             normalized_json=document.model_dump_json(exclude_none=True)
@@ -350,6 +354,8 @@ def migrate_to_studio(site_id: str, request: Request):
             
         v3_doc = parse_document(site.get('draft_structure_json'))
         v4_doc = migrate_v3_to_v4(v3_doc, rendered_pages)
+        if len(v4_doc.pages) > MAX_PAGES_PER_SITE:
+            raise HTTPException(422,detail={'code':'PAGE_LIMIT_EXCEEDED','message':f'Each website supports a maximum of {MAX_PAGES_PER_SITE} pages.','page_count':len(v4_doc.pages),'page_limit':MAX_PAGES_PER_SITE})
         
         v4_json = v4_doc.model_dump_json(exclude_none=True)
         db.execute(text('UPDATE sites SET studio_document_json=:v4,studio_revision=:revision,document_schema_version=5 WHERE id=:s AND user_id=:user'), {
@@ -487,6 +493,9 @@ def save_studio(site_id: str, document: dict, request: Request):
         site=_owned_site(db,u['id'],site_id)
         if not site:
             raise HTTPException(404, "Site not found")
+        page_count=len(document.get('pages') or {}) if isinstance(document,dict) else 0
+        if page_count > MAX_PAGES_PER_SITE:
+            raise HTTPException(422,detail={'code':'PAGE_LIMIT_EXCEEDED','message':f'Each website supports a maximum of {MAX_PAGES_PER_SITE} pages.','page_count':page_count,'page_limit':MAX_PAGES_PER_SITE})
             
         try:
             valid_doc = validate_studio_document(normalize_studio_document_json(document))

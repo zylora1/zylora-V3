@@ -76,8 +76,8 @@ def test_regional_price_policy_and_public_catalogue():
         assert (starter['billing_region'], starter['currency'], starter['amount_minor']) == ('INTERNATIONAL', 'USD', 900)
         assert (growth['billing_region'], growth['currency'], growth['amount_minor']) == ('INTERNATIONAL', 'USD', 1900)
     starter, growth = get_plan('STARTER'), get_plan('GROWTH')
-    assert starter['price_inr_minor'] == 79900 and starter['price_usd_minor'] == 900 and starter['page_limit'] == 5
-    assert growth['price_inr_minor'] == 179900 and growth['price_usd_minor'] == 1900 and growth['page_limit'] == 8
+    assert starter['price_inr_minor'] == 79900 and starter['price_usd_minor'] == 900 and starter['page_limit'] == 298
+    assert growth['price_inr_minor'] == 179900 and growth['price_usd_minor'] == 1900 and growth['page_limit'] == 298
     public = c.get('/api/public/plans').json()['items']
     assert [x['plan'] for x in public] == ['FREE', 'STARTER', 'GROWTH', 'PRO']
     assert all(x['plan'] != 'ZYLORA' for x in public)
@@ -163,7 +163,7 @@ def test_growth_activation_uses_growth_price_and_entitlement():
     assert verified.status_code == 200, verified.text
     assert verified.json()['plan'] == 'GROWTH' and verified.json()['amount_minor'] == 179900
     billing = c.get('/api/billing').json()
-    assert billing['plan'] == 'GROWTH' and billing['limits']['template_page_limit'] == 8
+    assert billing['plan'] == 'GROWTH' and billing['limits']['template_page_limit'] == 298
     assert billing['limits']['page_limit_scope'] == 'TEMPLATE' and billing['limits']['ai_page_policy'] == 'PROMPT_DRIVEN'
     c.close()
 

@@ -1410,7 +1410,7 @@ class PlanPatch(BaseModel):
     price_inr_minor: int|None=Field(default=None,ge=0)
     price_usd_minor: int|None=Field(default=None,ge=0)
     site_limit: int|None=Field(default=None,ge=1,le=100)
-    page_limit: int|None=Field(default=None,ge=1,le=10)
+    page_limit: int|None=Field(default=None,ge=1,le=298)
     ai_credits: int|None=Field(default=None,ge=0,le=1000000)
     chatbot_reserved_credits: int|None=Field(default=None,ge=0,le=1000000)
     lead_credits: int|None=Field(default=None,ge=0,le=1000000)
@@ -1426,7 +1426,10 @@ def admin_plan_patch(plan: str, payload: PlanPatch, request: Request):
     vals={k:v for k,v in payload.model_dump().items() if v is not None}
     if 'contact_only' in vals: vals['contact_only']=int(vals['contact_only'])
     before=get_plan(plan)
-    result=update_plan(plan,vals)
+    try:
+        result=update_plan(plan,vals)
+    except ValueError as exc:
+        raise HTTPException(422,detail=str(exc)) from exc
     changes={k:{'old':before.get(k),'new':result.get(k)} for k in vals if before.get(k)!=result.get(k)}
     _audit(admin['id'],'ADMIN_PLAN_UPDATE','plan',plan,{'changes':changes})
     return result

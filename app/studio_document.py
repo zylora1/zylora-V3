@@ -3,6 +3,7 @@ from typing import Any, Dict, List, Literal, Optional
 from copy import deepcopy
 import re
 from pydantic import BaseModel, Field, model_validator, field_validator
+from .plans import MAX_PAGES_PER_SITE
 
 SCHEMA_VERSION_STUDIO = 5
 
@@ -208,6 +209,8 @@ class SiteDocument(BaseModel):
 
     @model_validator(mode='after')
     def validate_document(self) -> SiteDocument:
+        if len(self.pages) > MAX_PAGES_PER_SITE:
+            raise ValueError(f"Each website supports a maximum of {MAX_PAGES_PER_SITE} pages")
         all_node_ids = set()
         
         # Helper to validate a node tree (cyclic, refs)

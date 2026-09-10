@@ -147,10 +147,13 @@ def test_support_user_admin_flow_idor_internal_notes_filters_assignment_and_dedu
 def test_super_admin_controls_every_plan_limit_credit_cost_and_export_price_and_transfer_is_free():
     reset_db(); admin,ha,_=make_admin('pricing-admin@example.com')
     patch={'public_name':'Free','price_inr_minor':12300,'price_usd_minor':199,'site_limit':2,'page_limit':2,'ai_credits':30,'lead_credits':40,'signup_bonus_credits':7,'ai_site_cost':4,'ai_edit_cost':3,'contact_only':False}
+    rejected=admin.patch('/api/admin/plans/FREE',headers=ha,json=patch); assert rejected.status_code==422,rejected.text
+    patch.pop('page_limit')
     r=admin.patch('/api/admin/plans/FREE',headers=ha,json=patch); assert r.status_code==200,r.text
     assert admin.put('/api/admin/settings',headers=ha,json={'source_export_usd_minor':7700,'source_export_inr_minor':640000}).status_code==200
     public=admin.get('/api/public/plans').json()['items']; free=next(x for x in public if x['plan']=='FREE')
     for k,v in patch.items(): assert free[k]==v
+    assert free['page_limit']==298
     new,h,me=signup('configured@example.com','Configured User'); assert me['credit_wallet']['monthly_remaining']==30 and me['credit_wallet']['signup_remaining']==7
     # AI create cost follows SUPER_ADMIN configuration and site limit is enforced from plan, not a hard-coded 10.
     payload={'business_name':'Configured One','description':'A complete business description long enough for an AI website.','template_slug':'atelier-noir','origin':'AI','industry':'Business','style':'Editorial'}

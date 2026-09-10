@@ -1,5 +1,5 @@
 import React from 'react';
-import {useStudio} from '../store';
+import {MAX_STUDIO_PAGES,useStudio} from '../store';
 
 export function PageNavigator({onFit}:{onFit:()=>void}) {
   const {state, dispatch} = useStudio();
@@ -14,7 +14,7 @@ export function PageNavigator({onFit}:{onFit:()=>void}) {
         <span className="page-thumb-preview"><i/><i/><i/></span>
         <span className="page-thumb-label">{index + 1}</span>
       </button>)}
-      <button className="page-thumb page-thumb-add" onClick={() => dispatch({type:'ADD_PAGE', payload:{name:`Page ${pages.length + 1}`, slug:`page-${pages.length + 1}`}})} aria-label="Add page"><span>＋</span><small>Add page</small></button>
+      <button className="page-thumb page-thumb-add" onClick={() => dispatch({type:'ADD_PAGE', payload:{name:`Page ${pages.length + 1}`, slug:`page-${pages.length + 1}`}})} aria-label={pages.length>=MAX_STUDIO_PAGES?'Page limit reached':'Add page'} disabled={pages.length>=MAX_STUDIO_PAGES}><span>＋</span><small>{pages.length>=MAX_STUDIO_PAGES?'298 page limit':'Add page'}</small></button>
       <div className="navigator-zoom" aria-label="Canvas zoom controls">
         <button onClick={()=>dispatch({type:'SET_ZOOM',payload:state.zoom-.1})} aria-label="Zoom out">−</button>
         <input className="zoom-range" aria-label="Canvas zoom" type="range" min="25" max="300" step="1" value={Math.round(state.zoom*100)} onChange={e=>dispatch({type:'SET_ZOOM',payload:Number(e.target.value)/100})}/>
