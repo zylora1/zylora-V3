@@ -51,6 +51,7 @@ export function App() {
   const autosave=useAutosave(state.document,siteId,csrf);
   const saveStatus=loadError||autosave.status;
   useEffect(()=>{if(!selectedPlan&&plans.length)setSelectedPlan(String(plans[0].plan||'FREE'))},[plans,selectedPlan]);
+  useEffect(()=>{if(new URLSearchParams(window.location.search).get('publish')==='1')setPublishWizard(1)},[]);
   useEffect(()=>{if(publishWizard===3&&domainChoice==='custom')fetch(`/api/sites/${siteId}/domains`).then(r=>r.ok?r.json():{items:[]}).then(d=>{setDomains(d.items||[]);setSelectedDomain((d.items||[])[0]?.hostname||'')}).catch(()=>{setDomains([]);setSelectedDomain('')})},[publishWizard,domainChoice,siteId]);
   useEffect(()=>{const open=()=>{setRail('uploads');setLeftOpen(true)};addEventListener('zylora-open-uploads',open);return()=>removeEventListener('zylora-open-uploads',open)},[]);
 

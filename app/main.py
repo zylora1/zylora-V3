@@ -18,7 +18,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 
-from .api import router
+from .api import router, render_draft
 from .api_extended import router as extended_router
 from .api_gapfixes import router as gap_router
 from .api_marketplace_support import router as marketplace_support_router, public_router as marketplace_public_router
@@ -50,7 +50,7 @@ from .link_icons import apply_footer_links_html, links_from_seo_json
 from .seo_engine import (active_custom_domain, all_indexable_pages, apply_seo_html, canonical_for_page, indexnow_key_matches,
     page_key_for_path, page_path, published_site_view, resolve_redirect, site_llms, site_origin, site_robots, site_sitemap,
     seo_document, structured_data_for_page)
-from .public_seo import router as public_seo_router, PUBLIC_SEO_PATHS
+from .public_seo import router as public_seo_router, PUBLIC_SEO_PATHS, PRODUCTS as PUBLIC_SEO_PRODUCTS, _product_page
 
 def _public_base_url() -> str:
     base=settings.app_url.rstrip('/')
@@ -432,7 +432,66 @@ def accept_transfer_page(): return FileResponse(ROOT/'static'/'accept-transfer.h
 @app.get('/choose-plan',include_in_schema=False)
 def choose_plan(): return FileResponse(ROOT/'static'/'choose-plan.html')
 @app.get('/pricing',include_in_schema=False)
-def pricing_alias(): return FileResponse(ROOT/'static'/'choose-plan.html')
+def pricing_alias():
+    # `/pricing` is the crawlable product story; `/choose-plan` remains the
+    # authenticated, server-priced checkout surface.
+    return _product_page('/pricing', PUBLIC_SEO_PRODUCTS['/pricing'])
+
+def _private_status_page(eyebrow: str, title: str, message: str, primary_href: str = '/dashboard', primary_label: str = 'Open dashboard') -> HTMLResponse:
+    """Small, server-rendered status surface for private/auth transitions.
+
+    These pages intentionally do not simulate payment or account state. The
+    billing and authentication APIs remain the source of truth; this is only
+    the safe landing surface for a bookmarked or provider-returned URL.
+    """
+    return HTMLResponse(
+        f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{escape(title)} | Zylora</title><meta name="description" content="Private Zylora account status page."><meta name="robots" content="noindex,nofollow"><link rel="stylesheet" href="/static/public-theme.css"></head><body><main class="z-container" style="min-height:100vh;display:grid;align-content:center;padding-top:64px;padding-bottom:64px"><div style="max-width:680px"><span class="eyebrow-pill">{escape(eyebrow)}</span><h1 style="font-family:var(--font-display);font-size:clamp(42px,7vw,82px);line-height:1;letter-spacing:-.05em;margin:20px 0">{escape(title)}</h1><p class="text-intro" style="max-width:58ch">{escape(message)}</p><div class="seo-actions"><a class="z-btn z-btn-primary" href="{escape(primary_href, quote=True)}">{escape(primary_label)}</a><a class="z-btn z-btn-secondary" href="/support">Open support</a></div></div></main></body></html>''',
+        headers={'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow'},
+    )
+
+@app.get('/auth/error', include_in_schema=False)
+def auth_error():
+    return _private_status_page('Authentication', 'We could not complete sign-in.', 'Return to the sign-in page and try again. If the problem continues, support can help with the account context.', '/login', 'Return to sign in')
+
+@app.get('/account/suspended', include_in_schema=False)
+def account_suspended():
+    return _private_status_page('Account status', 'This account needs attention.', 'Access is paused until the account issue is resolved. Sign in again or contact support so the account can be reviewed safely.', '/login', 'Return to sign in')
+
+@app.get('/onboarding', include_in_schema=False)
+def onboarding(request: Request):
+    # Account creation and site creation are already handled by the existing
+    # authenticated dashboard flow; avoid introducing an unbacked onboarding
+    # state machine or a fake POST endpoint.
+    user = current_user(request)
+    if user.get('role') == 'SUPER_ADMIN':
+        return RedirectResponse('/super-admin', status_code=302)
+    return RedirectResponse('/dashboard', status_code=302)
+
+@app.get('/checkout/processing', include_in_schema=False)
+def checkout_processing():
+    return _private_status_page('Checkout', 'Your checkout is processing.', 'The billing provider owns payment state. Return to your workspace and use the billing panel for the authoritative result.', '/choose-plan', 'Return to billing')
+
+@app.get('/checkout/success', include_in_schema=False)
+def checkout_success():
+    return _private_status_page('Checkout', 'Checkout returned successfully.', 'Refresh the workspace billing panel to read the server-confirmed subscription state.', '/dashboard', 'Open dashboard')
+
+@app.get('/checkout/failed', include_in_schema=False)
+def checkout_failed():
+    return _private_status_page('Checkout', 'Checkout needs another try.', 'No payment result is inferred from this URL. Return to the billing surface and review the server-provided status before trying again.', '/choose-plan', 'Return to billing')
+
+@app.get('/checkout/cancelled', include_in_schema=False)
+def checkout_cancelled():
+    return _private_status_page('Checkout', 'Checkout was cancelled.', 'No changes are assumed from a cancelled return. You can review plans again whenever you are ready.', '/choose-plan', 'Review plans')
+
+@app.get('/checkout/{plan}', include_in_schema=False)
+def checkout_plan(plan: str):
+    normalized = str(plan or '').strip().upper()
+    if normalized not in {'FREE', 'STARTER', 'GROWTH'}:
+        raise HTTPException(404, 'Plan not found')
+    # /choose-plan remains the existing server-priced, authenticated billing
+    # surface. The plan query is only a selection hint, not an amount.
+    return RedirectResponse(f'/choose-plan?plan={normalized}', status_code=307)
+
 def _require_super_admin(request: Request) -> dict:
     u = current_user(request)
     if u.get('role') != 'SUPER_ADMIN':
@@ -471,6 +530,20 @@ def editor(site_id:str,request:Request):
         site=db.execute(text('SELECT id FROM sites WHERE id=:site AND user_id=:user'),{'site':site_id,'user':user['id']}).first()
     if not site: raise HTTPException(404,'Site not found')
     return RedirectResponse(f'/studio/{site_id}',status_code=307)
+@app.get('/preview/{site_id}',include_in_schema=False)
+def preview_site(site_id: str, request: Request):
+    user=current_user(request)
+    with SessionLocal() as db:
+        site=db.execute(text('SELECT * FROM sites WHERE id=:site AND user_id=:user'),{'site':site_id,'user':user['id']}).mappings().first()
+    if not site: raise HTTPException(404,'Site not found')
+    return HTMLResponse(render_draft(dict(site),'home'),headers={'Cache-Control':'no-store','X-Robots-Tag':'noindex, nofollow'})
+@app.get('/studio/{site_id}/publish',include_in_schema=False)
+def studio_publish(site_id: str, request: Request):
+    user=current_user(request)
+    with SessionLocal() as db:
+        site=db.execute(text('SELECT id FROM sites WHERE id=:site AND user_id=:user'),{'site':site_id,'user':user['id']}).first()
+    if not site: raise HTTPException(404,'Site not found')
+    return RedirectResponse(f'/studio/{site_id}?publish=1',status_code=307)
 @app.get('/studio/{site_id}',include_in_schema=False)
 def studio(site_id:str,request:Request):
     user=current_user(request)

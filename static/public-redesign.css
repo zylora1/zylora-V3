@@ -118,6 +118,23 @@ body:has(.seo-page), body.landing-page { background: var(--zr-canvas); color: va
 .template-page-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 0; padding: 0; list-style: none; }
 .template-page-list li { padding: 17px 20px; border: 1px solid var(--zr-line); border-radius: 11px; background: rgba(255,255,255,.76); color: var(--zr-ink); font-weight: 600; }
 
+/* Informational and help routes use the same editorial system as product pages,
+   with a compact search affordance instead of an ornamental app shell. */
+.zylora-info-page .guide-aside, .zylora-help-article .guide-aside { position: sticky; top: 88px; }
+.help-search { display: grid; gap: 8px; max-width: 620px; margin-top: 34px; color: var(--zr-ink); font-size: 13px; font-weight: 700; }
+.help-search input { width: 100%; min-height: 48px; padding: 0 15px; border: 1px solid #cfdced; border-radius: 11px; background: #fff; color: var(--zr-ink); font: inherit; font-weight: 400; outline: none; }
+.help-search input:focus-visible { border-color: var(--zr-blue); box-shadow: 0 0 0 3px rgba(39,100,231,.16); }
+.help-grid { grid-template-columns: repeat(2, 1fr); }
+.help-card span:first-child { display: grid; gap: 7px; }
+.help-card strong { color: var(--zr-ink); font-family: var(--font-display); font-size: 18px; letter-spacing: -.03em; }
+.help-card small { color: var(--zr-muted); font-size: 14px; font-weight: 400; line-height: 1.5; }
+.help-empty { margin-top: 24px; color: var(--zr-muted); }
+.help-empty a { color: var(--zr-blue); font-weight: 700; }
+
+@media (max-width: 900px) {
+  .zylora-info-page .guide-aside, .zylora-help-article .guide-aside { position: static; }
+}
+
 /* Existing homepage: tighten the visual language without changing its HTML or interactions. */
 body.landing-page .hero-editorial { background-color: var(--zr-canvas); background-image: linear-gradient(var(--zr-grid) 1px, transparent 1px), linear-gradient(90deg, var(--zr-grid) 1px, transparent 1px); background-size: 52px 52px; }
 body.landing-page .hero-editorial h1 { font-weight: 650; letter-spacing: -.065em; }

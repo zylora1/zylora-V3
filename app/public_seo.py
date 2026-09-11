@@ -21,6 +21,45 @@ router = APIRouter()
 
 
 PRODUCTS: dict[str, dict[str, Any]] = {
+    "/features": {
+        "title": "Zylora Features | Build, publish and grow a business website",
+        "description": "Explore Zylora’s visual website editor, AI assistance, lead capture, appointments, CMS, SEO and analytics in one connected platform.",
+        "eyebrow": "One connected platform",
+        "h1": "Build the website. Keep the business moving.",
+        "intro": "Zylora brings the parts of a business website together: visual creation, responsive editing, publishing, discovery, conversations, leads, appointments and the follow-up work that comes after a click.",
+        "visual": "Create · Customize · Publish · Grow",
+        "workflow": ["Start from a blank site or a clear business brief", "Shape pages and content in the visual Studio", "Publish with the domain, SEO and conversion settings you need", "Learn from real activity and improve the next step"],
+        "capabilities": ["Free-form pages with structured responsive geometry", "AI assistance that remains optional and revision-bound", "Forms, AI Sales Assistant, CRM and appointment workflows", "Server-rendered public pages with metadata, sitemap and robots support"],
+        "use_cases": "Use the surface that matches the job in front of you, then keep the customer context close instead of stitching together disconnected tools.",
+        "faq": [("Is Zylora only a visual editor?", "No. Studio is connected to publishing, SEO, lead capture, appointments, CMS and the workspace tools that help a business follow up."), ("Can I start without a template?", "Yes. The primary creation path starts with a blank site; AI remains available as an optional assistant inside the workspace."), ("What is the source of truth for limits and billing?", "The backend plan and billing configuration remains authoritative for entitlements, pricing and usage.")],
+        "related": [("Website builder", "/website-builder"), ("Zylora Studio", "/zylora-studio"), ("AI Sales Assistant", "/ai-sales-assistant")],
+    },
+    "/ai-editor": {
+        "title": "AI Website Editor | Zylora",
+        "description": "Use Zylora’s revision-bound AI editing to rewrite content, improve metadata and refine selected website sections without giving up visual control.",
+        "eyebrow": "AI-assisted editing",
+        "h1": "Ask for a change. Review it in the same site.",
+        "intro": "Zylora’s AI editor works alongside Studio. It can help with supported copy and SEO improvements, while the document, permissions, credits and revision history stay under the existing product controls.",
+        "visual": "Select · Suggest · Review · Apply",
+        "workflow": ["Select the page, section or content job", "Describe the change in plain language", "Review the structured operation and its diff", "Apply atomically, save the revision and undo when needed"],
+        "capabilities": ["Optional copy rewrites and content generation", "Selected-section and supported site-wide edits", "SEO title and description improvement paths", "Server-authoritative credits, rate limits and approval before apply"],
+        "use_cases": "Use AI for momentum, then keep judgment with the person who owns the business, the facts and the final publish decision.",
+        "faq": [("Does AI publish changes automatically?", "No. Supported AI edits are reviewed and applied through the existing editor flow; publishing remains an explicit action."), ("Can AI change my whole site?", "Only supported, authorized operations are accepted. Unsupported requests are not presented as working backend features."), ("Are AI credits settled in the browser?", "No. Credit balance, cost, refunds and concurrency are determined by the backend.")],
+        "related": [("Zylora Studio", "/zylora-studio"), ("SEO foundation", "/seo"), ("AI website builder", "/ai-website-builder")],
+    },
+    "/seo": {
+        "title": "Website SEO Tools | Zylora",
+        "description": "Set website metadata, canonical URLs, indexation, structured business context, sitemaps and robots behavior through Zylora’s SEO workflow.",
+        "eyebrow": "Search-ready by design",
+        "h1": "Make the useful page easy to find.",
+        "intro": "Zylora keeps SEO close to the page and the business context: titles, descriptions, canonical URLs, indexation, structured data, crawlable rendering, sitemaps and robots rules where the product supports them.",
+        "visual": "Content · Metadata · Crawlability · Discovery",
+        "workflow": ["Give each page a clear job and a concise title", "Add accurate descriptions, headings and image context", "Review canonical and indexation settings", "Publish and verify the public HTML, sitemap and robots response"],
+        "capabilities": ["Per-site and per-page SEO settings in the existing editor workflow", "Server-rendered public content with canonical and social metadata", "Sitemap and robots generation for platform and customer sites", "Structured data built only from facts available to the product"],
+        "use_cases": "SEO works best when it describes a genuinely useful page. Zylora’s controls support the technical foundation without pretending that metadata can replace clear content or real business information.",
+        "faq": [("Can I control whether a page is indexable?", "The existing site SEO workflow supports indexation settings where the page and account configuration allow it."), ("Does Zylora generate structured data?", "Yes, where accurate organization, website, page, article or business fields are available; unsupported facts are not fabricated."), ("Can a published site be an inaccessible canvas image?", "No. Customer-site publishing uses semantic HTML and the existing safe renderer rather than replacing the whole page with a screenshot.")],
+        "related": [("Website builder", "/website-builder"), ("Analytics", "/analytics"), ("SEO checklist", "/guides/small-business-website-checklist")],
+    },
     "/website-builder": {
         "title": "Website Builder for Businesses | Zylora",
         "description": "Build, edit, publish and grow a business website with Zylora’s visual studio, lead capture, appointments and analytics.",
@@ -203,6 +242,9 @@ SOLUTIONS: dict[str, dict[str, Any]] = {
     "/solutions/gyms": {"name": "Gyms and fitness businesses", "title": "Gym Website Builder for Memberships and Enquiries | Zylora", "description": "Build a gym website that explains the offer, showcases the experience and turns interest into a visit or membership conversation.", "need": "A gym needs a clear offer, schedule or class context, trainer credibility, location and a low-friction first visit or enquiry.", "pages": "Home, Memberships, Classes, Trainers, Results where available, FAQs, Trial Visit and Contact.", "lead": "Lead capture can ask about goals, preferred timing and membership interest before the first visit.", "assistant": "The assistant can explain approved membership, class and visit information and direct people to the right next step.", "appointment": "Trial sessions, consultations and trainer introductions are useful appointment moments.", "cta": "Book a trial, view classes, ask about membership or visit the gym.", "related": [("Lead generation", "/lead-generation"), ("Appointments", "/appointments"), ("Website builder", "/website-builder")]},
     "/solutions/coaches": {"name": "Coaches and consultants", "title": "Website Builder for Coaches and Consultants | Zylora", "description": "Build a coaching or consulting website that makes your method clear and gives prospects a useful next step.", "need": "A coaching or consulting site needs a precise promise, audience context, method, proof, offer details and a path to a qualified conversation.", "pages": "Home, Program or Services, Method, About, Results where supported, FAQ, Resources and Book a Call.", "lead": "A short fit form can surface goals and timing before a discovery conversation.", "assistant": "The assistant can answer approved questions about the program, approach, format and fit.", "appointment": "Discovery calls, assessments and onboarding conversations are natural booking flows.", "cta": "Understand the approach, explore the offer, apply or book a call.", "related": [("AI Sales Assistant", "/ai-sales-assistant"), ("CRM", "/crm"), ("Appointments", "/appointments")]},
     "/solutions/real-estate": {"name": "Real estate businesses", "title": "Real Estate Website Builder with Property Content | Zylora", "description": "Create a real estate website that presents properties clearly and turns buyer or seller interest into a conversation.", "need": "Real estate sites need property detail, location context, trust signals, agent information and a reliable enquiry or viewing path.", "pages": "Home, Properties, Property Detail, Areas, About, Buying or Selling Guide, Viewing Request and Contact.", "lead": "Capture the property, budget and timing context that helps an agent respond well.", "assistant": "The assistant can answer approved questions about listings, viewing requests and the next steps in the process.", "appointment": "Property viewings, valuations and buyer consultations are useful appointment flows.", "cta": "View properties, request a viewing, book a valuation or speak with an agent.", "related": [("CMS", "/cms"), ("Lead generation", "/lead-generation"), ("Website examples", "/website-examples")]},
+    "/solutions/schools": {"name": "Schools", "title": "School Website Builder for Admissions and Enquiries | Zylora", "description": "Build a school website that explains programmes, answers family questions and makes admissions enquiries easier to act on.", "need": "A school website needs clear programme information, an honest admissions path, important dates, contact details and useful information for families—not just a prospectus PDF.", "pages": "Home, Programmes, Admissions, Events, Parent Information, FAQs, About and Enquiries.", "lead": "An enquiry form can capture the learner’s stage, programme interest and preferred follow-up path.", "assistant": "The assistant can answer approved questions about programmes, admissions steps and published school information.", "appointment": "Campus visits, admissions conversations and programme consultations are useful booking moments when configured.", "cta": "Explore programmes, understand admissions, request information or book a conversation.", "related": [("Lead generation", "/lead-generation"), ("Appointments", "/appointments"), ("CMS", "/cms")]},
+    "/solutions/coaching-centers": {"name": "Coaching centers", "title": "Coaching Center Website Builder for Courses and Enquiries | Zylora", "description": "Create a coaching-center website that makes courses, schedules and enrolment enquiries clear for learners and families.", "need": "A coaching center needs programme detail, faculty or teaching context, schedules, outcomes that can be evidenced and an easy route to ask about enrolment.", "pages": "Home, Courses, Faculty, Schedule, Admissions, FAQs, Results where supported and Contact.", "lead": "Capture the learner’s goal, subject, level and preferred contact method so the next response is useful.", "assistant": "The assistant can guide visitors through approved course, schedule, fee and enrolment information without inventing availability.", "appointment": "Counselling calls, assessments and trial sessions can become focused appointment paths when the schedule is configured.", "cta": "Compare courses, request a call, ask about enrolment or book an assessment.", "related": [("CMS", "/cms"), ("AI Sales Assistant", "/ai-sales-assistant"), ("Appointments", "/appointments")]},
+    "/solutions/portfolio": {"name": "Portfolio businesses", "title": "Portfolio Website Builder for Independent Creatives | Zylora", "description": "Build a portfolio website that frames selected work, explains your practice and turns the right visitor into a project conversation.", "need": "A portfolio site should lead with the work, provide enough context to understand the practice and make availability or project fit easy to explore.", "pages": "Home, Selected Work, Case Study, Services, About, Process, FAQs and Contact.", "lead": "A short project brief can preserve the context behind an enquiry without turning the first step into a long application.", "assistant": "The assistant can answer approved questions about services, process, availability and the kind of work you take on.", "appointment": "Discovery calls, portfolio reviews and project consultations are natural scheduling paths.", "cta": "See selected work, understand the process, request availability or book a conversation.", "related": [("Website examples", "/website-examples"), ("Zylora Studio", "/zylora-studio"), ("Lead generation", "/lead-generation")]},
 }
 
 
@@ -216,16 +258,82 @@ GUIDES: dict[str, dict[str, Any]] = {
 }
 
 
+INFO_PAGES: dict[str, dict[str, Any]] = {
+    "/about": {
+        "title": "About Zylora | Websites that help businesses move",
+        "description": "Learn what Zylora is: a website-building and business-conversion platform for creating, publishing and improving useful business websites.",
+        "eyebrow": "About Zylora",
+        "h1": "A website should have a job to do.",
+        "intro": "Zylora is a website-building and business-conversion platform. It helps businesses visually build and publish websites, answer visitor questions, capture leads and schedule appointments from one connected workspace.",
+        "sections": [("Create with context", "A business brief, a blank site and a visual editor give the work a useful starting point. AI can help with supported tasks, but it does not replace the owner’s judgment."), ("Keep control after generation", "Zylora Studio keeps pages, content and responsive composition editable. Publishing remains an explicit, server-authorized decision."), ("Connect the next action", "Forms, supported AI conversations, appointments, CRM and analytics connect the public website to the follow-up work behind it."), ("Describe the product honestly", "Plans, limits, providers and supported capabilities are governed by the existing application and backend configuration. When a capability is not implemented, the product does not present it as real.")],
+        "related": [("Features", "/features"), ("Website builder", "/website-builder"), ("Security", "/security")],
+    },
+    "/security": {
+        "title": "Zylora Security | Authentication, ownership and safe publishing",
+        "description": "Understand the security boundaries Zylora applies to authentication, tenant ownership, publishing, forms and customer-site content.",
+        "eyebrow": "Security at Zylora",
+        "h1": "Trust is part of the product surface.",
+        "intro": "Zylora keeps authorization and publishing decisions on the server. The browser can present controls, but it cannot grant itself ownership, credits, plan entitlements or permission to publish.",
+        "sections": [("Account and tenant boundaries", "Authenticated API routes resolve the current account and verify ownership before site, CRM, media, billing or Studio operations are applied."), ("Safe content boundaries", "Public-site rendering sanitizes stored rich content, validates supported URLs and keeps unsupported application features out of customer-site markup."), ("Publishing is explicit", "Draft editing, preview and publication are separate states. The server rechecks the document, plan and site policy before a public version is promoted."), ("Report a concern", "If you find a security issue or abusive content, use the Support path so the report can be handled in the existing account and operational workflow." )],
+        "related": [("Support", "/support"), ("Privacy", "/privacy"), ("Status", "/status")],
+    },
+    "/status": {
+        "title": "Zylora Status | Service health and publishing availability",
+        "description": "Check Zylora’s service health endpoint and understand which parts of the platform depend on account, provider and domain configuration.",
+        "eyebrow": "Service status",
+        "h1": "A clear place to check what is working.",
+        "intro": "The public health check reports whether the application can answer and reach its configured database. Workspace features and third-party providers can still have account-specific states, so each workflow keeps its own status and error handling.",
+        "sections": [("Application health", "Use the live health endpoint to check the application process and database connection."), ("Publishing health", "A site can be saved as a draft while publication is blocked by verification, plan activation, domain ownership or a validation issue. Those reasons are surfaced in the workspace."), ("Provider health", "Payments, email, WhatsApp, AI, OAuth, storage and domain operations depend on the provider configuration available to the running environment."), ("When something is wrong", "Start with the response shown by the affected workflow, then use Support with the account and site context needed to investigate.")],
+        "related": [("Open health check", "/api/health"), ("Support", "/support"), ("Publishing guide", "/guides/small-business-website-checklist")],
+    },
+    "/support": {
+        "title": "Zylora Support | Help with your website and workspace",
+        "description": "Find the right Zylora support path for account access, Studio editing, publishing, billing, domains and customer workflows.",
+        "eyebrow": "Support",
+        "h1": "Get unstuck with the right context.",
+        "intro": "Support is most useful when the team can see the account, site and workflow involved. Start with the public help center for guidance, or sign in to use the authenticated Support area in your workspace.",
+        "sections": [("Account access", "Use the sign-in, verification and password-recovery flows to restore access. Do not share passwords, reset tokens or payment details in a support request."), ("Studio and publishing", "Include the site name, page, breakpoint and the action that failed. Draft, preview and publish have different permissions and diagnostics."), ("Billing and domains", "The workspace is the source of truth for plan activation, regional pricing, domain status and provider responses."), ("Abuse or security", "For a security or abuse concern, describe what happened and the URL or site context without including secrets.")],
+        "related": [("Help center", "/help"), ("Sign in", "/login"), ("Security", "/security")],
+    },
+    "/contact": {
+        "title": "Contact Zylora | Choose the right next step",
+        "description": "Contact Zylora through the support, account and product paths that match your question.",
+        "eyebrow": "Contact Zylora",
+        "h1": "Tell us what needs to move forward.",
+        "intro": "Choose a path that keeps the useful context attached to your question. Account holders can reach Support from the workspace; everyone else can start with the public help center or the product pages below.",
+        "sections": [("I need help with an account", "Sign in to preserve your account and site context, then open Support from the dashboard."), ("I am evaluating the product", "Read the product, solution and pricing pages for supported capabilities and current plan information."), ("I found a security or abuse issue", "Use the Security and Support paths. Do not include credentials, tokens or private customer data in a public message."), ("I want to understand the workflow", "Start with the Website Builder, AI Editor or Studio pages and follow the related paths into leads, appointments and analytics.")],
+        "related": [("Open Support", "/support"), ("Help center", "/help"), ("Pricing", "/pricing")],
+    },
+    "/report-abuse": {
+        "title": "Report Abuse | Zylora",
+        "description": "Learn how to report abusive, unsafe or misleading content connected to a Zylora website or account.",
+        "eyebrow": "Report abuse",
+        "h1": "A safer web needs a usable reporting path.",
+        "intro": "If a Zylora-hosted website contains abusive, unsafe or misleading content, use the Support path with the public URL and a short description of the concern. Do not send passwords, tokens or private personal data.",
+        "sections": [("Include the public URL", "Share the exact page where the concern appears so the team can reproduce it without asking for account credentials."), ("Describe the issue plainly", "Explain what is unsafe, deceptive, infringing or otherwise abusive and include the relevant context."), ("Protect private data", "Screenshots or evidence should not expose passwords, reset links, payment details or personal information that is not necessary to investigate."), ("Need an account action?", "If you own the site, sign in and use Support so ownership and site context can be verified safely.")],
+        "related": [("Support", "/support"), ("Security", "/security"), ("Privacy", "/privacy")],
+    },
+}
+
+
+HELP_ARTICLES: dict[str, dict[str, Any]] = {
+    "getting-started": {"title": "Getting started with Zylora", "description": "Create a blank website, open Studio and connect the first customer action.", "h1": "Start with a useful first version.", "intro": "The shortest path is to create a blank site, give it a clear business purpose, then shape the pages and next action in Studio.", "sections": [("Create a blank site", "Choose Create Website from the dashboard. Template selection is not required for the primary creation path."), ("Open Studio", "The new site opens at the canonical /studio/{site_id} route. The /editor/{site_id} link remains a compatibility redirect."), ("Add the customer path", "Use the supported form, appointment or AI Sales Assistant controls that match the business. Do not publish a promise the backend cannot fulfill."), ("Preview and publish", "Review the page at the supported breakpoints, save the draft and publish only after the validation and plan checks are clear.")]},
+    "studio": {"title": "Using Zylora Studio", "description": "Learn the basic Studio workflow for pages, layers, free-form placement, responsive editing and recovery.", "h1": "The canvas is where the idea becomes yours.", "intro": "Studio is a document-first visual editor with a white artboard, page navigation, layers, inspector controls and responsive authoring states.", "sections": [("Select and edit", "Select an element on the canvas or in Layers, then use the inspector for content, geometry, style and supported widget settings."), ("Move with confidence", "Pointer movement stays transient; a completed drag, resize or rotation becomes one atomic command so undo remains useful."), ("Check each breakpoint", "Author against the supported desktop, tablet and mobile widths and reset inherited values when a breakpoint-specific override is no longer needed."), ("Recover safely", "Autosave is debounced and save conflicts keep the local draft in recovery storage instead of silently overwriting the authoritative server document.")]},
+    "publishing": {"title": "Preview and publish a Zylora website", "description": "Review a draft, resolve validation issues and publish through the server-authorized workflow.", "h1": "Publish when the public page is ready to do its job.", "intro": "Preview is for review; publish creates the public version. The backend rechecks ownership, document validity, plan, domain and site policy at the boundary.", "sections": [("Review the content", "Check headings, links, forms, images, alt text, mobile composition and the action you want visitors to take."), ("Check the address", "Use the configured Zylora address or a connected custom domain. Domain ownership and SSL state are not settled by the browser."), ("Resolve validation", "Fix blocked links, unsafe URLs, missing content or responsive geometry issues reported by the publish validation."), ("Verify the live result", "After publication, open the public URL and check the page HTML, metadata, sitemap, robots response and conversion flow.")]},
+    "billing": {"title": "Zylora plans, credits and billing", "description": "Understand how plans, AI credits, lead credits and regional checkout are controlled by the server.", "h1": "The workspace shows what your account can use.", "intro": "Prices, plan activation, credit balances and usage decisions come from the backend. The browser presents those values and never settles them independently.", "sections": [("Plan activation", "Starter and Growth self-service checkout uses server-priced regional offers and verified payment responses. Managed plans follow the configured contact path."), ("AI credits", "AI operations are revision-bound and account-scoped. A failed operation can be refunded by the authoritative accounting path."), ("Lead credits", "A captured client notification event follows the backend lead-credit rule even when email and WhatsApp delivery are both attempted."), ("If checkout fails", "The account keeps its current entitlement. Retry from the billing surface or use Support with the provider response; do not treat a browser success message as payment proof.")]},
+}
+
+
 def _base_url() -> str:
     return settings.app_url.rstrip("/")
 
 
 def _nav() -> str:
-    return '''<header class="z-header seo-header"><div class="z-container z-header-inner"><a class="z-logo" href="/" aria-label="Zylora home"><span class="z-logo-mark">Z</span><span class="z-logo-wordmark">Zylora</span></a><nav class="z-nav-links" id="seoPrimaryNav" aria-label="Primary"><a href="/website-builder">Products</a><a href="/solutions/small-business">Solutions</a><a href="/zylora-studio">Studio</a><a href="/guides/how-to-build-a-business-website">Resources</a><a href="/pricing">Pricing</a></nav><div class="z-header-actions"><a class="z-nav-login" href="/login">Sign in</a><a class="z-btn z-btn-primary z-btn-sm" href="/signup">Start building</a><button class="z-nav-burger" type="button" aria-label="Toggle navigation" onclick="document.getElementById('seoPrimaryNav').classList.toggle('open')"><span></span><span></span><span></span></button></div></div></header>'''
+    return '''<header class="z-header seo-header"><div class="z-container z-header-inner"><a class="z-logo" href="/" aria-label="Zylora home"><span class="z-logo-mark">Z</span><span class="z-logo-wordmark">Zylora</span></a><nav class="z-nav-links" id="seoPrimaryNav" aria-label="Primary"><a href="/features">Features</a><a href="/solutions/small-business">Solutions</a><a href="/zylora-studio">Studio</a><a href="/help">Resources</a><a href="/pricing">Pricing</a></nav><div class="z-header-actions"><a class="z-nav-login" href="/login">Sign in</a><a class="z-btn z-btn-primary z-btn-sm" href="/signup">Start building</a><button class="z-nav-burger" type="button" aria-label="Toggle navigation" onclick="document.getElementById('seoPrimaryNav').classList.toggle('open')"><span></span><span></span><span></span></button></div></div></header>'''
 
 
 def _footer() -> str:
-    groups = [("Product", [("Website Builder", "/website-builder"), ("AI inside Studio", "/ai-website-builder"), ("Zylora Studio", "/zylora-studio"), ("AI Sales Assistant", "/ai-sales-assistant"), ("CRM", "/crm"), ("Appointments", "/appointments")]), ("Solutions", [("Small Business", "/solutions/small-business"), ("Agencies", "/solutions/agencies"), ("Clinics", "/solutions/clinics"), ("Restaurants", "/solutions/restaurants"), ("Freelancers", "/solutions/freelancers"), ("Real Estate", "/solutions/real-estate")]), ("Resources", [("Guides", "/guides/how-to-build-a-business-website"), ("Website Examples", "/website-examples"), ("Studio", "/zylora-studio"), ("Blog", "/blog")]), ("Company", [("Pricing", "/pricing"), ("Contact", "/legal"), ("Privacy", "/privacy"), ("Terms", "/terms")])]
+    groups = [("Product", [("Features", "/features"), ("Website Builder", "/website-builder"), ("AI Editor", "/ai-editor"), ("Zylora Studio", "/zylora-studio"), ("AI Sales Assistant", "/ai-sales-assistant"), ("Appointments", "/appointments"), ("SEO", "/seo")]), ("Solutions", [("Small Business", "/solutions/small-business"), ("Schools", "/solutions/schools"), ("Coaching Centers", "/solutions/coaching-centers"), ("Clinics", "/solutions/clinics"), ("Agencies", "/solutions/agencies"), ("Portfolio", "/solutions/portfolio")]), ("Resources", [("Help Center", "/help"), ("Guides", "/guides/how-to-build-a-business-website"), ("Website Examples", "/website-examples"), ("Blog", "/blog"), ("Status", "/status")]), ("Company", [("About", "/about"), ("Pricing", "/pricing"), ("Support", "/support"), ("Contact", "/contact"), ("Security", "/security"), ("Privacy", "/privacy"), ("Terms", "/terms")])]
     columns = []
     for label, items in groups:
         links = ''.join('<li><a href="' + href + '">' + escape(text) + '</a></li>' for text, href in items)
@@ -285,6 +393,55 @@ def _guide_page(path: str, item: dict[str, Any]) -> HTMLResponse:
     return HTMLResponse(_head(item['title'], item['description'], canonical, schema) + '<body>' + _blank_studio_copy(body) + '</body></html>', headers={'Cache-Control': 'public,max-age=300'})
 
 
+def _info_page(path: str, item: dict[str, Any]) -> HTMLResponse:
+    canonical = _base_url() + path
+    sections = ''.join(
+        f'<article class="guide-section"><span>{idx:02d}</span><div><h2>{escape(title)}</h2><p>{escape(text)}</p></div></article>'
+        for idx, (title, text) in enumerate(item['sections'], 1)
+    )
+    related = ''.join(
+        f'<a class="seo-related-link" href="{escape(href, quote=True)}"><span>{escape(label)}</span><span aria-hidden="true">↗</span></a>'
+        for label, href in item['related']
+    )
+    schema = {
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        '@id': canonical + '#webpage',
+        'name': item['title'],
+        'url': canonical,
+        'description': item['description'],
+        'isPartOf': {'@type': 'WebSite', 'name': 'Zylora', 'url': _base_url()},
+    }
+    body = f'''{_nav()}<main class="seo-page zylora-info-page"><section class="seo-hero guide-hero"><div class="z-container seo-narrow-heading"><div class="eyebrow-pill">✦ {escape(item['eyebrow'])}</div><h1>{escape(item['h1'])}</h1><p class="seo-intro">{escape(item['intro'])}</p></div></section><div class="z-container seo-breadcrumb"><a href="/">Home</a><span>/</span><span>{escape(item['eyebrow'])}</span></div><section class="seo-section guide-content"><div class="guide-list">{sections}</div><aside class="guide-aside"><span class="seo-kicker">A useful next step</span><h2>Keep the context attached to the work.</h2><p>Use the product or support path that matches the question instead of guessing at an unsupported workflow.</p><a class="z-btn z-btn-primary" href="/help">Open help center</a></aside></section><section class="seo-section seo-related"><div class="seo-narrow-heading"><span class="seo-kicker">Continue</span><h2>Related Zylora paths.</h2></div><div class="seo-related-grid">{related}</div></section></main>{_footer()}'''
+    return HTMLResponse(_head(item['title'], item['description'], canonical, schema) + '<body>' + body + '</body></html>', headers={'Cache-Control': 'public,max-age=300'})
+
+
+def _help_index() -> HTMLResponse:
+    canonical = _base_url() + '/help'
+    cards = ''.join(
+        f'<a class="seo-related-link help-card" data-help-card href="/help/{escape(slug, quote=True)}"><span><strong>{escape(item["title"])}</strong><small>{escape(item["description"])}</small></span><span aria-hidden="true">↗</span></a>'
+        for slug, item in HELP_ARTICLES.items()
+    )
+    schema = {'@context': 'https://schema.org', '@type': 'CollectionPage', 'name': 'Zylora Help Center', 'url': canonical, 'description': 'Guidance for creating, editing, publishing and managing a Zylora website.'}
+    body = f'''{_nav()}<main class="seo-page zylora-help-page"><section class="seo-hero guide-hero"><div class="z-container seo-narrow-heading"><div class="eyebrow-pill">✦ Help center</div><h1>How can we help?</h1><p class="seo-intro">Find practical guidance for account access, Studio editing, publishing, billing and the customer workflows connected to your site.</p><label class="help-search"><span>Search help</span><input id="helpSearch" type="search" placeholder="Search Studio, publishing or billing" autocomplete="off"></label></div></section><div class="z-container seo-breadcrumb"><a href="/">Home</a><span>/</span><span>Help center</span></div><section class="seo-section"><div class="seo-narrow-heading"><span class="seo-kicker">Start here</span><h2>Short answers for the work in front of you.</h2></div><div class="seo-related-grid help-grid">{cards}</div><p id="helpEmpty" class="help-empty" hidden>No matching help article. Try a different phrase or use <a href="/support">Support</a> with your account context.</p></section></main><script>(function(){{const input=document.getElementById('helpSearch');const cards=[...document.querySelectorAll('[data-help-card]')];const empty=document.getElementById('helpEmpty');input.addEventListener('input',function(){{const q=input.value.trim().toLowerCase();let visible=0;cards.forEach(function(card){{const match=!q||card.textContent.toLowerCase().includes(q);card.hidden=!match;if(match)visible+=1;}});empty.hidden=visible!==0;}});}})();</script>{_footer()}'''
+    return HTMLResponse(_head('Zylora Help Center | Practical product guidance', 'Find practical guidance for Zylora accounts, Studio editing, publishing, billing and customer workflows.', canonical, schema) + '<body>' + body + '</body></html>', headers={'Cache-Control': 'public,max-age=300'})
+
+
+def _help_article(slug: str) -> HTMLResponse:
+    item = HELP_ARTICLES.get(slug)
+    if not item:
+        raise HTTPException(status_code=404, detail='Help article not found')
+    path = '/help/' + slug
+    canonical = _base_url() + path
+    sections = ''.join(
+        f'<article class="guide-section"><span>{idx:02d}</span><div><h2>{escape(title)}</h2><p>{escape(text)}</p></div></article>'
+        for idx, (title, text) in enumerate(item['sections'], 1)
+    )
+    schema = {'@context': 'https://schema.org', '@type': 'Article', 'headline': item['title'], 'description': item['description'], 'mainEntityOfPage': canonical, 'author': {'@type': 'Organization', 'name': 'Zylora'}, 'publisher': {'@type': 'Organization', 'name': 'Zylora'}}
+    body = f'''{_nav()}<main class="seo-page zylora-help-article"><section class="seo-hero guide-hero"><div class="z-container seo-narrow-heading"><div class="eyebrow-pill">✦ Zylora help</div><h1>{escape(item['h1'])}</h1><p class="seo-intro">{escape(item['intro'])}</p></div></section><div class="z-container seo-breadcrumb"><a href="/">Home</a><span>/</span><a href="/help">Help center</a><span>/</span><span>{escape(item['title'])}</span></div><section class="seo-section guide-content"><div class="guide-list">{sections}</div><aside class="guide-aside"><span class="seo-kicker">Need more context?</span><h2>Open the authenticated support path.</h2><p>Account and site questions are easier to resolve when the workspace can verify the relevant context.</p><a class="z-btn z-btn-primary" href="/support">Open support</a></aside></section></main>{_footer()}'''
+    return HTMLResponse(_head(item['title'] + ' | Zylora Help', item['description'], canonical, schema) + '<body>' + body + '</body></html>', headers={'Cache-Control': 'public,max-age=300'})
+
+
 @router.get('/website-examples', response_class=HTMLResponse, include_in_schema=False)
 def website_examples() -> HTMLResponse:
     canonical = _base_url() + '/website-examples'
@@ -326,7 +483,13 @@ def public_seo_catchall(path: str) -> HTMLResponse:
         return _solution_page(path, SOLUTIONS[path])
     if path in GUIDES:
         return _guide_page(path, GUIDES[path])
+    if path in INFO_PAGES:
+        return _info_page(path, INFO_PAGES[path])
+    if path == '/help':
+        return _help_index()
+    if path.startswith('/help/'):
+        return _help_article(path.removeprefix('/help/'))
     raise HTTPException(status_code=404, detail='Public page not found')
 
 
-PUBLIC_SEO_PATHS = tuple([*PRODUCTS.keys(), *SOLUTIONS.keys(), *GUIDES.keys(), '/website-examples'])
+PUBLIC_SEO_PATHS = tuple([*PRODUCTS.keys(), *SOLUTIONS.keys(), *GUIDES.keys(), *INFO_PAGES.keys(), '/website-examples', '/help', *['/help/' + slug for slug in HELP_ARTICLES]])
