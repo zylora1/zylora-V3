@@ -18,12 +18,14 @@ def copy_file(source: Path, target: Path) -> None:
     shutil.copy2(source, target)
 
 
-def copy_filtered(source: Path, target: Path) -> None:
+def copy_filtered(source: Path, target: Path, tracked_files: set[str] | None = None) -> None:
     for path in source.rglob("*"):
         relative = path.relative_to(source)
         if any(part in {"__pycache__", ".pytest_cache", ".ruff_cache", ".mypy_cache", "node_modules", ".vite"} for part in relative.parts):
             continue
         if path.is_dir():
+            continue
+        if tracked_files is not None and path.relative_to(ROOT).as_posix() not in tracked_files:
             continue
         if path.name.endswith(".dark-bak") or path.suffix.lower() in {".map", ".pyc", ".pyo", ".tsbuildinfo"}:
             continue
@@ -32,7 +34,7 @@ def copy_filtered(source: Path, target: Path) -> None:
         copy_file(path, target / relative)
 
 
-def build_templates(source_root: Path, target_root: Path, reachability: dict) -> dict:
+def build_templates(source_root: Path, target_root: Path, reachability: dict, tracked_files: set[str]) -> dict:
     rows = []
     for row in reachability["projects"]:
         slug = row["slug"]
@@ -40,14 +42,17 @@ def build_templates(source_root: Path, target_root: Path, reachability: dict) ->
         target = target_root / slug
         for relative in ("metadata.json", "assets-manifest.json", "verification/render-gate.json", "app/globals.css"):
             path = source / relative
-            if path.is_file():
+            if path.is_file() and path.relative_to(ROOT).as_posix() in tracked_files:
                 copy_file(path, target / relative)
         for relative in row["render_files"]:
-            copy_file(source / relative, target / relative)
+            path = source / relative
+            if not path.is_file() or path.relative_to(ROOT).as_posix() not in tracked_files:
+                raise RuntimeError(f"Reachability audit selected a non-versioned render file: {path}")
+            copy_file(path, target / relative)
         copied_assets = []
         for relative in row["required_assets"]:
             path = source / relative
-            if not path.is_file():
+            if not path.is_file() or path.relative_to(ROOT).as_posix() not in tracked_files:
                 raise RuntimeError(f"Reachability audit selected a missing asset: {source / relative}")
             copy_file(path, target / relative)
             copied_assets.append(relative)
@@ -84,6 +89,14 @@ def main() -> int:
     if not reachability_path.is_file():
         raise SystemExit("Run scripts/template_reachability_audit.py before building the release context.")
     reachability = json.loads(reachability_path.read_text(encoding="utf-8"))
+    try:
+        tracked_files = {
+            item.decode("utf-8")
+            for item in subprocess.check_output(["git", "ls-files", "-z"], cwd=ROOT).split(b"\0")
+            if item
+        }
+    except (OSError, subprocess.CalledProcessError) as exc:
+        raise SystemExit(f"Could not resolve the Git-tracked release set: {exc}") from exc
     unresolved = [(row["slug"], ref) for row in reachability["projects"] for ref in row["unresolved_references"]]
     if unresolved:
         raise SystemExit(f"Unresolved template references remain: {unresolved}")
@@ -92,11 +105,11 @@ def main() -> int:
     for relative in ("requirements-prod.txt", "Dockerfile", "run.sh", ".dockerignore"):
         copy_file(ROOT / relative, output / relative)
     copy_file(ROOT / "app" / "__init__.py", output / "app" / "__init__.py") if (ROOT / "app" / "__init__.py").is_file() else None
-    copy_filtered(ROOT / "app", output / "app")
-    copy_filtered(ROOT / "migrations", output / "migrations")
-    copy_filtered(ROOT / "static", output / "static")
+    copy_filtered(ROOT / "app", output / "app", tracked_files)
+    copy_filtered(ROOT / "migrations", output / "migrations", tracked_files)
+    copy_filtered(ROOT / "static", output / "static", tracked_files)
     copy_file(ROOT / "scripts" / "run_migrations.py", output / "scripts" / "run_migrations.py")
-    template_data = build_templates(ROOT / "template_projects", output / "template_projects", reachability)
+    template_data = build_templates(ROOT / "template_projects", output / "template_projects", reachability, tracked_files)
     (output / "data").mkdir(exist_ok=True)
 
     try:
