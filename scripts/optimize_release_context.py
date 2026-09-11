@@ -22,7 +22,7 @@ def context_hash(root: Path) -> str:
     return digest.hexdigest()
 
 
-def optimize(root: Path) -> dict[str, object]:
+def optimize(root: Path, jpeg_quality: int = 84) -> dict[str, object]:
     changed: list[dict[str, object]] = []
     for path in root.rglob("*"):
         if not path.is_file() or path.suffix.lower() not in {".jpg", ".jpeg", ".png"}:
@@ -38,7 +38,7 @@ def optimize(root: Path) -> dict[str, object]:
                     temporary = Path(handle.name)
                 try:
                     if image_format == "JPEG":
-                        converted.save(temporary, format=image_format, quality=84, optimize=True, progressive=True)
+                        converted.save(temporary, format=image_format, quality=jpeg_quality, optimize=True, progressive=True)
                     else:
                         converted.save(temporary, format=image_format, optimize=True, compress_level=9)
                     after = temporary.stat().st_size
@@ -59,6 +59,12 @@ def optimize(root: Path) -> dict[str, object]:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Quality-optimize raster assets in an ignored release_context copy.")
     parser.add_argument("root", nargs="?", type=Path, default=Path("release_context"))
+    parser.add_argument(
+        "--jpeg-quality",
+        type=int,
+        default=84,
+        help="JPEG quality for the release-only media optimization (40-95; default: 84).",
+    )
     args = parser.parse_args()
     root = args.root.resolve()
     # Release contexts are deliberately generated beside the repository and
@@ -67,7 +73,10 @@ def main() -> int:
     # the optimization command cannot be pointed at an arbitrary directory.
     if not root.is_dir() or not (root.name == "release_context" or root.name.startswith("release_context-")):
         raise SystemExit(f"Refusing non-release_context path: {root}")
-    result = optimize(root)
+    if not 40 <= args.jpeg_quality <= 95:
+        raise SystemExit("--jpeg-quality must be between 40 and 95")
+    result = optimize(root, jpeg_quality=args.jpeg_quality)
+    result["jpeg_quality"] = args.jpeg_quality
     (root / "release-media-optimization.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
     manifest_path = root / "release-manifest.json"
     if manifest_path.is_file():
