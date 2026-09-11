@@ -57,11 +57,15 @@ def optimize(root: Path) -> dict[str, object]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Losslessly/quality-optimize raster assets in an ignored release_context copy.")
+    parser = argparse.ArgumentParser(description="Quality-optimize raster assets in an ignored release_context copy.")
     parser.add_argument("root", nargs="?", type=Path, default=Path("release_context"))
     args = parser.parse_args()
     root = args.root.resolve()
-    if not root.is_dir() or root.name != "release_context":
+    # Release contexts are deliberately generated beside the repository and
+    # named with their source revision (for example
+    # ``release_context-d7c336f``).  Accept only that narrow naming scheme so
+    # the optimization command cannot be pointed at an arbitrary directory.
+    if not root.is_dir() or not (root.name == "release_context" or root.name.startswith("release_context-")):
         raise SystemExit(f"Refusing non-release_context path: {root}")
     result = optimize(root)
     (root / "release-media-optimization.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
