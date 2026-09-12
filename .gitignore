@@ -25,5 +25,7 @@ data/media/
 Thumbs.db
 .template-import-work/
 release_context/
+release_context*/
+release_context*.zip
 static/*.map
 *.tsbuildinfo

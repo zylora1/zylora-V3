@@ -21,5 +21,12 @@ browser-results/
 screenshots/
 static/audit_screenshots/
 release_context/
+release_context*/
+release_context*.zip
+browser-results/
+test-results/
+coverage/
+htmlcov/
+scratch/
 data/*.png
 data/studio-rebuild/

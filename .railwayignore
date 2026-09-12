@@ -19,3 +19,10 @@ __pycache__
 /data/*.png
 /static/audit_screenshots/
 /release_context/
+/release_context*/
+release_context*.zip
+browser-results/
+test-results/
+coverage/
+htmlcov/
+scratch/
