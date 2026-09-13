@@ -55,7 +55,7 @@ def studio_html(context: dict) -> str:
 
 def run_engine(name: str, browser, client: TestClient, csrf: str, site_id: str) -> None:
     page = new_page(browser, client, (1440, 900))
-    page.set_content(studio_html({"siteId": site_id, "csrfToken": csrf, "siteName": "Untitled website"}), wait_until="load")
+    page.set_content(studio_html({"siteId": site_id, "csrfToken": csrf, "siteName": "Untitled website"}), wait_until="domcontentloaded")
     page.wait_for_selector(".tool-rail")
     page.wait_for_timeout(700)
     labels = page.locator(".tool-rail button span").all_inner_texts()
@@ -137,7 +137,11 @@ def main() -> None:
             launcher = getattr(playwright, launcher_name)
             browser = launcher.launch(headless=True)
             page = new_page(browser, client, (1440, 900))
-            page.set_content(dashboard_html(), wait_until="load")
+            # The dashboard shell is exercised offline with backend fetches
+            # bridged into the test process; DOMContentLoaded avoids waiting
+            # on external font/resource load events that cannot complete on
+            # about:blank without a running static server.
+            page.set_content(dashboard_html(), wait_until="domcontentloaded")
             page.wait_for_selector('[data-testid="quick-new"]')
             page.locator('[data-testid="quick-new"]').click()
             page.wait_for_function("window.__NAV.startsWith('/studio/')", timeout=8000)
