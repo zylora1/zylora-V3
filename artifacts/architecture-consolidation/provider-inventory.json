@@ -1,0 +1,906 @@
+{
+  "direct_provider_calls": {
+    "anthropic": [
+      "scripts/provider_inventory.py:13",
+      "scripts/provider_inventory.py:56",
+      "scripts/security_pattern_scan.py:17"
+    ],
+    "cloudflare": [
+      "app/api_extended.py:1055",
+      "app/api_extended.py:1749",
+      "app/api_extended.py:1751",
+      "app/config.py:94",
+      "app/config.py:156",
+      "app/config.py:157",
+      "app/operations.py:66",
+      "app/operations.py:72",
+      "app/providers.py:576",
+      "app/providers.py:588",
+      "app/providers.py:589",
+      "app/providers.py:598",
+      "app/providers.py:602",
+      "app/providers.py:603",
+      "app/providers.py:611",
+      "app/providers.py:615",
+      "app/providers.py:616",
+      "docker-compose.yml:70",
+      "scripts/external_provider_smoke.py:74",
+      "scripts/external_provider_smoke.py:75",
+      "scripts/external_provider_smoke.py:77",
+      "scripts/external_provider_smoke.py:182",
+      "scripts/provider_inventory.py:34",
+      "scripts/provider_inventory.py:61",
+      "scripts/security_pattern_scan.py:17",
+      "tests/test_marketplace_support.py:207",
+      "tests/test_password_policy_regression.py:48",
+      "tests/test_production_delivery_config.py:33",
+      "tests/test_release_gaps.py:329"
+    ],
+    "meta_whatsapp": [
+      "app/api_extended.py:1053",
+      "app/api_extended.py:1773",
+      "app/api_extended.py:1775",
+      "app/config.py:75",
+      "app/config.py:149",
+      "app/config.py:150",
+      "app/operations.py:63",
+      "app/providers.py:72",
+      "app/providers.py:73",
+      "app/providers.py:75",
+      "docker-compose.yml:57",
+      "scripts/external_provider_smoke.py:167",
+      "scripts/external_provider_smoke.py:168",
+      "scripts/external_provider_smoke.py:170",
+      "scripts/external_provider_smoke.py:187",
+      "scripts/provider_inventory.py:28",
+      "scripts/provider_inventory.py:59",
+      "tests/test_marketplace_support.py:207",
+      "tests/test_production_delivery_config.py:24",
+      "tests/test_release_gaps.py:326"
+    ],
+    "openai": [
+      "app/ai_models.py:12",
+      "app/api.py:500",
+      "app/api.py:514",
+      "app/api.py:548",
+      "app/api.py:592",
+      "app/api.py:697",
+      "app/api.py:704",
+      "app/api.py:791",
+      "app/api_editor.py:885",
+      "app/api_extended.py:1051",
+      "app/api_extended.py:1781",
+      "app/api_extended.py:1783",
+      "app/api_operations.py:229",
+      "app/cms.py:1230",
+      "app/cms.py:1232",
+      "app/cms.py:1244",
+      "app/config.py:52",
+      "app/config.py:143",
+      "app/generate_v4.py:85",
+      "app/generate_v4.py:101",
+      "app/generate_v4.py:103",
+      "app/operations.py:61",
+      "app/operations.py:68",
+      "app/providers.py:163",
+      "app/providers.py:169",
+      "app/providers.py:174",
+      "app/providers.py:192",
+      "app/providers.py:202",
+      "app/providers.py:206",
+      "app/providers.py:212",
+      "app/providers.py:223",
+      "app/providers.py:226",
+      "app/providers.py:233",
+      "app/providers.py:240",
+      "app/providers.py:243",
+      "app/providers.py:264",
+      "app/providers.py:273",
+      "app/providers.py:276",
+      "app/providers.py:626",
+      "app/providers.py:639",
+      "app/providers.py:643",
+      "app/providers.py:656",
+      "app/providers.py:667",
+      "app/providers.py:670",
+      "app/sales_assistant.py:533",
+      "app/sales_assistant.py:556",
+      "app/structured_editor.py:967",
+      "app/structured_editor.py:976",
+      "app/structured_editor.py:979",
+      "app/super_admin_assistant.py:269",
+      "docker-compose.yml:32",
+      "docs/superpowers/plans/2026-09-15-architecture-consolidation.md:66",
+      "docs/superpowers/plans/2026-09-15-architecture-consolidation.md:180",
+      "scripts/ai_credit_browser_e2e.py:100",
+      "scripts/ai_credit_browser_e2e.py:101",
+      "scripts/ai_credit_browser_e2e.py:186",
+      "scripts/external_provider_smoke.py:49",
+      "scripts/external_provider_smoke.py:50",
+      "scripts/external_provider_smoke.py:53",
+      "scripts/external_provider_smoke.py:180",
+      "scripts/provider_inventory.py:12",
+      "scripts/provider_inventory.py:55",
+      "scripts/security_pattern_scan.py:17",
+      "tests/test_adversarial_security.py:164",
+      "tests/test_adversarial_security.py:165",
+      "tests/test_adversarial_security.py:178",
+      "tests/test_ai_prompt_guidance.py:74",
+      "tests/test_ai_security_architecture.py:120",
+      "tests/test_blank_studio_and_user_templates.py:148",
+      "tests/test_credit_ai_production_hardening.py:131",
+      "tests/test_password_policy_regression.py:32",
+      "tests/test_production_delivery_config.py:14",
+      "tests/test_provider_inventory.py:10",
+      "tests/test_regional_billing_sales_assistant.py:280",
+      "tests/test_regional_billing_sales_assistant.py:310",
+      "tests/test_release_gaps.py:299",
+      "tests/test_release_gaps.py:326",
+      "tests/test_sales_assistant_deep_certification.py:82",
+      "tests/test_sales_assistant_deep_certification.py:138",
+      "tests/test_sales_assistant_deep_certification.py:158"
+    ],
+    "razorpay": [
+      "app/api_extended.py:593",
+      "app/api_extended.py:723",
+      "app/api_extended.py:737",
+      "app/api_extended.py:739",
+      "app/api_extended.py:748",
+      "app/api_extended.py:838",
+      "app/api_extended.py:857",
+      "app/api_extended.py:1054",
+      "app/api_extended.py:1757",
+      "app/api_extended.py:1759",
+      "app/config.py:90",
+      "app/config.py:91",
+      "app/config.py:153",
+      "app/config.py:154",
+      "app/operations.py:64",
+      "app/operations.py:71",
+      "app/providers.py:461",
+      "app/providers.py:463",
+      "app/providers.py:466",
+      "app/providers.py:469",
+      "app/providers.py:479",
+      "app/providers.py:481",
+      "app/providers.py:483",
+      "app/providers.py:487",
+      "app/providers.py:489",
+      "app/providers.py:491",
+      "app/providers.py:496",
+      "app/providers.py:501",
+      "app/providers.py:503",
+      "app/providers.py:520",
+      "app/providers.py:522",
+      "app/providers.py:526",
+      "app/providers.py:531",
+      "app/providers.py:537",
+      "app/providers.py:543",
+      "app/providers.py:544",
+      "app/providers.py:549",
+      "app/providers.py:551",
+      "app/providers.py:553",
+      "app/providers.py:558",
+      "app/providers.py:560",
+      "app/providers.py:562",
+      "app/providers.py:567",
+      "app/providers.py:569",
+      "app/providers.py:571",
+      "docker-compose.yml:67",
+      "docker-compose.yml:68",
+      "scripts/external_provider_smoke.py:63",
+      "scripts/external_provider_smoke.py:64",
+      "scripts/external_provider_smoke.py:66",
+      "scripts/external_provider_smoke.py:181",
+      "scripts/provider_inventory.py:37",
+      "scripts/provider_inventory.py:38",
+      "scripts/provider_inventory.py:62",
+      "tests/test_marketplace_support.py:207",
+      "tests/test_password_policy_regression.py:43",
+      "tests/test_password_policy_regression.py:44",
+      "tests/test_production_delivery_config.py:28",
+      "tests/test_production_delivery_config.py:29",
+      "tests/test_release_gaps.py:328"
+    ],
+    "resend": [
+      "app/api_extended.py:1052",
+      "app/api_extended.py:1765",
+      "app/api_extended.py:1767",
+      "app/config.py:58",
+      "app/config.py:145",
+      "app/email_service.py:27",
+      "app/email_service.py:72",
+      "app/email_service.py:130",
+      "app/email_service.py:133",
+      "app/email_service.py:162",
+      "app/operations.py:62",
+      "app/operations.py:69",
+      "docs/superpowers/plans/2026-09-15-architecture-consolidation.md:67",
+      "scripts/provider_inventory.py:19",
+      "scripts/provider_inventory.py:57",
+      "scripts/security_pattern_scan.py:17",
+      "tests/test_password_policy_regression.py:34",
+      "tests/test_production_delivery_config.py:16",
+      "tests/test_production_delivery_config.py:57",
+      "tests/test_production_delivery_config.py:60",
+      "tests/test_production_delivery_config.py:67",
+      "tests/test_production_delivery_config.py:70",
+      "tests/test_production_delivery_config.py:77",
+      "tests/test_production_delivery_config.py:94",
+      "tests/test_production_delivery_config.py:100",
+      "tests/test_production_delivery_config.py:123",
+      "tests/test_production_delivery_config.py:142",
+      "tests/test_production_delivery_config.py:160",
+      "tests/test_production_delivery_config.py:164",
+      "tests/test_production_delivery_config.py:170",
+      "tests/test_production_delivery_config.py:180",
+      "tests/test_production_delivery_config.py:182",
+      "tests/test_provider_inventory.py:11"
+    ],
+    "telnyx": [
+      "docs/superpowers/plans/2026-09-15-architecture-consolidation.md:233",
+      "scripts/provider_inventory.py:33",
+      "scripts/provider_inventory.py:60"
+    ],
+    "twilio": [
+      "app/config.py:70",
+      "app/config.py:148",
+      "app/config.py:150",
+      "app/operations.py:63",
+      "app/providers.py:64",
+      "app/providers.py:65",
+      "app/providers.py:69",
+      "docker-compose.yml:53",
+      "docs/superpowers/plans/2026-09-15-architecture-consolidation.md:68",
+      "scripts/external_provider_smoke.py:151",
+      "scripts/external_provider_smoke.py:152",
+      "scripts/external_provider_smoke.py:155",
+      "scripts/external_provider_smoke.py:160",
+      "scripts/external_provider_smoke.py:186",
+      "scripts/provider_inventory.py:22",
+      "scripts/provider_inventory.py:58",
+      "tests/test_password_policy_regression.py:37",
+      "tests/test_production_delivery_config.py:20",
+      "tests/test_production_delivery_config.py:196",
+      "tests/test_production_delivery_config.py:201",
+      "tests/test_provider_inventory.py:12"
+    ]
+  },
+  "legacy_secrets": [
+    "ANTHROPIC_API_KEY",
+    "BREVO_API_KEY",
+    "DEEPSEEK_API_KEY",
+    "GEMINI_API_KEY",
+    "GOOGLE_AI_API_KEY",
+    "MISTRAL_API_KEY",
+    "OPENAI_API_KEY",
+    "RESEND_API_KEY",
+    "SENDGRID_API_KEY",
+    "SMTP_PASSWORD",
+    "SMTP_USERNAME",
+    "TWILIO_ACCOUNT_SID",
+    "TWILIO_AUTH_TOKEN",
+    "TWILIO_WHATSAPP_FROM",
+    "WHATSAPP_ACCESS_TOKEN",
+    "WHATSAPP_PHONE_NUMBER_ID",
+    "XAI_API_KEY"
+  ],
+  "references": [
+    {
+      "file": "app/config.py",
+      "line": 143,
+      "variables": [
+        "OPENAI_API_KEY"
+      ]
+    },
+    {
+      "file": "app/config.py",
+      "line": 145,
+      "variables": [
+        "RESEND_API_KEY"
+      ]
+    },
+    {
+      "file": "app/config.py",
+      "line": 150,
+      "variables": [
+        "TWILIO_ACCOUNT_SID",
+        "TWILIO_AUTH_TOKEN",
+        "TWILIO_WHATSAPP_FROM",
+        "WHATSAPP_ACCESS_TOKEN",
+        "WHATSAPP_PHONE_NUMBER_ID"
+      ]
+    },
+    {
+      "file": "app/config.py",
+      "line": 154,
+      "variables": [
+        "RAZORPAY_KEY_ID",
+        "RAZORPAY_KEY_SECRET",
+        "RAZORPAY_WEBHOOK_SECRET"
+      ]
+    },
+    {
+      "file": "app/config.py",
+      "line": 155,
+      "variables": [
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET"
+      ]
+    },
+    {
+      "file": "app/config.py",
+      "line": 157,
+      "variables": [
+        "CLOUDFLARE_API_TOKEN"
+      ]
+    },
+    {
+      "file": "app/email_service.py",
+      "line": 130,
+      "variables": [
+        "RESEND_API_KEY"
+      ]
+    },
+    {
+      "file": "docker-compose.yml",
+      "line": 32,
+      "variables": [
+        "OPENAI_API_KEY"
+      ]
+    },
+    {
+      "file": "docker-compose.yml",
+      "line": 37,
+      "variables": [
+        "SMTP_USERNAME"
+      ]
+    },
+    {
+      "file": "docker-compose.yml",
+      "line": 38,
+      "variables": [
+        "SMTP_PASSWORD"
+      ]
+    },
+    {
+      "file": "docker-compose.yml",
+      "line": 53,
+      "variables": [
+        "TWILIO_ACCOUNT_SID"
+      ]
+    },
+    {
+      "file": "docker-compose.yml",
+      "line": 54,
+      "variables": [
+        "TWILIO_AUTH_TOKEN"
+      ]
+    },
+    {
+      "file": "docker-compose.yml",
+      "line": 55,
+      "variables": [
+        "TWILIO_WHATSAPP_FROM"
+      ]
+    },
+    {
+      "file": "docker-compose.yml",
+      "line": 56,
+      "variables": [
+        "WHATSAPP_PHONE_NUMBER_ID"
+      ]
+    },
+    {
+      "file": "docker-compose.yml",
+      "line": 57,
+      "variables": [
+        "WHATSAPP_ACCESS_TOKEN"
+      ]
+    },
+    {
+      "file": "docker-compose.yml",
+      "line": 59,
+      "variables": [
+        "GOOGLE_CLIENT_ID"
+      ]
+    },
+    {
+      "file": "docker-compose.yml",
+      "line": 60,
+      "variables": [
+        "GOOGLE_CLIENT_SECRET"
+      ]
+    },
+    {
+      "file": "docker-compose.yml",
+      "line": 67,
+      "variables": [
+        "RAZORPAY_KEY_ID"
+      ]
+    },
+    {
+      "file": "docker-compose.yml",
+      "line": 68,
+      "variables": [
+        "RAZORPAY_KEY_SECRET"
+      ]
+    },
+    {
+      "file": "docker-compose.yml",
+      "line": 69,
+      "variables": [
+        "RAZORPAY_WEBHOOK_SECRET"
+      ]
+    },
+    {
+      "file": "docker-compose.yml",
+      "line": 70,
+      "variables": [
+        "CLOUDFLARE_API_TOKEN"
+      ]
+    },
+    {
+      "file": "docs/superpowers/plans/2026-09-15-architecture-consolidation.md",
+      "line": 66,
+      "variables": [
+        "OPENAI_API_KEY"
+      ]
+    },
+    {
+      "file": "docs/superpowers/plans/2026-09-15-architecture-consolidation.md",
+      "line": 67,
+      "variables": [
+        "RESEND_API_KEY"
+      ]
+    },
+    {
+      "file": "docs/superpowers/plans/2026-09-15-architecture-consolidation.md",
+      "line": 68,
+      "variables": [
+        "TWILIO_ACCOUNT_SID"
+      ]
+    },
+    {
+      "file": "docs/superpowers/plans/2026-09-15-architecture-consolidation.md",
+      "line": 233,
+      "variables": [
+        "TELNYX_API_KEY"
+      ]
+    },
+    {
+      "file": "scripts/external_provider_smoke.py",
+      "line": 50,
+      "variables": [
+        "OPENAI_API_KEY"
+      ]
+    },
+    {
+      "file": "scripts/external_provider_smoke.py",
+      "line": 64,
+      "variables": [
+        "RAZORPAY_KEY_ID",
+        "RAZORPAY_KEY_SECRET"
+      ]
+    },
+    {
+      "file": "scripts/external_provider_smoke.py",
+      "line": 75,
+      "variables": [
+        "CLOUDFLARE_API_TOKEN"
+      ]
+    },
+    {
+      "file": "scripts/external_provider_smoke.py",
+      "line": 104,
+      "variables": [
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET"
+      ]
+    },
+    {
+      "file": "scripts/external_provider_smoke.py",
+      "line": 117,
+      "variables": [
+        "SMTP_USERNAME"
+      ]
+    },
+    {
+      "file": "scripts/external_provider_smoke.py",
+      "line": 118,
+      "variables": [
+        "SMTP_PASSWORD"
+      ]
+    },
+    {
+      "file": "scripts/external_provider_smoke.py",
+      "line": 122,
+      "variables": [
+        "SMTP_PASSWORD",
+        "SMTP_USERNAME"
+      ]
+    },
+    {
+      "file": "scripts/external_provider_smoke.py",
+      "line": 151,
+      "variables": [
+        "TWILIO_ACCOUNT_SID",
+        "TWILIO_AUTH_TOKEN"
+      ]
+    },
+    {
+      "file": "scripts/external_provider_smoke.py",
+      "line": 158,
+      "variables": [
+        "TWILIO_WHATSAPP_FROM"
+      ]
+    },
+    {
+      "file": "scripts/external_provider_smoke.py",
+      "line": 168,
+      "variables": [
+        "WHATSAPP_ACCESS_TOKEN",
+        "WHATSAPP_PHONE_NUMBER_ID"
+      ]
+    },
+    {
+      "file": "scripts/external_provider_smoke.py",
+      "line": 180,
+      "variables": [
+        "OPENAI_API_KEY"
+      ]
+    },
+    {
+      "file": "scripts/external_provider_smoke.py",
+      "line": 181,
+      "variables": [
+        "RAZORPAY_KEY_ID",
+        "RAZORPAY_KEY_SECRET"
+      ]
+    },
+    {
+      "file": "scripts/external_provider_smoke.py",
+      "line": 182,
+      "variables": [
+        "CLOUDFLARE_API_TOKEN"
+      ]
+    },
+    {
+      "file": "scripts/external_provider_smoke.py",
+      "line": 184,
+      "variables": [
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET"
+      ]
+    },
+    {
+      "file": "scripts/external_provider_smoke.py",
+      "line": 186,
+      "variables": [
+        "TWILIO_ACCOUNT_SID",
+        "TWILIO_AUTH_TOKEN",
+        "TWILIO_WHATSAPP_FROM"
+      ]
+    },
+    {
+      "file": "scripts/external_provider_smoke.py",
+      "line": 187,
+      "variables": [
+        "WHATSAPP_ACCESS_TOKEN",
+        "WHATSAPP_PHONE_NUMBER_ID"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 12,
+      "variables": [
+        "OPENAI_API_KEY"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 13,
+      "variables": [
+        "ANTHROPIC_API_KEY"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 14,
+      "variables": [
+        "GOOGLE_AI_API_KEY"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 15,
+      "variables": [
+        "GEMINI_API_KEY"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 16,
+      "variables": [
+        "DEEPSEEK_API_KEY"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 17,
+      "variables": [
+        "MISTRAL_API_KEY"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 18,
+      "variables": [
+        "XAI_API_KEY"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 19,
+      "variables": [
+        "RESEND_API_KEY"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 20,
+      "variables": [
+        "SENDGRID_API_KEY"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 21,
+      "variables": [
+        "BREVO_API_KEY"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 22,
+      "variables": [
+        "TWILIO_ACCOUNT_SID"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 23,
+      "variables": [
+        "TWILIO_AUTH_TOKEN"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 24,
+      "variables": [
+        "TWILIO_WHATSAPP_FROM"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 25,
+      "variables": [
+        "SMTP_USERNAME"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 26,
+      "variables": [
+        "SMTP_PASSWORD"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 27,
+      "variables": [
+        "WHATSAPP_PHONE_NUMBER_ID"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 28,
+      "variables": [
+        "WHATSAPP_ACCESS_TOKEN"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 32,
+      "variables": [
+        "AI_GATEWAY_API_KEY"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 33,
+      "variables": [
+        "TELNYX_API_KEY"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 34,
+      "variables": [
+        "CLOUDFLARE_API_TOKEN"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 35,
+      "variables": [
+        "R2_ACCESS_KEY_ID"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 36,
+      "variables": [
+        "R2_SECRET_ACCESS_KEY"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 37,
+      "variables": [
+        "RAZORPAY_KEY_ID"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 38,
+      "variables": [
+        "RAZORPAY_KEY_SECRET"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 39,
+      "variables": [
+        "RAZORPAY_WEBHOOK_SECRET"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 40,
+      "variables": [
+        "GOOGLE_CLIENT_ID"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 41,
+      "variables": [
+        "GOOGLE_CLIENT_SECRET"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 42,
+      "variables": [
+        "PENPOT_INTERNAL_URL"
+      ]
+    },
+    {
+      "file": "scripts/provider_inventory.py",
+      "line": 43,
+      "variables": [
+        "OIDC_SIGNING_KEY"
+      ]
+    },
+    {
+      "file": "scripts/security_pattern_scan.py",
+      "line": 17,
+      "variables": [
+        "ANTHROPIC_API_KEY",
+        "OPENAI_API_KEY",
+        "RESEND_API_KEY",
+        "SENDGRID_API_KEY",
+        "SMTP_PASSWORD",
+        "TWILIO_AUTH_TOKEN",
+        "CLOUDFLARE_API_TOKEN"
+      ]
+    },
+    {
+      "file": "tests/test_production_delivery_config.py",
+      "line": 60,
+      "variables": [
+        "RESEND_API_KEY"
+      ]
+    },
+    {
+      "file": "tests/test_production_delivery_config.py",
+      "line": 70,
+      "variables": [
+        "RESEND_API_KEY"
+      ]
+    },
+    {
+      "file": "tests/test_production_delivery_config.py",
+      "line": 164,
+      "variables": [
+        "RESEND_API_KEY"
+      ]
+    },
+    {
+      "file": "tests/test_production_delivery_config.py",
+      "line": 201,
+      "variables": [
+        "TWILIO_ACCOUNT_SID"
+      ]
+    },
+    {
+      "file": "tests/test_provider_inventory.py",
+      "line": 10,
+      "variables": [
+        "OPENAI_API_KEY"
+      ]
+    },
+    {
+      "file": "tests/test_provider_inventory.py",
+      "line": 11,
+      "variables": [
+        "RESEND_API_KEY"
+      ]
+    },
+    {
+      "file": "tests/test_provider_inventory.py",
+      "line": 12,
+      "variables": [
+        "TWILIO_ACCOUNT_SID"
+      ]
+    },
+    {
+      "file": "tests/test_release_gaps.py",
+      "line": 326,
+      "variables": [
+        "OPENAI_API_KEY",
+        "WHATSAPP_ACCESS_TOKEN",
+        "WHATSAPP_PHONE_NUMBER_ID"
+      ]
+    },
+    {
+      "file": "tests/test_release_gaps.py",
+      "line": 327,
+      "variables": [
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET"
+      ]
+    },
+    {
+      "file": "tests/test_release_gaps.py",
+      "line": 328,
+      "variables": [
+        "RAZORPAY_KEY_ID",
+        "RAZORPAY_KEY_SECRET",
+        "RAZORPAY_WEBHOOK_SECRET"
+      ]
+    },
+    {
+      "file": "tests/test_release_gaps.py",
+      "line": 329,
+      "variables": [
+        "CLOUDFLARE_API_TOKEN"
+      ]
+    }
+  ],
+  "target_secrets": [
+    "AI_GATEWAY_API_KEY",
+    "CLOUDFLARE_API_TOKEN",
+    "GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET",
+    "OIDC_SIGNING_KEY",
+    "PENPOT_INTERNAL_URL",
+    "R2_ACCESS_KEY_ID",
+    "R2_SECRET_ACCESS_KEY",
+    "RAZORPAY_KEY_ID",
+    "RAZORPAY_KEY_SECRET",
+    "RAZORPAY_WEBHOOK_SECRET",
+    "TELNYX_API_KEY"
+  ]
+}
