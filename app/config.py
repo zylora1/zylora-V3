@@ -53,6 +53,15 @@ class Settings(BaseSettings):
     openai_model: str = 'gpt-5-mini'
     sales_assistant_model: str = 'gpt-4o-mini'
 
+    # Target hosted-AI boundary. Legacy OpenAI fields remain read-only
+    # compatibility inputs until every call site has moved to AIService.
+    ai_gateway_provider: str = 'vercel'
+    ai_gateway_api_key: str = ''
+    ai_gateway_base_url: str = ''
+    ai_default_model: str = 'openai/gpt-5-mini'
+    ai_sales_assistant_model: str = 'openai/gpt-4o-mini'
+    ai_editor_model: str = 'openai/gpt-5-mini'
+
     # Resend is the only email transport. Credentials remain server-side and
     # are never exposed by API responses.
     resend_api_key: str = ''
@@ -70,6 +79,15 @@ class Settings(BaseSettings):
     twilio_account_sid: str = ''
     twilio_auth_token: str = ''
     twilio_whatsapp_from: str = ''
+
+    # Target communications boundary. Legacy Resend/Twilio/Meta fields remain
+    # available only during the compatibility migration.
+    telnyx_api_key: str = ''
+    telnyx_base_url: str = 'https://api.telnyx.com/v2'
+    telnyx_email_from: str = ''
+    telnyx_whatsapp_from: str = ''
+    telnyx_sms_from: str = ''
+    telnyx_webhook_public_key: str = ''
 
     whatsapp_phone_number_id: str = ''
     whatsapp_access_token: str = ''
@@ -111,7 +129,37 @@ class Settings(BaseSettings):
     media_s3_access_key_id: str = ''
     media_s3_secret_access_key: str = ''
     media_s3_prefix: str = 'zylora-media'
+    r2_access_key_id: str = ''
+    r2_secret_access_key: str = ''
+    r2_endpoint: str = ''
+    r2_bucket: str = ''
     pexels_api_key: str = ''
+
+    # Penpot is feature-gated until a verified upstream distribution/runtime is
+    # available. Empty upstream metadata is intentional and is not evidence.
+    studio_engine: str = 'legacy'
+    penpot_base_url: str = ''
+    penpot_internal_url: str = ''
+    penpot_upstream_repo: str = 'https://github.com/penpot/penpot'
+    penpot_upstream_version: str = ''
+    penpot_upstream_commit: str = ''
+    oidc_issuer: str = ''
+    oidc_signing_key: str = ''
+    oidc_signing_key_id: str = ''
+    oidc_audience: str = ''
+
+    @field_validator('ai_gateway_provider', mode='before')
+    @classmethod
+    def normalize_ai_gateway_provider(cls, value):
+        return str(value or 'vercel').strip().lower()
+
+    @field_validator('studio_engine', mode='before')
+    @classmethod
+    def normalize_studio_engine(cls, value):
+        engine = str(value or 'legacy').strip().lower()
+        if engine not in {'legacy', 'penpot'}:
+            raise ValueError('STUDIO_ENGINE must be legacy or penpot')
+        return engine
 
 settings = Settings()
 
@@ -156,6 +204,14 @@ def validate_production_settings() -> None:
     if settings.cloudflare_api_token or settings.cloudflare_zone_id:
         need(bool(settings.cloudflare_api_token and settings.cloudflare_zone_id), 'CLOUDFLARE_API_TOKEN/CLOUDFLARE_ZONE_ID')
     need(bool(settings.cloudflare_saas_target and '.example' not in settings.cloudflare_saas_target), 'CLOUDFLARE_SAAS_TARGET')
+    need(settings.studio_engine in {'legacy', 'penpot'}, 'STUDIO_ENGINE=legacy or penpot')
+    if settings.ai_gateway_api_key:
+        need(settings.ai_gateway_provider == 'vercel', 'AI_GATEWAY_PROVIDER=vercel')
+        need(bool(settings.ai_gateway_base_url), 'AI_GATEWAY_BASE_URL')
+    if settings.telnyx_api_key:
+        need(bool(settings.telnyx_email_from or settings.telnyx_whatsapp_from or settings.telnyx_sms_from), 'TELNYX_*_FROM')
+    if settings.studio_engine == 'penpot':
+        need(bool(settings.penpot_base_url), 'PENPOT_BASE_URL')
     # Bootstrap credentials are optional after the first admin exists, but must never be partial.
     if bool(settings.super_admin_email) != bool(settings.super_admin_password):
         need(False, 'SUPER_ADMIN_EMAIL/SUPER_ADMIN_PASSWORD (set both or neither)')
