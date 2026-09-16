@@ -111,6 +111,7 @@
   },
   "postgresql": {
     "verified": false,
+    "production_sqlite_fail_closed": true,
     "status": "BLOCKED_BY_EXTERNAL_ENVIRONMENT",
     "reason": "No usable PostgreSQL service, psql binary, or Docker Linux engine was available."
   },

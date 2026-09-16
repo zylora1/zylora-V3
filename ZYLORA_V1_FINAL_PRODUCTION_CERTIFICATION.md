@@ -223,6 +223,11 @@ production deployment was attempted. Therefore:
 The exact certified commit cannot be compared with a Render deployed SHA, and
 production smoke tests were not run.
 
+The local production configuration guard was exercised separately: setting
+`APP_ENV=production` with a SQLite `DATABASE_URL` was rejected with the
+expected fail-closed error (`production sqlite fail-closed: PASS`). This does
+not substitute for a real PostgreSQL migration/concurrency rehearsal.
+
 ## V. PRODUCTION ENVIRONMENT CONTRACT
 
 Names only; values intentionally omitted.
