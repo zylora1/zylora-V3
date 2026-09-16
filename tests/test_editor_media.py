@@ -234,3 +234,12 @@ def test_editor_markup_has_unique_ids_and_ai_does_not_mutate_legacy_copy_for_med
     reset_db(); c,h=auth_client('ai-side-effect@example.com','AI Side Effect'); activate_zylora(c,h,country='GB'); sid=create_site(c,h,'AI Side Effect','atelier-noir'); upload(c,h,sid,'storefront.png','Storefront')
     before=c.get(f'/api/sites/{sid}').json(); r=c.post(f'/api/sites/{sid}/ai-edit',headers=h,json={'instruction':'Replace the hero image with storefront.png'}); assert r.status_code==200,r.text
     after=c.get(f'/api/sites/{sid}').json(); assert after['tagline']==before['tagline'] and after['description']==before['description']
+
+
+def test_legacy_template_heading_levels_preserve_visual_tags_and_accessible_order():
+    from app.structured_editor import instrument_editable_html
+    html = '<main><h1>Clinic</h1><h5>Service</h5><h5>Another service</h5><h3>Trust</h3><h6>Doctor</h6><h2>FAQ</h2><h5>Question</h5></main>'
+    soup = BeautifulSoup(instrument_editable_html(html, 'home', 'heading-fixture'), 'html.parser')
+    headings = soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
+    assert [h.name for h in headings] == ['h1', 'h5', 'h5', 'h3', 'h6', 'h2', 'h5']
+    assert [h.get('aria-level') for h in headings] == [None, '2', '2', None, '4', None, '3']

@@ -14,7 +14,8 @@ the local focused suites.
 | REL-ENV-004 | P1 release blocker | Live providers | Perform real Vercel, Telnyx, Cloudflare, Razorpay and Google OAuth staging calls | Credentials/staging accounts are unavailable | Retain provider abstractions and compatibility paths; do not fake live PASS | `app/ai_service.py`, `app/communication_service.py`, provider adapters | local adapter/security contracts | BLOCKED_BY_EXTERNAL_ENVIRONMENT |
 | REL-ENV-005 | P1 release blocker | Railway staging capacity | Provisioning the missing private Redis dependency returned `Your trial has expired`; the existing staging services have no active deployment | No plan/billing change was authorized; no new service was created and production was not touched | `docs/RAILWAY_STAGING_ARCHITECTURE.md` | Railway authenticated preflight, service list, add attempt | BLOCKED_BY_EXTERNAL_ENVIRONMENT |
 | REL-ENV-006 | P1 release blocker | Staging PostgreSQL access | Existing staging Postgres has no public TCP proxy and the host has no SSH key for Railway's private tunnel; local host has no PostgreSQL server/binary | No database mutation; keep PostgreSQL certification open until a Linux/Railway-capable staging runner is available | `artifacts/final-production-certification/railway-staging-attempt-2026-09-16.txt` | Railway connect attempts; local binary check | BLOCKED_BY_EXTERNAL_ENVIRONMENT |
-| REL-UX-001 | P3 | Legacy Studio smart guides | Run Chromium/Firefox Studio gap closure and inspect temporary guide assertion | The test reports the smart-guide assertion as `UNVERIFIED`; no browser errors or geometry failures occurred | Leave behavior unchanged until a reproducible guide failure is captured | `scripts/studio_gap_closure_e2e.py` | 12 actionable checks pass per Chromium/Firefox | OPEN / UNVERIFIED |
+| REL-UX-001 | P3 | Legacy Studio smart guides | Run the tightened Studio v4 browser journey and move one element near another | The earlier harness did not assert guide visibility, committed geometry and cleanup together | Added strict visibility, geometry-change and cleanup assertions to the v4 journey | `scripts/studio_v4_e2e.py` | 29 checks per Chromium/Firefox/WebKit; 0 errors | CLOSED / PASS |
+| REL-UX-002 | P3 | Published legacy template accessibility | Run axe against the seeded published preview with skipped heading levels | Legacy templates preserve authored visual `h5`/`h6` tags after an `h1` | Runtime adds calculated `aria-level` only when the outline skips levels; native tags remain unchanged | `app/structured_editor.py`, `tests/test_editor_media.py` | 2 focused regression tests; axe 0/0/0/0 | CLOSED / PASS |
 | REL-RISK-001 | P2 risk | Provider migration | Search runtime paths for direct OpenAI/Resend/Twilio/Meta compatibility adapters | Staged cutover intentionally keeps fallback adapters until live Vercel/Telnyx proof exists | No destructive removal before live replacement verification; production readiness requires explicit provider configuration | `app/ai_gateway.py`, `app/email_service.py`, `app/providers.py`, `.env.example` | provider inventory/config tests | DOCUMENTED RISK |
 
 ## Closed locally
@@ -33,11 +34,10 @@ the local focused suites.
   pass in Chromium, Firefox and WebKit under the elevated browser runner.
   The earlier combined-harness startup issue is retained as historical
   environment evidence, not a current product failure.
-- **REL-UX-001:** remains **OPEN / UNVERIFIED** for the separate smart-guide
-  assertion. The current rich interaction harness proves canvas panning,
-  ordering, responsive geometry and the tool rail, but does not replace a
-  dedicated smart-guide visual assertion.
-- Published-output accessibility improved from the prior 20 moderate findings
-  to **4 moderate heading-order findings**, with 0 critical, 0 serious and 0
-  minor findings. The remaining nodes belong to seeded legacy template
-  heading levels and remain a documented P3 cleanup item.
+- **REL-UX-001:** is **CLOSED / PASS**. The tightened v4 journey proves guide
+  visibility during an intentional drag, geometry commit on release and guide
+  cleanup in Chromium, Firefox and WebKit (29 checks per browser, 0 errors).
+- **REL-UX-002:** is **CLOSED / PASS**. Published-output axe is now **0
+  critical, 0 serious, 0 moderate and 0 minor**. Legacy template tags remain
+  visually unchanged while the runtime supplies calculated `aria-level`
+  corrections; the focused regression verifies both behaviors.

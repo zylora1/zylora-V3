@@ -9,8 +9,9 @@ Date: 2026-09-16 (Asia/Calcutta)
 The local release candidate is green and the tested legacy Studio/dashboard
 surface is ready for controlled review. Full production certification is not
 issued because the exact commit has not been deployed and verified on Render,
-and real PostgreSQL, Penpot runtime, and live provider smoke tests were not
-available in this environment.
+real PostgreSQL has not been exercised, and live provider smoke tests were not
+available in this environment. Penpot remains a pinned, fail-closed,
+deferred production path while the legacy engine is active.
 
 ## B. CERTIFIED VERSION
 
@@ -41,6 +42,10 @@ access is unavailable.
 - Added a `<main>` landmark for SiteDocument-rendered pages and for legacy
   template output when a user document has no main landmark; runtime scripts
   remain outside the landmark.
+- Preserved legacy template heading tags while adding calculated
+  `aria-level` values only where the authored outline skipped levels.
+- Tightened the Studio v4 browser journey with a real smart-guide visibility,
+  geometry-commit and cleanup assertion in Chromium, Firefox and WebKit.
 - Updated the final audit matrix and bug log with the superseding browser and
   accessibility evidence.
 
@@ -48,10 +53,11 @@ access is unavailable.
 
 | Check | Result |
 |---|---|
-| Full Python suite | **530 passed, 0 failed, 0 skipped, 59 warnings** |
-| Full-suite duration | **396.11s** |
+| Full Python suite | **531 passed, 0 failed, 0 skipped, 59 warnings** |
+| Full-suite duration | **387.44s (0:06:27)** |
 | Focused redesign contract | **5 passed** in 4.61s |
 | Focused renderer/import/regression group | **50 passed** in 39.17s |
+| Accessibility heading-order regression | **2 passed** in 9.14s |
 | Focused browser E2E | **1 passed** in 50.96s |
 | Security/provider contract tests | Local contract evidence remains green; no live-provider claim |
 
@@ -76,8 +82,9 @@ handling. They do not indicate a failed product assertion.
 |---|---|---|---|
 | Landing/dashboard/super-admin responsive harness | PASS; 0 console/page errors | PASS; 0 console/page errors | PASS; 0 console/page errors |
 | Legacy Studio rich interaction | PASS; 12/12, 0 errors | PASS; 12/12, 0 errors | PASS; 12/12, 0 errors |
+| Legacy Studio smart-guide v4 journey | PASS; 29/29, 0 errors | PASS; 29/29, 0 errors | PASS; 29/29, 0 errors |
 | Blank Studio workflow | PASS | PASS | PASS |
-| Real Penpot Studio | NOT TESTED | NOT TESTED | NOT TESTED |
+| Real Penpot Studio | DEFERRED / DISABLED PRODUCTION PATH | DEFERRED / DISABLED PRODUCTION PATH | DEFERRED / DISABLED PRODUCTION PATH |
 
 The focused browser harnesses ran with elevated local browser permissions;
 the earlier Windows process-startup failure is retained as historical
@@ -108,15 +115,15 @@ Actual axe-core run: `artifacts/final-production-certification/accessibility-axe
 |---|---:|
 | Critical | 0 |
 | Serious | 0 |
-| Moderate | 4 |
+| Moderate | 0 |
 | Minor | 0 |
 
-Landing, login, signup, dashboard, super-admin and the legacy Studio shell
-have no violations. The published preview has four moderate `heading-order`
-nodes in seeded legacy published
-template content (`h5`/`h6` levels). They are documented as a P3 template
-cleanup item; they were not silently rewritten because the headings are
-authored content and changing their levels would alter semantics.
+Landing, login, signup, dashboard, super-admin, the legacy Studio shell and
+the published preview have no axe violations. Legacy templates retain their
+authored `h1`/`h5`/`h6` visual tags; the runtime now adds non-destructive
+`aria-level` corrections when the authored outline skips levels. The focused
+regression verifies that visual tags remain unchanged while the accessible
+outline is ordered.
 
 ## I. DASHBOARD CERTIFICATION
 
@@ -137,8 +144,11 @@ Gateway request was **not tested** because no staging credential was present.
 Legacy Studio remains the active engine. Dedicated browser evidence covers
 blank-site creation, text/button/section insertion, selection, multi-select,
 ordering, panning, resize/rotation contracts, viewport matrix and persistence.
-The rich harness has 12 checks per browser with zero errors. Real Penpot Studio
-runtime, SSO, plugin execution and real-file lifecycle remain untested.
+The rich harness has 12 checks per browser with zero errors. The tightened v4
+journey adds 29 checks per browser, including guide visibility during an
+intentional drag, committed geometry and guide cleanup after release. The real
+Penpot path is intentionally deferred and disabled for production; its
+fail-closed gate remains in place and it is not used by the active editor.
 
 ### Legacy Studio performance evidence
 
@@ -154,7 +164,8 @@ It measures the legacy editor, not Penpot.
 | 500 | 16.7 / 16.8 ms | 16.7 / 16.7 ms | 33.4 ms | 16.7 ms | 0 |
 
 Penpot load, interaction, compile, preview and publish performance is not
-tested because the runtime is unavailable.
+tested because the production Penpot path is disabled and no runtime is
+available in this environment.
 
 ## L. AI CREDIT CERTIFICATION
 
@@ -255,7 +266,7 @@ architecture. No secret values were printed or committed.
 | Authenticated dashboard/Studio local flows | PASS locally |
 | Render health/startup/migrations | NOT TESTED — deployment access unavailable |
 | Production PostgreSQL | NOT TESTED — no usable service/CLI/Docker engine |
-| Real Penpot file/SSO/plugin/compile/publish | NOT TESTED — runtime unavailable |
+| Disabled Penpot path (runtime/SSO/plugin/compile/publish) | DEFERRED — not enabled by the active production engine |
 | Vercel AI Gateway | BLOCKED_BY_EXTERNAL_ENVIRONMENT |
 | Telnyx | BLOCKED_BY_EXTERNAL_ENVIRONMENT |
 | Cloudflare/R2/Turnstile | BLOCKED_BY_EXTERNAL_ENVIRONMENT |
@@ -264,9 +275,9 @@ architecture. No secret values were printed or committed.
 
 ## X. KNOWN NON-BLOCKING ISSUES
 
-- Four moderate axe heading-order findings in seeded legacy template content.
-- The separate smart-guide assertion remains `UNVERIFIED`; panning,
-  ordering, responsive geometry and editor persistence are verified.
+- The Penpot integration remains a deferred, disabled production path. Its
+  source pin and fail-closed bridge are preserved, but no runtime claim is
+  made while the legacy engine is active.
 - The 59-test warning group is dependency deprecation noise, not a failed
   application assertion.
 
@@ -275,12 +286,13 @@ architecture. No secret values were printed or committed.
 1. Verify the exact release commit on Render and run production smoke tests.
 2. Run the high-value suite against real PostgreSQL, including concurrency and
    migration rehearsal.
-3. Start the pinned Penpot 2.17.0 runtime on a Linux-capable host; exercise
-   OIDC, `/studio/{site_id}`, plugin metadata, real-file save/reload,
-   Penpot-to-SiteDocument compile, preview and publish.
-4. Run safe staging checks for Vercel AI Gateway, Telnyx, Cloudflare/R2/
+3. Run safe staging checks for Vercel AI Gateway, Telnyx, Cloudflare/R2/
    Turnstile, Razorpay test mode and Google OAuth when credentials/approvals
    are available.
+
+The pinned Penpot source remains available for a separately authorized
+staging activation. It is not an active production-release blocker while
+`STUDIO_ENGINE=legacy` is enforced and the bridge fails closed.
 
 ## Z. FINAL VERDICT
 

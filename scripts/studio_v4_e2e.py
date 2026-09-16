@@ -80,11 +80,14 @@ def main():
         page.locator('.tool-rail button[title="Elements"]').click(); page.get_by_label('Add Rectangle').click(); page.wait_for_timeout(120)
         guide_node=page.locator('[data-studio-type="container"]').last;page.locator('.canvas-workspace').evaluate('(e)=>{e.scrollTop=0;e.scrollLeft=0}');guide_node.scroll_into_view_if_needed();guide_id=guide_node.get_attribute('data-studio-id');page.locator('.tool-rail button[title="Layers"]').click();page.locator(f'[data-layer-node-id="{guide_id}"]').click();page.wait_for_timeout(100);guide_box=guide_node.bounding_box();assert guide_box
         art=page.locator('.studio-canvas').bounding_box();assert art
+        before_guide=guide_node.bounding_box();assert before_guide
         gx=guide_box['x']+guide_box['width']/2;gy=guide_box['y']+guide_box['height']/2;target_x=art['x']+art['width']/2-guide_box['width']/2;page.mouse.move(gx,gy);page.mouse.down();page.mouse.move(gx+12,gy,steps=2);page.mouse.move(target_x,gy,steps=12);page.wait_for_timeout(80);guide_count=page.locator('.snap-guide').count()
         for offset in range(-8,9):
             if guide_count: break
             page.mouse.move(target_x+offset,gy);page.wait_for_timeout(20);guide_count=page.locator('.snap-guide').count()
-        page.mouse.up();check(guide_count>0,'smart alignment guide appears during an intentional drag',checks)
+        page.mouse.up();page.wait_for_timeout(40);after_guide=guide_node.bounding_box();assert after_guide
+        check(guide_count>0,'smart alignment guide appears during an intentional drag',checks)
+        check(after_guide['x']!=before_guide['x'] and page.locator('.snap-guide').count()==0,'smart alignment guide clears after release and commits geometry',checks)
         # Resize the text itself from an explicit handle.
         heading.evaluate('el=>el.click()');text_before=heading.bounding_box();text_handle=heading.locator('.studio-resize-handle[data-handle="right"]');th=text_handle.bounding_box();assert text_before and th;text_handle.dispatch_event('pointerdown',{'clientX':th['x']+2,'clientY':th['y']+2,'pointerId':31,'button':0,'pointerType':'mouse'});page.locator('body').dispatch_event('pointermove',{'clientX':th['x']+52,'clientY':th['y']+2,'pointerId':31,'pointerType':'mouse'});page.locator('body').dispatch_event('pointerup',{'clientX':th['x']+52,'clientY':th['y']+2,'pointerId':31,'pointerType':'mouse'});page.wait_for_timeout(100);check(heading.bounding_box()['width']!=text_before['width'],'resize handle changes text geometry',checks)
         toolbar=page.locator('.selection-toolbar');toolbar.get_by_role('button', name='More').evaluate('el=>el.click()');page.wait_for_timeout(250);opacity=page.locator('.context-more-popover input[aria-label="Opacity"]');opacity.scroll_into_view_if_needed();opacity.fill('0.65');toolbar.get_by_role('button', name='More').evaluate('el=>el.click()');check(abs(float(heading.evaluate("e=>getComputedStyle(e).opacity"))-.65)<.01,'contextual opacity control changes the selected object',checks)

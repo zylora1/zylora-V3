@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-16T14:46:49.256735+00:00",
+  "generated_at": "2026-09-16T16:37:27.017084+00:00",
   "tool": "axe-core",
   "axe_version": "4.13.0",
   "surfaces": [
@@ -29,80 +29,13 @@
     },
     {
       "surface": "published_preview",
-      "violations": [
-        {
-          "id": "heading-order",
-          "impact": "moderate",
-          "help": "Heading levels should only increase by one",
-          "nodes": 4,
-          "targets": [
-            [
-              "h5[data-zylora-id=\"home-h5-9c67542a\"]"
-            ],
-            [
-              "h6[data-zylora-id=\"home-h6-m-0\"]"
-            ],
-            [
-              "h5[data-zylora-id=\"home-h5-fw-bold\"]"
-            ],
-            [
-              "h6[data-zylora-id=\"home-h6-fw-bold\"]"
-            ]
-          ],
-          "html": [
-            "<h5 data-zylora-editability=\"EDITABLE\" data-zylora-id=\"home-h5-9c67542a\" data-zylora-kind=\"text\">Advanced Dental Cleaning</h5>",
-            "<h6 class=\"m-0 fw-bold\" data-zylora-editability=\"EDITABLE\" data-zylora-id=\"home-h6-m-0\" data-zylora-kind=\"text\">Farah abuassi</h6>",
-            "<h5 class=\"fw-bold\" data-zylora-editability=\"EDITABLE\" data-zylora-id=\"home-h5-fw-bold\" data-zylora-kind=\"text\">\n                                5 Reasons Your Children Need Regular Dental\n                                CheckUps\n                            </h5>"
-          ],
-          "checks": [
-            {
-              "any": [
-                {
-                  "id": "heading-order",
-                  "data": null,
-                  "relatedNodes": [],
-                  "impact": "moderate",
-                  "message": "Heading order invalid"
-                }
-              ],
-              "all": [],
-              "none": []
-            },
-            {
-              "any": [
-                {
-                  "id": "heading-order",
-                  "data": null,
-                  "relatedNodes": [],
-                  "impact": "moderate",
-                  "message": "Heading order invalid"
-                }
-              ],
-              "all": [],
-              "none": []
-            },
-            {
-              "any": [
-                {
-                  "id": "heading-order",
-                  "data": null,
-                  "relatedNodes": [],
-                  "impact": "moderate",
-                  "message": "Heading order invalid"
-                }
-              ],
-              "all": [],
-              "none": []
-            }
-          ]
-        }
-      ]
+      "violations": []
     }
   ],
   "counts": {
     "critical": 0,
     "serious": 0,
-    "moderate": 4,
+    "moderate": 0,
     "minor": 0
   },
   "browser_errors": [],

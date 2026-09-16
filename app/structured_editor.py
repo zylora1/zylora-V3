@@ -486,6 +486,24 @@ def _inferred_field_label(tag: Tag) -> str:
 
 def _ensure_template_accessibility(soup: BeautifulSoup) -> None:
     """Harden legacy catalogue markup without changing its visual semantics."""
+    # Some licensed legacy templates use visual heading sizes (for example h5
+    # cards directly after an h1) instead of a document outline. Keep the
+    # native tags and their CSS untouched, but expose the intended outline to
+    # assistive technology through aria-level when a native level skips more
+    # than one step. Repeated visual headings keep the same effective level.
+    previous_native: int | None = None
+    previous_effective: int | None = None
+    for heading in soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
+        if not isinstance(heading, Tag) or heading.get('aria-level'):
+            continue
+        native = int(str(heading.name)[1])
+        effective = native
+        if previous_effective is not None and native > previous_effective + 1:
+            effective = previous_effective if native == previous_native else previous_effective + 1
+        if effective != native:
+            heading['aria-level'] = str(effective)
+        previous_native = native
+        previous_effective = effective
     for tag in soup.find_all(['img', 'button', 'input', 'textarea', 'select']):
         if not isinstance(tag, Tag):
             continue

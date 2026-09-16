@@ -9,11 +9,11 @@
   "studio_engine": "legacy",
   "tests": {
     "full_suite": {
-      "passed": 530,
+      "passed": 531,
       "failed": 0,
       "skipped": 0,
       "warnings": 59,
-      "duration_seconds": 396.11
+      "duration_seconds": 387.44
     },
     "focused_browser_e2e": {
       "passed": 1,
@@ -54,6 +54,8 @@
       "firefox": true,
       "webkit": true,
       "rich_checks_per_browser": 12,
+      "smart_guide_checks_per_browser": 29,
+      "smart_guide_assertion": "PASS",
       "blank_workflow": true,
       "errors": 0
     },
@@ -61,7 +63,9 @@
       "chromium": null,
       "firefox": null,
       "webkit": null,
-      "status": "BLOCKED_BY_EXTERNAL_ENVIRONMENT"
+      "status": "DEFERRED_DISABLED_PRODUCTION_PATH",
+      "production_enabled": false,
+      "fail_closed_verified": true
     }
   },
   "responsive": {
@@ -83,9 +87,9 @@
     "version": "4.13.0",
     "critical": 0,
     "serious": 0,
-    "moderate": 4,
+    "moderate": 0,
     "minor": 0,
-    "status": "PASS_WITH_DOCUMENTED_MODERATE_FINDINGS"
+    "status": "PASS"
   },
   "performance": {
     "engine": "legacy",
@@ -107,7 +111,9 @@
     "real_file_lifecycle_verified": false,
     "plugin_verified_in_runtime": false,
     "compiler_verified_against_real_file": false,
-    "status": "BLOCKED_BY_EXTERNAL_ENVIRONMENT"
+    "status": "DEFERRED_DISABLED_PRODUCTION_PATH",
+    "production_enabled": false,
+    "fail_closed_verified": true
   },
   "postgresql": {
     "verified": false,
@@ -131,7 +137,6 @@
   "blockers": [
     "Render exact-commit deployment and production smoke verification",
     "Real PostgreSQL migration and concurrency rehearsal",
-    "Real Penpot runtime, SSO, plugin, file lifecycle, compile, preview and publish",
     "Safe staging verification for live AI, communications, infrastructure, payments and Google OAuth providers"
   ],
   "evidence": {
