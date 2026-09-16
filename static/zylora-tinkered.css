@@ -537,3 +537,84 @@ body:has(.zylora-studio-app) .ai-studio-panel .ai-submit { background: var(--zy-
   body.landing-page .pricing-teaser-grid { grid-template-columns: 1fr; }
   body.landing-page .z-footer-grid { gap: 26px 18px; }
 }
+
+/* Public SEO/product routes share the same shell as landing, dashboard and
+   Studio.  These selectors stay scoped to the server-rendered public pages so
+   their information architecture and SEO markup remain unchanged. */
+.seo-header {
+  min-height: 42px !important;
+  background: rgba(251,251,249,.96) !important;
+  border-bottom: 1px solid var(--zy-warm-line) !important;
+  backdrop-filter: blur(14px);
+}
+.seo-header .z-header-inner { min-height: 42px; max-width: 1260px; }
+.seo-header .z-logo { gap: 7px; }
+.seo-header .z-logo-mark { width: 24px; height: 24px; border-radius: 6px; font-size: 13px; background: var(--zy-warm-ink); color: #fff; }
+.seo-header .z-logo-wordmark { color: var(--zy-warm-ink); font-size: 15px; font-weight: 700; letter-spacing: -.045em; }
+.seo-header .z-product-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 28px;
+  margin-left: 8px;
+  padding: 2px;
+  border: 1px solid var(--zy-warm-line);
+  border-radius: 8px;
+  background: var(--zy-warm-surface);
+}
+.seo-header .z-product-switcher > * {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 0 8px;
+  border-radius: 5px;
+  color: var(--zy-warm-copy);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: .04em;
+  text-decoration: none;
+}
+.seo-header .z-product-switcher .is-active { background: var(--zy-warm-ink); color: #fff; }
+.seo-header .z-product-switcher a:hover { background: var(--zy-warm-muted); color: var(--zy-warm-ink); }
+.seo-header .z-nav-links { gap: 26px; margin-left: auto; margin-right: 22px; }
+.seo-header .z-nav-links a,
+.seo-header .z-nav-login { color: var(--zy-warm-copy) !important; font-size: 12px; }
+.seo-header .z-nav-links a:hover,
+.seo-header .z-nav-login:hover { color: var(--zy-warm-ink) !important; }
+.seo-header .z-btn-primary { min-height: 30px; padding: 0 13px; border-radius: 8px; font-size: 12px; background: var(--zy-warm-ink) !important; border-color: var(--zy-warm-ink) !important; color: #fff !important; }
+.seo-page { background: var(--zy-warm-bg) !important; color: var(--zy-warm-ink); }
+.seo-page .seo-hero,
+.seo-page .seo-section,
+.seo-page .seo-cta { border-color: var(--zy-warm-line-soft); }
+.seo-page .seo-hero { background: var(--zy-warm-bg) !important; }
+.seo-page .seo-tint { background: var(--zy-warm-muted) !important; }
+.seo-page .seo-product-visual,
+.seo-page .seo-solution-banner,
+.seo-page .seo-solution-card,
+.seo-page .seo-related-link,
+.seo-page .seo-faq,
+.seo-page .seo-cta { border-color: var(--zy-warm-line) !important; background: var(--zy-warm-surface) !important; box-shadow: none !important; }
+.seo-page .seo-related-link:hover,
+.seo-page .seo-faq:hover,
+.seo-page .seo-solution-card:hover { border-color: var(--zy-warm-ink) !important; }
+.seo-page .eyebrow-pill { border-color: var(--zy-warm-line); background: var(--zy-warm-muted); color: var(--zy-warm-copy); }
+.seo-page .z-btn-primary { background: var(--zy-warm-ink) !important; border-color: var(--zy-warm-ink) !important; color: #fff !important; }
+.seo-page .z-btn-secondary { background: var(--zy-warm-surface) !important; border-color: var(--zy-warm-line) !important; color: var(--zy-warm-ink) !important; }
+.seo-page .seo-kicker,
+.seo-page .seo-breadcrumb,
+.seo-page .seo-body,
+.seo-page .seo-intro { color: var(--zy-warm-copy); }
+.z-footer { background: var(--zy-warm-bg) !important; color: var(--zy-warm-ink) !important; border-top: 1px solid var(--zy-warm-line) !important; }
+.z-footer .z-logo-wordmark { color: var(--zy-warm-ink) !important; }
+.z-footer .z-logo-mark { background: var(--zy-warm-ink) !important; color: #fff !important; }
+.z-footer .z-footer-brand-col p,
+.z-footer .z-footer-col a,
+.z-footer .z-footer-bottom { color: var(--zy-warm-copy) !important; }
+.z-footer .z-footer-col h4,
+.z-footer .z-footer-col h3 { color: var(--zy-warm-ink) !important; }
+.z-footer .z-footer-col a:hover { color: var(--zy-warm-ink) !important; }
+@media (max-width: 680px) {
+  .seo-header .z-product-switcher,
+  .seo-header .z-nav-links { display: none; }
+  .seo-header .z-header-inner { padding-inline: 14px; }
+}
