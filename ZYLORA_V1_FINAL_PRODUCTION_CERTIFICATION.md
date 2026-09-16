@@ -20,7 +20,8 @@ deferred production path while the legacy engine is active.
 | Repository | `zylora1/zylora-V3` |
 | Branch | `main` |
 | Base commit before release commit | `8c29bee4c62543744ab07d953afa9d48b0ea9fb1` |
-| Release candidate implementation commit | `ce3097fdc02626a53c8ce92445009ba1eaee4db7` |
+| Prior release candidate implementation commit | `ce3097fdc02626a53c8ce92445009ba1eaee4db7` |
+| Latest local certification commit | `9433f682aac56750bc86bae1ff4dfd003c5db05c` |
 | Working-tree state at audit start | Existing authorized changes; preserved without reset/clean |
 | Active Studio engine | `legacy` |
 | Penpot source | `vendor/penpot/` at 2.17.0 / `bdce5817ea86d028db29113d9ecdadcf07097b36` |
