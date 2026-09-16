@@ -25,11 +25,7 @@
         "autosave / reload / verify persistence",
         "open and close publish workflow"
       ],
-      "errors": [],
-      "warnings": [
-        "snap guide not surfaced in the blank one-section fixture",
-        "canvas pan not surfaced after zoom in this mobile browser"
-      ]
+      "errors": []
     },
     {
       "viewport": "430x932",
@@ -56,11 +52,7 @@
         "autosave / reload / verify persistence",
         "open and close publish workflow"
       ],
-      "errors": [],
-      "warnings": [
-        "snap guide not surfaced in the blank one-section fixture",
-        "canvas pan not surfaced after zoom in this mobile browser"
-      ]
+      "errors": []
     },
     {
       "viewport": "390x844",
@@ -87,11 +79,7 @@
         "autosave / reload / verify persistence",
         "open and close publish workflow"
       ],
-      "errors": [],
-      "warnings": [
-        "snap guide not surfaced in the blank one-section fixture",
-        "canvas pan not surfaced after zoom in this mobile browser"
-      ]
+      "errors": []
     },
     {
       "viewport": "375x812",
@@ -118,11 +106,7 @@
         "autosave / reload / verify persistence",
         "open and close publish workflow"
       ],
-      "errors": [],
-      "warnings": [
-        "snap guide not surfaced in the blank one-section fixture",
-        "canvas pan not surfaced after zoom in this mobile browser"
-      ]
+      "errors": []
     },
     {
       "viewport": "360x800",
@@ -149,11 +133,7 @@
         "autosave / reload / verify persistence",
         "open and close publish workflow"
       ],
-      "errors": [],
-      "warnings": [
-        "snap guide not surfaced in the blank one-section fixture",
-        "canvas pan not surfaced after zoom in this mobile browser"
-      ]
+      "errors": []
     }
   ]
 }

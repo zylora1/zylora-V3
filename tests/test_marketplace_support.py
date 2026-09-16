@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-import io
-import json
-import zipfile
 from datetime import datetime, timezone
 
 import pytest
@@ -33,8 +30,6 @@ def reset_db():
             if table in existing: db.execute(text(f'DELETE FROM {table}'))
         db.execute(text("UPDATE system_settings SET value='admin@example.com' WHERE key='admin_notification_email'"))
         db.execute(text("UPDATE system_settings SET value='true' WHERE key='public_signup_enabled'"))
-        db.execute(text("UPDATE system_settings SET value='9900' WHERE key='source_export_usd_minor'"))
-        db.execute(text("UPDATE system_settings SET value='829900' WHERE key='source_export_inr_minor'"))
         defaults={'FREE':(10,2,15,20,5,5,2,0),'STARTER':(10,5,100,100,5,5,2,0),'GROWTH':(10,8,300,300,5,5,2,0),'PRO':(10,10,0,0,0,0,0,1)}
         for plan,(sites,pages,ai,lead,bonus,site_cost,edit_cost,contact_only) in defaults.items():
             db.execute(text('UPDATE plan_configs SET site_limit=:s,page_limit=:p,ai_credits=:a,lead_credits=:l,signup_bonus_credits=:b,ai_site_cost=:sc,ai_edit_cost=:ec,contact_only=:co WHERE plan=:plan'),{'s':sites,'p':pages,'a':ai,'l':lead,'b':bonus,'sc':site_cost,'ec':edit_cost,'co':contact_only,'plan':plan})
@@ -144,13 +139,12 @@ def test_support_user_admin_flow_idor_internal_notes_filters_assignment_and_dedu
     assert user.post('/api/support/attachments',headers=h).status_code==501
 
 
-def test_super_admin_controls_every_plan_limit_credit_cost_and_export_price_and_transfer_is_free():
+def test_super_admin_controls_every_plan_limit_credit_cost_and_transfer_is_free():
     reset_db(); admin,ha,_=make_admin('pricing-admin@example.com')
     patch={'public_name':'Free','price_inr_minor':12300,'price_usd_minor':199,'site_limit':2,'page_limit':2,'ai_credits':30,'lead_credits':40,'signup_bonus_credits':7,'ai_site_cost':4,'ai_edit_cost':3,'contact_only':False}
     rejected=admin.patch('/api/admin/plans/FREE',headers=ha,json=patch); assert rejected.status_code==422,rejected.text
     patch.pop('page_limit')
     r=admin.patch('/api/admin/plans/FREE',headers=ha,json=patch); assert r.status_code==200,r.text
-    assert admin.put('/api/admin/settings',headers=ha,json={'source_export_usd_minor':7700,'source_export_inr_minor':640000}).status_code==200
     public=admin.get('/api/public/plans').json()['items']; free=next(x for x in public if x['plan']=='FREE')
     for k,v in patch.items(): assert free[k]==v
     assert free['page_limit']==298
@@ -164,7 +158,7 @@ def test_super_admin_controls_every_plan_limit_credit_cost_and_export_price_and_
     # AI-edit price is configurable too.
     before=new.get('/api/credits').json()['total']; assert new.post(f"/api/sites/{one.json()['id']}/ai-edit",headers=h,json={'instruction':'Add a subtle fade animation'}).status_code==200
     assert new.get('/api/credits').json()['total']==before-3
-    cfg=new.get('/api/source-export/config').json()['prices']; assert cfg=={'USD':7700,'INR':640000}
+    assert new.get('/api/source-export/config').status_code==404
     # Ownership transfer never creates or checks a freelancer/user transfer payment.
     recipient,hr,_=signup('recipient@example.com','Recipient')
     req=new.post(f"/api/sites/{one.json()['id']}/transfer",headers=h,json={'email':'recipient@example.com'}); assert req.status_code==200,req.text
@@ -174,7 +168,7 @@ def test_super_admin_controls_every_plan_limit_credit_cost_and_export_price_and_
     assert 'freelancer_fee_transactions' not in names
 
 
-def test_structured_ai_editor_sections_layout_images_typography_motion_safety_publish_isolation_and_export():
+def test_structured_ai_editor_sections_layout_images_typography_motion_safety_and_publish_isolation():
     reset_db(); c,h,_=signup('editor@example.com','Editor User'); activate_zylora(c,h,'GB')
     site=c.post('/api/sites',headers=h,json={'business_name':'Structured Studio','description':'A refined architecture studio focused on material and light. Include separate Home, Projects and Contact pages.','origin':'AI','industry':'Architecture','style':'Editorial'}); assert site.status_code==200
     sid=site.json()['id']; assert c.post(f'/api/sites/{sid}/publish',headers=h).status_code==200
@@ -204,12 +198,7 @@ def test_structured_ai_editor_sections_layout_images_typography_motion_safety_pu
     # Republish atomically promotes draft content+structure to the public snapshot.
     assert c.post(f'/api/sites/{sid}/publish',headers=h).status_code==200
     live_after=c.get(f'/s/{slug}').text; assert 'A new structured hero' in live_after
-    # Paid export contains an executable-safe structured edit client and the validated operation manifest.
-    order=c.post(f'/api/sites/{sid}/source-export/order',headers=h,json={'currency':'USD'}).json(); assert c.post(f'/api/sites/{sid}/source-export/verify',headers=h,json={'order_id':order['order_id'],'payment_id':order['mock_payment_id'],'signature':order['mock_signature']}).status_code==200
-    export=c.get(f'/api/sites/{sid}/export'); assert export.status_code==200
-    z=zipfile.ZipFile(io.BytesIO(export.content)); names=set(z.namelist()); assert {'app/zylora-edits.jsx','zylora-structured-edits.json'}<=names
-    manifest=json.loads(z.read('zylora-structured-edits.json')); assert len(manifest['operations'])>=len(operations)
-    client=z.read('app/zylora-edits.jsx').decode(); assert 'prefers-reduced-motion' in client and 'javascript:alert' not in client
+    assert c.get(f'/api/sites/{sid}/export').status_code==404
 
 
 def test_production_turnstile_and_shared_limiter_fail_closed(monkeypatch):

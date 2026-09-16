@@ -34,9 +34,9 @@ def _next_retry(attempt_count:int) -> str:
     _,base=_retry_policy(); seconds=min(6*3600,base*(2**max(0,attempt_count-1)))
     return (datetime.now(timezone.utc)+timedelta(seconds=seconds)).isoformat()
 
-def _delivery(user_id:str,site_id:str,event_type:str,channel:str,recipient:str,subject:str,body:str,idempotency_key:str)->dict:
+def _delivery(user_id:str,site_id:str,event_type:str,channel:str,recipient:str,subject:str,body:str,idempotency_key:str, *, charge_credit: bool = True)->dict:
     idem=hashlib.sha256(f'{idempotency_key}|{channel}|{recipient}'.encode()).hexdigest()[:120]
-    txid=None; delivery_id=str(uuid4()); cost=_credit_cost(channel)
+    txid=None; delivery_id=str(uuid4()); cost=_credit_cost(channel) if charge_credit else 0
     try:
         with SessionLocal.begin() as db:
             existing=db.execute(text('''SELECT * FROM notification_deliveries WHERE user_id=:u AND idempotency_key=:k AND channel=:c AND recipient=:r'''),
@@ -44,8 +44,9 @@ def _delivery(user_id:str,site_id:str,event_type:str,channel:str,recipient:str,s
             if existing: return {**dict(existing),'idempotent':True}
             user=db.execute(text('SELECT plan FROM users WHERE id=:u'),{'u':user_id}).mappings().first()
             if not user: return {'status':'FAILED','error':'User not found'}
-            reserved=reserve_wallet(db,user_id,user['plan'],cost,f'LEAD_{channel}',credit_type='lead',idempotency_key=idem,reference_id=site_id)
-            txid=reserved.get('id')
+            if cost:
+                reserved=reserve_wallet(db,user_id,user['plan'],cost,f'LEAD_{channel}',credit_type='lead',idempotency_key=idem,reference_id=site_id)
+                txid=reserved.get('id')
             max_attempts,_=_retry_policy()
             db.execute(text('''INSERT INTO notification_deliveries(id,user_id,site_id,event_type,channel,recipient,idempotency_key,
               credit_transaction_id,subject,body,status,attempt_count,max_attempts,created_at,updated_at) VALUES (:i,:u,:s,:e,:c,:r,:k,:t,:sub,:b,'PENDING',0,:mx,:a,:a)'''),
@@ -85,8 +86,12 @@ def notify(user_id:str,site_id:str,event_type:str,subject:str,body:str,idempoten
         user=db.execute(text('SELECT email FROM users WHERE id=:u'),{'u':user_id}).scalar_one()
     base=idempotency_key or hashlib.sha256(f'{site_id}|{event_type}|{subject}|{body}'.encode()).hexdigest()
     deliveries=[]
+    # One captured lead notification bundle consumes one lead credit even when
+    # both email and WhatsApp are enabled. The first channel owns the credit;
+    # the second channel is still durably tracked and retried without a second
+    # debit. A channel-only notification remains billable as before.
     email_to=cfg.get('email_to') or user
-    if email_to: deliveries.append(_delivery(user_id,site_id,event_type,'EMAIL',email_to,subject,body,base))
+    if email_to: deliveries.append(_delivery(user_id,site_id,event_type,'EMAIL',email_to,subject,body,base,charge_credit=True))
     # Admin copies are platform operational mail and intentionally do not consume the tenant's lead credits.
     admin_email=get_system_setting('admin_notification_email',settings.admin_notification_email)
     if admin_email and admin_email!=email_to:
@@ -97,7 +102,7 @@ def notify(user_id:str,site_id:str,event_type:str,subject:str,body:str,idempoten
     enabled=bool(cfg.get(toggle_map.get(event_type,'notify_other_enquiries'),1))
     if cfg.get('whatsapp_verified') and cfg.get('phone_number') and enabled:
         recipient=f"{cfg.get('country_code','+91')}{cfg['phone_number']}"
-        deliveries.append(_delivery(user_id,site_id,event_type,'WHATSAPP',recipient,subject,body,base))
+        deliveries.append(_delivery(user_id,site_id,event_type,'WHATSAPP',recipient,subject,body,base,charge_credit=not bool(email_to)))
     return {'deliveries':deliveries}
 
 
@@ -124,11 +129,14 @@ def retry_delivery(delivery_id: str, *, force: bool=False) -> dict:
         if not user:
             db.execute(text("UPDATE notification_deliveries SET status='DEAD_LETTER',last_error='User not found',dead_lettered_at=:a,updated_at=:a WHERE id=:i"),{'a':now,'i':delivery_id})
             return {'status':'DEAD_LETTER','id':delivery_id}
-        cost=_credit_cost(row['channel'])
+        # Rows without an original credit transaction are the second channel
+        # of a bundle; retries must not create a fresh lead debit.
+        cost=_credit_cost(row['channel']) if row.get('credit_transaction_id') else 0
         try:
-            reserved=reserve_wallet(db,row['user_id'],user['plan'],cost,f"LEAD_{row['channel']}_RETRY",credit_type='lead',idempotency_key=f"delivery-retry:{delivery_id}:{int(row.get('attempt_count') or 0)+1}",reference_id=row['site_id'])
-            txid=reserved.get('id')
-            db.execute(text('UPDATE notification_deliveries SET credit_transaction_id=:t WHERE id=:i'),{'t':txid,'i':delivery_id})
+            if cost:
+                reserved=reserve_wallet(db,row['user_id'],user['plan'],cost,f"LEAD_{row['channel']}_RETRY",credit_type='lead',idempotency_key=f"delivery-retry:{delivery_id}:{int(row.get('attempt_count') or 0)+1}",reference_id=row['site_id'])
+                txid=reserved.get('id')
+                db.execute(text('UPDATE notification_deliveries SET credit_transaction_id=:t WHERE id=:i'),{'t':txid,'i':delivery_id})
         except HTTPException as exc:
             db.execute(text("UPDATE notification_deliveries SET status='SKIPPED_CREDITS',last_error=:x,next_attempt_at=NULL,updated_at=:a WHERE id=:i"),{'x':str(exc.detail)[:1000],'a':now_iso(),'i':delivery_id})
             return {'status':'SKIPPED_CREDITS','id':delivery_id}

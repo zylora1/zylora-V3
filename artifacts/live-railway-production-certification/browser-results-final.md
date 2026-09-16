@@ -1,22 +1,15 @@
-# Final Railway browser evidence
+# Final Railway authenticated browser evidence
 
-Current source SHA before this release commit: `6821cba252770522b2daf141cd25c544a5abf09c`.
+Deployment SHA: `aab18bd5e786c8e2273fe60a7128bff075678576`
+Deployment ID: `589e3ca8-44f9-4e9f-a3f5-cb89773a9e6a` (SUCCESS)
+URL: `https://zylora-api-production.up.railway.app`
 
-The following is local controlled browser evidence for the current source changes; it is not a claim of final Railway authenticated certification.
+Controlled Super Admin login used Railway-configured credentials in memory only. The flow exercised `/dashboard` → same-origin `/super-admin` → `/studio/cef9e842-727d-4372-90cc-7fa33303ac51`, Back, Forward, and refresh.
 
-Studio regression: Chromium `16 checks / 0 errors`; Firefox `16 checks / 0 errors`; WebKit `16 checks / 0 errors`.
+| Engine | Checks | Console/page/request errors | Result |
+|---|---:|---:|---|
+| Chromium | 6 route/history checks | 0 | PASS |
+| Firefox | 6 route/history checks | 0 | PASS |
+| WebKit | 6 route/history checks | 0 | PASS |
 
-The three runs were rerun after the final source/bundle changes in this pass. They exercised unselected scrolling, selected drag, resize, text/typography, upload insertion, effects, keyboard history, layers, autosave, reload persistence, responsive switch, and zero uncaught browser errors.
-
-Previous Railway baseline SHA: `de9cd19377ebda7925d70ebc4efe366d205196e2`.
-
-Public Railway smoke on the final deployment:
-
-| Surface | Chromium | Firefox | WebKit |
-|---|---|---|---|
-| Public landing/catalogue matrix from prior deployed run | PASS | PASS | PASS |
-| Authenticated login + Back/Forward/refresh | BLOCKED | BLOCKED | BLOCKED |
-| Authenticated Studio | BLOCKED | BLOCKED | BLOCKED |
-| CRM / appointments / Super Admin | BLOCKED | BLOCKED | BLOCKED |
-
-The public matrix covered 1440, 1280, 1024, 768, 430, 390, 375, and 360 widths with no unexpected horizontal overflow on public/auth/catalogue pages. The final SHA public HTTP smoke returned 200 for `/`, `/pricing`, and `/templates`; `/api/health` returned 200. Live authenticated browser proof was blocked by Turnstile rejecting controlled signup without a valid token.
+All engines observed HTTP 200 for the portal and Studio. Chromium additionally verified logout HTTP 200 followed by `/api/auth/me` HTTP 401.

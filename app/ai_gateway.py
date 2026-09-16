@@ -71,6 +71,11 @@ class VercelAIGatewayAdapter:
         }
         if request.tools:
             payload["tools"] = list(request.tools)
+        max_output_tokens = request.metadata.get("max_output_tokens")
+        if max_output_tokens:
+            payload["max_tokens"] = max(1, min(int(max_output_tokens), 8192))
+        if request.metadata.get("json_object"):
+            payload["response_format"] = {"type": "json_object"}
         return payload
 
     def _post(self, request: AIRequest) -> httpx.Response:
@@ -159,3 +164,101 @@ class VercelAIGatewayAdapter:
         except (httpx.TimeoutException, httpx.NetworkError, httpx.RemoteProtocolError) as exc:
             raise ProviderUnavailableError("AI Gateway stream failed") from exc
 
+
+class LegacyOpenAIAdapter:
+    """Temporary Responses API adapter used during the provider cutover.
+
+    This class is deliberately kept behind ``AIService``.  Feature modules do
+    not import it and cannot choose a provider.  It exists only so a deployment
+    can switch credentials after the Vercel gateway contract is verified without
+    breaking an in-flight release.
+    """
+
+    provider = "openai"
+
+    def __init__(
+        self,
+        *,
+        api_key: str | None = None,
+        base_url: str = "https://api.openai.com/v1",
+        timeout: float = 45,
+        client: httpx.Client | None = None,
+    ) -> None:
+        self.api_key = (api_key if api_key is not None else settings.openai_api_key).strip()
+        self.base_url = base_url.rstrip("/")
+        self.timeout = max(1.0, min(float(timeout), 120.0))
+        self.client = client or httpx.Client(timeout=self.timeout)
+
+    def _headers(self, request: AIRequest) -> dict[str, str]:
+        if not self.api_key:
+            raise ProviderConfigurationError("AI provider is not configured")
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "X-Request-ID": request.correlation.request_id,
+        }
+        if request.idempotency_key:
+            headers["Idempotency-Key"] = request.idempotency_key[:200]
+        return headers
+
+    @staticmethod
+    def _input(value: Any) -> Any:
+        if isinstance(value, (str, list, dict)):
+            return value
+        return str(value)
+
+    def _payload(self, request: AIRequest) -> dict[str, Any]:
+        payload: dict[str, Any] = {
+            "model": request.model,
+            "input": self._input(request.input),
+            "max_output_tokens": max(1, min(int(request.metadata.get("max_output_tokens") or 2048), 8192)),
+        }
+        if request.metadata.get("json_object"):
+            payload["text"] = {"format": {"type": "json_object"}}
+        if request.tools:
+            payload["tools"] = list(request.tools)
+        return payload
+
+    def complete(self, request: AIRequest) -> AIResponse:
+        try:
+            response = self.client.post(
+                f"{self.base_url}/responses",
+                headers=self._headers(request),
+                json=self._payload(request),
+                timeout=self.timeout,
+            )
+        except (httpx.TimeoutException, httpx.NetworkError, httpx.RemoteProtocolError) as exc:
+            raise ProviderUnavailableError("AI provider request failed") from exc
+        status_code = int(getattr(response, "status_code", 200) or 200)
+        if status_code == 429 or status_code >= 500:
+            raise ProviderUnavailableError("AI provider is temporarily unavailable")
+        if status_code >= 400:
+            raise ProviderServiceError(f"AI provider rejected the request (HTTP {status_code})")
+        raise_for_status = getattr(response, "raise_for_status", None)
+        if callable(raise_for_status):
+            raise_for_status()
+        try:
+            payload = response.json()
+        except ValueError as exc:
+            raise ProviderServiceError("AI provider returned invalid JSON") from exc
+        usage = payload.get("usage") if isinstance(payload, dict) else {}
+        usage = usage if isinstance(usage, dict) else {}
+        return AIResponse(
+            provider=self.provider,
+            model=str(payload.get("model") or request.model),
+            output=payload.get("output_text") or "",
+            usage={
+                "input_tokens": int(usage.get("input_tokens") or 0),
+                "output_tokens": int(usage.get("output_tokens") or 0),
+                "total_tokens": int(usage.get("total_tokens") or 0),
+            },
+            provider_request_id=str(payload.get("id") or "") or None,
+        )
+
+    def stream(self, request: AIRequest) -> Iterator[str]:
+        # The legacy Responses streaming surface is intentionally not exposed
+        # by the compatibility path.  The Vercel adapter is the certified
+        # streaming implementation; callers fail closed instead of silently
+        # using a different protocol.
+        raise ProviderServiceError("Legacy AI provider streaming is unavailable during migration")

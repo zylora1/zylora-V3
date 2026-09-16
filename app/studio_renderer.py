@@ -337,6 +337,19 @@ def _render_node_html(node: Node, doc: SiteDocument, page: Page, data_context:di
     if scroll_effect:
         classes += ' z-scroll-target'
     attrs = f'class="{classes}" id="{html.escape(rendered_id,quote=True)}" data-studio-type="{html.escape(node.type,quote=True)}"'
+    semantic = node.metadata.get('zylora') if isinstance(node.metadata, dict) else None
+    if isinstance(semantic, dict):
+        component_type = str(semantic.get('componentType') or '').strip()
+        instance_id = str(semantic.get('instanceId') or '').strip()
+        if re.fullmatch(r'[A-Za-z0-9_-]{1,128}', component_type):
+            attrs += f' data-zylora-component="{html.escape(component_type, quote=True)}"'
+        if re.fullmatch(r'zl_cmp_[A-Za-z0-9_-]{1,120}', instance_id):
+            attrs += f' data-zylora-instance="{html.escape(instance_id, quote=True)}"'
+        runtime_config = semantic.get('runtimeConfig') if isinstance(semantic.get('runtimeConfig'), dict) else {}
+        for key in ('formId', 'calendarId', 'collectionId', 'fieldId'):
+            value = str(runtime_config.get(key) or '').strip()
+            if re.fullmatch(r'[A-Za-z0-9_-]{1,128}', value):
+                attrs += f' data-zylora-{_css_name(key)}="{html.escape(value, quote=True)}"'
     aria = node.accessibility or {}
     if aria.get("ariaLabel"):
         attrs += f' aria-label="{html.escape(str(aria["ariaLabel"]), quote=True)}"'
@@ -468,6 +481,11 @@ def render_page(doc: SiteDocument, page_id: str, *, data_context:dict|None=None,
         
     # Generate HTML
     body_html = _render_node_html(root,doc,page,data_context,collection_items,asset_resolver)
+    # A user document may use a generic container as its root. Keep that
+    # visual structure intact while guaranteeing a single semantic landmark
+    # for published pages. Page roots that already render as <main> are not
+    # wrapped a second time.
+    main_html = body_html if re.match(r'^\s*<main\b', body_html, flags=re.I) else f'<main id="zylora-site-main">{body_html}</main>'
     
     seo_override=seo_override or {}
     title=html.escape(str(seo_override.get('title') or page.seo.get('title') or doc.seo.get('title') or page.name))
@@ -503,7 +521,7 @@ def render_page(doc: SiteDocument, page_id: str, *, data_context:dict|None=None,
     </style>
 </head>
 <body>
-    {body_html}
+    {main_html}
     {scroll_script}
 </body>
 </html>"""

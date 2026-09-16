@@ -101,7 +101,7 @@ def run(browser_name: str) -> dict:
             page.get_by_role('button', name='mobile preview').click(); first.dispatch_event('click'); page.keyboard.press('ArrowRight'); page.wait_for_timeout(120)
             page.get_by_role('button', name='desktop preview').click(); check('desktop geometry survives mobile breakpoint edit', (first.get_attribute('style') or '') == desktop_style)
 
-            page.wait_for_function("document.querySelector('.cloud-save')?.getAttribute('title')==='Saved'", timeout=20000)
+            page.wait_for_function("document.querySelector('.save-status-control')?.getAttribute('title')==='Saved'", timeout=20000)
             persisted = client.post(f'/api/sites/{site_id}/studio-migrate', headers=headers).json()['document']
             nodes = persisted['pages']['home']['nodes']
             check('geometry and breakpoint state persist', any(n.get('responsiveOverrides') for n in nodes.values()) and any(n.get('style',{}).get('css',{}).get('zIndex') is not None for n in nodes.values()))

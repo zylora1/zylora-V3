@@ -1,0 +1,3 @@
+[submodule "vendor/penpot"]
+	path = vendor/penpot
+	url = https://github.com/penpot/penpot.git

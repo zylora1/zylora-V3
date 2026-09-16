@@ -14,6 +14,7 @@ from sqlalchemy import text
 logger = logging.getLogger(__name__)
 
 from .config import settings
+from .ai_service import hosted_ai_configured
 from .db import SessionLocal, now_iso
 from .settings_store import get_system_setting
 from .providers import sales_assistant_completion, estimate_openai_cost_micros
@@ -530,7 +531,7 @@ def process_message(site_id: str, conversation_id: str, message: str, *, contact
     # grounded facts below.
     model_safe_intents = {'APPOINTMENT_INTENT', 'AVAILABILITY_QUERY'}
     allow_model_synthesis = not (model_safe_intents & set(intents))
-    if settings.openai_api_key and not test_mode and allow_model_synthesis:
+    if hosted_ai_configured() and not test_mode and allow_model_synthesis:
         with SessionLocal() as db:
             history=[dict(r) for r in db.execute(text('SELECT role,content FROM assistant_messages WHERE conversation_id=:c ORDER BY created_at DESC LIMIT 8'),{'c':conversation_id}).mappings().all()][::-1]
         try:
@@ -553,7 +554,7 @@ def process_message(site_id: str, conversation_id: str, message: str, *, contact
                     'fallback':fallback,'idempotent':True,
                     'qualification':q,'qualification_fields':tools['qualification_fields'],
                     'conversion_deferred':False}
-    if settings.openai_api_key and (test_mode or reservation is not None) and (test_mode or allow_model_synthesis):
+    if hosted_ai_configured() and (test_mode or reservation is not None) and (test_mode or allow_model_synthesis):
         try:
             if not history:
                 with SessionLocal() as db:

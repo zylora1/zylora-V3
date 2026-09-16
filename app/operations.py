@@ -57,16 +57,28 @@ def record_operational_event(component: str, event_code: str, message: str, *, s
 
 
 def provider_readiness() -> dict:
+    gateway_ready = bool(settings.ai_gateway_api_key and settings.ai_gateway_base_url)
+    ai_ready = gateway_ready or (settings.app_env != 'production' and bool(settings.openai_api_key))
+    telnyx_ready = bool(settings.telnyx_api_key and (settings.telnyx_email_from or settings.telnyx_whatsapp_from or settings.telnyx_sms_from))
+    email_ready = bool(telnyx_ready or (settings.app_env != 'production' and settings.resend_api_key and settings.email_from))
+    whatsapp_ready = bool(
+        (settings.telnyx_api_key and settings.telnyx_whatsapp_from)
+        or (settings.app_env != 'production' and settings.twilio_account_sid and settings.twilio_auth_token and settings.twilio_whatsapp_from)
+        or (settings.app_env != 'production' and settings.whatsapp_phone_number_id and settings.whatsapp_access_token)
+    )
     return {
-        'openai': bool(settings.openai_api_key),
-        'email': bool(settings.resend_api_key and settings.email_from),
-        'whatsapp': bool((settings.twilio_account_sid and settings.twilio_auth_token and settings.twilio_whatsapp_from) or (settings.whatsapp_phone_number_id and settings.whatsapp_access_token)),
+        'ai_gateway': bool(settings.ai_gateway_api_key and settings.ai_gateway_base_url),
+        'communications': telnyx_ready,
+        'openai': bool(settings.openai_api_key),  # compatibility visibility
+        'email': email_ready,
+        'whatsapp': whatsapp_ready,
         'payments': bool(settings.payment_provider=='mock' or (settings.razorpay_key_id and settings.razorpay_key_secret and settings.razorpay_webhook_secret)),
         'turnstile': bool(settings.turnstile_secret_key),
         'cloudflare': bool(settings.cloudflare_api_token and settings.cloudflare_zone_id),
         'production_safe': settings.app_env!='production' or all([
-            bool(settings.openai_api_key),
-            bool(settings.resend_api_key and settings.email_from),
+            ai_ready,
+            email_ready,
+            whatsapp_ready,
             bool(settings.turnstile_secret_key),
             bool(settings.razorpay_key_id and settings.razorpay_key_secret and settings.razorpay_webhook_secret),
             bool(settings.cloudflare_api_token and settings.cloudflare_zone_id),

@@ -10,6 +10,10 @@ from .structured_editor import empty_document, parse_document
 STATE_FIELDS = ('name','business_name','tagline','description','accent','page_count','draft_structure_json','brand_json','seo_json','business_profile_json','generation_meta_json','document_schema_version')
 
 
+class StudioRevisionConflict(Exception):
+    """Raised when a recovery operation would overwrite newer Studio work."""
+
+
 def site_state(site: dict) -> dict:
     return {
         'name': site.get('name') or site.get('business_name') or '',
@@ -24,6 +28,8 @@ def site_state(site: dict) -> dict:
         'business_profile_json': site.get('business_profile_json') or '{}',
         'generation_meta_json': site.get('generation_meta_json') or '{}',
         'document_schema_version': int(site.get('document_schema_version') or 3),
+        'studio_document_json': site.get('studio_document_json'),
+        'studio_revision': int(site.get('studio_revision') or 0),
     }
 
 
@@ -124,11 +130,30 @@ def apply_state(db, site_id: str, state: dict) -> None:
     current=_fetch_site(db,site_id)
     vals={k:(state.get(k) if state.get(k) is not None else current.get(k)) for k in STATE_FIELDS}
     vals['page_count']=int(vals.get('page_count') or current.get('page_count') or 1)
-    db.execute(text('''UPDATE sites SET name=:name,business_name=:business_name,tagline=:tagline,description=:description,accent=:accent,page_count=:page_count,
+    # Old recovery payloads have no Studio document. Keep the current canonical
+    # document in that case; never replace it with an empty legacy projection.
+    studio_update = ''
+    revision_guard = ''
+    if state.get('studio_document_json'):
+        from .studio_document import validate_studio_document
+        document = validate_studio_document(json.loads(state['studio_document_json']))
+        expected_revision = int(current.get('studio_revision') or 0)
+        document.revision = expected_revision + 1
+        vals.update(studio_document_json=document.model_dump_json(exclude_none=True),
+                    studio_revision=document.revision, expected_studio_revision=expected_revision,
+                    page_count=len(document.pages), document_schema_version=document.schemaVersion)
+        studio_update = ',studio_document_json=:studio_document_json,studio_revision=:studio_revision'
+        revision_guard = ' AND studio_revision=:expected_studio_revision'
+    result = db.execute(text(f'''UPDATE sites SET name=:name,business_name=:business_name,tagline=:tagline,description=:description,accent=:accent,page_count=:page_count,
         draft_structure_json=:draft_structure_json,brand_json=:brand_json,seo_json=:seo_json,business_profile_json=:business_profile_json,
-        generation_meta_json=:generation_meta_json,document_schema_version=:document_schema_version,document_version=document_version+1,updated_at=:updated_at WHERE id=:site_id'''),{
+        generation_meta_json=:generation_meta_json,document_schema_version=:document_schema_version,document_version=document_version+1,updated_at=:updated_at
+        {studio_update} WHERE id=:site_id{revision_guard}'''),{
         **vals,'site_id':site_id,'updated_at':now_iso()
     })
+    if revision_guard and result.rowcount != 1:
+        from fastapi import HTTPException
+        raise HTTPException(409, detail={'code':'STUDIO_REVISION_CONFLICT',
+            'message':'The document changed while restoring. Reload and retry.'})
 
 
 def undo(db, site: dict, user_id: str) -> dict:
@@ -163,9 +188,13 @@ def list_revisions(db, site_id: str, limit: int=50) -> list[dict]:
     return [dict(r) for r in rows]
 
 
-def restore_revision(db, site: dict, user_id: str, revision_id: str) -> dict:
+def restore_revision(db, site: dict, user_id: str, revision_id: str, expected_revision: int | None = None) -> dict:
     row=db.execute(text('SELECT * FROM site_revisions WHERE id=:i AND site_id=:s'),{'i':revision_id,'s':site['id']}).mappings().first()
     if not row: raise KeyError(revision_id)
+    if expected_revision is not None:
+        current_revision = int(db.execute(text('SELECT studio_revision FROM sites WHERE id=:s AND user_id=:u'), {'s':site['id'],'u':user_id}).scalar_one_or_none() or 0)
+        if current_revision != expected_revision:
+            raise StudioRevisionConflict(f'Expected Studio revision {expected_revision}, found {current_revision}')
     ensure_history(db,site,user_id)
     apply_state(db,site['id'],json.loads(row['state_json']))
     push_history(db,site['id'],user_id,f"RESTORE_REVISION_{row['version']}")

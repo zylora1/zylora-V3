@@ -245,7 +245,7 @@
             },
               e(ModelIcon, { model: selectedModel }),
               e('span', null, selectedModel),
-              e('span', { style: { fontSize: 10, opacity: 0.6 } }, '▾')
+              e('span', { className: 'prompt-select-chevron', 'aria-hidden': 'true' })
             ),
             isModelSelectOpen && e('div', { className: 'model-dropdown-menu' },
               models.map(m =>

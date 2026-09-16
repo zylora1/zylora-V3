@@ -1,14 +1,14 @@
 :root{
   --ink:#111113;
   --muted:#6e6e73;
-  --muted-light:#86868b;
+  --muted-light:#5f6368;
   --line:rgba(0,0,0,.08);
   --paper:#F7F7F5;
   --surface:#fff;
   --zy-blue:#5B5CF0;
   --zy-blue-hover:#4A4BE0;
   --zy-blue-soft:#EEEEFF;
-  --zy-green:#1f9d55;
+  --zy-green:#137333;
   --zy-red:#d92d20;
 }
 .google-btn{background-image:url('/static/google-g-logo.svg')}
@@ -39,12 +39,17 @@ body{display:grid;grid-template-columns:minmax(380px,.95fr) minmax(480px,1.05fr)
 .art-preview-activity{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;background:#fafafc;border:1px solid rgba(0,0,0,.04);font-size:11.5px}
 .preview-activity-icon{color:var(--zy-blue);font-size:12px}
 .preview-activity-text b{display:block;font-size:11.5px;color:var(--ink)}
+body:has(.formpane) .preview-status,
+body:has(.formpane) .art-preview-kpi small,
+body:has(.formpane) .preview-activity-text small,
+body:has(.formpane) .divider { color: #4f5358; }
+body:has(.formpane) .art-preview-kpi strong.trend-up { color: #137333; }
 .preview-activity-text small{display:block;font-size:10px;color:var(--muted-light)}
 
 /* Form Pane */
 .formpane{display:grid;place-items:center;padding:48px clamp(24px,6vw,80px);background:#fff}
 .box{width:min(420px,100%)}
-.box h2{font-size:30px;font-weight:650;line-height:1.1;letter-spacing:-.035em;margin:0 0 8px;color:var(--ink)}
+.box h1,.box h2{font-size:30px;font-weight:650;line-height:1.1;letter-spacing:-.035em;margin:0 0 8px;color:var(--ink)}
 .box>p{color:var(--muted);margin:0 0 24px;font-size:14px;line-height:1.5}
 
 /* Google SSO Button */
@@ -85,12 +90,12 @@ input::placeholder{color:#a1a1a6}
   .art p{font-size:14.5px;margin:0 0 20px}
   .art-preview-card{display:none}
   .formpane{padding:40px 20px 60px}
-  .box h2{font-size:28px}
+  .box h1,.box h2{font-size:28px}
 }
 @media(max-width:480px){
   .art h1{font-size:30px}
   .formpane{padding-top:32px}
-  .box h2{font-size:26px}
+  .box h1,.box h2{font-size:26px}
 }
 
 .brand-wordmark {

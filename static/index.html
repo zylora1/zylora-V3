@@ -27,6 +27,7 @@
   <link rel="stylesheet" href="/static/public-theme.css"/>
   <link rel="stylesheet" href="/static/landing.css"/>
   <link rel="stylesheet" href="/static/public-redesign.css"/>
+  <link rel="stylesheet" href="/static/zylora-tinkered.css"/>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -83,14 +84,6 @@
           },
           {
             "@type": "Question",
-            "name": "Can I export clean Next.js source code without platform lock-in?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. Zylora delivers a production-ready Next.js project with Tailwind CSS and zero proprietary runtime dependencies whenever you choose to export."
-            }
-          },
-          {
-            "@type": "Question",
             "name": "Does the AI Sales Assistant consume my website editing credits?",
             "acceptedAnswer": {
               "@type": "Answer",
@@ -143,7 +136,7 @@
 <section class="hero-editorial">
   <div class="z-container hero-content-wrap">
     <div class="eyebrow-pill">
-      <span>✦</span> Emergent AI Platform · Studio Precision
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9L12 2Z"/></svg></span> Emergent AI Platform · Studio Precision
     </div>
     
     <h1>
@@ -163,7 +156,7 @@
     <!-- Live Natural-Language Prompt Composer -->
     <form id="hero-prompt-form" class="hero-prompt-container" action="/signup" method="GET">
       <div class="hero-prompt-box">
-        <div class="hero-prompt-icon">✦</div>
+        <div class="hero-prompt-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9L12 2Z"/></svg></div>
         <input id="hero-prompt-input" class="hero-prompt-input" name="idea" type="text" placeholder="What do you want to build? You can start blank and use this idea later inside Studio." autocomplete="off"/>
         <button id="hero-prompt-submit" class="hero-prompt-submit" type="submit">
           <span>Open blank Studio</span>
@@ -201,13 +194,13 @@
         <!-- Left: Layers Hierarchy -->
         <div class="studio-panel-layers">
           <span class="studio-panel-title">Layers & Nodes</span>
-          <div class="layer-node"><span>▾</span> <span>Section: Hero</span></div>
-          <div class="layer-node active" style="margin-left:12px"><span>■</span> <span>Heading (Display)</span></div>
-          <div class="layer-node" style="margin-left:12px"><span>■</span> <span>Lead Capture Form</span></div>
-          <div class="layer-node"><span>▸</span> <span>Section: Services Grid</span></div>
-          <div class="layer-node"><span>▸</span> <span>Section: Calendar Booking</span></div>
-          <div class="layer-node"><span>▸</span> <span>Section: Customer Reviews</span></div>
-          <div class="layer-node"><span>▸</span> <span>Section: Footer</span></div>
+          <div class="layer-node"><span class="tree-toggle open" aria-hidden="true"></span> <span>Section: Hero</span></div>
+          <div class="layer-node active" style="margin-left:12px"><span class="tree-node-dot" aria-hidden="true"></span> <span>Heading (Display)</span></div>
+          <div class="layer-node" style="margin-left:12px"><span class="tree-node-dot" aria-hidden="true"></span> <span>Lead Capture Form</span></div>
+          <div class="layer-node"><span class="tree-toggle" aria-hidden="true"></span> <span>Section: Services Grid</span></div>
+          <div class="layer-node"><span class="tree-toggle" aria-hidden="true"></span> <span>Section: Calendar Booking</span></div>
+          <div class="layer-node"><span class="tree-toggle" aria-hidden="true"></span> <span>Section: Customer Reviews</span></div>
+          <div class="layer-node"><span class="tree-toggle" aria-hidden="true"></span> <span>Section: Footer</span></div>
         </div>
 
         <!-- Center: Live Rendered Studio Canvas -->
@@ -245,8 +238,8 @@
             <div class="inspector-value">Flexbox (Column)</div>
           </div>
           <div class="inspector-prop">
-            <div class="inspector-label">Export Source</div>
-            <div class="inspector-value">React app + CSS</div>
+            <div class="inspector-label">Published output</div>
+            <div class="inspector-value">Zylora hosted renderer</div>
           </div>
         </div>
       </div>
@@ -254,8 +247,8 @@
 
     <!-- Foreground Layer 1: CMS Collection Binding Card -->
     <div class="floating-cms-card">
-      <span class="floating-badge">✦ Dynamic CMS Sync</span>
-      <h4>Collection: Services</h4>
+        <span class="floating-badge"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9L12 2Z"/></svg></span> Dynamic CMS Sync</span>
+      <h2>Collection: Services</h2>
       <p>Bound field: <code>service.headline</code> dynamically updates across 4 template pages.</p>
       <div class="cms-sync-indicator">✓ 18 items live in production</div>
     </div>
@@ -281,6 +274,24 @@
 </section>
 
 ﻿<!-- 3. Visual Transformation Story: Prompt -> Structure -> Design -> Studio -->
+<!-- 3. Universal AI connection -->
+<section class="ai-compatibility-section" id="ai-connections">
+  <div class="z-container ai-compatibility-layout">
+    <div class="ai-compatibility-copy">
+      <span class="eyebrow-pill">Bring your own AI</span>
+      <h2>Build with the AI you already use.</h2>
+      <p>Connect a compatible AI client through Zylora’s Agent Gateway. The client can create or edit the same canonical SiteDocument that opens in Zylora Studio, with the same permissions, revisions and publish controls.</p>
+      <p class="ai-flow" aria-label="External AI flows through the Zylora Agent Gateway into Studio"><strong>External AI</strong><span aria-hidden="true">→</span><strong>Zylora Agent Gateway</strong><span aria-hidden="true">→</span><strong>Same site in Studio</strong></p>
+    </div>
+    <div class="ai-compatibility-grid" aria-label="Supported connection methods">
+      <article class="ai-compatibility-card"><span class="ai-protocol-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 5h10v4H7zM4 15h6v4H4zM14 15h6v4h-6z"/><path d="M12 9v3M7 13h10"/></svg></span><h3>MCP</h3><p>Use the shared tool registry with scoped connector access.</p></article>
+      <article class="ai-compatibility-card"><span class="ai-protocol-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/><circle cx="18" cy="17" r="2"/></svg></span><h3>API / OpenAPI</h3><p>Invoke versioned REST tools from a compatible client or workflow.</p></article>
+      <article class="ai-compatibility-card"><span class="ai-protocol-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="8"/></svg></span><h3>Custom Agent</h3><p>Bring any tool-capable agent that can follow the documented contract.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Visual Transformation Story: Prompt -> Structure -> Design -> Studio -->
 <section class="transformation-section" id="how-it-works">
   <div class="z-container">
     <div class="transformation-header">
@@ -322,9 +333,9 @@
       <div class="pipeline-step">
         <span class="step-num">STAGE 04</span>
         <h3>Studio Ownership</h3>
-        <p>Directly manipulate any node on the visual canvas and export pristine Next.js source code anytime.</p>
+        <p>Directly manipulate any node on the visual canvas with spatial freedom, responsive breakpoints and instant preview.</p>
         <div class="pipeline-mock" style="font-weight:600;color:#10B981">
-          ✓ Full Source Export Ready
+          ✓ Hosted publishing ready
         </div>
       </div>
     </div>
@@ -361,9 +372,9 @@
         <!-- Studio Left Panel -->
         <div class="studio-side-dark">
           <div class="studio-panel-title" style="color:var(--z-dark-muted)">Component Tree</div>
-          <div style="color:#fff;font-size:13px;padding:6px 0">▾ Page: Home</div>
-          <div style="color:#fff;font-size:13px;padding:6px 14px;background:rgba(91,92,240,0.2);border-radius:6px">■ Hero Container</div>
-          <div style="color:var(--z-dark-muted);font-size:13px;padding:6px 24px">↳ H1 Headline</div>
+          <div style="color:#fff;font-size:13px;padding:6px 0"><span class="tree-toggle open" aria-hidden="true"></span> Page: Home</div>
+          <div style="color:#fff;font-size:13px;padding:6px 14px;background:rgba(91,92,240,0.2);border-radius:6px"><span class="tree-node-dot" aria-hidden="true"></span> Hero Container</div>
+          <div style="color:var(--z-dark-muted);font-size:13px;padding:6px 24px"><span class="tree-branch" aria-hidden="true"></span> H1 Headline</div>
           <div style="color:var(--z-dark-muted);font-size:13px;padding:6px 24px">↳ Lead Form</div>
           <div style="color:#fff;font-size:13px;padding:6px 0">▸ Collection: Case Studies</div>
           <div style="color:#fff;font-size:13px;padding:6px 0">▸ Booking Scheduler</div>
@@ -493,14 +504,14 @@
       <div class="lead-and-booking-pipeline">
         <div class="pipeline-card-dark">
           <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:#10B981;text-transform:uppercase;margin-bottom:8px">1. Qualified Lead Captured</div>
-          <h4 style="font-size:18px;color:#fff;margin-bottom:4px">Maya Patel</h4>
+          <h3 style="font-size:18px;color:#fff;margin-bottom:4px">Maya Patel</h3>
           <p style="font-size:13px;color:var(--z-dark-muted);margin:0 0 10px">maya@example.com · Contact captured · Intent: Consultation</p>
           <div style="font-size:12px;color:#A5A6F6">Synced to Google Sheets & WhatsApp alert dispatched</div>
         </div>
 
         <div class="pipeline-card-dark">
           <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:#3B82F6;text-transform:uppercase;margin-bottom:8px">2. Calendar Appointment Booked</div>
-          <h4 style="font-size:18px;color:#fff;margin-bottom:4px">Friday, Sept 11 · 11:00 AM</h4>
+          <h3 style="font-size:18px;color:#fff;margin-bottom:4px">Friday, Sept 11 · 11:00 AM</h3>
           <p style="font-size:13px;color:var(--z-dark-muted);margin:0">Verified slot confirmed with your specialist · Calendar invite generated</p>
         </div>
       </div>
@@ -570,7 +581,6 @@
           <tr><th scope="row">Custom domain publishing</th><td>—</td><td>Included</td><td>Included</td><td>Included</td></tr>
           <tr><th scope="row">Lead capture, CMS &amp; booking</th><td>Included</td><td>Included</td><td>Included</td><td>Included</td></tr>
           <tr><th scope="row">AI Sales Assistant</th><td>Optional</td><td>Optional</td><td>Optional</td><td>Managed setup</td></tr>
-          <tr><th scope="row">Source export</th><td>Available</td><td>Available</td><td>Available</td><td>Available</td></tr>
         </tbody>
       </table>
     </div>
@@ -642,13 +652,6 @@
       </details>
 
       <details class="faq-item">
-        <summary class="faq-summary">Can I export clean Next.js source code without platform lock-in?</summary>
-        <div class="faq-answer">
-          Yes. Zylora delivers a production-ready Next.js project with Tailwind CSS and zero proprietary runtime dependencies whenever you choose to export.
-        </div>
-      </details>
-
-      <details class="faq-item">
         <summary class="faq-summary">Does the AI Sales Assistant consume my website editing credits?</summary>
         <div class="faq-answer">
           Published assistants use normal AI Credits first and then the plan's finite Sales Assistant Protection allowance. When both are exhausted, the assistant remains useful through deterministic business facts, contact, lead and appointment flows.
@@ -697,7 +700,7 @@
       </div>
 
       <div class="z-footer-col">
-        <h4>Product</h4>
+        <h3>Product</h3>
         <ul>
           <li><a href="/signup">Zylora Studio</a></li>
           <li><a href="#studio">Visual Editor</a></li>
@@ -707,7 +710,7 @@
       </div>
 
       <div class="z-footer-col">
-        <h4>Solutions</h4>
+        <h3>Solutions</h3>
         <ul>
           <li><a href="/solutions/small-business">Small Business</a></li>
           <li><a href="/solutions/clinics">Clinics</a></li>
@@ -717,7 +720,7 @@
       </div>
 
       <div class="z-footer-col">
-        <h4>Resources</h4>
+        <h3>Resources</h3>
         <ul>
           <li><a href="/website-examples">Website Examples</a></li>
           <li><a href="/guides/how-to-create-a-website-with-ai">AI Website Guide</a></li>
@@ -727,7 +730,7 @@
       </div>
 
       <div class="z-footer-col">
-        <h4>Legal</h4>
+        <h3>Legal</h3>
         <ul>
           <li><a href="/legal">Legal Hub</a></li>
           <li><a href="/terms">Terms of Service</a></li>
@@ -737,7 +740,7 @@
     </div>
 
     <div class="z-footer-bottom">
-      <div>© 2026 Zylora Platforms Inc. All rights reserved. Clean Next.js exportable source code.</div>
+      <div>© 2026 Zylora Platforms Inc. All rights reserved. Hosted by Zylora.</div>
       <div>Designed for real business outcomes.</div>
     </div>
   </div>

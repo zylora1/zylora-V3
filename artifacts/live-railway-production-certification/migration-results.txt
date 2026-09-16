@@ -1,2 +1,2 @@
-Railway deployment startup reached "Application startup complete" and health 200 on deployment c636700b-975a-4420-880c-2e148e4e037e.
-No migration failure appeared in deploy logs. Full live table/constraint inventory remains BLOCKED.
+Final Railway deployment `589e3ca8-44f9-4e9f-a3f5-cb89773a9e6a` for SHA `aab18bd5e786c8e2273fe60a7128bff075678576` reached SUCCESS; startup reached application startup complete and `/api/health` returned HTTP 200 (`{"status":"ok"}`).
+Pre-deploy migration command is `python -m scripts.run_migrations`; no migration/startup failure appeared in captured deployment logs. Migration 035 is present in release source and covered by local regression tests. Direct server-version, applied-migration-row, table, foreign-key and index inventory remains BLOCKED because the Railway database is private and no SSH key/public TCP proxy was available.

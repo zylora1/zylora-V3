@@ -1,0 +1,12 @@
+[
+  {"id": "restaurant", "pages": ["home", "menu", "contact"], "components": ["navigation", "gallery", "map", "appointment-widget", "footer"]},
+  {"id": "clinic", "pages": ["home", "services", "doctors", "appointments", "contact"], "components": ["navigation", "section", "card", "lead-form", "appointment-widget", "ai-sales-assistant", "footer"]},
+  {"id": "school", "pages": ["home", "programs", "faculty", "blog", "contact"], "components": ["navigation", "cms-list", "blog-list", "contact-form", "faq", "footer"]},
+  {"id": "gym", "pages": ["home", "classes", "pricing", "contact"], "components": ["navigation", "pricing", "lead-form", "ai-sales-assistant", "footer"]},
+  {"id": "salon", "pages": ["home", "services", "booking", "contact"], "components": ["navigation", "gallery", "appointment-widget", "social-links", "footer"]},
+  {"id": "agency", "pages": ["home", "work", "services", "contact"], "components": ["navigation", "card", "testimonial", "contact-form", "footer"]},
+  {"id": "consultant", "pages": ["home", "about", "services", "contact"], "components": ["navigation", "heading", "button", "lead-form", "faq", "footer"]},
+  {"id": "portfolio", "pages": ["home", "projects", "about", "contact"], "components": ["navigation", "image", "gallery", "social-links", "footer"]},
+  {"id": "coaching-centre", "pages": ["home", "programs", "testimonials", "contact"], "components": ["navigation", "testimonial", "pricing", "lead-form", "ai-sales-assistant", "footer"]},
+  {"id": "local-service-business", "pages": ["home", "services", "reviews", "contact"], "components": ["navigation", "section", "map", "contact-form", "appointment-widget", "footer"]}
+]

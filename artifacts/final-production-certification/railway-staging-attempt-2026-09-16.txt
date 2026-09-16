@@ -1,0 +1,39 @@
+Railway staging evidence — 2026-09-16
+
+Authenticated workspace:
+- Railway workspace access succeeded.
+- Existing project: zylora-staging.
+- Existing environment: staging.
+- Existing services: zylora-app, zylora-web, zylora-admin, Postgres.
+
+Safe mutation attempts:
+- Linking the local CLI to the existing staging environment succeeded.
+- Adding a private zylora-redis service was rejected before creation:
+  "Failed to add Redis: Your trial has expired. Please select a plan to continue using Railway."
+- No Penpot services were created.
+- No production environment or production service was changed.
+
+Existing service state:
+- zylora-app latest staging deployment: FAILED/stopped (historical remote source deployment).
+- zylora-web latest staging deployment: FAILED/stopped (historical remote source deployment).
+- Postgres has no active deployment exposed through the CLI status response.
+- Read-only probes to the existing public API/web domains returned HTTP 404 for
+  `/ready`, `/api/health`, `/`, and the web root; no successful application
+  readiness response was observed.
+
+Database access attempts:
+- Railway public-proxy path: unavailable (connection URL must point to a Railway TCP proxy).
+- Railway SSH tunnel path: blocked because this host has no SSH key in its agent or ~/.ssh.
+- Local PostgreSQL executables: not present (psql/postgres/initdb not found).
+- Docker Linux engine: unavailable from the local certification host.
+
+Conclusion:
+- REAL_POSTGRESQL_VERIFIED = NO.
+- REAL_RAILWAY_RUNTIME_VERIFIED = NO.
+- Blocker is external account/runtime capacity, not a changed application assertion.
+
+Local Docker fallback:
+- Docker Desktop is installed, but the bounded `docker desktop start` attempt
+  did not make the `desktop-linux` server available.
+- `docker info` still fails because the Docker Linux engine named pipe is absent.
+- No Penpot container was started.

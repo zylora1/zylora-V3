@@ -423,6 +423,7 @@ h1, h2, h3, h4, h5, h6 {
   margin: 16px 0 24px;
 }
 
+.z-footer-col h3,
 .z-footer-col h4 {
   font-size: 12px;
   font-weight: 700;

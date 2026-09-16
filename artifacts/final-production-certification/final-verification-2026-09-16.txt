@@ -1,0 +1,19 @@
+Zylora V1 final local verification — 2026-09-16
+
+pytest -q: 530 passed, 0 failed, 0 skipped, 59 warnings in 396.11s
+pytest -q tests/test_e2e.py: 1 passed in 50.96s
+pytest -q tests/test_premium_redesign_contract.py: 5 passed in 4.61s
+Focused renderer/import/regression group: 50 passed in 39.17s
+Dashboard responsive geometry: 64/64; console errors 0; network errors 0
+Dashboard browser matrix: Chromium/Firefox/WebKit PASS; 0 console/page errors
+Legacy Studio rich matrix: Chromium/Firefox/WebKit 12 checks each; 0 errors
+axe-core 4.13.0: critical 0, serious 0, moderate 4, minor 0
+Python compileall: PASS
+Studio build: PASS (335.11 kB; 101.27 kB gzip)
+JavaScript syntax: PASS
+git diff --check: PASS (line-ending normalization warnings only)
+Exact conflict-marker scan: PASS
+High-confidence secret-pattern scan: PASS
+
+Not tested or blocked: Render deployment, production smoke, real PostgreSQL,
+real Penpot runtime/SSO/file lifecycle, and live provider calls.

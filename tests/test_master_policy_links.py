@@ -1,5 +1,5 @@
 from __future__ import annotations
-import io, json, re, zipfile
+import io, json, re
 from pathlib import Path
 import pytest
 from bs4 import BeautifulSoup
@@ -101,18 +101,13 @@ def test_ai_social_icon_header_request_is_redirected_to_footer_without_fabricati
     assert not soup.select_one('header a[data-platform="instagram"], main a[data-platform="instagram"]')
     assert c.get('/api/credits').json()['total']==before
 
-def test_footer_links_survive_publish_and_standalone_export_without_api_dependency():
-    reset_db(); c,h=signup('export-links@example.com'); activate_zylora(c,h,'GB'); sid=create_site(c,h,'Export Links','copper-table')
+def test_footer_links_survive_publish_without_api_dependency():
+    reset_db(); c,h=signup('footer-links@example.com'); activate_zylora(c,h,'GB'); sid=create_site(c,h,'Footer Links','copper-table')
     assert c.put(f'/api/sites/{sid}/footer-links',headers=h,json={'links':[{'url':'https://github.com/example'},{'url':'https://linkedin.com/company/example'}]}).status_code==200
     assert c.post(f'/api/sites/{sid}/publish',headers=h).status_code==200
     site=c.get(f'/api/sites/{sid}').json(); live=c.get(f"/s/{site['slug']}"); assert live.status_code==200 and 'data-zylora-footer-links' in live.text
-    o=c.post(f'/api/sites/{sid}/source-export/order',headers=h,json={'currency':'USD'}); assert o.status_code==200
-    if not o.json().get('entitled'):
-        j=o.json(); v=c.post(f'/api/sites/{sid}/source-export/verify',headers=h,json={'order_id':j['order_id'],'payment_id':j['mock_payment_id'],'signature':j['mock_signature']}); assert v.status_code==200,v.text
-    zres=c.get(f'/api/sites/{sid}/export'); assert zres.status_code==200
-    z=zipfile.ZipFile(io.BytesIO(zres.content)); js=z.read('app/zylora-edits.jsx').decode()
-    assert 'github.com/example' in js and 'linkedin.com/company/example' in js and 'data-zylora-footer-links' in js
-    assert '/api/sites/' not in js
+    assert 'github.com/example' in live.text and 'linkedin.com/company/example' in live.text and 'data-zylora-footer-links' in live.text
+    assert c.get(f'/api/sites/{sid}/export').status_code==404
 
 
 def test_template_content_policy_and_consent_microcopy():

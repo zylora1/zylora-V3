@@ -4,7 +4,7 @@ from __future__ import annotations
 
 The public catalogue is loaded from verified template projects under
 template_projects/. The current catalogue contains user-supplied licensed source
-archives adapted into Zylora's editable/publish/export runtime, while the existing
+archives adapted into Zylora's editable, hosted-publishing runtime, while the existing
 exact-source and reference-reconstruction gates remain available for future
 imports. AI-created websites continue to use the hidden internal renderer below.
 """
@@ -42,7 +42,7 @@ def _sha256_matches(path: Path, expected: object) -> bool:
     data = path.read_bytes()
     if hashlib.sha256(data).hexdigest() == value:
         return True
-    # Git checks out LF on Linux containers (Railway) and CRLF on Windows.
+    # Git checks out LF on Linux containers and CRLF on Windows.
     # Allow canonical newline normalization for text files so gates remain valid cross-platform.
     if path.suffix.lower() in {'.html', '.css', '.json', '.txt', '.js', '.svg'}:
         normalized = data.replace(b'\r\n', b'\n')
@@ -652,6 +652,10 @@ def _render_catalogue_project(slug: str, content: dict, page_slug: str='home') -
     for key,value in values.items():
         body=body.replace(key,value)
         css=css.replace(key,value)
+    # Keep licensed source files immutable for their render gate while fixing
+    # the light mobile menu's insufficient white-on-violet contrast at runtime.
+    if slug == 'prime-dental':
+        css += '\nbody[data-template="prime-dental"] .offcanvas .nav-link{color:#10183d!important}\n'
     title=(business+' — '+tagline) if page=='home' else (page.replace('-', ' ').title()+' — '+business)
     head=(
         '<!doctype html><html lang="en"><head><meta charset="utf-8">'

@@ -1,5 +1,5 @@
 from __future__ import annotations
-import io, os, zipfile
+import os
 from datetime import datetime, timedelta, timezone
 from fastapi.testclient import TestClient
 from sqlalchemy import text
@@ -79,14 +79,8 @@ def test_full_product_workflows():
     # The regional Starter entitlement is active; AI-created page count is still prompt-driven rather than plan-driven.
     assert c.get('/api/auth/me').json()['plan']=='STARTER'
 
-    # Source export is independent from ownership transfer and is paid/configurable.
-    locked=c.get(f'/api/sites/{sid}/export'); assert locked.status_code==402
-    order=c.post(f'/api/sites/{sid}/source-export/order',headers=h,json={'currency':'USD'}); assert order.status_code==200
-    oj=order.json(); verify=c.post(f'/api/sites/{sid}/source-export/verify',headers=h,json={'order_id':oj['order_id'],'payment_id':oj['mock_payment_id'],'signature':oj['mock_signature']}); assert verify.status_code==200
-    exp=c.get(f'/api/sites/{sid}/export'); assert exp.status_code==200 and exp.headers['content-type']=='application/zip'
-    z=zipfile.ZipFile(io.BytesIO(exp.content)); names=set(z.namelist()); assert {'package.json','next.config.mjs','app/page.jsx','app/layout.jsx','zylora-site.json'} <= names
-    manifest=__import__('json').loads(z.read('zylora-site.json')); assert len(manifest['pages'])>=1 and manifest['export_format'].startswith('Next.js')
-    exported='\n'.join(z.read(n).decode(errors='ignore') for n in names if n.endswith(('.jsx','.json','.md'))); assert 'Designed with intent.' in exported and 'Updated copy for a focused premium website.' in exported
+    # Websites remain hosted by Zylora; source/ZIP export is no longer a product path.
+    assert c.get(f'/api/sites/{sid}/export').status_code==404
 
     # SEO endpoints.
     assert c.get('/robots.txt').status_code==200; assert c.get('/sitemap.xml').status_code==200

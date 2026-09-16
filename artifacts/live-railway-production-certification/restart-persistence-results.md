@@ -1,2 +1,2 @@
-Railway final deployment restarted the application successfully. Existing published route `/s/jbhgvf-2f7c` returned 200 after deployment.
-Full controlled account/site/CRM/appointment/media state creation and post-redeploy verification: BLOCKED without authenticated test context.
+Final Railway deployment `589e3ca8-44f9-4e9f-a3f5-cb89773a9e6a` for SHA `aab18bd5e786c8e2273fe60a7128bff075678576` reached SUCCESS; startup completed and `/api/health` returned 200. Existing public route smoke and authenticated Super Admin/Studio state remained available.
+Full normal-user account/site/CRM/appointment/media state creation and post-redeploy verification: BLOCKED because a valid Turnstile-backed normal-user test path was unavailable. No destructive production data operation was attempted.

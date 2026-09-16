@@ -1,0 +1,13 @@
+# PostgreSQL test gate
+
+Status: BLOCKED
+
+- psycopg 3.3.4 is installed.
+- `psql` is not installed.
+- `docker info` failed because the Docker Desktop Linux engine was not running.
+- A Railway staging PostgreSQL service was discovered, but it was not reachable
+  from this host: no public TCP proxy and no SSH key for the private tunnel.
+- No local PostgreSQL server/binary or Docker Linux engine was available.
+- Production startup was separately verified to reject SQLite with a non-zero fail-closed error.
+
+No SQLite run is relabeled as PostgreSQL evidence.

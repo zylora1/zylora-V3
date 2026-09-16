@@ -30,6 +30,8 @@ def _valid_production(monkeypatch):
         'app_url': 'https://app.zylora.test',
         'database_url': 'postgresql+psycopg://zylora:pass@db:5432/zylora',
         'openai_api_key': 'test-openai-key',
+        'ai_gateway_api_key': 'test-gateway-key',
+        'ai_gateway_base_url': 'https://gateway.example.test/v1',
         'sales_assistant_model': 'gpt-4o-mini',
         'resend_api_key': 're_test_key',
         'email_from': 'Zylora <notifications@zylora.dev>',

@@ -87,9 +87,9 @@ def session_cookie_samesite() -> str:
 def session_cookie_domain() -> str | None:
     """Share the session with the configured sibling admin origin only.
 
-    The public API and Super Admin UI are separate Railway services.  A
-    host-only cookie authenticates the API but cannot be sent by the admin
-    origin, even when CORS allows credentialed requests.  Derive the narrowest
+    The public API and Super Admin UI may be separate services. A host-only
+    cookie authenticates the API but cannot be sent by the admin origin, even
+    when CORS allows credentialed requests. Derive the narrowest
     common hostname suffix from the configured origins; in development keep a
     host-only cookie.
     """
@@ -109,9 +109,9 @@ def session_cookie_domain() -> str | None:
     if len(common) < 2:
         return None
     domain = '.' + '.'.join(reversed(common))
-    # Railway's shared `up.railway.app` suffix is a public-suffix boundary in
-    # browsers; parent-domain cookies are rejected/omitted there. Keep the
-    # session host-only and use the same-origin admin portal instead.
+    # Shared-hosting suffixes can be public-suffix boundaries in browsers;
+    # parent-domain cookies are rejected/omitted there. Keep the session
+    # host-only and use the same-origin admin portal instead.
     if domain == '.up.railway.app':
         return None
     return domain

@@ -1,6 +1,6 @@
 # Zylora — AI-first website builder
 
-Zylora is a FastAPI website builder and business workspace. This build ships a 40-template public catalogue adapted from user-supplied licensed source archives. Each public template is normalized into Zylora’s verified template-project runtime for editing, publishing and export. AI-created websites still use a separate prompt-derived SiteDocument runtime and do not depend on a starting template.
+Zylora is a FastAPI website builder and business workspace. This build ships a 40-template public catalogue adapted from user-supplied licensed source archives. Each public template is normalized into Zylora’s verified template-project runtime for editing and publishing. AI-created websites still use a separate prompt-derived SiteDocument runtime and do not depend on a starting template.
 
 ## Design system
 
@@ -14,7 +14,7 @@ The product uses **Inter** for interface/body text and **Space Grotesk** for dis
 4. A visual direction is selected or inferred; there is no starting catalogue template.
 5. Zylora generates the SiteDocument and validates it.
 6. The site opens in the same manual + AI editor used for all sites.
-7. Publishing, leads, appointments, domains, SEO, notifications and source export continue from the same workspace.
+7. Publishing, leads, appointments, domains, SEO and notifications continue from the same workspace.
 
 `GET /api/templates` returns the verified public template catalogue. The internal `ai-runtime` remains infrastructure only and is never exposed as a selectable template.
 
@@ -31,7 +31,6 @@ The product uses **Inter** for interface/body text and **Space Grotesk** for dis
 - Custom domains, Cloudflare integration path and SSL lifecycle.
 - Free/Starter/Growth billing, separate AI/lead credit wallets and top-ups.
 - Freelancer marketplace, support system and SUPER_ADMIN surfaces.
-- Independent Next.js source export generated from the SiteDocument at export time.
 
 ## Quick start
 
@@ -68,21 +67,21 @@ make release-package-qa
 
 `release-package-qa` rejects local databases, `.env`, caches/bytecode, runtime uploads, logs, private-key material, symlinks, `node_modules` and `.next` output so audit/development state cannot be accidentally shipped.
 
-Live OpenAI, Razorpay, Cloudflare, Google, Resend, Twilio WhatsApp and Turnstile paths require real production credentials and provider-side verification. A network-enabled CI environment should also run `npm install && npm run build` on a generated source export before production deployment.
+Live Vercel AI Gateway, Telnyx, Razorpay, Cloudflare, optional Google OAuth and optional Turnstile paths require real production credentials and provider-side verification. A network-enabled CI environment should also run the Studio production build before deployment.
 
 See `REBUILD_NOTES_2026-08-26.md` for the catalogue-removal and migration details.
 
-## Railway deployment
+## Render deployment
 
-This repository deploys as one FastAPI web/API service. The application serves the frontend from `static/`, runs its bounded maintenance loop in-process, and does not require a separate worker or Redis. Build with the root `Dockerfile`, run `python scripts/run_migrations.py` as the Railway pre-deploy command, and let the image start through `run.sh`. The server binds to `0.0.0.0` and Railway's `PORT`; configure the health check as `/api/health`.
+This repository deploys as one FastAPI web/API service on Render. The application serves the frontend from `static/`, runs its bounded maintenance loop in-process, and has no runtime Redis dependency. Use the root `Dockerfile`; it runs `python scripts/run_migrations.py` before starting `uvicorn` through `run.sh`. The server binds to `0.0.0.0` and Render's `PORT`; configure the health check as `/api/health`.
 
-Use Railway PostgreSQL through `DATABASE_URL`. Set `APP_ENV=production`, an HTTPS `APP_URL`, and the production variables documented in `.env.example`. Production validation fails closed when a release-critical provider is missing. User media must use S3-compatible storage (`MEDIA_STORAGE_PROVIDER=s3`) or a Railway volume mounted at `MEDIA_STORAGE_DIR` with `MEDIA_STORAGE_DURABLE=true`; the container filesystem is not durable.
+Use Render PostgreSQL through `DATABASE_URL`. Set `APP_ENV=production`, an HTTPS `APP_URL`, and the production variables documented in `.env.example`. Production validation fails closed when PostgreSQL or the canonical hosted-AI gateway is missing. User media must use S3-compatible storage (`MEDIA_STORAGE_PROVIDER=s3`) or a Render persistent disk mounted at `MEDIA_STORAGE_DIR` with `MEDIA_STORAGE_DURABLE=true`; the container filesystem is not durable.
 
 Migrations are ordered, forward-only SQL files recorded in `schema_migrations`. Run the pre-deploy command once before application replicas start. To roll back application code, redeploy the previous Git commit; do not delete tables or rewrite migration history. Database rollback requires a separately reviewed compensating migration or a verified backup restore.
 
 ## Universal website import
 
-Zylora can safely import an `.html` file or a ZIP project and normalize it into the existing SiteDocument/editor runtime. Framework detection covers HTML/CSS/JS, React, Next.js, Angular, Vue, Nuxt, Svelte, SvelteKit and Astro. Rendered `out`/`dist`/`build` output is preferred when present; otherwise supported source markup is normalized without executing uploaded package scripts or application JavaScript. Imported pages participate in the normal draft, preview, publish, SEO, media, history and independent Next.js export pipelines.
+Zylora can safely import an `.html` file or a ZIP project and normalize it into the existing SiteDocument/editor runtime. Framework detection covers HTML/CSS/JS, React, Next.js, Angular, Vue, Nuxt, Svelte, SvelteKit and Astro. Rendered `out`/`dist`/`build` output is preferred when present; otherwise supported source markup is normalized without executing uploaded package scripts or application JavaScript. Imported pages participate in the normal draft, preview, publish, SEO, media and history workflows.
 
 Local raster assets are copied into Zylora managed media. Image replacement is unified across normal `<img>` elements, responsive `<picture>` sources, video posters, SVG `<image>` elements, inline backgrounds and background images discovered in imported stylesheets. Original imported assets remain retained so Reset can restore the source design.
 

@@ -12,6 +12,7 @@ from .studio_document import (
     _geometry_from_css,
     validate_studio_document,
 )
+from .penpot_semantics import SemanticValidationError, canonicalize_component_metadata
 
 
 GEOMETRY_FIELDS = {
@@ -99,6 +100,9 @@ def _apply_geometry(node: Node, raw: object, breakpoint: str = "desktop") -> Non
 
 def apply_v4_operations(doc: SiteDocument, operations: list[dict]) -> SiteDocument:
     new_doc = doc.model_copy(deep=True)
+    # Every canonical mutation keeps the website semantic envelope explicit;
+    # this is metadata, not a second document model.
+    new_doc.metadata.setdefault('zyloraWebsiteSchemaVersion', 1)
 
     for op in operations:
         op_type = op.get('type')
@@ -109,7 +113,16 @@ def apply_v4_operations(doc: SiteDocument, operations: list[dict]) -> SiteDocume
         page = new_doc.pages[page_id]
         nodes = page.nodes
 
-        if op_type == 'UPDATE_TEXT':
+        if op_type == 'UPDATE_SITE_TOKEN':
+            name = str(op.get('name') or '').strip()
+            if not name or len(name) > 120 or not all(char.isalnum() or char in '._-' for char in name) or not name[0].isalpha():
+                raise ValueError('Invalid site token name')
+            value = op.get('value')
+            if isinstance(value, (dict, list)):
+                raise ValueError('Site token values must be scalar')
+            new_doc.tokens[name] = str(value) if value is not None else ''
+
+        elif op_type == 'UPDATE_TEXT':
             node = _editable(nodes, op.get('nodeId'))
             if node.type not in ['text', 'heading', 'button', 'link']:
                 raise ValueError(f"Node {node.id} does not support text content")
@@ -119,6 +132,25 @@ def apply_v4_operations(doc: SiteDocument, operations: list[dict]) -> SiteDocume
             node = _editable(nodes, op.get('nodeId'))
             for k, v in op.get('css', {}).items():
                 node.style.css[k] = str(v)
+
+        elif op_type == 'UPDATE_SEMANTIC_METADATA':
+            node = _editable(nodes, op.get('nodeId'))
+            raw_metadata = op.get('metadata')
+            if not isinstance(raw_metadata, dict):
+                raise ValueError('Semantic metadata must be an object')
+            try:
+                semantic, _warnings = canonicalize_component_metadata(
+                    raw_metadata,
+                    node_id=node.id,
+                    used_instance_ids={
+                        str(other.metadata.get('zylora', {}).get('instanceId'))
+                        for other in nodes.values()
+                        if other.id != node.id and isinstance(other.metadata.get('zylora'), dict)
+                    },
+                )
+            except SemanticValidationError as exc:
+                raise ValueError(str(exc)) from exc
+            node.metadata['zylora'] = semantic
                 
         elif op_type == 'UPDATE_RESPONSIVE_STYLE':
             bp = op.get('breakpoint')
@@ -163,6 +195,81 @@ def apply_v4_operations(doc: SiteDocument, operations: list[dict]) -> SiteDocume
             # Add to new parent
             parent.children.append(node_id)
             node.parentId = new_parent_id
+
+        elif op_type == 'GROUP_NODES':
+            node_ids = [str(value) for value in (op.get('nodeIds') or [])]
+            group_id = str(op.get('groupId') or '')
+            if len(node_ids) < 2 or len(set(node_ids)) != len(node_ids):
+                raise ValueError('A group requires at least two distinct nodes')
+            if not group_id or group_id in nodes:
+                raise ValueError('Group id is missing or already exists')
+            grouped = [_editable(nodes, node_id) for node_id in node_ids]
+            if any(node.id == page.rootNodeId for node in grouped):
+                raise ValueError('The page root cannot be grouped')
+            parent_ids = {node.parentId for node in grouped}
+            if len(parent_ids) != 1 or None in parent_ids:
+                raise ValueError('Grouped nodes must share one parent')
+            parent_id = next(iter(parent_ids))
+            parent = nodes.get(parent_id)
+            if not parent:
+                raise ValueError('Group parent is missing')
+            ordered = [child_id for child_id in parent.children if child_id in node_ids]
+            if len(ordered) != len(node_ids):
+                raise ValueError('Grouped nodes are not children of their declared parent')
+            boxes = []
+            for node in grouped:
+                geom = node.geometry or NodeGeometry(**_geometry_from_css(node.model_dump()))
+                boxes.append((node, geom))
+            left = min(geom.x for _, geom in boxes)
+            top = min(geom.y for _, geom in boxes)
+            right = max(geom.x + geom.width for _, geom in boxes)
+            bottom = max(geom.y + geom.height for _, geom in boxes)
+            wrapper = Node(
+                id=group_id,
+                type='container',
+                parentId=parent.id,
+                children=ordered,
+                metadata={'displayName': 'Group', 'kind': 'group', 'penpotAdapter': True},
+                geometry=NodeGeometry(x=left, y=top, width=max(1, right-left), height=max(1, bottom-top)),
+            )
+            for node, geom in boxes:
+                node.parentId = group_id
+                node.geometry = NodeGeometry(
+                    x=geom.x-left, y=geom.y-top, width=geom.width, height=geom.height,
+                    rotation=geom.rotation, mode=geom.mode, minWidth=geom.minWidth,
+                    maxWidth=geom.maxWidth, minHeight=geom.minHeight, maxHeight=geom.maxHeight,
+                    lockAspectRatio=geom.lockAspectRatio,
+                )
+            at = min(parent.children.index(node_id) for node_id in ordered)
+            parent.children = [child_id for child_id in parent.children if child_id not in node_ids]
+            parent.children.insert(at, group_id)
+            nodes[group_id] = wrapper
+
+        elif op_type == 'UNGROUP_NODES':
+            group = _editable(nodes, op.get('nodeId'))
+            if group.type != 'container' or group.metadata.get('kind') != 'group' or not group.parentId:
+                raise ValueError('Only adapter-created groups can be ungrouped')
+            parent = nodes.get(group.parentId)
+            if not parent:
+                raise ValueError('Group parent is missing')
+            group_geom = group.geometry or NodeGeometry(**_geometry_from_css(group.model_dump()))
+            at = parent.children.index(group.id) if group.id in parent.children else len(parent.children)
+            for child_id in group.children:
+                child = nodes.get(child_id)
+                if not child:
+                    raise ValueError(f'Grouped child {child_id} is missing')
+                child_geom = child.geometry or NodeGeometry(**_geometry_from_css(child.model_dump()))
+                child.parentId = parent.id
+                child.geometry = NodeGeometry(
+                    x=child_geom.x+group_geom.x, y=child_geom.y+group_geom.y,
+                    width=child_geom.width, height=child_geom.height,
+                    rotation=child_geom.rotation, mode=child_geom.mode, minWidth=child_geom.minWidth,
+                    maxWidth=child_geom.maxWidth, minHeight=child_geom.minHeight,
+                    maxHeight=child_geom.maxHeight, lockAspectRatio=child_geom.lockAspectRatio,
+                )
+            parent.children = [child_id for child_id in parent.children if child_id != group.id]
+            parent.children[at:at] = list(group.children)
+            del nodes[group.id]
             
         elif op_type == 'DELETE_NODE':
             node_id = str(op.get('nodeId') or '')

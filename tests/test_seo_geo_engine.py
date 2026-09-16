@@ -1,5 +1,5 @@
 from __future__ import annotations
-import io, json, re, zipfile
+import json, re
 from fastapi.testclient import TestClient
 from sqlalchemy import text
 from app.main import app
@@ -69,7 +69,7 @@ def test_customer_blog_is_not_part_of_site_seo_or_runtime():
     assert c.get(f'/s/{slug}/blog/example-post').status_code==404
     sm=c.get(f'/s/{slug}/sitemap.xml'); assert sm.status_code==200 and '/blog' not in sm.text
 
-def test_seo_security_escaping_invalid_canonical_health_and_export_preservation():
+def test_seo_security_escaping_invalid_canonical_and_hosted_rendering():
     reset_db(); c,h=signup('escape@example.com'); activate_zylora(c,h,country='GB'); sid=site(c,h,'Safe & Sound')
     bad=c.patch(f'/api/sites/{sid}/seo',headers=h,json={'page':'home','canonical':'javascript:alert(1)'}); assert bad.status_code==422
     x=c.patch(f'/api/sites/{sid}/seo',headers=h,json={'page':'home','title':'</title><script>alert(1)</script>','description':'<img src=x onerror=alert(1)>'}); assert x.status_code==200
@@ -77,18 +77,7 @@ def test_seo_security_escaping_invalid_canonical_health_and_export_preservation(
     slug=c.get(f'/api/sites/{sid}').json()['slug']; html=c.get(f'/s/{slug}').text
     assert '<script>alert(1)</script>' not in html and '&lt;script&gt;' in html
     health=c.get(f'/api/sites/{sid}/seo/health'); assert health.status_code==200 and isinstance(health.json().get('issues'),list)
-    # Development test grants a deterministic independent source-export entitlement.
-    order=c.post(f'/api/sites/{sid}/source-export/order',headers=h,json={'currency':'USD'}); assert order.status_code==200
-    if not order.json().get('entitled'):
-        o=order.json(); vr=c.post(f'/api/sites/{sid}/source-export/verify',headers=h,json={'order_id':o['order_id'],'payment_id':o['mock_payment_id'],'signature':o['mock_signature']}); assert vr.status_code==200,vr.text
-    data=c.get(f'/api/sites/{sid}/export'); assert data.status_code==200,data.text
-    z=zipfile.ZipFile(io.BytesIO(data.content)); names=z.namelist(); assert 'app/robots.js' in names and 'app/sitemap.js' in names and 'zylora-seo.json' in names
-    assert all(not n.startswith('/') and '..' not in n.split('/') and '\\' not in n for n in names)
-    assert 'NEXT_PUBLIC_SITE_URL' in z.read('README-ZYLORA.md').decode()
-    home_src=z.read('app/page.jsx').decode()
-    assert 'NEXT_PUBLIC_SITE_URL' in home_src and 'metadataBase:new URL(zyloraSiteUrl)' in home_src
-    assert 'alternates:{canonical:"/"}' in home_src and '/s/' not in home_src.split('export const metadata=',1)[1].split('export default',1)[0]
-    assert 'app/not-found.jsx' in names and 'index:false' in z.read('app/not-found.jsx').decode()
+    assert c.get(f'/api/sites/{sid}/export').status_code==404
 
 
 def test_structured_data_has_stable_entity_ids_and_only_real_fields():

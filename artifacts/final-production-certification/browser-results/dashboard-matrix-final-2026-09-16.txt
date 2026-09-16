@@ -1,0 +1,12 @@
+Zylora dashboard/super-admin final browser matrix — 2026-09-16
+
+Harness: scripts/verify_dashboard_redesign.py
+Widths: 1440, 1280, 1024, 768, 430, 390, 375, 360
+
+Chromium: PASS — all widths and configured views; 0 console/page errors
+Firefox: PASS — all widths and configured views; 0 console/page errors
+WebKit: PASS — all widths and configured views; 0 console/page errors
+
+Verified views include Websites, Leads, AI Sales Assistant, Appointments,
+Growth Center, Site Health, Domains & SSL, Integrations, Freelancers, Support,
+Billing & Usage, Settings, and the Super Admin overview/tabs.

@@ -22,8 +22,8 @@ router=APIRouter(prefix='/api')
 # ----------------------- Public security config -----------------------------
 @router.get('/public/security-config')
 def security_config():
-    configured=bool(settings.turnstile_secret_key and settings.turnstile_site_key)
-    required=settings.app_env=='production' or bool(settings.turnstile_secret_key)
+    configured=bool(settings.turnstile_enabled and settings.turnstile_secret_key and settings.turnstile_site_key)
+    required=bool(settings.turnstile_enabled and (settings.app_env=='production' or settings.turnstile_secret_key))
     return {'turnstile_required':required,'turnstile_configured':configured,'turnstile_site_key':settings.turnstile_site_key if configured else ''}
 
 # ----------------------- Site knowledge + chatbot ---------------------------
@@ -403,7 +403,7 @@ def freelancer_dashboard(request:Request):
         ratings=db.execute(text('SELECT * FROM freelancer_ratings WHERE freelancer_id=:u ORDER BY created_at DESC'),{'u':u['id']}).mappings().all()
     p=dict(profile) if profile else None
     if p: p['rating_average']=round((p['rating_sum']/p['rating_count']),2) if p['rating_count'] else None
-    return {'profile':p,'sites':[dict(r) for r in sites],'template_submissions':[dict(r) for r in submissions],'ratings':[dict(r) for r in ratings],'pricing':{'dashboard_usd_minor':0,'studio_usd_minor':0,'transfer_usd_minor':0,'standalone_export_usd_minor':int(get_system_setting('source_export_usd_minor','9900'))}}
+    return {'profile':p,'sites':[dict(r) for r in sites],'template_submissions':[dict(r) for r in submissions],'ratings':[dict(r) for r in ratings],'pricing':{'dashboard_usd_minor':0,'studio_usd_minor':0,'transfer_usd_minor':0}}
 
 @router.put('/freelancer/profile')
 def save_freelancer_profile(payload:FreelancerProfileIn,request:Request):
@@ -419,7 +419,7 @@ def save_freelancer_profile(payload:FreelancerProfileIn,request:Request):
 @router.post('/freelancer/sites/{site_id}/fees/{fee_type}')
 def obsolete_freelancer_fee(site_id:str,fee_type:str,request:Request):
     _user(request,True)
-    raise HTTPException(410,'Freelancer transfer fees were removed. Ownership transfer is free; source export uses the independent source-export checkout.')
+    raise HTTPException(410,'Freelancer transfer fees were removed. Ownership transfer is free.')
 
 class FreelancerTemplateIn(BaseModel):
     name:str=Field(min_length=2,max_length=120)

@@ -1,6 +1,6 @@
 {
   "browser": "chromium",
-  "site_id": "1470c115-786d-448e-bf44-5c2478072081",
+  "site_id": "39e8b108-3dc4-4926-b47f-27502da3c3c4",
   "steps": [
     {
       "step": 1,
@@ -16,7 +16,7 @@
       "label": "create website",
       "verdict": "PASS",
       "evidence": {
-        "site_id": "1470c115-786d-448e-bf44-5c2478072081"
+        "site_id": "39e8b108-3dc4-4926-b47f-27502da3c3c4"
       },
       "ms": 0.0
     },
@@ -25,133 +25,133 @@
       "label": "enter blank Studio",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 353.2
+      "ms": 362.59
     },
     {
       "step": 4,
       "label": "verify blank Home artboard",
       "verdict": "PASS",
       "evidence": false,
-      "ms": 18.82
+      "ms": 24.29
     },
     {
       "step": 5,
       "label": "open Elements",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 88.47
+      "ms": 98.45
     },
     {
       "step": 6,
       "label": "insert text",
       "verdict": "PASS",
-      "evidence": "text_7a03198aea68",
-      "ms": 279.42
+      "evidence": "text_1db728686da3",
+      "ms": 303.17
     },
     {
       "step": 7,
       "label": "insert button",
       "verdict": "PASS",
-      "evidence": "button_af2405dec591",
-      "ms": 194.46
+      "evidence": "button_0a56df39475f",
+      "ms": 257.56
     },
     {
       "step": 8,
       "label": "insert card",
       "verdict": "PASS",
-      "evidence": "container_78ef748d9c8f",
-      "ms": 162.23
+      "evidence": "container_6ce17234f5dd",
+      "ms": 189.29
     },
     {
       "step": 9,
       "label": "insert image frame",
       "verdict": "PASS",
-      "evidence": "image_323dea8ff2b8",
-      "ms": 156.57
+      "evidence": "image_4bc0c0ce0591",
+      "ms": 176.76
     },
     {
       "step": 10,
       "label": "insert additional visual",
       "verdict": "PASS",
-      "evidence": "container_a49146c6914d",
-      "ms": 180.18
+      "evidence": "container_b72ad6dc19f1",
+      "ms": 179.81
     },
     {
       "step": 11,
       "label": "select object",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 101.25
+      "ms": 84.31
     },
     {
       "step": 12,
       "label": "deselect object",
       "verdict": "PASS",
       "evidence": false,
-      "ms": 98.17
+      "ms": 77.03
     },
     {
       "step": 13,
       "label": "Shift multi-select",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 197.42
+      "ms": 188.97
     },
     {
       "step": 14,
       "label": "marquee/select multiple",
       "verdict": "PASS",
       "evidence": false,
-      "ms": 166.43
+      "ms": 139.84
     },
     {
       "step": 15,
       "label": "drag object",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 368.55
+      "ms": 335.44
     },
     {
       "step": 16,
       "label": "overlap objects",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 281.39
+      "ms": 293.94
     },
     {
       "step": 17,
       "label": "verify z-order",
       "verdict": "PASS",
       "evidence": false,
-      "ms": 14.57
+      "ms": 18.36
     },
     {
       "step": 18,
       "label": "bring forward",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 195.31
+      "ms": 190.08
     },
     {
       "step": 19,
       "label": "send backward",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 112.5
+      "ms": 125.46
     },
     {
       "step": 20,
       "label": "bring to front",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 149.62
+      "ms": 156.82
     },
     {
       "step": 21,
       "label": "send to back",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 115.99
+      "ms": 134.11
     },
     {
       "step": 22,
@@ -159,47 +159,22 @@
       "verdict": "PASS",
       "evidence": {
         "before": {
-          "x": 628.5137329101562,
-          "y": 211.16000366210938,
-          "w": 174,
-          "h": 127.60000610351562
+          "x": 533.40625,
+          "y": 1176.0172119140625,
+          "w": 208.79998779296875,
+          "h": 249.39990234375
         },
         "after": {
-          "x": 638.9537353515625,
-          "y": 211.16000366210938,
-          "w": 161.82000732421875,
-          "h": 127.60000610351562
+          "x": 539.7862548828125,
+          "y": 1176.280029296875,
+          "w": 196.6199951171875,
+          "h": 249.39990234375
         },
         "hit_stack": {
-          "stack": [
-            {
-              "tag": "DIV",
-              "handle": null,
-              "id": "container_a49146c6914d",
-              "class": ""
-            },
-            {
-              "tag": "SPAN",
-              "handle": "left",
-              "id": null,
-              "class": "studio-resize-handle"
-            },
-            {
-              "tag": "DIV",
-              "handle": null,
-              "id": "container_78ef748d9c8f",
-              "class": ""
-            },
-            {
-              "tag": "IMG",
-              "handle": null,
-              "id": null,
-              "class": ""
-            }
-          ]
+          "stack": []
         }
       },
-      "ms": 248.32
+      "ms": 263.24
     },
     {
       "step": 23,
@@ -207,47 +182,22 @@
       "verdict": "PASS",
       "evidence": {
         "before": {
-          "x": 638.9537353515625,
-          "y": 211.16000366210938,
-          "w": 161.82000732421875,
-          "h": 127.60000610351562
+          "x": 539.7862548828125,
+          "y": 1176.280029296875,
+          "w": 196.6199951171875,
+          "h": 249.39990234375
         },
         "after": {
-          "x": 644.7537841796875,
-          "y": 211.16000366210938,
-          "w": 175.739990234375,
-          "h": 127.60000610351562
+          "x": 539.7862548828125,
+          "y": 1176.280029296875,
+          "w": 210.53997802734375,
+          "h": 249.39990234375
         },
         "hit_stack": {
-          "stack": [
-            {
-              "tag": "SPAN",
-              "handle": "right",
-              "id": null,
-              "class": "studio-resize-handle"
-            },
-            {
-              "tag": "DIV",
-              "handle": null,
-              "id": "container_78ef748d9c8f",
-              "class": ""
-            },
-            {
-              "tag": "IMG",
-              "handle": null,
-              "id": null,
-              "class": ""
-            },
-            {
-              "tag": "DIV",
-              "handle": null,
-              "id": null,
-              "class": "studio-image-frame"
-            }
-          ]
+          "stack": []
         }
       },
-      "ms": 285.67
+      "ms": 246.79
     },
     {
       "step": 24,
@@ -255,47 +205,22 @@
       "verdict": "PASS",
       "evidence": {
         "before": {
-          "x": 644.7537841796875,
-          "y": 211.16000366210938,
-          "w": 175.739990234375,
-          "h": 127.60000610351562
+          "x": 539.7862548828125,
+          "y": 1176.280029296875,
+          "w": 210.53997802734375,
+          "h": 249.39990234375
         },
         "after": {
-          "x": 644.7537841796875,
-          "y": 227.39999389648438,
-          "w": 175.739990234375,
-          "h": 115.42001342773438
+          "x": 539.7862548828125,
+          "y": 1188.4599609375,
+          "w": 210.53997802734375,
+          "h": 237.219970703125
         },
         "hit_stack": {
-          "stack": [
-            {
-              "tag": "IMG",
-              "handle": null,
-              "id": null,
-              "class": ""
-            },
-            {
-              "tag": "DIV",
-              "handle": null,
-              "id": null,
-              "class": "studio-image-frame"
-            },
-            {
-              "tag": "DIV",
-              "handle": null,
-              "id": "image_323dea8ff2b8",
-              "class": ""
-            },
-            {
-              "tag": "SPAN",
-              "handle": "top",
-              "id": null,
-              "class": "studio-resize-handle"
-            }
-          ]
+          "stack": []
         }
       },
-      "ms": 208.27
+      "ms": 256.88
     },
     {
       "step": 25,
@@ -303,47 +228,22 @@
       "verdict": "PASS",
       "evidence": {
         "before": {
-          "x": 644.7537841796875,
-          "y": 227.39999389648438,
-          "w": 175.739990234375,
-          "h": 115.42001342773438
+          "x": 539.7862548828125,
+          "y": 1188.4599609375,
+          "w": 210.53997802734375,
+          "h": 237.219970703125
         },
         "after": {
-          "x": 644.7537841796875,
-          "y": 227.39999389648438,
-          "w": 175.739990234375,
-          "h": 129.33999633789062
+          "x": 539.7862548828125,
+          "y": 1188.4599609375,
+          "w": 210.53997802734375,
+          "h": 251.1400146484375
         },
         "hit_stack": {
-          "stack": [
-            {
-              "tag": "IMG",
-              "handle": null,
-              "id": null,
-              "class": ""
-            },
-            {
-              "tag": "DIV",
-              "handle": null,
-              "id": null,
-              "class": "studio-image-frame"
-            },
-            {
-              "tag": "DIV",
-              "handle": null,
-              "id": "image_323dea8ff2b8",
-              "class": ""
-            },
-            {
-              "tag": "SPAN",
-              "handle": "bottom",
-              "id": null,
-              "class": "studio-resize-handle"
-            }
-          ]
+          "stack": []
         }
       },
-      "ms": 227.82
+      "ms": 235.94
     },
     {
       "step": 26,
@@ -351,47 +251,22 @@
       "verdict": "PASS",
       "evidence": {
         "before": {
-          "x": 644.7537841796875,
-          "y": 227.39999389648438,
-          "w": 175.739990234375,
-          "h": 129.33999633789062
+          "x": 539.7862548828125,
+          "y": 1188.4599609375,
+          "w": 210.53997802734375,
+          "h": 251.1400146484375
         },
         "after": {
-          "x": 654.61376953125,
-          "y": 239,
-          "w": 165.8800048828125,
-          "h": 119.47998046875
+          "x": 549.646240234375,
+          "y": 1197.159912109375,
+          "w": 200.67999267578125,
+          "h": 241.280029296875
         },
         "hit_stack": {
-          "stack": [
-            {
-              "tag": "IMG",
-              "handle": null,
-              "id": null,
-              "class": ""
-            },
-            {
-              "tag": "DIV",
-              "handle": null,
-              "id": null,
-              "class": "studio-image-frame"
-            },
-            {
-              "tag": "DIV",
-              "handle": null,
-              "id": "image_323dea8ff2b8",
-              "class": ""
-            },
-            {
-              "tag": "SPAN",
-              "handle": "top-left",
-              "id": null,
-              "class": "studio-resize-handle"
-            }
-          ]
+          "stack": []
         }
       },
-      "ms": 270.52
+      "ms": 263.01
     },
     {
       "step": 27,
@@ -399,47 +274,22 @@
       "verdict": "PASS",
       "evidence": {
         "before": {
-          "x": 654.61376953125,
-          "y": 239,
-          "w": 165.8800048828125,
-          "h": 119.47998046875
+          "x": 549.646240234375,
+          "y": 1197.159912109375,
+          "w": 200.67999267578125,
+          "h": 241.280029296875
         },
         "after": {
-          "x": 660.4137573242188,
-          "y": 245.95999145507812,
-          "w": 178.05999755859375,
-          "h": 109.6199951171875
+          "x": 549.646240234375,
+          "y": 1207.02001953125,
+          "w": 212.8599853515625,
+          "h": 231.419921875
         },
         "hit_stack": {
-          "stack": [
-            {
-              "tag": "SPAN",
-              "handle": "top-right",
-              "id": null,
-              "class": "studio-resize-handle"
-            },
-            {
-              "tag": "IMG",
-              "handle": null,
-              "id": null,
-              "class": ""
-            },
-            {
-              "tag": "DIV",
-              "handle": null,
-              "id": null,
-              "class": "studio-image-frame"
-            },
-            {
-              "tag": "DIV",
-              "handle": null,
-              "id": "home-hero-image",
-              "class": ""
-            }
-          ]
+          "stack": []
         }
       },
-      "ms": 259.68
+      "ms": 250.21
     },
     {
       "step": 28,
@@ -447,47 +297,22 @@
       "verdict": "PASS",
       "evidence": {
         "before": {
-          "x": 660.4137573242188,
-          "y": 245.95999145507812,
-          "w": 178.05999755859375,
-          "h": 109.6199951171875
+          "x": 549.646240234375,
+          "y": 1207.02001953125,
+          "w": 212.8599853515625,
+          "h": 231.419921875
         },
         "after": {
-          "x": 665.0537109375,
-          "y": 245.95999145507812,
-          "w": 168.2000732421875,
-          "h": 121.80001831054688
+          "x": 559.5062255859375,
+          "y": 1207.02001953125,
+          "w": 203,
+          "h": 243.5999755859375
         },
         "hit_stack": {
-          "stack": [
-            {
-              "tag": "IMG",
-              "handle": null,
-              "id": null,
-              "class": ""
-            },
-            {
-              "tag": "DIV",
-              "handle": null,
-              "id": null,
-              "class": "studio-image-frame"
-            },
-            {
-              "tag": "DIV",
-              "handle": null,
-              "id": "image_323dea8ff2b8",
-              "class": ""
-            },
-            {
-              "tag": "SPAN",
-              "handle": "bottom-left",
-              "id": null,
-              "class": "studio-resize-handle"
-            }
-          ]
+          "stack": []
         }
       },
-      "ms": 402.88
+      "ms": 233.34
     },
     {
       "step": 29,
@@ -495,47 +320,22 @@
       "verdict": "PASS",
       "evidence": {
         "before": {
-          "x": 665.0537109375,
-          "y": 245.95999145507812,
-          "w": 168.2000732421875,
-          "h": 121.80001831054688
+          "x": 559.5062255859375,
+          "y": 1207.02001953125,
+          "w": 203,
+          "h": 243.5999755859375
         },
         "after": {
-          "x": 665.0537109375,
-          "y": 245.95999145507812,
-          "w": 180.3800048828125,
-          "h": 133.98001098632812
+          "x": 557.186279296875,
+          "y": 1207.02001953125,
+          "w": 215.179931640625,
+          "h": 255.7799072265625
         },
         "hit_stack": {
-          "stack": [
-            {
-              "tag": "SPAN",
-              "handle": "bottom-right",
-              "id": null,
-              "class": "studio-resize-handle"
-            },
-            {
-              "tag": "IMG",
-              "handle": null,
-              "id": null,
-              "class": ""
-            },
-            {
-              "tag": "DIV",
-              "handle": null,
-              "id": null,
-              "class": "studio-image-frame"
-            },
-            {
-              "tag": "DIV",
-              "handle": null,
-              "id": "home-hero-image",
-              "class": ""
-            }
-          ]
+          "stack": []
         }
       },
-      "ms": 326.06
+      "ms": 234.52
     },
     {
       "step": 30,
@@ -546,21 +346,21 @@
         "guide_count": 0,
         "handles": 8
       },
-      "ms": 178.2
+      "ms": 157.52
     },
     {
       "step": 31,
       "label": "verify center guide",
       "verdict": "PASS",
-      "evidence": false,
-      "ms": 482.09
+      "evidence": true,
+      "ms": 387.96
     },
     {
       "step": 32,
       "label": "verify edge guide",
       "verdict": "PASS",
       "evidence": false,
-      "ms": 435.69
+      "ms": 381.66
     },
     {
       "step": 33,
@@ -570,112 +370,112 @@
         "spacing_guide_visible": false,
         "spacing_guide_count": 0
       },
-      "ms": 2285.24
+      "ms": 1930.11
     },
     {
       "step": 34,
       "label": "align left",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 232.07
+      "ms": 229.5
     },
     {
       "step": 35,
       "label": "align horizontal center",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 203.56
+      "ms": 232.91
     },
     {
       "step": 36,
       "label": "align right",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 266.26
+      "ms": 228.05
     },
     {
       "step": 37,
       "label": "align top",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 229.35
+      "ms": 217.16
     },
     {
       "step": 38,
       "label": "align vertical center",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 202.3
+      "ms": 209.01
     },
     {
       "step": 39,
       "label": "align bottom",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 221.46
+      "ms": 230.91
     },
     {
       "step": 40,
       "label": "distribute horizontally",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 101.15
+      "ms": 52.81
     },
     {
       "step": 41,
       "label": "distribute vertically",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 77.61
+      "ms": 44.38
     },
     {
       "step": 42,
       "label": "rotate object",
       "verdict": "PASS",
-      "evidence": "width: 1147px; height: 231px; padding: 24px; border-radius: 20px; background: rgb(255, 255, 255); box-shadow: rgba(15, 23, 42, 0.14) 0px 18px 45px; position: absolute; left: -757px; top: 152px; z-index: 7; cursor: move; rotate: 180deg;",
-      "ms": 312.8
+      "evidence": "position: absolute; width: 1374px; height: 441px; background: rgb(255, 255, 255); border: 1px solid rgb(219, 226, 234); border-radius: 24px; box-shadow: rgba(15, 23, 42, 0.12) 0px 18px 42px; overflow: hidden; z-index: 7; cursor: move; left: -881px; top: 152px; rotate: 180deg;",
+      "ms": 250.05
     },
     {
       "step": 43,
       "label": "test committed rotation angle",
       "verdict": "PASS",
       "evidence": false,
-      "ms": 7.29
+      "ms": 8.28
     },
     {
       "step": 44,
       "label": "duplicate object",
       "verdict": "PASS",
-      "evidence": true,
-      "ms": 211.21
+      "evidence": false,
+      "ms": 210.21
     },
     {
       "step": 45,
       "label": "group multi-selection",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 161.95
+      "ms": 149.08
     },
     {
       "step": 46,
       "label": "duplicate grouped content",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 276.84
+      "ms": 298.96
     },
     {
       "step": 47,
       "label": "rotate grouped content",
       "verdict": "PASS",
-      "evidence": "position: absolute; left: 230px; top: 274px; width: 170px; height: 170px; z-index: 1; cursor: move; rotate: 180deg;",
-      "ms": 279.03
+      "evidence": "position: absolute; left: 333px; top: 484px; width: 170px; height: 170px; z-index: 1; cursor: move; rotate: 180deg;",
+      "ms": 249.64
     },
     {
       "step": 48,
       "label": "lock element",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 949.51
+      "ms": 813.77
     },
     {
       "step": 49,
@@ -689,119 +489,119 @@
       "label": "unlock element",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 238.0
+      "ms": 206.82
     },
     {
       "step": 51,
       "label": "crop image",
       "verdict": "PASS",
       "evidence": {
-        "image_id": "image_674013684b1a",
+        "image_id": "image_4bc0c0ce0591",
         "crop_toolbar": 1
       },
-      "ms": 727.6
+      "ms": 555.94
     },
     {
       "step": 52,
       "label": "zoom crop media",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 98.84
+      "ms": 91.09
     },
     {
       "step": 53,
       "label": "pan crop media",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 61.82
+      "ms": 62.26
     },
     {
       "step": 54,
       "label": "save crop",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 60.79
+      "ms": 34.43
     },
     {
       "step": 55,
       "label": "switch desktop breakpoint",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 67.73
+      "ms": 48.11
     },
     {
       "step": 56,
       "label": "edit desktop layout",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 278.61
+      "ms": 289.44
     },
     {
       "step": 57,
       "label": "switch tablet breakpoint",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 216.01
+      "ms": 220.78
     },
     {
       "step": 58,
       "label": "edit tablet layout",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 403.59
+      "ms": 276.38
     },
     {
       "step": 59,
       "label": "switch mobile breakpoint",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 222.8
+      "ms": 227.73
     },
     {
       "step": 60,
       "label": "edit mobile layout",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 347.32
+      "ms": 242.72
     },
     {
       "step": 61,
       "label": "return desktop and verify isolation",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 256.29
+      "ms": 254.45
     },
     {
       "step": 62,
       "label": "undo/redo sequence",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 169.99
+      "ms": 149.41
     },
     {
       "step": 63,
       "label": "save/autosave",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 707.89
+      "ms": 732.17
     },
     {
       "step": 64,
       "label": "reload and verify state",
       "verdict": "PASS",
       "evidence": true,
-      "ms": 21.47
+      "ms": 15.31
     },
     {
       "step": 65,
       "label": "publish and verify output",
       "verdict": "PASS",
       "evidence": {
-        "slug": "literal-studio-65-4987",
+        "slug": "literal-studio-65",
         "status": 200,
         "renderer": "V4"
       },
-      "ms": 833.97
+      "ms": 922.45
     },
     {
       "step": 66,

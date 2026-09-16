@@ -1,0 +1,39 @@
+Zylora Penpot source verification (2026-09-16)
+
+Source mode: git_submodule
+Superproject path: vendor/penpot
+Repository: https://github.com/penpot/penpot
+Verified tag: 2.17.0
+Verified commit: bdce5817ea86d028db29113d9ecdadcf07097b36
+Submodule worktree: clean (git -C vendor/penpot status --short returned no lines)
+Submodule metadata: present (vendor/penpot/.git exists)
+Note: the aggregate `git submodule status -- vendor/penpot` command hit a
+Git-for-Windows Win32 signal-pipe error (WinError 5) on this host; the direct
+submodule commit/tag/status checks above succeeded.
+Official distribution artifact: integrations/penpot/docker-compose.2.17.0.yaml
+Artifact SHA-256: 79330B4445D6C6DBA6918D222D342A365710BA90B6BB8A8EAE3D333155B0CF5E
+Upstream modified files: 0
+
+Runtime result: BLOCKED_BY_EXTERNAL_ENVIRONMENT
+Evidence: Docker Compose startup was attempted, but this Windows host has no
+Docker Linux engine (dockerDesktopLinuxEngine named pipe unavailable). No
+Penpot containers, database, Redis service, exporter, OIDC session, or real
+Penpot file lifecycle was exercised.
+
+Cutover state:
+STUDIO_ENGINE=legacy
+Penpot engine enabled=False
+Source present=True
+Runtime started=False
+SSO configured=False
+
+This artifact proves source acquisition and pinning only. It does not certify
+Penpot runtime, SSO, plugin execution, real-file persistence, compilation from
+a real Penpot file, preview, publish, Railway staging, or PostgreSQL.
+
+Fresh post-change repository verification:
+pytest -q
+511 passed, 0 failed, 0 skipped, 59 warnings in 540.15s (0:09:00)
+python -m compileall -q app
+PASS
+Penpot mapping/provider-health focus: 8 passed, 1 warning in 19.20s

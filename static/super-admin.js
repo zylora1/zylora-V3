@@ -769,8 +769,6 @@ async function loadAdminSystem() {
     const sm = Object.fromEntries(sys.items.map(x => [x.key, x.value]));
     if ($('#adminNotificationEmail')) $('#adminNotificationEmail').value = sm.admin_notification_email || '';
     if ($('#publicSignupEnabled')) $('#publicSignupEnabled').checked = sm.public_signup_enabled !== 'false';
-    if ($('#sourceExportUsd')) $('#sourceExportUsd').value = sm.source_export_usd_minor || 9900;
-    if ($('#sourceExportInr')) $('#sourceExportInr').value = sm.source_export_inr_minor || 829900;
     if ($('#starterIndiaPlanId')) $('#starterIndiaPlanId').value = sm.starter_india_provider_plan_id || '';
     if ($('#starterInternationalPlanId')) $('#starterInternationalPlanId').value = sm.starter_international_provider_plan_id || '';
     if ($('#growthIndiaPlanId')) $('#growthIndiaPlanId').value = sm.growth_india_provider_plan_id || '';
@@ -1060,6 +1058,21 @@ async function loadAdminIntegrations() {
         </div>
       </div>
     `).join('');
+    const usage = await api('/api/admin/provider-usage?days=30');
+    const summary = $('#providerUsageSummary');
+    if (summary) {
+      const aiRequests = (usage.ai || []).reduce((total, row) => total + Number(row.requests || 0), 0);
+      const communicationRequests = (usage.communications || []).reduce((total, row) => total + Number(row.count || 0), 0);
+      const payments = usage.payments || {};
+      summary.innerHTML = `<div style="display:flex;gap:18px;flex-wrap:wrap;"><span>AI requests <b>${aiRequests}</b></span><span>Communications <b>${communicationRequests}</b></span><span>Successful payments <b>${Number(payments.successful || 0)}</b></span><span>Failed payments <b>${Number(payments.failed || 0)}</b></span></div>`;
+    }
+    const alerts = Array.isArray(usage.alerts) ? usage.alerts : [];
+    const alertSummary = $('#providerUsageAlerts');
+    if (alertSummary) {
+      alertSummary.innerHTML = alerts.length
+        ? alerts.map(a => `<div style="color:${a.severity === 'critical' ? 'var(--zy-error)' : 'var(--zy-warning,#d97706)'};margin-top:6px;"><span class="status-badge">Alert</span> ${escapeHtml(a.message || 'Provider threshold reached')}</div>`).join('')
+        : '<span>No configured provider thresholds are currently breached.</span>';
+    }
   } catch (e) {
     grid.innerHTML = `<p class="muted-copy" style="color:var(--zy-error);">${escapeHtml(e.message)}</p>`;
   }
@@ -1288,8 +1301,6 @@ function setupAdminSystemForm() {
       const payload = {
         admin_notification_email: $('#adminNotificationEmail').value.trim() || null,
         public_signup_enabled: $('#publicSignupEnabled').checked,
-        source_export_usd_minor: Number($('#sourceExportUsd').value || 9900),
-        source_export_inr_minor: Number($('#sourceExportInr').value || 829900),
         starter_india_provider_plan_id: $('#starterIndiaPlanId').value.trim() || null,
         starter_international_provider_plan_id: $('#starterInternationalPlanId').value.trim() || null,
         growth_india_provider_plan_id: $('#growthIndiaPlanId').value.trim() || null,

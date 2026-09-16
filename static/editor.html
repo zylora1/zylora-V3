@@ -6,17 +6,16 @@
     <a href="/dashboard" class="back">Dashboard</a>
   </div>
   <div class="site-title">
-    <b id="siteName">Loading…</b>
+    <h1 id="siteName">Loading…</h1>
     <span id="siteStatus">DRAFT</span>
     <span id="saveState" aria-live="polite">Saved</span>
   </div>
   <div class="history-actions">
-    <button id="undoBtn" aria-label="Undo" title="Undo (Ctrl/Cmd+Z)">↶</button>
-    <button id="redoBtn" aria-label="Redo" title="Redo (Ctrl/Cmd+Shift+Z)">↷</button>
+    <button id="undoBtn" aria-label="Undo" title="Undo (Ctrl/Cmd+Z)"><svg class="editor-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7 4 12l5 5M4 12h9a6 6 0 0 1 6 6"/></svg></button>
+    <button id="redoBtn" aria-label="Redo" title="Redo (Ctrl/Cmd+Shift+Z)"><svg class="editor-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 7 5 5-5 5M20 12h-9a6 6 0 0 0-6 6"/></svg></button>
   </div>
   <div class="editor-actions">
     <button id="previewBtn">Preview</button>
-    <a id="exportBtn" href="#">Export ZIP</a>
     <button class="publish" id="publishBtn" data-testid="editor-publish">Publish</button>
   </div>
 </header>
@@ -26,7 +25,7 @@
 <section id="sitePanel" class="rail-panel hidden"><div class="panel-head"><div><small>Site basics</small><h2>Content</h2></div></div><label>Tagline<textarea id="tagline"></textarea></label><label>Description<textarea id="description" class="large"></textarea></label><label>Accent color<div class="color-row"><input id="accent" type="color"><input id="accentText" maxlength="7"></div></label><button class="primary" id="saveBtn" data-testid="editor-save">Save basics</button><div class="msg" id="saveMsg">Changes autosave after you stop typing. Browser recovery is enabled.</div></section>
 <section id="aiPanel" class="rail-panel hidden">
   <div class="ai-head">
-    <span class="ai-icon">✦</span>
+    <span class="ai-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9L12 2Z"/></svg></span>
     <div class="ai-title-group">
       <b>Zylora AI Editor</b>
       <small>Structured, validated actions</small>
@@ -138,7 +137,7 @@
 
         <div class="seo-actions-bar">
           <button class="primary action-save-seo" id="applySeo">Save page SEO</button>
-          <button type="button" class="secondary action-ai-seo" id="seoAiAssist">✦ Suggest metadata with AI</button>
+          <button type="button" class="secondary action-ai-seo" id="seoAiAssist"><span class="ai-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9L12 2Z"/></svg></span> Suggest metadata with AI</button>
           <p class="field-hint">AI suggestions use your credit balance and remain fully editable before saving.</p>
         </div>
       </section>

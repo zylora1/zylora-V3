@@ -11,6 +11,7 @@ from sqlalchemy import text
 
 from .ai_security import SUPER_ADMIN_ASSISTANT, redact_ai_output, record_ai_usage_event
 from .config import settings
+from .ai_service import hosted_ai_configured
 from .db import SessionLocal, now_iso
 from .providers import estimate_openai_cost_micros, super_admin_completion
 from .security import current_user, durable_rate_limit, require_csrf
@@ -262,11 +263,11 @@ def super_admin_assistant(payload: AdminAssistantMessage, request: Request):
     request_id = str(__import__('uuid').uuid4())
     tool, data = run_safe_admin_tool(payload.message)
     answer = redact_ai_output(_answer(tool, data))
-    model = settings.openai_model
+    model = settings.ai_default_model if settings.ai_gateway_api_key else settings.openai_model
     input_tokens = output_tokens = cached_tokens = cost = 0
     status = 'LOCAL_TOOL_ANSWER'
     error_code = None
-    if settings.openai_api_key:
+    if hosted_ai_configured():
         try:
             result = super_admin_completion(question=payload.message, tool_name=tool, tool_result=data, model=model)
             answer = redact_ai_output(result.get('answer') or answer)

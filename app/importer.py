@@ -375,7 +375,7 @@ def _normalize_page(user_id: str, site_id: str, root: Path, page: ImportPage, gl
     if css:
         style=soup.new_tag('style'); style['data-zylora-imported-css']='true'; style.string=css
         (soup.head or soup).append(style)
-    # Normalize local page links into the Zylora page graph; renderers resolve them for preview/live/export.
+    # Normalize local page links into the Zylora page graph; renderers resolve them for preview/live hosting.
     for a in soup.find_all('a'):
         href=str(a.get('href') or '').strip()
         if not href or href.startswith(('#','mailto:','tel:','https://','http://','//')): continue

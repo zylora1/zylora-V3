@@ -1,10 +1,11 @@
 import React from 'react';
-import {isNodeLocked,useStudio} from '../store';
+import {isNodeLocked,useStudio,StudioState,StudioAction,Page,Node as StudioNode,resolveNodeGeometry} from '../store';
 import {useResize} from '../interactions/useResize';
 import {useDrag} from '../interactions/useDrag';
 import {useRotation} from '../interactions/useRotation';
 import {intentionalDrag,rectFromElement} from '../engine';
 import {clearTransientSnapLines,setTransientSnapLines} from '../engine/transient';
+import {StudioIcon} from './StudioIcon';
 
 function studioGradientCss(gradient:any){if(!gradient?.stops?.length)return '';const stops=gradient.stops.map((stop:any)=>`${stop.color}${stop.opacity<1&&/^#[0-9a-f]{6}$/i.test(stop.color)?` / ${stop.opacity}`:''} ${Math.max(0,Math.min(1,Number(stop.position)||0))*100}%`).join(', ');return gradient.type==='radial'?`radial-gradient(circle at ${gradient.centerX??50}% ${gradient.centerY??50}%, ${stops})`:`linear-gradient(${gradient.angle||0}deg, ${stops})`}
 function richMarkup(value:string,runs:any[]){const esc=(x:string)=>x.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'} as any)[c]);if(!runs?.length)return esc(value);const points=Array.from(new Set([0,value.length,...runs.flatMap((r:any)=>[r.start,r.end])].map((x:any)=>Math.max(0,Math.min(value.length,Number(x)))))).sort((a,b)=>a-b);return points.slice(0,-1).map((start,i)=>{const end=points[i+1],marks=runs.filter((r:any)=>r.start<=start&&r.end>=end).reduce((a:any,r:any)=>({...a,...r.marks}),{}),style=Object.entries(marks).filter(([k])=>['fontFamily','fontSize','fontWeight','fontStyle','textDecoration','color','letterSpacing','lineHeight'].includes(k)).map(([k,v])=>`${k.replace(/[A-Z]/g,m=>'-'+m.toLowerCase())}:${v}`).join(';'),gradient=studioGradientCss((marks as any).gradient);const gradientStyle=gradient?`background:${gradient};background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;`:'';return `<span${style||gradientStyle?` style="${esc(style+gradientStyle)}"`:''}>${esc(value.slice(start,end))}</span>`}).join('')}
@@ -26,10 +27,17 @@ function EditableText({nodeId,value,runs,onChange,onEnter}:{nodeId:string;value:
 const acceptsChildren=(type:string,kind?:string)=>['page','section','container','stack','flex','grid','repeater','list','gallery'].includes(type)&&!['shape','card','spacer'].includes(String(kind||'').toLowerCase());
 const editableTypes=['heading','paragraph','text','button','link'];
 
-export function CanvasNode({nodeId}:{nodeId:string}){
- const {state,dispatch}=useStudio();
- const page=state.document?.pages[state.currentPageId],node=page?.nodes[nodeId];
- if(!page||!node)return null;
+type CanvasNodeViewProps={
+ nodeId:string;
+ state:StudioState;
+ dispatch:React.Dispatch<StudioAction>;
+ pageRef:React.MutableRefObject<Page>;
+ node:StudioNode;
+ selectedNodeIds:string[];
+};
+
+function CanvasNodeView({nodeId,state,dispatch,pageRef,node,selectedNodeIds}:CanvasNodeViewProps){
+ const page=pageRef.current;
  const [rectOverride,setRectOverride]=React.useState<any>(null);
  const [marquee,setMarquee]=React.useState<{left:number;top:number;width:number;height:number}|null>(null);
  const [assetOver,setAssetOver]=React.useState(false);
@@ -48,7 +56,7 @@ export function CanvasNode({nodeId}:{nodeId:string}){
   cssStyles={...cssStyles,...(tablet?.style?.css||{}),...(override?.style?.css||{})};
   effectiveVisibility=override?.visibility||tablet?.visibility||effectiveVisibility;
  }
- const isSelected=state.selectedNodeIds.includes(nodeId),isLocked=isNodeLocked(node);
+ const isSelected=selectedNodeIds.includes(nodeId),isLocked=isNodeLocked(node);
  const isAbsolute=cssStyles.position==='absolute'||cssStyles.position==='fixed';
  const elementRef=React.useRef<HTMLElement|null>(null);
  const rotation=useRotation(angle=>dispatch({type:'UPDATE_NODE_GEOMETRY',payload:{nodeId,geometry:{rotate:`${angle}deg`}}}));
@@ -59,7 +67,17 @@ export function CanvasNode({nodeId}:{nodeId:string}){
  const clearPreview=()=>{clearTransientSnapLines()};
  const previewUpdate=(rect:any,lines:any[]=[])=>{setRectOverride(rect);setTransientSnapLines(lines)};
  const endDrag=(rect:any)=>{setRectOverride(null);clearPreview();if(!state.document)return;const geometry={position:'absolute',left:`${Math.round(rect.x)}px`,top:`${Math.round(rect.y)}px`};dragBase.current=null;dispatch({type:'UPDATE_NODE_GEOMETRY',payload:{nodeId,geometry}})};
-  const getTargets=()=>{const el=elementRef.current,parent=el?.parentElement;if(!el||!parent)return{peers:[],parent:null};const pr=parent.getBoundingClientRect();const peers=Array.from(parent.children).filter(x=>x!==el).map(x=>{const r=(x as HTMLElement).getBoundingClientRect();return{x:(r.left-pr.left)/state.zoom,y:(r.top-pr.top)/state.zoom,w:r.width/state.zoom,h:r.height/state.zoom}}).filter(r=>r.w>0&&r.h>0);return{peers,parent:{x:0,y:0,w:pr.width/state.zoom,h:pr.height/state.zoom}}};
+  const getTargets=()=>{
+   const parentId=node.parentId||page.rootNodeId;
+   const parentNode=page.nodes[parentId];
+   if(!parentNode)return{peers:[],parent:null};
+   const peers=parentNode.children.filter(id=>id!==nodeId).map(id=>{
+    const geometry=resolveNodeGeometry(page.nodes[id],state.currentBreakpoint);
+    return{x:geometry.x,y:geometry.y,w:Math.max(1,geometry.width),h:Math.max(1,geometry.height)};
+   }).filter(rect=>rect.w>0&&rect.h>0);
+   const parentGeometry=resolveNodeGeometry(parentNode,state.currentBreakpoint);
+   return{peers,parent:{x:0,y:0,w:Math.max(1,parentGeometry.width),h:Math.max(1,parentGeometry.height)}};
+  };
   const {startDrag}=useDrag(previewUpdate,endDrag,state.zoom,getTargets);
  const endResize=(rect:any)=>{setRectOverride(null);clearPreview();dispatch({type:'UPDATE_NODE_GEOMETRY',payload:{nodeId,geometry:{position:'absolute',width:`${Math.round(rect.w)}px`,height:`${Math.round(rect.h)}px`,left:`${Math.round(rect.x)}px`,top:`${Math.round(rect.y)}px`}}})};
   const {startResize}=useResize({x:0,y:0,w:0,h:0},previewUpdate,endResize,state.zoom,getTargets,parseFloat(cssStyles.rotate||'0')||0);
@@ -133,8 +151,32 @@ export function CanvasNode({nodeId}:{nodeId:string}){
  const props:any={ref:elementRef,style:renderStyle,onClick:(e:React.MouseEvent)=>{if(suppressClick.current){suppressClick.current=false;return}select(e)},onPointerDown:pointerDown,onDragOver:(e:React.DragEvent)=>e.preventDefault(),onDrop:drop,'data-studio-id':node.id,'data-studio-type':node.type,'data-studio-selected':isSelected?'true':undefined,'aria-label':node.accessibility?.ariaLabel||undefined};
  if(Tag==='img'){props.src=node.content.src;props.alt=node.content.alt||''}
  if(Tag==='a'&&node.content.href){props.href=node.content.href; if(node.metadata?.linkTarget==='_blank'){props.target='_blank';props.rel='noopener noreferrer'}}
- const imageContent=node.type==='image'?<div className={`studio-image-frame${cropMode?' crop-mode':''}${assetOver?' media-drop-target':''}`} onPointerDown={cropMode?cropPointerDown:undefined} onPointerMove={cropMode?cropPointerMove:undefined} onPointerUp={cropMode?cropPointerUp:undefined} onDragEnter={e=>{if(Array.from(e.dataTransfer.types).includes('application/x-zylora-asset'))setAssetOver(true)}} onDragLeave={()=>setAssetOver(false)} style={{width:'100%',height:'100%',overflow:'hidden',position:'relative',cursor:cropMode?'grab':undefined}}>{node.content.src?<img src={node.content.src} alt={node.content.alt||''} style={{width:'100%',height:'100%',objectFit:cssStyles.objectFit||'cover',objectPosition:`${50+cropDraft.x}% ${50+cropDraft.y}%`,transform:`scale(${cropDraft.scale})`,display:'block',pointerEvents:cropMode?'none':'auto'}}/>:<div className="studio-image-empty" aria-label="Drop image here">Drop image here</div>}{cropMode&&<div className="crop-toolbar" onPointerDown={e=>e.stopPropagation()}><button aria-label="Zoom out crop" onClick={()=>setCropDraft(v=>({...v,scale:Math.max(1,+(v.scale-.1).toFixed(2))}))}>−</button><input aria-label="Crop zoom" type="range" min="1" max="3" step=".05" value={cropDraft.scale} onChange={e=>setCropDraft(v=>({...v,scale:Number(e.target.value)}))}/><button aria-label="Zoom in crop" onClick={()=>setCropDraft(v=>({...v,scale:Math.min(3,+(v.scale+.1).toFixed(2))}))}>＋</button><button onClick={()=>setCropDraft({x:0,y:0,scale:1})}>Reset</button><button className="primary" onClick={finishCrop}>Done</button><button onClick={cancelCrop}>Cancel</button></div>}</div>:null;
- const content=node.type==='image'?imageContent:editableTypes.includes(node.type)&&node.children.length===0?<EditableText nodeId={node.id} value={node.content.text||''} runs={node.content.runs||[]} onChange={text=>dispatch({type:'UPDATE_NODE_TEXT',payload:{nodeId,text}})} onEnter={()=>elementRef.current?.blur()}/>:node.content.text||node.content.html||null;
- const singleSelected=isSelected&&!cropMode&&state.selectedNodeIds.length===1;
-  return <Tag {...props}>{marquee&&node.type==='page'&&<span className="studio-marquee" style={marquee}/>} {singleSelected&&<div className="studio-floating-actions" aria-hidden="true">•••</div>}{rectOverride&&isSelected&&<div className="studio-measurement" aria-live="polite">x {Math.round(rectOverride.x)} · y {Math.round(rectOverride.y)} · {Math.round(rectOverride.w)} × {Math.round(rectOverride.h)}</div>}{singleSelected&&<button className="studio-rotate-handle" aria-label="Rotate selection" onPointerDown={startRotate}><span/><em>{rotationDraft!==null?`${Math.round(rotationDraft)}°`:''}</em></button>}{singleSelected&&['top-left','top','top-right','right','bottom-right','bottom','bottom-left','left'].map(renderHandle)}{content}{node.children.map(id=><CanvasNode key={id} nodeId={id}/>)}</Tag>;
+ const imageContent=node.type==='image'?<div className={`studio-image-frame${cropMode?' crop-mode':''}${assetOver?' media-drop-target':''}`} onPointerDown={cropMode?cropPointerDown:undefined} onPointerMove={cropMode?cropPointerMove:undefined} onPointerUp={cropMode?cropPointerUp:undefined} onDragEnter={e=>{if(Array.from(e.dataTransfer.types).includes('application/x-zylora-asset'))setAssetOver(true)}} onDragLeave={()=>setAssetOver(false)} style={{width:'100%',height:'100%',overflow:'hidden',position:'relative',cursor:cropMode?'grab':undefined}}>{node.content.src?<img src={node.content.src} alt={node.content.alt||''} style={{width:'100%',height:'100%',objectFit:cssStyles.objectFit||'cover',objectPosition:`${50+cropDraft.x}% ${50+cropDraft.y}%`,transform:`scale(${cropDraft.scale})`,display:'block',pointerEvents:cropMode?'none':'auto'}}/>:<div className="studio-image-empty" aria-label="Drop image here">Drop image here</div>}{cropMode&&<div className="crop-toolbar" onPointerDown={e=>e.stopPropagation()}><button aria-label="Zoom out crop" onClick={()=>setCropDraft(v=>({...v,scale:Math.max(1,+(v.scale-.1).toFixed(2))}))}><StudioIcon name="minus" size={14}/></button><input aria-label="Crop zoom" type="range" min="1" max="3" step=".05" value={cropDraft.scale} onChange={e=>setCropDraft(v=>({...v,scale:Number(e.target.value)}))}/><button aria-label="Zoom in crop" onClick={()=>setCropDraft(v=>({...v,scale:Math.min(3,+(v.scale+.1).toFixed(2))}))}><StudioIcon name="plus" size={14}/></button><button onClick={()=>setCropDraft({x:0,y:0,scale:1})}>Reset</button><button className="primary" onClick={finishCrop}>Done</button><button onClick={cancelCrop}>Cancel</button></div>}</div>:null;
+ const iconContent=node.type==='icon'&&node.content?.icon?<StudioIcon name={node.content.icon} size={Math.max(16,Math.min(72,parseFloat(cssStyles.fontSize||'28')||28))}/>:null;
+ const content=node.type==='image'?imageContent:iconContent||(editableTypes.includes(node.type)&&node.children.length===0?<EditableText nodeId={node.id} value={node.content.text||''} runs={node.content.runs||[]} onChange={text=>dispatch({type:'UPDATE_NODE_TEXT',payload:{nodeId,text}})} onEnter={()=>elementRef.current?.blur()}/>:node.content.text||node.content.html||null);
+ const singleSelected=isSelected&&!cropMode&&selectedNodeIds.length===1;
+  return <Tag {...props}>{marquee&&node.type==='page'&&<span className="studio-marquee" style={marquee}/>} {singleSelected&&<div className="studio-floating-actions" aria-hidden="true"><StudioIcon name="more" size={14}/></div>}{rectOverride&&isSelected&&<div className="studio-measurement" aria-live="polite">x {Math.round(rectOverride.x)} · y {Math.round(rectOverride.y)} · {Math.round(rectOverride.w)} × {Math.round(rectOverride.h)}</div>}{singleSelected&&<button className="studio-rotate-handle" aria-label="Rotate selection" onPointerDown={startRotate}><span/><em>{rotationDraft!==null?`${Math.round(rotationDraft)}°`:''}</em></button>}{singleSelected&&['top-left','top','top-right','right','bottom-right','bottom','bottom-left','left'].map(renderHandle)}{content}{node.children.map(id=><CanvasNode key={id} nodeId={id}/>)}</Tag>;
+}
+
+/* Context updates are frequent (selection, history, zoom and autosave). Keep
+   the context-facing shell tiny and memoize the expensive interaction view so
+   an edit to one node does not rebuild every unchanged canvas node. The page
+   snapshot is intentionally ignored by the comparator when the node reference
+   is stable; hierarchy changes replace the affected parent's node reference. */
+const MemoCanvasNode=React.memo(CanvasNodeView,(previous,next)=>
+ previous.node===next.node &&
+ previous.selectedNodeIds===next.selectedNodeIds &&
+ previous.state.currentBreakpoint===next.state.currentBreakpoint &&
+ previous.state.zoom===next.state.zoom &&
+ previous.state.cropNodeId===next.state.cropNodeId &&
+ previous.state.snapLines===next.state.snapLines
+);
+
+export function CanvasNode({nodeId}:{nodeId:string}){
+ const {state,dispatch}=useStudio();
+ const page=state.document?.pages[state.currentPageId],node=page?.nodes[nodeId];
+ if(!page||!node)return null;
+ const pageRef=React.useRef(page);
+ pageRef.current=page;
+ return <MemoCanvasNode nodeId={nodeId} state={state} dispatch={dispatch} pageRef={pageRef} node={node} selectedNodeIds={state.selectedNodeIds}/>;
 }

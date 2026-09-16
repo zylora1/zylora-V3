@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zylora.example/schemas/penpot/zylora-component-metadata-v1.json",
+  "title": "Zylora semantic plugin data",
+  "type": "object",
+  "required": ["zylora"],
+  "properties": {
+    "zylora": {
+      "type": "object",
+      "required": ["schemaVersion", "componentType", "instanceId"],
+      "properties": {
+        "schemaVersion": {"const": 1},
+        "componentType": {
+          "type": "string",
+          "enum": [
+            "text", "heading", "paragraph", "heading1", "heading2", "heading3", "heading4", "heading5", "heading6", "label", "caption",
+            "button", "link", "image", "image-frame", "shape", "card", "section", "navigation", "footer",
+            "contact-form", "lead-form", "enquiry-form", "appointment-widget", "ai-sales-assistant",
+            "faq", "pricing", "testimonial", "gallery", "cms-list", "cms-item", "cms-field",
+            "blog-list", "blog-post-reference", "map", "social-links", "custom-semantic-component"
+          ]
+        },
+        "instanceId": {"type": "string", "pattern": "^zl_cmp_[A-Za-z0-9_-]{1,120}$"},
+        "runtimeConfig": {"type": "object"},
+        "bindings": {"type": "object"},
+        "actions": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/action"}
+        },
+        "responsive": {"type": "object"},
+        "accessibility": {"type": "object"},
+        "seo": {"type": "object"},
+        "metadata": {"type": "object"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "action": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {"enum": ["internal_page", "external_url", "section_anchor", "email", "phone", "appointment", "form", "modal", "download", "none"]},
+        "targetPageId": {"type": "string", "pattern": "^[A-Za-z0-9_-]{1,128}$"},
+        "targetSectionId": {"type": "string", "pattern": "^[A-Za-z0-9_-]{1,128}$"},
+        "url": {"type": "string", "maxLength": 2048},
+        "value": {"type": "string", "maxLength": 512}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

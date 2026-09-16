@@ -79,7 +79,7 @@ def sha256_tree(root: Path) -> str:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Build a compact Zylora Railway production context.")
+    parser = argparse.ArgumentParser(description="Build a compact Zylora production deployment context.")
     parser.add_argument("--output", type=Path, default=ROOT / "release_context")
     args = parser.parse_args()
     output = args.output.resolve()

@@ -38,13 +38,39 @@ def _openai_models() -> list[dict]:
     return result
 
 
+def _gateway_models() -> list[dict]:
+    if not settings.ai_gateway_api_key:
+        return []
+    configured = [
+        str(settings.ai_default_model or '').strip(),
+        str(settings.ai_editor_model or '').strip(),
+        str(settings.ai_sales_assistant_model or '').strip(),
+    ]
+    return [
+        {
+            'id': model,
+            'provider': 'vercel',
+            'name': model.replace('/', ' / ').replace('-', ' ').title(),
+            'tier': 'Gateway',
+            'pricing_version': 'gateway-configured',
+            'enabled': True,
+        }
+        for model in dict.fromkeys(x for x in configured if x)
+    ]
+
+
 def enabled_models() -> list[dict]:
+    gateway = _gateway_models()
+    # Direct OpenAI models are a local/test compatibility surface only. A
+    # production process without the gateway must not advertise them.
+    if gateway or settings.app_env == 'production':
+        return gateway
     return _openai_models()
 
 
 def default_model() -> str | None:
     models = enabled_models()
-    configured = str(settings.openai_model or '').strip()
+    configured = str((settings.ai_default_model if settings.ai_gateway_api_key else settings.openai_model) or '').strip()
     if any(m['id'] == configured for m in models):
         return configured
     return models[0]['id'] if models else None

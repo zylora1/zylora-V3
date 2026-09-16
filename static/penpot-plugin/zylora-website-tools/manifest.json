@@ -1,0 +1,9 @@
+{
+  "name": "Zylora Website Tools",
+  "version": "0.1.0",
+  "description": "Typed Zylora website semantics for the Penpot bridge.",
+  "entry": "index.js",
+  "permissions": ["content:read", "content:write"],
+  "providerCredentials": false,
+  "status": "BRIDGE_CONTRACT_ONLY"
+}

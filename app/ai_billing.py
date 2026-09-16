@@ -520,8 +520,22 @@ def provider_cost_to_credits_decimal(cost_micros: int, *, multiplier: Any | None
 
 
 def pricing_for(db, provider: str, model: str) -> dict | None:
-    row = db.execute(text("SELECT * FROM ai_pricing_versions WHERE provider=:p AND model=:m AND active=1 ORDER BY effective_at DESC LIMIT 1"), {"p": provider, "m": model}).mappings().first()
-    return dict(row) if row else None
+    # Gateway model IDs are namespaced (for example ``openai/gpt-5-mini``),
+    # while the existing server pricing catalogue stores the underlying model
+    # name.  Resolve the alias without changing the provider/model recorded in
+    # the ledger; billing remains server-authoritative and auditable.
+    candidates = [str(model)]
+    if "/" in str(model):
+        candidates.append(str(model).split("/", 1)[1])
+    providers = [str(provider)]
+    if str(provider) != "openai":
+        providers.append("openai")
+    for candidate_provider in providers:
+        for candidate_model in candidates:
+            row = db.execute(text("SELECT * FROM ai_pricing_versions WHERE provider=:p AND model=:m AND active=1 ORDER BY effective_at DESC LIMIT 1"), {"p": candidate_provider, "m": candidate_model}).mappings().first()
+            if row:
+                return dict(row)
+    return None
 
 
 def calculate_provider_cost(db, *, provider: str = "openai", model: str, input_units: int = 0, output_units: int = 0, cached_input_units: int = 0) -> dict:

@@ -18,7 +18,7 @@ function syncDeleteAccountButton(){const email=$('#deleteAccountEmail')?.value.t
 function openDeleteAccount(){if(state.me?.role==='SUPER_ADMIN'){toast('Platform administrator accounts cannot be deleted from self-service settings');return}$('#deleteAccountEmail').value='';$('#deleteAccountText').value='';$('#deleteAccountUnderstand').checked=false;$('#deleteAccountMsg').textContent='';$('#deleteAccountReauth').hidden=true;$('#deleteAccountSubmit').hidden=false;syncDeleteAccountButton();openModal('deleteAccountModal')}
 async function reauthenticateForAccountDeletion(){try{await api('/api/auth/logout',{method:'POST'})}catch{}sessionStorage.clear();location.href='/login?next='+encodeURIComponent('/dashboard?view=settings&deleteAccount=1')}
 async function deleteAccount(e){e.preventDefault();const btn=$('#deleteAccountSubmit'),msg=$('#deleteAccountMsg');btn.disabled=true;msg.textContent='Deleting account and owned data…';try{const j=await api('/api/auth/account',{method:'DELETE',body:JSON.stringify({email:$('#deleteAccountEmail').value.trim(),confirmation:$('#deleteAccountText').value.trim()})});msg.classList.add('success');msg.textContent='Account deleted. Redirecting…';sessionStorage.clear();if(j.cleanup_warnings?.length)console.warn('Account deletion cleanup warnings',j.cleanup_warnings);setTimeout(()=>location.replace('/'),500)}catch(err){msg.classList.remove('success');msg.textContent=err.message;if(err.detail?.code==='REAUTH_REQUIRED'){$('#deleteAccountReauth').hidden=false;btn.hidden=true}else{btn.disabled=false}}}
-function apiErrorMessage(detail,status){if(typeof detail==='string')return detail;const d=detail||{};if(d.message)return d.message;const map={AI_CREDITS_EXHAUSTED:'You have used your available AI credits. Buy an AI-credit top-up, upgrade your plan, or wait for the next reset.',LEAD_CREDITS_EXHAUSTED:'You have used your available lead credits. Buy a lead-credit top-up, upgrade your plan, or wait for the next reset.',DRAFT_LIMIT_REACHED:'You have reached the draft-site limit. Delete an unused draft before creating another.',MANAGED_SERVICE_REQUIRED:'This request needs Zylora managed service. Contact our experts to continue.',SOURCE_EXPORT_PAYMENT_REQUIRED:'Source export requires a one-time purchase.',PLAN_SELECTION_REQUIRED:'Choose a plan before publishing.',PLAN_UPGRADE_REQUIRED:'Your current plan cannot publish this website yet. Choose an eligible plan to continue.',SCHEMA_CAPABILITY_REQUIRED:'This edit needs a website capability that the current SiteDocument does not support safely.'};return map[d.code]||d.code?.replaceAll('_',' ').toLowerCase().replace(/^./,c=>c.toUpperCase())||`Request failed (${status})`}
+function apiErrorMessage(detail,status){if(typeof detail==='string')return detail;const d=detail||{};if(d.message)return d.message;const map={AI_CREDITS_EXHAUSTED:'You have used your available AI credits. Buy an AI-credit top-up, upgrade your plan, or wait for the next reset.',LEAD_CREDITS_EXHAUSTED:'You have used your available lead credits. Buy a lead-credit top-up, upgrade your plan, or wait for the next reset.',DRAFT_LIMIT_REACHED:'You have reached the draft-site limit. Delete an unused draft before creating another.',MANAGED_SERVICE_REQUIRED:'This request needs Zylora managed service. Contact our experts to continue.',PLAN_SELECTION_REQUIRED:'Choose a plan before publishing.',PLAN_UPGRADE_REQUIRED:'Your current plan cannot publish this website yet. Choose an eligible plan to continue.',SCHEMA_CAPABILITY_REQUIRED:'This edit needs a website capability that the current SiteDocument does not support safely.'};return map[d.code]||d.code?.replaceAll('_',' ').toLowerCase().replace(/^./,c=>c.toUpperCase())||`Request failed (${status})`}
 async function api(url,opts={}){const headers={...(opts.headers||{})};if(!(opts.body instanceof FormData))headers['Content-Type']='application/json';if(opts.method&&opts.method!=='GET'){headers['X-CSRF-Token']=sessionStorage.getItem('csrf')||state.me?.csrf_token||'';}const r=await fetch(url,{...opts,headers});let j={};try{j=await r.json()}catch{}if(r.status===401){location.href='/login';throw new Error('Authentication required')}if(!r.ok){const detail=j.detail??j;const e=new Error(apiErrorMessage(detail,r.status));e.status=r.status;e.detail=typeof detail==='object'&&detail?detail:{};throw e}return j}
 function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200)}
 function openModal(id){const el=$('#'+id);el.classList.add('open');el.setAttribute('aria-hidden','false')}
@@ -55,7 +55,9 @@ if (window.PromptInputModule && assistantPromptInputRoot && !assistantPromptInpu
       if (typeof sendAssistantTest === 'function') sendAssistantTest();
     }
   });
-}}
+}
+window.dispatchEvent(new CustomEvent('zylora:sites-loaded', { detail: { sites: state.sites } }));
+}
 function fillSiteSelectors(){for(const id of ['domainSite','integrationSite','knowledgeSite','studioSiteSelect','healthSite','assistantSite','assistantViewSite','appointmentsSite']){const sel=$('#'+id);const current=sel?.value;if(!sel)continue;sel.innerHTML=state.sites.map(s=>`<option value="${s.id}">${escapeHtml(s.business_name)}</option>`).join('');if(current&&state.sites.some(s=>s.id===current))sel.value=current}state.selectedDomainSite=$('#domainSite')?.value||null;state.selectedIntegrationSite=$('#integrationSite')?.value||null}
 function periodTrend(current,previous){if(previous<=0)return current>0?{label:'NEW',kind:'up'}:null;const pct=((current-previous)/previous)*100;return{label:`${pct>=0?'▲':'▼'}${Math.abs(pct).toFixed(pct>=100?0:1)}%`,kind:pct>=0?'up':'down'}}
 function renderOverviewMomentum(){const now=Date.now(),week=7*864e5,month=30*864e5,count=(items,start,end)=>items.filter(x=>{const t=Date.parse(x.created_at||'');return Number.isFinite(t)&&t>=start&&t<=end&&t<end}).length;const lead=periodTrend(count(state.leads||[],now-week,now),count(state.leads||[],now-2*week,now-week));const site=periodTrend(count(state.sites||[],now-month,now),count(state.sites||[],now-2*month,now-month));for(const [id,v] of [['leadTrend',lead],['siteTrend',site]]){const el=$('#'+id);if(!el)continue;if(!v){el.hidden=true;continue}el.hidden=false;el.textContent=v.label;el.className=`micro-trend ${v.kind}`}}
@@ -120,7 +122,6 @@ function renderSites(){
             <summary aria-label="More website actions" title="More actions">•••</summary>
             <div class="site-overflow-menu" role="menu">
               ${isLive ? `<a role="menuitem" href="/s/${s.slug}" target="_blank" rel="noopener">Open live site</a>` : `<button role="menuitem" data-publish="${s.id}">Publish website</button>`}
-              <button role="menuitem" data-source-export="${s.id}">Export Next.js</button>
               <button role="menuitem" data-domain-site="${s.id}">Domain & SSL</button>
               <button role="menuitem" data-transfer="${s.id}">Transfer ownership</button>
               ${!isLive ? `<button role="menuitem" class="danger" data-delete-draft="${s.id}" data-site-name="${escapeHtml(s.business_name)}">Delete draft</button>` : ''}
@@ -133,7 +134,6 @@ function renderSites(){
   $$('[data-publish]').forEach(b=>b.onclick=()=>publishFromDashboard(b.dataset.publish));
   $$('[data-domain-site]').forEach(b=>b.onclick=()=>{$('#domainSite').value=b.dataset.domainSite;setView('domains');loadDomains()});
   $$('[data-transfer]').forEach(b=>b.onclick=()=>{$('#transferSiteId').value=b.dataset.transfer;$('#transferMsg').textContent='';openModal('transferModal')});
-  $$('[data-source-export]').forEach(b=>b.onclick=()=>unlockSourceExport(b.dataset.sourceExport));
   $$('[data-delete-draft]').forEach(b=>b.onclick=()=>{
     state.pendingDeleteSiteId = b.dataset.deleteDraft;
     $('#deleteDraftSiteName').textContent = b.dataset.siteName || 'this website';
@@ -216,7 +216,6 @@ async function sendAssistantTest(){const siteId=assistantSiteId(),input=$('#assi
 async function saveSettings(e){e.preventDefault();const f=e.currentTarget;const payload={email_to:f.elements.email_to.value||null,country_code:f.elements.country_code.value||'+91',phone_number:f.elements.phone_number.value||null};for(const k of ['notify_new_form_lead','notify_new_chatbot_lead','notify_new_appointment','notify_appointment_cancelled_or_rescheduled','notify_other_enquiries'])payload[k]=f.elements[k].checked;try{const j=await api('/api/notifications',{method:'PUT',body:JSON.stringify(payload)});$('#notifyStatus').textContent='Settings saved.';$('#verifyState').textContent=j.whatsapp_verified?'WhatsApp number verified ✓':'WhatsApp number not verified';state.settingsLoaded=true}catch(err){$('#notifyStatus').textContent=err.message}}
 async function requestOtp(){try{const j=await api('/api/notifications/whatsapp/request-otp',{method:'POST'});$('#verifyState').textContent=`Code sent to number ending ${j.destination}.`;if(j.debug_code){$('#otpCode').value=j.debug_code;$('#verifyState').textContent+=` Development code: ${j.debug_code}`}}catch(e){toast(e.message)}}
 async function verifyOtp(){try{const code=$('#otpCode').value.trim();await api('/api/notifications/whatsapp/verify',{method:'POST',body:JSON.stringify({code})});$('#verifyState').textContent='WhatsApp number verified ✓';toast('WhatsApp verified')}catch(e){toast(e.message)}}
-async function unlockSourceExport(siteId){try{let direct=await fetch(`/api/sites/${siteId}/export`,{credentials:'same-origin'});if(direct.ok){const blob=await direct.blob(),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='zylora-nextjs.zip';a.click();setTimeout(()=>URL.revokeObjectURL(url),3000);return}const err=await direct.json().catch(()=>({}));if(direct.status!==402)throw new Error(err.detail?.message||err.detail||'Export unavailable');const cfg=await api('/api/source-export/config'),currency='USD',price=(cfg.prices[currency]||0)/100;if(!confirm(`Standalone Next.js source export costs ${new Intl.NumberFormat(undefined,{style:'currency',currency}).format(price)}. Ownership transfer remains free. Continue?`))return;const o=await api(`/api/sites/${siteId}/source-export/order`,{method:'POST',body:JSON.stringify({currency})});if(o.entitled){location.href=`/api/sites/${siteId}/export`;return}if(o.provider==='mock'){await api(`/api/sites/${siteId}/source-export/verify`,{method:'POST',body:JSON.stringify({order_id:o.order_id,payment_id:o.mock_payment_id,signature:o.mock_signature})});toast('Source export unlocked');location.href=`/api/sites/${siteId}/export`;return}await loadRazorpay();const rz=new Razorpay({key:o.key_id,amount:o.amount,currency:o.currency,order_id:o.order_id,name:'Zylora',description:'Next.js source export',prefill:{name:state.me.name,email:state.me.email},handler:async r=>{await api(`/api/sites/${siteId}/source-export/verify`,{method:'POST',body:JSON.stringify({order_id:r.razorpay_order_id,payment_id:r.razorpay_payment_id,signature:r.razorpay_signature})});location.href=`/api/sites/${siteId}/export`}});rz.open()}catch(e){toast(e.message)}}
 async function loadGrowth(){try{const j=await api(`/api/growth?days=${Number(state.analyticsRange||30)}`),t=j.totals||{},af=j.assistant||{};const convText=Number(t.visitors||0)>0?`${Number(t.lead_conversion_rate||0).toFixed(1)}%`:'—';$('#growthVisitors')&&($('#growthVisitors').textContent=t.visitors||0);$('#growthViews')&&($('#growthViews').textContent=`${t.page_views||0} page views`);$('#growthConversion')&&($('#growthConversion').textContent=convText);$('#growthCtaRate')&&($('#growthCtaRate').textContent=`${Number(t.cta_rate||0).toFixed(1)}% CTA rate`);$('#assistantOpened')&&($('#assistantOpened').textContent=af.opened||0);$('#assistantMeaningful')&&($('#assistantMeaningful').textContent=af.meaningful_conversations||0);$('#assistantLeads')&&($('#assistantLeads').textContent=af.leads_captured||0);$('#assistantQualified')&&($('#assistantQualified').textContent=af.qualified_leads||0);$('#assistantHot')&&($('#assistantHot').textContent=af.hot_leads||0);$('#assistantAppointments')&&($('#assistantAppointments').textContent=af.appointments_booked||0);if($('#overviewLeadCount'))$('#overviewLeadCount').textContent=state.leads?.length||0;if($('#overviewQualifiedLeads'))$('#overviewQualifiedLeads').textContent=(state.leads||[]).filter(l=>['HOT','WARM','QUALIFIED'].includes(String(l.lead_temperature||l.status||'').toUpperCase())).length;if($('#overviewAppointmentsBooked'))$('#overviewAppointmentsBooked').textContent=af.appointments_booked||0;if($('#overviewConversionRate'))$('#overviewConversionRate').textContent=convText;if($('#overviewAssistantConvs'))$('#overviewAssistantConvs').textContent=af.meaningful_conversations||0;if($('#overviewAssistantLeads'))$('#overviewAssistantLeads').textContent=af.leads_captured||0;if($('#overviewAssistantRate'))$('#overviewAssistantRate').textContent=`${Number(af.conversion_rate||0).toFixed(1)}%`;(function(){var _base=Number(af.opened||0);var _bars=[{id:'funnelBarOpened',val:af.opened||0},{id:'funnelBarConversations',val:af.meaningful_conversations||0},{id:'funnelBarLeads',val:af.leads_captured||0},{id:'funnelBarQualified',val:af.qualified_leads||0},{id:'funnelBarHot',val:af.hot_leads||0},{id:'funnelBarAppointments',val:af.appointments_booked||0}];_bars.forEach(function(b){var el=document.getElementById(b.id);if(el){var pct=_base>0?Math.round((b.val/_base)*100):0;el.style.width=(_base>0?(b.id==='funnelBarOpened'?100:pct):0)+'%';}});})();$('#assistantFunnelCount')&&($('#assistantFunnelCount').textContent=af.leads_captured||0);$('#assistantFunnelRate')&&($('#assistantFunnelRate').textContent=`${Number(af.conversion_rate||0).toFixed(1)}% conversion`);const perfData=Array.isArray(j.performance_series)?j.performance_series:[];if(window.ZyloraCharts&&typeof window.ZyloraCharts.renderPerformanceChart==='function'){window.ZyloraCharts.renderPerformanceChart('shadcnWebsitePerfRoot',perfData)}const insights=$('#growthInsights');if(insights)insights.innerHTML=(j.insights||[]).map(x=>`<div class="stack-item"><div><b>${escapeHtml(x.title||x.code)}</b><small>${escapeHtml(x.detail||'')}</small></div>${x.action==='AI_OPTIMIZE_CTA'&&j.sites?.[0]?`<a class="ghost-btn" href="/studio/${j.sites[0].id}?ai=${encodeURIComponent('Improve conversion and CTA clarity using the current website design system. Preserve the brand direction.')}">Fix with AI</a>`:''}</div>`).join('')||'<p class="muted-copy">No recommendations yet. More traffic data will make this view more useful.</p>';const pages=$('#growthPages');if(pages)pages.innerHTML=(j.pages||[]).slice(0,10).map(x=>`<div class="stack-item"><div><b>${escapeHtml(x.path)}</b><small>${x.views} views · ${x.cta_clicks} CTA clicks</small></div><span class="status-badge">${Number(x.cta_rate||0).toFixed(1)}%</span></div>`).join('')||'<p class="muted-copy">No tracked page views yet.</p>'}catch(e){toast(e.message)}}
 function formatHealthStatusBadge(status) {
   const s = String(status || '').toUpperCase();
@@ -410,8 +409,6 @@ async function renderHeroSiteCard(){
     if(unpubBtn){unpubBtn.style.display=isLive?'':'none';unpubBtn.onclick=async()=>{actionsMenu.hidden=true;try{await api(`/api/sites/${site.id}/unpublish`,{method:'POST'});toast('Website unpublished to draft');await loadSites();}catch(e){toast(e.message)}};}
     const dupBtn=$('#heroActionDuplicate');
     if(dupBtn){dupBtn.onclick=async()=>{actionsMenu.hidden=true;try{const res=await api(`/api/sites/${site.id}/duplicate`,{method:'POST'});toast(`Website duplicated as ${res.business_name}`);await loadSites();}catch(e){toast(e.message)}};}
-    const expBtn=$('#heroActionExport');
-    if(expBtn){expBtn.onclick=()=>{actionsMenu.hidden=true;unlockSourceExport(site.id);};}
     const delBtn=$('#heroActionDeleteDraft');
     if(delBtn){delBtn.style.display=!isLive?'':'none';delBtn.onclick=()=>{actionsMenu.hidden=true;state.pendingDeleteSiteId=site.id;$('#deleteDraftSiteName').textContent=site.business_name;$('#deleteDraftMsg').textContent='';openModal('deleteDraftModal');};}
   }
@@ -632,30 +629,47 @@ $('#appointmentsSite')?.addEventListener('change',loadAppointments);$('#refreshA
 
 
 // --- Global Spotlight Search Engine ---
+const SEARCH_ICON_PATHS={
+  dashboard:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+  website:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 8h18M8 4v4M16 4v4"/>',
+  leads:'<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c.4-3.1 2.4-5 6-5s5.6 1.9 6 5M15 15c2.8-.1 4.7 1.5 5 4"/>',
+  assistant:'<path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-6l-4 3v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/><path d="M7 10h10M7 13h6"/>',
+  calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 9h18M7 13h3M14 13h3M7 17h3"/>',
+  analytics:'<path d="M4 19V5M4 19h17"/><path d="m7 15 4-4 3 2 5-7"/>',
+  health:'<path d="M12 21s8-4.4 8-10.5A4.5 4.5 0 0 0 12 8a4.5 4.5 0 0 0-8 2.5C4 16.6 12 21 12 21Z"/><path d="M8 12h2l1-2 2 4 1-2h2"/>',
+  domain:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5M8 18h3"/>',
+  integrations:'<path d="M8 12h8M12 8v8"/><circle cx="12" cy="12" r="8"/>',
+  freelancer:'<circle cx="12" cy="8" r="3"/><path d="M5 21c.5-4 2.8-6 7-6s6.5 2 7 6"/>',
+  support:'<path d="M4 13a8 8 0 0 1 16 0v3a2 2 0 0 1-2 2h-2v-6h4M4 14H2v2a2 2 0 0 0 2 2h2v-6H4"/><path d="M10 21h4"/>',
+  billing:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/>',
+  settings:'<circle cx="12" cy="12" r="3"/><path d="M19 15l1 2-2 2-2-1-2 1-1 2h-2l-1-2-2-1-2 1-2-2 1-2-1-2 1-2-1-2 2-2 2 1 2-1 1-2h2l1 2 2 1 2-1 2 2-1 2 1 2-1 2Z"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  box:'<path d="m4 7 8-4 8 4v10l-8 4-8-4Z"/><path d="m4 7 8 4 8-4M12 11v10"/>'
+};
+function iconSvg(name){return `<svg class="search-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${SEARCH_ICON_PATHS[name]||SEARCH_ICON_PATHS.dashboard}</svg>`}
 const searchInput = $('#globalSearch');
 const searchDropdown = $('#globalSearchResults');
 const searchClearBtn = $('#searchClearBtn');
 const searchKbd = $('#searchKbd');
 
 const DASHBOARD_VIEWS = [
-  { id: 'overview', title: 'Dashboard Overview', subtitle: 'Workspace summary & KPI metrics', icon: '⊞', badge: 'View' },
-  { id: 'websites', title: 'Websites & Pages', subtitle: 'Manage active, draft & custom domain sites', icon: '🌐', badge: 'View' },
-  { id: 'leads', title: 'Leads & Inquiries', subtitle: 'Captured form leads, scores & contact details', icon: '👥', badge: 'View' },
-  { id: 'assistant', title: 'AI Sales Assistant', subtitle: 'Autonomous chatbot configuration & training', icon: '💬', badge: 'View' },
-  { id: 'appointments', title: 'Appointments & Booking', subtitle: 'Scheduled calls, calendar rules & client sessions', icon: '📅', badge: 'View' },
-  { id: 'analytics', title: 'Growth Center & Analytics', subtitle: 'Funnel stages, conversion rate & visitor traffic', icon: '📈', badge: 'View' },
-  { id: 'health', title: 'Site Health & SEO', subtitle: 'Audit diagnostics, uptime & backup exports', icon: '🩺', badge: 'View' },
-  { id: 'domains', title: 'Domains & SSL', subtitle: 'Custom hostnames, TLS certificates & DNS verify', icon: '🔒', badge: 'View' },
-  { id: 'integrations', title: 'Integrations & Knowledge', subtitle: 'Google Sheets sync, custom knowledge docs', icon: '⚡', badge: 'View' },
-  { id: 'freelancer', title: 'Freelancers Marketplace', subtitle: 'Verified independent design specialists', icon: '💼', badge: 'View' },
-  { id: 'support', title: 'Support & Tickets', subtitle: 'Direct help, operational inquiries & guidance', icon: '🎧', badge: 'View' },
-  { id: 'billing', title: 'Billing & Usage Plans', subtitle: 'Regional pricing, invoices & AI credits', icon: '💳', badge: 'View' },
-  { id: 'settings', title: 'Account Settings', subtitle: 'Security, profile, passwords & preferences', icon: '⚙', badge: 'View' }
+  { id: 'overview', title: 'Dashboard Overview', subtitle: 'Workspace summary & KPI metrics', icon: 'dashboard', badge: 'View' },
+  { id: 'websites', title: 'Websites & Pages', subtitle: 'Manage active, draft & custom domain sites', icon: 'website', badge: 'View' },
+  { id: 'leads', title: 'Leads & Inquiries', subtitle: 'Captured form leads, scores & contact details', icon: 'leads', badge: 'View' },
+  { id: 'assistant', title: 'AI Sales Assistant', subtitle: 'Autonomous chatbot configuration & training', icon: 'assistant', badge: 'View' },
+  { id: 'appointments', title: 'Appointments & Booking', subtitle: 'Scheduled calls, calendar rules & client sessions', icon: 'calendar', badge: 'View' },
+  { id: 'analytics', title: 'Growth Center & Analytics', subtitle: 'Funnel stages, conversion rate & visitor traffic', icon: 'analytics', badge: 'View' },
+  { id: 'health', title: 'Site Health & SEO', subtitle: 'Audit diagnostics, uptime & backup exports', icon: 'health', badge: 'View' },
+  { id: 'domains', title: 'Domains & SSL', subtitle: 'Custom hostnames, TLS certificates & DNS verify', icon: 'domain', badge: 'View' },
+  { id: 'integrations', title: 'Integrations & Knowledge', subtitle: 'Google Sheets sync, custom knowledge docs', icon: 'integrations', badge: 'View' },
+  { id: 'freelancer', title: 'Freelancers Marketplace', subtitle: 'Verified independent design specialists', icon: 'freelancer', badge: 'View' },
+  { id: 'support', title: 'Support & Tickets', subtitle: 'Direct help, operational inquiries & guidance', icon: 'support', badge: 'View' },
+  { id: 'billing', title: 'Billing & Usage Plans', subtitle: 'Regional pricing, invoices & AI credits', icon: 'billing', badge: 'View' },
+  { id: 'settings', title: 'Account Settings', subtitle: 'Security, profile, passwords & preferences', icon: 'settings', badge: 'View' }
 ];
 
 const DASHBOARD_ACTIONS = [
-  { id: 'act-new-site', title: '＋ Create New Website', subtitle: 'Open a blank Studio immediately', action: () => openCreate(), icon: '＋', badge: 'Action' },
-  { id: 'act-export', title: 'Export Workspace Data', subtitle: 'Download sites and leads summary', action: () => { setView('health'); toast('Opened Site Health for export'); }, icon: '📦', badge: 'Action' }
+  { id: 'act-new-site', title: 'Create New Website', subtitle: 'Open a blank Studio immediately', action: () => openCreate(), icon: 'plus', badge: 'Action' }
 ];
 
 let selectedResultIndex = -1;
@@ -688,7 +702,7 @@ function renderGlobalSearchResults(query) {
     site: s,
     title: s.business_name || s.slug,
     subtitle: `${s.status} · /s/${s.slug}`,
-    icon: '💻',
+    icon: 'website',
     badge: 'Website'
   }));
 
@@ -702,7 +716,7 @@ function renderGlobalSearchResults(query) {
     lead: l,
     title: l.name || l.email,
     subtitle: `${l.email || ''} · ${l.business_name || 'Direct lead'} · ${l.source || 'web'}`,
-    icon: '👤',
+    icon: 'leads',
     badge: 'Lead'
   }));
 
@@ -717,7 +731,7 @@ function renderGlobalSearchResults(query) {
       const idx = currentResults.length;
       currentResults.push({ type: 'action', item });
       html += `<div class="search-result-item" data-res-idx="${idx}" role="option">
-        <span class="item-icon">${item.icon}</span>
+        <span class="item-icon">${iconSvg(item.icon)}</span>
         <div class="item-content">
           <span class="item-title">${escapeHtml(item.title)}</span>
           <span class="item-subtitle">${escapeHtml(item.subtitle)}</span>
@@ -733,7 +747,7 @@ function renderGlobalSearchResults(query) {
       const idx = currentResults.length;
       currentResults.push(item);
       html += `<div class="search-result-item" data-res-idx="${idx}" role="option">
-        <span class="item-icon">${item.icon}</span>
+        <span class="item-icon">${iconSvg(item.icon)}</span>
         <div class="item-content">
           <span class="item-title">${escapeHtml(item.title)}</span>
           <span class="item-subtitle">${escapeHtml(item.subtitle)}</span>
@@ -749,7 +763,7 @@ function renderGlobalSearchResults(query) {
       const idx = currentResults.length;
       currentResults.push(item);
       html += `<div class="search-result-item" data-res-idx="${idx}" role="option">
-        <span class="item-icon">${item.icon}</span>
+        <span class="item-icon">${iconSvg(item.icon)}</span>
         <div class="item-content">
           <span class="item-title">${escapeHtml(item.title)}</span>
           <span class="item-subtitle">${escapeHtml(item.subtitle)}</span>
@@ -765,7 +779,7 @@ function renderGlobalSearchResults(query) {
       const idx = currentResults.length;
       currentResults.push({ type: 'view', view: v });
       html += `<div class="search-result-item" data-res-idx="${idx}" role="option">
-        <span class="item-icon">${v.icon}</span>
+        <span class="item-icon">${iconSvg(v.icon)}</span>
         <div class="item-content">
           <span class="item-title">${escapeHtml(v.title)}</span>
           <span class="item-subtitle">${escapeHtml(v.subtitle)}</span>

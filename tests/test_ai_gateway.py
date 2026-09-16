@@ -3,9 +3,11 @@ import json
 import httpx
 import pytest
 
-from app.ai_gateway import VercelAIGatewayAdapter
+from app.ai_gateway import LegacyOpenAIAdapter, VercelAIGatewayAdapter
 from app.ai_service import HostedAIService
 from app.provider_services import AIRequest, CorrelationContext, ProviderServiceError
+from app.ai_billing import calculate_provider_cost
+from app.db import SessionLocal, migrate
 
 
 def _request(*, stream=False, model="anthropic/claude-sonnet-4.5"):
@@ -102,3 +104,84 @@ def test_hosted_service_resolves_feature_model_and_fallback():
     assert request.model == "provider/primary"
     assert service.resolve_model("TEST_FEATURE", "provider/fallback") == "provider/fallback"
 
+
+def test_legacy_adapter_is_compatibility_only_and_normalizes_responses_api():
+    seen = {}
+
+    def handler(request):
+        seen["url"] = str(request.url)
+        seen["headers"] = dict(request.headers)
+        seen["payload"] = json.loads(request.content)
+        return httpx.Response(200, json={
+            "id": "resp-1",
+            "model": "gpt-5-mini",
+            "output_text": '{"operations":[]}',
+            "usage": {"input_tokens": 3, "output_tokens": 2},
+        })
+
+    client = httpx.Client(transport=httpx.MockTransport(handler))
+    adapter = LegacyOpenAIAdapter(api_key="legacy-secret", client=client)
+    result = adapter.complete(_request(model="gpt-5-mini"))
+    assert result.provider == "openai"
+    assert result.output == '{"operations":[]}'
+    assert seen["url"] == "https://api.openai.com/v1/responses"
+    assert seen["headers"]["authorization"] == "Bearer legacy-secret"
+    assert "legacy-secret" not in repr(result)
+    client.close()
+
+
+def test_hosted_service_execute_json_uses_injected_adapter_and_returns_usage():
+    class Adapter:
+        def complete(self, request):
+            return type("Response", (), {
+                "provider": "vercel",
+                "model": request.model,
+                "output": '{"answer":"ok"}',
+                "usage": {"input_tokens": 4, "output_tokens": 1},
+            })()
+
+        def stream(self, request):
+            yield "ok"
+
+    service = HostedAIService(adapter=Adapter(), registry={"TEST_FEATURE": {"primary": "provider/primary"}})
+    parsed, response = service.execute_json(
+        "TEST_FEATURE",
+        "Return JSON only",
+        request_id="req-json",
+    )
+    assert parsed == {"answer": "ok"}
+    assert response.provider == "vercel"
+    assert response.usage["input_tokens"] + response.usage["output_tokens"] == 5
+
+
+def test_migrated_site_copy_uses_ai_service_without_legacy_http(monkeypatch):
+    from app import providers
+    from app.config import settings
+
+    monkeypatch.setattr(settings, "ai_gateway_api_key", "gateway-test")
+    monkeypatch.setattr(settings, "openai_api_key", "")
+
+    class Response:
+        provider = "vercel"
+        model = "openai/gpt-5-mini"
+        usage = {"input_tokens": 2, "output_tokens": 3}
+
+    calls = []
+
+    def execute_json(feature, prompt, **kwargs):
+        calls.append((feature, kwargs.get("requested_model")))
+        return {"tagline": "Clear", "description": "Factual copy"}, Response()
+
+    monkeypatch.setattr(providers.ai_service, "execute_json", execute_json)
+    result = providers.ai_generate_site("Acme", "Factual services", "Agency", "Minimal")
+    assert result["provider"] == "vercel"
+    assert calls == [("SITE_COPY", "openai/gpt-5-mini")]
+
+
+def test_gateway_namespace_resolves_existing_server_pricing_alias():
+    migrate()
+    with SessionLocal() as db:
+        result = calculate_provider_cost(db, provider="vercel", model="openai/gpt-5-mini", input_units=100, output_units=25)
+    assert result["provider"] == "vercel"
+    assert result["model"] == "openai/gpt-5-mini"
+    assert result["provider_cost_micros"] > 0

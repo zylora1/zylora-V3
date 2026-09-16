@@ -12,8 +12,9 @@ from sqlalchemy import text
 
 from .db import SessionLocal, now_iso
 from .config import settings
+from .ai_service import hosted_ai_configured
 from .security import current_user, require_csrf, durable_rate_limit
-from .editor_state import create_backup, list_backups, restore_backup, ensure_history, push_history, create_revision
+from .editor_state import create_backup, list_backups, restore_backup, ensure_history, push_history, create_revision, StudioRevisionConflict
 from .operations import run_site_qa, launch_checklist, site_health, growth_report, operations_summary, record_analytics, record_operational_event, safe_exception_summary
 from .settings_store import get_system_setting
 from .structured_editor import parse_document, merge_operations, generate_operations, validate_operations_against_html, validate_internal_page_links, extract_editor_nodes, instrument_editable_html
@@ -91,6 +92,10 @@ def backup_restore(site_id: str, backup_id: str, request: Request):
         site=_owned_site(db,u['id'],site_id)
         try: result=restore_backup(db,site,u['id'],backup_id)
         except KeyError: raise HTTPException(404,'Backup not found')
+        except StudioRevisionConflict as exc:
+            raise HTTPException(409,detail={'code':'STUDIO_REVISION_CONFLICT','message':str(exc),'conflict':'reload_or_rebase_required'})
+        except (ValueError,TypeError,json.JSONDecodeError) as exc:
+            raise HTTPException(422,detail={'code':'BACKUP_CORRUPT','message':'The backup contains an invalid canonical Studio document.'}) from exc
     _audit(u['id'],'SITE_BACKUP_RESTORE','site',site_id,{'backup_id':backup_id})
     return {'ok':True,**result}
 
@@ -222,7 +227,7 @@ def sitewide_ai_edit(site_id: str, payload: SitewideAiEditIn, request: Request):
         # bounded site-wide budget before those calls; applying a saved preview
         # does not call AI and therefore creates no second reservation.
         pages=_page_keys(site)
-        if settings.openai_api_key and (payload.preview_only or not payload.preview_id):
+        if hosted_ai_configured() and (payload.preview_only or not payload.preview_id):
             try:
                 estimate=ai_billing.feature_reservation_budget(
                     db, feature='AI_SITEWIDE_EDIT', provider='openai',

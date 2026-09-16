@@ -122,7 +122,10 @@ def main() -> None:
         live.on("requestfailed", lambda request: network_errors.append(f"{request.method} {request.url}: {request.failure}"))
         live.on("response", lambda response: network_errors.append(f"HTTP {response.status} {response.url}") if response.status >= 400 else None)
         live.goto("http://127.0.0.1:8000/?apple-browser-qa=1", wait_until="networkidle")
-        assert live.locator("h1").inner_text() == "Your business deserves more than a website."
+        # The landing headline is intentionally product-owned copy. Keep this
+        # check tied to the current Zylora message instead of an older draft
+        # headline so a legitimate copy refinement does not fail layout QA.
+        assert "Build a website that brings you customers." in live.locator("h1").inner_text()
         assert live.locator("#starterRegionalPrice").inner_text().strip() not in {"", "{{STARTER_REGIONAL_PRICE}}"}
         live.close()
         browser.close()

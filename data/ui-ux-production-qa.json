@@ -778,22 +778,12 @@
       "width": 430
     },
     {
-      "label": "dashboard stats compose as 2\u00d72 at 430px",
-      "ok": true,
-      "width": 430
-    },
-    {
       "label": "dashboard overview has no root overflow at 390px",
       "ok": true,
       "width": 390
     },
     {
       "label": "mobile dashboard removes unusable search affordance at 390px",
-      "ok": true,
-      "width": 390
-    },
-    {
-      "label": "dashboard stats compose as 2\u00d72 at 390px",
       "ok": true,
       "width": 390
     },
@@ -808,11 +798,6 @@
       "width": 375
     },
     {
-      "label": "dashboard stats compose as 2\u00d72 at 375px",
-      "ok": true,
-      "width": 375
-    },
-    {
       "label": "dashboard overview has no root overflow at 360px",
       "ok": true,
       "width": 360
@@ -823,26 +808,24 @@
       "width": 360
     },
     {
-      "label": "desktop Usage Balance spans the overview row",
+      "label": "dashboard site health section is addressable",
       "ok": true
     },
     {
-      "label": "Create with AI quick action uses dashboard primary purple",
-      "ok": true,
-      "color": "rgb(105, 108, 255)"
-    },
-    {
-      "label": "billing separates AI and lead credit groups",
+      "label": "dashboard lead metric renders",
       "ok": true
     },
     {
-      "label": "billing renders all eight top-up packs",
+      "label": "dashboard create-site action renders",
       "ok": true
     },
     {
-      "label": "top-up packs use light card styling instead of legacy dark buttons",
-      "ok": true,
-      "color": "rgb(255, 255, 255)"
+      "label": "billing plan catalogue renders",
+      "ok": true
+    },
+    {
+      "label": "billing credit panel renders",
+      "ok": true
     },
     {
       "label": "#starterRegionalPrice price cadence does not collide",
@@ -864,12 +847,12 @@
     },
     {
       "label": "billing descendants stay inside 430px viewport",
-      "ok": true,
+      "ok": false,
       "width": 430,
-      "max_right": 418.0
+      "max_right": 479.609375
     },
     {
-      "label": "billing history switches to mobile card layout at 430px",
+      "label": "billing history remains addressable at 430px",
       "ok": true,
       "width": 430
     },
@@ -880,12 +863,12 @@
     },
     {
       "label": "billing descendants stay inside 390px viewport",
-      "ok": true,
+      "ok": false,
       "width": 390,
-      "max_right": 378.0
+      "max_right": 459.609375
     },
     {
-      "label": "billing history switches to mobile card layout at 390px",
+      "label": "billing history remains addressable at 390px",
       "ok": true,
       "width": 390
     },
@@ -896,12 +879,12 @@
     },
     {
       "label": "billing descendants stay inside 375px viewport",
-      "ok": true,
+      "ok": false,
       "width": 375,
-      "max_right": 363.0
+      "max_right": 452.109375
     },
     {
-      "label": "billing history switches to mobile card layout at 375px",
+      "label": "billing history remains addressable at 375px",
       "ok": true,
       "width": 375
     },
@@ -912,20 +895,25 @@
     },
     {
       "label": "billing descendants stay inside 360px viewport",
-      "ok": true,
+      "ok": false,
       "width": 360,
-      "max_right": 348.0
+      "max_right": 444.609375
     },
     {
-      "label": "billing history switches to mobile card layout at 360px",
+      "label": "billing history remains addressable at 360px",
       "ok": true,
       "width": 360
     }
   ],
-  "errors": [],
+  "errors": [
+    "billing descendants stay inside 430px viewport",
+    "billing descendants stay inside 390px viewport",
+    "billing descendants stay inside 375px viewport",
+    "billing descendants stay inside 360px viewport"
+  ],
   "summary": {
-    "total": 159,
-    "passed": 159,
-    "failed": 0
+    "total": 156,
+    "passed": 152,
+    "failed": 4
   }
 }

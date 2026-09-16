@@ -1,3 +1,7 @@
-Final repository result after the current Studio and Sales Assistant source changes: 371 passed, 1 skipped, 0 failures, 59 warnings, 272.54s (elevated Windows run).
-
-Compile check: python -m compileall -q app studio scripts tests/test_studio_canva_contract.py — PASS.
+Final source SHA: aab18bd5e786c8e2273fe60a7128bff075678576
+Command: pytest -q (approved execution mode for Playwright subprocess)
+Result: 376 passed, 1 skipped, 0 failed, 59 warnings
+Duration: 295.82s
+Command: python -m compileall -q app
+Result: PASS
+Focused portal/CORS tests: 17 passed

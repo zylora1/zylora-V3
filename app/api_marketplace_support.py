@@ -15,12 +15,9 @@ from pydantic import BaseModel, EmailStr, Field, field_validator
 from sqlalchemy import text
 
 from .api import _audit, _owned_site, _user
-from .config import settings
 from .db import SessionLocal, now_iso
-from .providers import razorpay_create_order, razorpay_signature, razorpay_verify_payment, send_email, verify_turnstile
+from .providers import send_email, verify_turnstile
 from .security import durable_rate_limit
-from .settings_store import get_system_setting
-from .operations import safe_exception_summary, record_operational_event
 
 router = APIRouter(prefix='/api')
 public_router = APIRouter()
@@ -549,58 +546,3 @@ def admin_support_patch(conversation_id: str, payload: AdminSupportPatch, reques
 def support_attachments_disabled(request: Request):
     _user(request,True)
     raise HTTPException(501,'Support attachments are disabled until authenticated object storage and malware scanning are configured')
-
-
-# ---------------------- Independent paid source export ---------------------
-def _export_prices() -> dict:
-    return {'USD':int(get_system_setting('source_export_usd_minor','9900')),'INR':int(get_system_setting('source_export_inr_minor','829900'))}
-
-
-@router.get('/source-export/config')
-def source_export_config(request: Request):
-    _user(request); return {'prices':_export_prices()}
-
-
-class SourceExportOrderIn(BaseModel):
-    currency: str='USD'
-
-
-@router.post('/sites/{site_id}/source-export/order')
-def source_export_order(site_id: str, payload: SourceExportOrderIn, request: Request):
-    u=_user(request,True); durable_rate_limit(f'source-export-order:{u["id"]}',10,3600); currency=payload.currency.upper(); prices=_export_prices()
-    if currency not in prices: raise HTTPException(422,'Unsupported currency')
-    with SessionLocal() as db:
-        _owned_site(db,u['id'],site_id)
-        entitled=db.execute(text('SELECT 1 FROM source_export_entitlements WHERE user_id=:u AND site_id=:s'),{'u':u['id'],'s':site_id}).first()
-    if entitled: return {'ok':True,'entitled':True}
-    oid=str(uuid4()); amount=prices[currency]
-    try: provider=razorpay_create_order(amount,currency,f'export-{oid[:16]}',{'site_id':site_id,'user_id':u['id']})
-    except Exception as exc:
-        record_operational_event('PAYMENTS','SOURCE_EXPORT_ORDER_FAILED',safe_exception_summary(exc),severity='ERROR',user_id=u['id'],site_id=site_id,dedupe_minutes=2)
-        raise HTTPException(503,'Source export checkout is temporarily unavailable. Please try again.')
-    now=now_iso()
-    with SessionLocal.begin() as db:
-        db.execute(text('INSERT INTO source_export_orders(id,user_id,site_id,amount_minor,currency,provider_order_id,status,created_at,updated_at) VALUES (:i,:u,:s,:a,:c,:p,\'CREATED\',:n,:n)'),{'i':oid,'u':u['id'],'s':site_id,'a':amount,'c':currency,'p':provider['id'],'n':now})
-    result={'order_id':provider['id'],'amount':amount,'currency':currency,'provider':provider.get('provider','razorpay'),'key_id':settings.razorpay_key_id or None}
-    if result['provider']=='mock' and settings.app_env!='production':
-        payment='pay_mock_'+secrets.token_hex(6); result['mock_payment_id']=payment; result['mock_signature']=razorpay_signature(provider['id'],payment,'zylora-mock-razorpay-secret')
-    return result
-
-
-class SourceExportVerifyIn(BaseModel):
-    order_id: str
-    payment_id: str
-    signature: str
-
-
-@router.post('/sites/{site_id}/source-export/verify')
-def source_export_verify(site_id: str, payload: SourceExportVerifyIn, request: Request):
-    u=_user(request,True); durable_rate_limit(f'source-export-verify:{u["id"]}',30,3600)
-    with SessionLocal.begin() as db:
-        row=db.execute(text("SELECT * FROM source_export_orders WHERE user_id=:u AND site_id=:s AND provider_order_id=:o AND status='CREATED'"),{'u':u['id'],'s':site_id,'o':payload.order_id}).mappings().first()
-        if not row: raise HTTPException(404,'Source export order not found')
-        if not razorpay_verify_payment(payload.order_id,payload.payment_id,payload.signature): raise HTTPException(400,'Invalid payment signature')
-        db.execute(text("UPDATE source_export_orders SET provider_payment_id=:p,status='PAID',updated_at=:a WHERE id=:i"),{'p':payload.payment_id,'a':now_iso(),'i':row['id']})
-        db.execute(text('INSERT INTO source_export_entitlements(user_id,site_id,order_id,created_at) VALUES (:u,:s,:o,:a) ON CONFLICT(user_id,site_id) DO NOTHING'),{'u':u['id'],'s':site_id,'o':row['id'],'a':now_iso()})
-    _audit(u['id'],'SOURCE_EXPORT_UNLOCK','site',site_id,{'order_id':row['id']})
-    return {'ok':True,'entitled':True}

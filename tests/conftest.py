@@ -1,10 +1,28 @@
 import sys
+import atexit
+import os
+import shutil
+import tempfile
 from pathlib import Path
 import pytest
 
 ROOT=Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0,str(ROOT))
+
+# Keep the default local test run isolated from repository runtime data.  The
+# media tests intentionally create many files; writing them under ``data/``
+# makes root-level pytest discovery and SQLite prone to exhausting constrained
+# Windows runners.  An explicitly supplied DATABASE_URL remains authoritative
+# for PostgreSQL or other integration runs.
+if not os.environ.get("DATABASE_URL"):
+    _TEST_RUNTIME_DIR = Path(tempfile.mkdtemp(prefix="zylora-pytest-"))
+    os.environ["DATABASE_URL"] = f"sqlite:///{_TEST_RUNTIME_DIR / 'zylora.db'}"
+    os.environ.setdefault("MEDIA_STORAGE_DIR", str(_TEST_RUNTIME_DIR / "media"))
+
+    @atexit.register
+    def _cleanup_test_runtime() -> None:
+        shutil.rmtree(_TEST_RUNTIME_DIR, ignore_errors=True)
 
 
 def _reset_plan_configs():

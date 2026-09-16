@@ -1,5 +1,4 @@
 from __future__ import annotations
-import io, zipfile
 from fastapi.testclient import TestClient
 from sqlalchemy import text
 
@@ -63,15 +62,14 @@ def test_pro_contact_only_blocks_ai_and_has_no_wallet_while_ai_cap_is_product_le
     billing=c.get('/api/billing').json(); assert billing['limits']['ai_max_pages']==20
 
 
-def test_paid_source_export_contains_next16_static_metadata_route_opt_in():
+def test_removed_website_export_routes_stay_unavailable():
     reset_db(); c,h,_=raw_signup('export-static@example.com'); assert c.post('/api/billing/select',headers=h,json={'plan':'FREE'}).status_code==200
-    sid,_=ai_site(c,h,'Export Static Site')
-    order=c.post(f'/api/sites/{sid}/source-export/order',headers=h,json={'currency':'USD'}); assert order.status_code==200
-    o=order.json(); assert c.post(f'/api/sites/{sid}/source-export/verify',headers=h,json={'order_id':o['order_id'],'payment_id':o['mock_payment_id'],'signature':o['mock_signature']}).status_code==200
-    exp=c.get(f'/api/sites/{sid}/export'); assert exp.status_code==200
-    z=zipfile.ZipFile(io.BytesIO(exp.content))
-    robots=z.read('app/robots.js').decode(); sitemap=z.read('app/sitemap.js').decode()
-    assert "export const dynamic='force-static';" in robots
-    assert "export const dynamic='force-static';" in sitemap
-    assert robots.index("export const dynamic='force-static';") < robots.index('export default function robots')
-    assert sitemap.index("export const dynamic='force-static';") < sitemap.index('export default function sitemap')
+    sid,_=ai_site(c,h,'Hosted Site')
+    for method,path in [
+        ('get',f'/api/sites/{sid}/export'),
+        ('get','/api/source-export/config'),
+        ('post',f'/api/sites/{sid}/source-export/order'),
+        ('post',f'/api/sites/{sid}/source-export/verify'),
+    ]:
+        response=getattr(c,method)(path,headers=h)
+        assert response.status_code in {404,405},(method,path,response.status_code,response.text)

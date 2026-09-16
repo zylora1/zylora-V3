@@ -414,11 +414,6 @@ def run_verification():
     assert r_attack_del.status_code in {403, 404}, f"Leak on delete: {r_attack_del.status_code}"
     print(" - DELETE /api/sites/{site_b}: PASS (Access Denied)")
 
-    # 7. Site Export
-    r_attack_export = client.post(f'/api/sites/{site_b_id}/source-export/order', headers=headers_a, cookies=cookies_a, json={'currency': 'USD'})
-    assert r_attack_export.status_code in {403, 404}, f"Leak on export: {r_attack_export.status_code}"
-    print(" - POST /api/sites/{site_b}/source-export/order: PASS (Access Denied)")
-
     print("TENANT ISOLATION: 100% VERIFIED — Zero cross-tenant data leakage")
     print("==================================================")
     print("ALL VERIFICATION CHECKS COMPLETED SUCCESSFULLY")

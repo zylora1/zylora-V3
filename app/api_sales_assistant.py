@@ -127,7 +127,7 @@ def public_message(site_id: str,conversation_id: str,payload: MessageIn,request:
     contact=payload.contact.model_dump(mode='json') if payload.contact else None
     if contact:
         contact['service_enquiry_consent']=bool(contact.get('service_enquiry_consent',True)); contact['marketing_consent']=bool(contact.get('marketing_consent',False))
-    turnstile_required = settings.app_env == 'production' or bool(settings.turnstile_secret_key)
+    turnstile_required = bool(settings.turnstile_enabled and (settings.app_env == 'production' or settings.turnstile_secret_key))
     conversion_allowed = bool(payload.turnstile_token) or not turnstile_required
     idem=(request.headers.get('Idempotency-Key') or '').strip()[:120]
     request_id=f'{conversation_id}:{idem}' if idem else None

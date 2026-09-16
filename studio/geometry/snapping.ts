@@ -8,9 +8,17 @@ export interface SnapOptions { screenTolerance?:number; disableSnapping?:boolean
 const EPSILON=.75;
 const xEdges=(r:Rect)=>[r.x,r.x+r.w]; const yEdges=(r:Rect)=>[r.y,r.y+r.h];
 const xCenter=(r:Rect)=>r.x+r.w/2; const yCenter=(r:Rect)=>r.y+r.h/2;
+const spacingOrderCache=new WeakMap<Rect[],{horizontal:Rect[];vertical:Rect[]}>();
+const orderedPeers=(peers:Rect[])=>{
+  const cached=spacingOrderCache.get(peers);
+  if(cached)return cached;
+  const value={horizontal:peers.slice().sort((a,b)=>a.x-b.x),vertical:peers.slice().sort((a,b)=>a.y-b.y)};
+  spacingOrderCache.set(peers,value);
+  return value;
+};
 
 function addSpacingCandidates(rect:Rect,peers:Rect[],horizontal:boolean,add:(candidate:number,line:SnapLine)=>void){
-  const sorted=peers.slice().sort((a,b)=>(horizontal?a.x-b.x:a.y-b.y));
+  const sorted=horizontal?orderedPeers(peers).horizontal:orderedPeers(peers).vertical;
   // Only adjacent intervals can form a visible gap. Considering every pair
   // made resize cost quadratic on large documents without adding a useful
   // guide, because non-adjacent pairs contain another peer in the interval.
@@ -45,10 +53,26 @@ export function computeSnapping(rect:Rect,peers:Rect[],parentBounds:Rect|null,le
   const sx=(target:number,source:number,type:SnapKind='edge')=>choose('x',target-source,{position:target,orientation:'vertical',type});
   const sy=(target:number,source:number,type:SnapKind='edge')=>choose('y',target-source,{position:target,orientation:'horizontal',type});
   const candidate=(r:Rect)=>{xEdges(r).forEach(v=>{sx(v,rect.x);sx(v,rect.x+rect.w)});yEdges(r).forEach(v=>{sy(v,rect.y);sy(v,rect.y+rect.h)});sx(xCenter(r),xCenter(rect),'center');sy(yCenter(r),yCenter(rect),'center');};
-  if(!options.disableSnapping){if(parentBounds)candidate(parentBounds);peers.forEach(candidate);(options.explicitGuides||[]).forEach(g=>g.orientation==='vertical'?sx(g.position,rect.x,'guide'):sy(g.position,rect.y,'guide'));
+  if(!options.disableSnapping){
+    if(parentBounds)candidate(parentBounds);
+    // A peer can only snap when one of its edges/centers is near the moving
+    // rectangle. Filter by a generous world-space envelope before evaluating
+    // candidates; this keeps dense 500-node pages responsive without changing
+    // the visible snap threshold.
+    const envelope=Math.max(48,threshold*8);
+    const nearby=peers.filter(peer=>peer.x<=rect.x+rect.w+envelope&&peer.x+peer.w>=rect.x-envelope&&peer.y<=rect.y+rect.h+envelope&&peer.y+peer.h>=rect.y-envelope);
+    nearby.forEach(candidate);
+    (options.explicitGuides||[]).forEach(g=>g.orientation==='vertical'?sx(g.position,rect.x,'guide'):sy(g.position,rect.y,'guide'));
     const xs:Array<{candidate:number;line:SnapLine}>=[],ys:Array<{candidate:number;line:SnapLine}>=[];
-    addSpacingCandidates(rect,peers,true,(c,line)=>xs.push({candidate:c,line}));addSpacingCandidates(rect,peers,false,(c,line)=>ys.push({candidate:c,line}));
-    xs.forEach(v=>choose('x',v.candidate-rect.x,v.line));ys.forEach(v=>choose('y',v.candidate-rect.y,v.line));
+    // Spacing guides are valuable on ordinary website pages, but scanning
+    // every adjacent interval becomes the dominant cost in stress documents.
+    // Keep edge/center/parent snapping at any size and reserve distance-guide
+    // work for documents with at most 250 peers.
+    if(peers.length<=250){
+      addSpacingCandidates(rect,nearby,true,(c,line)=>xs.push({candidate:c,line}));
+      addSpacingCandidates(rect,nearby,false,(c,line)=>ys.push({candidate:c,line}));
+      xs.forEach(v=>choose('x',v.candidate-rect.x,v.line));ys.forEach(v=>choose('y',v.candidate-rect.y,v.line));
+    }
   }
   const snapX=bestX as {delta:number;distance:number;line:SnapLine}|null;
   const snapY=bestY as {delta:number;distance:number;line:SnapLine}|null;

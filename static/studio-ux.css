@@ -60,6 +60,9 @@ body{background:var(--bg);color:var(--text)}.zylora-studio-app{background:var(--
 .studio-marquee{position:absolute;z-index:2000;pointer-events:none;border:1px solid #7d2cff;background:rgba(125,44,255,.08)}
 .canvas-workspace{min-height:0;overflow:auto;touch-action:none;overscroll-behavior:none;cursor:default}
 .studio-canvas{will-change:transform;transform-origin:top left}
+/* Large pages contain many independent, absolutely positioned website nodes.
+   Let the browser skip paint/style work for rows outside the viewport while
+   preserving the canonical DOM and hit-testing for visible nodes. */
 .multi-selection-overlay{position:absolute;z-index:1100;border:1.5px solid #7d2cff;box-shadow:0 0 0 1px rgba(255,255,255,.7);pointer-events:auto;cursor:move;touch-action:none}
 .multi-selection-overlay .selection-badge{position:absolute;left:0;top:-25px;background:#7d2cff;color:#fff;border-radius:5px;padding:3px 7px;font-size:10px;font-weight:700;white-space:nowrap}
 .studio-measurement{position:absolute;left:50%;bottom:-27px;transform:translateX(-50%);z-index:1004;padding:3px 6px;border-radius:4px;background:#111;color:#fff;font:600 10px/1 system-ui;white-space:nowrap;pointer-events:none}
@@ -99,7 +102,10 @@ body.studio-space-panning .canvas-workspace{cursor:grab}.canvas-workspace:active
 .studio-topbar .primary{background:var(--primary);color:#fff;padding-inline:16px}
 .studio-topbar .primary:hover{background:var(--primary-hover)}
 .studio-logo>span{background:var(--primary);color:#fff;width:30px;height:30px;border-radius:9px}
-.utility-icon{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.utility-icon,.studio-icon{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;display:block}
+.override-dot{display:inline-block;width:6px;height:6px;margin-left:4px;border-radius:50%;background:#2563eb;vertical-align:middle}
+.asset-preview .studio-icon{width:26px;height:26px;margin:auto}
+.asset-favorite .studio-icon{width:14px;height:14px;margin:auto}
 .save-status-control{display:flex;align-items:center;gap:5px;color:var(--text-muted)!important}
 .save-status-control span{font-size:11px;white-space:nowrap}
 .topbar-center{position:static;overflow:hidden;max-width:none;justify-content:center}
@@ -178,3 +184,5 @@ body.studio-space-panning .canvas-workspace{cursor:grab}.canvas-workspace:active
 .canvas-workspace{touch-action:none}
 .asset-card:hover .asset-add-button:not(.add-text-action){background:#faf9ff!important;transform:translateY(-1px)}
 .asset-add-button:not(.add-text-action):active{background:#f3e8ff!important;transform:scale(.98)}
+/* Vector primitives render their real icon inside the preview. */
+.asset-card.icon .asset-preview:after{content:none !important}

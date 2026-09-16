@@ -36,8 +36,34 @@ from .mail_campaigns import (attach_campaign_file, campaign_csv, campaign_detail
     parse_csv_recipients, parse_manual_recipients, parse_xlsx_recipients, process_due_campaign_jobs,
     queue_campaign, resolve_internal_audience, suppress_from_token)
 from .email_service import email_service
+from .communication_service import communication_service
+from .infrastructure_service import infrastructure_service
+from .payment_service import payment_service
+from .provider_health import provider_health_snapshot
 
 router = APIRouter(prefix='/api')
+
+
+@router.post('/webhooks/telnyx')
+async def telnyx_webhook(request: Request):
+    """Authenticate and durably de-duplicate Telnyx delivery events."""
+    raw = await request.body()
+    try:
+        event = communication_service.verify_webhook(dict(request.headers), raw)
+    except Exception as exc:
+        raise HTTPException(400, 'Invalid Telnyx webhook signature') from exc
+    data = event.get('data') if isinstance(event.get('data'), dict) else {}
+    event_id = str(data.get('id') or '').strip()
+    event_type = str(data.get('event_type') or 'unknown').strip()[:120]
+    if not event_id:
+        raise HTTPException(422, 'Telnyx webhook event id is required')
+    with SessionLocal.begin() as db:
+        prior = db.execute(text('SELECT id FROM webhook_events WHERE id=:i'), {'i': event_id}).first()
+        if prior:
+            return {'ok': True, 'duplicate': True, 'event_id': event_id}
+        db.execute(text('''INSERT INTO webhook_events(id,provider,event_type,received_at,status,attempt_count)
+            VALUES (:i,'telnyx',:t,:a,'SUCCEEDED',1)'''), {'i': event_id, 't': event_type, 'a': now_iso()})
+    return {'ok': True, 'duplicate': False, 'event_id': event_id}
 
 class RendererStateIn(BaseModel):
     state: str = Field(max_length=20)
@@ -161,6 +187,8 @@ def _pkce_pair() -> tuple[str,str]:
 
 @router.get('/auth/google/start')
 def google_start(request: Request, mock: int=0, email: str='google.user@example.com', next: str='/dashboard'):
+    if settings.app_env == 'production' and not settings.google_oauth_enabled:
+        raise HTTPException(404, 'Google OAuth is disabled')
     ip=request.client.host if request.client else 'unknown'
     durable_rate_limit('google-oauth-start:'+ip,30,3600)
     state=secrets.token_urlsafe(32); verifier,challenge=_pkce_pair()
@@ -257,7 +285,7 @@ def add_domain(site_id: str, payload: DomainIn, request: Request):
     except Exception:
         raise HTTPException(409,'That hostname is already connected')
     try:
-        result=cloudflare_create_hostname(hostname)
+        result=infrastructure_service.ensure_domain(hostname=hostname)
     except Exception as exc:
         from .operations import record_operational_event, safe_exception_summary
         summary=safe_exception_summary(exc)
@@ -280,7 +308,7 @@ def refresh_domain(domain_id: str, request: Request):
     with SessionLocal() as db:
         row=db.execute(text('SELECT d.* FROM custom_domains d JOIN sites s ON s.id=d.site_id WHERE d.id=:i AND s.user_id=:u'),{'i':domain_id,'u':u['id']}).mappings().first()
     if not row: raise HTTPException(404,'Domain not found')
-    try: result=cloudflare_get_hostname(row['provider_hostname_id'] or '',row['hostname'])
+    try: result=infrastructure_service.get_domain(provider_id=row['provider_hostname_id'] or '',hostname=row['hostname'])
     except Exception as exc:
         from .operations import record_operational_event, safe_exception_summary
         summary=safe_exception_summary(exc)
@@ -301,7 +329,7 @@ def delete_domain(domain_id: str, request: Request):
         row=db.execute(text('SELECT d.* FROM custom_domains d JOIN sites s ON s.id=d.site_id WHERE d.id=:i AND s.user_id=:u'),{'i':domain_id,'u':u['id']}).mappings().first()
     if not row: raise HTTPException(404,'Domain not found')
     if row['provider_hostname_id']:
-        try: cloudflare_delete_hostname(row['provider_hostname_id'])
+        try: infrastructure_service.delete_domain(provider_id=row['provider_hostname_id'])
         except Exception as exc:
             from .operations import record_operational_event, safe_exception_summary
             summary=safe_exception_summary(exc)
@@ -583,7 +611,7 @@ def create_credit_topup_order(payload:CreditTopupOrderIn,request:Request):
     durable_rate_limit(f'credit-topup-order:{u["id"]}',20,3600)
     oid=str(uuid4()); amount=int(pack['price_usd_minor']); currency='USD'
     try:
-        order=razorpay_create_order(amount,currency,oid,{'user_id':u['id'],'order_type':'credit_topup','credit_type':credit_type,'pack_code':pack_code})
+        order=payment_service.create_order(amount_minor=amount,currency=currency,receipt=oid,notes={'user_id':u['id'],'order_type':'credit_topup','credit_type':credit_type,'pack_code':pack_code})
     except Exception as exc:
         record_operational_event('PAYMENTS','CREDIT_TOPUP_ORDER_FAILED',safe_exception_summary(exc),severity='ERROR',user_id=u['id'],dedupe_minutes=2)
         raise HTTPException(502,'Could not create the credit top-up order. Please try again.')
@@ -602,7 +630,7 @@ def verify_credit_topup(payload:CreditTopupVerifyIn,request:Request):
         row=db.execute(text('SELECT * FROM credit_topup_orders WHERE provider_order_id=:o AND user_id=:u'),{'o':payload.order_id,'u':u['id']}).mappings().first()
     if not row: raise HTTPException(404,'Credit top-up order not found')
     if row['status']=='PAID': return {'ok':True,'idempotent':True,'wallet':wallet_summary(u['id'])}
-    if not razorpay_verify_payment(row['provider_order_id'],payload.payment_id,payload.signature): raise HTTPException(400,'Invalid Razorpay signature')
+    if not payment_service.verify_payment(order_id=row['provider_order_id'],payment_id=payload.payment_id,signature=payload.signature): raise HTTPException(400,'Invalid Razorpay signature')
     completed,changed=_complete_credit_topup(row['id'],payload.payment_id,payload.signature,'razorpay')
     return {'ok':True,'idempotent':not changed,'credit_type':completed['credit_type'],'credits_added':completed['credits'],'wallet':wallet_summary(u['id'])}
 
@@ -738,7 +766,7 @@ def create_regional_subscription(payload: RegionalCheckoutIn,request: Request):
     if active_same:
         return {'subscription_id':active_same['provider_subscription_id'],'local_subscription_id':active_same['id'],'plan':target,'amount':active_same['billing_amount_minor'],'currency':active_same['billing_currency'],'billing_region':active_same['billing_region'],'provider':active_same['provider'],'idempotent':True,'already_active':True,'key_id':settings.razorpay_key_id or None}
     local_id=str(uuid4())
-    try: sub=razorpay_create_subscription(plan_id,idempotency_key=idem,notes={'user_id':u['id'],'product':target,'billing_region':region})
+    try: sub=payment_service.create_subscription(plan_id=plan_id,idempotency_key=idem,notes={'user_id':u['id'],'product':target,'billing_region':region},compatibility_factory=razorpay_create_subscription)
     except Exception as exc:
         record_operational_event('PAYMENTS','SUBSCRIPTION_CREATE_FAILED',safe_exception_summary(exc),severity='ERROR',user_id=u['id'],dedupe_minutes=2)
         raise HTTPException(502,'Could not create the subscription. Please try again.')
@@ -759,8 +787,8 @@ def verify_regional_subscription(payload: RegionalVerifyIn,request: Request):
     if not row: raise HTTPException(404,'Subscription not found')
     target=str(row.get('product') or 'ZYLORA').upper()
     if row['status']=='ACTIVE': return {'ok':True,'plan':target,'idempotent':True,'billing_region':row['billing_region'],'currency':row['billing_currency'],'amount_minor':row['billing_amount_minor']}
-    if not razorpay_verify_subscription_payment(payload.subscription_id,payload.payment_id,payload.signature): raise HTTPException(400,'Invalid Razorpay subscription signature')
-    try: payment=razorpay_get_payment(payload.payment_id)
+    if not payment_service.verify_subscription_payment(subscription_id=payload.subscription_id,payment_id=payload.payment_id,signature=payload.signature): raise HTTPException(400,'Invalid Razorpay subscription signature')
+    try: payment=payment_service.get_payment(payment_id=payload.payment_id)
     except Exception as exc:
         record_operational_event('PAYMENTS','SUBSCRIPTION_RECONCILE_FAILED',safe_exception_summary(exc),severity='ERROR',user_id=u['id'],dedupe_minutes=2)
         raise HTTPException(502,'Payment verification is temporarily unavailable. Please try again.')
@@ -848,7 +876,7 @@ def create_razorpay_order(payload: CheckoutIn, request: Request):
     cfg=get_plan(plan); amount=int(cfg['price_inr_minor'])
     if amount<=0: raise HTTPException(409,'This plan is not configured with a payable INR price')
     oid=str(uuid4())
-    try: order=razorpay_create_order(amount,'INR',oid,{'user_id':u['id'],'target_plan':plan})
+    try: order=payment_service.create_order(amount_minor=amount,currency='INR',receipt=oid,notes={'user_id':u['id'],'target_plan':plan})
     except Exception as exc:
         record_operational_event('PAYMENTS','LEGACY_ORDER_CREATE_FAILED',safe_exception_summary(exc),severity='ERROR',user_id=u['id'],dedupe_minutes=2)
         raise HTTPException(502,'Could not create the payment order. Please try again.')
@@ -866,7 +894,7 @@ def verify_razorpay(payload: VerifyPaymentIn, request: Request):
         row=db.execute(text('SELECT * FROM razorpay_orders WHERE provider_order_id=:o AND user_id=:u'),{'o':payload.order_id,'u':u['id']}).mappings().first()
     if not row: raise HTTPException(404,'Payment order not found')
     if row['status']=='PAID': return {'ok':True,'plan':row['target_plan'],'idempotent':True}
-    if not razorpay_verify_payment(row['provider_order_id'],payload.payment_id,payload.signature): raise HTTPException(400,'Invalid Razorpay signature')
+    if not payment_service.verify_payment(order_id=row['provider_order_id'],payment_id=payload.payment_id,signature=payload.signature): raise HTTPException(400,'Invalid Razorpay signature')
     completed,changed=_complete_paid_order(row['id'],payload.payment_id,payload.signature,'razorpay')
     from .credits import wallet_summary
     return {'ok':True,'plan':completed['target_plan'],'credits':wallet_summary(u['id'])['total'],'idempotent':not changed}
@@ -1047,13 +1075,16 @@ def admin_overview(request: Request):
         'platform_health': {
             'api': 'HEALTHY',
             'database': 'HEALTHY',
-            'redis': 'HEALTHY',
-            'openai': 'CONFIGURED' if bool(getattr(settings, 'openai_api_key', '')) else 'NOT_CONFIGURED',
-            'resend': 'CONFIGURED' if bool(getattr(settings, 'resend_api_key', '') and getattr(settings, 'email_from', '')) else 'NOT_CONFIGURED',
-            'whatsapp': 'CONFIGURED' if bool(getattr(settings, 'whatsapp_access_token', '')) else 'NOT_CONFIGURED',
+            'redis': 'NOT_REQUIRED',
+            'ai_gateway': 'CONFIGURED' if bool(getattr(settings, 'ai_gateway_api_key', '') and getattr(settings, 'ai_gateway_base_url', '')) else 'NOT_CONFIGURED',
+            'telnyx': 'CONFIGURED' if bool(getattr(settings, 'telnyx_api_key', '') and (getattr(settings, 'telnyx_email_from', '') or getattr(settings, 'telnyx_whatsapp_from', '') or getattr(settings, 'telnyx_sms_from', ''))) else 'NOT_CONFIGURED',
+            'openai': 'COMPATIBILITY_ONLY' if bool(getattr(settings, 'openai_api_key', '')) else 'NOT_CONFIGURED',
+            'resend': 'COMPATIBILITY_ONLY' if bool(getattr(settings, 'resend_api_key', '')) else 'NOT_CONFIGURED',
+            'whatsapp': 'COMPATIBILITY_ONLY' if bool(getattr(settings, 'whatsapp_access_token', '')) else 'NOT_CONFIGURED',
             'razorpay': 'CONFIGURED' if bool(getattr(settings, 'razorpay_key_id', '')) else 'NOT_CONFIGURED',
             'cloudflare': 'CONFIGURED' if bool(getattr(settings, 'cloudflare_api_token', '')) else 'NOT_CONFIGURED'
         },
+        'provider_health': provider_health_snapshot(),
         'recent_admin_activity': recent_audit
     }
 
@@ -1473,8 +1504,6 @@ def admin_settings(request: Request):
 class AdminSettingsIn(BaseModel):
     admin_notification_email: EmailStr|None=None
     public_signup_enabled: bool|None=None
-    source_export_usd_minor: int|None=Field(default=None,ge=0,le=100000000)
-    source_export_inr_minor: int|None=Field(default=None,ge=0,le=1000000000)
     zylora_india_price_minor: int|None=Field(default=None,gt=0,le=1000000000)
     zylora_international_price_minor: int|None=Field(default=None,gt=0,le=100000000)
     zylora_india_provider_plan_id: str|None=Field(default=None,max_length=200)
@@ -1734,6 +1763,7 @@ def admin_integrations(request: Request):
     with SessionLocal() as db:
         sheets_count = db.execute(text("SELECT count(*) FROM google_sheets_integrations WHERE enabled=1")).scalar_one()
         domains_count = db.execute(text("SELECT count(*) FROM custom_domains")).scalar_one()
+    health = {item['id']: item for item in provider_health_snapshot().get('providers', [])}
     return {
         'integrations': [
             {
@@ -1748,41 +1778,41 @@ def admin_integrations(request: Request):
                 'id': 'cloudflare',
                 'name': 'Cloudflare for SaaS',
                 'category': 'Domains & SSL',
-                'configured': bool(getattr(settings, 'cloudflare_api_token', '')),
+                'configured': bool(health.get('cloudflare', {}).get('configured')),
                 'active_connections': domains_count,
-                'status': 'HEALTHY' if getattr(settings, 'cloudflare_api_token', '') else 'CONFIGURED_SIMULATED'
+                'status': health.get('cloudflare', {}).get('status', 'NOT_CONFIGURED')
             },
             {
                 'id': 'razorpay',
                 'name': 'Razorpay Regional Billing',
                 'category': 'Payments & Checkout',
-                'configured': bool(getattr(settings, 'razorpay_key_id', '')),
+                'configured': bool(health.get('razorpay', {}).get('configured')),
                 'active_connections': 1,
-                'status': 'HEALTHY' if getattr(settings, 'razorpay_key_id', '') else 'MOCK_SANDBOX'
+                'status': health.get('razorpay', {}).get('status', 'NOT_CONFIGURED')
             },
             {
-                'id': 'resend',
-                'name': 'Resend Email Transport',
+                'id': 'telnyx',
+                'name': 'Telnyx Communications',
                 'category': 'Messaging & Delivery',
-                'configured': bool(getattr(settings, 'resend_api_key', '') and getattr(settings, 'email_from', '')),
+                'configured': bool(health.get('telnyx', {}).get('configured')),
                 'active_connections': 1,
-                'status': 'HEALTHY' if getattr(settings, 'resend_api_key', '') else 'DEVELOPMENT_FALLBACK'
+                'status': health.get('telnyx', {}).get('status', 'NOT_CONFIGURED')
             },
             {
-                'id': 'whatsapp',
-                'name': 'WhatsApp Cloud API',
-                'category': 'Messaging & Notifications',
-                'configured': bool(getattr(settings, 'whatsapp_access_token', '')),
-                'active_connections': 1,
-                'status': 'HEALTHY' if getattr(settings, 'whatsapp_access_token', '') else 'DEVELOPMENT_SIMULATED'
-            },
-            {
-                'id': 'openai',
-                'name': 'OpenAI Intelligence Engine',
+                'id': 'vercel_ai_gateway',
+                'name': 'Vercel AI Gateway',
                 'category': 'AI & Conversational',
-                'configured': bool(getattr(settings, 'openai_api_key', '')),
+                'configured': bool(health.get('vercel_ai_gateway', {}).get('configured')),
                 'active_connections': 1,
-                'status': 'HEALTHY' if getattr(settings, 'openai_api_key', '') else 'STANDBY'
+                'status': health.get('vercel_ai_gateway', {}).get('status', 'NOT_CONFIGURED')
+            },
+            {
+                'id': 'penpot',
+                'name': 'Penpot Editing Platform',
+                'category': 'Studio',
+                'configured': bool(health.get('penpot', {}).get('configured')),
+                'active_connections': 1,
+                'status': health.get('penpot', {}).get('status', 'BLOCKED_BY_EXTERNAL_ENVIRONMENT')
             }
         ]
     }
@@ -1810,11 +1840,12 @@ def admin_health(request: Request):
             'version': '2.4.0-release'
         },
         'redis': {
-            'status': 'HEALTHY',
-            'mode': 'IN_MEMORY_DURABLE'
+            'status': 'NOT_REQUIRED',
+            'mode': 'NO_RUNTIME_DEPENDENCY'
         },
         'open_issues_count': open_issues,
-        'backups_count': backups_count
+        'backups_count': backups_count,
+        'providers': provider_health_snapshot()
     }
 
 class CampaignIn(BaseModel):

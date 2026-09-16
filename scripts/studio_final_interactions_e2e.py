@@ -47,13 +47,16 @@ def run(engine_override: str | None = None) -> None:
             page.set_content(inline_shell(shell.text), wait_until='load')
             page.wait_for_selector('.studio-canvas [data-studio-id]', timeout=15000)
 
-            # Create two real sections through the recording-aligned Templates drawer.
-            if not page.get_by_title('Add Editorial hero', exact=True).is_visible():
-                page.locator('.tool-rail button[title="Templates"]').click()
+            # Create two real sections through the current Sections panel.
+            # Older recordings used removed template assets; the production
+            # editor now creates schema-valid blank sections through this
+            # canonical command surface.
+            page.locator('.tool-rail button[title="Sections"]').click()
             page.wait_for_timeout(250)
-            page.get_by_title('Add Editorial hero', exact=True).first.click(timeout=5000)
+            add_section = page.get_by_role('button', name='Add blank section', exact=True)
+            add_section.first.click(timeout=5000)
             page.wait_for_timeout(500)
-            page.get_by_title('Add Nature hero', exact=True).first.click()
+            add_section.first.click(timeout=5000)
             page.wait_for_timeout(800)
             page.locator('.panel-collapse[aria-label="Close tool panel"]').click()
             page.wait_for_timeout(200)
@@ -87,16 +90,16 @@ def run(engine_override: str | None = None) -> None:
             geometry_before = heading.get_attribute('style')
             workspace = page.locator('.canvas-workspace').bounding_box(); assert workspace
             px, py = workspace['x'] + workspace['width']*.72, workspace['y'] + workspace['height']*.72
-            left_before = page.locator('.canvas-workspace').evaluate('(e)=>e.scrollLeft')
+            viewport_before = page.locator('.studio-canvas').get_attribute('data-viewport')
             page.mouse.move(px, py); page.mouse.down(button='middle'); page.mouse.move(px-180, py, steps=8); page.mouse.up(button='middle'); page.wait_for_timeout(100)
-            left_middle = page.locator('.canvas-workspace').evaluate('(e)=>e.scrollLeft')
-            assert left_middle != left_before
+            viewport_middle = page.locator('.studio-canvas').get_attribute('data-viewport')
+            assert viewport_middle != viewport_before
             assert heading.get_attribute('style') == geometry_before
             checks.append('middle-mouse pan changes viewport only')
-            top_before = page.locator('.canvas-workspace').evaluate('(e)=>e.scrollTop')
+            viewport_before_space = viewport_middle
             page.keyboard.down('Space'); page.mouse.move(px, py); page.mouse.down(); page.mouse.move(px, py-120, steps=8); page.mouse.up(); page.keyboard.up('Space'); page.wait_for_timeout(100)
-            top_space = page.locator('.canvas-workspace').evaluate('(e)=>e.scrollTop')
-            assert top_space != top_before
+            viewport_space = page.locator('.studio-canvas').get_attribute('data-viewport')
+            assert viewport_space != viewport_before_space
             assert heading.get_attribute('style') == geometry_before
             checks.append('Space+drag pans without mutating component geometry')
 
@@ -134,12 +137,12 @@ def run(engine_override: str | None = None) -> None:
             page.screenshot(path=str(evidence/'reference-elements-1535.png'), full_page=False)
             page.screenshot(path=str(evidence/'recording-aligned-desktop.png'), full_page=False)
             page.locator('.tool-rail button[title="Elements"]').click()
-            page.locator('.tool-rail button[title="Brand"]').click()
             labels=page.locator('.tool-rail button span').all_text_contents()
-            assert labels == ['Templates','Elements','Text','Brand','Uploads','Tools','Projects','Apps','Photos']
-            checks.append('recording-aligned rail contains the nine reference tools in order')
+            assert labels == ['Sections','Elements','Text','Uploads','Draw','Layers','Pages','AI']
+            checks.append('Studio rail contains the eight current Zylora tools in order')
+            page.locator('.tool-rail button[title="Layers"]').click()
             page.screenshot(path=str(evidence/'recording-aligned-layers.png'), full_page=False)
-            page.locator('.tool-rail button[title="Brand"]').click()
+            page.locator('.tool-rail button[title="Layers"]').click()
             page.set_viewport_size({'width': 390, 'height': 844})
             page.screenshot(path=str(evidence/'recording-aligned-mobile.png'), full_page=False)
             page.screenshot(path=str(ROOT/'data'/'studio-final-interactions.png'), full_page=False)

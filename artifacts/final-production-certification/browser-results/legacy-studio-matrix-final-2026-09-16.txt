@@ -1,0 +1,13 @@
+Zylora legacy Studio final browser matrix — 2026-09-16
+
+Harness: scripts/studio_final_interactions_e2e.py
+Chromium: 12 checks / 0 errors
+Firefox: 12 checks / 0 errors
+WebKit: 12 checks / 0 errors
+
+The blank Studio harness also passed in Chromium, Firefox and WebKit with 0
+errors. The browser checks cover current tool-rail labels, blank section
+creation, stable section ordering, middle-mouse/Space panning, responsive
+no-overflow, selection, persistence and no browser exceptions.
+
+This is legacy Studio evidence. It is not real Penpot runtime evidence.

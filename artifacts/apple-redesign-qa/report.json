@@ -1,0 +1,6063 @@
+{
+  "viewports": [
+    1440,
+    1280,
+    1024,
+    768,
+    430,
+    390,
+    375,
+    360
+  ],
+  "checks": 64,
+  "passed": 64,
+  "failed": 0,
+  "results": [
+    {
+      "surface": "landing",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "viewport": 1440,
+      "viewportHeight": 900,
+      "rootWidth": 1440,
+      "bodyWidth": 1440,
+      "visible": 42,
+      "overflowers": [],
+      "maxRight": [],
+      "rail": null
+    },
+    {
+      "surface": "landing",
+      "width": 1280,
+      "noHorizontalOverflow": true,
+      "viewport": 1280,
+      "viewportHeight": 900,
+      "rootWidth": 1280,
+      "bodyWidth": 1280,
+      "visible": 42,
+      "overflowers": [
+        {
+          "tag": "DIV",
+          "cls": "floating-cms-card",
+          "left": -23,
+          "right": 303,
+          "width": 326
+        },
+        {
+          "tag": "SPAN",
+          "cls": "floating-badge",
+          "left": -3,
+          "right": 125,
+          "width": 128
+        },
+        {
+          "tag": "H2",
+          "cls": "",
+          "left": -2,
+          "right": 280,
+          "width": 282
+        },
+        {
+          "tag": "DIV",
+          "cls": "floating-assistant-card",
+          "left": 956,
+          "right": 1304,
+          "width": 349
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 984,
+          "right": 1283,
+          "width": 299
+        },
+        {
+          "tag": "SPAN",
+          "cls": "",
+          "left": 1230,
+          "right": 1283,
+          "width": 53
+        },
+        {
+          "tag": "DIV",
+          "cls": "chat-bubble visitor",
+          "left": 1001,
+          "right": 1282,
+          "width": 280
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "floating-assistant-card",
+          "left": 955.5139770507812,
+          "right": 1304.4859619140625,
+          "width": 348.97198486328125
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "",
+          "left": 984.2494506835938,
+          "right": 1282.765869140625,
+          "width": 298.51641845703125
+        },
+        {
+          "tag": "SPAN",
+          "id": "",
+          "cls": "",
+          "left": 1230.130859375,
+          "right": 1282.765869140625,
+          "width": 52.635009765625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "chat-bubble visitor",
+          "left": 1001.2228393554688,
+          "right": 1281.649169921875,
+          "width": 280.42633056640625
+        }
+      ],
+      "rail": null
+    },
+    {
+      "surface": "landing",
+      "width": 1024,
+      "noHorizontalOverflow": true,
+      "viewport": 1024,
+      "viewportHeight": 900,
+      "rootWidth": 1024,
+      "bodyWidth": 1024,
+      "visible": 42,
+      "overflowers": [
+        {
+          "tag": "DIV",
+          "cls": "studio-side-dark right",
+          "left": 739,
+          "right": 1039,
+          "width": 300
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "studio-side-dark right",
+          "left": 738.5,
+          "right": 1038.5,
+          "width": 300
+        }
+      ],
+      "rail": null
+    },
+    {
+      "surface": "landing",
+      "width": 768,
+      "noHorizontalOverflow": true,
+      "viewport": 768,
+      "viewportHeight": 900,
+      "rootWidth": 768,
+      "bodyWidth": 768,
+      "visible": 37,
+      "overflowers": [
+        {
+          "tag": "TABLE",
+          "cls": "comparison-table",
+          "left": 32,
+          "right": 852,
+          "width": 820
+        },
+        {
+          "tag": "THEAD",
+          "cls": "",
+          "left": 32,
+          "right": 852,
+          "width": 820
+        },
+        {
+          "tag": "TR",
+          "cls": "",
+          "left": 32,
+          "right": 852,
+          "width": 820
+        },
+        {
+          "tag": "TH",
+          "cls": "",
+          "left": 666,
+          "right": 852,
+          "width": 185
+        },
+        {
+          "tag": "TBODY",
+          "cls": "",
+          "left": 32,
+          "right": 852,
+          "width": 820
+        },
+        {
+          "tag": "TR",
+          "cls": "",
+          "left": 32,
+          "right": 852,
+          "width": 820
+        },
+        {
+          "tag": "TD",
+          "cls": "",
+          "left": 666,
+          "right": 852,
+          "width": 185
+        },
+        {
+          "tag": "TR",
+          "cls": "",
+          "left": 32,
+          "right": 852,
+          "width": 820
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "TABLE",
+          "id": "",
+          "cls": "comparison-table",
+          "left": 31.71875,
+          "right": 851.71875,
+          "width": 820
+        },
+        {
+          "tag": "THEAD",
+          "id": "",
+          "cls": "",
+          "left": 31.71875,
+          "right": 851.71875,
+          "width": 820
+        },
+        {
+          "tag": "TR",
+          "id": "",
+          "cls": "",
+          "left": 31.71875,
+          "right": 851.71875,
+          "width": 820
+        },
+        {
+          "tag": "TH",
+          "id": "",
+          "cls": "",
+          "left": 666.234375,
+          "right": 851.71875,
+          "width": 185.484375
+        },
+        {
+          "tag": "TBODY",
+          "id": "",
+          "cls": "",
+          "left": 31.71875,
+          "right": 851.71875,
+          "width": 820
+        },
+        {
+          "tag": "TR",
+          "id": "",
+          "cls": "",
+          "left": 31.71875,
+          "right": 851.71875,
+          "width": 820
+        }
+      ],
+      "rail": null
+    },
+    {
+      "surface": "landing",
+      "width": 430,
+      "noHorizontalOverflow": true,
+      "viewport": 430,
+      "viewportHeight": 900,
+      "rootWidth": 430,
+      "bodyWidth": 430,
+      "visible": 37,
+      "overflowers": [
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 308,
+          "right": 506,
+          "width": 198
+        },
+        {
+          "tag": "A",
+          "cls": "z-btn z-btn-sm",
+          "left": 372,
+          "right": 506,
+          "width": 134
+        },
+        {
+          "tag": "DIV",
+          "cls": "studio-canvas-stage-dark",
+          "left": 21,
+          "right": 458,
+          "width": 437
+        },
+        {
+          "tag": "TABLE",
+          "cls": "comparison-table",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        },
+        {
+          "tag": "THEAD",
+          "cls": "",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        },
+        {
+          "tag": "TR",
+          "cls": "",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        },
+        {
+          "tag": "TH",
+          "cls": "",
+          "left": 398,
+          "right": 521,
+          "width": 123
+        },
+        {
+          "tag": "TH",
+          "cls": "",
+          "left": 521,
+          "right": 650,
+          "width": 128
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "TABLE",
+          "id": "",
+          "cls": "comparison-table",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        },
+        {
+          "tag": "THEAD",
+          "id": "",
+          "cls": "",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        },
+        {
+          "tag": "TR",
+          "id": "",
+          "cls": "",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        },
+        {
+          "tag": "TH",
+          "id": "",
+          "cls": "",
+          "left": 649.578125,
+          "right": 841,
+          "width": 191.421875
+        },
+        {
+          "tag": "TBODY",
+          "id": "",
+          "cls": "",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        },
+        {
+          "tag": "TR",
+          "id": "",
+          "cls": "",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        }
+      ],
+      "rail": null
+    },
+    {
+      "surface": "landing",
+      "width": 390,
+      "noHorizontalOverflow": true,
+      "viewport": 390,
+      "viewportHeight": 900,
+      "rootWidth": 390,
+      "bodyWidth": 390,
+      "visible": 37,
+      "overflowers": [
+        {
+          "tag": "DIV",
+          "cls": "window-actions",
+          "left": 295,
+          "right": 398,
+          "width": 103
+        },
+        {
+          "tag": "SPAN",
+          "cls": "window-action-badge",
+          "left": 360,
+          "right": 398,
+          "width": 37
+        },
+        {
+          "tag": "DIV",
+          "cls": "canvas-links-mock",
+          "left": 161,
+          "right": 413,
+          "width": 252
+        },
+        {
+          "tag": "SPAN",
+          "cls": "",
+          "left": 370,
+          "right": 413,
+          "width": 43
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 308,
+          "right": 506,
+          "width": 198
+        },
+        {
+          "tag": "A",
+          "cls": "z-btn z-btn-sm",
+          "left": 372,
+          "right": 506,
+          "width": 134
+        },
+        {
+          "tag": "DIV",
+          "cls": "studio-canvas-stage-dark",
+          "left": 21,
+          "right": 458,
+          "width": 437
+        },
+        {
+          "tag": "DIV",
+          "cls": "rendered-mockup-frame",
+          "left": 61,
+          "right": 418,
+          "width": 357
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "TABLE",
+          "id": "",
+          "cls": "comparison-table",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        },
+        {
+          "tag": "THEAD",
+          "id": "",
+          "cls": "",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        },
+        {
+          "tag": "TR",
+          "id": "",
+          "cls": "",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        },
+        {
+          "tag": "TH",
+          "id": "",
+          "cls": "",
+          "left": 649.578125,
+          "right": 841,
+          "width": 191.421875
+        },
+        {
+          "tag": "TBODY",
+          "id": "",
+          "cls": "",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        },
+        {
+          "tag": "TR",
+          "id": "",
+          "cls": "",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        }
+      ],
+      "rail": null
+    },
+    {
+      "surface": "landing",
+      "width": 375,
+      "noHorizontalOverflow": true,
+      "viewport": 375,
+      "viewportHeight": 900,
+      "rootWidth": 375,
+      "bodyWidth": 375,
+      "visible": 37,
+      "overflowers": [
+        {
+          "tag": "DIV",
+          "cls": "window-actions",
+          "left": 295,
+          "right": 398,
+          "width": 103
+        },
+        {
+          "tag": "SPAN",
+          "cls": "window-action-badge",
+          "left": 360,
+          "right": 398,
+          "width": 37
+        },
+        {
+          "tag": "DIV",
+          "cls": "canvas-links-mock",
+          "left": 161,
+          "right": 413,
+          "width": 252
+        },
+        {
+          "tag": "SPAN",
+          "cls": "",
+          "left": 370,
+          "right": 413,
+          "width": 43
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 308,
+          "right": 506,
+          "width": 198
+        },
+        {
+          "tag": "A",
+          "cls": "z-btn z-btn-sm",
+          "left": 372,
+          "right": 506,
+          "width": 134
+        },
+        {
+          "tag": "DIV",
+          "cls": "studio-canvas-stage-dark",
+          "left": 21,
+          "right": 458,
+          "width": 437
+        },
+        {
+          "tag": "DIV",
+          "cls": "rendered-mockup-frame",
+          "left": 61,
+          "right": 418,
+          "width": 357
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "TABLE",
+          "id": "",
+          "cls": "comparison-table",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        },
+        {
+          "tag": "THEAD",
+          "id": "",
+          "cls": "",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        },
+        {
+          "tag": "TR",
+          "id": "",
+          "cls": "",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        },
+        {
+          "tag": "TH",
+          "id": "",
+          "cls": "",
+          "left": 649.578125,
+          "right": 841,
+          "width": 191.421875
+        },
+        {
+          "tag": "TBODY",
+          "id": "",
+          "cls": "",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        },
+        {
+          "tag": "TR",
+          "id": "",
+          "cls": "",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        }
+      ],
+      "rail": null
+    },
+    {
+      "surface": "landing",
+      "width": 360,
+      "noHorizontalOverflow": true,
+      "viewport": 360,
+      "viewportHeight": 900,
+      "rootWidth": 360,
+      "bodyWidth": 360,
+      "visible": 37,
+      "overflowers": [
+        {
+          "tag": "DIV",
+          "cls": "window-actions",
+          "left": 295,
+          "right": 398,
+          "width": 103
+        },
+        {
+          "tag": "SPAN",
+          "cls": "window-action-badge",
+          "left": 360,
+          "right": 398,
+          "width": 37
+        },
+        {
+          "tag": "DIV",
+          "cls": "canvas-links-mock",
+          "left": 161,
+          "right": 413,
+          "width": 252
+        },
+        {
+          "tag": "SPAN",
+          "cls": "",
+          "left": 370,
+          "right": 413,
+          "width": 43
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 308,
+          "right": 506,
+          "width": 198
+        },
+        {
+          "tag": "A",
+          "cls": "z-btn z-btn-sm",
+          "left": 372,
+          "right": 506,
+          "width": 134
+        },
+        {
+          "tag": "DIV",
+          "cls": "studio-canvas-stage-dark",
+          "left": 21,
+          "right": 458,
+          "width": 437
+        },
+        {
+          "tag": "DIV",
+          "cls": "rendered-mockup-frame",
+          "left": 61,
+          "right": 418,
+          "width": 357
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "TABLE",
+          "id": "",
+          "cls": "comparison-table",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        },
+        {
+          "tag": "THEAD",
+          "id": "",
+          "cls": "",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        },
+        {
+          "tag": "TR",
+          "id": "",
+          "cls": "",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        },
+        {
+          "tag": "TH",
+          "id": "",
+          "cls": "",
+          "left": 649.578125,
+          "right": 841,
+          "width": 191.421875
+        },
+        {
+          "tag": "TBODY",
+          "id": "",
+          "cls": "",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        },
+        {
+          "tag": "TR",
+          "id": "",
+          "cls": "",
+          "left": 21,
+          "right": 841,
+          "width": 820
+        }
+      ],
+      "rail": null
+    },
+    {
+      "surface": "landing-laptop",
+      "width": 1366,
+      "noHorizontalOverflow": true,
+      "viewport": 1366,
+      "viewportHeight": 768,
+      "rootWidth": 1366,
+      "bodyWidth": 1366,
+      "visible": 42,
+      "overflowers": [
+        {
+          "tag": "DIV",
+          "cls": "floating-cms-card",
+          "left": -17,
+          "right": 303,
+          "width": 321
+        },
+        {
+          "tag": "DIV",
+          "cls": "floating-assistant-card",
+          "left": 1042,
+          "right": 1384,
+          "width": 341
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "floating-assistant-card",
+          "left": 1042.483642578125,
+          "right": 1383.516357421875,
+          "width": 341.03271484375
+        }
+      ],
+      "rail": null
+    },
+    {
+      "surface": "landing-laptop",
+      "width": 1280,
+      "noHorizontalOverflow": true,
+      "viewport": 1280,
+      "viewportHeight": 800,
+      "rootWidth": 1280,
+      "bodyWidth": 1280,
+      "visible": 42,
+      "overflowers": [
+        {
+          "tag": "DIV",
+          "cls": "floating-cms-card",
+          "left": -22,
+          "right": 302,
+          "width": 323
+        },
+        {
+          "tag": "SPAN",
+          "cls": "floating-badge",
+          "left": -2,
+          "right": 125,
+          "width": 128
+        },
+        {
+          "tag": "H2",
+          "cls": "",
+          "left": -2,
+          "right": 281,
+          "width": 282
+        },
+        {
+          "tag": "DIV",
+          "cls": "floating-assistant-card",
+          "left": 957,
+          "right": 1303,
+          "width": 345
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "floating-assistant-card",
+          "left": 957.3903198242188,
+          "right": 1302.609619140625,
+          "width": 345.21929931640625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "",
+          "left": 982.8497924804688,
+          "right": 1281.191650390625,
+          "width": 298.34185791015625
+        },
+        {
+          "tag": "SPAN",
+          "id": "",
+          "cls": "",
+          "left": 1228.831298828125,
+          "right": 1281.191650390625,
+          "width": 52.3603515625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "chat-bubble visitor",
+          "left": 1001.1091918945312,
+          "right": 1280.54833984375,
+          "width": 279.43914794921875
+        }
+      ],
+      "rail": null
+    },
+    {
+      "surface": "dashboard-overview",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "viewport": 1440,
+      "viewportHeight": 900,
+      "rootWidth": 1440,
+      "bodyWidth": 1440,
+      "visible": 61,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "crm-drawer",
+          "left": 1440,
+          "right": 1960,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "cls": "crm-drawer-header",
+          "left": 1441,
+          "right": 1959,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 1465,
+          "right": 1527,
+          "width": 62
+        },
+        {
+          "tag": "H3",
+          "cls": "",
+          "left": 1465,
+          "right": 1527,
+          "width": 62
+        },
+        {
+          "tag": "P",
+          "cls": "",
+          "left": 1465,
+          "right": 1527,
+          "width": 62
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 1842,
+          "right": 1935,
+          "width": 93
+        },
+        {
+          "tag": "SPAN",
+          "cls": "crm-score-pill cold",
+          "left": 1842,
+          "right": 1900,
+          "width": 59
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "crm-drawer-close",
+          "left": 1908,
+          "right": 1935,
+          "width": 27
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 1440,
+          "right": 1960,
+          "width": 520
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 1440,
+          "right": 1960,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1441,
+          "right": 1959,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1441,
+          "right": 1959,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1441,
+          "right": 1959,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1441,
+          "right": 1959,
+          "width": 518
+        }
+      ],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-overview",
+      "width": 1280,
+      "noHorizontalOverflow": true,
+      "viewport": 1280,
+      "viewportHeight": 900,
+      "rootWidth": 1280,
+      "bodyWidth": 1280,
+      "visible": 61,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "crm-drawer",
+          "left": 1280,
+          "right": 1800,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "cls": "crm-drawer-header",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 1305,
+          "right": 1367,
+          "width": 62
+        },
+        {
+          "tag": "H3",
+          "cls": "",
+          "left": 1305,
+          "right": 1367,
+          "width": 62
+        },
+        {
+          "tag": "P",
+          "cls": "",
+          "left": 1305,
+          "right": 1367,
+          "width": 62
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 1682,
+          "right": 1775,
+          "width": 93
+        },
+        {
+          "tag": "SPAN",
+          "cls": "crm-score-pill cold",
+          "left": 1682,
+          "right": 1740,
+          "width": 59
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "crm-drawer-close",
+          "left": 1748,
+          "right": 1775,
+          "width": 27
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 1280,
+          "right": 1800,
+          "width": 520
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 1280,
+          "right": 1800,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        }
+      ],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-overview",
+      "width": 1024,
+      "noHorizontalOverflow": true,
+      "viewport": 1024,
+      "viewportHeight": 900,
+      "rootWidth": 1024,
+      "bodyWidth": 1024,
+      "visible": 61,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -280,
+          "right": -21,
+          "width": 259
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -262,
+          "right": -206,
+          "width": 56
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -280,
+          "right": -21,
+          "width": 259
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -260,
+          "right": -41,
+          "width": 219
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -270,
+          "right": -31,
+          "width": 239
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -260,
+          "right": -242,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -260,
+          "right": -242,
+          "width": 18
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 1024,
+          "right": 1544,
+          "width": 520
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 1024,
+          "right": 1544,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1025,
+          "right": 1543,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1025,
+          "right": 1543,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1025,
+          "right": 1543,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1025,
+          "right": 1543,
+          "width": 518
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-overview",
+      "width": 768,
+      "noHorizontalOverflow": true,
+      "viewport": 768,
+      "viewportHeight": 900,
+      "rootWidth": 768,
+      "bodyWidth": 770,
+      "visible": 59,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -280,
+          "right": -21,
+          "width": 259
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -270,
+          "right": -228,
+          "width": 42
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -258,
+          "right": -240,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -258,
+          "right": -240,
+          "width": 18
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -256,
+          "right": -242,
+          "width": 14
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -254,
+          "right": -244,
+          "width": 10
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -251,
+          "right": -247,
+          "width": 4
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 768,
+          "right": 1288,
+          "width": 520
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 768,
+          "right": 1288,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 769,
+          "right": 1287,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 769,
+          "right": 1287,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 769,
+          "right": 1287,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 769,
+          "right": 1287,
+          "width": 518
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-overview",
+      "width": 430,
+      "noHorizontalOverflow": true,
+      "viewport": 430,
+      "viewportHeight": 900,
+      "rootWidth": 430,
+      "bodyWidth": 432,
+      "visible": 58,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -579,
+          "right": -319,
+          "width": 260
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -578,
+          "right": -320,
+          "width": 258
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -568,
+          "right": -526,
+          "width": 42
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -554,
+          "right": -540,
+          "width": 14
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -552,
+          "right": -542,
+          "width": 10
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -549,
+          "right": -545,
+          "width": 4
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 430,
+          "right": 834.1875,
+          "width": 404.1875
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 430,
+          "right": 834.1875,
+          "width": 404.1875
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 431,
+          "right": 833.1875,
+          "width": 402.1875
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 431,
+          "right": 833.1875,
+          "width": 402.1875
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 431,
+          "right": 833.1875,
+          "width": 402.1875
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 431,
+          "right": 833.1875,
+          "width": 402.1875
+        }
+      ],
+      "rail": {
+        "left": -579,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-overview",
+      "width": 390,
+      "noHorizontalOverflow": true,
+      "viewport": 390,
+      "viewportHeight": 900,
+      "rootWidth": 390,
+      "bodyWidth": 392,
+      "visible": 58,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -579,
+          "right": -319,
+          "width": 260
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -578,
+          "right": -320,
+          "width": 258
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -568,
+          "right": -526,
+          "width": 42
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -554,
+          "right": -540,
+          "width": 14
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -552,
+          "right": -542,
+          "width": 10
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -549,
+          "right": -545,
+          "width": 4
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 390,
+          "right": 756.59375,
+          "width": 366.59375
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 390,
+          "right": 756.59375,
+          "width": 366.59375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 391,
+          "right": 755.59375,
+          "width": 364.59375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 391,
+          "right": 755.59375,
+          "width": 364.59375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 391,
+          "right": 755.59375,
+          "width": 364.59375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 391,
+          "right": 755.59375,
+          "width": 364.59375
+        }
+      ],
+      "rail": {
+        "left": -579,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-overview",
+      "width": 375,
+      "noHorizontalOverflow": true,
+      "viewport": 375,
+      "viewportHeight": 900,
+      "rootWidth": 375,
+      "bodyWidth": 377,
+      "visible": 58,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -579,
+          "right": -319,
+          "width": 260
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -578,
+          "right": -320,
+          "width": 258
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -568,
+          "right": -526,
+          "width": 42
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -554,
+          "right": -540,
+          "width": 14
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -552,
+          "right": -542,
+          "width": 10
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -549,
+          "right": -545,
+          "width": 4
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 375,
+          "right": 727.5,
+          "width": 352.5
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 375,
+          "right": 727.5,
+          "width": 352.5
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 376,
+          "right": 726.5,
+          "width": 350.5
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 376,
+          "right": 726.5,
+          "width": 350.5
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 376,
+          "right": 726.5,
+          "width": 350.5
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 376,
+          "right": 726.5,
+          "width": 350.5
+        }
+      ],
+      "rail": {
+        "left": -579,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-overview",
+      "width": 360,
+      "noHorizontalOverflow": true,
+      "viewport": 360,
+      "viewportHeight": 900,
+      "rootWidth": 360,
+      "bodyWidth": 362,
+      "visible": 58,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -579,
+          "right": -319,
+          "width": 260
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -578,
+          "right": -320,
+          "width": 258
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -568,
+          "right": -526,
+          "width": 42
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -554,
+          "right": -540,
+          "width": 14
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -552,
+          "right": -542,
+          "width": 10
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -549,
+          "right": -545,
+          "width": 4
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 360,
+          "right": 698.390625,
+          "width": 338.390625
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 360,
+          "right": 698.390625,
+          "width": 338.390625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 361,
+          "right": 697.390625,
+          "width": 336.390625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 361,
+          "right": 697.390625,
+          "width": 336.390625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 361,
+          "right": 697.390625,
+          "width": 336.390625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 361,
+          "right": 697.390625,
+          "width": 336.390625
+        }
+      ],
+      "rail": {
+        "left": -579,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-overview-laptop",
+      "width": 1366,
+      "noHorizontalOverflow": true,
+      "viewport": 1366,
+      "viewportHeight": 768,
+      "rootWidth": 1366,
+      "bodyWidth": 1366,
+      "visible": 61,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "crm-drawer",
+          "left": 1366,
+          "right": 1886,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "cls": "crm-drawer-header",
+          "left": 1367,
+          "right": 1885,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 1391,
+          "right": 1453,
+          "width": 62
+        },
+        {
+          "tag": "H3",
+          "cls": "",
+          "left": 1391,
+          "right": 1453,
+          "width": 62
+        },
+        {
+          "tag": "P",
+          "cls": "",
+          "left": 1391,
+          "right": 1453,
+          "width": 62
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 1768,
+          "right": 1861,
+          "width": 93
+        },
+        {
+          "tag": "SPAN",
+          "cls": "crm-score-pill cold",
+          "left": 1768,
+          "right": 1826,
+          "width": 59
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "crm-drawer-close",
+          "left": 1834,
+          "right": 1861,
+          "width": 27
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 1366,
+          "right": 1886,
+          "width": 520
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 1366,
+          "right": 1886,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1367,
+          "right": 1885,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1367,
+          "right": 1885,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1367,
+          "right": 1885,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1367,
+          "right": 1885,
+          "width": 518
+        }
+      ],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-overview-laptop",
+      "width": 1280,
+      "noHorizontalOverflow": true,
+      "viewport": 1280,
+      "viewportHeight": 800,
+      "rootWidth": 1280,
+      "bodyWidth": 1280,
+      "visible": 61,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "crm-drawer",
+          "left": 1280,
+          "right": 1800,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "cls": "crm-drawer-header",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 1305,
+          "right": 1367,
+          "width": 62
+        },
+        {
+          "tag": "H3",
+          "cls": "",
+          "left": 1305,
+          "right": 1367,
+          "width": 62
+        },
+        {
+          "tag": "P",
+          "cls": "",
+          "left": 1305,
+          "right": 1367,
+          "width": 62
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 1682,
+          "right": 1775,
+          "width": 93
+        },
+        {
+          "tag": "SPAN",
+          "cls": "crm-score-pill cold",
+          "left": 1682,
+          "right": 1740,
+          "width": 59
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "crm-drawer-close",
+          "left": 1748,
+          "right": 1775,
+          "width": 27
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 1280,
+          "right": 1800,
+          "width": 520
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 1280,
+          "right": 1800,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        }
+      ],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-assistant",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "viewport": 1440,
+      "viewportHeight": 900,
+      "rootWidth": 1440,
+      "bodyWidth": 1440,
+      "visible": 47,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "crm-drawer",
+          "left": 1440,
+          "right": 1960,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "cls": "crm-drawer-header",
+          "left": 1441,
+          "right": 1959,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 1465,
+          "right": 1527,
+          "width": 62
+        },
+        {
+          "tag": "H3",
+          "cls": "",
+          "left": 1465,
+          "right": 1527,
+          "width": 62
+        },
+        {
+          "tag": "P",
+          "cls": "",
+          "left": 1465,
+          "right": 1527,
+          "width": 62
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 1842,
+          "right": 1935,
+          "width": 93
+        },
+        {
+          "tag": "SPAN",
+          "cls": "crm-score-pill cold",
+          "left": 1842,
+          "right": 1900,
+          "width": 59
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "crm-drawer-close",
+          "left": 1908,
+          "right": 1935,
+          "width": 27
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 1440,
+          "right": 1960,
+          "width": 520
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 1440,
+          "right": 1960,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1441,
+          "right": 1959,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1441,
+          "right": 1959,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1441,
+          "right": 1959,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1441,
+          "right": 1959,
+          "width": 518
+        }
+      ],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-assistant",
+      "width": 1280,
+      "noHorizontalOverflow": true,
+      "viewport": 1280,
+      "viewportHeight": 900,
+      "rootWidth": 1280,
+      "bodyWidth": 1280,
+      "visible": 47,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "crm-drawer",
+          "left": 1280,
+          "right": 1800,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "cls": "crm-drawer-header",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 1305,
+          "right": 1367,
+          "width": 62
+        },
+        {
+          "tag": "H3",
+          "cls": "",
+          "left": 1305,
+          "right": 1367,
+          "width": 62
+        },
+        {
+          "tag": "P",
+          "cls": "",
+          "left": 1305,
+          "right": 1367,
+          "width": 62
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 1682,
+          "right": 1775,
+          "width": 93
+        },
+        {
+          "tag": "SPAN",
+          "cls": "crm-score-pill cold",
+          "left": 1682,
+          "right": 1740,
+          "width": 59
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "crm-drawer-close",
+          "left": 1748,
+          "right": 1775,
+          "width": 27
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 1280,
+          "right": 1800,
+          "width": 520
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 1280,
+          "right": 1800,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        }
+      ],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-assistant",
+      "width": 1024,
+      "noHorizontalOverflow": true,
+      "viewport": 1024,
+      "viewportHeight": 900,
+      "rootWidth": 1024,
+      "bodyWidth": 1024,
+      "visible": 47,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -280,
+          "right": -21,
+          "width": 259
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -262,
+          "right": -206,
+          "width": 56
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -280,
+          "right": -21,
+          "width": 259
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -260,
+          "right": -41,
+          "width": 219
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -270,
+          "right": -31,
+          "width": 239
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -260,
+          "right": -242,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -260,
+          "right": -242,
+          "width": 18
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 1024,
+          "right": 1544,
+          "width": 520
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 1024,
+          "right": 1544,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1025,
+          "right": 1543,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1025,
+          "right": 1543,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1025,
+          "right": 1543,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1025,
+          "right": 1543,
+          "width": 518
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-assistant",
+      "width": 768,
+      "noHorizontalOverflow": true,
+      "viewport": 768,
+      "viewportHeight": 900,
+      "rootWidth": 768,
+      "bodyWidth": 770,
+      "visible": 45,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -280,
+          "right": -21,
+          "width": 259
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -270,
+          "right": -228,
+          "width": 42
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -258,
+          "right": -240,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -258,
+          "right": -240,
+          "width": 18
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -256,
+          "right": -242,
+          "width": 14
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -254,
+          "right": -244,
+          "width": 10
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -251,
+          "right": -247,
+          "width": 4
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 768,
+          "right": 1288,
+          "width": 520
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 768,
+          "right": 1288,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 769,
+          "right": 1287,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 769,
+          "right": 1287,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 769,
+          "right": 1287,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 769,
+          "right": 1287,
+          "width": 518
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-assistant",
+      "width": 430,
+      "noHorizontalOverflow": true,
+      "viewport": 430,
+      "viewportHeight": 900,
+      "rootWidth": 430,
+      "bodyWidth": 432,
+      "visible": 44,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -579,
+          "right": -319,
+          "width": 260
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -578,
+          "right": -320,
+          "width": 258
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -568,
+          "right": -526,
+          "width": 42
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -554,
+          "right": -540,
+          "width": 14
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -552,
+          "right": -542,
+          "width": 10
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -549,
+          "right": -545,
+          "width": 4
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 430,
+          "right": 834.1875,
+          "width": 404.1875
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 430,
+          "right": 834.1875,
+          "width": 404.1875
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 431,
+          "right": 833.1875,
+          "width": 402.1875
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 431,
+          "right": 833.1875,
+          "width": 402.1875
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 431,
+          "right": 833.1875,
+          "width": 402.1875
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 431,
+          "right": 833.1875,
+          "width": 402.1875
+        }
+      ],
+      "rail": {
+        "left": -579,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-assistant",
+      "width": 390,
+      "noHorizontalOverflow": true,
+      "viewport": 390,
+      "viewportHeight": 900,
+      "rootWidth": 390,
+      "bodyWidth": 392,
+      "visible": 44,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -579,
+          "right": -319,
+          "width": 260
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -578,
+          "right": -320,
+          "width": 258
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -568,
+          "right": -526,
+          "width": 42
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -554,
+          "right": -540,
+          "width": 14
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -552,
+          "right": -542,
+          "width": 10
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -549,
+          "right": -545,
+          "width": 4
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 390,
+          "right": 756.59375,
+          "width": 366.59375
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 390,
+          "right": 756.59375,
+          "width": 366.59375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 391,
+          "right": 755.59375,
+          "width": 364.59375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 391,
+          "right": 755.59375,
+          "width": 364.59375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 391,
+          "right": 755.59375,
+          "width": 364.59375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 391,
+          "right": 755.59375,
+          "width": 364.59375
+        }
+      ],
+      "rail": {
+        "left": -579,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-assistant",
+      "width": 375,
+      "noHorizontalOverflow": true,
+      "viewport": 375,
+      "viewportHeight": 900,
+      "rootWidth": 375,
+      "bodyWidth": 377,
+      "visible": 44,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -579,
+          "right": -319,
+          "width": 260
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -578,
+          "right": -320,
+          "width": 258
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -568,
+          "right": -526,
+          "width": 42
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -554,
+          "right": -540,
+          "width": 14
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -552,
+          "right": -542,
+          "width": 10
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -549,
+          "right": -545,
+          "width": 4
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 375,
+          "right": 727.5,
+          "width": 352.5
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 375,
+          "right": 727.5,
+          "width": 352.5
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 376,
+          "right": 726.5,
+          "width": 350.5
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 376,
+          "right": 726.5,
+          "width": 350.5
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 376,
+          "right": 726.5,
+          "width": 350.5
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 376,
+          "right": 726.5,
+          "width": 350.5
+        }
+      ],
+      "rail": {
+        "left": -579,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-assistant",
+      "width": 360,
+      "noHorizontalOverflow": true,
+      "viewport": 360,
+      "viewportHeight": 900,
+      "rootWidth": 360,
+      "bodyWidth": 362,
+      "visible": 44,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -579,
+          "right": -319,
+          "width": 260
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -578,
+          "right": -320,
+          "width": 258
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -568,
+          "right": -526,
+          "width": 42
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -554,
+          "right": -540,
+          "width": 14
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -552,
+          "right": -542,
+          "width": 10
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -549,
+          "right": -545,
+          "width": 4
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 360,
+          "right": 698.390625,
+          "width": 338.390625
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 360,
+          "right": 698.390625,
+          "width": 338.390625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 361,
+          "right": 697.390625,
+          "width": 336.390625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 361,
+          "right": 697.390625,
+          "width": 336.390625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 361,
+          "right": 697.390625,
+          "width": 336.390625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 361,
+          "right": 697.390625,
+          "width": 336.390625
+        }
+      ],
+      "rail": {
+        "left": -579,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-appointments",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "viewport": 1440,
+      "viewportHeight": 900,
+      "rootWidth": 1440,
+      "bodyWidth": 1440,
+      "visible": 44,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "crm-drawer",
+          "left": 1440,
+          "right": 1960,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "cls": "crm-drawer-header",
+          "left": 1441,
+          "right": 1959,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 1465,
+          "right": 1527,
+          "width": 62
+        },
+        {
+          "tag": "H3",
+          "cls": "",
+          "left": 1465,
+          "right": 1527,
+          "width": 62
+        },
+        {
+          "tag": "P",
+          "cls": "",
+          "left": 1465,
+          "right": 1527,
+          "width": 62
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 1842,
+          "right": 1935,
+          "width": 93
+        },
+        {
+          "tag": "SPAN",
+          "cls": "crm-score-pill cold",
+          "left": 1842,
+          "right": 1900,
+          "width": 59
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "crm-drawer-close",
+          "left": 1908,
+          "right": 1935,
+          "width": 27
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 1440,
+          "right": 1960,
+          "width": 520
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 1440,
+          "right": 1960,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1441,
+          "right": 1959,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1441,
+          "right": 1959,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1441,
+          "right": 1959,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1441,
+          "right": 1959,
+          "width": 518
+        }
+      ],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-appointments",
+      "width": 1280,
+      "noHorizontalOverflow": true,
+      "viewport": 1280,
+      "viewportHeight": 900,
+      "rootWidth": 1280,
+      "bodyWidth": 1280,
+      "visible": 44,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "crm-drawer",
+          "left": 1280,
+          "right": 1800,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "cls": "crm-drawer-header",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 1305,
+          "right": 1367,
+          "width": 62
+        },
+        {
+          "tag": "H3",
+          "cls": "",
+          "left": 1305,
+          "right": 1367,
+          "width": 62
+        },
+        {
+          "tag": "P",
+          "cls": "",
+          "left": 1305,
+          "right": 1367,
+          "width": 62
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 1682,
+          "right": 1775,
+          "width": 93
+        },
+        {
+          "tag": "SPAN",
+          "cls": "crm-score-pill cold",
+          "left": 1682,
+          "right": 1740,
+          "width": 59
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "crm-drawer-close",
+          "left": 1748,
+          "right": 1775,
+          "width": 27
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 1280,
+          "right": 1800,
+          "width": 520
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 1280,
+          "right": 1800,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        }
+      ],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-appointments",
+      "width": 1024,
+      "noHorizontalOverflow": true,
+      "viewport": 1024,
+      "viewportHeight": 900,
+      "rootWidth": 1024,
+      "bodyWidth": 1024,
+      "visible": 44,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -280,
+          "right": -21,
+          "width": 259
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -262,
+          "right": -206,
+          "width": 56
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -280,
+          "right": -21,
+          "width": 259
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -260,
+          "right": -41,
+          "width": 219
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -270,
+          "right": -31,
+          "width": 239
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -260,
+          "right": -242,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -260,
+          "right": -242,
+          "width": 18
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 1024,
+          "right": 1544,
+          "width": 520
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 1024,
+          "right": 1544,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1025,
+          "right": 1543,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1025,
+          "right": 1543,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1025,
+          "right": 1543,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1025,
+          "right": 1543,
+          "width": 518
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-appointments",
+      "width": 768,
+      "noHorizontalOverflow": true,
+      "viewport": 768,
+      "viewportHeight": 900,
+      "rootWidth": 768,
+      "bodyWidth": 770,
+      "visible": 42,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -280,
+          "right": -21,
+          "width": 259
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -270,
+          "right": -228,
+          "width": 42
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -258,
+          "right": -240,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -258,
+          "right": -240,
+          "width": 18
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -256,
+          "right": -242,
+          "width": 14
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -254,
+          "right": -244,
+          "width": 10
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -251,
+          "right": -247,
+          "width": 4
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 768,
+          "right": 1288,
+          "width": 520
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 768,
+          "right": 1288,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 769,
+          "right": 1287,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 769,
+          "right": 1287,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 769,
+          "right": 1287,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 769,
+          "right": 1287,
+          "width": 518
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-appointments",
+      "width": 430,
+      "noHorizontalOverflow": true,
+      "viewport": 430,
+      "viewportHeight": 900,
+      "rootWidth": 430,
+      "bodyWidth": 432,
+      "visible": 41,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -579,
+          "right": -319,
+          "width": 260
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -578,
+          "right": -320,
+          "width": 258
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -568,
+          "right": -526,
+          "width": 42
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -554,
+          "right": -540,
+          "width": 14
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -552,
+          "right": -542,
+          "width": 10
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -549,
+          "right": -545,
+          "width": 4
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 430,
+          "right": 834.1875,
+          "width": 404.1875
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 430,
+          "right": 834.1875,
+          "width": 404.1875
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 431,
+          "right": 833.1875,
+          "width": 402.1875
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 431,
+          "right": 833.1875,
+          "width": 402.1875
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 431,
+          "right": 833.1875,
+          "width": 402.1875
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 431,
+          "right": 833.1875,
+          "width": 402.1875
+        }
+      ],
+      "rail": {
+        "left": -579,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-appointments",
+      "width": 390,
+      "noHorizontalOverflow": true,
+      "viewport": 390,
+      "viewportHeight": 900,
+      "rootWidth": 390,
+      "bodyWidth": 392,
+      "visible": 41,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -579,
+          "right": -319,
+          "width": 260
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -578,
+          "right": -320,
+          "width": 258
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -568,
+          "right": -526,
+          "width": 42
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -554,
+          "right": -540,
+          "width": 14
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -552,
+          "right": -542,
+          "width": 10
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -549,
+          "right": -545,
+          "width": 4
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 390,
+          "right": 756.59375,
+          "width": 366.59375
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 390,
+          "right": 756.59375,
+          "width": 366.59375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 391,
+          "right": 755.59375,
+          "width": 364.59375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 391,
+          "right": 755.59375,
+          "width": 364.59375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 391,
+          "right": 755.59375,
+          "width": 364.59375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 391,
+          "right": 755.59375,
+          "width": 364.59375
+        }
+      ],
+      "rail": {
+        "left": -579,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-appointments",
+      "width": 375,
+      "noHorizontalOverflow": true,
+      "viewport": 375,
+      "viewportHeight": 900,
+      "rootWidth": 375,
+      "bodyWidth": 377,
+      "visible": 41,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -579,
+          "right": -319,
+          "width": 260
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -578,
+          "right": -320,
+          "width": 258
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -568,
+          "right": -526,
+          "width": 42
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -554,
+          "right": -540,
+          "width": 14
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -552,
+          "right": -542,
+          "width": 10
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -549,
+          "right": -545,
+          "width": 4
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 375,
+          "right": 727.5,
+          "width": 352.5
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 375,
+          "right": 727.5,
+          "width": 352.5
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 376,
+          "right": 726.5,
+          "width": 350.5
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 376,
+          "right": 726.5,
+          "width": 350.5
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 376,
+          "right": 726.5,
+          "width": 350.5
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 376,
+          "right": 726.5,
+          "width": 350.5
+        }
+      ],
+      "rail": {
+        "left": -579,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-appointments",
+      "width": 360,
+      "noHorizontalOverflow": true,
+      "viewport": 360,
+      "viewportHeight": 900,
+      "rootWidth": 360,
+      "bodyWidth": 362,
+      "visible": 41,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -579,
+          "right": -319,
+          "width": 260
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -578,
+          "right": -320,
+          "width": 258
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -568,
+          "right": -526,
+          "width": 42
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -554,
+          "right": -540,
+          "width": 14
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -552,
+          "right": -542,
+          "width": 10
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -549,
+          "right": -545,
+          "width": 4
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 360,
+          "right": 698.390625,
+          "width": 338.390625
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 360,
+          "right": 698.390625,
+          "width": 338.390625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 361,
+          "right": 697.390625,
+          "width": 336.390625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 361,
+          "right": 697.390625,
+          "width": 336.390625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 361,
+          "right": 697.390625,
+          "width": 336.390625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 361,
+          "right": 697.390625,
+          "width": 336.390625
+        }
+      ],
+      "rail": {
+        "left": -579,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-analytics",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "viewport": 1440,
+      "viewportHeight": 900,
+      "rootWidth": 1440,
+      "bodyWidth": 1440,
+      "visible": 39,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "crm-drawer",
+          "left": 1440,
+          "right": 1960,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "cls": "crm-drawer-header",
+          "left": 1441,
+          "right": 1959,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 1465,
+          "right": 1527,
+          "width": 62
+        },
+        {
+          "tag": "H3",
+          "cls": "",
+          "left": 1465,
+          "right": 1527,
+          "width": 62
+        },
+        {
+          "tag": "P",
+          "cls": "",
+          "left": 1465,
+          "right": 1527,
+          "width": 62
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 1842,
+          "right": 1935,
+          "width": 93
+        },
+        {
+          "tag": "SPAN",
+          "cls": "crm-score-pill cold",
+          "left": 1842,
+          "right": 1900,
+          "width": 59
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "crm-drawer-close",
+          "left": 1908,
+          "right": 1935,
+          "width": 27
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 1440,
+          "right": 1960,
+          "width": 520
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 1440,
+          "right": 1960,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1441,
+          "right": 1959,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1441,
+          "right": 1959,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1441,
+          "right": 1959,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1441,
+          "right": 1959,
+          "width": 518
+        }
+      ],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-analytics",
+      "width": 1280,
+      "noHorizontalOverflow": true,
+      "viewport": 1280,
+      "viewportHeight": 900,
+      "rootWidth": 1280,
+      "bodyWidth": 1280,
+      "visible": 39,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "crm-drawer",
+          "left": 1280,
+          "right": 1800,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "cls": "crm-drawer-header",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 1305,
+          "right": 1367,
+          "width": 62
+        },
+        {
+          "tag": "H3",
+          "cls": "",
+          "left": 1305,
+          "right": 1367,
+          "width": 62
+        },
+        {
+          "tag": "P",
+          "cls": "",
+          "left": 1305,
+          "right": 1367,
+          "width": 62
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "left": 1682,
+          "right": 1775,
+          "width": 93
+        },
+        {
+          "tag": "SPAN",
+          "cls": "crm-score-pill cold",
+          "left": 1682,
+          "right": 1740,
+          "width": 59
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "crm-drawer-close",
+          "left": 1748,
+          "right": 1775,
+          "width": 27
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 1280,
+          "right": 1800,
+          "width": 520
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 1280,
+          "right": 1800,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1281,
+          "right": 1799,
+          "width": 518
+        }
+      ],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-analytics",
+      "width": 1024,
+      "noHorizontalOverflow": true,
+      "viewport": 1024,
+      "viewportHeight": 900,
+      "rootWidth": 1024,
+      "bodyWidth": 1024,
+      "visible": 39,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo",
+          "left": -280,
+          "right": -21,
+          "width": 259
+        },
+        {
+          "tag": "SPAN",
+          "cls": "zylora-wordmark",
+          "left": -262,
+          "right": -206,
+          "width": 56
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -280,
+          "right": -21,
+          "width": 259
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -260,
+          "right": -41,
+          "width": 219
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -270,
+          "right": -31,
+          "width": 239
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -260,
+          "right": -242,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -260,
+          "right": -242,
+          "width": 18
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 1024,
+          "right": 1544,
+          "width": 520
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 1024,
+          "right": 1544,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1025,
+          "right": 1543,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1025,
+          "right": 1543,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 1025,
+          "right": 1543,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 1025,
+          "right": 1543,
+          "width": 518
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-analytics",
+      "width": 768,
+      "noHorizontalOverflow": true,
+      "viewport": 768,
+      "viewportHeight": 900,
+      "rootWidth": 768,
+      "bodyWidth": 770,
+      "visible": 37,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -280,
+          "right": -21,
+          "width": 259
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -270,
+          "right": -228,
+          "width": 42
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -258,
+          "right": -240,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -258,
+          "right": -240,
+          "width": 18
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -256,
+          "right": -242,
+          "width": 14
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -254,
+          "right": -244,
+          "width": 10
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -251,
+          "right": -247,
+          "width": 4
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 768,
+          "right": 1288,
+          "width": 520
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 768,
+          "right": 1288,
+          "width": 520
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 769,
+          "right": 1287,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 769,
+          "right": 1287,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 769,
+          "right": 1287,
+          "width": 518
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 769,
+          "right": 1287,
+          "width": 518
+        }
+      ],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-analytics",
+      "width": 430,
+      "noHorizontalOverflow": true,
+      "viewport": 430,
+      "viewportHeight": 900,
+      "rootWidth": 430,
+      "bodyWidth": 432,
+      "visible": 36,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -579,
+          "right": -319,
+          "width": 260
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -578,
+          "right": -320,
+          "width": 258
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -568,
+          "right": -526,
+          "width": 42
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -554,
+          "right": -540,
+          "width": 14
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -552,
+          "right": -542,
+          "width": 10
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -549,
+          "right": -545,
+          "width": 4
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 430,
+          "right": 834.1875,
+          "width": 404.1875
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 430,
+          "right": 834.1875,
+          "width": 404.1875
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 431,
+          "right": 833.1875,
+          "width": 402.1875
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 431,
+          "right": 833.1875,
+          "width": 402.1875
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 431,
+          "right": 833.1875,
+          "width": 402.1875
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 431,
+          "right": 833.1875,
+          "width": 402.1875
+        }
+      ],
+      "rail": {
+        "left": -579,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-analytics",
+      "width": 390,
+      "noHorizontalOverflow": true,
+      "viewport": 390,
+      "viewportHeight": 900,
+      "rootWidth": 390,
+      "bodyWidth": 392,
+      "visible": 36,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -579,
+          "right": -319,
+          "width": 260
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -578,
+          "right": -320,
+          "width": 258
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -568,
+          "right": -526,
+          "width": 42
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -554,
+          "right": -540,
+          "width": 14
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -552,
+          "right": -542,
+          "width": 10
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -549,
+          "right": -545,
+          "width": 4
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 390,
+          "right": 756.59375,
+          "width": 366.59375
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 390,
+          "right": 756.59375,
+          "width": 366.59375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 391,
+          "right": 755.59375,
+          "width": 364.59375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 391,
+          "right": 755.59375,
+          "width": 364.59375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 391,
+          "right": 755.59375,
+          "width": 364.59375
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 391,
+          "right": 755.59375,
+          "width": 364.59375
+        }
+      ],
+      "rail": {
+        "left": -579,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-analytics",
+      "width": 375,
+      "noHorizontalOverflow": true,
+      "viewport": 375,
+      "viewportHeight": 900,
+      "rootWidth": 375,
+      "bodyWidth": 377,
+      "visible": 36,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -579,
+          "right": -319,
+          "width": 260
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -578,
+          "right": -320,
+          "width": 258
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -568,
+          "right": -526,
+          "width": 42
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -554,
+          "right": -540,
+          "width": 14
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -552,
+          "right": -542,
+          "width": 10
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -549,
+          "right": -545,
+          "width": 4
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 375,
+          "right": 727.5,
+          "width": 352.5
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 375,
+          "right": 727.5,
+          "width": 352.5
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 376,
+          "right": 726.5,
+          "width": 350.5
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 376,
+          "right": 726.5,
+          "width": 350.5
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 376,
+          "right": 726.5,
+          "width": 350.5
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 376,
+          "right": 726.5,
+          "width": 350.5
+        }
+      ],
+      "rail": {
+        "left": -579,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "dashboard-analytics",
+      "width": 360,
+      "noHorizontalOverflow": true,
+      "viewport": 360,
+      "viewportHeight": 900,
+      "rootWidth": 360,
+      "bodyWidth": 362,
+      "visible": 36,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -579,
+          "right": -319,
+          "width": 260
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -578,
+          "right": -320,
+          "width": 258
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -568,
+          "right": -526,
+          "width": 42
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -556,
+          "right": -538,
+          "width": 18
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -554,
+          "right": -540,
+          "width": 14
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -552,
+          "right": -542,
+          "width": 10
+        },
+        {
+          "tag": "path",
+          "cls": "[object SVGAnimatedString]",
+          "left": -549,
+          "right": -545,
+          "width": 4
+        }
+      ],
+      "maxRight": [
+        {
+          "tag": "ASIDE",
+          "id": "crmContactDrawer",
+          "cls": "crm-drawer",
+          "left": 360,
+          "right": 698.390625,
+          "width": 338.390625
+        },
+        {
+          "tag": "ASIDE",
+          "id": "crmDealDrawer",
+          "cls": "crm-drawer",
+          "left": 360,
+          "right": 698.390625,
+          "width": 338.390625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 361,
+          "right": 697.390625,
+          "width": 336.390625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 361,
+          "right": 697.390625,
+          "width": 336.390625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-header",
+          "left": 361,
+          "right": 697.390625,
+          "width": 336.390625
+        },
+        {
+          "tag": "DIV",
+          "id": "",
+          "cls": "crm-drawer-body",
+          "left": 361,
+          "right": 697.390625,
+          "width": 336.390625
+        }
+      ],
+      "rail": {
+        "left": -579,
+        "position": "fixed",
+        "shell": "app-shell"
+      }
+    },
+    {
+      "surface": "super-admin-overview",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "viewport": 1440,
+      "viewportHeight": 900,
+      "rootWidth": 1440,
+      "bodyWidth": 1440,
+      "visible": 26,
+      "overflowers": [],
+      "maxRight": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-overview",
+      "width": 1280,
+      "noHorizontalOverflow": true,
+      "viewport": 1280,
+      "viewportHeight": 900,
+      "rootWidth": 1280,
+      "bodyWidth": 1280,
+      "visible": 26,
+      "overflowers": [],
+      "maxRight": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-overview",
+      "width": 1024,
+      "noHorizontalOverflow": true,
+      "viewport": 1024,
+      "viewportHeight": 900,
+      "rootWidth": 1024,
+      "bodyWidth": 1024,
+      "visible": 27,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -191,
+          "right": 69,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -181,
+          "right": 58,
+          "width": 239
+        },
+        {
+          "tag": "SPAN",
+          "cls": "admin-brand-tag",
+          "left": -153,
+          "right": -101,
+          "width": 52
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -191,
+          "right": 68,
+          "width": 259
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -165,
+          "right": 42,
+          "width": 207
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -177,
+          "right": 54,
+          "width": 231
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -163,
+          "right": -143,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -162,
+          "right": -144,
+          "width": 18
+        }
+      ],
+      "maxRight": [],
+      "rail": {
+        "left": -191,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-overview",
+      "width": 768,
+      "noHorizontalOverflow": true,
+      "viewport": 768,
+      "viewportHeight": 900,
+      "rootWidth": 768,
+      "bodyWidth": 768,
+      "visible": 27,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "admin-brand-tag",
+          "left": -144,
+          "right": -93,
+          "width": 52
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -257,
+          "right": -44,
+          "width": 213
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -199,
+          "right": -102,
+          "width": 98
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -243,
+          "right": -58,
+          "width": 185
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -229,
+          "right": -209,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -228,
+          "right": -210,
+          "width": 18
+        }
+      ],
+      "maxRight": [],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-overview",
+      "width": 430,
+      "noHorizontalOverflow": true,
+      "viewport": 430,
+      "viewportHeight": 900,
+      "rootWidth": 430,
+      "bodyWidth": 430,
+      "visible": 26,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "admin-brand-tag",
+          "left": -144,
+          "right": -93,
+          "width": 52
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -257,
+          "right": -44,
+          "width": 213
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -199,
+          "right": -102,
+          "width": 98
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -243,
+          "right": -58,
+          "width": 185
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -229,
+          "right": -209,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -228,
+          "right": -210,
+          "width": 18
+        }
+      ],
+      "maxRight": [],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-overview",
+      "width": 390,
+      "noHorizontalOverflow": true,
+      "viewport": 390,
+      "viewportHeight": 900,
+      "rootWidth": 390,
+      "bodyWidth": 390,
+      "visible": 26,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "admin-brand-tag",
+          "left": -144,
+          "right": -93,
+          "width": 52
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -257,
+          "right": -44,
+          "width": 213
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -199,
+          "right": -102,
+          "width": 98
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -243,
+          "right": -58,
+          "width": 185
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -229,
+          "right": -209,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -228,
+          "right": -210,
+          "width": 18
+        }
+      ],
+      "maxRight": [],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-overview",
+      "width": 375,
+      "noHorizontalOverflow": true,
+      "viewport": 375,
+      "viewportHeight": 900,
+      "rootWidth": 375,
+      "bodyWidth": 375,
+      "visible": 26,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "admin-brand-tag",
+          "left": -144,
+          "right": -93,
+          "width": 52
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -257,
+          "right": -44,
+          "width": 213
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -199,
+          "right": -102,
+          "width": 98
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -243,
+          "right": -58,
+          "width": 185
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -229,
+          "right": -209,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -228,
+          "right": -210,
+          "width": 18
+        }
+      ],
+      "maxRight": [],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-overview",
+      "width": 360,
+      "noHorizontalOverflow": true,
+      "viewport": 360,
+      "viewportHeight": 900,
+      "rootWidth": 360,
+      "bodyWidth": 360,
+      "visible": 26,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "admin-brand-tag",
+          "left": -144,
+          "right": -93,
+          "width": 52
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -257,
+          "right": -44,
+          "width": 213
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -199,
+          "right": -102,
+          "width": 98
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -243,
+          "right": -58,
+          "width": 185
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -229,
+          "right": -209,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -228,
+          "right": -210,
+          "width": 18
+        }
+      ],
+      "maxRight": [],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-overview-laptop",
+      "width": 1366,
+      "noHorizontalOverflow": true,
+      "viewport": 1366,
+      "viewportHeight": 768,
+      "rootWidth": 1366,
+      "bodyWidth": 1366,
+      "visible": 26,
+      "overflowers": [],
+      "maxRight": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-overview-laptop",
+      "width": 1280,
+      "noHorizontalOverflow": true,
+      "viewport": 1280,
+      "viewportHeight": 800,
+      "rootWidth": 1280,
+      "bodyWidth": 1280,
+      "visible": 26,
+      "overflowers": [],
+      "maxRight": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-users",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "viewport": 1440,
+      "viewportHeight": 900,
+      "rootWidth": 1440,
+      "bodyWidth": 1440,
+      "visible": 25,
+      "overflowers": [],
+      "maxRight": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-users",
+      "width": 1280,
+      "noHorizontalOverflow": true,
+      "viewport": 1280,
+      "viewportHeight": 900,
+      "rootWidth": 1280,
+      "bodyWidth": 1280,
+      "visible": 25,
+      "overflowers": [],
+      "maxRight": [],
+      "rail": {
+        "left": 0,
+        "position": "sticky",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-users",
+      "width": 1024,
+      "noHorizontalOverflow": true,
+      "viewport": 1024,
+      "viewportHeight": 900,
+      "rootWidth": 1024,
+      "bodyWidth": 1024,
+      "visible": 26,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -125,
+          "right": 135,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -115,
+          "right": 124,
+          "width": 239
+        },
+        {
+          "tag": "SPAN",
+          "cls": "admin-brand-tag",
+          "left": -87,
+          "right": -35,
+          "width": 52
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -125,
+          "right": 134,
+          "width": 259
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -99,
+          "right": 108,
+          "width": 207
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -111,
+          "right": 120,
+          "width": 231
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -97,
+          "right": -77,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -96,
+          "right": -78,
+          "width": 18
+        }
+      ],
+      "maxRight": [],
+      "rail": {
+        "left": -125,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-users",
+      "width": 768,
+      "noHorizontalOverflow": true,
+      "viewport": 768,
+      "viewportHeight": 900,
+      "rootWidth": 768,
+      "bodyWidth": 768,
+      "visible": 26,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -248,
+          "right": 12,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -140,
+          "right": -96,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "admin-brand-tag",
+          "left": -112,
+          "right": -61,
+          "width": 52
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -225,
+          "right": -12,
+          "width": 213
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -167,
+          "right": -70,
+          "width": 98
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -211,
+          "right": -26,
+          "width": 185
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -197,
+          "right": -177,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -196,
+          "right": -178,
+          "width": 18
+        }
+      ],
+      "maxRight": [],
+      "rail": {
+        "left": -248,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-users",
+      "width": 430,
+      "noHorizontalOverflow": true,
+      "viewport": 430,
+      "viewportHeight": 900,
+      "rootWidth": 430,
+      "bodyWidth": 430,
+      "visible": 25,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -279,
+          "right": -19,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "admin-brand-tag",
+          "left": -144,
+          "right": -92,
+          "width": 52
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -256,
+          "right": -44,
+          "width": 213
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -199,
+          "right": -101,
+          "width": 98
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -242,
+          "right": -58,
+          "width": 185
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -228,
+          "right": -208,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -227,
+          "right": -209,
+          "width": 18
+        }
+      ],
+      "maxRight": [],
+      "rail": {
+        "left": -279,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-users",
+      "width": 390,
+      "noHorizontalOverflow": true,
+      "viewport": 390,
+      "viewportHeight": 900,
+      "rootWidth": 390,
+      "bodyWidth": 390,
+      "visible": 25,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "admin-brand-tag",
+          "left": -144,
+          "right": -93,
+          "width": 52
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -257,
+          "right": -44,
+          "width": 213
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -199,
+          "right": -102,
+          "width": 98
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -243,
+          "right": -58,
+          "width": 185
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -229,
+          "right": -209,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -228,
+          "right": -210,
+          "width": 18
+        }
+      ],
+      "maxRight": [],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-users",
+      "width": 375,
+      "noHorizontalOverflow": true,
+      "viewport": 375,
+      "viewportHeight": 900,
+      "rootWidth": 375,
+      "bodyWidth": 375,
+      "visible": 25,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "admin-brand-tag",
+          "left": -144,
+          "right": -93,
+          "width": 52
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -257,
+          "right": -44,
+          "width": 213
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -199,
+          "right": -102,
+          "width": 98
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -243,
+          "right": -58,
+          "width": 185
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -229,
+          "right": -209,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -228,
+          "right": -210,
+          "width": 18
+        }
+      ],
+      "maxRight": [],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "super-admin-users",
+      "width": 360,
+      "noHorizontalOverflow": true,
+      "viewport": 360,
+      "viewportHeight": 900,
+      "rootWidth": 360,
+      "bodyWidth": 360,
+      "visible": 25,
+      "overflowers": [
+        {
+          "tag": "ASIDE",
+          "cls": "rail sneat-sidebar",
+          "left": -280,
+          "right": -20,
+          "width": 260
+        },
+        {
+          "tag": "A",
+          "cls": "rail-logo z-wordmark",
+          "left": -172,
+          "right": -128,
+          "width": 44
+        },
+        {
+          "tag": "SPAN",
+          "cls": "admin-brand-tag",
+          "left": -144,
+          "right": -93,
+          "width": 52
+        },
+        {
+          "tag": "NAV",
+          "cls": "",
+          "left": -257,
+          "right": -44,
+          "width": 213
+        },
+        {
+          "tag": "P",
+          "cls": "menu-section",
+          "left": -199,
+          "right": -102,
+          "width": 98
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "rail-btn active",
+          "left": -243,
+          "right": -58,
+          "width": 185
+        },
+        {
+          "tag": "SPAN",
+          "cls": "menu-icon",
+          "left": -229,
+          "right": -209,
+          "width": 20
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "left": -228,
+          "right": -210,
+          "width": 18
+        }
+      ],
+      "maxRight": [],
+      "rail": {
+        "left": -280,
+        "position": "fixed",
+        "shell": "app-shell super-shell"
+      }
+    },
+    {
+      "surface": "booking-widget",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "viewport": 1440,
+      "viewportHeight": 844,
+      "rootWidth": 1440,
+      "bodyWidth": 1424,
+      "visible": 41,
+      "overflowers": [],
+      "maxRight": [],
+      "rail": null
+    },
+    {
+      "surface": "booking-widget",
+      "width": 390,
+      "noHorizontalOverflow": true,
+      "viewport": 390,
+      "viewportHeight": 844,
+      "rootWidth": 390,
+      "bodyWidth": 374,
+      "visible": 43,
+      "overflowers": [],
+      "maxRight": [],
+      "rail": null
+    }
+  ],
+  "consoleErrors": [],
+  "networkErrors": []
+}

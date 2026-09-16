@@ -1,0 +1,144 @@
+{
+  "verdict": "NOT PRODUCTION READY",
+  "local_release_candidate": "PASS",
+  "repository": "zylora1/zylora-V3",
+  "branch": "main",
+  "commit_before_release_commit": "8c29bee4c62543744ab07d953afa9d48b0ea9fb1",
+  "commit_after_release_commit": "8ffb160daceac667e2a98db1b36dd244c4630847",
+  "working_tree_after_release_commit": "dirty; preserved out-of-scope historical/generated changes remain uncommitted",
+  "studio_engine": "legacy",
+  "tests": {
+    "full_suite": {
+      "passed": 530,
+      "failed": 0,
+      "skipped": 0,
+      "warnings": 59,
+      "duration_seconds": 396.11
+    },
+    "focused_browser_e2e": {
+      "passed": 1,
+      "failed": 0,
+      "duration_seconds": 50.96
+    },
+    "premium_redesign_contract": {
+      "passed": 5,
+      "failed": 0,
+      "duration_seconds": 4.61
+    },
+    "focused_renderer_import_regression": {
+      "passed": 50,
+      "failed": 0,
+      "warnings": 59,
+      "duration_seconds": 39.17
+    }
+  },
+  "build": {
+    "python_compileall": true,
+    "typescript": true,
+    "studio_build": true,
+    "javascript_syntax": true,
+    "json_and_schema_validation": true,
+    "git_diff_check": true,
+    "conflict_marker_scan": true
+  },
+  "browser": {
+    "dashboard": {
+      "chromium": true,
+      "firefox": true,
+      "webkit": true,
+      "console_errors": 0,
+      "page_errors": 0
+    },
+    "legacy_studio": {
+      "chromium": true,
+      "firefox": true,
+      "webkit": true,
+      "rich_checks_per_browser": 12,
+      "blank_workflow": true,
+      "errors": 0
+    },
+    "penpot_studio": {
+      "chromium": null,
+      "firefox": null,
+      "webkit": null,
+      "status": "BLOCKED_BY_EXTERNAL_ENVIRONMENT"
+    }
+  },
+  "responsive": {
+    "1440": true,
+    "1280": true,
+    "1024": true,
+    "768": true,
+    "430": true,
+    "390": true,
+    "375": true,
+    "360": true,
+    "geometry_checks": 64,
+    "geometry_passed": 64,
+    "console_errors": 0,
+    "network_errors": 0
+  },
+  "accessibility": {
+    "tool": "axe-core",
+    "version": "4.13.0",
+    "critical": 0,
+    "serious": 0,
+    "moderate": 4,
+    "minor": 0,
+    "status": "PASS_WITH_DOCUMENTED_MODERATE_FINDINGS"
+  },
+  "performance": {
+    "engine": "legacy",
+    "profile": "artifacts/final-production-certification/performance-profile-drag-raf-built.json",
+    "500_node_drag_p95_ms": 16.8,
+    "500_node_resize_p95_ms": 16.7,
+    "500_node_undo_p95_ms": 33.4,
+    "500_node_zoom_p95_ms": 16.7,
+    "500_node_long_task_count": 0,
+    "penpot_runtime_measured": false
+  },
+  "penpot": {
+    "source": "vendor/penpot",
+    "version": "2.17.0",
+    "commit": "bdce5817ea86d028db29113d9ecdadcf07097b36",
+    "submodule_clean": true,
+    "runtime_verified": false,
+    "sso_verified": false,
+    "real_file_lifecycle_verified": false,
+    "plugin_verified_in_runtime": false,
+    "compiler_verified_against_real_file": false,
+    "status": "BLOCKED_BY_EXTERNAL_ENVIRONMENT"
+  },
+  "postgresql": {
+    "verified": false,
+    "status": "BLOCKED_BY_EXTERNAL_ENVIRONMENT",
+    "reason": "No usable PostgreSQL service, psql binary, or Docker Linux engine was available."
+  },
+  "providers": {
+    "vercel_ai_gateway": "LOCAL_CONTRACT_VERIFIED_ONLY",
+    "telnyx": "LOCAL_CONTRACT_VERIFIED_ONLY",
+    "cloudflare_r2_turnstile": "LOCAL_CONTRACT_VERIFIED_ONLY",
+    "razorpay": "LOCAL_MOCK_VERIFIED_ONLY",
+    "google_oauth": "LOCAL_CONTRACT_VERIFIED_ONLY"
+  },
+  "deployment_verified": false,
+  "production_smoke_verified": false,
+  "render": {
+    "status": "BLOCKED_BY_EXTERNAL_ENVIRONMENT",
+    "reason": "No authenticated Render CLI/API session or service URL is available in this workspace."
+  },
+  "blockers": [
+    "Render exact-commit deployment and production smoke verification",
+    "Real PostgreSQL migration and concurrency rehearsal",
+    "Real Penpot runtime, SSO, plugin, file lifecycle, compile, preview and publish",
+    "Safe staging verification for live AI, communications, infrastructure, payments and Google OAuth providers"
+  ],
+  "evidence": {
+    "axe": "artifacts/final-production-certification/accessibility-axe-certification.json",
+    "responsive": "artifacts/apple-redesign-qa/report.json",
+    "penpot_source": "artifacts/final-production-certification/penpot-source-verification-2026-09-16.txt",
+    "postgresql": "artifacts/final-production-certification/postgres-tests.txt",
+    "provider_verification": "artifacts/final-production-certification/provider-verification.md",
+    "performance_legacy_studio": "artifacts/final-production-certification/performance-profile-drag-raf-built.json"
+  }
+}

@@ -1,5 +1,4 @@
 from __future__ import annotations
-import io, zipfile
 from fastapi.testclient import TestClient
 from sqlalchemy import text
 from app.main import app
@@ -44,15 +43,8 @@ def test_catalogue_removed_ai_is_template_independent_and_exportable():
     assert 'Harbor Dental' in preview.text and 'TEMPLATE-00' not in preview.text and 'template-thumbnails' not in preview.text
     doc=c.get(f'/api/sites/{sid}/editor-document?page=home').json()
     assert len(doc['structure']['pages'])==created.json()['page_count']
-    # Development source-export entitlement is created through the mock checkout.
-    order=c.post(f'/api/sites/{sid}/source-export/order',headers=h,json={'currency':'USD'}); assert order.status_code==200
-    o=order.json(); assert c.post(f'/api/sites/{sid}/source-export/verify',headers=h,json={'order_id':o['order_id'],'payment_id':o['mock_payment_id'],'signature':o['mock_signature']}).status_code==200
-    exp=c.get(f'/api/sites/{sid}/export'); assert exp.status_code==200,exp.text
-    z=zipfile.ZipFile(io.BytesIO(exp.content)); names=set(z.namelist())
-    assert {'package.json','next.config.mjs','app/page.jsx','app/layout.jsx','app/site-page.jsx','app/globals.css','zylora-site.json'}<=names
-    manifest=__import__('json').loads(z.read('zylora-site.json'))
-    assert manifest['renderer']=='ai-runtime' and manifest['origin']=='AI'
-    assert b'prompt-derived SiteDocument' in z.read('README-ZYLORA.md')
+    # Published output remains hosted by Zylora; website source/ZIP export is gone.
+    assert c.get(f'/api/sites/{sid}/export').status_code==404
 
 
 def test_minimal_brand_font_and_public_template_runtime_not_exposed():

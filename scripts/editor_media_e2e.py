@@ -1,5 +1,5 @@
 from __future__ import annotations
-import base64, json, re, tempfile, io, zipfile, os
+import base64, json, re, tempfile, os
 from pathlib import Path
 from typing import Any
 from PIL import Image
@@ -24,7 +24,7 @@ def ck(cond,label):
 def reset_db():
     clear_rate_limits(); migrate()
     with SessionLocal.begin() as db:
-        for table in ['assistant_action_keys','assistant_messages','assistant_usage','assistant_conversations','sales_assistant_configs','lead_form_configs','subscriptions','billing_profiles','site_revisions','editor_history','media_assets','support_messages','support_conversations','freelancer_leads','freelancer_outbound_clicks','freelancer_external_links','rate_limit_buckets','source_export_entitlements','source_export_orders','analytics_events','appointment_settings','freelancer_ratings','freelancer_template_submissions','freelancer_profiles','chatbot_messages','site_knowledge_docs','credit_usage','credit_wallets','webhook_events','razorpay_orders','google_sheets_integrations','custom_domains','ownership_transfers','blog_posts','pro_leads','audit_log','billing_events','outbox','whatsapp_otps','notification_settings','appointments','leads','oauth_states','auth_tokens','sites','sessions','users']:
+        for table in ['assistant_action_keys','assistant_messages','assistant_usage','assistant_conversations','sales_assistant_configs','lead_form_configs','subscriptions','billing_profiles','site_revisions','editor_history','media_assets','support_messages','support_conversations','freelancer_leads','freelancer_outbound_clicks','freelancer_external_links','rate_limit_buckets','analytics_events','appointment_settings','freelancer_ratings','freelancer_template_submissions','freelancer_profiles','chatbot_messages','site_knowledge_docs','credit_usage','credit_wallets','webhook_events','razorpay_orders','google_sheets_integrations','custom_domains','ownership_transfers','blog_posts','pro_leads','audit_log','billing_events','outbox','whatsapp_otps','notification_settings','appointments','leads','oauth_states','auth_tokens','sites','sessions','users']:
             db.execute(text(f'DELETE FROM {table}'))
 
 def signup(client):
@@ -97,8 +97,9 @@ def main():
         # Publish + template isolation.
         page.locator('[data-testid="editor-publish"]').click(); page.wait_for_timeout(150); slug=client.get(f'/api/sites/{sid}').json()['slug']; public=client.get(f'/s/{slug}').text; ck(aid in public and 'Architecture with a clear point of view.' in public,'published public site matches edited image and content')
         sid2=create_site(client,h,'Fresh Template Copy'); ck(aid not in client.get(f'/api/sites/{sid2}/preview').text,'second site from same template retains original image')
-        # Export source with managed asset.
-        order=client.post(f'/api/sites/{sid}/source-export/order',headers=h,json={'currency':'USD'}).json(); client.post(f'/api/sites/{sid}/source-export/verify',headers=h,json={'order_id':order['order_id'],'payment_id':order['mock_payment_id'],'signature':order['mock_signature']}); z=zipfile.ZipFile(io.BytesIO(client.get(f'/api/sites/{sid}/export').content)); ck(any(n.startswith('public/zylora-assets/') for n in z.namelist()) and aid in z.read('app/zylora-edits.jsx').decode(),'Next.js export bundles managed image and structured edits')
+        # Hosted publishing remains the supported delivery path; the managed
+        # image is already verified in the rendered public site above.
+        ck(client.get(f'/api/sites/{sid}/preview').status_code == 200, 'managed media remains available through the hosted preview path')
         page.set_viewport_size({'width':390,'height':850}); ck(no_overflow(page),'editor mobile shell has no document horizontal overflow')
         browser.close()
     client.__exit__(None,None,None)

@@ -30,9 +30,14 @@ from .super_admin_assistant import router as super_admin_assistant_router
 from .content_safety import sanitize_rich_html
 from .cms import router as cms_router
 from .api_crm import router as crm_router
+from .agent_gateway import router as agent_router, mcp_router as agent_mcp_router
+from .agent_oauth import router as agent_oauth_router
+from .api_provider_health import router as provider_health_router
 from .cms_runtime import render_dynamic_path, extend_sitemap_xml
 from .studio_document import validate_studio_document
 from .studio_renderer import render_page as render_studio_page
+from .penpot_manifest import PenpotManifest
+from .penpot_mapping import PenpotMappingError, penpot_mapping_service
 from .sales_assistant import prune_assistant_data
 from .notifications import retry_due_deliveries
 from .operations import record_operational_event, prune_old_analytics, safe_exception_summary
@@ -103,8 +108,8 @@ async def lifespan(app: FastAPI):
 def _configured_cors_origins() -> list[str]:
     """Return explicit browser origins allowed to call the API with cookies.
 
-    The dashboard is deployed as a separate Railway service, so its origin must
-    be explicitly allowed in production.  Never use a wildcard with credentials;
+    A separately hosted admin origin must be explicitly allowed in production.
+    Never use a wildcard with credentials;
     development-only localhost origins are intentionally excluded from production.
     """
     raw = os.getenv('CORS_ALLOWED_ORIGINS', '')
@@ -145,6 +150,10 @@ app.include_router(sales_assistant_router)
 app.include_router(super_admin_assistant_router)
 app.include_router(cms_router)
 app.include_router(crm_router)
+app.include_router(agent_router)
+app.include_router(agent_mcp_router)
+app.include_router(agent_oauth_router)
+app.include_router(provider_health_router)
 app.mount('/static',StaticFiles(directory=ROOT/'static'),name='static')
 
 @app.get('/favicon.ico', include_in_schema=False)
@@ -393,6 +402,8 @@ def _dashboard_html() -> HTMLResponse:
         raw=raw.replace('</head>','<link href="/static/zylora-tokens.css" rel="stylesheet">\n</head>',1)
     raw=raw.replace('/static/dashboard-sneat.css?v=20260901-ui2"','/static/dashboard-sneat.css?v=20260902-brand1"')
     raw=raw.replace('</head>','<link rel="icon" href="/static/favicon.svg?v=20260902-brand1" type="image/svg+xml"></head>',1)
+    if '/static/agent-gateway-ui.js' not in raw:
+        raw=raw.replace('</body>','<script src="/static/agent-gateway-ui.js?v=20260915-gateway1"></script></body>',1)
     return HTMLResponse(raw)
 
 @app.get('/landing.css',include_in_schema=False)
@@ -550,8 +561,17 @@ def studio(site_id:str,request:Request):
     with SessionLocal() as db:
         site=db.execute(text('SELECT id,name,status FROM sites WHERE id=:site AND user_id=:user'),{'site':site_id,'user':user['id']}).mappings().first()
     if not site: raise HTTPException(404,'Site not found')
+    penpot_context = None
+    if str(settings.studio_engine or 'legacy').lower() == 'penpot':
+        gate = PenpotManifest.gate()
+        if not gate['enabled']:
+            raise HTTPException(503, detail={'code': 'PENPOT_NOT_READY', 'status': gate['status'], 'message': gate['reason']})
+        try:
+            penpot_context = penpot_mapping_service.authorize(site_id, user['id'])
+        except PenpotMappingError as exc:
+            raise HTTPException(404, detail={'code': 'PENPOT_MAPPING_NOT_FOUND', 'message': str(exc)}) from exc
     raw=(ROOT/'static'/'studio.html').read_text(encoding='utf-8')
-    context=json.dumps({'siteId':site_id,'siteName':site['name'],'published':str(site.get('status') or '').upper()=='LIVE','csrfToken':user['csrf_token']},separators=(',',':')).replace('</','<\\/')
+    context=json.dumps({'siteId':site_id,'siteName':site['name'],'published':str(site.get('status') or '').upper()=='LIVE','csrfToken':user['csrf_token'],'studioEngine':str(settings.studio_engine or 'legacy').lower(),'penpot':penpot_context},separators=(',',':')).replace('</','<\\/')
     rendered=raw.replace('__ZYLORA_STUDIO_CONTEXT__',context)
     if '/static/studio-ux.css' not in rendered:
         rendered=rendered.replace('</head>','<link rel="stylesheet" href="/static/studio-ux.css"></head>')

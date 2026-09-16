@@ -4,8 +4,7 @@ import json
 import re
 from uuid import uuid4
 
-import httpx
-
+from .ai_service import ai_service, hosted_ai_configured
 from .config import settings
 from .providers import record_ai_api_usage
 from .studio_document import validate_studio_document
@@ -82,9 +81,9 @@ def _validate_operations(document: dict, operations: object, page_id: str) -> li
 def generate_v4_operations(doc_json: str, instruction: str, selection: list[str], *, user_id: str | None = None, site_id: str | None = None, return_usage: bool = False):
     document = validate_studio_document(json.loads(doc_json)).model_dump(exclude_none=True)
     page_id = _page_for_selection(document, selection)
-    if not settings.openai_api_key:
+    if not hosted_ai_configured():
         if settings.app_env.lower() == "production":
-            raise RuntimeError("OpenAI is not configured in production")
+            raise RuntimeError("AI Gateway is not configured in production")
         result = (_local_operations(document, instruction, selection, page_id), "local")
         return (*result, {}) if return_usage else result
     page = document["pages"][page_id]
@@ -96,15 +95,17 @@ def generate_v4_operations(doc_json: str, instruction: str, selection: list[str]
         "Inserted nodes require unique safe IDs, a supported node type, children:[], and structured content/style/metadata. Never output HTML, scripts, secrets, fake claims, or unsafe links. "
         f"Page ID: {page_id}. Root ID: {page['rootNodeId']}. Selected IDs: {json.dumps(selection)}. Objects: {json.dumps(node_context)}. User request: {instruction[:2000]}"
     )
-    selected_model = settings.openai_model
-    payload = {"model": selected_model, "input": prompt, "max_output_tokens": 1200, "text": {"format": {"type": "json_object"}}}
-    headers = {"Authorization": f"Bearer {settings.openai_api_key}", "Content-Type": "application/json"}
-    with httpx.Client(timeout=45) as client:
-        response = client.post("https://api.openai.com/v1/responses", headers=headers, json=payload)
-        response.raise_for_status()
-        response_data = response.json()
-    usage = response_data.get("usage") or {}
-    record_ai_api_usage(surface="WEBSITE", operation="STUDIO_V4_EDIT", model=selected_model, usage=usage, user_id=user_id, site_id=site_id)
-    parsed = json.loads(response_data.get("output_text") or "{}")
+    selected_model = settings.ai_editor_model or settings.openai_model
+    parsed, response = ai_service.execute_json(
+        "STUDIO_V4_EDIT",
+        prompt,
+        user_id=user_id,
+        site_id=site_id,
+        requested_model=selected_model,
+        max_output_tokens=1200,
+    )
+    usage = dict(response.usage or {})
+    record_ai_api_usage(surface="WEBSITE", operation="STUDIO_V4_EDIT", model=response.model, usage=usage, user_id=user_id, site_id=site_id)
     result = (_validate_operations(document, parsed.get("operations"), page_id), "openai")
+    result = (result[0], response.provider)
     return (*result, usage) if return_usage else result

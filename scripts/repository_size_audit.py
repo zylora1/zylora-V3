@@ -182,7 +182,7 @@ def build_report(data: dict) -> str:
     for bucket, items in data["known_inventory"].items():
         total = sum(item["bytes"] for item in items)
         lines.append(f"- `{bucket}`: {len(items):,} files, {total:,} bytes ({total / MB:.3f} MiB)")
-    lines += ["", "## Deployment context note", "", "Railway upload size is recorded separately from this filesystem audit. The last observed upload rejection was 321,386,600 bytes after the existing ignore rules. A deterministic compact context must be measured after packaging changes.", ""]
+    lines += ["", "## Deployment context note", "", "Render image size and build output are deployment concerns separate from this filesystem audit. Measure the Docker build artifact in the deployment environment rather than inferring provider limits here.", ""]
     return "\n".join(lines)
 
 

@@ -1,7 +1,8 @@
-"""Authoritative Resend email transport for transactional and campaign mail.
+"""Provider-neutral email transport for transactional and campaign mail.
 
-All product email flows call this service (directly or through the backwards
-compatible ``providers.send_email`` facade). No feature opens another transport.
+Telnyx is the canonical production transport. The Resend adapter remains only
+as an explicit compatibility path for local/staged migrations; no production
+feature requires a Resend credential when Telnyx is configured.
 """
 from __future__ import annotations
 
@@ -22,17 +23,18 @@ from .config import settings
 from .content_safety import html_to_text, looks_like_html, sanitize_email_html
 from .db import SessionLocal, now_iso
 from .operations import record_operational_event, safe_exception_summary
+from .communication_service import communication_service
 
 _HEADER_BREAK = re.compile(r"[\r\n]")
 _RESEND_ENDPOINT = 'https://api.resend.com/emails'
 
 
 class EmailConfigurationError(RuntimeError):
-    """Raised when live Resend delivery was requested without usable settings."""
+    """Raised when live email delivery was requested without usable settings."""
 
 
 class EmailDeliveryError(RuntimeError):
-    """Raised when Resend rejects a message or returns an unusable response."""
+    """Raised when the selected email provider rejects a message."""
 
 
 @dataclass(frozen=True)
@@ -57,8 +59,8 @@ def _clean_header(value: str, label: str, limit: int) -> str:
 
 
 def _sender() -> tuple[str, str]:
-    """Return a Resend-safe display name and normalized sender address."""
-    configured = _clean_header(settings.email_from, 'EMAIL_FROM', 254)
+    """Return a provider-safe display name and normalized sender address."""
+    configured = _clean_header(settings.telnyx_email_from or settings.email_from, 'EMAIL_FROM', 254)
     name, address = parseaddr(configured)
     address = normalize_recipient(address or configured)
     return (_clean_header(name, 'sender name', 120) if name else 'Zylora', address)
@@ -85,7 +87,7 @@ def _outbox(recipient: str, subject: str, body: str, *, category: str, metadata:
 
 
 class EmailService:
-    """Compose and deliver mail through the single Resend HTTP API boundary."""
+    """Compose and deliver mail through the canonical communications boundary."""
 
     def _payload(self, recipient: str, subject: str, body: str, *, html: str | None,
                  reply_to: str | None, attachments: Iterable[EmailAttachment],
@@ -152,13 +154,46 @@ class EmailService:
              category: str = 'TRANSACTIONAL', reply_to: str | None = None,
              attachments: Iterable[EmailAttachment] = (),
              idempotency_key: str | None = None) -> dict:
+        # Campaign callers may pass a generator.  Materialize once so the
+        # payload builder and Telnyx adapter see the same attachments.
+        attachments = tuple(attachments or ())
         payload, normalized, text_body, html_body, message_id = self._payload(
             recipient, subject, body, html=html, reply_to=reply_to,
             attachments=attachments, idempotency_key=idempotency_key,
         )
         started = time.monotonic()
+        # Telnyx is the target communications provider.  The legacy Resend
+        # path remains available only while TELNYX_API_KEY is absent, so a
+        # staged deployment can switch credentials without interrupting mail.
+        if settings.telnyx_api_key.strip():
+            try:
+                result = communication_service.send_email(
+                    recipient=normalized,
+                    subject=subject,
+                    text_body=text_body,
+                    html_body=html_body or None,
+                    idempotency_key=idempotency_key or message_id,
+                    attachments=[
+                        {'filename': a.filename, 'content': base64.b64encode(bytes(a.content)).decode('ascii'), 'content_type': a.content_type}
+                        for a in attachments
+                    ],
+                )
+            except Exception as exc:
+                record_operational_event('EMAIL', 'TELNYX_SEND_FAILED', safe_exception_summary(exc), severity='ERROR', metadata={
+                    'category': category,
+                    'recipient_sha256': hashlib.sha256(normalized.encode()).hexdigest()[:16],
+                })
+                _outbox(normalized, subject, text_body, category=category,
+                        metadata={'provider': 'telnyx', 'error': safe_exception_summary(exc)}, status='FAILED')
+                raise
+            provider_id = result.provider_id or message_id
+            _outbox(normalized, subject, text_body, category=category, metadata={
+                'provider': 'telnyx', 'message_id': provider_id, 'has_html': bool(html_body),
+                'duration_ms': round((time.monotonic() - started) * 1000, 1),
+            })
+            return {'provider': 'telnyx', 'status': result.status, 'message_id': provider_id}
         # Development/test retain deterministic local outbox behavior. Production
-        # never silently falls back when Resend is unavailable.
+        # never silently falls back when the configured provider is unavailable.
         if not settings.resend_api_key.strip() and settings.app_env != 'production':
             _outbox(normalized, subject, text_body, category=category,
                      metadata={'provider': 'local', 'message_id': message_id, 'has_html': bool(html_body)})

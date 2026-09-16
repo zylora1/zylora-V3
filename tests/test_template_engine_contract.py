@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-import io
 import json
-import zipfile
 
 import pytest
 from fastapi.testclient import TestClient
@@ -85,23 +83,14 @@ def test_unsupported_structural_ai_request_returns_schema_capability_request_loc
     assert exc.value.detail['smallest_schema_extension']
 
 
-def test_export_preserves_site_document_effect_runtime_and_prompt_derived_routes():
-    reset_db(); c,h=signup('engine-export@example.com')
-    site=create_ai(c,h,'Export Engine','Create separate Home, Projects, Studio, Process and Contact pages for a creative practice.')
+def test_hosted_renderer_preserves_site_document_effect_runtime_and_prompt_derived_routes():
+    reset_db(); c,h=signup('engine-renderer@example.com')
+    site=create_ai(c,h,'Renderer Engine','Create separate Home, Projects, Studio, Process and Contact pages for a creative practice.')
     sid=site['id']
     r=c.post(f'/api/sites/{sid}/structure',headers=h,json={'operations':[{'page':'home','type':'set_effect','selector':'h1','effect_kind':'hover','effect':'lift'}]})
     assert r.status_code==200,r.text
-    order=c.post(f'/api/sites/{sid}/source-export/order',headers=h,json={'currency':'USD'}).json()
-    assert c.post(f'/api/sites/{sid}/source-export/verify',headers=h,json={'order_id':order['order_id'],'payment_id':order['mock_payment_id'],'signature':order['mock_signature']}).status_code==200
-    exp=c.get(f'/api/sites/{sid}/export'); assert exp.status_code==200
-    z=zipfile.ZipFile(io.BytesIO(exp.content))
-    doc=json.loads(z.read('zylora-structured-edits.json'))
-    site_manifest=json.loads(z.read('zylora-site.json'))
-    client=z.read('app/zylora-edits.jsx').decode()
-    page_ids=[p['id'] for p in doc['pages']]
-    assert page_ids[0]=='home' and {'projects','studio','process','contact'}.issubset(page_ids)
-    assert site_manifest['renderer']=='ai-runtime'
-    assert site_manifest['pages'][0]=='/' and '/projects' in site_manifest['pages'] and '/contact' in site_manifest['pages']
-    assert 'effect_kind' in client and 'set_effect' in client
-    assert "export const dynamic='force-static';" in z.read('app/robots.js').decode()
-    assert "export const dynamic='force-static';" in z.read('app/sitemap.js').decode()
+    document=c.get(f'/api/sites/{sid}/structure').json()
+    assert document['pages'][0]['id']=='home' and {'projects','studio','process','contact'}.issubset({p['id'] for p in document['pages']})
+    assert 'set_effect' in json.dumps(document)
+    assert c.get(f'/api/sites/{sid}/preview').status_code==200
+    assert c.get(f'/api/sites/{sid}/export').status_code==404

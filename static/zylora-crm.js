@@ -4,6 +4,18 @@
 (function() {
   'use strict';
 
+  const crmIcon = (kind) => {
+    const paths = {
+      users: '<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c.4-3.1 2.4-5 6-5s5.6 1.9 6 5M15 15c2.8-.1 4.7 1.5 5 4"/>',
+      flame: '<path d="M12 21c4 0 7-2.8 7-6.5 0-2.8-1.6-5.1-4.3-7.3.1 2-1 3.2-2.2 3.9.2-3.1-1.3-5.7-3.8-7.1.2 3.6-4.7 5.7-4.7 10.5C4 18.3 7.4 21 12 21Z"/>',
+      pipeline: '<path d="M4 5h16M7 12h10M10 19h4"/><path d="M4 5 10 12v7M20 5l-6 7v7"/>',
+      trophy: '<path d="M8 4h8v5a4 4 0 0 1-8 0V4Z"/><path d="M8 6H5v2a3 3 0 0 0 3 3M16 6h3v2a3 3 0 0 1-3 3M12 13v4M8 21h8M9 17h6"/>',
+      task: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="m8 12 2.5 2.5L16 9"/>'
+    };
+    return `<svg class="crm-inline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[kind] || paths.task}</svg>`;
+  };
+  const crmScoreIcon = (score) => score >= 50 ? crmIcon('flame') : crmIcon('task');
+
   const CRM = {
     state: {
       activeView: 'crm-overview',
@@ -89,27 +101,27 @@
 
       g.innerHTML = `
         <div class="crm-stat-card">
-          <div class="crm-stat-label">Total Contacts <span>👥</span></div>
+          <div class="crm-stat-label">Total Contacts <span>${crmIcon('users')}</span></div>
           <div class="crm-stat-value">${c.total || 0}</div>
           <div class="crm-stat-sub"><span class="crm-stat-trend up">+${c.new_this_week || 0}</span> this week</div>
         </div>
         <div class="crm-stat-card">
-          <div class="crm-stat-label">Hot Leads <span>🔥</span></div>
+          <div class="crm-stat-label">Hot Leads <span>${crmIcon('flame')}</span></div>
           <div class="crm-stat-value">${c.hot_leads || 0}</div>
           <div class="crm-stat-sub">Score ≥ 50</div>
         </div>
         <div class="crm-stat-card">
-          <div class="crm-stat-label">Pipeline Value <span>💼</span></div>
+          <div class="crm-stat-label">Pipeline Value <span>${crmIcon('pipeline')}</span></div>
           <div class="crm-stat-value">${this.formatMoney(d.pipeline_value || 0)}</div>
           <div class="crm-stat-sub">${d.active_deals || 0} open deals</div>
         </div>
         <div class="crm-stat-card">
-          <div class="crm-stat-label">Closed Won <span>🏆</span></div>
+          <div class="crm-stat-label">Closed Won <span>${crmIcon('trophy')}</span></div>
           <div class="crm-stat-value">${this.formatMoney(d.won_revenue || 0)}</div>
           <div class="crm-stat-sub">Win rate: <b>${d.win_rate_percent || 0}%</b></div>
         </div>
         <div class="crm-stat-card">
-          <div class="crm-stat-label">Pending Tasks <span>⚡</span></div>
+          <div class="crm-stat-label">Pending Tasks <span>${crmIcon('task')}</span></div>
           <div class="crm-stat-value">${t.pending || 0}</div>
           <div class="crm-stat-sub"><span class="${t.overdue > 0 ? 'crm-stat-trend down' : ''}">${t.overdue || 0} overdue</span></div>
         </div>
@@ -199,7 +211,7 @@
       tbody.innerHTML = this.state.contacts.map(c => {
         const initials = ((c.first_name?.[0] || '') + (c.last_name?.[0] || c.email?.[0] || 'C')).toUpperCase();
         const scoreClass = c.lead_score >= 50 ? 'hot' : (c.lead_score >= 25 ? 'warm' : 'cold');
-        const scoreIcon = c.lead_score >= 50 ? '🔥' : (c.lead_score >= 25 ? '⚡' : '❄️');
+        const scoreIcon = crmScoreIcon(c.lead_score || 0);
         const isSelected = this.state.selectedContactIds.has(c.id);
 
         return `

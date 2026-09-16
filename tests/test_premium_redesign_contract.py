@@ -73,3 +73,31 @@ def test_ai_creator_keeps_a_native_prompt_fallback():
     assert '<label class="prompt-box">' in html
     assert "const aiCreatePromptInputRoot = $('#aiCreatePromptInputRoot')" in js
     assert "&& #aiCreatePromptInputRoot" not in js
+    assert "sessionStorage.getItem('zyloraAiDraft')" in js
+
+
+def test_tinkered_visual_skin_is_shared_without_replacing_product_mechanics():
+    landing = (STATIC / "index.html").read_text(encoding="utf-8")
+    dashboard = (STATIC / "dashboard.html").read_text(encoding="utf-8")
+    studio = (STATIC / "studio.html").read_text(encoding="utf-8")
+    dashboard_script = (STATIC / "dashboard-tinkered.js").read_text(encoding="utf-8")
+    studio_source = (ROOT / "studio" / "App.tsx").read_text(encoding="utf-8")
+
+    assert '/static/zylora-tinkered.css' in landing
+    assert '/static/zylora-tinkered.css' in dashboard
+    assert '/static/zylora-tinkered.css' in studio
+    assert '/static/dashboard-tinkered.js' in dashboard
+    assert 'id="dashboardCreateComposer"' in dashboard_script
+    assert 'data-action="new-site"' not in dashboard_script
+    assert 'data-action="new-site"' in dashboard
+    assert 'studio-product-switcher' in studio_source
+    assert 'studio-sidebar-right' in studio_source
+    assert 'ai-panel-open' in studio_source
+    assert "zylora:sites-loaded" in (STATIC / "dashboard.js").read_text(encoding="utf-8")
+    assert "dashboard-site-card-rail" in dashboard_script
+    assert "dashboard-account-popover" in dashboard_script
+    assert "dashboard-resource-card" in dashboard_script
+    assert "fetch('/api/billing'" in dashboard_script
+    assert "zyloraAiDraft" in dashboard_script
+    assert "window.location.href = '/ai-create'" in dashboard_script
+    assert "window.location.href = '/studio/'" in dashboard_script

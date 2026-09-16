@@ -1,6 +1,7 @@
 import sys
 import json
 import base64
+import os
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -46,7 +47,11 @@ def run_qa():
     errors = []
     
     with TestClient(app, cookies={'zylora_session': user_sess}) as client, sync_playwright() as p:
-        browser = p.chromium.launch()
+        browser_name = os.environ.get('ZYLORA_BROWSER', 'chromium').strip().lower()
+        browser_type = {'chromium': p.chromium, 'firefox': p.firefox, 'webkit': p.webkit}.get(browser_name)
+        if browser_type is None:
+            raise ValueError(f"Unsupported ZYLORA_BROWSER={browser_name!r}; use chromium, firefox, or webkit")
+        browser = browser_type.launch()
         
         dash_html = inline_document('dashboard.html', 'dashboard.css', 'dashboard.js', f'window.__CSRF="{user_csrf}";\n' + browser_bootstrap(), patch=patch_dashboard)
         
@@ -84,7 +89,6 @@ def run_qa():
 
         views_to_test = [
             ('websites', '#websites', 'Websites'),
-            ('templates', '#templates', 'Templates'),
             ('leads', '#leads', 'Leads'),
             ('assistant', '#assistant', 'AI Sales Assistant'),
             ('appointments', '#appointments', 'Appointments'),

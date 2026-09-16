@@ -1,4 +1,9 @@
-from app.config import settings
+import pytest
+
+from app.config import Settings, settings
+from app.ai_service import HostedAIService
+from app.providers import verify_turnstile
+from app.provider_services import ProviderConfigurationError
 from app.provider_services import (
     AIRequest,
     AIResponse,
@@ -9,6 +14,8 @@ from app.provider_services import (
     InfrastructureService,
     PaymentService,
 )
+from app.infrastructure_service import CloudflareInfrastructureService
+from app.payment_service import RazorpayPaymentService
 
 
 def test_target_settings_have_one_gateway_and_one_communications_surface():
@@ -17,6 +24,38 @@ def test_target_settings_have_one_gateway_and_one_communications_surface():
     assert hasattr(settings, "telnyx_api_key")
     assert hasattr(settings, "r2_endpoint")
     assert settings.studio_engine == "legacy"
+
+
+def test_production_ai_service_does_not_select_direct_openai_compatibility(monkeypatch):
+    monkeypatch.setattr(settings, "app_env", "production")
+    monkeypatch.setattr(settings, "ai_gateway_api_key", "")
+    monkeypatch.setattr(settings, "openai_api_key", "legacy-only-key")
+    service = HostedAIService()
+    assert service.configured() is False
+    with pytest.raises(ProviderConfigurationError, match="AI_GATEWAY_API_KEY"):
+        service._adapter_for_request()
+
+
+def test_turnstile_can_be_disabled_without_provider_secret(monkeypatch):
+    monkeypatch.setattr(settings, "app_env", "production")
+    monkeypatch.setattr(settings, "turnstile_enabled", False)
+    monkeypatch.setattr(settings, "turnstile_secret_key", "")
+    assert verify_turnstile(None) is True
+
+
+def test_cloudflare_r2_names_feed_the_existing_s3_compatible_media_service():
+    configured = Settings(
+        _env_file=None,
+        media_storage_provider="s3",
+        r2_access_key_id="r2-key",
+        r2_secret_access_key="r2-secret",
+        r2_endpoint="https://account.r2.cloudflarestorage.com",
+        r2_bucket="zylora-media",
+    )
+    assert configured.media_s3_access_key_id == "r2-key"
+    assert configured.media_s3_secret_access_key == "r2-secret"
+    assert configured.media_s3_endpoint_url.endswith("cloudflarestorage.com")
+    assert configured.media_s3_bucket == "zylora-media"
 
 
 def test_provider_contracts_are_runtime_checkable_without_secret_fields():
@@ -72,3 +111,9 @@ def test_provider_contracts_are_runtime_checkable_without_secret_fields():
     assert not hasattr(response, "api_key")
     assert request.correlation.request_id == "req-1"
 
+
+def test_infrastructure_and_payment_facades_delegate_without_exposing_provider_modules(monkeypatch):
+    monkeypatch.setattr("app.providers.cloudflare_create_hostname", lambda hostname: {"hostname": hostname, "provider": "cloudflare"})
+    monkeypatch.setattr("app.providers.razorpay_create_order", lambda amount, currency, receipt, notes=None: {"id": receipt, "amount": amount, "currency": currency})
+    assert CloudflareInfrastructureService().ensure_domain(hostname="www.example.test")["provider"] == "cloudflare"
+    assert RazorpayPaymentService().create_order(amount_minor=100, currency="INR", receipt="r-1")["id"] == "r-1"

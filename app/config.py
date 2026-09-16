@@ -1,7 +1,7 @@
 from __future__ import annotations
 from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import field_validator
+from pydantic import field_validator, model_validator
 from sqlalchemy.engine import make_url
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -14,7 +14,9 @@ class Settings(BaseSettings):
     @classmethod
     def normalize_app_env(cls, value):
         import os
-        env_override = os.getenv('APP_ENV') or os.getenv('ENVIRONMENT') or os.getenv('RAILWAY_ENVIRONMENT')
+        # Deployment platforms should set APP_ENV/ENVIRONMENT explicitly.
+        # Do not infer runtime mode from a provider-specific variable.
+        env_override = os.getenv('APP_ENV') or os.getenv('ENVIRONMENT')
         if value and str(value).lower() not in {'', 'development'}:
             raw = str(value).strip().lower()
         elif env_override:
@@ -57,13 +59,13 @@ class Settings(BaseSettings):
     # compatibility inputs until every call site has moved to AIService.
     ai_gateway_provider: str = 'vercel'
     ai_gateway_api_key: str = ''
-    ai_gateway_base_url: str = ''
+    ai_gateway_base_url: str = 'https://ai-gateway.vercel.sh/v1'
     ai_default_model: str = 'openai/gpt-5-mini'
     ai_sales_assistant_model: str = 'openai/gpt-4o-mini'
     ai_editor_model: str = 'openai/gpt-5-mini'
 
-    # Resend is the only email transport. Credentials remain server-side and
-    # are never exposed by API responses.
+    # Resend remains a compatibility transport only while Telnyx is rolled out.
+    # Credentials remain server-side and are never exposed by API responses.
     resend_api_key: str = ''
     email_from: str = 'Zylora <notifications@zylora.dev>'
     email_reply_to: str = ''
@@ -85,9 +87,17 @@ class Settings(BaseSettings):
     telnyx_api_key: str = ''
     telnyx_base_url: str = 'https://api.telnyx.com/v2'
     telnyx_email_from: str = ''
+    telnyx_email_domain_id: str = ''
     telnyx_whatsapp_from: str = ''
+    telnyx_messaging_profile_id: str = ''
     telnyx_sms_from: str = ''
+    telnyx_public_key: str = ''
     telnyx_webhook_public_key: str = ''
+    # Optional server-side operational alert thresholds.  Zero disables a
+    # threshold; alerts are surfaced in the Super Admin provider-usage view.
+    ai_cost_alert_usd: float = 0.0
+    telnyx_message_alert_count: int = 0
+    communication_failure_alert_pct: float = 0.0
 
     whatsapp_phone_number_id: str = ''
     whatsapp_access_token: str = ''
@@ -95,6 +105,7 @@ class Settings(BaseSettings):
 
     google_client_id: str = ''
     google_client_secret: str = ''
+    google_oauth_enabled: bool = False
     google_redirect_uri: str = ''
     google_service_account_json: str = ''
     google_service_account_file: str = ''
@@ -161,6 +172,26 @@ class Settings(BaseSettings):
             raise ValueError('STUDIO_ENGINE must be legacy or penpot')
         return engine
 
+    @model_validator(mode='after')
+    def resolve_r2_media_aliases(self):
+        """Use the target Cloudflare R2 names without duplicating credentials.
+
+        The media service intentionally remains S3-compatible, so R2 does not
+        need a second storage implementation.  During the staged migration,
+        deployments may provide the target ``R2_*`` variables while older
+        installations still use ``MEDIA_S3_*``.  Prefer explicitly supplied
+        MEDIA_S3 values and fill only missing fields from the R2 aliases.
+        """
+        if not self.media_s3_access_key_id:
+            self.media_s3_access_key_id = self.r2_access_key_id
+        if not self.media_s3_secret_access_key:
+            self.media_s3_secret_access_key = self.r2_secret_access_key
+        if not self.media_s3_endpoint_url:
+            self.media_s3_endpoint_url = self.r2_endpoint
+        if not self.media_s3_bucket:
+            self.media_s3_bucket = self.r2_bucket
+        return self
+
 settings = Settings()
 
 
@@ -188,19 +219,27 @@ def validate_production_settings() -> None:
             need((db_url.password or '') != 'zylora-dev-only', 'DATABASE_URL credentials')
         except Exception:
             need(False, 'DATABASE_URL')
-    need(bool(settings.openai_api_key), 'OPENAI_API_KEY')
-    need(bool(settings.sales_assistant_model), 'SALES_ASSISTANT_MODEL')
-    need(bool(settings.resend_api_key), 'RESEND_API_KEY')
+    # Production hosted inference is gateway-only. Legacy OpenAI credentials
+    # remain a local/test compatibility surface and cannot make production
+    # appear AI-ready on their own.
+    ai_ready = bool(settings.ai_gateway_api_key and settings.ai_gateway_base_url)
+    need(ai_ready, 'AI_GATEWAY_API_KEY/AI_GATEWAY_BASE_URL')
+    need(bool(settings.ai_sales_assistant_model or settings.sales_assistant_model), 'AI_SALES_ASSISTANT_MODEL')
+    telnyx_email_ready = bool(settings.telnyx_api_key and settings.telnyx_email_from)
+    need(telnyx_email_ready or bool(settings.resend_api_key), 'TELNYX_API_KEY/TELNYX_EMAIL_FROM (or RESEND_API_KEY compatibility)')
     need(bool(settings.email_from and '@' in settings.email_from and '.local' not in settings.email_from and '.example' not in settings.email_from), 'EMAIL_FROM')
     need(bool(settings.email_unsubscribe_secret) and len(settings.email_unsubscribe_secret) >= 32, 'EMAIL_UNSUBSCRIBE_SECRET (32+ characters)')
     twilio_ready=bool(settings.twilio_account_sid and settings.twilio_auth_token and settings.twilio_whatsapp_from)
     meta_whatsapp_ready=bool(settings.whatsapp_phone_number_id and settings.whatsapp_access_token)
-    need(twilio_ready or meta_whatsapp_ready, 'TWILIO_ACCOUNT_SID/TWILIO_AUTH_TOKEN/TWILIO_WHATSAPP_FROM or WHATSAPP_PHONE_NUMBER_ID/WHATSAPP_ACCESS_TOKEN')
-    need(bool(settings.turnstile_site_key and settings.turnstile_secret_key), 'TURNSTILE_SITE_KEY/TURNSTILE_SECRET_KEY')
+    telnyx_whatsapp_ready = bool(settings.telnyx_api_key and settings.telnyx_whatsapp_from)
+    need(telnyx_whatsapp_ready or twilio_ready or meta_whatsapp_ready, 'TELNYX_API_KEY/TELNYX_WHATSAPP_FROM (or TWILIO_ACCOUNT_SID/TWILIO_AUTH_TOKEN/TWILIO_WHATSAPP_FROM or legacy WhatsApp compatibility)')
+    if settings.turnstile_enabled:
+        need(bool(settings.turnstile_site_key and settings.turnstile_secret_key), 'TURNSTILE_SITE_KEY/TURNSTILE_SECRET_KEY')
     need(settings.payment_provider in {'razorpay', 'mock'}, 'PAYMENT_PROVIDER=razorpay or mock')
     if settings.payment_provider == 'razorpay' and (settings.razorpay_key_id or settings.razorpay_key_secret or settings.razorpay_webhook_secret):
         need(bool(settings.razorpay_key_id and settings.razorpay_key_secret and settings.razorpay_webhook_secret), 'RAZORPAY_KEY_ID/RAZORPAY_KEY_SECRET/RAZORPAY_WEBHOOK_SECRET')
-    need(bool(settings.google_client_id and settings.google_client_secret), 'GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET')
+    if settings.google_oauth_enabled:
+        need(bool(settings.google_client_id and settings.google_client_secret), 'GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET')
     if settings.cloudflare_api_token or settings.cloudflare_zone_id:
         need(bool(settings.cloudflare_api_token and settings.cloudflare_zone_id), 'CLOUDFLARE_API_TOKEN/CLOUDFLARE_ZONE_ID')
     need(bool(settings.cloudflare_saas_target and '.example' not in settings.cloudflare_saas_target), 'CLOUDFLARE_SAAS_TARGET')
@@ -210,6 +249,9 @@ def validate_production_settings() -> None:
         need(bool(settings.ai_gateway_base_url), 'AI_GATEWAY_BASE_URL')
     if settings.telnyx_api_key:
         need(bool(settings.telnyx_email_from or settings.telnyx_whatsapp_from or settings.telnyx_sms_from), 'TELNYX_*_FROM')
+    need(settings.ai_cost_alert_usd >= 0, 'AI_COST_ALERT_USD must be non-negative')
+    need(settings.telnyx_message_alert_count >= 0, 'TELNYX_MESSAGE_ALERT_COUNT must be non-negative')
+    need(0 <= settings.communication_failure_alert_pct <= 100, 'COMMUNICATION_FAILURE_ALERT_PCT must be 0..100')
     if settings.studio_engine == 'penpot':
         need(bool(settings.penpot_base_url), 'PENPOT_BASE_URL')
     # Bootstrap credentials are optional after the first admin exists, but must never be partial.

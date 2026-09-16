@@ -14,11 +14,12 @@ from sqlalchemy import text
 
 from .db import SessionLocal, now_iso
 from .config import settings
+from .ai_service import hosted_ai_configured
 from . import ai_billing
 from .plans import MAX_PAGES_PER_SITE, get_plan
 from .providers import ai_seo_metadata
 from .operations import safe_exception_summary, record_operational_event
-from .editor_state import create_revision, ensure_history, list_revisions, push_history, redo as history_redo, restore_revision, undo as history_undo
+from .editor_state import create_revision, ensure_history, list_revisions, push_history, redo as history_redo, restore_revision, undo as history_undo, StudioRevisionConflict
 from .media import (
     asset_is_publicly_referenced, create_asset, get_asset, import_remote_stock, list_assets, load_bytes,
     media_url, pexels_search, soft_delete_asset, update_asset
@@ -34,6 +35,9 @@ from .seo_engine import (apply_seo_html, clean_text, metadata_for_page, normaliz
 from .link_icons import normalize_footer_links, detect_link_platform, apply_footer_links_html
 from .studio_document import normalize_studio_document_json, validate_studio_document
 from .studio_renderer import render_page as render_studio_page
+from .penpot_adapter import PenpotAdapterError, project_site_document, translate_penpot_interaction
+from .penpot_semantics import COMPONENT_REGISTRY, REGISTRY
+from .studio_mutations import StudioMutationConflict, apply_operations
 
 router = APIRouter(prefix='/api')
 public_router = APIRouter()
@@ -181,7 +185,7 @@ async def upload_asset(site_id: str, request: Request, file: UploadFile=File(...
         detail=exc.detail if isinstance(exc.detail,str) else 'The image could not be processed.'
         raise HTTPException(exc.status_code,detail={'code':'MEDIA_UPLOAD_INVALID','message':f'{filename}: {detail}'}) from exc
     except Exception as exc:
-        # Do not hide an S3/Railway volume/DB failure behind a generic browser
+        # Do not hide an S3/persistent-volume/database failure behind a generic browser
         # toast. Keep provider details in operational telemetry, while giving
         # the editor an actionable, non-secret response.
         record_operational_event('MEDIA','MEDIA_UPLOAD_STORAGE_FAILED',safe_exception_summary(exc),severity='ERROR',user_id=u['id'],site_id=site_id,dedupe_minutes=2)
@@ -523,10 +527,14 @@ def save_studio(site_id: str, document: dict, request: Request):
                 valid_doc.revision = 1
                 
             doc_json = valid_doc.model_dump_json(exclude_none=True)
+            if not db.execute(text('SELECT 1 FROM site_revisions WHERE site_id=:site_id LIMIT 1'), {'site_id':site_id}).first():
+                create_revision(db,site_id,u['id'],'STUDIO_INITIAL','Before first Studio save')
             result=db.execute(text('''UPDATE sites
-                SET studio_document_json=:document, studio_revision=:next_revision, updated_at=:updated
+                SET studio_document_json=:document, studio_revision=:next_revision, updated_at=:updated,
+                    page_count=:page_count, document_schema_version=:schema_version
                 WHERE id=:site_id AND user_id=:user_id AND studio_revision=:expected_revision'''),{
                 'document':doc_json,'next_revision':valid_doc.revision,'expected_revision':client_rev,
+                'page_count':len(valid_doc.pages),'schema_version':valid_doc.schemaVersion,
                 'updated':now_iso(),'site_id':site_id,'user_id':u['id']
             })
             if result.rowcount != 1:
@@ -550,6 +558,7 @@ def save_studio(site_id: str, document: dict, request: Request):
                     'serverDocument':authoritative_document,
                     'conflict':'reload_or_rebase_required',
                 })
+            create_revision(db,site_id,u['id'],'STUDIO_SAVE','Studio save')
             
         except HTTPException:
             raise
@@ -558,27 +567,111 @@ def save_studio(site_id: str, document: dict, request: Request):
 
     return {'ok': True, 'newRevision': valid_doc.revision}
 
+
+@router.get('/sites/{site_id}/studio/penpot-projection')
+def penpot_projection(site_id: str, request: Request, page_id: str | None = None):
+    """Return a short-lived Penpot-shaped projection of the canonical document."""
+    u = _user(request)
+    with SessionLocal() as db:
+        site = _owned_site(db, u['id'], site_id)
+    if not site.get('studio_document_json'):
+        raise HTTPException(409, detail={'code': 'STUDIO_DOCUMENT_REQUIRED', 'message': 'Save the Studio document before opening the canvas projection.'})
+    try:
+        document = validate_studio_document(json.loads(site['studio_document_json']))
+        return project_site_document(document, page_id)
+    except PenpotAdapterError as exc:
+        raise HTTPException(422, detail={'code': 'PENPOT_PROJECTION_INVALID', 'message': str(exc)}) from exc
+    except (TypeError, ValueError, json.JSONDecodeError) as exc:
+        raise HTTPException(422, detail={'code': 'STUDIO_DOCUMENT_CORRUPT', 'message': 'The canonical Studio document is invalid.'}) from exc
+
+
+@router.get('/sites/{site_id}/studio/semantic-registry')
+def semantic_registry(site_id: str, request: Request):
+    """Return the canonical Zylora semantic registry to the authenticated plugin."""
+    u = _user(request)
+    with SessionLocal() as db:
+        _owned_site(db, u['id'], site_id)
+    return {
+        'websiteSchemaVersion': REGISTRY['websiteSchemaVersion'],
+        'componentSchemaVersion': REGISTRY['componentSchemaVersion'],
+        'aliases': dict(REGISTRY.get('aliases') or {}),
+        'components': [dict(value) for value in COMPONENT_REGISTRY.values()],
+    }
+
+
+@router.post('/sites/{site_id}/studio/penpot-interaction')
+def apply_penpot_interaction(site_id: str, payload: dict, request: Request):
+    """Translate one Penpot interaction and commit it through the Studio CAS."""
+    u = _user(request, True)
+    interaction = payload.get('interaction') if isinstance(payload, dict) else None
+    if not isinstance(interaction, dict):
+        raise HTTPException(422, detail={'code': 'INVALID_PENPOT_INTERACTION', 'message': 'interaction must be an object.'})
+    with SessionLocal.begin() as db:
+        site = _owned_site(db, u['id'], site_id)
+        if not site.get('studio_document_json'):
+            raise HTTPException(409, detail={'code': 'STUDIO_DOCUMENT_REQUIRED', 'message': 'Save the Studio document before editing the canvas.'})
+        try:
+            document = validate_studio_document(json.loads(site['studio_document_json']))
+            current_revision = int(site.get('studio_revision') or document.revision or 0)
+            expected_revision = payload.get('expected_revision', current_revision)
+            if int(expected_revision) != current_revision:
+                raise HTTPException(409, detail={'code': 'STUDIO_REVISION_CONFLICT', 'message': 'A newer Studio revision is authoritative.', 'serverRevision': current_revision})
+            operations = translate_penpot_interaction(document, interaction)
+            committed = apply_operations(
+                db,
+                site_id=site_id,
+                user_id=u['id'],
+                document=document,
+                operations=operations,
+                base_revision=current_revision,
+                kind='STUDIO_PENPOT',
+                label=f"Penpot interaction: {interaction.get('type') or interaction.get('action') or 'edit'}",
+                audit_metadata={'source': 'penpot-rest'},
+            )
+            patched = committed['document']
+            revision = committed['revision']
+        except HTTPException:
+            raise
+        except PenpotAdapterError as exc:
+            raise HTTPException(422, detail={'code': 'INVALID_PENPOT_INTERACTION', 'message': str(exc)}) from exc
+        except StudioMutationConflict as exc:
+            raise HTTPException(409, detail={'code': 'STUDIO_REVISION_CONFLICT', 'message': 'A concurrent Studio save won; reload and retry.', 'serverRevision': exc.current_revision}) from exc
+        except (TypeError, ValueError, json.JSONDecodeError) as exc:
+            raise HTTPException(422, detail={'code': 'INVALID_PENPOT_INTERACTION', 'message': str(exc)}) from exc
+    return {'ok': True, 'operations': operations, 'newRevision': patched.revision, 'revision': revision}
+
 @router.get('/sites/{site_id}/revisions/{revision_id}/preview')
 def revision_preview(site_id: str, revision_id: str, request: Request, page: str='home'):
     u=_user(request)
     with SessionLocal() as db:
-        site=_owned_site(db,u['id'],site_id); p=_page_allowed(site,page)
+        site=_owned_site(db,u['id'],site_id)
         row=db.execute(text('SELECT state_json FROM site_revisions WHERE id=:i AND site_id=:s'),{'i':revision_id,'s':site_id}).first()
         if not row: raise HTTPException(404,'Revision not found')
     try: state=json.loads(row[0])
     except Exception: raise HTTPException(422,'Revision is corrupt')
+    if state.get('studio_document_json'):
+        try:
+            document=validate_studio_document(json.loads(state['studio_document_json']))
+        except (ValueError,TypeError):
+            raise HTTPException(422,'Revision Studio document is corrupt')
+        if page not in document.pages:
+            raise HTTPException(404,'Page not found in this revision')
+        return Response(render_studio_page(document,page,asset_resolver=media_url,seo_override={'noindex':True}),media_type='text/html')
+    p=_page_allowed(site,page)
     revision_site=dict(site)
     for k in ('tagline','description','accent','draft_structure_json','brand_json','seo_json','document_schema_version'):
         if k in state: revision_site[k]=state[k]
     return Response(render_draft(revision_site,p),media_type='text/html')
 
 @router.post('/sites/{site_id}/revisions/{revision_id}/restore')
-def revision_restore(site_id: str, revision_id: str, request: Request):
+def revision_restore(site_id: str, revision_id: str, request: Request, expected_revision: int | None = None):
     u=_user(request,True)
     with SessionLocal.begin() as db:
         site=_owned_site(db,u['id'],site_id)
-        try: item=restore_revision(db,site,u['id'],revision_id)
+        try: item=restore_revision(db,site,u['id'],revision_id,expected_revision=expected_revision)
         except KeyError: raise HTTPException(404,'Revision not found')
+        except StudioRevisionConflict as exc: raise HTTPException(409,detail={'code':'STUDIO_REVISION_CONFLICT','message':str(exc),'conflict':'reload_or_rebase_required'})
+        except (ValueError,TypeError): raise HTTPException(422,'Revision is corrupt and was not restored')
     return {'ok':True,'revision':item}
 
 
@@ -805,7 +898,7 @@ def seo_ai_assist(site_id: str, payload: SeoAiAssistIn, request: Request):
             'page':page,'page_text':page_text,
         }
         model=settings.openai_model
-        if not settings.openai_api_key:
+        if not hosted_ai_configured():
             reservation=None
         else:
             try:

@@ -12,6 +12,8 @@ def _valid_production(monkeypatch):
         'app_url':'https://app.zylora.test',
         'database_url':'postgresql+psycopg://zylora:strong-production-db-password@db:5432/zylora',
         'openai_api_key':'test-openai-key',
+        'ai_gateway_api_key':'test-gateway-key',
+        'ai_gateway_base_url':'https://gateway.example.test/v1',
         'sales_assistant_model':'gpt-4o-mini',
         'resend_api_key':'re_test_key',
         'email_from':'Zylora <notifications@zylora.dev>',
@@ -345,7 +347,7 @@ def test_production_mode_rejects_sqlite_in_migrate(monkeypatch):
     assert 'Production database migrations require PostgreSQL' in str(exc.value)
 
 
-def test_environment_normalization_detects_railway_and_environment(monkeypatch):
+def test_environment_normalization_uses_platform_neutral_environment(monkeypatch):
     from app.config import Settings
     monkeypatch.setenv('ENVIRONMENT', 'production')
     s1 = Settings()
@@ -354,4 +356,4 @@ def test_environment_normalization_detects_railway_and_environment(monkeypatch):
     monkeypatch.delenv('ENVIRONMENT', raising=False)
     monkeypatch.setenv('RAILWAY_ENVIRONMENT', 'production')
     s2 = Settings()
-    assert s2.app_env == 'production'
+    assert s2.app_env == 'development'

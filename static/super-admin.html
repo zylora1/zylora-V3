@@ -439,7 +439,7 @@
         <span class="menu-label">Overview</span>
       </button>
       <button class="rail-btn" data-admin-tab="adminIntelligence" type="button">
-        <span class="menu-icon" aria-hidden="true">✦</span>
+        <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9L12 2Z"/></svg></span>
         <span class="menu-label">Intelligence</span>
       </button>
       <button class="rail-btn" data-admin-tab="adminUsers" type="button">
@@ -527,7 +527,7 @@
   <main class="workspace">
     <header class="topbar sneat-navbar">
       <button aria-label="Toggle navigation" class="sidebar-toggle" id="sidebarToggle" type="button"><span></span><span></span><span></span></button>
-      <div class="search"><span aria-hidden="true">⌕</span><input aria-label="Search" id="adminGlobalSearch" placeholder="Search users, templates, blogs or settings…"/></div>
+      <div class="search"><svg class="admin-search-icon" aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" focusable="false"><circle cx="10.8" cy="10.8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.2 4.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input aria-label="Search" id="adminGlobalSearch" placeholder="Search users, templates, blogs or settings…"/></div>
       <div class="topbar-actions">
         <button class="ghost-btn" id="refreshAdmin" type="button">↻ Refresh Data</button>
         <div class="profile">
@@ -662,7 +662,7 @@
         <div class="panel">
           <div class="panel-title"><div><span>Quick Admin Actions</span><small>Common operations</small></div></div>
           <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
-            <button class="accent-btn compact-btn" data-action="admin-import-template" type="button">＋ Universal Project Import</button>
+            <button class="accent-btn compact-btn" data-action="admin-import-template" type="button">Universal Project Import</button>
             <button class="ghost-btn compact-btn" data-admin-jump="adminCampaigns" type="button">New Broadcast Campaign</button>
             <button class="ghost-btn compact-btn" data-admin-jump="adminPlatformBlog" type="button">Draft Platform Blog</button>
             <button class="ghost-btn compact-btn" data-admin-jump="adminPlans" type="button">Adjust Pricing Plans</button>
@@ -741,7 +741,7 @@
           <h2>Template catalogue &amp; Universal Import</h2>
           <p class="muted-copy">Manage licensed and imported templates, inspect build readiness, toggle catalog visibility, and import complete projects.</p>
         </div>
-        <button class="accent-btn" data-action="admin-import-template">＋ Universal Website / Template Import</button>
+        <button class="accent-btn" data-action="admin-import-template">Universal Website / Template Import</button>
       </div>
       <div class="admin-filter-row">
         <input id="adminTemplateSearch" placeholder="Search templates by name, category, or slug..." style="flex: 1;"/>
@@ -889,8 +889,6 @@
           <h2>Platform settings</h2>
           <label>Admin notification email<input id="adminNotificationEmail" placeholder="admin@example.com" type="email"/></label>
           <div class="check-row"><input checked="" id="publicSignupEnabled" type="checkbox"/><span>Allow public signup</span></div>
-          <label>Source export price · USD cents<input id="sourceExportUsd" min="0" type="number"/></label>
-          <label>Source export price · INR paise<input id="sourceExportInr" min="0" type="number"/></label>
           <hr/>
           <h3>Self-service provider plan IDs</h3>
           <p class="muted-copy">Public prices are controlled in the Plans tab. These IDs map Starter and Growth to independent India and international Razorpay subscriptions; no FX conversion is used.</p>
@@ -1011,7 +1009,6 @@
           <option value="">All transaction types</option>
           <option value="SUBSCRIPTION">Subscriptions</option>
           <option value="TOPUP">Credit Top-ups</option>
-          <option value="EXPORT">Source Export</option>
         </select>
         <select id="adminPaymentStatusFilter" style="width:140px;">
           <option value="">All statuses</option>
@@ -1040,6 +1037,11 @@
       </div>
       <div id="adminIntegrationGrid">
         <p class="muted-copy">Loading integrations…</p>
+      </div>
+      <div class="panel" style="margin-top:18px;">
+        <div class="panel-title"><div><span>Provider usage (last 30 days)</span><small>Server-aggregated counts; credentials never reach the browser.</small></div></div>
+        <div id="providerUsageSummary" class="muted-copy" style="padding-top:12px;">Loading usage…</div>
+        <div id="providerUsageAlerts" class="muted-copy" style="padding-top:10px;"></div>
       </div>
     </div>
 

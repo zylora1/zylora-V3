@@ -3,7 +3,7 @@ import hashlib, io, json, random, re, secrets, zipfile
 from datetime import datetime, timedelta, timezone
 from uuid import uuid4
 from fastapi import APIRouter, HTTPException, Request, Response
-from fastapi.responses import HTMLResponse, StreamingResponse
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
@@ -14,6 +14,7 @@ from .template_catalogue import public_templates
 from .providers import ai_generate_site, ai_edit, send_whatsapp, sync_google_sheet_event, plan_site_architecture
 from .notifications import notify
 from .config import settings
+from .ai_service import hosted_ai_configured
 from .plans import MAX_PAGES_PER_SITE, get_plan, tier3_page_limit, smallest_self_service_plan_for_pages, SELF_SERVICE_PLAN_KEYS, PAID_SELF_SERVICE_PLAN_KEYS
 from .settings_store import get_system_setting
 from .auth_flows import issue_auth_token
@@ -21,7 +22,6 @@ from .credits import debit_wallet, ensure_wallet, wallet_summary, reset_monthly_
 from .ai_billing import usage_summary as ai_usage_summary, transaction_history as ai_transaction_history, wallet_snapshot as ai_wallet_snapshot, adjust_wallet as ai_adjust_wallet
 from . import ai_billing
 from .providers import verify_turnstile, cloudflare_delete_hostname
-from .exporter import build_next_export
 from .structured_editor import apply_document, generate_operations, merge_operations, parse_document, validate_operation, instrument_editable_html, extract_editor_nodes, validate_operations_against_html, validate_internal_page_links, build_site_document, SchemaCapabilityRequired
 from .publish_permissions import capture_structural_snapshot, plan_is_paid, project_document_for_publish, structural_changes
 from .media import list_assets, get_asset, delete_bytes
@@ -332,6 +332,9 @@ def _delete_account_user_data(db, user_id: str, email: str) -> None:
         'DELETE FROM razorpay_orders WHERE user_id=:u',
         'DELETE FROM billing_events WHERE user_id=:u',
         'DELETE FROM auth_tokens WHERE user_id=:u',
+        'DELETE FROM agent_oauth_codes WHERE user_id=:u',
+        'DELETE FROM agent_idempotency WHERE connector_id IN (SELECT id FROM agent_connectors WHERE user_id=:u)',
+        'DELETE FROM agent_connectors WHERE user_id=:u',
         'DELETE FROM sessions WHERE user_id=:u',
         'DELETE FROM notification_settings WHERE user_id=:u',
         'DELETE FROM whatsapp_otps WHERE user_id=:u',
@@ -495,7 +498,7 @@ def create_site(payload:SiteIn,request:Request):
         job_id=str(uuid4())
         with SessionLocal.begin() as db:
             reservation_budget = int(plan_cfg.get('ai_site_cost', 5) or 5)
-            if settings.openai_api_key:
+            if hosted_ai_configured():
                 try:
                     # The two Creator calls are bounded in providers.py to
                     # 800 and 500 output tokens.  Reserve the server-side
@@ -509,7 +512,7 @@ def create_site(payload:SiteIn,request:Request):
                     raise HTTPException(503, detail={'code':'AI_PRICING_UNAVAILABLE','message':'AI pricing is not configured for this model.'}) from exc
             db.execute(text("""INSERT INTO generation_jobs(id,user_id,idempotency_key,status,progress_stage,created_at,updated_at)
                 VALUES (:i,:u,:k,'PLANNING','Planning site',:a,:a)"""),{'i':job_id,'u':u['id'],'k':idem,'a':now_iso()})
-            reserved=reserve_wallet(db,u['id'],u['plan'],int(plan_cfg.get('ai_site_cost',5) or 5),'AI_SITE_CREATE','ai',idem,job_id,estimated_credits=reservation_budget,provider='openai' if settings.openai_api_key else None,model=selected_model if settings.openai_api_key else None)
+            reserved=reserve_wallet(db,u['id'],u['plan'],int(plan_cfg.get('ai_site_cost',5) or 5),'AI_SITE_CREATE','ai',idem,job_id,estimated_credits=reservation_budget,provider='openai' if hosted_ai_configured() else None,model=selected_model if hosted_ai_configured() else None)
             reservation_id=reserved.get('id')
     try:
         if origin=='AI':
@@ -543,7 +546,7 @@ def create_site(payload:SiteIn,request:Request):
             document['pages']=planned; document['navigation']=nav
             document['designPlan']={'archetype':architecture.get('design_direction'),'motion':payload.motion_style,'composition_source':'prompt+business-requirements'}
             document['businessProfile']={'business_name':payload.business_name,'description':payload.description,'industry':payload.industry,'supplied_facts_only':True}
-            document['generationMeta']={'pipeline':'requirements>ia>design>content>site-document>validation','planner_provider':architecture.get('provider'),'model':selected_model or ('local' if not settings.openai_api_key else settings.openai_model),'prompt_version':'zylora-site-v4-2026-08-25'}
+            document['generationMeta']={'pipeline':'requirements>ia>design>content>site-document>validation','planner_provider':architecture.get('provider'),'model':selected_model or ('local' if not hosted_ai_configured() else settings.ai_default_model or settings.openai_model),'prompt_version':'zylora-site-v4-2026-08-25'}
             motion_ops=_creation_motion_operations(payload.motion_style)
             if motion_ops: document=merge_operations(document,motion_ops)
             page_count=len(planned)
@@ -587,7 +590,7 @@ def create_site(payload:SiteIn,request:Request):
                 # evidence of billable customer usage.  Local deterministic
                 # development mode retains the established fixed compatibility
                 # charge because it has no provider-usage stream to meter.
-                settled_credits = actual if actual is not None else (0 if settings.openai_api_key else None)
+                settled_credits = actual if actual is not None else (0 if hosted_ai_configured() else None)
                 finalize_wallet(db,reservation_id,actual_credits=settled_credits,**settlement_metadata)
             if origin=='AI': db.execute(text("UPDATE generation_jobs SET site_id=:s,status='COMPLETED',progress_stage='Ready to edit',updated_at=:a WHERE id=:i"),{'s':sid,'a':now_iso(),'i':job_id})
     except Exception as exc:
@@ -692,14 +695,14 @@ def edit_ai(site_id:str,payload:AiEditIn,request:Request):
         # after the document mutation commits; validation failures roll back the
         # surrounding transaction and therefore cannot charge the user.
         editor_budget = int(get_plan(u['plan']).get('ai_edit_cost',2) or 2)
-        if settings.openai_api_key:
+        if hosted_ai_configured():
             try:
                 editor_budget = ai_billing.feature_reservation_budget(
                     db, feature='AI_EDIT', provider='openai', model=settings.openai_model,
                 )
             except ValueError as exc:
                 raise HTTPException(503, detail={'code':'AI_PRICING_UNAVAILABLE','message':'AI pricing is not configured for this model.'}) from exc
-        editor_reservation=reserve_wallet(db,u['id'],u['plan'],int(get_plan(u['plan']).get('ai_edit_cost',2) or 2),'AI_EDIT',credit_type='ai',idempotency_key=idem,reference_id=site_id,estimated_credits=editor_budget,provider='openai' if settings.openai_api_key else None,model=settings.openai_model if settings.openai_api_key else None)
+        editor_reservation=reserve_wallet(db,u['id'],u['plan'],int(get_plan(u['plan']).get('ai_edit_cost',2) or 2),'AI_EDIT',credit_type='ai',idempotency_key=idem,reference_id=site_id,estimated_credits=editor_budget,provider='openai' if hosted_ai_configured() else None,model=settings.openai_model if hosted_ai_configured() else None)
 
         is_v4 = bool(s.get('studio_document_json'))
         editor_usage = {}
@@ -760,7 +763,7 @@ def edit_ai(site_id:str,payload:AiEditIn,request:Request):
         edited={'tagline':s['tagline'],'description':s['description']}
         actual_editor_credits = None
         editor_settlement_metadata = {}
-        if editor_usage and provider == 'openai':
+        if editor_usage and provider not in {'local', 'template'}:
             try:
                 cached = int((editor_usage.get('input_tokens_details') or {}).get('cached_tokens') or editor_usage.get('cached_input_tokens') or 0)
                 editor_cost = ai_billing.calculate_provider_cost(
@@ -786,7 +789,7 @@ def edit_ai(site_id:str,payload:AiEditIn,request:Request):
         # Missing usage from a real provider releases the hold. Local
         # deterministic mode retains the established fixed compatibility
         # charge because no provider usage stream exists there.
-        settled_editor_credits = actual_editor_credits if actual_editor_credits is not None else (0 if settings.openai_api_key else None)
+        settled_editor_credits = actual_editor_credits if actual_editor_credits is not None else (0 if hosted_ai_configured() else None)
         debit=finalize_wallet(db,editor_reservation['id'],actual_credits=settled_editor_credits,**editor_settlement_metadata) if editor_reservation and not editor_reservation.get('skipped') else editor_reservation
         ensure_history(db,s,u['id'])
         if is_v4:
@@ -1060,18 +1063,6 @@ def preview_page(site_id:str,page_slug:str,request:Request):
     allowed=set(_site_page_keys(s))
     if page not in allowed: raise HTTPException(404,'Page not available')
     return HTMLResponse(render_draft(s,page))
-
-@router.get('/sites/{site_id}/export')
-def export_site(site_id:str,request:Request):
-    u=_user(request)
-    with SessionLocal() as db:
-        s=_owned_site(db,u['id'],site_id)
-        entitled=db.execute(text('SELECT 1 FROM source_export_entitlements WHERE user_id=:u AND site_id=:s'),{'u':u['id'],'s':site_id}).first()
-        if not entitled:
-            from .settings_store import get_system_setting
-            raise HTTPException(402,detail={'code':'SOURCE_EXPORT_PAYMENT_REQUIRED','prices':{'USD':int(get_system_setting('source_export_usd_minor','9900')),'INR':int(get_system_setting('source_export_inr_minor','829900'))}})
-    buff=build_next_export(s)
-    return StreamingResponse(buff,media_type='application/zip',headers={'Content-Disposition':f'attachment; filename="{s["slug"]}-nextjs.zip"'})
 
 @router.post('/leads')
 def lead(payload:LeadIn,request:Request):

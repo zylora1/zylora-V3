@@ -46,7 +46,7 @@ def test_instrument_and_replace_all_visual_media():
     assert out.find('video')['poster'].endswith('/new.png') and out.find('image')['href'].endswith('/new.png')
     assert '/new.png' in out.select_one('.mast').get('style','')
 
-def test_import_static_site_edit_publish_and_export():
+def test_import_static_site_edit_and_publish():
     reset_db(); c,h=auth_client('importer@example.com','Importer')
     # Standard users are forbidden from universal import
     assert c.post('/api/sites/import',headers=h,files={'file':('website.zip',b'fake','application/zip')}).status_code==403
@@ -72,13 +72,7 @@ def test_import_static_site_edit_publish_and_export():
     pub=c.post(f'/api/sites/{sid}/publish',headers=h); assert pub.status_code==200,pub.text
     slug=c.get(f'/api/sites/{sid}').json()['slug']; live=c.get(f'/s/{slug}'); assert live.status_code==200 and '/about' in live.text
     base_asset=assets[0]; media=c.get(base_asset['url']); assert media.status_code==200 and media.headers['cache-control'].startswith('public')
-    # Grant source export through the normal purchase flow.
-    order=c.post(f'/api/sites/{sid}/source-export/order',headers=h,json={'currency':'USD'}).json()
-    verify=c.post(f'/api/sites/{sid}/source-export/verify',headers=h,json={'order_id':order['order_id'],'payment_id':order['mock_payment_id'],'signature':order['mock_signature']}); assert verify.status_code==200,verify.text
-    exp=c.get(f'/api/sites/{sid}/export'); assert exp.status_code==200,exp.text[:200]
-    z=zipfile.ZipFile(io.BytesIO(exp.content)); names=set(z.namelist()); assert {'package.json','app/page.jsx','app/about/page.jsx','app/zylora-edits.jsx','zylora-site.json'} <= names
-    assert any(n.startswith('public/zylora-assets/') for n in names)
-    exported=z.read('app/page.jsx').decode(); assert 'Imported Home' in exported and '/zylora-assets/' in exported
+    assert c.get(f'/api/sites/{sid}/export').status_code==404
 
 
 def test_source_only_frameworks_normalize_without_execution():

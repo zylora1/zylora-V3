@@ -1,5 +1,5 @@
 from __future__ import annotations
-import io, json, zipfile
+import io, json
 from PIL import Image
 from bs4 import BeautifulSoup
 from sqlalchemy import text
@@ -34,7 +34,7 @@ def test_media_upload_validation_tenant_isolation_metadata_and_safe_delete():
     assert a.delete(f"/api/sites/{sid}/assets/{asset['id']}",headers=ha).status_code==409
 
 
-def test_image_lifecycle_crop_focal_fit_alt_reset_undo_redo_revision_publish_isolation_and_export():
+def test_image_lifecycle_crop_focal_fit_alt_reset_undo_redo_revision_publish_isolation():
     reset_db(); c,h=auth_client('image-flow@example.com','Image Flow'); activate_zylora(c,h,country='GB')
     sid=create_site(c,h,'Aurora Studio','atelier-noir'); asset=upload(c,h,sid,'aurora-storefront.png','Aurora storefront at dusk')
     doc=c.get(f'/api/sites/{sid}/editor-document?page=home').json(); hero=next(n for n in doc['nodes'] if n.get('role')=='hero-image')
@@ -66,13 +66,9 @@ def test_image_lifecycle_crop_focal_fit_alt_reset_undo_redo_revision_publish_iso
     # Reset affects draft only until republish and leaves unrelated content alone.
     assert c.post(f'/api/sites/{sid}/editor/actions',headers=h,json={'operations':[{'page':'home','type':'reset_image','selector':selector}],'action':'IMAGE_RESET'}).status_code==200
     assert asset['id'] not in c.get(f'/api/sites/{sid}/preview').text and asset['id'] in c.get(f'/s/{slug}').text
-    # Undo reset for export lifecycle.
+    # Undo reset keeps the draft state available for the hosted renderer.
     assert c.post(f'/api/sites/{sid}/editor/undo',headers=h).json()['changed'] is True
-    order=c.post(f'/api/sites/{sid}/source-export/order',headers=h,json={'currency':'USD'}).json(); assert c.post(f'/api/sites/{sid}/source-export/verify',headers=h,json={'order_id':order['order_id'],'payment_id':order['mock_payment_id'],'signature':order['mock_signature']}).status_code==200
-    zresp=c.get(f'/api/sites/{sid}/export'); assert zresp.status_code==200
-    z=zipfile.ZipFile(io.BytesIO(zresp.content)); names=set(z.namelist()); media=[n for n in names if n.startswith('public/zylora-assets/')]; assert media
-    manifest=json.loads(z.read('zylora-media-manifest.json')); assert any(x['id']==asset['id'] for x in manifest)
-    client=z.read('app/zylora-edits.jsx').decode(); assert 'set_image_crop' in client and 'set_image_focal_point' in client and asset['id'] in client
+    assert c.get(f'/api/sites/{sid}/export').status_code==404
 
 
 def test_editor_structured_controls_responsive_brand_seo_accessibility_and_lock_enforcement():
@@ -138,7 +134,7 @@ def test_background_gallery_logo_responsive_focal_and_auto_fit_engine():
     assert imgs[1]['alt']=='Second gallery image'
 
 
-def test_ai_image_edit_and_export_preserves_brand_seo_and_media():
+def test_ai_image_edit_preserves_brand_seo_and_media():
     reset_db(); c,h=auth_client('ai-media@example.com','AI Media'); activate_zylora(c,h,country='GB'); sid=create_site(c,h,'Media Export','atelier-noir')
     asset=upload(c,h,sid,'storefront.jpg','Storefront image')
     logo=upload(c,h,sid,'logo.png','Media Export logo')
@@ -147,14 +143,9 @@ def test_ai_image_edit_and_export_preserves_brand_seo_and_media():
     assert asset['id'] in c.get(f'/api/sites/{sid}/preview').text
     assert c.patch(f'/api/sites/{sid}/brand',headers=h,json={'primary':'#123456','background':'#fafafa','heading':'#111111','body':'#222222','heading_font':'Georgia','body_font':'Arial','button_radius':'16px','logo_asset_id':logo['id'],'favicon_asset_id':logo['id']}).status_code==200
     assert c.patch(f'/api/sites/{sid}/seo',headers=h,json={'page':'home','title':'Media Export Studio','description':'A media-rich studio website.','og_title':'Media Export','og_description':'Managed media export test.','og_image_asset_id':asset['id'],'canonical':'https://example.com/','noindex':False}).status_code==200
-    order=c.post(f'/api/sites/{sid}/source-export/order',headers=h,json={'currency':'USD'}).json(); c.post(f'/api/sites/{sid}/source-export/verify',headers=h,json={'order_id':order['order_id'],'payment_id':order['mock_payment_id'],'signature':order['mock_signature']})
-    zr=c.get(f'/api/sites/{sid}/export'); assert zr.status_code==200
-    z=zipfile.ZipFile(io.BytesIO(zr.content)); client=z.read('app/zylora-edits.jsx').decode(); page=z.read('app/page.jsx').decode(); layout=z.read('app/layout.jsx').decode()
-    assert 'const brand=' in client and '#123456' in client and '/zylora-assets/' in client
-    assert 'Media Export Studio' in page and 'openGraph' in page and 'NEXT_PUBLIC_SITE_URL' in page
-    assert 'metadataBase:new URL(zyloraSiteUrl)' in page and 'alternates:{canonical:"/"}' in page and 'https://example.com/' not in page
-    assert 'Media Export Studio' in layout
-    assert any(x.startswith('public/zylora-assets/') for x in z.namelist())
+    preview=c.get(f'/api/sites/{sid}/preview').text
+    assert '#123456' in preview and 'Media Export Studio' in preview
+    assert c.get(f'/api/sites/{sid}/export').status_code==404
 
 
 def test_dashboard_has_no_decorative_gradients():
@@ -187,7 +178,7 @@ def test_media_security_oversize_stock_ssrf_and_revision_restore(monkeypatch):
     after=len(c.get(f'/api/sites/{sid}/revisions').json()['items']); assert after>=before and 'Revision two' not in c.get(f'/api/sites/{sid}/preview').text
 
 
-def test_internal_page_links_are_validated_and_resolve_in_preview_live_and_export():
+def test_internal_page_links_are_validated_and_resolve_in_preview_and_live():
     reset_db(); c,h=auth_client('links@example.com','Links'); activate_zylora(c,h,country='GB'); sid=create_site(c,h,'Link Studio','atelier-noir',description='Create a website with separate Home, Projects and Contact pages for an architecture studio.')
     doc=c.get(f'/api/sites/{sid}/editor-document?page=home').json(); anchor=next(n for n in doc['nodes'] if n['tag']=='a' and n.get('editability')!='LOCKED'); sel=f'[data-zylora-id="{anchor["id"]}"]'
     op={'page':'home','type':'set_link','selector':sel,'link_type':'page','page_slug':'projects','label':'Projects'}
@@ -195,9 +186,7 @@ def test_internal_page_links_are_validated_and_resolve_in_preview_live_and_expor
     draft=BeautifulSoup(c.get(f'/api/sites/{sid}/preview').text,'html.parser').select_one(sel); assert draft and draft['href']==f'/api/sites/{sid}/preview/projects' and draft.get('data-zylora-page-link')=='projects'
     bad=c.post(f'/api/sites/{sid}/editor/actions',headers=h,json={'operations':[{**op,'page_slug':'not-a-page'}]}); assert bad.status_code==422
     c.post(f'/api/sites/{sid}/publish',headers=h); slug=c.get(f'/api/sites/{sid}').json()['slug']; live=BeautifulSoup(c.get(f'/s/{slug}').text,'html.parser').select_one(sel); assert live and live['href']==f'/s/{slug}/projects'
-    order=c.post(f'/api/sites/{sid}/source-export/order',headers=h,json={'currency':'USD'}).json(); c.post(f'/api/sites/{sid}/source-export/verify',headers=h,json={'order_id':order['order_id'],'payment_id':order['mock_payment_id'],'signature':order['mock_signature']})
-    zr=c.get(f'/api/sites/{sid}/export'); assert zr.status_code==200
-    z=zipfile.ZipFile(io.BytesIO(zr.content)); client=z.read('app/zylora-edits.jsx').decode(); assert "o.page_slug==='home'?'/':'/'+o.page_slug" in client
+    assert c.get(f'/api/sites/{sid}/export').status_code==404
 
 
 def test_multipage_editor_validation_uses_each_page_schema():

@@ -196,13 +196,10 @@ def test_google_sheets_resync_disconnect_and_reconnect():
 def test_freelancer_program_fees_transfer_template_publish_and_rating():
     reset_db(); freelancer,h,_=signup('freelancer@example.com','Freelancer'); sid=ai_site(freelancer,h,'Client Build')
     join=freelancer.put('/api/freelancer/profile',headers=h,json={'display_name':'Studio Nova','bio':'Independent designer building client sites.'}); assert join.status_code==200
-    dash=freelancer.get('/api/freelancer/dashboard').json(); assert 'fees' not in dash; assert dash['pricing']['transfer_usd_minor']==0 and dash['pricing']['standalone_export_usd_minor']==9900
-    assert freelancer.get(f'/api/sites/{sid}/export').status_code==402
+    dash=freelancer.get('/api/freelancer/dashboard').json(); assert 'fees' not in dash; assert dash['pricing']['transfer_usd_minor']==0 and 'standalone_export_usd_minor' not in dash['pricing']
+    assert freelancer.get(f'/api/sites/{sid}/export').status_code==404
     legacy=freelancer.post(f'/api/freelancer/sites/{sid}/fees/EXPORT',headers=h); assert legacy.status_code==410
-    order=freelancer.post(f'/api/sites/{sid}/source-export/order',headers=h,json={'currency':'USD'}); assert order.status_code==200 and order.json()['amount']==9900
-    oj=order.json(); assert freelancer.post(f'/api/sites/{sid}/source-export/verify',headers=h,json={'order_id':oj['order_id'],'payment_id':oj['mock_payment_id'],'signature':oj['mock_signature']}).status_code==200
-    export=freelancer.get(f'/api/sites/{sid}/export'); assert export.status_code==200
-    z=zipfile.ZipFile(io.BytesIO(export.content)); assert 'package.json' in z.namelist()
+    assert freelancer.post(f'/api/sites/{sid}/source-export/order',headers=h,json={'currency':'USD'}).status_code in {404,405}
     published=freelancer.post(f'/api/freelancer/sites/{sid}/publish-template',headers=h,json={'name':'Client Build Template','description':'A polished client-ready site adapted into a reusable catalogue submission.'})
     assert published.status_code==409 and published.json()['detail']['code']=='TEMPLATE_SUBMISSIONS_PAUSED'
     with SessionLocal() as db: assert db.execute(text('SELECT count(*) FROM freelancer_template_submissions WHERE source_site_id=:s'),{'s':sid}).scalar_one()==0
@@ -295,18 +292,18 @@ def test_production_paid_upgrade_guard_and_safe_compose_defaults(monkeypatch):
     assert 'INDEXNOW_ENDPOINT: ${INDEXNOW_ENDPOINT:-https://api.indexnow.org/indexnow}' in compose
     assert 'APP_ENV: production\n      APP_URL: http://localhost' not in compose
 
-def test_production_ai_paths_fail_closed_without_openai(monkeypatch):
+def test_production_ai_paths_fail_closed_without_gateway(monkeypatch):
     from app import providers
     from app.structured_editor import generate_operations
     monkeypatch.setattr(settings,'app_env','production')
     monkeypatch.setattr(settings,'openai_api_key','')
-    with pytest.raises(RuntimeError,match='OpenAI is not configured'):
+    with pytest.raises(RuntimeError,match='AI Gateway is not configured'):
         providers.ai_generate_site('Acme','A sufficiently detailed business description.','Business','Premium')
-    with pytest.raises(RuntimeError,match='OpenAI is not configured'):
+    with pytest.raises(RuntimeError,match='AI Gateway is not configured'):
         providers.ai_edit({'business_name':'Acme','tagline':'Hello','description':'Details'},'Make it warmer')
-    with pytest.raises(RuntimeError,match='OpenAI is not configured'):
+    with pytest.raises(RuntimeError,match='AI Gateway is not configured'):
         generate_operations({'business_name':'Acme'},'Make the hero larger','home')
-    with pytest.raises(RuntimeError,match='OpenAI is not configured'):
+    with pytest.raises(RuntimeError,match='AI Gateway is not configured'):
         providers.grounded_chatbot_answer('What are your hours?',[{'id':'doc-1','title':'FAQ','content':'We are open Monday to Friday.'}])
 
 
