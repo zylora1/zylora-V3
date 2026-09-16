@@ -27,7 +27,7 @@
   <link rel="stylesheet" href="/static/public-theme.css"/>
   <link rel="stylesheet" href="/static/landing.css"/>
   <link rel="stylesheet" href="/static/public-redesign.css"/>
-  <link rel="stylesheet" href="/static/zylora-tinkered.css"/>
+  <link rel="stylesheet" href="/static/zylora-tinkered.css?v=20260916-ui1"/>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -107,19 +107,21 @@
 <body class="landing-page">
 
 <!-- 1. Shared Global Navigation -->
-<header class="z-header site-nav">
-  <div class="z-container z-header-inner">
-    <a class="z-logo" href="/" aria-label="Zylora home">
-      <span class="z-logo-mark">Z</span>
-      <span class="z-logo-wordmark">Zylora</span>
-    </a>
-    <nav class="z-nav-links" id="primaryNav" aria-label="Primary">
-      <a href="/website-builder">Products</a>
-      <a href="/solutions/small-business">Solutions</a>
-      <a href="#studio">Studio</a>
-      <a href="/guides/how-to-build-a-business-website">Resources</a>
-      <a href="/pricing">Pricing</a>
-    </nav>
+  <header class="z-header site-nav">
+    <div class="z-container z-header-inner">
+      <a class="z-logo" href="/" aria-label="Zylora home">
+        <span class="z-logo-mark">Z</span>
+        <span class="z-logo-wordmark">Zylora</span>
+      </a>
+      <div class="z-product-switcher" aria-label="Zylora products">
+        <span class="is-active">ZYLORA</span>
+        <a href="/zylora-studio">STUDIO</a>
+      </div>
+      <nav class="z-nav-links" id="primaryNav" aria-label="Primary">
+      <a href="#how-it-works">Create</a>
+      <a href="#studio">Design</a>
+      <a href="#publish">Publish</a>
+      </nav>
     <div class="z-header-actions">
       <a class="z-nav-login" href="/login">Log in</a>
       <a class="z-btn z-btn-primary z-btn-sm" data-testid="nav-start" href="/signup">Start free</a>
@@ -669,7 +671,7 @@
 </section>
 
 <!-- 11. Final High-Impact CTA Banner -->
-<section class="final-cta-section">
+<section class="final-cta-section" id="publish">
   <div class="z-container final-cta-wrap">
     <span class="eyebrow-pill eyebrow-dark">Launch Today</span>
     <h2>Your new website is two minutes away.</h2>
@@ -710,7 +712,7 @@
       </div>
 
       <div class="z-footer-col">
-        <h3>Solutions</h3>
+        <h3>Explore</h3>
         <ul>
           <li><a href="/solutions/small-business">Small Business</a></li>
           <li><a href="/solutions/clinics">Clinics</a></li>
@@ -720,12 +722,12 @@
       </div>
 
       <div class="z-footer-col">
-        <h3>Resources</h3>
+        <h3>Account</h3>
         <ul>
-          <li><a href="/website-examples">Website Examples</a></li>
-          <li><a href="/guides/how-to-create-a-website-with-ai">AI Website Guide</a></li>
-          <li><a href="/blog">Editorial Blog</a></li>
-          <li><a href="/guides/small-business-website-checklist">Website Checklist</a></li>
+          <li><a href="/login">Sign in</a></li>
+          <li><a href="/signup">Start building free</a></li>
+          <li><a href="/choose-plan">Plans &amp; billing</a></li>
+          <li><a href="/support">Support</a></li>
         </ul>
       </div>
 
