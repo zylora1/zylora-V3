@@ -111,8 +111,9 @@ Actual axe-core run: `artifacts/final-production-certification/accessibility-axe
 | Moderate | 4 |
 | Minor | 0 |
 
-All exercised application surfaces have no violations. The four remaining
-moderate nodes are `heading-order` findings in seeded legacy published
+Landing, login, signup, dashboard, super-admin and the legacy Studio shell
+have no violations. The published preview has four moderate `heading-order`
+nodes in seeded legacy published
 template content (`h5`/`h6` levels). They are documented as a P3 template
 cleanup item; they were not silently rewritten because the headings are
 authored content and changing their levels would alter semantics.
