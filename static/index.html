@@ -3,56 +3,53 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Zylora ?" Build a website that brings you customers</title>
-  <meta name="description" content="AI derives structure, copy, and layout. Refine in Canva-grade Visual Studio, import existing sites, and publish with built-in CRM, appointments, and custom domains."/>
+  <title>Zylora — Professional Website Engine & CRM</title>
+  <meta name="description" content="Generate a structured baseline with AI, edit in a Canva-grade Visual Studio, and deploy to a global edge network with built-in CRM and custom domains."/>
+  
   <link rel="canonical" href="{{APP_URL}}/"/>
   <link rel="manifest" href="/static/manifest.webmanifest"/>
   <link rel="icon" type="image/png" href="/static/favicon.png"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
   
-  <link rel="stylesheet" href="/static/zylora-tokens.css"/>
   <link rel="stylesheet" href="/static/public-redesign.css"/>
 
-  <!-- Motion logic and interaction observers -->
   <script defer>
     document.addEventListener('DOMContentLoaded', () => {
-      // Header scroll effect
-      const header = document.querySelector('.site-header');
+      const header = document.querySelector('.z-header');
       window.addEventListener('scroll', () => {
-        if(window.scrollY > 16) {
-          header.classList.add('scrolled');
-        } else {
-          header.classList.remove('scrolled');
-        }
+        if(window.scrollY > 20) header.classList.add('scrolled');
+        else header.classList.remove('scrolled');
       }, {passive: true});
 
-      // Simple intersection observer for reveals
-      const observer = new IntersectionObserver((entries) => {
+      const observer = new IntersectionObserver(entries => {
         entries.forEach(e => {
           if (e.isIntersecting) {
-            e.target.style.opacity = '1';
-            e.target.style.transform = 'translateY(0)';
+            e.target.classList.add('revealed');
             observer.unobserve(e.target);
           }
         });
       }, { threshold: 0.15 });
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-      document.querySelectorAll('.reveal-on-scroll').forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(24px)';
-        el.style.transition = 'opacity var(--motion-slow) var(--ease-out), transform var(--motion-slow) var(--ease-out)';
-        observer.observe(el);
-      });
-
-      // FAQ Accordion
-      document.querySelectorAll('.faq-question').forEach(btn => {
+      document.querySelectorAll('.faq-q').forEach(btn => {
         btn.addEventListener('click', () => {
           const item = btn.closest('.faq-item');
-          const isOpen = item.classList.contains('open');
-          document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-          if (!isOpen) item.classList.add('open');
+          const answer = item.querySelector('.faq-a');
+          const inner = item.querySelector('.faq-a-inner');
+          
+          if (item.classList.contains('open')) {
+            answer.style.height = '0px';
+            answer.style.opacity = '0';
+            item.classList.remove('open');
+          } else {
+            document.querySelectorAll('.faq-item.open').forEach(openItem => {
+              openItem.classList.remove('open');
+              openItem.querySelector('.faq-a').style.height = '0px';
+              openItem.querySelector('.faq-a').style.opacity = '0';
+            });
+            item.classList.add('open');
+            answer.style.height = inner.getBoundingClientRect().height + 'px';
+            answer.style.opacity = '1';
+          }
         });
       });
     });
@@ -61,287 +58,333 @@
 <body>
 
   <!-- HEADER -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="/" class="logo-link">Zylora</a>
-      
-      <nav class="nav-links">
-        <a href="#features" class="nav-link">Studio</a>
-        <a href="#ai" class="nav-link">AI</a>
-        <a href="#leads" class="nav-link">CRM & Leads</a>
-        <a href="#pricing" class="nav-link">Pricing</a>
+  <header class="z-header">
+    <div class="z-container zh-inner">
+      <a href="/" class="zh-logo">Zylora</a>
+      <nav class="zh-nav">
+        <a href="#studio" class="zh-nav-link">Studio</a>
+        <a href="#ai" class="zh-nav-link">AI Core</a>
+        <a href="#crm" class="zh-nav-link">CRM & Pipeline</a>
+        <a href="/pricing" class="zh-nav-link">Pricing</a>
       </nav>
-
-      <div class="header-actions">
-        <a href="/login" class="login-link">Log in</a>
-        <a href="/signup" class="btn btn-primary btn-nav">Start building</a>
+      <div class="zh-actions">
+        <a href="/login" class="zh-login">Log in</a>
+        <a href="/signup" class="btn btn-primary">Start building</a>
       </div>
-      
-      <button class="mobile-menu-btn" aria-label="Menu">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-      </button>
     </div>
   </header>
 
   <!-- HERO -->
-  <main>
-    <section class="hero container-hero">
-      <div class="hero-eyebrow">Build. Edit. Publish. All in one place.</div>
-      <h1 class="display-hero">From idea to a working business website.</h1>
-      <p class="body-large">Zylora generates your layout and copy using AI, provides a professional Visual Studio for precise editing, and handles leads, booking, and hosting instantly.</p>
+  <section class="sec-hero">
+    <div class="z-container">
+      <div class="hero-tag">Intelligent architecture. Professional execution.</div>
+      <h1 class="t-hero">Design your business.<br/>We build the website.</h1>
+      <p class="t-body-lg">Zylora marries generative AI with a production-grade visual editor. Automatically structure your layout, refine every pixel natively, and publish instantly with built-in leads, booking, and hosting.</p>
       
-      <div class="hero-cta-row">
-        <a href="/signup" class="btn btn-primary">Start building free <svg style="margin-left:8px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-        <a href="/pricing" class="btn btn-secondary">View pricing</a>
+      <div class="hero-actions">
+        <a href="/signup" class="btn btn-primary btn-lg">Start for free</a>
+        <a href="#studio" class="btn btn-secondary btn-lg">Explore the editor</a>
       </div>
-      <div class="hero-trust">No credit card required. Publish your first site for free.</div>
+      <div class="hero-micro">No credit card required. Publish to a global edge network.</div>
 
-      <div class="hero-visual">
-        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #EAEAEA;">
-          <!-- Placeholder for authentic product screenshot/composition -->
-          <span style="font-family: monospace; color: #888;">[ REAL ZYLORA STUDIO COMPOSITION HERE ]</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- PRODUCT PROOF / STATEMENT -->
-    <section class="statement-section">
-      <div class="container statement-grid reveal-on-scroll">
-        <div>
-          <h2 class="statement-heading">Design like a real editor. Publish like a real website.</h2>
-        </div>
-        <div>
-          <p class="body-normal">We reject the premise that website builders must choose between rigidity and chaos. Zylora pairs AI generation with a production-grade layout engine. Create forms, take appointments, and launch on a custom domain without touching a server.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- LARGE FEATURES -->
-    <section class="features-container" id="features">
-      
-      <!-- Feature 1: Studio -->
-      <div class="container feature-split reveal-on-scroll">
-        <div class="feature-copy">
-          <div class="eyebrow" style="margin-bottom:16px;">Visual Studio</div>
-          <h3>Absolute control over every pixel.</h3>
-          <p>Don't fight restrictive templates. Zylora Studio provides a professional editing environment with layers, smart snapping, and advanced typography controls. Make structural edits visually while maintaining responsive integrity.</p>
-          <a href="/signup" class="btn btn-secondary">Try the editor</a>
-        </div>
-        <div class="feature-visual">
-          <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #FAFAFA;">
-            <span style="font-family: monospace; color: #888;">[ STUDIO UI DEMONSTRATION ]</span>
+      <!-- AUTHENTIC HTML/CSS MOCKUP OF THE STUDIO -->
+      <div class="hero-visual reveal">
+        <div class="ui-topbar">
+          <div class="ui-topbar-left">
+            <div class="ui-dot"></div><div class="ui-dot"></div><div class="ui-dot"></div>
           </div>
-        </div>
-      </div>
-
-      <!-- Feature 2: AI Composer -->
-      <div class="container feature-split reverse reveal-on-scroll" id="ai">
-        <div class="feature-copy">
-          <div class="eyebrow" style="margin-bottom:16px;">AI Generation</div>
-          <h3>Describe your business. We build the architecture.</h3>
-          <p>Skip the blank canvas. Zylora analyzes your prompt to generate structural sections, writes conversion-focused copy, and establishes a cohesive design system—ready for your refinement.</p>
-        </div>
-        <div class="feature-visual">
-          <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #FAFAFA;">
-            <span style="font-family: monospace; color: #888;">[ AI PROMPT COMPOSER DEMONSTRATION ]</span>
+          <div class="ui-tools">
+            <div class="ui-tool active"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg></div>
+            <div class="ui-tool"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div>
+            <div class="ui-tool"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg></div>
+            <div class="ui-tool"><span style="font-family:sans-serif; font-weight:bold; font-size:12px; color:#111;">T</span></div>
           </div>
-        </div>
-      </div>
-
-      <!-- Feature 3: Leads -->
-      <div class="container feature-split reveal-on-scroll" id="leads">
-        <div class="feature-copy">
-          <div class="eyebrow" style="margin-bottom:16px;">Built-in CRM</div>
-          <h3>Capture leads and bookings natively.</h3>
-          <p>Your website is a business tool, not just a brochure. Embed dynamic booking calendars and lead capture forms directly onto the canvas. Manage inquiries instantly through the Zylora dashboard.</p>
-        </div>
-        <div class="feature-visual">
-          <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #FAFAFA;">
-            <span style="font-family: monospace; color: #888;">[ CRM / BOOKING PIPELINE VISUAL ]</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Feature 4: Publishing -->
-      <div class="container feature-split reverse reveal-on-scroll">
-        <div class="feature-copy">
-          <div class="eyebrow" style="margin-bottom:16px;">Global Infrastructure</div>
-          <h3>Hosted securely. Deployed instantly.</h3>
-          <p>Publish with a single click. Every Zylora site is deployed to a global edge network with automatic SSL, instant caching, and robust security. Connect your custom domain directly from the dashboard.</p>
-        </div>
-        <div class="feature-visual">
-          <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #FAFAFA;">
-            <span style="font-family: monospace; color: #888;">[ PUBLISH ACTION / CUSTOM DOMAIN STATUS ]</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- UTILITY CARDS -->
-    <section class="cards-section" style="background-color: var(--surface-muted);">
-      <div class="container reveal-on-scroll">
-        <div style="text-align:center; max-width:600px; margin:0 auto;">
-          <h2 class="section-heading" style="font-size:48px;">Everything you need to launch.</h2>
-        </div>
-        <div class="cards-grid">
-          <div class="utility-card">
-            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-            <h4>Universal Importer</h4>
-            <p class="body-normal">Bring your existing website. We parse the structure and rebuild it within the Studio for instant editing.</p>
-          </div>
-          <div class="utility-card">
-            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <h4>Automatic SSL</h4>
-            <p class="body-normal">Every connected domain is automatically secured with modern SSL certificates at the edge.</p>
-          </div>
-          <div class="utility-card">
-            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-            <h4>Responsive by default</h4>
-            <p class="body-normal">Layouts scale beautifully across all screen sizes. Check and refine tablet and mobile breakpoints easily.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PRICING -->
-    <section class="pricing-section" id="pricing">
-      <div class="container">
-        <div class="pricing-header reveal-on-scroll">
-          <h2 class="section-heading">Transparent Pricing</h2>
-          <p class="body-large" style="margin: 24px auto 0 auto;">{{REGIONAL_PRICE_NOTE}}. Start completely free without entering a credit card, or upgrade for custom domains and multi-page publishing.</p>
+          <div style="width:100px;"></div>
         </div>
         
-        <div class="pricing-grid reveal-on-scroll">
-          <!-- FREE -->
-          <div class="pricing-card">
-            <h3 class="pricing-card-name">Free</h3>
-            <p class="pricing-card-desc">Essential tools to design, test, and preview your website.</p>
-            <div class="pricing-price">,10<span class="pricing-period">/mo</span></div>
-            
-            <ul class="pricing-features">
-              <li><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span><strong>{{FREE_SITE_LIMIT}}</strong> live website draft</span></li>
-              <li><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>Up to <strong>{{FREE_PAGE_LIMIT}}</strong> pages per site</span></li>
-              <li><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>Zylora subdomain hosting</span></li>
-              <li><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>Basic AI generation</span></li>
-            </ul>
-            <a href="/signup" class="btn btn-secondary pricing-action">Get started free</a>
+        <div class="ui-workspace">
+          <div class="ui-sidebar">
+            <span style="font-size:11px; font-weight:600; color:#888; text-transform:uppercase; margin-bottom:8px;">Layers</span>
+            <div class="ui-layer">Page Root</div>
+            <div class="ui-layer" style="padding-left:16px;">Navigation Bar</div>
+            <div class="ui-layer selected" style="padding-left:16px;">Hero Section</div>
+            <div class="ui-layer" style="padding-left:24px;">Headline Text</div>
+            <div class="ui-layer" style="padding-left:24px;">Primary CTA</div>
+            <div class="ui-layer" style="padding-left:16px;">Feature Grid</div>
           </div>
-
-          <!-- STARTER -->
-          <div class="pricing-card emphasized">
-            <div class="eyebrow" style="position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--text); color:var(--bg); padding:4px 12px; border-radius:12px;">Most Popular</div>
-            <h3 class="pricing-card-name">Starter</h3>
-            <p class="pricing-card-desc">For professionals and growing businesses launching on their own domain.</p>
-            <div class="pricing-price">{{STARTER_REGIONAL_PRICE}}<span class="pricing-period">/mo</span></div>
-            
-            <ul class="pricing-features">
-              <li><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span><strong>{{STARTER_SITE_LIMIT}}</strong> live website with custom domain</span></li>
-              <li><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>Up to <strong>{{STARTER_PAGE_LIMIT}}</strong> pages per site</span></li>
-              <li><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>Lead capture and CRM access</span></li>
-              <li><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>Custom code injection</span></li>
-            </ul>
-            <a href="/signup?plan=STARTER" class="btn btn-primary pricing-action">Start with Starter</a>
+          
+          <div class="ui-canvas">
+            <div class="mock-canvas-bg"></div>
+            <div class="ui-artboard">
+              <div style="height:60px; border-bottom:1px solid #EEE; display:flex; align-items:center; padding:0 24px; font-weight:500;">Acme Corp</div>
+              <div style="padding:40px 24px;">
+                <h1 style="font-size:32px; font-family:sans-serif; margin-bottom:16px;">We design modern infrastructure.</h1>
+                <p style="color:#666; font-size:14px; margin-bottom:24px;">Scaling operations for the next generation of commerce.</p>
+                <div style="width:120px; height:36px; background:#111; border-radius:6px;"></div>
+              </div>
+              <div class="ui-selection-box">
+                <div class="ui-selection-handle" style="top:-3px; left:-3px;"></div>
+                <div class="ui-selection-handle" style="top:-3px; right:-3px;"></div>
+                <div class="ui-selection-handle" style="bottom:-3px; left:-3px;"></div>
+                <div class="ui-selection-handle" style="bottom:-3px; right:-3px;"></div>
+              </div>
+            </div>
           </div>
-
-          <!-- GROWTH -->
-          <div class="pricing-card">
-            <h3 class="pricing-card-name">Growth</h3>
-            <p class="pricing-card-desc">For scaling companies that need high AI credit volume and active pipelines.</p>
-            <div class="pricing-price">{{GROWTH_REGIONAL_PRICE}}<span class="pricing-period">/mo</span></div>
-            
-            <ul class="pricing-features">
-              <li><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span><strong>{{GROWTH_SITE_LIMIT}}</strong> live websites with high-performance edge</span></li>
-              <li><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>Up to <strong>{{GROWTH_PAGE_LIMIT}}</strong> pages per site</span></li>
-              <li><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>Advanced appointment booking</span></li>
-              <li><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>Priority support</span></li>
-            </ul>
-            <a href="/signup?plan=GROWTH" class="btn btn-secondary pricing-action">Start with Growth</a>
+          
+          <div class="ui-inspector">
+            <span style="font-size:11px; font-weight:600; color:#888; text-transform:uppercase; margin-bottom:12px; display:block;">Layout</span>
+            <div class="ui-prop"><span>Display</span> <span class="ui-prop-val">Flex</span></div>
+            <div class="ui-prop"><span>Direction</span> <span class="ui-prop-val">Column</span></div>
+            <div class="ui-prop"><span>Gap</span> <span class="ui-prop-val">24px</span></div>
+            <div style="height:1px; background:#E5E5E5; margin:16px 0;"></div>
+            <span style="font-size:11px; font-weight:600; color:#888; text-transform:uppercase; margin-bottom:12px; display:block;">Typography</span>
+            <div class="ui-prop"><span>Typeface</span> <span class="ui-prop-val">Inter</span></div>
+            <div class="ui-prop"><span>Weight</span> <span class="ui-prop-val">500</span></div>
+            <div class="ui-prop"><span>Size</span> <span class="ui-prop-val">32px</span></div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- FAQ -->
-    <section class="faq-section">
-      <div class="container faq-container reveal-on-scroll">
-        <div class="faq-header">
-          <h2 class="section-heading" style="font-size:40px;">Frequently asked questions</h2>
+  <!-- STATEMENT -->
+  <section class="sec-statement">
+    <div class="z-container stat-grid reveal">
+      <div>
+        <h2 class="stat-heading">Design like a true editor. Publish like a real website.</h2>
+      </div>
+      <div>
+        <p class="t-body">We reject the premise that modern website builders must choose between visual rigidity and absolute chaos. Zylora pairs AI generation with a production-grade layout engine. Create forms, secure appointments, and launch on a custom domain—all without touching a server or managing plugins.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="sec-features" id="studio">
+    <!-- Studio -->
+    <div class="z-container feat-split reveal">
+      <div class="feat-copy">
+        <span class="t-eyebrow">Visual Studio</span>
+        <h3>Absolute control over every layout pixel.</h3>
+        <p class="t-body">Don't fight restrictive templates. Zylora Studio provides a professional editing environment with layered hierarchy, smart magnetic snapping, and advanced typography controls. Make structural edits visually while maintaining perfect responsive integrity across all breakpoints.</p>
+      </div>
+      <div class="feat-visual">
+        <div class="mock-canvas-bg"></div>
+        <div class="mock-node" style="width:240px; top: 120px; left: 80px;">
+          <div style="width:100%; height:80px; background:#E0E0E0;"></div>
+          <div style="width:60%; height:12px; background:#CCC;"></div>
         </div>
-        <div class="faq-list">
-          <div class="faq-item">
-            <button class="faq-question">Do I need to know how to code? <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
-            <div class="faq-answer"><p class="body-normal">Not at all. Zylora's Visual Studio allows you to control layout, typography, and spacing visually, while the AI can handle the initial structure. However, developers have the option to inject custom code if necessary.</p></div>
+        <div class="mock-node" style="width:240px; top: 160px; right: 80px; z-index:1;">
+          <div class="mock-guide" style="width:200px; height:1px; top:40px; left:-180px;"></div>
+          <div style="width:100%; height:80px; background:#E0E0E0;"></div>
+          <div style="width:80%; height:12px; background:#111;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI -->
+    <div class="z-container feat-split reverse reveal" id="ai">
+      <div class="feat-copy">
+        <span class="t-eyebrow">AI Generative Core</span>
+        <h3>Describe your business. We build the architecture.</h3>
+        <p class="t-body">Skip the blank canvas paralysis. Zylora analyzes your natural language prompt to generate semantic structural sections, writes conversion-focused copy, and establishes a cohesive design system—instantly ready for your manual refinement.</p>
+      </div>
+      <div class="feat-visual" style="background:#FDFDFD;">
+        <div class="mock-ai-window">
+          <div class="mock-ai-head">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Zylora AI Assistant
           </div>
-          <div class="faq-item">
-            <button class="faq-question">Can I connect my own domain? <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
-            <div class="faq-answer"><p class="body-normal">Yes. Custom domains are available on the Starter and Growth plans. We provide automatic SSL provisioning via Cloudflare the moment you point your DNS records to us.</p></div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question">Does Zylora host my website? <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
-            <div class="faq-answer"><p class="body-normal">Yes. Zylora is an all-in-one platform. When you click Publish, your site is instantly deployed to a global edge network, meaning it loads extremely fast anywhere in the world.</p></div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question">How does the CRM work? <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
-            <div class="faq-answer"><p class="body-normal">Any form or booking widget you place in the Visual Studio automatically routes entries to your Zylora Dashboard. You can view contacts, manage leads, and respond to inquiries without needing third-party tools like Mailchimp or Calendly.</p></div>
+          <div class="mock-ai-body">
+            <div class="mock-ai-prompt">"Build a boutique legal consulting firm landing page focusing on corporate tax restructuring. Include a partner bio section and an initial consultation form."</div>
+            <div class="mock-ai-result">Generating 5 sections...<br/>&#10003; Establishing typography scales<br/>&#10003; Writing corporate copy<br/>&#10003; Assembling lead capture pipeline</div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- FINAL CTA -->
-    <section class="cta-section reveal-on-scroll">
-      <div class="container">
-        <div class="cta-panel">
-          <h2 class="section-heading">Ready to launch?</h2>
-          <p class="body-large">Design your business website today. Start free, upgrade when you're ready to publish on a custom domain.</p>
-          <a href="/signup" class="btn btn-primary" style="padding: 0 40px; height: 56px; font-size: 16px;">Create your website</a>
+    <!-- CRM -->
+    <div class="z-container feat-split reveal" id="crm">
+      <div class="feat-copy">
+        <span class="t-eyebrow">Built-in CRM</span>
+        <h3>Capture leads and bookings natively.</h3>
+        <p class="t-body">Your website is an operational business tool, not just a static brochure. Embed dynamic booking calendars and lead capture forms directly onto the canvas. Manage incoming inquiries instantly through the Zylora dashboard.</p>
+      </div>
+      <div class="feat-visual">
+        <div class="mock-crm-list">
+          <div class="mock-crm-item">
+            <div style="display:flex; gap:12px; align-items:center;">
+              <div class="mock-crm-avatar"></div>
+              <div><div style="font-size:14px; font-weight:500;">Elena Rostova</div><div style="font-size:12px; color:#888;">Corporate Tax Inquiry</div></div>
+            </div>
+            <div class="mock-crm-status status-new">New Lead</div>
+          </div>
+          <div class="mock-crm-item">
+            <div style="display:flex; gap:12px; align-items:center;">
+              <div class="mock-crm-avatar"></div>
+              <div><div style="font-size:14px; font-weight:500;">Marcus Wright</div><div style="font-size:12px; color:#888;">Q3 Audit Consultation</div></div>
+            </div>
+            <div class="mock-crm-status" style="background:#FFF3E0; color:#E65100;">Meeting Set</div>
+          </div>
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
+
+  <!-- UTILITY CARDS -->
+  <section class="sec-cards">
+    <div class="z-container reveal">
+      <h2 class="t-section" style="text-align:center; max-width:700px; margin:0 auto;">Everything required to launch professionally.</h2>
+      
+      <div class="uc-grid">
+        <div class="uc-card">
+          <svg class="uc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          <h4>Responsive by default</h4>
+          <p class="t-body" style="font-size:15px;">Layouts scale beautifully across all screen sizes. Check and refine exact tablet and mobile breakpoints within the Studio.</p>
+        </div>
+        <div class="uc-card">
+          <svg class="uc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <h4>Automatic SSL & Edge</h4>
+          <p class="t-body" style="font-size:15px;">Every connected domain is automatically secured with modern SSL certificates and cached across our global CDN.</p>
+        </div>
+        <div class="uc-card">
+          <svg class="uc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <h4>Universal Importer</h4>
+          <p class="t-body" style="font-size:15px;">Bring your existing HTML or React project. We parse the structural DOM and rebuild it natively within our engine.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="sec-pricing" id="pricing">
+    <div class="z-container">
+      <div class="reveal" style="text-align:center;">
+        <h2 class="t-section">Transparent Pricing</h2>
+        <p class="t-body-lg" style="margin:24px auto 0;">{{REGIONAL_PRICE_NOTE}}. Start entirely for free without entering a credit card, or upgrade for custom domains and expanded capabilities.</p>
+      </div>
+      
+      <div class="pr-grid reveal">
+        <!-- Free -->
+        <div class="pr-card">
+          <h3 class="pr-name">Free</h3>
+          <p class="pr-desc">Essential tools to design, test, and preview your architecture.</p>
+          <div class="pr-price">,10<span>/mo</span></div>
+          <ul class="pr-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span><strong>{{FREE_SITE_LIMIT}}</strong> live website draft</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>Up to <strong>{{FREE_PAGE_LIMIT}}</strong> pages per site</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>Zylora subdomain hosting</span></li>
+          </ul>
+          <a href="/signup" class="btn btn-secondary pr-action">Get started free</a>
+        </div>
+
+        <!-- Starter -->
+        <div class="pr-card featured">
+          <div class="pr-badge">Most Popular</div>
+          <h3 class="pr-name">Starter</h3>
+          <p class="pr-desc">For professionals and growing businesses launching on their own domain.</p>
+          <div class="pr-price">{{STARTER_REGIONAL_PRICE}}<span>/mo</span></div>
+          <ul class="pr-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span><strong>{{STARTER_SITE_LIMIT}}</strong> live sites with custom domains</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>Up to <strong>{{STARTER_PAGE_LIMIT}}</strong> pages per site</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>Lead capture and basic CRM</span></li>
+          </ul>
+          <a href="/signup?plan=STARTER" class="btn btn-primary pr-action">Start with Starter</a>
+        </div>
+
+        <!-- Growth -->
+        <div class="pr-card">
+          <h3 class="pr-name">Growth</h3>
+          <p class="pr-desc">For scaling companies that need high AI credit volume and active pipelines.</p>
+          <div class="pr-price">{{GROWTH_REGIONAL_PRICE}}<span>/mo</span></div>
+          <ul class="pr-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span><strong>{{GROWTH_SITE_LIMIT}}</strong> live high-performance sites</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>Up to <strong>{{GROWTH_PAGE_LIMIT}}</strong> pages per site</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>Advanced appointment booking</span></li>
+          </ul>
+          <a href="/signup?plan=GROWTH" class="btn btn-secondary pr-action">Start with Growth</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="sec-faq">
+    <div class="z-container reveal">
+      <h2 class="t-section" style="text-align:center;">Frequently asked questions</h2>
+      <div class="faq-wrap">
+        <div class="faq-item">
+          <button class="faq-q">Do I need to know how to code? <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+          <div class="faq-a"><div class="faq-a-inner">Not at all. Zylora's Visual Studio allows you to control layout, typography, and spacing visually, while the AI can handle the initial structure. However, developers have the option to inject custom code if necessary.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Can I connect my own domain? <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+          <div class="faq-a"><div class="faq-a-inner">Yes. Custom domains are available on the Starter and Growth plans. We provide automatic SSL provisioning via Cloudflare the moment you point your DNS records to us.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">How does the CRM work? <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+          <div class="faq-a"><div class="faq-a-inner">Any form or booking widget you place in the Visual Studio automatically routes entries to your Zylora Dashboard. You can view contacts, manage leads, and respond to inquiries without needing third-party tools.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="sec-cta">
+    <div class="z-container reveal">
+      <div class="cta-panel">
+        <h2 class="t-section">Ready to launch?</h2>
+        <p class="t-body-lg">Design your business website today. Start completely free.</p>
+        <a href="/signup" class="btn btn-cta btn-lg">Create your website</a>
+      </div>
+    </div>
+  </section>
 
   <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand-col">
-          <a href="/" class="footer-logo">Zylora</a>
-          <p class="footer-desc">The AI-first platform for professional visual editing, hosting, and customer growth.</p>
+  <footer class="z-footer">
+    <div class="z-container">
+      <div class="ft-grid">
+        <div style="grid-column: 1;">
+          <a href="/" class="ft-logo">Zylora</a>
+          <p class="ft-desc">The AI-first platform for professional visual editing, hosting, and customer growth.</p>
         </div>
-        
-        <div class="footer-nav">
-          <h4 class="footer-col-header">Product</h4>
-          <a href="#features" class="footer-link">Visual Studio</a>
-          <a href="#ai" class="footer-link">AI Composer</a>
-          <a href="#leads" class="footer-link">CRM & Pipeline</a>
-          <a href="/pricing" class="footer-link">Pricing</a>
+        <div>
+          <h4 class="ft-title">Product</h4>
+          <div class="ft-nav">
+            <a href="#studio" class="ft-link">Visual Studio</a>
+            <a href="#ai" class="ft-link">AI Composer</a>
+            <a href="#crm" class="ft-link">CRM & Pipeline</a>
+            <a href="/pricing" class="ft-link">Pricing</a>
+          </div>
         </div>
-        
-        <div class="footer-nav">
-          <h4 class="footer-col-header">Resources</h4>
-          <a href="/support" class="footer-link">Community Support</a>
-          <a href="/blog" class="footer-link">Editorial Journal</a>
-          <a href="/freelancers" class="footer-link">Freelancer Directory</a>
-          <a href="/llms.txt" class="footer-link">LLM Documentation</a>
+        <div>
+          <h4 class="ft-title">Resources</h4>
+          <div class="ft-nav">
+            <a href="/support" class="ft-link">Community Support</a>
+            <a href="/blog" class="ft-link">Editorial Journal</a>
+            <a href="/freelancers" class="ft-link">Freelancer Directory</a>
+            <a href="/llms.txt" class="ft-link">LLM Documentation</a>
+          </div>
         </div>
-        
-        <div class="footer-nav">
-          <h4 class="footer-col-header">Company</h4>
-          <a href="/login" class="footer-link">Account Access</a>
-          <a href="/signup" class="footer-link">Start Free</a>
+        <div>
+          <h4 class="ft-title">Company</h4>
+          <div class="ft-nav">
+            <a href="/login" class="ft-link">Account Access</a>
+            <a href="/signup" class="ft-link">Start Free</a>
+          </div>
         </div>
-        
-        <div class="footer-nav">
-          <h4 class="footer-col-header">Legal</h4>
-          <a href="/terms" class="footer-link">Terms of Service</a>
-          <a href="/privacy" class="footer-link">Privacy Policy</a>
-          <a href="/legal" class="footer-link">Compliance</a>
+        <div>
+          <h4 class="ft-title">Legal</h4>
+          <div class="ft-nav">
+            <a href="/terms" class="ft-link">Terms of Service</a>
+            <a href="/privacy" class="ft-link">Privacy Policy</a>
+            <a href="/legal" class="ft-link">Compliance</a>
+          </div>
         </div>
       </div>
-      
-      <div class="footer-bottom">
-        <div>(C) 2026 Zylora Inc. All rights reserved.</div>
-        <div class="footer-legal-links">
+      <div class="ft-bottom">
+        <div>&copy; 2026 Zylora Inc. All rights reserved.</div>
+        <div class="ft-legal">
           <a href="/privacy" style="color:inherit; text-decoration:none;">Privacy</a>
           <a href="/terms" style="color:inherit; text-decoration:none;">Terms</a>
         </div>
