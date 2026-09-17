@@ -1735,3 +1735,70 @@ button {
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+   AUTHENTIC STUDIO & FEATURE MOCKUPS (ENHANCEMENTS)
+   ========================================================================== */
+
+.hero-visual-enhancement {
+  margin-top: 64px;
+  width: 100%;
+  max-width: 1100px;
+  background-color: var(--zy-warm-surface, #fff);
+  border-radius: 16px;
+  border: 1px solid var(--zy-warm-line, #deded8);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: heroReveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  opacity: 0;
+  transform: translateY(24px) scale(0.98);
+}
+@keyframes heroReveal { to { opacity: 1; transform: translateY(0) scale(1); } }
+
+.ui-topbar {
+  height: 44px; border-bottom: 1px solid var(--zy-warm-line, #deded8);
+  display: flex; align-items: center; justify-content: space-between; padding: 0 16px;
+  background: var(--zy-warm-bg, #fbfbf9);
+}
+.ui-topbar-left { display: flex; gap: 12px; align-items: center; }
+.ui-dot { width: 10px; height: 10px; border-radius: 50%; background: #d0d0c8; }
+.ui-tools { display: flex; gap: 6px; }
+.ui-tool { width: 26px; height: 26px; border-radius: 6px; border: 1px solid transparent; display: flex; align-items: center; justify-content: center; color: var(--zy-warm-copy); }
+.ui-tool.active { background: #eaeae4; border-color: var(--zy-warm-line); color: var(--zy-warm-ink); }
+.ui-workspace { display: flex; flex: 1; min-height: 480px; }
+.ui-sidebar { width: 220px; border-right: 1px solid var(--zy-warm-line); background: var(--zy-warm-surface); padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+.ui-canvas { flex: 1; background: var(--zy-warm-sidebar, #f0f0ed); position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.ui-inspector { width: 240px; border-left: 1px solid var(--zy-warm-line); background: var(--zy-warm-surface); padding: 16px; }
+.ui-layer { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--zy-warm-copy); padding: 6px; border-radius: 4px; }
+.ui-layer.selected { background: var(--zy-warm-line-soft); font-weight: 500; color: var(--zy-warm-ink); }
+.ui-artboard { width: 85%; height: 85%; background: #FFF; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--zy-warm-line); display: flex; flex-direction: column; position: relative; overflow:hidden; }
+.ui-selection-box { position: absolute; top: 12%; left: 8%; right: 8%; height: 80px; border: 1.5px solid #0b5fff; background: rgba(11,95,255,0.04); pointer-events: none; }
+.ui-selection-handle { position: absolute; width: 6px; height: 6px; background: #FFF; border: 1.5px solid #0b5fff; }
+.ui-prop { display: flex; justify-content: space-between; align-items: center; font-size: 11px; margin-bottom: 12px; color: var(--zy-warm-copy); }
+.ui-prop-val { padding: 4px 8px; background: var(--zy-warm-bg); border: 1px solid var(--zy-warm-line); border-radius: 4px; color: var(--zy-warm-ink); font-family: monospace; }
+.ui-artboard-header { padding: 20px 32px; border-bottom: 1px solid #f0f0ed; font-weight: 600; font-size: 14px; color: #111; }
+.ui-artboard-hero { padding: 40px 32px; }
+.ui-artboard-title { font-size: 32px; font-weight: 700; margin-bottom: 12px; color: #111; font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.03em; }
+.ui-artboard-desc { font-size: 13px; color: #555; max-width: 80%; line-height: 1.5; margin-bottom: 24px; }
+.ui-artboard-btn { display: inline-block; padding: 10px 20px; background: #0b5fff; color: #fff; font-size: 12px; font-weight: 600; border-radius: 6px; }
+
+@media (max-width: 991px) { .ui-sidebar, .ui-inspector { display: none; } }
+
+/* Fixes for capability cards to make them pop more */
+.capability-card {
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+.capability-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--zy-warm-shadow);
+}
+.capability-card::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: transparent; transition: background 0.3s ease;
+}
+.capability-card:hover::before {
+  background: linear-gradient(90deg, #0b5fff, #8bb3ff);
+}
