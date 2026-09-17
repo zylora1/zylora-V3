@@ -1,4 +1,4 @@
-"""Deterministic compiler from Penpot bridge payloads to SiteDocument."""
+"""Deterministic compiler from visual editor payloads to SiteDocument."""
 
 from __future__ import annotations
 

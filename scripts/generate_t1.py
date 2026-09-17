@@ -1,4 +1,4 @@
-﻿import sys, io, os, json, hashlib, re, shutil
+import sys, io, os, json, hashlib, re, shutil
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 
 repo_dir = r"c:\Zylora-Ithanda finalu\Zylora-Production-Ready-SuperAdmin-Audited-2026-08-31-v4"
@@ -44,7 +44,7 @@ home_html = """<main>
       <a href="#testimonials">Testimonials</a>
       <a href="#contact">Contact</a>
     </nav>
-    <a class="button header-button" href="#contact">LET'S TALK ↗</a>
+    <a class="button header-button" href="#contact">LET'S TALK ?</a>
   </header>
 
   <section class="hero shell" aria-labelledby="hero-title">
@@ -55,7 +55,7 @@ home_html = """<main>
         <path d="M5 58C52 30 91 20 143 8M27 67c59-31 103-43 194-56M76 67c43-23 81-34 129-41M122 63c31-13 59-20 91-22"></path>
       </svg>
       <p class="hero-intro">{{TAGLINE}}<br/>{{DESCRIPTION}}</p>
-      <a class="button" href="#work">VIEW MY WORK ↗</a>
+      <a class="button" href="#work">VIEW MY WORK ?</a>
     </div>
     <div class="hero-visual">
       <div class="location">BASED IN<br/>NEW YORK<span></span></div>
@@ -129,7 +129,7 @@ home_html = """<main>
   </section>
 
   <section class="work shell" id="work">
-    <div class="work-head"><div class="section-label"><span></span>Featured work</div><div class="filters">ALL WORK　 BRANDING　 CAMPAIGNS　 DIGITAL　 EXPERIENCES</div></div>
+    <div class="work-head"><div class="section-label"><span></span>Featured work</div><div class="filters">ALL WORK  BRANDING  CAMPAIGNS  DIGITAL  EXPERIENCES</div></div>
     <div class="work-grid">
       <article class="project"><div class="project-image north"><small>NP</small><strong>NORTH<br/>EDGE</strong><span>EXPLORE THE UNKNOWN</span></div><h3>NORTH EDGE</h3><p>Branding</p></article>
       <article class="project"><div class="project-image wild"><img src="../assets/images/bottle.jpg" alt="Bottle campaign"/><strong>BOLD<br/>BY NATURE</strong></div><h3>WILDHORN</h3><p>Campaign</p></article>
@@ -140,30 +140,30 @@ home_html = """<main>
 
   <section class="recognition shell" id="clients">
     <div class="section-label"><span></span>Trusted by / Achievements</div>
-    <div class="logos"><b class="nike">NIKE</b><b>adidas</b><b>SAMSUNG</b><b class="script-logo">Coca-Cola</b><b>NETFLIX</b><b>● Spotify</b><b>VISA</b><b>▲|Adobe</b></div>
+    <div class="logos"><b class="nike">NIKE</b><b>adidas</b><b>SAMSUNG</b><b class="script-logo">Coca-Cola</b><b>NETFLIX</b><b>? Spotify</b><b>VISA</b><b>?|Adobe</b></div>
     <div class="awards"><div><b>AWWWARDS</b><span>Honorable Mention</span></div><div><b>CSS DESIGN AWARDS</b><span>Special Kudos</span></div><div><b>COMMUNICATION ARTS</b><span>Excellence Award</span></div><div><b>THE WEBBY AWARDS</b><span>Official Honoree</span></div></div>
   </section>
 
   <section class="testimonials shell" id="testimonials">
     <div class="section-label"><span></span>What clients say</div>
     <div class="testimonial-grid">
-      <blockquote><span>“</span><p>Axel is a rare combination of strategic thinker and creative visionary. He elevates every project he touches.</p><footer><b>JESSICA MILLER</b><br/>CMO, Shopify</footer></blockquote>
-      <blockquote><span>“</span><p>Working with Axel was a game-changer. His leadership and creative instincts are world-class.</p><footer><b>DAVID LEE</b><br/>Head of Marketing, Nike</footer></blockquote>
-      <blockquote><span>“</span><p>Axel brings clarity, energy, and bold ideas to the table. He's the creative partner you want in your corner.</p><footer><b>SOPHIA BROWN</b><br/>Brand Director, Spotify</footer></blockquote>
+      <blockquote><span>�</span><p>Axel is a rare combination of strategic thinker and creative visionary. He elevates every project he touches.</p><footer><b>JESSICA MILLER</b><br/>CMO, Shopify</footer></blockquote>
+      <blockquote><span>�</span><p>Working with Axel was a game-changer. His leadership and creative instincts are world-class.</p><footer><b>DAVID LEE</b><br/>Head of Marketing, Nike</footer></blockquote>
+      <blockquote><span>�</span><p>Axel brings clarity, energy, and bold ideas to the table. He's the creative partner you want in your corner.</p><footer><b>SOPHIA BROWN</b><br/>Brand Director, Spotify</footer></blockquote>
     </div>
   </section>
 
   <section class="contact shell" id="contact">
     <h2>LET'S CREATE SOMETHING<br/><span>EXTRAORDINARY.</span></h2>
-    <div><p>Have a project in mind or just want to say hello?<br/>I'd love to hear from you.</p><a class="button" href="#contact">GET IN TOUCH ↗</a></div>
+    <div><p>Have a project in mind or just want to say hello?<br/>I'd love to hear from you.</p><a class="button" href="#contact">GET IN TOUCH ?</a></div>
     <svg class="contact-brush" viewBox="0 0 150 150" aria-hidden="true"><path d="M148 7 64 35l71 3L35 68l100-17L21 90l118-26-91 55 101-35-78 57 78-34"></path></svg>
   </section>
 
   <footer class="footer"><div class="shell footer-grid">
-    <div><a class="footer-brand" href="#home">AXEL MORGAN<span>.</span></a><p>Creative Director crafting brands<br/>and campaigns that make an impact.</p><div class="socials">◎　in　Bē　✉</div></div>
+    <div><a class="footer-brand" href="#home">AXEL MORGAN<span>.</span></a><p>Creative Director crafting brands<br/>and campaigns that make an impact.</p><div class="socials">? in Be ?</div></div>
     <div><h3>NAVIGATION</h3><a href="#home">Home</a><a href="#about">About</a><a href="#services">Services</a><a href="#work">Work</a><a href="#clients">Clients</a><a href="#testimonials">Testimonials</a><a href="#contact">Contact</a></div>
     <div><h3>SERVICES</h3><p>Brand Strategy<br/>Creative Direction<br/>Campaign Development<br/>Team Leadership<br/>Digital Experiences</p></div>
-    <div><h3>CONTACT</h3><p>hello@axelmorgan.com<br/>+1 (212) 555-0148<br/>New York, NY</p><small>© 2026 Axel Morgan. All rights reserved.</small></div>
+    <div><h3>CONTACT</h3><p>hello@axelmorgan.com<br/>+1 (212) 555-0148<br/>New York, NY</p><small>� 2026 Axel Morgan. All rights reserved.</small></div>
   </div></footer>
 </main>"""
 

@@ -246,7 +246,7 @@ def main() -> None:
         browser = p.chromium.launch(headless=True, executable_path=executable, args=["--no-sandbox"])
 
         # Landing responsive behavior and CTA wiring.
-        landing_html = inline_document("index.html", "landing.css", "landing.js", browser_bootstrap())
+        landing_html = inline_document("index.html", "public-redesign.css", "landing.js", browser_bootstrap())
         page = new_page(browser, client, (1440, 1000))
         page.set_content(landing_html, wait_until="load")
         check("Create a website that moves your business forward" in page.locator("h1").inner_text(), "landing customer-growth hero renders")

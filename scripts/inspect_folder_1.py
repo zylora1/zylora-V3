@@ -1,4 +1,4 @@
-﻿import os
+import os
 
 p = r"C:\Users\joys0\OneDrive\Desktop\temp-1\1"
 print("Folder 1 files:")

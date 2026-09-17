@@ -9,17 +9,27 @@ The Zylora Studio Command API is the single authoritative mutation interface for
 
 Direct manipulation of raw state or unsanitized document objects is strictly prohibited.
 
+The browser implementation is the `EXECUTE_COMMAND` envelope in
+`studio/engine/commands.ts`. `studio/zylora/commands/commandRegistry.ts` is a
+thin adapter for named AI/migration/external commands; it delegates to the same
+envelope and reducer rather than maintaining another store. The server-side
+equivalent is `app/studio_mutations.py` plus `apply_v4_operations`, which adds
+authorization, validation, revision CAS, history and audit persistence.
+
 ---
 
 ## 2. Command Pipeline & Execution Contract
 
 Every command follows the formal lifecycle:
-1. **Validation**: The command payload is validated against JSON schema and type rules. Invalid inputs are rejected immediately with descriptive errors.
+1. **Validation**: The command payload is validated against JSON schema and type rules. Invalid inputs are rejected immediately with descriptive errors. Browser commands pass `validateStudioCommand`; server/AI/external operations pass the canonical Pydantic document and operation validators.
 2. **Authorization & Lock Checking**: Verifies the active user owns the site and checks that targeted nodes are not locked (`node.metadata.locked !== true`).
-3. **Transaction Context**: Commands can execute individually or be grouped into a composite transaction (e.g., an AI command modifying multiple nodes).
+3. **Transaction Context**: Commands can execute individually or be grouped into a composite transaction (e.g., an AI command modifying multiple nodes). AI snapshots are applied through one command envelope so the visible edit is one undo step.
 4. **Deterministic Mutation**: A pure reducer applies the change to produce the next `SiteDocument`.
 5. **History Recording**: An undoable delta is appended to `editor-core/history.ts`. Composite operations (such as AI edits) record as a single atomic undo step.
-6. **Provenance Logging**: When triggered by AI or external tools, metadata is recorded including `actor`, `timestamp`, `model`, `requestId`, and `affectedNodeIds`.
+6. **Provenance Logging**: When triggered by AI or external tools, metadata is carried in the command envelope (`actor`, `timestamp`, `model`, `requestId`, and `affectedNodeIds`) and the server records the authoritative audit event.
+
+No plugin runtime, iframe, external workspace global or Penpot MCP bridge is
+required for ordinary editing or AI changes.
 
 ---
 

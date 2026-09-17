@@ -3,6 +3,9 @@
   "version": "2.17.0",
   "tag": "2.17.0",
   "upstream_commit": "bdce5817ea86d028db29113d9ecdadcf07097b36",
+  "source_commit": "246c6a09eaf7c9806fda64ccd836be68c47eaeec",
+  "source_parent": "bdce5817ea86d028db29113d9ecdadcf07097b36",
+  "source_commit_message": "chore: add zylora workspace compilation target",
   "install_method": "official self-hosted Docker Compose distribution",
   "distribution_artifact": "docker-compose.2.17.0.yaml",
   "distribution_sha256": "79330B4445D6C6DBA6918D222D342A365710BA90B6BB8A8EAE3D333155B0CF5E",
@@ -13,5 +16,5 @@
   "source_copied": false,
   "source_bridge_ready": false,
   "runtime_status": "BLOCKED_BY_EXTERNAL_ENVIRONMENT",
-  "blocker": "Docker CLI/engine is unavailable on the certification host; no Penpot containers were started."
+  "blocker": "The source checkout is present and pinned, but no Penpot product runtime is part of the native Zylora Studio path. Docker CLI/engine is unavailable on the certification host, so no upstream runtime was started."
 }

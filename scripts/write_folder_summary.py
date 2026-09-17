@@ -1,4 +1,4 @@
-ï»¿import sys, io, os, json, hashlib, re, zipfile, tarfile
+import sys, io, os, json, hashlib, re, zipfile, tarfile
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 
 src_dir = r"C:\Users\joys0\OneDrive\Desktop\temp-1"
@@ -47,7 +47,7 @@ summary_md = f"""# Zylora Master Source Template Directory Summary
 
 ---
 
-## 2. Directory Breakdown (Folders 1 â€“ 41)
+## 2. Directory Breakdown (Folders 1 – 41)
 
 | Folder | Package Name | Primary Heading / Concept | Framework / Entry | Assets | Status | Target Zylora Slug |
 |:---|:---|:---|:---|:---:|:---|:---|
@@ -73,15 +73,15 @@ summary_md = f"""# Zylora Master Source Template Directory Summary
 | **20** | `iso-meet-creative-marketplace` | Creative department for brands | Next.js / `app/page.tsx` | 1 | Unique | `iso-studio` |
 | **21** | `sites-project` | Green Infrastructure | Next.js / `app/page.tsx` | 14 | Unique | `green-infrastructure` |
 | **22** | `metta-language-community` | metta language community | Next.js / `app/page.tsx` | 1 | Unique | `metta-community` |
-| **23** | `hollhii-growth-agency` | Your business success starts here â€” | Next.js / `app/page.tsx` | 0 | Unique | `hollhii-agency` |
+| **23** | `hollhii-growth-agency` | Your business success starts here — | Next.js / `app/page.tsx` | 0 | Unique | `hollhii-agency` |
 | **24** | `atacama-climate-action` | Saving Nature & Fighting Climate Change | Next.js / `app/page.tsx` | 2 | Unique | `atacama-action` |
 | **25** | `sites-project` | Building Digital Products (Duplicate of F6) | Next.js / `app/page.tsx` | 2 | Skipped (Dup) | *Merged into F6* |
 | **26** | `sites-project` | Navigating the digital landscape for success | Next.js / `app/page.tsx` | 1 | Unique | `apex-digital` |
-| **27** | `moss-hotel-landing-page-27` | MOSS â€” Alpine Retreat | HTML5 / `index.html` | 0 | Unique | `moss-retreat` |
-| **28** | `editorial-brand-portfolio-28` | Zita Fernandes â€” Brand Identity | HTML5 / `index.html` | 0 | Unique | `zita-portfolio` |
+| **27** | `moss-hotel-landing-page-27` | MOSS — Alpine Retreat | HTML5 / `index.html` | 0 | Unique | `moss-retreat` |
+| **28** | `editorial-brand-portfolio-28` | Zita Fernandes — Brand Identity | HTML5 / `index.html` | 0 | Unique | `zita-portfolio` |
 | **29** | `gentle-systems-archive` | Curiosity, imagination, invention | Next.js / `app/page.tsx` | 1 | Unique | `gentle-systems` |
 | **30** | `sites-project` | A Modern Bank Card (Duplicate of F3) | Next.js / `app/page.tsx` | 1 | Skipped (Dup) | *Merged into F3* |
-| **31** | `sites-project` | Trofo â€” Premium Roofing & Home Services | Next.js (9 Comps) | 18 | Unique | `trofo-roofing` |
+| **31** | `sites-project` | Trofo — Premium Roofing & Home Services | Next.js (9 Comps) | 18 | Unique | `trofo-roofing` |
 | **32** | `sites-project` | Belonging Collective Platform | Next.js (12 Comps) | 10 | Unique | `belonging-collective` |
 | **33** | `sites-project` | Prime Aesthetic Dental Specialist Clinic | Next.js (19 Comps) | 32 | Unique | `smile-studio` |
 | **34** | `sites-project` | Global Climate & Nature Initiatives | Next.js (8 Comps) | 16 | Unique | `nature-initiatives` |

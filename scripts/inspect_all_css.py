@@ -1,4 +1,4 @@
-﻿import sys, io, os, json, re, glob
+import sys, io, os, json, re, glob
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 
 src_dir = r"C:\Users\joys0\OneDrive\Desktop\temp-1"

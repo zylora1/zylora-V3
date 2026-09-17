@@ -19,11 +19,12 @@ def test_ai_creator_desktop_stage_can_shrink_and_scroll_to_final_action():
 
 
 def test_landing_hero_type_scale_is_bounded_for_desktop_and_mobile():
-    css = (STATIC / "landing.css").read_text(encoding="utf-8")
-    assert ".hero h1{font-size:clamp(58px,9vw,142px);line-height:.86}" in css
-    assert "@media(max-width:650px){.hero h1{font-size:clamp(52px,16vw,78px)}}" in css
+    css = (STATIC / "public-redesign.css").read_text(encoding="utf-8")
+    assert ".display-hero {" in css
+    assert "font-size: 112px;" in css
+    assert "font-size: 42px;" in css
     main = (STATIC.parent / "app" / "main.py").read_text(encoding="utf-8")
-    assert "/static/landing.css?v=20260901-ui2" in main
+    assert "'static'/'index.html'" in main
 
 
 def test_google_auth_buttons_use_local_four_color_google_logo():

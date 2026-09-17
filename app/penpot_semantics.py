@@ -1,8 +1,8 @@
-"""Canonical Zylora website semantics for the Penpot bridge.
+"""Canonical Zylora website semantics for the editor/compiler boundary.
 
 Penpot owns visual composition.  This module owns the typed, versioned
 metadata that makes a visual object a Zylora website component.  The registry
-is shared with the first-party plugin through the checked-in JSON artifact;
+is shared with authorized editor clients through the checked-in JSON artifact;
 the compiler is the enforcement boundary before a document reaches
 SiteDocument/publishing.
 """
@@ -135,7 +135,7 @@ def validate_link_target(action: dict[str, Any]) -> dict[str, Any]:
 
 
 class ZyloraComponentMetadata(BaseModel):
-    """Formal, versioned metadata stored in Penpot pluginData."""
+    """Formal, versioned metadata stored with a visual node."""
 
     model_config = ConfigDict(extra="forbid")
 

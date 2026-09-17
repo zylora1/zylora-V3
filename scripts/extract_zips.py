@@ -1,4 +1,4 @@
-﻿import sys, io, os, zipfile, shutil
+import sys, io, os, zipfile, shutil
 from pathlib import Path
 
 ROOT = Path(".").resolve()

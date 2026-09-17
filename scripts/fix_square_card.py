@@ -1,4 +1,4 @@
-﻿import sys, io, os, json, hashlib
+import sys, io, os, json, hashlib
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 

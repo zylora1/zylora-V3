@@ -1,7 +1,7 @@
 ﻿# Zylora Studio Architecture Specification
 
 ## 1. System Overview
-Zylora Studio is a professional, native website design editor embedded within the Zylora SaaS platform. Its graphics editing foundation is derived from the upstream open-source Penpot project (`v2.17.0`, commit `bdce5817ea86d028db29113d9ecdadcf07097b36`), adapted into a high-performance TypeScript architecture that executes directly within modern web browsers without external runtimes or iframes.
+Zylora Studio is a professional, native website design editor embedded within the Zylora SaaS platform. Its graphics editing foundation is derived from the official Penpot `2.17.0` tag (`bdce5817ea86d028db29113d9ecdadcf07097b36`) and the checked-out source commit `246c6a09eaf7c9806fda64ccd836be68c47eaeec`, adapted into a high-performance TypeScript architecture that executes directly within modern web browsers without external runtimes, plugins, or iframes.
 
 ---
 
@@ -55,6 +55,9 @@ Every visual interaction in the editor follows a deterministic, unidirectional p
                   ▼
      [Zylora Studio Command API]
   (Validates payload, checks node locks, creates transaction)
+                  │
+                  ▼
+         [Native Studio Command Envelope]
                   │
                   ▼
          [Store Reducer]

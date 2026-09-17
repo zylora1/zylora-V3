@@ -1,11 +1,11 @@
 ﻿# Zylora Studio Release & Production Certification Checklist
 
 ## 1. Product Invariants & Branding
-- [x] Product name displayed everywhere is "Zylora" or "Zylora Studio".
-- [x] Zero user-facing Penpot strings in HTML, CSS, JavaScript, tooltips, dialogs, error messages, or metadata.
-- [x] No Penpot accounts, logins, or external service dependencies.
-- [x] No iframe embedding or plugin runtime required.
+- [x] Product name displayed on the production Studio shell is "Zylora" or "Zylora Studio".
+- [x] No Penpot bridge/workspace strings remain in the loaded Studio shell or public capability copy.
+- [x] No Penpot accounts, logins, iframe or plugin runtime are required by ordinary editing.
 - [x] Legal notices preserved in `legal/MPL-2.0.txt`, `legal/THIRD_PARTY_NOTICES.md`, and `studio/UPSTREAM.md`.
+- [ ] Full repository branding/legal scan still requires a separate release review for compatibility-only artifacts.
 
 ---
 
@@ -38,5 +38,9 @@
 - [x] Geometry & transform math tests (`test_studio_transform_rebuild.py`): Passed.
 - [x] Interaction & UX contract tests (`test_studio_final_interactions.py`, `test_studio_ux_contract.py`): Passed.
 - [x] Penpot adapter & compiler tests (`test_penpot_*.py`): Passed.
-- [x] Browser E2E cross-engine suite (`test_e2e.py` on Chromium, WebKit, Firefox): Passed.
-- [x] Full regression test suite: 531 passed, 0 failed.
+- [ ] Real upstream Penpot runtime/browser matrix: not run on this host.
+- [ ] Full regression test suite: rerun after the native canvas change before release sign-off.
+
+The last focused baseline before this change was 37 passed and 1 dependency
+warning. That baseline is evidence for the audited contracts only; it is not a
+production certification claim.

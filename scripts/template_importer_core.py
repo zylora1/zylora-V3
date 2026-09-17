@@ -1,4 +1,4 @@
-﻿import sys, io, os, json, hashlib, re, shutil, base64, mimetypes, zipfile
+import sys, io, os, json, hashlib, re, shutil, base64, mimetypes, zipfile
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 

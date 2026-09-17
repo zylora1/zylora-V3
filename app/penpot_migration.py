@@ -1,4 +1,4 @@
-"""Repeatable SiteDocument ↔ Penpot bridge migration records."""
+"""Repeatable visual-source migration records for the editor/compiler boundary."""
 
 from __future__ import annotations
 

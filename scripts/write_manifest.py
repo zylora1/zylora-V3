@@ -1,4 +1,4 @@
-﻿import sys, io, os, json, hashlib
+import sys, io, os, json, hashlib
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 
 src_dir = r"C:\Users\joys0\OneDrive\Desktop\temp-1"
@@ -31,7 +31,7 @@ templates_list = [
     {"source": "Folder 23", "sourceArchive": "23", "originalName": "Your business success starts here", "zyloraName": "Hollhii Agency", "zyloraId": "hollhii-agency", "slug": "hollhii-agency", "framework": "Next.js App Router", "pages": ["home"], "category": "Marketing & Growth", "status": "PENDING"},
     {"source": "Folder 24", "sourceArchive": "24", "originalName": "Saving Nature & Fighting Climate Change", "zyloraName": "Atacama Action", "zyloraId": "atacama-action", "slug": "atacama-action", "framework": "Next.js App Router", "pages": ["home"], "category": "Non-Profit & Climate", "status": "PENDING"},
     {"source": "Folder 26", "sourceArchive": "26", "originalName": "Navigating the digital landscape for success", "zyloraName": "Apex Digital", "zyloraId": "apex-digital", "slug": "apex-digital", "framework": "Next.js App Router", "pages": ["home"], "category": "Digital Agency & Tech", "status": "PENDING"},
-    {"source": "Folder 27", "sourceArchive": "27", "originalName": "MOSS — Alpine Retreat", "zyloraName": "MOSS Retreat", "zyloraId": "moss-retreat", "slug": "moss-retreat", "framework": "HTML5 / CSS3", "pages": ["home"], "category": "Hospitality & Travel", "status": "PENDING"},
+    {"source": "Folder 27", "sourceArchive": "27", "originalName": "MOSS � Alpine Retreat", "zyloraName": "MOSS Retreat", "zyloraId": "moss-retreat", "slug": "moss-retreat", "framework": "HTML5 / CSS3", "pages": ["home"], "category": "Hospitality & Travel", "status": "PENDING"},
     {"source": "Folder 28", "sourceArchive": "28", "originalName": "Zita Fernandes Brand Portfolio", "zyloraName": "Zita Portfolio", "zyloraId": "zita-portfolio", "slug": "zita-portfolio", "framework": "HTML5 / CSS3", "pages": ["home"], "category": "Art Direction & Branding", "status": "PENDING"},
     {"source": "Folder 29", "sourceArchive": "29", "originalName": "Curiosity, imagination, invention", "zyloraName": "Gentle Systems", "zyloraId": "gentle-systems", "slug": "gentle-systems", "framework": "Next.js App Router", "pages": ["home"], "category": "Research & Systems", "status": "PENDING"},
     {"source": "Folder 31", "sourceArchive": "31", "originalName": "Trofo Roofing & Home Services", "zyloraName": "Trofo Roofing", "zyloraId": "trofo-roofing", "slug": "trofo-roofing", "framework": "Next.js Modular", "pages": ["home"], "category": "Home Services & Trade", "status": "PENDING"},

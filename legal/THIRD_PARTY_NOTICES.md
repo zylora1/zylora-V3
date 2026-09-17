@@ -8,6 +8,8 @@ This product includes software and algorithmic components derived from open-sour
 
 - **Upstream Project**: Penpot
 - **Repository**: https://github.com/penpot/penpot
+- **Upstream tag**: `2.17.0` — `bdce5817ea86d028db29113d9ecdadcf07097b36`
+- **Checked-out source**: `246c6a09eaf7c9806fda64ccd836be68c47eaeec` (one Zylora build-target commit on top of the tag)
 - **Copyright**: (c) Kaleidos Open Source SL
 - **License**: Mozilla Public License Version 2.0 (MPL-2.0)
 - **License Text**: See [MPL-2.0.txt](./MPL-2.0.txt)
@@ -20,6 +22,11 @@ Portions of Zylora Studio's editor engine, specifically:
 - Transactional undo/redo stack semantics (`studio/editor-core/history.ts` derived from `common/src/app/common/logic/undo_stack.cljc`)
 
 are derived from the Penpot open-source project and are subject to the Mozilla Public License Version 2.0.
+
+The full Penpot product runtime, backend, plugin sandbox, MCP service and
+customer-facing shell are not shipped as part of ordinary Zylora Studio. The
+checked-in source provenance and the adapted-file mapping are maintained in
+`studio/UPSTREAM.md` and `integrations/penpot/penpot.lock.json`.
 
 In accordance with Section 3.1 of the MPL-2.0:
 - The Source Code Form of covered software and any modifications are documented in `studio/UPSTREAM.md`.

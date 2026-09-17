@@ -587,7 +587,12 @@ def penpot_projection(site_id: str, request: Request, page_id: str | None = None
 
 @router.get('/sites/{site_id}/studio/semantic-registry')
 def semantic_registry(site_id: str, request: Request):
-    """Return the canonical Zylora semantic registry to the authenticated plugin."""
+    """Return the canonical Zylora semantic registry to an authorized editor client.
+
+    The native Studio uses this contract through ordinary authenticated APIs;
+    no browser plugin is required. The endpoint remains for compatibility with
+    older migration tooling and is tenant-scoped before returning metadata.
+    """
     u = _user(request)
     with SessionLocal() as db:
         _owned_site(db, u['id'], site_id)

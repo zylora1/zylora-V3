@@ -67,7 +67,7 @@ def main():
         browser = p.chromium.launch(headless=True, args=["--no-sandbox"])
 
         # Prepare inlined documents
-        landing_html = inline_document("index.html", "landing.css", "landing.js", browser_bootstrap())
+        landing_html = inline_document("index.html", "public-redesign.css", "landing.js", browser_bootstrap())
         login_html = inline_document("login.html", "auth.css", "auth.js", browser_bootstrap(), patch_auth)
         signup_html = inline_document("signup.html", "auth.css", "auth.js", browser_bootstrap(), patch_auth)
         dash_html = inline_document("dashboard.html", "dashboard.css", "dashboard.js", browser_bootstrap(), patch_dashboard)

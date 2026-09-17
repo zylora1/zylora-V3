@@ -1,4 +1,4 @@
-﻿import sys, io, os, json, re
+import sys, io, os, json, re
 from difflib import SequenceMatcher
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 

@@ -1,4 +1,4 @@
-﻿import os
+import os
 for s in ["scripts/replace_catalogue_with_licensed_archives.py", "scripts/licensed_template_static_renderer.js", "scripts/licensed_template_tailwind_compiler.js"]:
     if os.path.exists(s):
         print(f"=== {s} ===")

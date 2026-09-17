@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 for s in ["astrolus", "astroship", "nexora", "saas-candy"]:
     p = Path("template_projects") / s / "app" / "globals.css"
     if p.exists():

@@ -17,6 +17,7 @@ import { useAutosave } from './persistence/useAutosave';
 import {
   beginPinch,
   dispatchStudioCommand,
+  validateStudioCommand,
   fitCanvasZoom,
   screenToCanvas,
   TransientSnapLines,
@@ -142,10 +143,19 @@ export function App() {
   const [state, dispatch] = useReducer(studioReducer, initialState);
   const commandDispatch = useCallback(
     (action: StudioAction) => {
+      const candidate = action.type === 'EXECUTE_COMMAND' ? action.payload.command.action : action;
+      const error = validateStudioCommand(state, candidate);
+      if (error) {
+        // A malformed command must fail closed without corrupting the current
+        // document. The UI remains usable and the caller can surface its own
+        // validation message (AI/external clients receive the server error).
+        if (import.meta.env?.DEV) console.warn(`[StudioCommandAPI] ${error}`);
+        return;
+      }
       if (action.type === 'EXECUTE_COMMAND') dispatch(action);
       else dispatchStudioCommand(dispatch, action, { source: 'system' });
     },
-    [dispatch]
+    [dispatch, state]
   );
 
   const [rail, setRail] = useState<Rail>('layers');
@@ -232,7 +242,7 @@ export function App() {
       .catch(() => setLoadError(navigator.onLine ? 'Studio could not be loaded' : 'Offline'));
   }, [siteId, csrf]);
 
-  // Keyboard Shortcuts: Penpot-grade bindings
+  // Keyboard shortcuts for the native Zylora Studio canvas.
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement;
@@ -549,17 +559,6 @@ export function App() {
       setToast(error instanceof Error ? error.message : 'Publishing could not start');
     }
   };
-
-  useEffect(() => {
-    import('./zylora/penpot-interop').then(({ penpotInterop }) => {
-      penpotInterop.mountWorkspace('penpot-mount', null);
-      penpotInterop.registerSemanticInspector((shapeIds) => {
-        if (shapeIds.length === 1) {
-          dispatch({ type: 'SELECT_NODE', payload: shapeIds[0] });
-        }
-      });
-    });
-  }, [dispatch]);
 
   const saveAsTemplate = async () => {
     const name = window.prompt('Name this reusable template', `${project} template`);
@@ -1004,10 +1003,11 @@ export function App() {
                 data-testid="studio-artboard"
                 data-viewport={`${viewport.x},${viewport.y},${state.zoom}`}
               >
-                <div className="canvas-workspace" onPointerDown={onCanvasPointerDown} onDrop={onDrop} onDragOver={e => e.preventDefault()}>
+                <div className="canvas-workspace">
                   <div
                     className="studio-canvas"
-                    id="penpot-mount"
+                    id="zylora-canvas"
+                    data-editor-engine="zylora-native"
                     style={{
                       width: '100%',
                       height: '100%',
@@ -1016,7 +1016,14 @@ export function App() {
                       backgroundColor: '#e5e5e5'
                     }}
                   >
-                    {page ? <div className="canvas-loading"><span /><p>Starting Penpot engine...</p></div> : <div className="canvas-loading"><span /><p>Preparing your canvas…</p></div>}
+                    {page ? (
+                      <>
+                        <CanvasNode nodeId={page.rootNodeId} />
+                        {!preview && <SelectionOverlay />}
+                      </>
+                    ) : (
+                      <div className="canvas-loading"><span /><p>Preparing your canvas…</p></div>
+                    )}
                   </div>
                 </div>
               </div>

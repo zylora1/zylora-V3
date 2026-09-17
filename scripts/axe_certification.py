@@ -28,7 +28,7 @@ def run() -> int:
         raise SystemExit("axe-core is not installed; run npm install --no-save --ignore-scripts axe-core")
 
     surfaces: list[tuple[str, str, str, str, str]] = [
-        ("landing", "index.html", "landing.css", "landing.js", browser_bootstrap()),
+        ("landing", "index.html", "public-redesign.css", "landing.js", browser_bootstrap()),
         ("login", "login.html", "auth.css", "auth.js", browser_bootstrap()),
         ("signup", "signup.html", "auth.css", "auth.js", browser_bootstrap()),
         ("dashboard", "dashboard.html", "dashboard.css", "dashboard.js", f'window.__CSRF="{user_csrf}";\n' + browser_bootstrap()),

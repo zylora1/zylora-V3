@@ -1,4 +1,4 @@
-﻿import sys, io, os, json, hashlib
+import sys, io, os, json, hashlib
 from pathlib import Path
 
 ROOT = Path(".").resolve()
@@ -66,7 +66,7 @@ for idx, t in enumerate(manifest["templates"], 1):
     manifest_data = json.loads((tpl_dir / "assets-manifest.json").read_text(encoding="utf-8")) if (tpl_dir / "assets-manifest.json").exists() else {}
     meta = json.loads((tpl_dir / "metadata.json").read_text(encoding="utf-8")) if (tpl_dir / "metadata.json").exists() else {}
     
-    audit_lines.append(f"### {idx}. `{slug}` — {name}")
+    audit_lines.append(f"### {idx}. `{slug}` � {name}")
     audit_lines.append(f"- **Source Package:** `{t.get('source', '')}` (`{t.get('sourceArchive', '')}`)")
     audit_lines.append(f"- **Original Name:** {t.get('originalName', name)}")
     audit_lines.append(f"- **Category & Industry:** {t.get('category', '')} / {meta.get('industry', '')}")

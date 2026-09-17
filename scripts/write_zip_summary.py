@@ -1,4 +1,4 @@
-﻿import sys, io, os, json, hashlib, zipfile, tarfile
+import sys, io, os, json, hashlib, zipfile, tarfile
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 
 src_dir = r"C:\Users\joys0\OneDrive\Desktop\temp-1"

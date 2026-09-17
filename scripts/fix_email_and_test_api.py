@@ -1,4 +1,4 @@
-﻿import sys, io, os, json, hashlib, re
+import sys, io, os, json, hashlib, re
 from pathlib import Path
 
 ROOT = Path(".").resolve()

@@ -4,7 +4,12 @@
 Accepted
 
 ## Context
-Zylora Studio is transitioning its graphics editing engine to a native Penpot-derived architecture. A critical decision is how the editor represents visual geometry, website semantics, and publishing data: whether to maintain two synchronized models (e.g. an internal Penpot design graph and an external Zylora `SiteDocument`) or a single unified canonical data model.
+Zylora Studio uses a native TypeScript editor whose geometry/layout algorithms
+are derived from the pinned Penpot 2.17.0 source. A critical decision is how the
+editor represents visual geometry, website semantics, and publishing data:
+whether to maintain two synchronized models (e.g. an internal Penpot design
+graph and an external Zylora `SiteDocument`) or a single unified canonical data
+model.
 
 Maintaining two independent live editor models with round-trip synchronization introduces significant risks:
 - Synchronization race conditions during high-frequency gestures (e.g. 60 FPS dragging or resizing).
@@ -28,7 +33,10 @@ Canonical Semantic Manifest (Zylora Bindings & Roles)
 
 ### 1. Visual Document Layer (Canvas & Layout)
 - **Ownership**: Owns parent-local 2D geometry (`NodeGeometry`: x, y, width, height, rotation, mode, min/max constraints, lockAspectRatio), hierarchy (`parentId`, `children`), visual appearance (fills, strokes, border radius, box shadows, gradients), and layout configuration (freeform absolute vs flex/grid).
-- **Engine Representation**: Defined in `studio/store.ts` and `app/studio_document.py` (`Node`).
+- **Engine Representation**: Defined in `studio/store.ts` and
+  `app/studio_document.py` (`Node`). The browser renders this document through
+  Zylora's native `CanvasNode` tree; there is no second live Penpot document,
+  plugin sandbox, or iframe to synchronize.
 
 ### 2. Semantic Manifest Layer (Website Behaviors)
 - **Ownership**: Owns website component roles (`zyloraType`), form input schemas, appointment booking service IDs, CMS collection bindings, lead routing, SEO metadata, accessible ARIA labels, and custom click actions (`NodeAction`).

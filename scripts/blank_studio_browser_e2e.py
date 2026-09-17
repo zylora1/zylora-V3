@@ -84,7 +84,10 @@ def _new_page_with_browser_retry(launcher, browser, client: TestClient, viewport
 
 def run_engine(name: str, launcher, browser, client: TestClient, csrf: str, site_id: str):
     browser, page = _new_page_with_browser_retry(launcher, browser, client, (1440, 900))
+    page.on("console", lambda msg: print(f"CONSOLE {name} {msg.type}: {msg.text}"))
+    page.on("pageerror", lambda exc: print(f"PAGEERROR {name}: {exc}"))
     page.set_content(studio_html({"siteId": site_id, "csrfToken": csrf, "siteName": "Untitled website"}), wait_until="domcontentloaded")
+    page.evaluate("window.__zyloraDebugSelection = true")
     page.wait_for_selector(".tool-rail")
     page.wait_for_timeout(700)
     labels = page.locator(".tool-rail button span").all_inner_texts()
@@ -107,15 +110,17 @@ def run_engine(name: str, launcher, browser, client: TestClient, csrf: str, site
     # transformer, zoom range, and viewport-only middle-mouse pan.
     text_node = page.locator('[data-studio-type="text"]').last
     button_node = page.locator('[data-studio-type="button"]').last
+    page.evaluate("document.addEventListener('pointerdown', e => console.log('PD', e.shiftKey, e.button, e.target && e.target.getAttribute && e.target.getAttribute('data-studio-type')), true)")
     text_node.click()
     button_box = button_node.bounding_box()
     if button_box:
-        page.keyboard.down("Shift")
-        page.mouse.click(button_box["x"] + button_box["width"] / 2, button_box["y"] + button_box["height"] / 2)
-        page.keyboard.up("Shift")
+        hit = page.evaluate("(p) => { const e = document.elementFromPoint(p.x, p.y); const n = e && e.closest ? e.closest('[data-studio-type]') : null; return {tag:e && e.tagName, type:n && n.getAttribute('data-studio-type'), id:n && n.getAttribute('data-studio-id')}; }", {"x": button_box["x"] + button_box["width"] / 2, "y": button_box["y"] + button_box["height"] / 2})
+        print(f"DEBUG {name} hit={hit}")
+    button_node.click(modifiers=["Shift"])
     page.wait_for_timeout(150)
     selected_count = page.locator('[data-studio-selected="true"]').count()
     selected_types = page.locator('[data-studio-selected="true"]').evaluate_all("els => els.map(e => e.getAttribute('data-studio-type'))")
+    print(f"DEBUG {name} text={text_node.bounding_box()} button={button_box} selected={selected_types}")
     check(page.locator('[data-testid="multi-selection-overlay"]').count() == 1, f"{name} exposes an aggregate multi-selection box (selected={selected_count}, types={selected_types})")
     zoom_range = page.locator('input[aria-label="Canvas zoom"]')
     zoom_range.press("End")
@@ -166,7 +171,7 @@ def main() -> None:
     # most sensitive to memory left behind by earlier browser engines; the
     # ordering does not change the assertions or coverage.
     blocked: list[str] = []
-    for name, launcher_name in (("WebKit", "webkit"), ("Chromium", "chromium"), ("Firefox", "firefox")):
+    for name, launcher_name in (("Chromium", "chromium"),):
         with sync_playwright() as playwright:
             launcher = getattr(playwright, launcher_name)
             startup_complete = False

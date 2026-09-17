@@ -96,8 +96,12 @@ function CanvasNodeView({nodeId,state,dispatch,pageRef,node,selectedNodeIds}:Can
   e.stopPropagation();
   // Commit selection at pointer-down so modifier-key multi-selection remains
   // deterministic even for native button/link nodes whose click event can be
-  // consumed by the browser. Geometry still waits for the drag threshold.
-  if(!isSelected) dispatch({type:'SELECT_NODE',payload:e.shiftKey?[...state.selectedNodeIds,nodeId]:[nodeId]});
+  // consumed by the browser. The follow-up click is suppressed so Chromium's
+  // pointer-up + click sequence cannot toggle the same selection twice.
+  if(node.type!=='page'){
+   suppressClick.current=true;
+   dispatch({type:'SELECT_NODE',payload:e.shiftKey?(isSelected?state.selectedNodeIds.filter(id=>id!==nodeId):[...state.selectedNodeIds,nodeId]):[nodeId]});
+  }else if(!isSelected) dispatch({type:'SELECT_NODE',payload:e.shiftKey?[...state.selectedNodeIds,nodeId]:[nodeId]});
   // A pointerdown is only a click candidate. Geometry is never mutated until
   // an already-selected node crosses the intentional-drag threshold.
   const el=elementRef.current;if(!el)return;
@@ -121,7 +125,7 @@ function CanvasNodeView({nodeId,state,dispatch,pageRef,node,selectedNodeIds}:Can
    const g=gesture.current;if(!g||g.pointerId!==e.pointerId)return;
    window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',cancel);
    gesture.current=null;
-   if(!g.active&&!cancelled&&g.kind==='select')select(e as unknown as React.MouseEvent);
+   if(cancelled&&!g.active)suppressClick.current=false;
    if(!g.active&&!cancelled&&g.kind==='move')dragBase.current=null;
   };
   const up=(event:PointerEvent)=>{if(event.pointerId!==e.pointerId)return;finish(false)};
