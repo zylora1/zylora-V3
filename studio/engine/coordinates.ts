@@ -23,6 +23,9 @@ export function canvasToScreen(point:Point,canvas:DOMRect|Rect,transform:Viewpor
   return {x:canvas.x+(point.x-(transform.panX||0))*transform.zoom,y:canvas.y+(point.y-(transform.panY||0))*transform.zoom};
 }
 
+export const screenToWorld = screenToArtboard;
+export const worldToScreen = artboardToScreen;
+
 export const rectFromElement=(element:HTMLElement,parent:HTMLElement|null,zoom:number,absolute:boolean,css:Record<string,unknown>):Rect=>{
   const rect=element.getBoundingClientRect(),parentRect=parent?.getBoundingClientRect();
   return {

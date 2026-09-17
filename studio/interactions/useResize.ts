@@ -25,7 +25,7 @@ export function useResize(_initialRect:Rect,onResizeUpdate:(rect:Rect,lines?:any
    const right=handle.includes('right'),bottom=handle.includes('bottom');
    const horizontal=right||handle.includes('left'),vertical=bottom||handle.includes('top');
    const point={x:raw.x+(right?raw.w:0),y:raw.y+(bottom?raw.h:0),w:0,h:0};
-   const snap=computeSnapping(point,targets.peers,targets.parent,6/api.zoom,{disableSnapping:e.ctrlKey||e.metaKey});
+   const snap=computeSnapping(point,targets.peers,targets.parent,6/api.zoom,{disableSnapping:e.ctrlKey||e.metaKey,explicitGuides:(window as any).__zyloraCanvasGuides||[]});
    const dx=horizontal?snap.snappedRect.x-point.x:0,dy=vertical?snap.snappedRect.y-point.y:0;
    const rect={x:raw.x+(right?0:dx),y:raw.y+(bottom?0:dy),w:raw.w+(right?dx:-dx),h:raw.h+(bottom?dy:-dy)};
    if(rect.w<10||rect.h<10)return {snappedRect:raw,snapLines:[]};
