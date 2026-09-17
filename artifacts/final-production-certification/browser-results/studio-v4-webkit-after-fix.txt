@@ -1,0 +1,14 @@
+C:\Users\joys0\AppData\Local\Programs\Python\Python311\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+PASS Studio exposes all ten professional workspaces
+PASS Add panel inserts a structured section
+Traceback (most recent call last):
+  File "C:\Zylora-Ithanda finalu\Zylora-Production-Ready-SuperAdmin-Audited-2026-08-31-v4\scripts\studio_v4_e2e.py", line 69, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "C:\Zylora-Ithanda finalu\Zylora-Production-Ready-SuperAdmin-Audited-2026-08-31-v4\scripts\studio_v4_e2e.py", line 47, in main
+    check(heading.inner_text()=='Browser edited production heading','direct text editing updates the canvas',checks)
+  File "C:\Zylora-Ithanda finalu\Zylora-Production-Ready-SuperAdmin-Audited-2026-08-31-v4\scripts\studio_v4_e2e.py", line 17, in check
+    assert value,label;checks.append(label);print('PASS',label,flush=True)
+           ^^^^^
+AssertionError: direct text editing updates the canvas

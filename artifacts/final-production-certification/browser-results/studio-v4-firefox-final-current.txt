@@ -1,0 +1,29 @@
+PASS Studio exposes the eight current workspaces
+PASS scrolling over an unselected component never mutates its geometry
+PASS scrolling does not implicitly select a component
+PASS Add panel inserts a structured section
+PASS dragging an Add primitive onto the canvas creates a real node
+PASS direct text editing updates the canvas
+PASS uploaded user media inserts onto the canvas
+PASS selection opens contextual top toolbar
+PASS contextual toolbar changes typography and effects
+PASS pointer drag moves a structured element
+PASS smart alignment guide appears during an intentional drag
+PASS resize handle changes text geometry
+PASS contextual opacity control changes the selected object
+PASS keyboard duplicate creates an independent document node
+PASS duplicate receives a new stable ID
+PASS duplicated canvas objects can overlap
+PASS document-aware copy and paste creates a new node
+PASS Delete removes the selected document node
+PASS Undo restores the deleted node
+PASS Redo reapplies the deletion
+PASS pointer resize changes image geometry
+PASS image crop mode supports drag, zoom and Done
+PASS responsive editor switches to mobile canvas
+PASS keyboard undo and redo execute against document history
+PASS layer order changes through the reference context menu
+PASS autosave persists geometry, typography, opacity, link, image crop/fitting, and effects
+PASS full Studio reload restores persisted changes
+PASS Studio journey has zero uncaught browser errors
+studio_v4_e2e (firefox): 28 checks / 0 errors

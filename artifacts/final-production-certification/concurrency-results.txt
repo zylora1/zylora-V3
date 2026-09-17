@@ -1,0 +1,6 @@
+# Concurrency and integrity evidence
+
+- Targeted security/credit/CRM/concurrency suite: **39 passed, 1 skipped, 1 warning in 42.80s**.
+- Coverage includes cross-tenant IDOR matrices, concurrent webhook replay/idempotency, durable rate limiting, Turnstile replay, CRM OCC, lead-ingestion deduplication, credit accounting, appointment uniqueness, and automation tenant isolation.
+- The full current pytest suite also exercised the same transaction paths; its only failure was the sandboxed browser subprocess test, which passed when rerun with browser-process permission.
+- A live PostgreSQL race run remains blocked by the infrastructure gate above; SQLite concurrency results are not substituted for PostgreSQL certification.

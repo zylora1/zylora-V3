@@ -1,0 +1,9 @@
+# Security scan evidence
+
+- Full repository security/concurrency suite: 39 passed, 1 skipped.
+- Full final pytest: 350 passed, 1 skipped; no security test failures.
+- High-confidence secret-pattern scan over text/source/config files found no real credential. The only matches were test fixture literals named `rzp_live_test`, not usable credentials.
+- Production settings fail closed for missing PostgreSQL, provider credentials, and non-durable local media.
+- Tenant/IDOR, RBAC, payment replay/tamper, Turnstile replay, upload authorization, and XSS/unsafe URL cases are covered by the passing adversarial/security tests.
+
+This is repository evidence; live provider and external-infrastructure security remains blocked where credentials/services are absent.

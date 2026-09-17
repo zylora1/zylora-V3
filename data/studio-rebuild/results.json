@@ -1,0 +1,244 @@
+[
+  {
+    "engine": "webkit",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "checks": [
+      "blank",
+      "text insertion",
+      "panel close",
+      "select",
+      "duplicate",
+      "nudge",
+      "multi-select",
+      "aggregate pointer drag",
+      "aggregate pointer resize",
+      "group/ungroup commands",
+      "autosave",
+      "no document overflow"
+    ],
+    "errors": []
+  },
+  {
+    "engine": "webkit",
+    "viewport": [
+      1536,
+      864
+    ],
+    "checks": [
+      "blank",
+      "text insertion",
+      "panel close",
+      "select",
+      "duplicate",
+      "nudge",
+      "multi-select",
+      "aggregate pointer drag",
+      "aggregate pointer resize",
+      "group/ungroup commands",
+      "autosave",
+      "no document overflow"
+    ],
+    "errors": []
+  },
+  {
+    "engine": "webkit",
+    "viewport": [
+      1440,
+      900
+    ],
+    "checks": [
+      "blank",
+      "text insertion",
+      "panel close",
+      "select",
+      "duplicate",
+      "nudge",
+      "multi-select",
+      "aggregate pointer drag",
+      "aggregate pointer resize",
+      "group/ungroup commands",
+      "autosave",
+      "no document overflow"
+    ],
+    "errors": []
+  },
+  {
+    "engine": "webkit",
+    "viewport": [
+      1366,
+      768
+    ],
+    "checks": [
+      "blank",
+      "text insertion",
+      "panel close",
+      "select",
+      "duplicate",
+      "nudge",
+      "multi-select",
+      "aggregate pointer drag",
+      "aggregate pointer resize",
+      "group/ungroup commands",
+      "autosave",
+      "no document overflow"
+    ],
+    "errors": []
+  },
+  {
+    "engine": "webkit",
+    "viewport": [
+      1280,
+      800
+    ],
+    "checks": [
+      "blank",
+      "text insertion",
+      "panel close",
+      "select",
+      "duplicate",
+      "nudge",
+      "multi-select",
+      "aggregate pointer drag",
+      "aggregate pointer resize",
+      "group/ungroup commands",
+      "autosave",
+      "no document overflow"
+    ],
+    "errors": []
+  },
+  {
+    "engine": "webkit",
+    "viewport": [
+      1024,
+      768
+    ],
+    "checks": [
+      "blank",
+      "text insertion",
+      "panel close",
+      "select",
+      "duplicate",
+      "nudge",
+      "multi-select",
+      "aggregate pointer drag",
+      "aggregate pointer resize",
+      "group/ungroup commands",
+      "autosave",
+      "no document overflow"
+    ],
+    "errors": []
+  },
+  {
+    "engine": "webkit",
+    "viewport": [
+      768,
+      1024
+    ],
+    "checks": [
+      "blank",
+      "text insertion",
+      "panel close",
+      "select",
+      "duplicate",
+      "nudge",
+      "multi-select",
+      "aggregate pointer drag",
+      "aggregate pointer resize",
+      "group/ungroup commands",
+      "autosave",
+      "no document overflow"
+    ],
+    "errors": []
+  },
+  {
+    "engine": "webkit",
+    "viewport": [
+      430,
+      932
+    ],
+    "checks": [
+      "blank",
+      "text insertion",
+      "panel close",
+      "select",
+      "duplicate",
+      "nudge",
+      "multi-select",
+      "aggregate pointer drag",
+      "aggregate pointer resize",
+      "group/ungroup commands",
+      "autosave",
+      "no document overflow"
+    ],
+    "errors": []
+  },
+  {
+    "engine": "webkit",
+    "viewport": [
+      390,
+      844
+    ],
+    "checks": [
+      "blank",
+      "text insertion",
+      "panel close",
+      "select",
+      "duplicate",
+      "nudge",
+      "multi-select",
+      "aggregate pointer drag",
+      "aggregate pointer resize",
+      "group/ungroup commands",
+      "autosave",
+      "no document overflow"
+    ],
+    "errors": []
+  },
+  {
+    "engine": "webkit",
+    "viewport": [
+      375,
+      812
+    ],
+    "checks": [
+      "blank",
+      "text insertion",
+      "panel close",
+      "select",
+      "duplicate",
+      "nudge",
+      "multi-select",
+      "aggregate pointer drag",
+      "aggregate pointer resize",
+      "group/ungroup commands",
+      "autosave",
+      "no document overflow"
+    ],
+    "errors": []
+  },
+  {
+    "engine": "webkit",
+    "viewport": [
+      360,
+      800
+    ],
+    "checks": [
+      "blank",
+      "text insertion",
+      "panel close",
+      "select",
+      "duplicate",
+      "nudge",
+      "multi-select",
+      "aggregate pointer drag",
+      "aggregate pointer resize",
+      "group/ungroup commands",
+      "autosave",
+      "no document overflow"
+    ],
+    "errors": []
+  }
+]

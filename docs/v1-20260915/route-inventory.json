@@ -1,0 +1,3250 @@
+[
+  [
+    "create_connector",
+    "POST /connectors",
+    "static/agent-gateway-ui.js",
+    "app/agent_gateway.py:519",
+    "tests/test_agent_gateway.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "list_connectors",
+    "GET /connectors",
+    "static/agent-gateway-ui.js",
+    "app/agent_gateway.py:541",
+    "tests/test_agent_gateway.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "integration_registry",
+    "GET /registry",
+    "static/agent-gateway-ui.js",
+    "app/agent_gateway.py:549",
+    "tests/test_agent_gateway.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "revoke_connector",
+    "POST /connectors/{connector_id}/revoke",
+    "static/agent-gateway-ui.js",
+    "app/agent_gateway.py:561",
+    "tests/test_agent_gateway.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "capabilities",
+    "GET /capabilities",
+    "Not resolved by literal scan",
+    "app/agent_gateway.py:571",
+    "tests/test_agent_gateway.py, tests/test_agent_oauth.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "tools",
+    "GET /tools",
+    "Not resolved by literal scan",
+    "app/agent_gateway.py:577",
+    "tests/test_agent_gateway.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "invoke",
+    "POST /invoke",
+    "Not resolved by literal scan",
+    "app/agent_gateway.py:583",
+    "tests/test_agent_gateway.py, tests/test_agent_oauth.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "mcp",
+    "POST /mcp",
+    "Not resolved by literal scan",
+    "app/agent_gateway.py:596",
+    "tests/test_agent_gateway.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "register_client",
+    "POST /oauth/register",
+    "Not resolved by literal scan",
+    "app/agent_oauth.py:177",
+    "tests/test_agent_oauth.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "authorize",
+    "API_ROUTE /oauth/authorize",
+    "Not resolved by literal scan",
+    "app/agent_oauth.py:199",
+    "tests/test_agent_oauth.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "token",
+    "POST /oauth/token",
+    "Not resolved by literal scan",
+    "app/agent_oauth.py:242",
+    "tests/test_agent_oauth.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "revoke",
+    "POST /oauth/revoke",
+    "Not resolved by literal scan",
+    "app/agent_oauth.py:304",
+    "tests/test_agent_oauth.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "authorization_server_metadata",
+    "GET /.well-known/oauth-authorization-server",
+    "Not resolved by literal scan",
+    "app/agent_oauth.py:321",
+    "tests/test_agent_oauth.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "protected_resource_metadata",
+    "GET /.well-known/oauth-protected-resource",
+    "Not resolved by literal scan",
+    "app/agent_oauth.py:339",
+    "tests/test_agent_oauth.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "signup",
+    "POST /auth/signup",
+    "static/auth.js",
+    "app/api.py:204",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "login",
+    "POST /auth/login",
+    "static/auth.js",
+    "app/api.py:222",
+    "tests/test_adversarial_security.py, tests/test_password_policy_regression.py, tests/test_platform_features.py, tests/test_super_admin_portal.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "logout",
+    "POST /auth/logout",
+    "static/dashboard.js, static/super-admin.js",
+    "app/api.py:234",
+    "tests/test_adversarial_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "me",
+    "GET /auth/me",
+    "static/ai-create.js, static/choose-plan.js, static/dashboard.js, static/editor.js, static/publish-flow.js",
+    "app/api.py:240",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_ai_security_architecture.py, tests/test_api.py, tests/test_blank_studio_and_user_templates.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_account",
+    "DELETE /auth/account",
+    "static/dashboard.js",
+    "app/api.py:359",
+    "tests/test_account_deletion.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "update_profile",
+    "PATCH /auth/profile",
+    "static/dashboard.js",
+    "app/api.py:419",
+    "tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "credits",
+    "GET /credits",
+    "Not resolved by literal scan",
+    "app/api.py:428",
+    "tests/test_marketplace_support.py, tests/test_master_policy_links.py, tests/test_regional_billing_sales_assistant.py, tests/test_release_gaps.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "templates",
+    "GET /templates",
+    "static/super-admin.js, static/templates.js, static/freelancer-profile.html, static/freelancers.html, static/legal.html",
+    "app/api.py:432",
+    "tests/test_ai_first_rebuild.py, tests/test_ai_prompt_guidance.py, tests/test_api.py, tests/test_blank_studio_and_user_templates.py, tests/test_final_production_hardening.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "sites",
+    "GET /sites",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api.py:438",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "ai_models",
+    "GET /ai/models",
+    "static/ai-model-picker.js",
+    "app/api.py:444",
+    "tests/test_production_transformation_contract.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_site",
+    "POST /sites",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api.py:449",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_site",
+    "GET /sites/{site_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api.py:607",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "update_site",
+    "PUT /sites/{site_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api.py:612",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "patch_publishing_address",
+    "PATCH /sites/{site_id}/publishing-address",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api.py:625",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_draft_site",
+    "DELETE /sites/{site_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api.py:639",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "edit_ai",
+    "POST /sites/{site_id}/ai-edit",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api.py:656",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_site_structure",
+    "GET /sites/{site_id}/structure",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api.py:805",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "update_site_structure",
+    "POST /sites/{site_id}/structure",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api.py:811",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "publish",
+    "POST /sites/{site_id}/publish",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api.py:838",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "published_versions",
+    "GET /sites/{site_id}/published-versions",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api.py:999",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "rollback_published",
+    "POST /sites/{site_id}/rollback/{revision}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api.py:1007",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "unpublish_site",
+    "POST /sites/{site_id}/unpublish",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api.py:1021",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "duplicate_site",
+    "POST /sites/{site_id}/duplicate",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api.py:1032",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "preview",
+    "GET /sites/{site_id}/preview",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api.py:1052",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "preview_page",
+    "GET /sites/{site_id}/preview/{page_slug}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api.py:1058",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "lead",
+    "POST /leads",
+    "static/dashboard.js, static/public-runtime.js, static/super-admin.js",
+    "app/api.py:1067",
+    "tests/test_api.py, tests/test_credit_ai_production_hardening.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_migration.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "list_leads",
+    "GET /leads",
+    "static/dashboard.js, static/public-runtime.js, static/super-admin.js",
+    "app/api.py:1147",
+    "tests/test_api.py, tests/test_credit_ai_production_hardening.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_migration.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "update_lead_status",
+    "PATCH /leads/{lead_id}/status",
+    "static/dashboard.js, static/public-runtime.js, static/super-admin.js",
+    "app/api.py:1160",
+    "tests/test_api.py, tests/test_credit_ai_production_hardening.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_migration.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "book",
+    "POST /appointments",
+    "static/dashboard.js, static/public-runtime.js",
+    "app/api.py:1171",
+    "tests/test_api.py, tests/test_credit_ai_production_hardening.py, tests/test_crm_e2e.py, tests/test_final_production_hardening.py, tests/test_release_gaps.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "cancel_public_appointment",
+    "POST /public/appointments/{appointment_id}/cancel",
+    "Not resolved by literal scan",
+    "app/api.py:1227",
+    "tests/test_credit_ai_production_hardening.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_notifications",
+    "GET /notifications",
+    "static/dashboard.js",
+    "app/api.py:1247",
+    "tests/test_api.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "set_notifications",
+    "PUT /notifications",
+    "static/dashboard.js",
+    "app/api.py:1254",
+    "tests/test_api.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "request_otp",
+    "POST /notifications/whatsapp/request-otp",
+    "static/dashboard.js",
+    "app/api.py:1271",
+    "tests/test_api.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "verify_otp",
+    "POST /notifications/whatsapp/verify",
+    "static/dashboard.js",
+    "app/api.py:1286",
+    "tests/test_api.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "billing",
+    "GET /billing",
+    "static/choose-plan.js, static/dashboard.js, static/publish-flow.js, static/privacy.html",
+    "app/api.py:1300",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "billing_history",
+    "GET /billing/history",
+    "static/dashboard.js",
+    "app/api.py:1312",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "ai_credits",
+    "GET /ai-credits",
+    "static/dashboard.js, static/super-admin.js",
+    "app/api.py:1329",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "ai_credits_usage",
+    "GET /ai-credits/usage",
+    "Not resolved by literal scan",
+    "app/api.py:1337",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "ai_credits_transactions",
+    "GET /ai-credits/transactions",
+    "static/dashboard.js",
+    "app/api.py:1342",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "select_plan",
+    "POST /billing/select",
+    "static/choose-plan.js",
+    "app/api.py:1348",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "change_plan",
+    "POST /billing/change",
+    "static/dashboard.js",
+    "app/api.py:1400",
+    "tests/test_adversarial_security.py, tests/test_regional_billing_sales_assistant.py, tests/test_release_gaps.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_stats",
+    "GET /admin/stats",
+    "Not resolved by literal scan",
+    "app/api.py:1421",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "debug_outbox",
+    "GET /debug/outbox",
+    "Not resolved by literal scan",
+    "app/api.py:1428",
+    "tests/test_api.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_overview",
+    "GET /overview",
+    "static/super-admin.js, static/zylora-crm.js",
+    "app/api_crm.py:231",
+    "tests/test_crm_api.py, tests/test_crm_automations.py, tests/test_crm_e2e.py, tests/test_crm_security.py, tests/test_password_policy_regression.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_overview",
+    "GET /analytics/overview",
+    "static/zylora-crm.js",
+    "app/api_crm.py:231",
+    "tests/test_crm_api.py, tests/test_crm_e2e.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_overview",
+    "GET /analytics/conversion-funnel",
+    "Not resolved by literal scan",
+    "app/api_crm.py:231",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "list_contacts",
+    "GET /contacts",
+    "static/zylora-crm.js, static/dashboard.html",
+    "app/api_crm.py:243",
+    "tests/test_crm_api.py, tests/test_crm_automations.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_contact",
+    "POST /contacts",
+    "static/zylora-crm.js, static/dashboard.html",
+    "app/api_crm.py:318",
+    "tests/test_crm_api.py, tests/test_crm_automations.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_contact_detail",
+    "GET /contacts/{contact_id}",
+    "static/zylora-crm.js, static/dashboard.html",
+    "app/api_crm.py:383",
+    "tests/test_crm_api.py, tests/test_crm_automations.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "update_contact",
+    "PATCH /contacts/{contact_id}",
+    "static/zylora-crm.js, static/dashboard.html",
+    "app/api_crm.py:443",
+    "tests/test_crm_api.py, tests/test_crm_automations.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_contact",
+    "DELETE /contacts/{contact_id}",
+    "static/zylora-crm.js, static/dashboard.html",
+    "app/api_crm.py:492",
+    "tests/test_crm_api.py, tests/test_crm_automations.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_contact_timeline",
+    "GET /contacts/{contact_id}/timeline",
+    "static/zylora-crm.js, static/dashboard.html",
+    "app/api_crm.py:506",
+    "tests/test_crm_api.py, tests/test_crm_automations.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "add_contact_note",
+    "POST /contacts/{contact_id}/notes",
+    "static/zylora-crm.js, static/dashboard.html",
+    "app/api_crm.py:538",
+    "tests/test_crm_api.py, tests/test_crm_automations.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "add_contact_task",
+    "POST /contacts/{contact_id}/tasks",
+    "static/zylora-crm.js, static/dashboard.html",
+    "app/api_crm.py:581",
+    "tests/test_crm_api.py, tests/test_crm_automations.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "bulk_contact_action",
+    "POST /contacts/bulk",
+    "static/zylora-crm.js",
+    "app/api_crm.py:632",
+    "tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "merge_contacts_endpoint",
+    "POST /contacts/merge",
+    "Not resolved by literal scan",
+    "app/api_crm.py:700",
+    "tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "list_companies",
+    "GET /companies",
+    "static/zylora-crm.js",
+    "app/api_crm.py:726",
+    "tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_company",
+    "POST /companies",
+    "static/zylora-crm.js",
+    "app/api_crm.py:785",
+    "tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_company",
+    "GET /companies/{company_id}",
+    "static/zylora-crm.js",
+    "app/api_crm.py:834",
+    "tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "update_company",
+    "PATCH /companies/{company_id}",
+    "static/zylora-crm.js",
+    "app/api_crm.py:862",
+    "tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_company",
+    "DELETE /companies/{company_id}",
+    "static/zylora-crm.js",
+    "app/api_crm.py:896",
+    "tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_pipelines",
+    "GET /pipelines",
+    "static/zylora-crm.js",
+    "app/api_crm.py:914",
+    "tests/test_crm_api.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_pipeline",
+    "POST /pipelines",
+    "static/zylora-crm.js",
+    "app/api_crm.py:943",
+    "tests/test_crm_api.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_pipeline",
+    "GET /pipelines/{pipeline_id}",
+    "static/zylora-crm.js",
+    "app/api_crm.py:984",
+    "tests/test_crm_api.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_pipeline",
+    "DELETE /pipelines/{pipeline_id}",
+    "static/zylora-crm.js",
+    "app/api_crm.py:1006",
+    "tests/test_crm_api.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "list_deals",
+    "GET /deals",
+    "static/zylora-crm.js, static/dashboard.html",
+    "app/api_crm.py:1026",
+    "tests/test_crm_api.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_deal",
+    "POST /deals",
+    "static/zylora-crm.js, static/dashboard.html",
+    "app/api_crm.py:1081",
+    "tests/test_crm_api.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_deal",
+    "GET /deals/{deal_id}",
+    "static/zylora-crm.js, static/dashboard.html",
+    "app/api_crm.py:1179",
+    "tests/test_crm_api.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "update_deal",
+    "PATCH /deals/{deal_id}",
+    "static/zylora-crm.js, static/dashboard.html",
+    "app/api_crm.py:1223",
+    "tests/test_crm_api.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_deal",
+    "DELETE /deals/{deal_id}",
+    "static/zylora-crm.js, static/dashboard.html",
+    "app/api_crm.py:1256",
+    "tests/test_crm_api.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "move_deal_stage_endpoint",
+    "PUT /deals/{deal_id}/stage",
+    "static/zylora-crm.js, static/dashboard.html",
+    "app/api_crm.py:1271",
+    "tests/test_crm_api.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "move_deal_stage_endpoint",
+    "POST /deals/{deal_id}/stage",
+    "static/zylora-crm.js, static/dashboard.html",
+    "app/api_crm.py:1271",
+    "tests/test_crm_api.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "list_tasks",
+    "GET /tasks",
+    "static/zylora-crm.js",
+    "app/api_crm.py:1300",
+    "tests/test_crm_api.py, tests/test_crm_automations.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_task",
+    "POST /tasks",
+    "static/zylora-crm.js",
+    "app/api_crm.py:1335",
+    "tests/test_crm_api.py, tests/test_crm_automations.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_task",
+    "GET /tasks/{task_id}",
+    "static/zylora-crm.js",
+    "app/api_crm.py:1396",
+    "tests/test_crm_api.py, tests/test_crm_automations.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "update_task_status",
+    "PATCH /tasks/{task_id}",
+    "static/zylora-crm.js",
+    "app/api_crm.py:1416",
+    "tests/test_crm_api.py, tests/test_crm_automations.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "update_task_status",
+    "POST /tasks/{task_id}/complete",
+    "static/zylora-crm.js",
+    "app/api_crm.py:1416",
+    "tests/test_crm_api.py, tests/test_crm_automations.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_task",
+    "DELETE /tasks/{task_id}",
+    "static/zylora-crm.js",
+    "app/api_crm.py:1457",
+    "tests/test_crm_api.py, tests/test_crm_automations.py, tests/test_crm_e2e.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "list_tags",
+    "GET /tags",
+    "Not resolved by literal scan",
+    "app/api_crm.py:1474",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_tag",
+    "POST /tags",
+    "Not resolved by literal scan",
+    "app/api_crm.py:1485",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_tag",
+    "DELETE /tags/{tag_id}",
+    "Not resolved by literal scan",
+    "app/api_crm.py:1510",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "list_custom_fields",
+    "GET /custom-fields",
+    "Not resolved by literal scan",
+    "app/api_crm.py:1531",
+    "tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_custom_field",
+    "POST /custom-fields",
+    "Not resolved by literal scan",
+    "app/api_crm.py:1558",
+    "tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_custom_field",
+    "DELETE /custom-fields/{field_id}",
+    "Not resolved by literal scan",
+    "app/api_crm.py:1590",
+    "tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "list_segments",
+    "GET /segments",
+    "Not resolved by literal scan",
+    "app/api_crm.py:1607",
+    "tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_segment",
+    "POST /segments",
+    "Not resolved by literal scan",
+    "app/api_crm.py:1626",
+    "tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_segment",
+    "DELETE /segments/{segment_id}",
+    "Not resolved by literal scan",
+    "app/api_crm.py:1651",
+    "tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "list_automations",
+    "GET /automations",
+    "static/zylora-crm.js",
+    "app/api_crm.py:1668",
+    "tests/test_crm_automations.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_automation",
+    "POST /automations",
+    "static/zylora-crm.js",
+    "app/api_crm.py:1688",
+    "tests/test_crm_automations.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "list_all_automation_runs",
+    "GET /automations/runs",
+    "static/zylora-crm.js",
+    "app/api_crm.py:1724",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_automation",
+    "GET /automations/{automation_id}",
+    "static/zylora-crm.js",
+    "app/api_crm.py:1749",
+    "tests/test_crm_automations.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_automation",
+    "DELETE /automations/{automation_id}",
+    "static/zylora-crm.js",
+    "app/api_crm.py:1766",
+    "tests/test_crm_automations.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_automation_runs",
+    "GET /automations/{automation_id}/runs",
+    "static/zylora-crm.js",
+    "app/api_crm.py:1779",
+    "tests/test_crm_automations.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "list_crm_leads",
+    "GET /leads",
+    "static/dashboard.js, static/public-runtime.js, static/super-admin.js",
+    "app/api_crm.py:1812",
+    "tests/test_api.py, tests/test_credit_ai_production_hardening.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_migration.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_crm_lead",
+    "GET /leads/{lead_id}",
+    "static/dashboard.js, static/public-runtime.js, static/super-admin.js",
+    "app/api_crm.py:1853",
+    "tests/test_api.py, tests/test_credit_ai_production_hardening.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_migration.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "update_crm_lead_status",
+    "PATCH /leads/{lead_id}/status",
+    "static/dashboard.js, static/public-runtime.js, static/super-admin.js",
+    "app/api_crm.py:1869",
+    "tests/test_api.py, tests/test_credit_ai_production_hardening.py, tests/test_crm_concurrency.py, tests/test_crm_e2e.py, tests/test_crm_migration.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "export_contacts",
+    "GET /export/contacts",
+    "static/zylora-crm.js, static/dashboard.html",
+    "app/api_crm.py:1890",
+    "tests/test_crm_api.py, tests/test_crm_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "export_deals",
+    "GET /export/deals",
+    "static/dashboard.html",
+    "app/api_crm.py:1901",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "import_contacts",
+    "POST /import/contacts",
+    "Not resolved by literal scan",
+    "app/api_crm.py:1912",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "ai_assistant_action",
+    "POST /ai-assistant",
+    "Not resolved by literal scan",
+    "app/api_crm.py:1924",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "upload_asset",
+    "POST /sites/{site_id}/assets",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:174",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "assets",
+    "GET /sites/{site_id}/assets",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:195",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "asset",
+    "GET /sites/{site_id}/assets/{asset_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:202",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "patch_asset",
+    "PATCH /sites/{site_id}/assets/{asset_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:209",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_asset",
+    "DELETE /sites/{site_id}/assets/{asset_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:216",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "stock_search",
+    "GET /sites/{site_id}/stock-images",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:223",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "stock_import",
+    "POST /sites/{site_id}/stock-images/import",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:234",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "media_delivery",
+    "GET /media/{asset_id}/{filename}",
+    "static/studio.js, studio/components/AssetsPanel.tsx",
+    "app/api_editor.py:241",
+    "tests/test_ai_security_architecture.py, tests/test_publish_plan_structural_permissions.py, tests/test_studio_publish_fidelity.py, tests/test_universal_import.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "editor_document",
+    "GET /sites/{site_id}/editor-document",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:261",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "editor_actions",
+    "POST /sites/{site_id}/editor/actions",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:273",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "editor_undo",
+    "POST /sites/{site_id}/editor/undo",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:302",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "editor_redo",
+    "POST /sites/{site_id}/editor/redo",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:310",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "revisions",
+    "GET /sites/{site_id}/revisions",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:318",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "migrate_to_studio",
+    "POST /sites/{site_id}/studio-migrate",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:325",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_blank_site",
+    "POST /sites/blank",
+    "static/dashboard.js",
+    "app/api_editor.py:380",
+    "tests/test_agent_gateway.py, tests/test_blank_studio_and_user_templates.py, tests/test_editor_media.py, tests/test_security_hardening_followup.py, tests/test_studio_canonical_recovery.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "list_user_templates",
+    "GET /user-templates",
+    "static/studio.js, studio/App.tsx, studio/components/UserTemplatesPanel.tsx",
+    "app/api_editor.py:418",
+    "tests/test_blank_studio_and_user_templates.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "save_user_template",
+    "POST /sites/{site_id}/user-templates",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:438",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_from_user_template",
+    "POST /user-templates/{template_id}/create",
+    "static/studio.js, studio/App.tsx, studio/components/UserTemplatesPanel.tsx",
+    "app/api_editor.py:459",
+    "tests/test_blank_studio_and_user_templates.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "save_studio",
+    "POST /sites/{site_id}/studio-save",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:491",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "penpot_projection",
+    "GET /sites/{site_id}/studio/penpot-projection",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:570",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "apply_penpot_interaction",
+    "POST /sites/{site_id}/studio/penpot-interaction",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:587",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "revision_preview",
+    "GET /sites/{site_id}/revisions/{revision_id}/preview",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:626",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "revision_restore",
+    "POST /sites/{site_id}/revisions/{revision_id}/restore",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:649",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "patch_brand",
+    "PATCH /sites/{site_id}/brand",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:669",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "patch_business_profile",
+    "PATCH /sites/{site_id}/business-profile",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:743",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "patch_seo",
+    "PATCH /sites/{site_id}/seo",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:764",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_seo_settings",
+    "GET /sites/{site_id}/seo/settings",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:790",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "patch_seo_settings",
+    "PATCH /sites/{site_id}/seo/settings",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:797",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_footer_links",
+    "GET /sites/{site_id}/footer-links",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:836",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "put_footer_links",
+    "PUT /sites/{site_id}/footer-links",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:843",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "preview_link_platform",
+    "GET /sites/{site_id}/link-platform",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:856",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "seo_ai_assist",
+    "POST /sites/{site_id}/seo/ai-assist",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:867",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "seo_health_endpoint",
+    "GET /sites/{site_id}/seo/health",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:916",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "accessibility_check",
+    "GET /sites/{site_id}/accessibility-check",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_editor.py:943",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_renderer_state",
+    "GET /admin/sites/{site_id}/renderer",
+    "Not resolved by literal scan",
+    "app/api_extended.py:46",
+    "tests/test_studio_v4.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_capture_v4",
+    "POST /admin/sites/{site_id}/renderer/capture-v4",
+    "Not resolved by literal scan",
+    "app/api_extended.py:57",
+    "tests/test_studio_v4.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_set_renderer",
+    "POST /admin/sites/{site_id}/renderer",
+    "Not resolved by literal scan",
+    "app/api_extended.py:74",
+    "tests/test_studio_v4.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_studio_v4_operations",
+    "GET /admin/studio-v4/operations",
+    "Not resolved by literal scan",
+    "app/api_extended.py:90",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "request_email_verification",
+    "POST /auth/email/request-verification",
+    "static/dashboard.js",
+    "app/api_extended.py:116",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "verify_email",
+    "POST /auth/email/verify",
+    "static/dashboard.js, static/verify-email.html",
+    "app/api_extended.py:125",
+    "tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py, tests/test_api.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "request_password_reset",
+    "POST /auth/password/request",
+    "static/forgot-password.html",
+    "app/api_extended.py:134",
+    "tests/test_adversarial_security.py, tests/test_auth_email_delivery_resilience.py, tests/test_password_policy_regression.py, tests/test_platform_features.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "confirm_password_reset",
+    "POST /auth/password/confirm",
+    "static/reset-password.html",
+    "app/api_extended.py:146",
+    "tests/test_adversarial_security.py, tests/test_password_policy_regression.py, tests/test_platform_features.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "google_start",
+    "GET /auth/google/start",
+    "static/auth.js, static/login.html, static/signup.html",
+    "app/api_extended.py:163",
+    "tests/test_final_production_hardening.py, tests/test_password_policy_regression.py, tests/test_platform_features.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "google_callback",
+    "GET /auth/google/callback",
+    "Not resolved by literal scan",
+    "app/api_extended.py:184",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "list_domains",
+    "GET /sites/{site_id}/domains",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_extended.py:236",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "add_domain",
+    "POST /sites/{site_id}/domains",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_extended.py:244",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "refresh_domain",
+    "POST /domains/{domain_id}/refresh",
+    "static/dashboard.js, static/studio.js, studio/App.tsx",
+    "app/api_extended.py:278",
+    "tests/test_adversarial_security.py, tests/test_platform_features.py, tests/test_release_gaps.py, tests/test_seo_geo_engine.py, tests/test_sitemap_quality.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_domain",
+    "DELETE /domains/{domain_id}",
+    "static/dashboard.js, static/studio.js, studio/App.tsx",
+    "app/api_extended.py:298",
+    "tests/test_adversarial_security.py, tests/test_platform_features.py, tests/test_release_gaps.py, tests/test_seo_geo_engine.py, tests/test_sitemap_quality.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "transfer_site",
+    "POST /sites/{site_id}/transfer",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_extended.py:321",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "accept_transfer",
+    "POST /ownership/accept",
+    "static/accept-transfer.html",
+    "app/api_extended.py:347",
+    "tests/test_marketplace_support.py, tests/test_platform_features.py, tests/test_release_gaps.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "customer_blog_unavailable",
+    "API_ROUTE /sites/{site_id}/blog",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_extended.py:422",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_google_sheet",
+    "GET /sites/{site_id}/integrations/google-sheets",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_extended.py:449",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "set_google_sheet",
+    "PUT /sites/{site_id}/integrations/google-sheets",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_extended.py:457",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "test_google_sheet",
+    "POST /sites/{site_id}/integrations/google-sheets/test",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_extended.py:473",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_google_sheet",
+    "DELETE /sites/{site_id}/integrations/google-sheets",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_extended.py:491",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "public_integrations",
+    "GET /public/sites/{site_id}/integrations",
+    "static/public-runtime.js",
+    "app/api_extended.py:500",
+    "tests/test_ai_security_architecture.py, tests/test_crm_e2e.py, tests/test_final_production_hardening.py, tests/test_platform_features.py, tests/test_regional_billing_sales_assistant.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_pro_lead",
+    "POST /pro/enquiries",
+    "static/dashboard.js, static/landing.js",
+    "app/api_extended.py:520",
+    "tests/test_platform_features.py, tests/test_release_gaps.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "credit_topup_catalogue",
+    "GET /billing/credit-topups",
+    "static/dashboard.js",
+    "app/api_extended.py:547",
+    "tests/test_credit_ai_production_hardening.py, tests/test_final_production_hardening.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_credit_topup_order",
+    "POST /billing/credit-topups/order",
+    "static/dashboard.js",
+    "app/api_extended.py:575",
+    "tests/test_credit_ai_production_hardening.py, tests/test_final_production_hardening.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "verify_credit_topup",
+    "POST /billing/credit-topups/verify",
+    "static/dashboard.js",
+    "app/api_extended.py:599",
+    "tests/test_credit_ai_production_hardening.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "public_regional_price",
+    "GET /public/regional-price",
+    "static/landing.js",
+    "app/api_extended.py:708",
+    "tests/test_regional_billing_sales_assistant.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "billing_regional_offer",
+    "GET /billing/regional-offer",
+    "static/choose-plan.js",
+    "app/api_extended.py:716",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_regional_subscription",
+    "POST /billing/subscription",
+    "static/choose-plan.js, static/dashboard.js, static/publish-flow.js",
+    "app/api_extended.py:727",
+    "tests/test_adversarial_security.py, tests/test_final_production_hardening.py, tests/test_regional_billing_sales_assistant.py, tests/test_reliability_growth.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "verify_regional_subscription",
+    "POST /billing/subscription/verify",
+    "static/choose-plan.js, static/dashboard.js, static/publish-flow.js",
+    "app/api_extended.py:755",
+    "tests/test_adversarial_security.py, tests/test_regional_billing_sales_assistant.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "current_subscription",
+    "GET /billing/subscription",
+    "static/choose-plan.js, static/dashboard.js, static/publish-flow.js",
+    "app/api_extended.py:778",
+    "tests/test_adversarial_security.py, tests/test_final_production_hardening.py, tests/test_regional_billing_sales_assistant.py, tests/test_reliability_growth.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "cancel_regional_subscription",
+    "POST /billing/subscription/cancel",
+    "static/dashboard.js",
+    "app/api_extended.py:785",
+    "tests/test_adversarial_security.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "checkout_config",
+    "GET /billing/checkout-config",
+    "Not resolved by literal scan",
+    "app/api_extended.py:836",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_razorpay_order",
+    "POST /billing/razorpay/order",
+    "Not resolved by literal scan",
+    "app/api_extended.py:841",
+    "tests/test_adversarial_security.py, tests/test_release_gaps.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "verify_razorpay",
+    "POST /billing/razorpay/verify",
+    "Not resolved by literal scan",
+    "app/api_extended.py:863",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "razorpay_webhook",
+    "POST /billing/razorpay/webhook",
+    "Not resolved by literal scan",
+    "app/api_extended.py:875",
+    "tests/test_adversarial_security.py, tests/test_final_production_hardening.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_overview",
+    "GET /admin/overview",
+    "static/super-admin.js",
+    "app/api_extended.py:963",
+    "tests/test_password_policy_regression.py, tests/test_platform_features.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_leads",
+    "GET /admin/leads",
+    "static/super-admin.js",
+    "app/api_extended.py:1061",
+    "tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_users",
+    "GET /admin/users",
+    "static/super-admin.js",
+    "app/api_extended.py:1071",
+    "tests/test_adversarial_security.py, tests/test_password_policy_regression.py, tests/test_platform_features.py, tests/test_release_gaps.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_user_patch",
+    "PATCH /admin/users/{user_id}",
+    "static/super-admin.js",
+    "app/api_extended.py:1090",
+    "tests/test_adversarial_security.py, tests/test_password_policy_regression.py, tests/test_platform_features.py, tests/test_release_gaps.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_user_detail",
+    "GET /admin/users/{user_id}",
+    "static/super-admin.js",
+    "app/api_extended.py:1127",
+    "tests/test_adversarial_security.py, tests/test_password_policy_regression.py, tests/test_platform_features.py, tests/test_release_gaps.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_ai_credit_users",
+    "GET /admin/ai-credits/users",
+    "Not resolved by literal scan",
+    "app/api_extended.py:1160",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_ai_credit_user",
+    "GET /admin/ai-credits/users/{user_id}",
+    "Not resolved by literal scan",
+    "app/api_extended.py:1173",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_ai_credit_reconciliation",
+    "GET /admin/ai-credits/users/{user_id}/reconciliation",
+    "Not resolved by literal scan",
+    "app/api_extended.py:1184",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_ai_credit_adjust",
+    "POST /admin/ai-credits/adjust",
+    "static/super-admin.js",
+    "app/api_extended.py:1199",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_ai_credit_analytics",
+    "GET /admin/ai-credits/analytics",
+    "static/super-admin.js",
+    "app/api_extended.py:1214",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_restrict_user",
+    "POST /admin/users/{user_id}/restrict",
+    "static/super-admin.js",
+    "app/api_extended.py:1261",
+    "tests/test_adversarial_security.py, tests/test_password_policy_regression.py, tests/test_platform_features.py, tests/test_release_gaps.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_restore_user",
+    "POST /admin/users/{user_id}/restore",
+    "static/super-admin.js",
+    "app/api_extended.py:1277",
+    "tests/test_adversarial_security.py, tests/test_password_policy_regression.py, tests/test_platform_features.py, tests/test_release_gaps.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_delete_user",
+    "DELETE /admin/users/{user_id}",
+    "static/super-admin.js",
+    "app/api_extended.py:1288",
+    "tests/test_adversarial_security.py, tests/test_password_policy_regression.py, tests/test_platform_features.py, tests/test_release_gaps.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_templates",
+    "GET /admin/templates",
+    "static/super-admin.js",
+    "app/api_extended.py:1304",
+    "tests/test_role_dashboard_separation.py, tests/test_super_admin_portal.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_template_patch",
+    "PATCH /admin/templates/{slug}",
+    "static/super-admin.js",
+    "app/api_extended.py:1316",
+    "tests/test_role_dashboard_separation.py, tests/test_super_admin_portal.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_analytics",
+    "GET /admin/analytics",
+    "Not resolved by literal scan",
+    "app/api_extended.py:1344",
+    "tests/test_super_admin_portal.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_template_toggle_state",
+    "POST /admin/templates/{slug}/toggle-state",
+    "static/super-admin.js",
+    "app/api_extended.py:1375",
+    "tests/test_role_dashboard_separation.py, tests/test_super_admin_portal.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "public_plans",
+    "GET /public/plans",
+    "static/choose-plan.js, static/dashboard.js, static/studio.js, studio/App.tsx",
+    "app/api_extended.py:1392",
+    "tests/test_marketplace_support.py, tests/test_regional_billing_sales_assistant.py, tests/test_studio_targeted_corrections.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_plans",
+    "GET /admin/plans",
+    "static/super-admin.js",
+    "app/api_extended.py:1406",
+    "tests/test_marketplace_support.py, tests/test_platform_features.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_plan_patch",
+    "PATCH /admin/plans/{plan}",
+    "static/super-admin.js",
+    "app/api_extended.py:1423",
+    "tests/test_marketplace_support.py, tests/test_platform_features.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_pro_leads",
+    "GET /admin/pro-leads",
+    "static/super-admin.js",
+    "app/api_extended.py:1438",
+    "tests/test_platform_features.py, tests/test_release_gaps.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_pro_lead_patch",
+    "PATCH /admin/pro-leads/{lead_id}",
+    "static/super-admin.js",
+    "app/api_extended.py:1450",
+    "tests/test_platform_features.py, tests/test_release_gaps.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_audit",
+    "GET /admin/audit",
+    "static/super-admin.js",
+    "app/api_extended.py:1462",
+    "tests/test_adversarial_security.py, tests/test_platform_features.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_settings",
+    "GET /admin/settings",
+    "static/super-admin.js",
+    "app/api_extended.py:1468",
+    "tests/test_adversarial_security.py, tests/test_password_policy_regression.py, tests/test_platform_features.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_settings_update",
+    "PUT /admin/settings",
+    "static/super-admin.js",
+    "app/api_extended.py:1492",
+    "tests/test_adversarial_security.py, tests/test_password_policy_regression.py, tests/test_platform_features.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_platform_blog",
+    "GET /admin/blog",
+    "static/super-admin.js",
+    "app/api_extended.py:1505",
+    "tests/test_ai_security_architecture.py, tests/test_platform_features.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_platform_blog_create",
+    "POST /admin/blog",
+    "static/super-admin.js",
+    "app/api_extended.py:1511",
+    "tests/test_ai_security_architecture.py, tests/test_platform_features.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_platform_blog_publish",
+    "POST /admin/blog/{post_id}/publish",
+    "static/super-admin.js",
+    "app/api_extended.py:1515",
+    "tests/test_ai_security_architecture.py, tests/test_platform_features.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_platform_blog_detail",
+    "GET /admin/blog/{post_id}",
+    "static/super-admin.js",
+    "app/api_extended.py:1524",
+    "tests/test_ai_security_architecture.py, tests/test_platform_features.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_platform_blog_update",
+    "PUT /admin/blog/{post_id}",
+    "static/super-admin.js",
+    "app/api_extended.py:1533",
+    "tests/test_ai_security_architecture.py, tests/test_platform_features.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_platform_blog_unpublish",
+    "POST /admin/blog/{post_id}/unpublish",
+    "static/super-admin.js",
+    "app/api_extended.py:1573",
+    "tests/test_ai_security_architecture.py, tests/test_platform_features.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_platform_blog_delete",
+    "DELETE /admin/blog/{post_id}",
+    "static/super-admin.js",
+    "app/api_extended.py:1584",
+    "tests/test_ai_security_architecture.py, tests/test_platform_features.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_user_360",
+    "GET /admin/users/{user_id}/360",
+    "static/super-admin.js",
+    "app/api_extended.py:1595",
+    "tests/test_adversarial_security.py, tests/test_password_policy_regression.py, tests/test_platform_features.py, tests/test_release_gaps.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_payments",
+    "GET /admin/payments",
+    "static/super-admin.js",
+    "app/api_extended.py:1638",
+    "tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_ai_usage",
+    "GET /admin/ai-usage",
+    "Not resolved by literal scan",
+    "app/api_extended.py:1664",
+    "tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_messaging",
+    "GET /admin/messaging",
+    "Not resolved by literal scan",
+    "app/api_extended.py:1684",
+    "tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_traffic",
+    "GET /admin/traffic",
+    "Not resolved by literal scan",
+    "app/api_extended.py:1700",
+    "tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_integrations",
+    "GET /admin/integrations",
+    "static/super-admin.js",
+    "app/api_extended.py:1730",
+    "tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_health",
+    "GET /admin/health",
+    "static/super-admin.js",
+    "app/api_extended.py:1789",
+    "tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_campaigns",
+    "GET /admin/campaigns",
+    "static/super-admin.js",
+    "app/api_extended.py:1837",
+    "tests/test_ai_security_architecture.py, tests/test_role_dashboard_separation.py, tests/test_smtp_mail_center.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_campaign_create",
+    "POST /admin/campaigns",
+    "static/super-admin.js",
+    "app/api_extended.py:1846",
+    "tests/test_ai_security_architecture.py, tests/test_role_dashboard_separation.py, tests/test_smtp_mail_center.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_campaign_test_send",
+    "POST /admin/campaigns/{campaign_id}/test-send",
+    "static/super-admin.js",
+    "app/api_extended.py:1864",
+    "tests/test_ai_security_architecture.py, tests/test_role_dashboard_separation.py, tests/test_smtp_mail_center.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_campaign_send",
+    "POST /admin/campaigns/{campaign_id}/send",
+    "static/super-admin.js",
+    "app/api_extended.py:1875",
+    "tests/test_ai_security_architecture.py, tests/test_role_dashboard_separation.py, tests/test_smtp_mail_center.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_campaign_detail",
+    "GET /admin/campaigns/{campaign_id}",
+    "static/super-admin.js",
+    "app/api_extended.py:1882",
+    "tests/test_ai_security_architecture.py, tests/test_role_dashboard_separation.py, tests/test_smtp_mail_center.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_campaign_recipients",
+    "GET /admin/campaigns/{campaign_id}/recipients",
+    "static/super-admin.js",
+    "app/api_extended.py:1887",
+    "tests/test_ai_security_architecture.py, tests/test_role_dashboard_separation.py, tests/test_smtp_mail_center.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_campaign_import",
+    "POST /admin/campaigns/import",
+    "static/super-admin.js",
+    "app/api_extended.py:1901",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_campaign_attachment",
+    "POST /admin/campaigns/{campaign_id}/attachments",
+    "static/super-admin.js",
+    "app/api_extended.py:1912",
+    "tests/test_ai_security_architecture.py, tests/test_role_dashboard_separation.py, tests/test_smtp_mail_center.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_campaign_attachment_delete",
+    "DELETE /admin/campaigns/{campaign_id}/attachments/{attachment_id}",
+    "static/super-admin.js",
+    "app/api_extended.py:1918",
+    "tests/test_ai_security_architecture.py, tests/test_role_dashboard_separation.py, tests/test_smtp_mail_center.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_campaign_export",
+    "GET /admin/campaigns/{campaign_id}/export.csv",
+    "static/super-admin.js",
+    "app/api_extended.py:1929",
+    "tests/test_ai_security_architecture.py, tests/test_role_dashboard_separation.py, tests/test_smtp_mail_center.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_campaign_retry_failed",
+    "POST /admin/campaigns/{campaign_id}/retry-failed",
+    "static/super-admin.js",
+    "app/api_extended.py:1934",
+    "tests/test_ai_security_architecture.py, tests/test_role_dashboard_separation.py, tests/test_smtp_mail_center.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_campaign_process",
+    "POST /admin/campaigns/process",
+    "Not resolved by literal scan",
+    "app/api_extended.py:1946",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "email_preferences",
+    "GET /email/preferences",
+    "Not resolved by literal scan",
+    "app/api_extended.py:1957",
+    "tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "email_preferences_update",
+    "PUT /email/preferences",
+    "Not resolved by literal scan",
+    "app/api_extended.py:1967",
+    "tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "email_unsubscribe",
+    "GET /email/unsubscribe/{token}",
+    "Not resolved by literal scan",
+    "app/api_extended.py:1979",
+    "tests/test_ai_security_architecture.py, tests/test_smtp_mail_center.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_campaign_delete",
+    "DELETE /admin/campaigns/{campaign_id}",
+    "static/super-admin.js",
+    "app/api_extended.py:2000",
+    "tests/test_ai_security_architecture.py, tests/test_role_dashboard_separation.py, tests/test_smtp_mail_center.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "security_config",
+    "GET /public/security-config",
+    "static/freelancer-profile.js, static/zylora-ui.js",
+    "app/api_gapfixes.py:24",
+    "tests/test_marketplace_support.py, tests/test_release_gaps.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "list_knowledge",
+    "GET /sites/{site_id}/knowledge",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_gapfixes.py:148",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "add_knowledge_text",
+    "POST /sites/{site_id}/knowledge",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_gapfixes.py:156",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "upload_knowledge",
+    "POST /sites/{site_id}/knowledge/upload",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_gapfixes.py:166",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_knowledge",
+    "DELETE /sites/{site_id}/knowledge/{doc_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_gapfixes.py:186",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "chatbot",
+    "POST /public/chatbot",
+    "Not resolved by literal scan",
+    "app/api_gapfixes.py:250",
+    "tests/test_credit_ai_production_hardening.py, tests/test_release_gaps.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "site_chatbot_metrics",
+    "GET /sites/{site_id}/chatbot-metrics",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_gapfixes.py:348",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_chatbot_metrics",
+    "GET /admin/chatbot-metrics",
+    "Not resolved by literal scan",
+    "app/api_gapfixes.py:359",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "google_sheets_resync",
+    "POST /sites/{site_id}/integrations/google-sheets/resync",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_gapfixes.py:371",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "freelancer_dashboard",
+    "GET /freelancer/dashboard",
+    "static/dashboard.js",
+    "app/api_gapfixes.py:397",
+    "tests/test_release_gaps.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "save_freelancer_profile",
+    "PUT /freelancer/profile",
+    "static/dashboard.js",
+    "app/api_gapfixes.py:409",
+    "tests/test_release_gaps.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "obsolete_freelancer_fee",
+    "POST /freelancer/sites/{site_id}/fees/{fee_type}",
+    "static/dashboard.js",
+    "app/api_gapfixes.py:420",
+    "tests/test_release_gaps.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "freelancer_publish_template",
+    "POST /freelancer/sites/{site_id}/publish-template",
+    "static/dashboard.js",
+    "app/api_gapfixes.py:429",
+    "tests/test_release_gaps.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "eligible_freelancer_ratings",
+    "GET /freelancer/ratings/eligible",
+    "static/dashboard.js",
+    "app/api_gapfixes.py:437",
+    "tests/test_release_gaps.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "rate_freelancer",
+    "POST /freelancer/ratings",
+    "static/dashboard.js",
+    "app/api_gapfixes.py:457",
+    "tests/test_release_gaps.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_credit_topup",
+    "POST /admin/users/{user_id}/credits/topup",
+    "static/super-admin.js",
+    "app/api_gapfixes.py:476",
+    "tests/test_adversarial_security.py, tests/test_password_policy_regression.py, tests/test_platform_features.py, tests/test_release_gaps.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "import_website",
+    "POST /sites/import",
+    "static/super-admin.js",
+    "app/api_importer.py:28",
+    "tests/test_role_dashboard_separation.py, tests/test_universal_import.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_import_summary",
+    "GET /sites/{site_id}/import-summary",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_importer.py:51",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "freelancer_application",
+    "GET /freelancer/application",
+    "static/dashboard.js",
+    "app/api_marketplace_support.py:161",
+    "tests/test_marketplace_support.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "submit_freelancer_application",
+    "POST /freelancer/application",
+    "static/dashboard.js",
+    "app/api_marketplace_support.py:170",
+    "tests/test_marketplace_support.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "public_freelancers",
+    "GET /public/freelancers",
+    "static/freelancer-profile.js, static/freelancers.js",
+    "app/api_marketplace_support.py:190",
+    "tests/test_marketplace_support.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "public_freelancer",
+    "GET /public/freelancers/{slug}",
+    "static/freelancer-profile.js, static/freelancers.js",
+    "app/api_marketplace_support.py:204",
+    "tests/test_marketplace_support.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "freelancer_redirect",
+    "GET /go/freelancer/{freelancer_id}/{link_id}",
+    "Not resolved by literal scan",
+    "app/api_marketplace_support.py:212",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "freelancer_enquiry",
+    "POST /public/freelancers/{slug}/enquiries",
+    "static/freelancer-profile.js, static/freelancers.js",
+    "app/api_marketplace_support.py:238",
+    "tests/test_marketplace_support.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_freelancers",
+    "GET /admin/freelancers",
+    "static/super-admin.js",
+    "app/api_marketplace_support.py:290",
+    "tests/test_marketplace_support.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_freelancer_patch",
+    "PATCH /admin/freelancers/{freelancer_id}",
+    "static/super-admin.js",
+    "app/api_marketplace_support.py:321",
+    "tests/test_marketplace_support.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "support_create",
+    "POST /support/conversations",
+    "static/dashboard.js",
+    "app/api_marketplace_support.py:381",
+    "tests/test_marketplace_support.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "support_list",
+    "GET /support/conversations",
+    "static/dashboard.js",
+    "app/api_marketplace_support.py:400",
+    "tests/test_marketplace_support.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "support_thread",
+    "GET /support/conversations/{conversation_id}",
+    "static/dashboard.js",
+    "app/api_marketplace_support.py:410",
+    "tests/test_marketplace_support.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "support_user_message",
+    "POST /support/conversations/{conversation_id}/messages",
+    "static/dashboard.js",
+    "app/api_marketplace_support.py:420",
+    "tests/test_marketplace_support.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "support_user_resolve",
+    "POST /support/conversations/{conversation_id}/resolve",
+    "static/dashboard.js",
+    "app/api_marketplace_support.py:432",
+    "tests/test_marketplace_support.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "support_user_reopen",
+    "POST /support/conversations/{conversation_id}/reopen",
+    "static/dashboard.js",
+    "app/api_marketplace_support.py:441",
+    "tests/test_marketplace_support.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "support_operators",
+    "GET /admin/support/operators",
+    "Not resolved by literal scan",
+    "app/api_marketplace_support.py:450",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "support_admin_meta",
+    "GET /admin/support/meta",
+    "Not resolved by literal scan",
+    "app/api_marketplace_support.py:458",
+    "tests/test_marketplace_support.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_support_list",
+    "GET /admin/support",
+    "static/super-admin.js",
+    "app/api_marketplace_support.py:468",
+    "tests/test_marketplace_support.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_support_thread",
+    "GET /admin/support/{conversation_id}",
+    "static/super-admin.js",
+    "app/api_marketplace_support.py:482",
+    "tests/test_marketplace_support.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_support_message",
+    "POST /admin/support/{conversation_id}/messages",
+    "static/super-admin.js",
+    "app/api_marketplace_support.py:498",
+    "tests/test_marketplace_support.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_support_patch",
+    "PATCH /admin/support/{conversation_id}",
+    "static/super-admin.js",
+    "app/api_marketplace_support.py:528",
+    "tests/test_marketplace_support.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "support_attachments_disabled",
+    "POST /support/attachments",
+    "Not resolved by literal scan",
+    "app/api_marketplace_support.py:546",
+    "tests/test_marketplace_support.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "backups",
+    "GET /sites/{site_id}/backups",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_operations.py:71",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "backup_create",
+    "POST /sites/{site_id}/backups",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_operations.py:79",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "backup_restore",
+    "POST /sites/{site_id}/backups/{backup_id}/restore",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_operations.py:88",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "health",
+    "GET /sites/{site_id}/health",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_operations.py:103",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "run_qa",
+    "POST /sites/{site_id}/qa",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_operations.py:110",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_launch_checklist",
+    "GET /sites/{site_id}/launch-checklist",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_operations.py:119",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "business_profile",
+    "GET /sites/{site_id}/business-profile",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_operations.py:159",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "business_profile_patch",
+    "PATCH /sites/{site_id}/business-profile",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_operations.py:166",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "design_system",
+    "GET /sites/{site_id}/design-system",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_operations.py:196",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "sitewide_ai_edit",
+    "POST /sites/{site_id}/ai-edit/sitewide",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_operations.py:212",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "analytics_event",
+    "POST /public/analytics",
+    "static/public-runtime.js",
+    "app/api_operations.py:323",
+    "tests/test_reliability_growth.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "growth",
+    "GET /growth",
+    "static/dashboard.js",
+    "app/api_operations.py:337",
+    "tests/test_reliability_growth.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "tenant_audit",
+    "GET /audit",
+    "static/dashboard.js, static/super-admin.js",
+    "app/api_operations.py:344",
+    "tests/test_adversarial_security.py, tests/test_platform_features.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "retry_site_deliveries",
+    "POST /sites/{site_id}/deliveries/retry",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_operations.py:356",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "billing_recovery",
+    "GET /billing/recovery",
+    "static/dashboard.js",
+    "app/api_operations.py:460",
+    "tests/test_reliability_growth.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "billing_reconcile",
+    "POST /billing/recovery/{case_id}/reconcile",
+    "static/dashboard.js",
+    "app/api_operations.py:468",
+    "tests/test_reliability_growth.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_operations",
+    "GET /admin/operations",
+    "Not resolved by literal scan",
+    "app/api_operations.py:477",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_retry_deliveries",
+    "POST /admin/operations/retry-deliveries",
+    "Not resolved by literal scan",
+    "app/api_operations.py:482",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "resolve_operational_event",
+    "PATCH /admin/operations/events/{event_id}/resolve",
+    "Not resolved by literal scan",
+    "app/api_operations.py:487",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "public_assistant_config",
+    "GET /public/sites/{site_id}/assistant/config",
+    "static/public-runtime.js",
+    "app/api_sales_assistant.py:76",
+    "tests/test_ai_security_architecture.py, tests/test_crm_e2e.py, tests/test_final_production_hardening.py, tests/test_platform_features.py, tests/test_regional_billing_sales_assistant.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "public_conversation",
+    "POST /public/sites/{site_id}/assistant/conversations",
+    "static/public-runtime.js",
+    "app/api_sales_assistant.py:108",
+    "tests/test_ai_security_architecture.py, tests/test_crm_e2e.py, tests/test_final_production_hardening.py, tests/test_platform_features.py, tests/test_regional_billing_sales_assistant.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "public_message",
+    "POST /public/sites/{site_id}/assistant/conversations/{conversation_id}/messages",
+    "static/public-runtime.js",
+    "app/api_sales_assistant.py:123",
+    "tests/test_ai_security_architecture.py, tests/test_crm_e2e.py, tests/test_final_production_hardening.py, tests/test_platform_features.py, tests/test_regional_billing_sales_assistant.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "public_assistant_availability",
+    "GET /public/sites/{site_id}/assistant/availability",
+    "static/public-runtime.js",
+    "app/api_sales_assistant.py:151",
+    "tests/test_ai_security_architecture.py, tests/test_crm_e2e.py, tests/test_final_production_hardening.py, tests/test_platform_features.py, tests/test_regional_billing_sales_assistant.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "public_assistant_appointment",
+    "POST /public/sites/{site_id}/assistant/conversations/{conversation_id}/appointments",
+    "static/public-runtime.js",
+    "app/api_sales_assistant.py:160",
+    "tests/test_ai_security_architecture.py, tests/test_crm_e2e.py, tests/test_final_production_hardening.py, tests/test_platform_features.py, tests/test_regional_billing_sales_assistant.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "assistant_handoff",
+    "POST /public/sites/{site_id}/assistant/conversations/{conversation_id}/handoff",
+    "static/public-runtime.js",
+    "app/api_sales_assistant.py:221",
+    "tests/test_ai_security_architecture.py, tests/test_crm_e2e.py, tests/test_final_production_hardening.py, tests/test_platform_features.py, tests/test_regional_billing_sales_assistant.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "owner_assistant_settings",
+    "GET /sites/{site_id}/assistant/settings",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_sales_assistant.py:268",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "owner_assistant_settings_patch",
+    "PATCH /sites/{site_id}/assistant/settings",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_sales_assistant.py:275",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "owner_conversations",
+    "GET /sites/{site_id}/assistant/conversations",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_sales_assistant.py:287",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "owner_conversation_detail",
+    "GET /sites/{site_id}/assistant/conversations/{conversation_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_sales_assistant.py:297",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "owner_test_conversation",
+    "POST /sites/{site_id}/assistant/test/conversations",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_sales_assistant.py:305",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "owner_test_message",
+    "POST /sites/{site_id}/assistant/test/conversations/{conversation_id}/messages",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_sales_assistant.py:315",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "owner_assistant_analytics",
+    "GET /sites/{site_id}/assistant/analytics",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_sales_assistant.py:324",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "owner_appointment_settings",
+    "GET /sites/{site_id}/appointment-settings",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_sales_assistant.py:341",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "owner_appointment_settings_save",
+    "PUT /sites/{site_id}/appointment-settings",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_sales_assistant.py:350",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_site_appointments",
+    "GET /sites/{site_id}/appointments",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_sales_assistant.py:366",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "generate_lead_form",
+    "POST /sites/{site_id}/lead-form/generate",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_sales_assistant.py:395",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_lead_form",
+    "GET /sites/{site_id}/lead-form",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_sales_assistant.py:406",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "save_lead_form",
+    "PUT /sites/{site_id}/lead-form",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/api_sales_assistant.py:415",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "list_collections",
+    "GET /sites/{site_id}/cms/collections",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:455",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_collection",
+    "POST /sites/{site_id}/cms/collections",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:475",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_collection",
+    "GET /sites/{site_id}/cms/collections/{collection_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:493",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "patch_collection",
+    "PATCH /sites/{site_id}/cms/collections/{collection_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:501",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_collection",
+    "DELETE /sites/{site_id}/cms/collections/{collection_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:522",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_field",
+    "POST /sites/{site_id}/cms/collections/{collection_id}/fields",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:538",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "patch_field",
+    "PATCH /sites/{site_id}/cms/collections/{collection_id}/fields/{field_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:589",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_field",
+    "DELETE /sites/{site_id}/cms/collections/{collection_id}/fields/{field_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:653",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "list_items",
+    "GET /sites/{site_id}/cms/collections/{collection_id}/items",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:677",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_item",
+    "POST /sites/{site_id}/cms/collections/{collection_id}/items",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:722",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "get_item",
+    "GET /sites/{site_id}/cms/collections/{collection_id}/items/{item_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:747",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "patch_item",
+    "PATCH /sites/{site_id}/cms/collections/{collection_id}/items/{item_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:755",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "publish_item",
+    "POST /sites/{site_id}/cms/collections/{collection_id}/items/{item_id}/publish",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:777",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "unpublish_item",
+    "POST /sites/{site_id}/cms/collections/{collection_id}/items/{item_id}/unpublish",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:789",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "item_revisions",
+    "GET /sites/{site_id}/cms/collections/{collection_id}/items/{item_id}/revisions",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:800",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "restore_item_revision",
+    "POST /sites/{site_id}/cms/collections/{collection_id}/items/{item_id}/revisions/{revision}/restore",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:810",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "export_collection_csv",
+    "GET /sites/{site_id}/cms/collections/{collection_id}/export.csv",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:849",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "import_collection_csv",
+    "POST /sites/{site_id}/cms/collections/{collection_id}/import.csv",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:867",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_item",
+    "DELETE /sites/{site_id}/cms/collections/{collection_id}/items/{item_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:914",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "list_bindings",
+    "GET /sites/{site_id}/cms/bindings",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:947",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "put_binding",
+    "PUT /sites/{site_id}/cms/bindings",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:957",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_binding",
+    "DELETE /sites/{site_id}/cms/bindings/{binding_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:1005",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "list_dynamic_pages",
+    "GET /sites/{site_id}/cms/dynamic-pages",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:1032",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_dynamic_page",
+    "POST /sites/{site_id}/cms/dynamic-pages",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:1040",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "patch_dynamic_page",
+    "PATCH /sites/{site_id}/cms/dynamic-pages/{dynamic_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:1061",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_dynamic_page",
+    "DELETE /sites/{site_id}/cms/dynamic-pages/{dynamic_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:1089",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "list_permissions",
+    "GET /sites/{site_id}/cms/permissions",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:1100",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "put_permission",
+    "PUT /sites/{site_id}/cms/permissions",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:1111",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_permission",
+    "DELETE /sites/{site_id}/cms/permissions/{permission_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:1137",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "list_views",
+    "GET /sites/{site_id}/cms/collections/{collection_id}/views",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:1149",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_view",
+    "POST /sites/{site_id}/cms/collections/{collection_id}/views",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:1159",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "patch_view",
+    "PATCH /sites/{site_id}/cms/collections/{collection_id}/views/{view_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:1173",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "delete_view",
+    "DELETE /sites/{site_id}/cms/collections/{collection_id}/views/{view_id}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:1189",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "create_ai_proposal",
+    "POST /sites/{site_id}/cms/assistant/proposals",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:1219",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "apply_ai_proposal",
+    "POST /sites/{site_id}/cms/assistant/apply",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/dashboard.js, static/editor.js",
+    "app/cms.py:1281",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_cms_summary",
+    "GET /admin/cms/summary",
+    "Not resolved by literal scan",
+    "app/cms.py:1314",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "favicon",
+    "GET /favicon.ico",
+    "static/accept-transfer.html, static/ai-create.html, static/choose-plan.html, static/dashboard.html, static/forgot-password.html",
+    "app/main.py:156",
+    "tests/test_ui_layout_regressions.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "template_asset",
+    "GET /template-assets/{slug}/{asset_path:path}",
+    "static/dashboard.js",
+    "app/main.py:164",
+    "tests/test_reference_extension.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "root_landing_css",
+    "GET /landing.css",
+    "static/index.html",
+    "app/main.py:406",
+    "tests/test_ui_layout_regressions.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "root_auth_css",
+    "GET /auth.css",
+    "static/accept-transfer.html, static/forgot-password.html, static/login.html, static/reset-password.html, static/signup.html",
+    "app/main.py:408",
+    "tests/test_ui_layout_regressions.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "root_apple_css",
+    "GET /zylora-apple.css",
+    "static/dashboard.html, static/super-admin.html",
+    "app/main.py:410",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "root_ui_css",
+    "GET /zylora-ui.css",
+    "static/accept-transfer.html, static/ai-create.html, static/dashboard.html, static/editor.html, static/forgot-password.html",
+    "app/main.py:412",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "health",
+    "GET /api/health",
+    "Not resolved by literal scan",
+    "app/main.py:415",
+    "tests/test_release_gaps.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "home",
+    "GET /",
+    "Not resolved by literal scan",
+    "app/main.py:421",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "admin_entry",
+    "GET /admin",
+    "static/super-admin.js",
+    "app/main.py:423",
+    "tests/test_adversarial_security.py, tests/test_ai_security_architecture.py, tests/test_marketplace_support.py, tests/test_password_policy_regression.py, tests/test_platform_features.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "login",
+    "GET /login",
+    "static/ai-create.js, static/auth.js, static/choose-plan.js, static/dashboard.js, static/editor.js",
+    "app/main.py:428",
+    "tests/test_adversarial_security.py, tests/test_master_policy_links.py, tests/test_password_policy_regression.py, tests/test_platform_features.py, tests/test_super_admin_portal.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "signup",
+    "GET /signup",
+    "static/ai-create.js, static/auth.js, static/choose-plan.js, static/templates.js, static/choose-plan.html",
+    "app/main.py:430",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "forgot_password",
+    "GET /forgot-password",
+    "static/login.html",
+    "app/main.py:432",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "reset_password",
+    "GET /reset-password",
+    "Not resolved by literal scan",
+    "app/main.py:434",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "verify_email_page",
+    "GET /verify-email",
+    "Not resolved by literal scan",
+    "app/main.py:436",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "accept_transfer_page",
+    "GET /accept-transfer",
+    "Not resolved by literal scan",
+    "app/main.py:438",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "choose_plan",
+    "GET /choose-plan",
+    "static/choose-plan.js, static/choose-plan.html, static/freelancers.html, static/index.html, static/legal.html",
+    "app/main.py:440",
+    "tests/test_final_release_entitlements_export.py, tests/test_public_information_architecture.py, tests/test_public_route_aliases.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "pricing_alias",
+    "GET /pricing",
+    "static/super-admin.js, static/index.html, static/templates.html",
+    "app/main.py:442",
+    "tests/test_crm_e2e.py, tests/test_public_information_architecture.py, tests/test_public_route_aliases.py, tests/test_regional_billing_sales_assistant.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "auth_error",
+    "GET /auth/error",
+    "Not resolved by literal scan",
+    "app/main.py:460",
+    "tests/test_public_information_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "account_suspended",
+    "GET /account/suspended",
+    "Not resolved by literal scan",
+    "app/main.py:464",
+    "tests/test_public_information_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "onboarding",
+    "GET /onboarding",
+    "Not resolved by literal scan",
+    "app/main.py:468",
+    "tests/test_public_information_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "checkout_processing",
+    "GET /checkout/processing",
+    "Not resolved by literal scan",
+    "app/main.py:478",
+    "tests/test_public_information_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "checkout_success",
+    "GET /checkout/success",
+    "Not resolved by literal scan",
+    "app/main.py:482",
+    "tests/test_public_information_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "checkout_failed",
+    "GET /checkout/failed",
+    "Not resolved by literal scan",
+    "app/main.py:486",
+    "tests/test_public_information_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "checkout_cancelled",
+    "GET /checkout/cancelled",
+    "Not resolved by literal scan",
+    "app/main.py:490",
+    "tests/test_public_information_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "checkout_plan",
+    "GET /checkout/{plan}",
+    "static/choose-plan.js, static/dashboard.js, static/publish-flow.js, static/editor.html",
+    "app/main.py:494",
+    "tests/test_public_information_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "dashboard",
+    "GET /dashboard",
+    "static/auth.js, static/choose-plan.js, static/dashboard.js, static/publish-flow.js, static/studio.js",
+    "app/main.py:509",
+    "tests/test_editor_media.py, tests/test_publish_plan_structural_permissions.py, tests/test_release_gaps.py, tests/test_role_dashboard_separation.py, tests/test_security_hardening_followup.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "super_admin_page",
+    "GET /super-admin",
+    "static/super-admin.js, static/super-admin.html",
+    "app/main.py:517",
+    "tests/test_ai_security_architecture.py, tests/test_role_dashboard_separation.py, tests/test_security_hardening_followup.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "super_admin_page",
+    "GET /super-admin/{subpath:path}",
+    "static/super-admin.js, static/super-admin.html",
+    "app/main.py:517",
+    "tests/test_ai_security_architecture.py, tests/test_role_dashboard_separation.py, tests/test_security_hardening_followup.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "ai_create",
+    "GET /ai-create",
+    "static/ai-create.html, static/choose-plan.html, static/freelancers.html, static/legal.html, static/privacy.html",
+    "app/main.py:521",
+    "tests/test_ai_prompt_guidance.py, tests/test_blank_studio_and_user_templates.py, tests/test_security_hardening_followup.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "legal",
+    "GET /legal",
+    "static/choose-plan.html, static/freelancers.html, static/index.html, static/legal.html, static/privacy.html",
+    "app/main.py:526",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "terms",
+    "GET /terms",
+    "static/choose-plan.html, static/freelancers.html, static/index.html, static/legal.html, static/privacy.html",
+    "app/main.py:528",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "privacy",
+    "GET /privacy",
+    "static/choose-plan.html, static/freelancers.html, static/index.html, static/legal.html, static/privacy.html",
+    "app/main.py:530",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "editor",
+    "GET /editor/{site_id}",
+    "static/ai-create.js, static/choose-plan.js, static/editor.js, static/super-admin.js, static/templates.js",
+    "app/main.py:532",
+    "tests/test_adversarial_security.py, tests/test_ai_first_rebuild.py, tests/test_editor_media.py, tests/test_production_transformation_contract.py, tests/test_publish_plan_structural_permissions.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "preview_site",
+    "GET /preview/{site_id}",
+    "static/dashboard.js, static/editor.js, static/super-admin.js",
+    "app/main.py:541",
+    "tests/test_adversarial_security.py, tests/test_ai_first_rebuild.py, tests/test_editor_media.py, tests/test_marketplace_support.py, tests/test_master_policy_links.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "studio_publish",
+    "GET /studio/{site_id}/publish",
+    "static/dashboard.js, static/studio.js, static/dashboard.html, static/index.html, static/studio.html",
+    "app/main.py:548",
+    "tests/test_agent_gateway.py, tests/test_blank_studio_and_user_templates.py, tests/test_cms.py, tests/test_editor_media.py, tests/test_production_transformation_contract.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "studio",
+    "GET /studio/{site_id}",
+    "static/dashboard.js, static/studio.js, static/dashboard.html, static/index.html, static/studio.html",
+    "app/main.py:555",
+    "tests/test_agent_gateway.py, tests/test_blank_studio_and_user_templates.py, tests/test_cms.py, tests/test_editor_media.py, tests/test_production_transformation_contract.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "freelancers_page",
+    "GET /freelancers",
+    "static/freelancer-profile.js, static/freelancers.js, static/super-admin.js, static/choose-plan.html, static/dashboard.html",
+    "app/main.py:568",
+    "tests/test_marketplace_support.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "freelancer_profile_page",
+    "GET /freelancers/{slug}",
+    "static/freelancer-profile.js, static/freelancers.js, static/super-admin.js, static/choose-plan.html, static/dashboard.html",
+    "app/main.py:573",
+    "tests/test_marketplace_support.py, tests/test_role_dashboard_separation.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "template_catalogue",
+    "GET /templates",
+    "static/super-admin.js, static/templates.js, static/freelancer-profile.html, static/freelancers.html, static/legal.html",
+    "app/main.py:600",
+    "tests/test_ai_first_rebuild.py, tests/test_ai_prompt_guidance.py, tests/test_api.py, tests/test_blank_studio_and_user_templates.py, tests/test_final_production_hardening.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "template_preview",
+    "GET /template-preview/{slug}",
+    "static/super-admin.js, static/templates.js",
+    "app/main.py:604",
+    "tests/test_ai_first_rebuild.py, tests/test_reference_batch_001.py, tests/test_reference_extension.py, tests/test_security_hardening_followup.py, tests/test_static.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "template_preview_page",
+    "GET /template-preview/{slug}/{page_slug}",
+    "static/super-admin.js, static/templates.js",
+    "app/main.py:608",
+    "tests/test_ai_first_rebuild.py, tests/test_reference_batch_001.py, tests/test_reference_extension.py, tests/test_security_hardening_followup.py, tests/test_static.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "public_site",
+    "GET /s/{slug}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/auth.js, static/choose-plan.js",
+    "app/main.py:612",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "public_site_path",
+    "GET /s/{slug}/{path:path}",
+    "static/agent-gateway-ui.js, static/ai-create.js, static/ai-model-picker.js, static/auth.js, static/choose-plan.js",
+    "app/main.py:619",
+    "tests/test_account_deletion.py, tests/test_adversarial_security.py, tests/test_agent_gateway.py, tests/test_ai_first_rebuild.py, tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "platform_blog",
+    "GET /blog",
+    "static/super-admin.js, static/choose-plan.html, static/freelancers.html, static/index.html, static/legal.html",
+    "app/main.py:626",
+    "tests/test_adversarial_security.py, tests/test_ai_security_architecture.py, tests/test_platform_features.py, tests/test_role_dashboard_separation.py, tests/test_seo_geo_engine.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "platform_blog_post",
+    "GET /blog/{post_slug}",
+    "static/super-admin.js, static/choose-plan.html, static/freelancers.html, static/index.html, static/legal.html",
+    "app/main.py:636",
+    "tests/test_adversarial_security.py, tests/test_ai_security_architecture.py, tests/test_platform_features.py, tests/test_role_dashboard_separation.py, tests/test_seo_geo_engine.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "robots",
+    "GET /robots.txt",
+    "Not resolved by literal scan",
+    "app/main.py:774",
+    "tests/test_api.py, tests/test_seo_geo_engine.py, tests/test_sitemap_quality.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "sitemap",
+    "GET /sitemap.xml",
+    "Not resolved by literal scan",
+    "app/main.py:788",
+    "tests/test_api.py, tests/test_cms.py, tests/test_platform_features.py, tests/test_seo_geo_engine.py, tests/test_sitemap_quality.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "sitemap_part",
+    "GET /sitemaps/{part}.xml",
+    "Not resolved by literal scan",
+    "app/main.py:803",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "manifest",
+    "GET /manifest.webmanifest",
+    "static/index.html",
+    "app/main.py:809",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "llms",
+    "GET /llms.txt",
+    "static/choose-plan.html, static/editor.html, static/freelancers.html, static/index.html, static/legal.html",
+    "app/main.py:811",
+    "tests/test_seo_geo_engine.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "website_examples",
+    "GET /website-examples",
+    "static/index.html",
+    "app/public_seo.py:446",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "template_detail",
+    "GET /templates/{slug}",
+    "static/super-admin.js, static/templates.js, static/freelancer-profile.html, static/freelancers.html, static/legal.html",
+    "app/public_seo.py:456",
+    "tests/test_ai_first_rebuild.py, tests/test_ai_prompt_guidance.py, tests/test_api.py, tests/test_blank_studio_and_user_templates.py, tests/test_final_production_hardening.py",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "public_seo_catchall",
+    "GET /{path:path}",
+    "Not resolved by literal scan",
+    "app/public_seo.py:478",
+    "No literal match; inspect indirect coverage",
+    "PRESENT / runtime unverified"
+  ],
+  [
+    "super_admin_assistant",
+    "POST /super-admin/assistant",
+    "static/super-admin.js",
+    "app/super_admin_assistant.py:258",
+    "tests/test_ai_security_architecture.py",
+    "PRESENT / runtime unverified"
+  ]
+]

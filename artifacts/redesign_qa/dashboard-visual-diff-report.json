@@ -1,0 +1,221 @@
+{
+  "date": "2026-09-15",
+  "reference": {
+    "archive": "C:\\Users\\joys0\\Downloads\\free-react-tailwind-admin-dashboard-main.zip",
+    "sha256": "cd8e86400171a4e8ca21b894e998250eac8174e4914d5b0f595b901a43012943",
+    "inspected": true,
+    "license": "MIT",
+    "runnable_reference_available": true,
+    "runtime": "http://127.0.0.1:4174/",
+    "build": "npm.cmd ci --ignore-scripts; npm.cmd run build (passed outside the sandbox; Vite warnings recorded in command output)"
+  },
+  "method": {
+    "candidate": "Playwright Chromium screenshots already captured by scripts/verify_dashboard_redesign.py",
+    "reference": "Playwright Chromium screenshots from the built TailAdmin Vite preview",
+    "perceptual_diff": "RGB absolute pixel delta; changed-pixel threshold 16",
+    "overlay": "not generated",
+    "bounding_box_metrics": "diff bounding box recorded per viewport"
+  },
+  "viewports": [
+    {
+      "viewport": "1440px_desktop",
+      "width": 1440,
+      "height": 900,
+      "diff": {
+        "reference_size": [
+          1440,
+          900
+        ],
+        "candidate_size": [
+          1440,
+          900
+        ],
+        "mean_absolute_channel_delta": 12.618,
+        "changed_pixel_fraction_threshold_16": 0.1961,
+        "changed_pixel_count_threshold_16": 254123,
+        "diff_bbox": [
+          0,
+          0,
+          1440,
+          900
+        ]
+      }
+    },
+    {
+      "viewport": "1280px_laptop",
+      "width": 1280,
+      "height": 800,
+      "diff": {
+        "reference_size": [
+          1280,
+          800
+        ],
+        "candidate_size": [
+          1280,
+          800
+        ],
+        "mean_absolute_channel_delta": 11.929,
+        "changed_pixel_fraction_threshold_16": 0.1487,
+        "changed_pixel_count_threshold_16": 152276,
+        "diff_bbox": [
+          0,
+          0,
+          1280,
+          800
+        ]
+      }
+    },
+    {
+      "viewport": "1024px_tablet_landscape",
+      "width": 1024,
+      "height": 768,
+      "diff": {
+        "reference_size": [
+          1024,
+          768
+        ],
+        "candidate_size": [
+          1024,
+          768
+        ],
+        "mean_absolute_channel_delta": 11.577,
+        "changed_pixel_fraction_threshold_16": 0.0979,
+        "changed_pixel_count_threshold_16": 76991,
+        "diff_bbox": [
+          0,
+          0,
+          1024,
+          768
+        ]
+      }
+    },
+    {
+      "viewport": "768px_tablet_portrait",
+      "width": 768,
+      "height": 1024,
+      "diff": {
+        "reference_size": [
+          768,
+          1024
+        ],
+        "candidate_size": [
+          768,
+          1024
+        ],
+        "mean_absolute_channel_delta": 15.586,
+        "changed_pixel_fraction_threshold_16": 0.1538,
+        "changed_pixel_count_threshold_16": 120945,
+        "diff_bbox": [
+          0,
+          0,
+          768,
+          1024
+        ]
+      }
+    },
+    {
+      "viewport": "430px_mobile_large",
+      "width": 430,
+      "height": 932,
+      "diff": {
+        "reference_size": [
+          430,
+          932
+        ],
+        "candidate_size": [
+          430,
+          932
+        ],
+        "mean_absolute_channel_delta": 22.187,
+        "changed_pixel_fraction_threshold_16": 0.2313,
+        "changed_pixel_count_threshold_16": 92683,
+        "diff_bbox": [
+          0,
+          0,
+          430,
+          932
+        ]
+      }
+    },
+    {
+      "viewport": "390px_mobile_standard",
+      "width": 390,
+      "height": 844,
+      "diff": {
+        "reference_size": [
+          390,
+          844
+        ],
+        "candidate_size": [
+          390,
+          844
+        ],
+        "mean_absolute_channel_delta": 22.205,
+        "changed_pixel_fraction_threshold_16": 0.2363,
+        "changed_pixel_count_threshold_16": 77780,
+        "diff_bbox": [
+          0,
+          0,
+          390,
+          844
+        ]
+      }
+    },
+    {
+      "viewport": "375px_mobile_se",
+      "width": 375,
+      "height": 812,
+      "diff": {
+        "reference_size": [
+          375,
+          812
+        ],
+        "candidate_size": [
+          375,
+          812
+        ],
+        "mean_absolute_channel_delta": 22.243,
+        "changed_pixel_fraction_threshold_16": 0.2378,
+        "changed_pixel_count_threshold_16": 72404,
+        "diff_bbox": [
+          0,
+          0,
+          375,
+          812
+        ]
+      }
+    },
+    {
+      "viewport": "360px_mobile_small",
+      "width": 360,
+      "height": 640,
+      "diff": {
+        "reference_size": [
+          360,
+          640
+        ],
+        "candidate_size": [
+          360,
+          640
+        ],
+        "mean_absolute_channel_delta": 23.949,
+        "changed_pixel_fraction_threshold_16": 0.2524,
+        "changed_pixel_count_threshold_16": 58158,
+        "diff_bbox": [
+          0,
+          0,
+          360,
+          640
+        ]
+      }
+    }
+  ],
+  "browser_errors": [],
+  "certification": {
+    "status": "NOT_CERTIFIED",
+    "mismatches": [
+      "The supplied reference is a generic ecommerce dashboard and the candidate is the Zylora data-driven dashboard; the measured pixel deltas are evidence for targeted review, not proof of semantic equivalence."
+    ],
+    "open_gate": "Review the recorded per-viewport deltas and align any remaining structural mismatches before claiming reference fidelity."
+  }
+}

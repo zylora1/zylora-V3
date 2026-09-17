@@ -1,0 +1,43 @@
+Zylora final production audit evidence — 2026-09-16
+
+Full repository:
+- pytest -q: 527 passed, 0 failed, 0 skipped, 59 warnings in 710.65s (0:11:50)
+
+Focused groups:
+- security/gateway/hardening: 27 passed, 1 warning, 124.29s
+- entitlement/production configuration: 46 passed, 1 warning, 102.00s
+- CMS/SEO/media/Telnyx/CRM: 32 passed, 1 warning, 110.83s
+- legacy Studio contracts: 29 passed, 1 warning, 40.98s
+- Penpot semantic/compiler/migration: 24 passed, 0 failed, 0 skipped, 7.40s
+
+Build/source:
+- Python compileall: PASS
+- Studio TypeScript: PASS
+- Studio production build: PASS (334.64 kB; gzip 101.17 kB)
+- Plugin JavaScript syntax: PASS
+- Penpot JSON manifests/schema/fixtures: PASS
+- Conflict-marker scan: PASS
+- High-confidence source secret scan: PASS
+- git diff --check: PASS (line-ending normalization warnings only)
+
+Browser:
+- Legacy Studio gap closure Chromium: 12 actionable checks PASS; no errors;
+  smart-guide assertion UNVERIFIED
+- Legacy Studio gap closure Firefox: 12 actionable checks PASS; no errors;
+  smart-guide assertion UNVERIFIED
+- Standalone combined browser rerun: blocked before product assertions by
+  Playwright WebKit TargetClosedError / Windows process restrictions
+- Real Penpot browser flow: NOT TESTED; Docker Linux engine unavailable
+
+Penpot source:
+- official repository: https://github.com/penpot/penpot
+- version: 2.17.0
+- commit: bdce5817ea86d028db29113d9ecdadcf07097b36
+- submodule clean; source_bridge_ready=false; STUDIO_ENGINE=legacy
+
+Railway staging:
+- Existing isolated project/environment resolved: zylora-staging / staging.
+- Private Redis provisioning was rejected before creation because the Railway trial expired.
+- Existing staging Postgres has no public TCP proxy; SSH tunnel was unavailable because this host has no SSH key.
+- No Penpot services were created and no production environment was changed.
+- Real Railway/Penpot/PostgreSQL certification remains blocked; see railway-staging-attempt-2026-09-16.txt.

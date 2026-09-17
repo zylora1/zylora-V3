@@ -1,0 +1,8 @@
+Final deployed SHA: aab18bd5e786c8e2273fe60a7128bff075678576
+
+- Session cookie: Secure, HttpOnly, SameSite=None, host-only API domain; logout invalidation verified.
+- Credentialed admin-origin CORS preflight: HTTP 200, explicit origin, credentials true, no wildcard.
+- Arbitrary attacker-origin preflight: HTTP 400, no allow-origin.
+- Headers: HSTS, CSP frame-ancestors, X-Frame-Options SAMEORIGIN, X-Content-Type-Options nosniff, Referrer-Policy, Permissions-Policy.
+- No secret values were written to artifacts.
+- Existing repository tenant/RBAC/IDOR/XSS/SQL/upload/credit regression suites: PASS in final pytest.

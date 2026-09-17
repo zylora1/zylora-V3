@@ -1,0 +1,21 @@
+{
+  "browser": "Webkit",
+  "checks": 14,
+  "errors": [],
+  "items": [
+    "Studio exposes all ten professional workspaces",
+    "Add panel inserts a structured section",
+    "direct text editing updates the canvas",
+    "uploaded user media inserts onto the canvas",
+    "direct manipulation moves an absolute element",
+    "resize handles change element geometry",
+    "Inspector changes spacing and typography",
+    "responsive editor switches to mobile canvas",
+    "mobile edits are represented as breakpoint overrides",
+    "keyboard undo and redo execute against document history",
+    "Layers tree stays synchronized with the canvas",
+    "autosave persists the edited V4 document",
+    "full Studio reload restores persisted changes",
+    "Studio journey has zero uncaught browser errors"
+  ]
+}

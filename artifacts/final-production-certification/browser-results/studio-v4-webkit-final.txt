@@ -1,0 +1,17 @@
+C:\Users\joys0\AppData\Local\Programs\Python\Python311\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+PASS Studio exposes all ten professional workspaces
+PASS Add panel inserts a structured section
+PASS direct text editing updates the canvas
+PASS uploaded user media inserts onto the canvas
+PASS direct manipulation moves an absolute element
+PASS resize handles change element geometry
+PASS Inspector changes spacing and typography
+PASS responsive editor switches to mobile canvas
+PASS mobile edits are represented as breakpoint overrides
+PASS keyboard undo and redo execute against document history
+PASS Layers tree stays synchronized with the canvas
+PASS autosave persists the edited V4 document
+PASS full Studio reload restores persisted changes
+PASS Studio journey has zero uncaught browser errors
+Current rerun: 28 checks / 0 errors. The prior 14-check transcript above is retained as historical evidence; the current run used the corrected workspace-count and save-status selectors.

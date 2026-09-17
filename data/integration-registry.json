@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "surface": {
+    "id": "zylora-agent-gateway",
+    "label": "Zylora Agent Gateway",
+    "status": "PROTOCOL_COMPATIBLE",
+    "protocols": ["REST", "MCP"],
+    "rest_base_path": "/api/agent",
+    "mcp_path": "/mcp",
+    "auth": "Zylora connector bearer token",
+    "notes": "Protocol compatibility is covered by local contract tests. A named third-party client is not verified until its current client flow is exercised."
+  },
+  "integrations": [
+    {
+      "id": "zylora-mcp",
+      "label": "Zylora MCP",
+      "kind": "generic_mcp",
+      "status": "PROTOCOL_COMPATIBLE",
+      "icon_asset": "zylora-generic-mcp",
+      "verified_client": false,
+      "connection": "POST /mcp with a connector bearer token",
+      "scopes": ["account.read", "sites.read", "sites.edit", "sites.create", "sites.publish"]
+    },
+    {
+      "id": "zylora-rest",
+      "label": "Zylora REST / Tool API",
+      "kind": "rest_api",
+      "status": "PROTOCOL_COMPATIBLE",
+      "icon_asset": "zylora-generic-api",
+      "verified_client": false,
+      "connection": "POST /api/agent/invoke with a connector bearer token",
+      "scopes": ["account.read", "sites.read", "sites.edit", "sites.create", "sites.publish"]
+    },
+    {
+      "id": "openai-chatgpt",
+      "label": "OpenAI / ChatGPT",
+      "kind": "named_client",
+      "status": "NOT_CURRENTLY_CERTIFIED",
+      "icon_asset": null,
+      "verified_client": false,
+      "connection": null,
+      "notes": "No OpenAI or ChatGPT branded card is enabled until a current client connection test is completed."
+    },
+    {
+      "id": "anthropic-claude",
+      "label": "Claude",
+      "kind": "named_client",
+      "status": "NOT_CURRENTLY_CERTIFIED",
+      "icon_asset": null,
+      "verified_client": false,
+      "connection": null,
+      "notes": "No Claude branded card is enabled until a current client connection test is completed."
+    },
+    {
+      "id": "manus",
+      "label": "Manus",
+      "kind": "named_client",
+      "status": "NOT_CURRENTLY_CERTIFIED",
+      "icon_asset": null,
+      "verified_client": false,
+      "connection": null,
+      "notes": "No Manus branded card is enabled until a current client connection test is completed."
+    }
+  ]
+}

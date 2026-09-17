@@ -1,0 +1,51 @@
+Zylora continuation verification — 2026-09-15
+
+Final full suite after scoped create/page/publish gateway extension (fresh DB, elevated local browser path): 480 passed, 59 warnings, 0 failed in 430.32s (0:07:10).
+Command: pytest -q --tb=short
+
+Final full suite after explicit OAuth create/publish scope coverage (fresh DB, elevated local browser path): 481 passed, 59 warnings, 0 failed in 430.58s (0:07:10).
+Command: pytest -q --tb=short
+
+Final full suite after export-helper cleanup (fresh DB, elevated local browser path): 481 passed, 59 warnings, 0 failed in 404.77s (0:06:44).
+Command: pytest -q --tb=short
+
+Final full suite on the exact final tree after SVG icon correction (fresh DB, elevated local browser path): 481 passed, 59 warnings, 0 failed in 421.45s (0:07:01).
+Command: pytest -q --tb=short
+
+Final full suite after shared Studio mutation boundary (fresh DB, elevated local browser path): 481 passed, 59 warnings, 0 failed in 417.99s (0:06:57).
+Command: pytest -q --tb=short
+
+Final full suite after history-aware shared Studio mutation boundary (fresh DB, elevated local browser path): 481 passed, 59 warnings, 0 failed in 345.12s (0:05:45).
+Command: pytest -q --tb=short
+
+Final exact-tree full suite after authoritative page-limit constant: 481 passed, 59 warnings, 0 failed in 346.20s (0:05:46), fresh database, elevated local browser path.
+Command: pytest -q --tb=short
+
+Focused Penpot adapter + agent gateway before the scoped create/page/publish extension: 7 passed.
+Focused scoped gateway continuity after extension: 1 passed; full gateway/OAuth/adversarial subset before the final OAuth scope test: 18 passed, 1 warning.
+Latest gateway/OAuth/adversarial subset with explicit OAuth create/publish coverage: 19 passed, 1 warning in 36.41s.
+Focused OAuth: 4 passed.
+Post-export-removal entitlement regression: 4 passed, 1 warning in 7.65s.
+Post-export-removal adversarial security regression: 9 passed, 1 warning in 25.11s.
+Combined Chromium browser product workflow after hosted-publish assertion cleanup: 1 passed in 41.35s.
+Static/HTML/JS regression after accessibility SVG cleanup: 9 passed, 1 warning in 8.45s.
+Website export removal/regression batch: 73 passed.
+Dashboard responsive QA: PASS, 8 viewports, supported views/admin tabs active, 0 console/page errors.
+Dashboard responsive QA post-icon-cleanup: PASS, 8 viewports, all supported USER/SUPER_ADMIN views active, 0 console/page errors.
+Dashboard responsive QA after accessibility SVG cleanup: PASS, 8 viewports, all supported USER/SUPER_ADMIN views active, 0 console/page errors.
+TypeScript check: PASS.
+Studio production build: PASS.
+Python compileall: PASS.
+git diff --check: PASS.
+
+Browser evidence already present for Studio V4:
+Chromium: 28 checks / 0 errors (current runner, after SVG icon pass).
+Firefox: 28 checks / 0 errors (current runner, after SVG icon pass).
+WebKit: 28 checks / 0 errors (current runner, after SVG icon pass).
+Fresh post-icon-cleanup Chromium rerun: 28 checks / 0 errors.
+
+Dedicated Studio performance profile: 50/100/250/500 requested nodes; zero browser errors; 500-node drag/undo long tasks 71/57 ms and undo p95 frame 50 ms. See performance-profile-current.json.
+
+The current runner's stale seven-workspace assertion and `.cloud-save` selector were corrected to the current eight-workspace Studio and `.save-status-control` contract before this run.
+
+The TailAdmin reference was built and rendered locally. The eight-viewport RGB pixel diff now has objective metrics, but the fidelity gate remains open because the reference is generic ecommerce content while Zylora renders different real site/health data; all viewport diffs require structural review. See artifacts/redesign_qa/dashboard-visual-diff-report.json.

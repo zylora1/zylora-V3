@@ -1,0 +1,301 @@
+{
+  "routes": [
+    "/",
+    "/pricing",
+    "/features",
+    "/ai-editor",
+    "/seo",
+    "/solutions/schools",
+    "/solutions/coaching-centers",
+    "/solutions/portfolio",
+    "/about",
+    "/security",
+    "/status",
+    "/support",
+    "/contact",
+    "/help",
+    "/help/studio"
+  ],
+  "viewports": {
+    "desktop": {
+      "width": 1440,
+      "height": 900
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  "results": [
+    {
+      "browser": "chromium",
+      "viewport": "desktop",
+      "route": "/",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "desktop",
+      "route": "/pricing",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "desktop",
+      "route": "/features",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "desktop",
+      "route": "/ai-editor",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "desktop",
+      "route": "/seo",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "desktop",
+      "route": "/solutions/schools",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "desktop",
+      "route": "/solutions/coaching-centers",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "desktop",
+      "route": "/solutions/portfolio",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "desktop",
+      "route": "/about",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "desktop",
+      "route": "/security",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "desktop",
+      "route": "/status",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "desktop",
+      "route": "/support",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "desktop",
+      "route": "/contact",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "desktop",
+      "route": "/help",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "desktop",
+      "route": "/help/studio",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "mobile",
+      "route": "/",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "mobile",
+      "route": "/pricing",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "mobile",
+      "route": "/features",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "mobile",
+      "route": "/ai-editor",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "mobile",
+      "route": "/seo",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "mobile",
+      "route": "/solutions/schools",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "mobile",
+      "route": "/solutions/coaching-centers",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "mobile",
+      "route": "/solutions/portfolio",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "mobile",
+      "route": "/about",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "mobile",
+      "route": "/security",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "mobile",
+      "route": "/status",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "mobile",
+      "route": "/support",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "mobile",
+      "route": "/contact",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "mobile",
+      "route": "/help",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    },
+    {
+      "browser": "chromium",
+      "viewport": "mobile",
+      "route": "/help/studio",
+      "status": 200,
+      "h1_count": 1,
+      "horizontal_overflow": false,
+      "console_errors": 0
+    }
+  ]
+}

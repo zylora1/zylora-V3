@@ -4,7 +4,7 @@ export type StudioIconName =
   | 'undo' | 'redo' | 'desktop' | 'tablet' | 'mobile'
   | 'plus' | 'minus' | 'search' | 'star' | 'close' | 'chevron-down'
   | 'home' | 'page' | 'arrow-up' | 'arrow-down' | 'arrow-left' | 'arrow-right'
-  | 'duplicate' | 'trash' | 'eye' | 'lock' | 'pencil' | 'spark' | 'check' | 'heart' | 'play'
+  | 'duplicate' | 'trash' | 'eye' | 'lock' | 'pencil' | 'spark' | 'sparkles' | 'text' | 'check' | 'heart' | 'play'
   | 'mail' | 'phone' | 'globe' | 'calendar' | 'map-pin' | 'camera' | 'menu'
   | 'more';
 
@@ -40,6 +40,8 @@ const paths: Record<StudioIconName, React.ReactNode> = {
   lock: <><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></>,
   pencil: <><path d="m4 20 4.2-1 10.6-10.6-3.2-3.2L5 15.8 4 20Z"/><path d="m13.8 7 3.2 3.2"/></>,
   spark: <><path d="m12 3 1.7 6.3L20 11l-6.3 1.7L12 19l-1.7-6.3L4 11l6.3-1.7L12 3Z"/></>,
+  sparkles: <><path d="m12 3 1.7 6.3L20 11l-6.3 1.7L12 19l-1.7-6.3L4 11l6.3-1.7L12 3Z"/></>,
+  text: <><path d="M4 7V4h16v3M9 20h6M12 4v16"/></>,
   check: <path d="m5 12 4 4L19 6"/>,
   heart: <path d="M12 20S4 15.4 4 9.7A4.2 4.2 0 0 1 12 7a4.2 4.2 0 0 1 8 2.7C20 15.4 12 20 12 20Z"/>,
   play: <path d="m8 5 11 7-11 7V5Z"/>,

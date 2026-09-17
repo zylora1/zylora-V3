@@ -1,0 +1,47 @@
+Zylora Penpot semantic alignment verification (2026-09-16)
+
+Registry:
+- integrations/penpot/zylora-component-registry.json
+- website schema version: 1
+- component schema version: 1
+- component types: 37 canonical entries
+
+Penpot source/compliance:
+- official repository: https://github.com/penpot/penpot
+- version: 2.17.0
+- upstream commit: bdce5817ea86d028db29113d9ecdadcf07097b36
+- source: vendor/penpot Git submodule (clean; zero modified upstream files)
+- compliance result: NEEDS_LEGAL_REVIEW (legal review not performed locally)
+
+Implemented boundary:
+- app/penpot_semantics.py
+- app/penpot_compiler.py
+- app/penpot_adapter.py
+- app/studio_ai_operations.py
+- static/penpot-plugin/zylora-website-tools/schema.json
+- static/penpot-plugin/zylora-website-tools/index.js
+- authenticated semantic-registry API route
+- app/penpot_roundtrip.py
+- tests/fixtures/penpot/golden-sites.json (10 fixture shapes)
+
+Focused verification:
+pytest -q tests/test_penpot_semantics.py tests/test_penpot_compiler.py tests/test_penpot_migration.py tests/test_penpot_roundtrip.py tests/test_penpot_mapping.py
+24 passed, 0 failed, 0 skipped in 7.40s
+
+Full verification after changes:
+pytest -q
+527 passed, 0 failed, 0 skipped, 59 warnings in 710.75s (0:11:50)
+python -m compileall -q app: PASS
+node --check static/penpot-plugin/zylora-website-tools/index.js: PASS
+JSON registry/schema/fixture parsing: PASS
+npm.cmd run build:studio: PASS
+npx.cmd tsc --noEmit -p studio/tsconfig.json: PASS
+git diff --check: PASS (line-ending normalization warnings only)
+pytest -q tests/test_e2e.py: 1 passed in 94.96s
+Studio gap-closure Chromium: 12 actionable checks passed; one smart-guide
+assertion remained UNVERIFIED; no browser errors
+
+Local runtime limitation:
+Actual Penpot service/file/plugin/SSO/browser lifecycle was not exercised.
+Docker Linux engine is unavailable on the certification host, so the final
+Studio engine remains STUDIO_ENGINE=legacy.

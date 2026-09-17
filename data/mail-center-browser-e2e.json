@@ -1,0 +1,15 @@
+{
+  "mode": "Playwright Chromium + real FastAPI bridge",
+  "checks": 8,
+  "errors": [],
+  "items": [
+    "Mail Center exposes rich compose surface",
+    "Mail preview is sandboxed",
+    "Mail Center saves a draft through the real API",
+    "Saved draft enables queue control",
+    "Mail Center queues the draft for background delivery",
+    "Mail Center browser journey has no uncaught errors",
+    "Browser actions persist campaign queue state and recipient snapshot",
+    "Test send is isolated to the supplied QA recipient"
+  ]
+}

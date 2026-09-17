@@ -1,0 +1,13 @@
+# Migration gate
+
+## Static/runtime checks
+
+- Migration chain inspected: `001_init.sql` through `034_crm_core.sql`, including Studio, CMS, renderer-authority, and CRM migrations.
+- `app/db.py` fails closed for `APP_ENV=production` when `DATABASE_URL` is missing or SQLite.
+- The local test suite repeatedly creates and migrates isolated SQLite databases successfully.
+- PostgreSQL execution was attempted as a certification prerequisite, but no PostgreSQL service or Docker daemon is available in this environment (`docker info` failed because the Docker Desktop Linux engine pipe was absent; `psql` is not installed).
+- Production fail-closed startup was explicitly exercised with `APP_ENV=production` and a SQLite `DATABASE_URL`; import exited non-zero with `CRITICAL CONFIGURATION ERROR: Production environment requires PostgreSQL`.
+
+## Gate result
+
+`BLOCKED` — a real PostgreSQL fresh-database and populated legacy migration rehearsal cannot be represented as PASS without a running PostgreSQL service. The application-side fail-closed guard is present, but the production dialect itself remains unverified.

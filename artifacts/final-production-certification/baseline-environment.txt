@@ -1,0 +1,13 @@
+# Current regression baseline snapshot (captured after inherited remediation work)
+Timestamp: 2026-09-06T11:41:05.9343818+05:30
+Branch: main
+Commit: d9e57d61ddf0f188cfbc1815c15a6b4d31952b48
+Python: Python 3.11.9
+FastAPI/SQLAlchemy/Pytest/Playwright/Psycopg/Alembic: {'fastapi': '0.141.1', 'sqlalchemy': '2.0.50', 'pytest': '9.1.1', 'playwright': '1.62.0', 'psycopg': '3.3.4', 'alembic': '1.18.5'}
+Docker: installed; daemon unavailable in this environment
+PostgreSQL CLI: not installed
+Redis CLI: not installed
+Playwright browser cache: .links, chromium_headless_shell-1228, chromium_headless_shell-1234, chromium-1228, chromium-1234, ffmpeg-1011, firefox-1538, webkit-2336, winldd-1007
+Database configuration: default settings are SQLite; no DATABASE_URL override was present in the shell at capture time.
+Provider configuration: no provider secrets are written to this evidence file; presence is assessed as configured/unconfigured in provider-verification.md.
+Dirty worktree: see git status in the repository; pre-existing user changes were preserved.

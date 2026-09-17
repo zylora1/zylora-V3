@@ -1,0 +1,805 @@
+{
+  "browser": "webkit",
+  "site_id": "8bc03ffb-0f76-453d-a0ec-c2e41b9e1c64",
+  "steps": [
+    {
+      "step": 1,
+      "label": "authenticate local Studio test identity",
+      "verdict": "PASS",
+      "evidence": {
+        "csrf": true
+      },
+      "ms": 0.0
+    },
+    {
+      "step": 2,
+      "label": "create website",
+      "verdict": "PASS",
+      "evidence": {
+        "site_id": "8bc03ffb-0f76-453d-a0ec-c2e41b9e1c64"
+      },
+      "ms": 0.0
+    },
+    {
+      "step": 3,
+      "label": "enter blank Studio",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 347.85
+    },
+    {
+      "step": 4,
+      "label": "verify blank Home artboard",
+      "verdict": "PASS",
+      "evidence": false,
+      "ms": 14.48
+    },
+    {
+      "step": 5,
+      "label": "open Elements",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 220.88
+    },
+    {
+      "step": 6,
+      "label": "insert text",
+      "verdict": "PASS",
+      "evidence": "text_1bd086cac4c3",
+      "ms": 516.29
+    },
+    {
+      "step": 7,
+      "label": "insert button",
+      "verdict": "PASS",
+      "evidence": "button_237ff1954c7a",
+      "ms": 421.26
+    },
+    {
+      "step": 8,
+      "label": "insert card",
+      "verdict": "PASS",
+      "evidence": "container_1ea08b80535f",
+      "ms": 315.8
+    },
+    {
+      "step": 9,
+      "label": "insert image frame",
+      "verdict": "PASS",
+      "evidence": "image_0bb596e37b2d",
+      "ms": 297.88
+    },
+    {
+      "step": 10,
+      "label": "insert additional visual",
+      "verdict": "PASS",
+      "evidence": "container_0375f49a7256",
+      "ms": 294.46
+    },
+    {
+      "step": 11,
+      "label": "select object",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 101.24
+    },
+    {
+      "step": 12,
+      "label": "deselect object",
+      "verdict": "PASS",
+      "evidence": false,
+      "ms": 77.11
+    },
+    {
+      "step": 13,
+      "label": "Shift multi-select",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 177.56
+    },
+    {
+      "step": 14,
+      "label": "marquee/select multiple",
+      "verdict": "PASS",
+      "evidence": false,
+      "ms": 152.46
+    },
+    {
+      "step": 15,
+      "label": "drag object",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 369.08
+    },
+    {
+      "step": 16,
+      "label": "overlap objects",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 281.78
+    },
+    {
+      "step": 17,
+      "label": "verify z-order",
+      "verdict": "PASS",
+      "evidence": false,
+      "ms": 12.32
+    },
+    {
+      "step": 18,
+      "label": "bring forward",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 430.27
+    },
+    {
+      "step": 19,
+      "label": "send backward",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 252.26
+    },
+    {
+      "step": 20,
+      "label": "bring to front",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 263.22
+    },
+    {
+      "step": 21,
+      "label": "send to back",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 251.09
+    },
+    {
+      "step": 22,
+      "label": "resize from left",
+      "verdict": "PASS",
+      "evidence": {
+        "before": {
+          "x": 628.5137329101562,
+          "y": 211.16000366210938,
+          "w": 174,
+          "h": 127.60000610351562
+        },
+        "after": {
+          "x": 638.9537353515625,
+          "y": 211.16000366210938,
+          "w": 161.82000732421875,
+          "h": 127.60000610351562
+        },
+        "hit_stack": {
+          "stack": [
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": "container_0375f49a7256",
+              "class": ""
+            },
+            {
+              "tag": "SPAN",
+              "handle": "left",
+              "id": null,
+              "class": "studio-resize-handle"
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": "container_1ea08b80535f",
+              "class": ""
+            },
+            {
+              "tag": "IMG",
+              "handle": null,
+              "id": null,
+              "class": ""
+            }
+          ]
+        }
+      },
+      "ms": 249.68
+    },
+    {
+      "step": 23,
+      "label": "resize from right",
+      "verdict": "PASS",
+      "evidence": {
+        "before": {
+          "x": 638.9537353515625,
+          "y": 211.16000366210938,
+          "w": 161.82000732421875,
+          "h": 127.60000610351562
+        },
+        "after": {
+          "x": 644.7537231445312,
+          "y": 211.16000366210938,
+          "w": 175.74005126953125,
+          "h": 127.60000610351562
+        },
+        "hit_stack": {
+          "stack": [
+            {
+              "tag": "SPAN",
+              "handle": "right",
+              "id": null,
+              "class": "studio-resize-handle"
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": "container_1ea08b80535f",
+              "class": ""
+            },
+            {
+              "tag": "IMG",
+              "handle": null,
+              "id": null,
+              "class": ""
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": null,
+              "class": "studio-image-frame"
+            }
+          ]
+        }
+      },
+      "ms": 265.22
+    },
+    {
+      "step": 24,
+      "label": "resize from top",
+      "verdict": "PASS",
+      "evidence": {
+        "before": {
+          "x": 644.7537231445312,
+          "y": 211.16000366210938,
+          "w": 175.74005126953125,
+          "h": 127.60000610351562
+        },
+        "after": {
+          "x": 644.7537231445312,
+          "y": 227.39999389648438,
+          "w": 175.74005126953125,
+          "h": 115.42001342773438
+        },
+        "hit_stack": {
+          "stack": [
+            {
+              "tag": "IMG",
+              "handle": null,
+              "id": null,
+              "class": ""
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": null,
+              "class": "studio-image-frame"
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": "image_0bb596e37b2d",
+              "class": ""
+            },
+            {
+              "tag": "SPAN",
+              "handle": "top",
+              "id": null,
+              "class": "studio-resize-handle"
+            }
+          ]
+        }
+      },
+      "ms": 267.34
+    },
+    {
+      "step": 25,
+      "label": "resize from bottom",
+      "verdict": "PASS",
+      "evidence": {
+        "before": {
+          "x": 644.7537231445312,
+          "y": 227.39999389648438,
+          "w": 175.74005126953125,
+          "h": 115.42001342773438
+        },
+        "after": {
+          "x": 644.7537231445312,
+          "y": 227.39999389648438,
+          "w": 175.74005126953125,
+          "h": 129.33999633789062
+        },
+        "hit_stack": {
+          "stack": [
+            {
+              "tag": "IMG",
+              "handle": null,
+              "id": null,
+              "class": ""
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": null,
+              "class": "studio-image-frame"
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": "image_0bb596e37b2d",
+              "class": ""
+            },
+            {
+              "tag": "SPAN",
+              "handle": "bottom",
+              "id": null,
+              "class": "studio-resize-handle"
+            }
+          ]
+        }
+      },
+      "ms": 254.1
+    },
+    {
+      "step": 26,
+      "label": "resize from top-left",
+      "verdict": "PASS",
+      "evidence": {
+        "before": {
+          "x": 644.7537231445312,
+          "y": 227.39999389648438,
+          "w": 175.74005126953125,
+          "h": 129.33999633789062
+        },
+        "after": {
+          "x": 654.61376953125,
+          "y": 239,
+          "w": 165.8800048828125,
+          "h": 119.48001098632812
+        },
+        "hit_stack": {
+          "stack": [
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": "container_0375f49a7256",
+              "class": ""
+            },
+            {
+              "tag": "IMG",
+              "handle": null,
+              "id": null,
+              "class": ""
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": null,
+              "class": "studio-image-frame"
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": "image_0bb596e37b2d",
+              "class": ""
+            }
+          ]
+        }
+      },
+      "ms": 257.54
+    },
+    {
+      "step": 27,
+      "label": "resize from top-right",
+      "verdict": "PASS",
+      "evidence": {
+        "before": {
+          "x": 654.61376953125,
+          "y": 239,
+          "w": 165.8800048828125,
+          "h": 119.48001098632812
+        },
+        "after": {
+          "x": 660.4137573242188,
+          "y": 245.9600067138672,
+          "w": 178.05999755859375,
+          "h": 109.61997985839844
+        },
+        "hit_stack": {
+          "stack": [
+            {
+              "tag": "SPAN",
+              "handle": "top-right",
+              "id": null,
+              "class": "studio-resize-handle"
+            },
+            {
+              "tag": "IMG",
+              "handle": null,
+              "id": null,
+              "class": ""
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": null,
+              "class": "studio-image-frame"
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": "home-hero-image",
+              "class": ""
+            }
+          ]
+        }
+      },
+      "ms": 243.73
+    },
+    {
+      "step": 28,
+      "label": "resize from bottom-left",
+      "verdict": "PASS",
+      "evidence": {
+        "before": {
+          "x": 660.4137573242188,
+          "y": 245.9600067138672,
+          "w": 178.05999755859375,
+          "h": 109.61997985839844
+        },
+        "after": {
+          "x": 665.0537719726562,
+          "y": 245.9600067138672,
+          "w": 168.199951171875,
+          "h": 121.80000305175781
+        },
+        "hit_stack": {
+          "stack": [
+            {
+              "tag": "IMG",
+              "handle": null,
+              "id": null,
+              "class": ""
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": null,
+              "class": "studio-image-frame"
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": "image_0bb596e37b2d",
+              "class": ""
+            },
+            {
+              "tag": "SPAN",
+              "handle": "bottom-left",
+              "id": null,
+              "class": "studio-resize-handle"
+            }
+          ]
+        }
+      },
+      "ms": 253.6
+    },
+    {
+      "step": 29,
+      "label": "resize from bottom-right",
+      "verdict": "PASS",
+      "evidence": {
+        "before": {
+          "x": 665.0537719726562,
+          "y": 245.9600067138672,
+          "w": 168.199951171875,
+          "h": 121.80000305175781
+        },
+        "after": {
+          "x": 659.2537231445312,
+          "y": 245.9600067138672,
+          "w": 180.3800048828125,
+          "h": 133.97999572753906
+        },
+        "hit_stack": {
+          "stack": [
+            {
+              "tag": "SPAN",
+              "handle": "bottom-right",
+              "id": null,
+              "class": "studio-resize-handle"
+            },
+            {
+              "tag": "IMG",
+              "handle": null,
+              "id": null,
+              "class": ""
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": null,
+              "class": "studio-image-frame"
+            },
+            {
+              "tag": "DIV",
+              "handle": null,
+              "id": "home-hero-image",
+              "class": ""
+            }
+          ]
+        }
+      },
+      "ms": 236.28
+    },
+    {
+      "step": 30,
+      "label": "verify snapping during resize",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 85.19
+    },
+    {
+      "step": 31,
+      "label": "verify center guide",
+      "verdict": "PASS",
+      "evidence": false,
+      "ms": 250.96
+    },
+    {
+      "step": 32,
+      "label": "verify edge guide",
+      "verdict": "PASS",
+      "evidence": false,
+      "ms": 232.44
+    },
+    {
+      "step": 33,
+      "label": "verify equal-spacing guide",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 787.7
+    },
+    {
+      "step": 34,
+      "label": "align left",
+      "verdict": "PASS",
+      "evidence": false,
+      "ms": 322.88
+    },
+    {
+      "step": 35,
+      "label": "align horizontal center",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 310.08
+    },
+    {
+      "step": 36,
+      "label": "align right",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 357.29
+    },
+    {
+      "step": 37,
+      "label": "align top",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 314.05
+    },
+    {
+      "step": 38,
+      "label": "align vertical center",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 347.62
+    },
+    {
+      "step": 39,
+      "label": "align bottom",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 323.22
+    },
+    {
+      "step": 40,
+      "label": "distribute horizontally",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 171.25
+    },
+    {
+      "step": 41,
+      "label": "distribute vertically",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 193.55
+    },
+    {
+      "step": 42,
+      "label": "rotate object",
+      "verdict": "PASS",
+      "evidence": "width: 311px; height: 231px; padding: 24px; border-radius: 20px; background: rgb(255, 255, 255); box-shadow: rgba(15, 23, 42, 0.14) 0px 18px 45px; position: absolute; left: -289.5px; top: 152px; z-index: 7; rotate: 180deg;",
+      "ms": 273.94
+    },
+    {
+      "step": 43,
+      "label": "test committed rotation angle",
+      "verdict": "PASS",
+      "evidence": false,
+      "ms": 5.38
+    },
+    {
+      "step": 44,
+      "label": "duplicate object",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 191.97
+    },
+    {
+      "step": 45,
+      "label": "group multi-selection",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 305.4
+    },
+    {
+      "step": 46,
+      "label": "duplicate grouped content",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 546.61
+    },
+    {
+      "step": 47,
+      "label": "rotate grouped content",
+      "verdict": "PASS",
+      "evidence": "position: absolute; left: -138.5px; top: 274px; width: 170px; height: 170px; z-index: 1; rotate: 180deg;",
+      "ms": 280.21
+    },
+    {
+      "step": 48,
+      "label": "lock element",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 905.43
+    },
+    {
+      "step": 49,
+      "label": "verify locked element cannot move",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 0.0
+    },
+    {
+      "step": 50,
+      "label": "unlock element",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 106.87
+    },
+    {
+      "step": 51,
+      "label": "crop image",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 847.67
+    },
+    {
+      "step": 52,
+      "label": "zoom crop media",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 176.89
+    },
+    {
+      "step": 53,
+      "label": "pan crop media",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 62.61
+    },
+    {
+      "step": 54,
+      "label": "save crop",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 198.15
+    },
+    {
+      "step": 55,
+      "label": "switch desktop breakpoint",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 163.41
+    },
+    {
+      "step": 56,
+      "label": "edit desktop layout",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 260.96
+    },
+    {
+      "step": 57,
+      "label": "switch tablet breakpoint",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 152.3
+    },
+    {
+      "step": 58,
+      "label": "edit tablet layout",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 266.6
+    },
+    {
+      "step": 59,
+      "label": "switch mobile breakpoint",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 151.13
+    },
+    {
+      "step": 60,
+      "label": "edit mobile layout",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 273.57
+    },
+    {
+      "step": 61,
+      "label": "return desktop and verify isolation",
+      "verdict": "PASS",
+      "evidence": false,
+      "ms": 358.62
+    },
+    {
+      "step": 62,
+      "label": "undo/redo sequence",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 155.35
+    },
+    {
+      "step": 63,
+      "label": "save/autosave",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 716.33
+    },
+    {
+      "step": 64,
+      "label": "reload and verify state",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 14.72
+    },
+    {
+      "step": 65,
+      "label": "publish and verify output",
+      "verdict": "PASS",
+      "evidence": {
+        "slug": "literal-studio-65-db87",
+        "status": 200,
+        "renderer": null
+      },
+      "ms": 894.18
+    },
+    {
+      "step": 66,
+      "label": "zero Studio browser errors",
+      "verdict": "PASS",
+      "evidence": true,
+      "ms": 0.0
+    }
+  ],
+  "errors": []
+}

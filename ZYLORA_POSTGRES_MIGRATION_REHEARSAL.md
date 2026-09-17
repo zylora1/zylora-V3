@@ -1,0 +1,3 @@
+# PostgreSQL migration rehearsal
+
+**Status: BLOCKED.** The application has a fail-closed production guard against SQLite and the `psycopg` driver is installed. A Railway staging PostgreSQL service was discovered, but it has no public TCP proxy and the certification host has no SSH key for Railway's private tunnel. No local `psql`/PostgreSQL binary or running Docker Linux daemon is available. Fresh and populated PostgreSQL migration execution therefore cannot be represented as PASS. Exact staging access evidence is in `artifacts/final-production-certification/railway-staging-attempt-2026-09-16.txt` and local migration evidence is in `artifacts/final-production-certification/migration-results.txt`.

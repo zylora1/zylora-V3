@@ -1,0 +1,46 @@
+Zylora final cutover verification (2026-09-16)
+
+pytest -q
+511 passed, 0 failed, 0 skipped, 59 warnings in 501.49s (0:08:21)
+
+pytest -q tests/test_adversarial_security.py tests/test_agent_gateway.py tests/test_agent_oauth.py tests/test_telnyx.py
+23 passed, 1 warning in 37.61s
+
+pytest -q tests/test_e2e.py
+1 passed in 42.69s
+
+python scripts/blank_studio_browser_e2e.py
+WebKit, Chromium, Firefox: 0 errors
+
+python scripts/studio_v4_e2e.py
+Chromium: 28 checks / 0 errors
+
+python scripts/verify_dashboard_redesign.py
+8 required viewports; all dashboard/super-admin views active; 0 console errors; 0 page errors
+
+python scripts/axe_certification.py
+axe-core 4.13.0; critical=0; serious=0; moderate=20; minor=0; status=PASS
+
+python -m compileall -q app
+PASS
+
+npm.cmd run build:studio
+PASS; Vite 8.2.2; 40 modules; static/studio.js 334.47 kB (101.10 kB gzip)
+
+npx.cmd tsc --noEmit -p studio/tsconfig.json
+PASS
+
+npm.cmd run check:nextjs-sources
+PASS; 480 files; errors 0
+
+git diff --check
+PASS (line-ending normalization warnings only)
+
+Penpot runtime
+BLOCKED_BY_EXTERNAL_ENVIRONMENT: Docker Linux engine unavailable; official 2.17.0 distribution acquired but not started.
+
+PostgreSQL
+BLOCKED_BY_EXTERNAL_ENVIRONMENT: no PostgreSQL service/CLI/Docker Linux engine available.
+
+Live provider credentials
+NOT CONFIGURED in the certification environment: Vercel AI Gateway, Telnyx, Cloudflare/R2/Turnstile, Razorpay, Google OAuth, OIDC/Penpot.

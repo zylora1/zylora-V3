@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "policy": "Only assets with verified provenance may appear in a branded integration card.",
+  "assets": [
+    {
+      "id": "zylora-generic-mcp",
+      "kind": "generic_protocol",
+      "label": "MCP connection",
+      "path": "/static/favicon.svg",
+      "provenance": "Zylora-owned mark used as a neutral protocol placeholder",
+      "license": "Zylora-owned"
+    },
+    {
+      "id": "zylora-generic-api",
+      "kind": "generic_protocol",
+      "label": "REST / tool API",
+      "path": "/static/favicon.svg",
+      "provenance": "Zylora-owned mark used as a neutral API placeholder",
+      "license": "Zylora-owned"
+    }
+  ],
+  "third_party_assets": []
+}

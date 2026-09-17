@@ -310,7 +310,7 @@ export function Inspector() {
                 <button title="Align Left" onClick={() => dispatch({ type: 'ALIGN_SELECTED', payload: 'left' })}>
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M2 1h2v14H2V1zm4 3h8v2H6V4zm0 6h6v2H6v-2z"/></svg>
                 </button>
-                <button title="Align Horizontal Center" onClick={() => dispatch({ type: 'ALIGN_SELECTED', payload: 'center' })}>
+                <button title="Align Horizontal Center" onClick={() => dispatch({ type: 'ALIGN_SELECTED', payload: 'horizontal-center' })}>
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M7 1h2v14H7V1zm-4 3h10v2H3V4zm2 6h6v2H5v-2z"/></svg>
                 </button>
                 <button title="Align Right" onClick={() => dispatch({ type: 'ALIGN_SELECTED', payload: 'right' })}>
@@ -319,7 +319,7 @@ export function Inspector() {
                 <button title="Align Top" onClick={() => dispatch({ type: 'ALIGN_SELECTED', payload: 'top' })}>
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M1 2h14v2H1V2zm3 4v8h2V6H4zm6 0v6h2V6h-2z"/></svg>
                 </button>
-                <button title="Align Vertical Middle" onClick={() => dispatch({ type: 'ALIGN_SELECTED', payload: 'middle' })}>
+                <button title="Align Vertical Middle" onClick={() => dispatch({ type: 'ALIGN_SELECTED', payload: 'vertical-center' })}>
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M1 7h14v2H1V7zm3-4v10h2V3H4zm6 2v6h2V5h-2z"/></svg>
                 </button>
                 <button title="Align Bottom" onClick={() => dispatch({ type: 'ALIGN_SELECTED', payload: 'bottom' })}>
@@ -328,8 +328,8 @@ export function Inspector() {
               </div>
               {multi && (
                 <div className="distribute-button-strip" style={{ marginTop: '6px' }}>
-                  <button onClick={() => dispatch({ type: 'DISTRIBUTE_SELECTED', payload: 'horizontal' })}>Distribute X</button>
-                  <button onClick={() => dispatch({ type: 'DISTRIBUTE_SELECTED', payload: 'vertical' })}>Distribute Y</button>
+                  <button onClick={() => dispatch({ type: 'DISTRIBUTE_SELECTED', payload: 'horizontal-gap' })}>Distribute X</button>
+                  <button onClick={() => dispatch({ type: 'DISTRIBUTE_SELECTED', payload: 'vertical-gap' })}>Distribute Y</button>
                 </div>
               )}
             </div>

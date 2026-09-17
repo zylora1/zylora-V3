@@ -28,4 +28,5 @@ release_context/
 release_context*/
 release_context*.zip
 static/*.map
+.codex-tmp/
 *.tsbuildinfo

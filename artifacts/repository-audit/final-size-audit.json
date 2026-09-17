@@ -1,0 +1,367 @@
+{
+  "root": "C:\\Zylora-Ithanda finalu\\Zylora-Production-Ready-SuperAdmin-Audited-2026-08-31-v4",
+  "file_count": 20902,
+  "total_bytes": 2406949651,
+  "by_classification": {
+    "BUILD_REQUIRED": 456992,
+    "DEVELOPMENT_ONLY": 2029252525,
+    "RUNTIME_REQUIRED": 229859666,
+    "SOURCE_REQUIRED": 146159612,
+    "TEST_ONLY": 1220856
+  },
+  "top_directories": [
+    {
+      "path": ".git",
+      "bytes": 806618264
+    },
+    {
+      "path": "template_projects",
+      "bytes": 334772587
+    },
+    {
+      "path": "release_context",
+      "bytes": 185990361
+    },
+    {
+      "path": "release_context-d7c336f",
+      "bytes": 185949375
+    },
+    {
+      "path": "release_context-179bc95",
+      "bytes": 185946489
+    },
+    {
+      "path": "release_context-5f87719",
+      "bytes": 185946489
+    },
+    {
+      "path": "release_context-d9eb284",
+      "bytes": 166243059
+    },
+    {
+      "path": "release_context-179bc95-q65",
+      "bytes": 164323558
+    },
+    {
+      "path": "node_modules",
+      "bytes": 67683190
+    },
+    {
+      "path": "data",
+      "bytes": 58367557
+    },
+    {
+      "path": "static",
+      "bytes": 32723180
+    },
+    {
+      "path": "artifacts",
+      "bytes": 10729281
+    },
+    {
+      "path": ".temp_extract",
+      "bytes": 4436528
+    },
+    {
+      "path": "tests",
+      "bytes": 4104038
+    },
+    {
+      "path": "app",
+      "bytes": 3994588
+    },
+    {
+      "path": ".codex-tmp",
+      "bytes": 3212397
+    },
+    {
+      "path": "zylora-dev.db",
+      "bytes": 2383872
+    },
+    {
+      "path": "scripts",
+      "bytes": 1879009
+    },
+    {
+      "path": "apps",
+      "bytes": 256752
+    },
+    {
+      "path": "studio",
+      "bytes": 221033
+    },
+    {
+      "path": "docs",
+      "bytes": 197167
+    },
+    {
+      "path": "migrations",
+      "bytes": 101361
+    },
+    {
+      "path": ".pytest_cache",
+      "bytes": 53781
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 41685
+    },
+    {
+      "path": "AWWWARDS_118_SOURCE_REGISTRY.json",
+      "bytes": 33374
+    }
+  ],
+  "top_files": [
+    {
+      "path": ".git/objects/pack/pack-c3628a8e94275763d165bd79c1afc91a34446a1b.pack",
+      "bytes": 318341534,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": ".git/objects/pack/tmp_pack_6UVXS4",
+      "bytes": 239083531,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": ".git/objects/pack/tmp_pack_azADiI",
+      "bytes": 162873355,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": ".git/objects/pack/tmp_pack_QqVDf1",
+      "bytes": 79273995,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "data/zylora.db",
+      "bytes": 51773440,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "node_modules/@rolldown/binding-win32-x64-msvc/rolldown-binding.win32-x64-msvc.node",
+      "bytes": 20875776,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "template_projects/learnhub/assets/source/src/assets/images/hero-img.jpg",
+      "bytes": 16644398,
+      "classification": "RUNTIME_REQUIRED"
+    },
+    {
+      "path": "template_projects/ai-starter-kit/assets/source/public/images/notifications/user-1.png",
+      "bytes": 13294493,
+      "classification": "SOURCE_REQUIRED"
+    },
+    {
+      "path": "node_modules/lightningcss-win32-x64-msvc/lightningcss.win32-x64-msvc.node",
+      "bytes": 9484800,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "node_modules/typescript/lib/typescript.js",
+      "bytes": 9112572,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "template_projects/furnish/assets/source/src/assets/images/couch-with-cushions-glass-table.jpg",
+      "bytes": 8142612,
+      "classification": "RUNTIME_REQUIRED"
+    },
+    {
+      "path": "template_projects/picto/assets/source/src/assets/images/person2.png",
+      "bytes": 7048404,
+      "classification": "RUNTIME_REQUIRED"
+    },
+    {
+      "path": "release_context/template_projects/picto/assets/source/src/assets/images/person2.png",
+      "bytes": 6438323,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-179bc95/template_projects/picto/assets/source/src/assets/images/person2.png",
+      "bytes": 6438323,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-179bc95-q65/template_projects/picto/assets/source/src/assets/images/person2.png",
+      "bytes": 6438323,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-5f87719/template_projects/picto/assets/source/src/assets/images/person2.png",
+      "bytes": 6438323,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-d7c336f/template_projects/picto/assets/source/src/assets/images/person2.png",
+      "bytes": 6438323,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-d9eb284/template_projects/picto/assets/source/src/assets/images/person2.png",
+      "bytes": 6438323,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "template_projects/ai-starter-kit/assets/source/public/images/notifications/user-2.png",
+      "bytes": 6423766,
+      "classification": "SOURCE_REQUIRED"
+    },
+    {
+      "path": "node_modules/typescript/lib/_tsc.js",
+      "bytes": 6213092,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "template_projects/saas-candy/assets/source/dist/css/iconfont/fonts/tabler-icons.svg",
+      "bytes": 5549988,
+      "classification": "SOURCE_REQUIRED"
+    },
+    {
+      "path": "release_context/template_projects/ai-starter-kit/assets/source/public/images/benefits/bn-2.svg",
+      "bytes": 4586260,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-179bc95/template_projects/ai-starter-kit/assets/source/public/images/benefits/bn-2.svg",
+      "bytes": 4586260,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-179bc95-q65/template_projects/ai-starter-kit/assets/source/public/images/benefits/bn-2.svg",
+      "bytes": 4586260,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-5f87719/template_projects/ai-starter-kit/assets/source/public/images/benefits/bn-2.svg",
+      "bytes": 4586260,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-d7c336f/template_projects/ai-starter-kit/assets/source/public/images/benefits/bn-2.svg",
+      "bytes": 4586260,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-d9eb284/template_projects/ai-starter-kit/assets/source/public/images/benefits/bn-2.svg",
+      "bytes": 4586260,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "template_projects/ai-starter-kit/assets/source/public/images/benefits/bn-2.svg",
+      "bytes": 4586260,
+      "classification": "RUNTIME_REQUIRED"
+    },
+    {
+      "path": "template_projects/picto/assets/source/src/assets/Homepage.jpg",
+      "bytes": 4108690,
+      "classification": "SOURCE_REQUIRED"
+    },
+    {
+      "path": "release_context/template_projects/learnhub/assets/source/src/assets/images/hero-img.jpg",
+      "bytes": 3201001,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-179bc95/template_projects/learnhub/assets/source/src/assets/images/hero-img.jpg",
+      "bytes": 3201001,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-5f87719/template_projects/learnhub/assets/source/src/assets/images/hero-img.jpg",
+      "bytes": 3201001,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-d7c336f/template_projects/learnhub/assets/source/src/assets/images/hero-img.jpg",
+      "bytes": 3201001,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context/template_projects/saas-candy/assets/source/assets/images/hero/right-image.svg",
+      "bytes": 2849227,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-179bc95/template_projects/saas-candy/assets/source/assets/images/hero/right-image.svg",
+      "bytes": 2849227,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-179bc95-q65/template_projects/saas-candy/assets/source/assets/images/hero/right-image.svg",
+      "bytes": 2849227,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-5f87719/template_projects/saas-candy/assets/source/assets/images/hero/right-image.svg",
+      "bytes": 2849227,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-d7c336f/template_projects/saas-candy/assets/source/assets/images/hero/right-image.svg",
+      "bytes": 2849227,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-d9eb284/template_projects/saas-candy/assets/source/assets/images/hero/right-image.svg",
+      "bytes": 2849227,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "template_projects/saas-candy/assets/source/assets/images/hero/right-image.svg",
+      "bytes": 2849227,
+      "classification": "RUNTIME_REQUIRED"
+    },
+    {
+      "path": "release_context/template_projects/restaurant/assets/source/assets/img/free-layer-blur.png",
+      "bytes": 2687793,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-179bc95/template_projects/restaurant/assets/source/assets/img/free-layer-blur.png",
+      "bytes": 2687793,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-179bc95-q65/template_projects/restaurant/assets/source/assets/img/free-layer-blur.png",
+      "bytes": 2687793,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-5f87719/template_projects/restaurant/assets/source/assets/img/free-layer-blur.png",
+      "bytes": 2687793,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-d7c336f/template_projects/restaurant/assets/source/assets/img/free-layer-blur.png",
+      "bytes": 2687793,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-d9eb284/template_projects/restaurant/assets/source/assets/img/free-layer-blur.png",
+      "bytes": 2687793,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "template_projects/restaurant/assets/source/assets/img/free-layer-blur.png",
+      "bytes": 2687793,
+      "classification": "RUNTIME_REQUIRED"
+    },
+    {
+      "path": "artifacts/repository-audit/size-audit.json",
+      "bytes": 2642659,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context/template_projects/ai-starter-kit/assets/source/public/images/benefits/bn-1.svg",
+      "bytes": 2476308,
+      "classification": "DEVELOPMENT_ONLY"
+    },
+    {
+      "path": "release_context-179bc95/template_projects/ai-starter-kit/assets/source/public/images/benefits/bn-1.svg",
+      "bytes": 2476308,
+      "classification": "DEVELOPMENT_ONLY"
+    }
+  ],
+  "reachable_path_count": 1831
+}

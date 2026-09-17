@@ -1,0 +1,21 @@
+{
+  "browser": "chromium",
+  "steps": {
+    "blank Home Studio loads": "PASS",
+    "three free-form rectangles insert": "PASS",
+    "deterministic shift multi-selection": "PASS",
+    "align/distribute toolbar exposes commands": "PASS",
+    "align left commits actual geometry": "PASS",
+    "distribution is a single interactive command": "PASS",
+    "temporary smart guide appears during drag": "UNVERIFIED",
+    "resize changes geometry": "PASS",
+    "rotation control is present": "PASS",
+    "layers panel can lock a selected node": "PASS",
+    "desktop geometry survives mobile breakpoint edit": "PASS",
+    "geometry and breakpoint state persist": "PASS",
+    "no NaN geometry serialized": "PASS",
+    "browser emitted no Studio errors": "PASS"
+  },
+  "checks": 12,
+  "errors": []
+}

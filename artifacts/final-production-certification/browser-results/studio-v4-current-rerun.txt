@@ -1,0 +1,12 @@
+Zylora Studio current browser rerun — 2026-09-15
+
+Runner: scripts/studio_v4_e2e.py
+Contract corrections: eight current tool-rail workspaces; .save-status-control title=Saved.
+
+Chromium: 28 checks / 0 errors
+Firefox: 28 checks / 0 errors
+WebKit: 28 checks / 0 errors
+
+Checks include structured insertion, drag, direct text editing, media insertion, contextual typography/effects, pointer drag, smart guides, resize, opacity, duplicate/copy/paste/delete/undo/redo, image crop/fitting, responsive breakpoint, layer order, autosave persistence, reload recovery, and uncaught-error checks.
+
+Final history-aware mutation-boundary rerun (2026-09-15): Chromium 28 checks / 0 errors; Firefox 28 checks / 0 errors; WebKit 28 checks / 0 errors. All runs used this existing Studio E2E journey and the elevated local Playwright path.

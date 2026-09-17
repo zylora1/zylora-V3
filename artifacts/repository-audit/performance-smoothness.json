@@ -1,0 +1,170 @@
+[
+  {
+    "requested": 20,
+    "rendered": 76,
+    "dom_nodes": 783,
+    "sequential_insertion_ms": 1663.38,
+    "steady_state": {
+      "drag": {
+        "frames": 72,
+        "average_ms": 17.59027777777778,
+        "p95_ms": 33.30000000000018,
+        "max_ms": 33.40000000000009,
+        "long_tasks": [],
+        "wall_ms": 903.58
+      },
+      "resize": {
+        "frames": 25,
+        "average_ms": 18.00151999999998,
+        "p95_ms": 33.30000000000018,
+        "max_ms": 33.400000000000546,
+        "long_tasks": [],
+        "wall_ms": 103.03
+      },
+      "selection": {
+        "frames": 26,
+        "average_ms": 17.94615384615386,
+        "p95_ms": 33.399999999999636,
+        "max_ms": 33.399999999999636,
+        "long_tasks": [],
+        "wall_ms": 35.87
+      },
+      "layer_panel": {
+        "frames": 38,
+        "average_ms": 17.981578947368426,
+        "p95_ms": 33.30000000000018,
+        "max_ms": 33.30000000000018,
+        "long_tasks": [],
+        "wall_ms": 325.11
+      },
+      "autosave_wait_ms": 13.79
+    },
+    "browser_errors": []
+  },
+  {
+    "requested": 100,
+    "rendered": 156,
+    "dom_nodes": 863,
+    "sequential_insertion_ms": 7307.83,
+    "steady_state": {
+      "drag": {
+        "frames": 71,
+        "average_ms": 17.135211267605637,
+        "p95_ms": 16.80000000000109,
+        "max_ms": 33.30000000000109,
+        "long_tasks": [],
+        "wall_ms": 846.31
+      },
+      "resize": {
+        "frames": 25,
+        "average_ms": 18.664000000000016,
+        "p95_ms": 33.29999999999927,
+        "max_ms": 33.400000000001455,
+        "long_tasks": [],
+        "wall_ms": 111.79
+      },
+      "selection": {
+        "frames": 31,
+        "average_ms": 17.203225806451588,
+        "p95_ms": 16.799999999999272,
+        "max_ms": 33.400000000001455,
+        "long_tasks": [],
+        "wall_ms": 29.92
+      },
+      "layer_panel": {
+        "frames": 42,
+        "average_ms": 17.061904761904728,
+        "p95_ms": 16.80000000000109,
+        "max_ms": 33.29999999999927,
+        "long_tasks": [],
+        "wall_ms": 348.86
+      },
+      "autosave_wait_ms": 26.12
+    },
+    "browser_errors": []
+  },
+  {
+    "requested": 250,
+    "rendered": 306,
+    "dom_nodes": 1013,
+    "sequential_insertion_ms": 16252.27,
+    "steady_state": {
+      "drag": {
+        "frames": 62,
+        "average_ms": 16.66451612903227,
+        "p95_ms": 16.700000000000728,
+        "max_ms": 16.799999999999272,
+        "long_tasks": [],
+        "wall_ms": 674.84
+      },
+      "resize": {
+        "frames": 26,
+        "average_ms": 17.30384615384607,
+        "p95_ms": 16.700000000000728,
+        "max_ms": 33.400000000001455,
+        "long_tasks": [],
+        "wall_ms": 97.33
+      },
+      "selection": {
+        "frames": 38,
+        "average_ms": 16.665789473684193,
+        "p95_ms": 16.700000000000728,
+        "max_ms": 16.799999999999272,
+        "long_tasks": [],
+        "wall_ms": 31.76
+      },
+      "layer_panel": {
+        "frames": 37,
+        "average_ms": 17.116216216216195,
+        "p95_ms": 16.799999999999272,
+        "max_ms": 33.20000000000073,
+        "long_tasks": [],
+        "wall_ms": 281.23
+      },
+      "autosave_wait_ms": 9.19
+    },
+    "browser_errors": []
+  },
+  {
+    "requested": 500,
+    "rendered": 556,
+    "dom_nodes": 1263,
+    "sequential_insertion_ms": 28358.24,
+    "steady_state": {
+      "drag": {
+        "frames": 70,
+        "average_ms": 16.9049714285714,
+        "p95_ms": 16.799999999999272,
+        "max_ms": 33.400000000001455,
+        "long_tasks": [],
+        "wall_ms": 819.02
+      },
+      "resize": {
+        "frames": 27,
+        "average_ms": 17.90000000000011,
+        "p95_ms": 33.29999999999927,
+        "max_ms": 33.29999999999927,
+        "long_tasks": [],
+        "wall_ms": 115.74
+      },
+      "selection": {
+        "frames": 45,
+        "average_ms": 16.666666666666668,
+        "p95_ms": 16.700000000000728,
+        "max_ms": 16.700000000000728,
+        "long_tasks": [],
+        "wall_ms": 27.24
+      },
+      "layer_panel": {
+        "frames": 38,
+        "average_ms": 17.544736842105284,
+        "p95_ms": 33.29999999999927,
+        "max_ms": 33.29999999999927,
+        "long_tasks": [],
+        "wall_ms": 303.76
+      },
+      "autosave_wait_ms": 14.33
+    },
+    "browser_errors": []
+  }
+]
