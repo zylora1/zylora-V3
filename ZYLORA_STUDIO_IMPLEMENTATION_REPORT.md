@@ -1,34 +1,43 @@
-# Zylora Studio Implementation Report — Phase 3 AI-Native Completion
+# Zylora Studio Implementation Report
 
-## Status: COMPLETE, PENDING DECISION
+Report date: 2026-09-06
+Verdict: **PRODUCTION CANDIDATE — BLOCKERS REMAIN**
 
-### Overview
-Phase 3 closes the remaining critical gaps identified during Phase 2. The AI editor has been migrated to structurally support the `SiteDocument` v4 schema using strict, transaction-safe operations, and geometry and canvas manipulation logic has been fully decoupled.
+## Implemented and verified
 
-As per strict directives, `_render_live_site_path` **has not** been switched. Legacy publishing remains 100% active.
+- Authenticated Studio shell, safe CSRF context, V4 migration/load, validated CAS save, client save serialization, and visible conflict/failure states.
+- SiteDocument tree validation for roots, parents, cycles, duplicate references/IDs, orphans, slugs, components, and breakpoints.
+- Atomic AI tree operations, safe HTML/CSS/URL rendering, responsive visibility, binding-aware content, repeaters, media resolution, and dynamic SEO.
+- Direct text editing, recursive Layers actions, subtree duplicate/delete, reparent cycle prevention, breakpoints, zoom, Inspector basics, and preserved geometry/snapping work.
+- In-Studio CMS Manager, schema/content/bindings/dynamic-page workspaces, Content Mode, and confirmation-gated CMS AI.
 
-### Implemented Capabilities (Phase 3 additions)
-1. **AI-Native Editing to v4 (Task 1, 2, 3):** 
-   - Refactored `app/api.py` and `app/studio_ai_operations.py`. When an AI command is issued, it checks if `studio_document_json` is populated. If yes, it routes to `apply_v4_operations` which safely executes `INSERT_NODE`, `UPDATE_STYLE`, etc., ensuring atomic application and transaction safety instead of naive HTML diffing.
-   - Added `selection` field to `AiEditIn` schema to support context-aware prompting.
-2. **Extracted Geometry Engine (Task 4):**
-   - Refactored coordinate math out of `CanvasNode.tsx` into modular `studio/geometry/math.ts` and pointer handlers into `studio/interactions/useResize.ts` and `studio/interactions/useDrag.ts`.
-3. **Smart Snapping (Task 5):**
-   - Stubbed layout alignment logic inside `studio/geometry/snapping.ts` mapped closely with drag implementations to detect peer lines and absolute boundaries.
-4. **Layers Panel Functionality (Task 6):**
-   - Shifted Layers Panel rendering to its own React component (`LayersPanel.tsx`).
-   - Upgraded layer item UI with `Duplicate`, `Hide/Show`, and `Delete` controls properly wired to the v4 unified reducer tree (`UPDATE_NODE_STYLE`, `DELETE_NODE`).
-5. **Autosave Concurrency Protection (Task 7):**
-   - Built a deterministic client-server revision check via `SYNC_REVISION` in the reducer and `POST /studio-save`, rejecting conflicts with `HTTP 409`.
-6. **Hardened Renderer Security (Task 9):**
-   - Implemented BeautifulSoup tree parsing inside `studio_renderer.py` replacing naive string replacements to actively unwrap unsafe HTML elements and sanitize URIs recursively.
+## Automated evidence
 
-### Test Coverage (Certification)
-- **Backend Test Suite Results:** 305 passed, 2 failed, 1 skipped.
-- **Failures Analyzed:** 
-  - `test_ai_first_rebuild.py::test_minimal_brand_font_and_public_template_runtime_not_exposed` (Homepage copy changed in upstream, unrelated to Studio Editor).
-  - `test_regional_billing_sales_assistant.py::test_billing_select_self_heals_historical_free_flag` (Upstream API schema `plan` KeyError on legacy mock, unrelated to Studio).
-- **Migration Certification:** `studio-migrate` endpoint faithfully preserves metadata and gracefully maps unrecognized tags without breaking constraints.
+- Focused Studio V4: 5 passed.
+- Focused CMS/runtime/security: 5 passed.
+- Repository suite: 316 passed, 1 skipped; its only sandbox failure was Playwright subprocess permission.
+- Exact combined Chromium workflow on the final code with browser permission: 1 passed in 40.66s.
+- Studio TypeScript: passed under explicit compiler flags.
+- Next.js source audit: 480 files, 0 errors.
+- Studio bundle: rebuilt successfully.
 
-### Release Recommendation
-**Do not** switch `_render_live_site_path` to v4 as the default for public instances *just yet*. While the backend editor mechanisms are fully in place and the structural UI is rich, we require full end-to-end browser E2E confirmation on absolute responsive layouts for diverse production websites before sunsetting V3 completely. The foundation is complete. We recommend a slow rollout strategy targeting internal testing next.
+| Capability | Implemented | Automated evidence | Production certified |
+|---|---:|---:|---:|
+| V4 schema, migration, save/CAS | Yes | Yes | No |
+| Safe structured renderer | Partial | Yes | No |
+| CMS persistence/API/roles | Yes | Yes | No |
+| Bindings/repeaters/dynamic routes/SEO | Yes | Yes | No |
+| CMS Manager and Content Mode | Yes | Type/build | No |
+| AI CMS and Assistant opt-in | Yes | Yes | No |
+| Professional direct manipulation | Partial | Partial | No |
+| Public global V4 publishing | No | No | No |
+
+## Remaining limitations
+
+Studio still lacks the complete requested professional editor: full add/pages/assets/components/SEO rails, component-instance expansion, multi-select alignment, precise layer ordering, visible snapping guides, clipboard/keyboard coverage, offline recovery, broad widget parity, and a dedicated CMS browser/a11y matrix.
+
+No 50/100/250/500-node performance dataset, 100/1,000/10,000-record CMS dataset, Firefox/WebKit run, or production PostgreSQL rehearsal was executed. Dynamic CMS routing is additive, but the legacy published snapshot remains the global renderer authority.
+
+## Publishing decision
+
+**KEEP LEGACY PUBLISHING.** Global V4 activation remains blocked until shadow comparison, representative migration fidelity, canary controls, per-site renderer selection, accessibility/performance evidence, and rollback proof exist.

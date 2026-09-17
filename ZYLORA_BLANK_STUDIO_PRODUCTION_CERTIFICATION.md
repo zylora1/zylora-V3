@@ -10,10 +10,11 @@ The blank-canvas creation workflow is implemented, tested, committed, pushed, an
 
 ## Release identity
 
-- Local SHA: `f04105a509f58a5988a238b55bcaa4804bb23dc6`
-- `origin/main`: `f04105a509f58a5988a238b55bcaa4804bb23dc6`
-- Railway SHA: `f04105a509f58a5988a238b55bcaa4804bb23dc6`
-- Deployment ID: `37c744f9-31ff-4a5a-8aef-dbb6560b0e9b`
+- Functional implementation SHA: `f04105a509f58a5988a238b55bcaa4804bb23dc6`
+- Final release/documentation SHA: `3d3bf5567b7cdf2aebdc086c639cf4f486557229`
+- `origin/main`: `3d3bf5567b7cdf2aebdc086c639cf4f486557229`
+- Railway SHA: `3d3bf5567b7cdf2aebdc086c639cf4f486557229`
+- Deployment ID: `84401a4d-2740-4572-9034-05b86f4ff5ae`
 - Deployment status: `SUCCESS`
 - Production URL: `https://zylora-api-production.up.railway.app`
 - Health: Railway deployment log recorded `GET /api/health` → `200 OK`
