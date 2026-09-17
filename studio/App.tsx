@@ -550,6 +550,17 @@ export function App() {
     }
   };
 
+  useEffect(() => {
+    import('./zylora/penpot-interop').then(({ penpotInterop }) => {
+      penpotInterop.mountWorkspace('penpot-mount', null);
+      penpotInterop.registerSemanticInspector((shapeIds) => {
+        if (shapeIds.length === 1) {
+          dispatch({ type: 'SELECT_NODE', payload: shapeIds[0] });
+        }
+      });
+    });
+  }, [dispatch]);
+
   const saveAsTemplate = async () => {
     const name = window.prompt('Name this reusable template', `${project} template`);
     if (!name) return;
@@ -992,26 +1003,22 @@ export function App() {
               <div
                 data-testid="studio-artboard"
                 data-viewport={`${viewport.x},${viewport.y},${state.zoom}`}
-                className="studio-canvas"
-                style={{
-                  width,
-                  height: 'auto',
-                  minHeight: 766,
-                  transform: `translate3d(${viewport.x}px,${viewport.y}px,0) scale(${state.zoom})`,
-                }}
               >
-                {page ? <CanvasNode nodeId={page.rootNodeId} /> : <div className="canvas-loading"><span /><p>Preparing your canvas…</p></div>}
-                <TransientSnapLines />
-                {state.snapLines.map((line, i) => (
+                <div className="canvas-workspace" onPointerDown={onCanvasPointerDown} onDrop={onDrop} onDragOver={e => e.preventDefault()}>
                   <div
-                    key={i}
-                    className={`snap-guide ${line.orientation} snap-${line.type}`}
-                    style={line.orientation === 'vertical' ? {left:line.position} : {top:line.position}}
+                    className="studio-canvas"
+                    id="penpot-mount"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      minHeight: 766,
+                      transform: 'none',
+                      backgroundColor: '#e5e5e5'
+                    }}
                   >
-                    {line.label && <span>{line.label}</span>}
+                    {page ? <div className="canvas-loading"><span /><p>Starting Penpot engine...</p></div> : <div className="canvas-loading"><span /><p>Preparing your canvas…</p></div>}
                   </div>
-                ))}
-                <SelectionOverlay />
+                </div>
               </div>
             </div>
 
