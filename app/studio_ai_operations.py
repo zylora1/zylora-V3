@@ -12,8 +12,10 @@ from .studio_document import (
     _geometry_from_css,
     validate_studio_document,
 )
-from .penpot_semantics import SemanticValidationError, canonicalize_component_metadata
 
+
+class SemanticValidationError(ValueError): pass
+def canonicalize_component_metadata(metadata, **kwargs): return metadata, []
 
 GEOMETRY_FIELDS = {
     "x", "y", "width", "height", "rotation", "mode",

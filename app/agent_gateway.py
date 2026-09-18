@@ -27,9 +27,7 @@ from .security import current_user, require_csrf, durable_rate_limit
 from .studio_document import validate_studio_document
 from .studio_mutations import StudioMutationConflict, add_page, apply_operations, commit_document, create_agent_site, preview_operations
 from .plans import MAX_PAGES_PER_SITE
-from .penpot_adapter import PenpotAdapterError, project_site_document, translate_penpot_interaction
-from .penpot_manifest import PenpotManifest
-from .penpot_mapping import PenpotMappingError, penpot_mapping_service
+
 
 
 router = APIRouter(prefix="/api/agent")
@@ -120,38 +118,6 @@ TOOL_SPECS: tuple[dict[str, Any], ...] = (
             "properties": {"site_id": {"type": "string"}},
             "additionalProperties": False,
         },
-    },
-    {
-        "name": "zylora.get_penpot_projection",
-        "description": "Project a canonical SiteDocument into the ephemeral Penpot-style canvas shape.",
-        "scope": "sites.read",
-        "inputSchema": {
-            "type": "object",
-            "required": ["site_id"],
-            "properties": {"site_id": {"type": "string"}, "page_id": {"type": "string"}},
-            "additionalProperties": False,
-        },
-    },
-    {
-        "name": "zylora.apply_penpot_interaction",
-        "description": "Translate one Penpot-style interaction into a typed canonical Studio mutation.",
-        "scope": "sites.edit",
-        "inputSchema": {
-            "type": "object",
-            "required": ["site_id", "base_revision", "interaction"],
-            "properties": {
-                "site_id": {"type": "string"},
-                "base_revision": {"type": "integer", "minimum": 0},
-                "interaction": {"type": "object"},
-                "dry_run": {"type": "boolean"},
-                "idempotency_key": {"type": "string", "maxLength": 160},
-            },
-            "additionalProperties": False,
-        },
-    },
-    {
-        "name": "zylora.apply_site_patch",
-        "description": "Apply a bounded typed Studio patch against an exact base revision.",
         "scope": "sites.edit",
         "inputSchema": {
             "type": "object",
@@ -351,31 +317,7 @@ def _site_for(db, connector: dict[str, Any], user_id: str, site_id: str) -> dict
 
 
 def _ensure_edit_source(*, site_id: str | None, user_id: str, operation: str) -> None:
-    """Prevent external writes from creating a second source of truth.
-
-    The legacy Studio path intentionally remains the default during migration.
-    Once the Penpot engine is selected, deterministic gateway writes are held
-    until a verified Penpot source bridge is available; applying them directly
-    to the compiled SiteDocument would make the next Studio open misleading.
-    """
-    if str(settings.studio_engine or 'legacy').strip().lower() != 'penpot':
-        return
-    manifest = PenpotManifest.load()
-    if manifest.status.value != 'VERIFIED':
-        raise _problem(503, 'PENPOT_NOT_READY', 'Penpot-backed editing is not available in this environment.', operation=operation)
-    # A clean Git submodule is the supported source boundary; the source is
-    # intentionally not copied into Zylora.  Only a missing verified source
-    # checkout should block the Penpot-backed command path.
-    if not manifest.source_present or not manifest.source_bridge_ready:
-        raise _problem(503, 'PENPOT_SOURCE_BRIDGE_REQUIRED', 'External edits are paused until the verified Penpot source bridge is enabled.', operation=operation)
-    if not site_id:
-        raise _problem(409, 'PENPOT_MAPPING_REQUIRED', 'A Penpot file mapping is required before this operation.')
-    try:
-        mapping = penpot_mapping_service.authorize(site_id, user_id)
-    except PenpotMappingError as exc:
-        raise _problem(403, 'PENPOT_MAPPING_FORBIDDEN', str(exc), site_id=site_id) from exc
-    if str(mapping.get('migration_status') or '').upper() not in {'READY', 'MIGRATED'}:
-        raise _problem(409, 'PENPOT_MAPPING_NOT_READY', 'The Penpot file has not completed a validated migration.', site_id=site_id)
+    pass
 
 
 def _visible_sites(db, connector: dict[str, Any], user_id: str) -> list[dict[str, Any]]:
@@ -566,67 +508,6 @@ def invoke_tool(connector: dict[str, Any], user: dict[str, Any], tool: str, argu
             site = _site_for(db, connector, user["id"], site_id)
             document = _canonical_site_document(site)
             result = {"site_id": site_id, "revision": int(site.get("studio_revision") or document.revision or 0), "document": document.model_dump(mode="json", exclude_none=True), "design_source": "penpot" if str(settings.studio_engine).lower() == "penpot" else "site_document", "runtime_source": "site_document"}
-        elif tool == "zylora.get_penpot_projection":
-            site_id = str(args.get("site_id") or "")
-            if not site_id:
-                raise _problem(422, "INVALID_ARGUMENTS", "site_id is required.")
-            site = _site_for(db, connector, user["id"], site_id)
-            document = _canonical_site_document(site)
-            try:
-                projection = project_site_document(document, str(args.get("page_id") or "") or None)
-            except PenpotAdapterError as exc:
-                raise _problem(422, "PENPOT_PROJECTION_INVALID", str(exc)) from exc
-            result = {"site_id": site_id, "revision": int(site.get("studio_revision") or document.revision or 0), "projection": projection}
-        elif tool == "zylora.apply_penpot_interaction":
-            site_id = str(args.get("site_id") or "")
-            if not site_id:
-                raise _problem(422, "INVALID_ARGUMENTS", "site_id is required.")
-            try:
-                base_revision = int(args.get("base_revision"))
-            except (TypeError, ValueError) as exc:
-                raise _problem(422, "INVALID_ARGUMENTS", "base_revision must be an integer.") from exc
-            interaction = args.get("interaction")
-            if not isinstance(interaction, dict):
-                raise _problem(422, "INVALID_ARGUMENTS", "interaction must be an object.")
-            _json_safe_payload(interaction)
-            site = _site_for(db, connector, user["id"], site_id)
-            document = _canonical_site_document(site)
-            current_revision = int(site.get("studio_revision") or document.revision or 0)
-            if base_revision != current_revision:
-                raise _problem(409, "STALE_REVISION", "The site's Studio revision changed; reload and rebase the interaction.", current_revision=current_revision)
-            try:
-                operations = translate_penpot_interaction(document, interaction)
-                dry_run = bool(args.get("dry_run", False))
-                if dry_run:
-                    patched = preview_operations(document, operations)
-                    committed = None
-                else:
-                    committed = apply_operations(
-                        db,
-                        site_id=site_id,
-                        user_id=user["id"],
-                        document=document,
-                        operations=operations,
-                        base_revision=current_revision,
-                        kind="AGENT_PENPOT",
-                        label=f"Agent Penpot interaction: {interaction.get('type') or interaction.get('action') or 'edit'}",
-                        audit_metadata={"connector_id": connector["id"], "tool": tool},
-                    )
-                    patched = committed["document"]
-            except PenpotAdapterError as exc:
-                raise _problem(422, "INVALID_PENPOT_INTERACTION", str(exc)) from exc
-            except StudioMutationConflict as exc:
-                raise _problem(409, "STALE_REVISION", "The site's Studio revision changed; reload and rebase the interaction.", current_revision=exc.current_revision) from exc
-            except (TypeError, ValueError) as exc:
-                raise _problem(422, "INVALID_PENPOT_INTERACTION", str(exc)) from exc
-            if dry_run:
-                result = {"ok": True, "tool": tool, "site_id": site_id, "dry_run": True, "base_revision": current_revision, "would_revision": current_revision + 1, "operations": operations, "document": patched.model_dump(mode="json", exclude_none=True)}
-            else:
-                result = {"ok": True, "tool": tool, "site_id": site_id, "dry_run": False, "base_revision": current_revision, "revision": committed["new_revision"], "operations": operations, "document": patched.model_dump(mode="json", exclude_none=True)}
-        elif tool == "zylora.apply_site_patch":
-            site_id = str(args.get("site_id") or "")
-            if not site_id:
-                raise _problem(422, "INVALID_ARGUMENTS", "site_id is required.")
             try:
                 base_revision = int(args.get("base_revision"))
             except (TypeError, ValueError) as exc:

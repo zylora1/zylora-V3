@@ -15,7 +15,6 @@ from sqlalchemy import text
 
 from .config import settings
 from .db import SessionLocal
-from .penpot_manifest import PenpotManifest
 
 
 def _configured(value: Any) -> bool:
@@ -23,7 +22,6 @@ def _configured(value: Any) -> bool:
 
 
 def provider_health_snapshot() -> dict[str, Any]:
-    penpot = PenpotManifest.load()
     telnyx_channels = {
         "email": _configured(getattr(settings, "telnyx_email_from", "")),
         "whatsapp": _configured(getattr(settings, "telnyx_whatsapp_from", "")),
@@ -75,23 +73,6 @@ def provider_health_snapshot() -> dict[str, Any]:
             "status": "CONFIGURED" if (_configured(getattr(settings, "google_client_id", "")) and _configured(getattr(settings, "google_client_secret", ""))) else "NOT_CONFIGURED",
         },
         {
-            "id": "penpot",
-            "name": "Penpot Editing Platform",
-            "category": "studio",
-            "configured": bool(PenpotManifest.engine_enabled()),
-            "status": "READY" if PenpotManifest.engine_enabled() else penpot.status.value,
-            "version": penpot.version,
-            "commit": penpot.commit,
-            "source_copied": penpot.source_copied,
-            "source_present": penpot.source_present,
-            "source_mode": penpot.source_mode,
-            "source_path": penpot.source_path,
-            "source_bridge_ready": penpot.source_bridge_ready,
-            "distribution_acquired": penpot.distribution_acquired,
-            "runtime_started": penpot.runtime_started,
-            "install_method": penpot.install_method,
-            "artifact_path": penpot.artifact_path,
-        },
     ]
     return {
         "checked_at": datetime.now(timezone.utc).isoformat(),

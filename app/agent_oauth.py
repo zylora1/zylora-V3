@@ -205,11 +205,6 @@ async def authorize(request: Request):
         values['site_ids'] = request.query_params.getlist('site_ids')
         params = _authorize_values(values, user['id'])
         csrf = token_urlsafe(24)
-        
-        if params['client_id'] == 'zylora_penpot_client':
-            # Auto-authorize trusted Penpot client
-            request.method = 'POST'
-            values['decision'] = 'approve'
         return _consent_page(request, params, user, csrf)
     parsed = parse_qs((await request.body()).decode('utf-8'), keep_blank_values=True)
     values = {key: items[-1] if len(items) == 1 else items for key, items in parsed.items()}
@@ -259,14 +254,9 @@ async def token(request: Request):
         if not raw_code or not client_id or not redirect_uri:
             return _oauth_error('invalid_request', 'code, client_id, and redirect_uri are required')
         
-        # Require either PKCE verifier or client_secret
-        if not verifier and not client_secret:
-            return _oauth_error('invalid_request', 'code_verifier or client_secret is required')
-            
-        # If client_secret is provided, validate it against the configured studio secret
-        if client_secret and client_secret != settings.penpot_oidc_client_secret:
-            return _oauth_error('invalid_client', 'Invalid client secret', 401)
-            
+        if not verifier:
+            return _oauth_error('invalid_request', 'code_verifier is required')
+
         with SessionLocal.begin() as db:
             code = db.execute(text('SELECT * FROM agent_oauth_codes WHERE code_hash=:code_hash AND client_id=:client_id'), {'code_hash': _hash(raw_code), 'client_id': client_id}).mappings().first()
             if not code:

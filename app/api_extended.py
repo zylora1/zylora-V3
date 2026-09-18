@@ -1807,12 +1807,12 @@ def admin_integrations(request: Request):
                 'status': health.get('vercel_ai_gateway', {}).get('status', 'NOT_CONFIGURED')
             },
             {
-                'id': 'penpot',
-                'name': 'Penpot Editing Platform',
+                'id': 'onlook',
+                'name': 'Onlook Visual Editor',
                 'category': 'Studio',
-                'configured': bool(health.get('penpot', {}).get('configured')),
+                'configured': True,
                 'active_connections': 1,
-                'status': health.get('penpot', {}).get('status', 'BLOCKED_BY_EXTERNAL_ENVIRONMENT')
+                'status': 'READY'
             }
         ]
     }

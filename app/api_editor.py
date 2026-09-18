@@ -35,8 +35,6 @@ from .seo_engine import (apply_seo_html, clean_text, metadata_for_page, normaliz
 from .link_icons import normalize_footer_links, detect_link_platform, apply_footer_links_html
 from .studio_document import normalize_studio_document_json, validate_studio_document
 from .studio_renderer import render_page as render_studio_page
-from .penpot_adapter import PenpotAdapterError, project_site_document, translate_penpot_interaction
-from .penpot_semantics import COMPONENT_REGISTRY, REGISTRY
 from .studio_mutations import StudioMutationConflict, apply_operations
 
 router = APIRouter(prefix='/api')
@@ -566,84 +564,6 @@ def save_studio(site_id: str, document: dict, request: Request):
             raise HTTPException(400, f"Invalid document: {str(e)}")
 
     return {'ok': True, 'newRevision': valid_doc.revision}
-
-
-@router.get('/sites/{site_id}/studio/penpot-projection')
-def penpot_projection(site_id: str, request: Request, page_id: str | None = None):
-    """Return a short-lived Penpot-shaped projection of the canonical document."""
-    u = _user(request)
-    with SessionLocal() as db:
-        site = _owned_site(db, u['id'], site_id)
-    if not site.get('studio_document_json'):
-        raise HTTPException(409, detail={'code': 'STUDIO_DOCUMENT_REQUIRED', 'message': 'Save the Studio document before opening the canvas projection.'})
-    try:
-        document = validate_studio_document(json.loads(site['studio_document_json']))
-        return project_site_document(document, page_id)
-    except PenpotAdapterError as exc:
-        raise HTTPException(422, detail={'code': 'PENPOT_PROJECTION_INVALID', 'message': str(exc)}) from exc
-    except (TypeError, ValueError, json.JSONDecodeError) as exc:
-        raise HTTPException(422, detail={'code': 'STUDIO_DOCUMENT_CORRUPT', 'message': 'The canonical Studio document is invalid.'}) from exc
-
-
-@router.get('/sites/{site_id}/studio/semantic-registry')
-def semantic_registry(site_id: str, request: Request):
-    """Return the canonical Zylora semantic registry to an authorized editor client.
-
-    The native Studio uses this contract through ordinary authenticated APIs;
-    no browser plugin is required. The endpoint remains for compatibility with
-    older migration tooling and is tenant-scoped before returning metadata.
-    """
-    u = _user(request)
-    with SessionLocal() as db:
-        _owned_site(db, u['id'], site_id)
-    return {
-        'websiteSchemaVersion': REGISTRY['websiteSchemaVersion'],
-        'componentSchemaVersion': REGISTRY['componentSchemaVersion'],
-        'aliases': dict(REGISTRY.get('aliases') or {}),
-        'components': [dict(value) for value in COMPONENT_REGISTRY.values()],
-    }
-
-
-@router.post('/sites/{site_id}/studio/penpot-interaction')
-def apply_penpot_interaction(site_id: str, payload: dict, request: Request):
-    """Translate one Penpot interaction and commit it through the Studio CAS."""
-    u = _user(request, True)
-    interaction = payload.get('interaction') if isinstance(payload, dict) else None
-    if not isinstance(interaction, dict):
-        raise HTTPException(422, detail={'code': 'INVALID_PENPOT_INTERACTION', 'message': 'interaction must be an object.'})
-    with SessionLocal.begin() as db:
-        site = _owned_site(db, u['id'], site_id)
-        if not site.get('studio_document_json'):
-            raise HTTPException(409, detail={'code': 'STUDIO_DOCUMENT_REQUIRED', 'message': 'Save the Studio document before editing the canvas.'})
-        try:
-            document = validate_studio_document(json.loads(site['studio_document_json']))
-            current_revision = int(site.get('studio_revision') or document.revision or 0)
-            expected_revision = payload.get('expected_revision', current_revision)
-            if int(expected_revision) != current_revision:
-                raise HTTPException(409, detail={'code': 'STUDIO_REVISION_CONFLICT', 'message': 'A newer Studio revision is authoritative.', 'serverRevision': current_revision})
-            operations = translate_penpot_interaction(document, interaction)
-            committed = apply_operations(
-                db,
-                site_id=site_id,
-                user_id=u['id'],
-                document=document,
-                operations=operations,
-                base_revision=current_revision,
-                kind='STUDIO_PENPOT',
-                label=f"Penpot interaction: {interaction.get('type') or interaction.get('action') or 'edit'}",
-                audit_metadata={'source': 'penpot-rest'},
-            )
-            patched = committed['document']
-            revision = committed['revision']
-        except HTTPException:
-            raise
-        except PenpotAdapterError as exc:
-            raise HTTPException(422, detail={'code': 'INVALID_PENPOT_INTERACTION', 'message': str(exc)}) from exc
-        except StudioMutationConflict as exc:
-            raise HTTPException(409, detail={'code': 'STUDIO_REVISION_CONFLICT', 'message': 'A concurrent Studio save won; reload and retry.', 'serverRevision': exc.current_revision}) from exc
-        except (TypeError, ValueError, json.JSONDecodeError) as exc:
-            raise HTTPException(422, detail={'code': 'INVALID_PENPOT_INTERACTION', 'message': str(exc)}) from exc
-    return {'ok': True, 'operations': operations, 'newRevision': patched.revision, 'revision': revision}
 
 @router.get('/sites/{site_id}/revisions/{revision_id}/preview')
 def revision_preview(site_id: str, revision_id: str, request: Request, page: str='home'):

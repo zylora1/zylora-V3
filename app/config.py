@@ -146,15 +146,15 @@ class Settings(BaseSettings):
     r2_bucket: str = ''
     pexels_api_key: str = ''
 
-    # Penpot is feature-gated until a verified upstream distribution/runtime is
+    # onlook is feature-gated until a verified upstream distribution/runtime is
     # available. Empty upstream metadata is intentional and is not evidence.
     studio_engine: str = 'legacy'
-    penpot_oidc_client_secret: str = ''
-    penpot_base_url: str = ''
-    penpot_internal_url: str = ''
-    penpot_upstream_repo: str = 'https://github.com/penpot/penpot'
-    penpot_upstream_version: str = ''
-    penpot_upstream_commit: str = ''
+    onlook_oidc_client_secret: str = ''
+    ONLOOK_BASE_URL: str = ''
+    onlook_internal_url: str = ''
+    onlook_upstream_repo: str = 'https://github.com/onlook/onlook'
+    onlook_upstream_version: str = ''
+    onlook_upstream_commit: str = ''
     oidc_issuer: str = ''
     oidc_signing_key: str = ''
     oidc_signing_key_id: str = ''
@@ -169,8 +169,8 @@ class Settings(BaseSettings):
     @classmethod
     def normalize_studio_engine(cls, value):
         engine = str(value or 'legacy').strip().lower()
-        if engine not in {'legacy', 'native', 'penpot'}:
-            raise ValueError('STUDIO_ENGINE must be legacy, native, or penpot')
+        if engine not in {'legacy', 'native', 'onlook'}:
+            raise ValueError('STUDIO_ENGINE must be legacy, native, or onlook')
         return engine
 
     @model_validator(mode='after')
@@ -244,7 +244,7 @@ def validate_production_settings() -> None:
     if settings.cloudflare_api_token or settings.cloudflare_zone_id:
         need(bool(settings.cloudflare_api_token and settings.cloudflare_zone_id), 'CLOUDFLARE_API_TOKEN/CLOUDFLARE_ZONE_ID')
     need(bool(settings.cloudflare_saas_target and '.example' not in settings.cloudflare_saas_target), 'CLOUDFLARE_SAAS_TARGET')
-    need(settings.studio_engine in {'legacy', 'native', 'penpot'}, 'STUDIO_ENGINE=legacy, native, or penpot')
+    need(settings.studio_engine in {'legacy', 'native', 'onlook'}, 'STUDIO_ENGINE=legacy, native, or onlook')
     if settings.ai_gateway_api_key:
         need(settings.ai_gateway_provider == 'vercel', 'AI_GATEWAY_PROVIDER=vercel')
         need(bool(settings.ai_gateway_base_url), 'AI_GATEWAY_BASE_URL')
@@ -253,8 +253,8 @@ def validate_production_settings() -> None:
     need(settings.ai_cost_alert_usd >= 0, 'AI_COST_ALERT_USD must be non-negative')
     need(settings.telnyx_message_alert_count >= 0, 'TELNYX_MESSAGE_ALERT_COUNT must be non-negative')
     need(0 <= settings.communication_failure_alert_pct <= 100, 'COMMUNICATION_FAILURE_ALERT_PCT must be 0..100')
-    if settings.studio_engine == 'penpot':
-        need(bool(settings.penpot_base_url), 'PENPOT_BASE_URL')
+    if settings.studio_engine == 'onlook':
+        need(bool(settings.ONLOOK_BASE_URL), 'ONLOOK_BASE_URL')
     # Bootstrap credentials are optional after the first admin exists, but must never be partial.
     if bool(settings.super_admin_email) != bool(settings.super_admin_password):
         need(False, 'SUPER_ADMIN_EMAIL/SUPER_ADMIN_PASSWORD (set both or neither)')
