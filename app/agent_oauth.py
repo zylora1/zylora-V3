@@ -252,11 +252,21 @@ async def token(request: Request):
     if grant == 'authorization_code':
         raw_code = values.get('code') or ''
         client_id = values.get('client_id') or ''
+        client_secret = values.get('client_secret') or ''
         redirect_uri = values.get('redirect_uri') or ''
         verifier = values.get('code_verifier') or ''
         resource = values.get('resource') or None
-        if not raw_code or not client_id or not redirect_uri or not verifier:
-            return _oauth_error('invalid_request', 'code, client_id, redirect_uri and code_verifier are required')
+        if not raw_code or not client_id or not redirect_uri:
+            return _oauth_error('invalid_request', 'code, client_id, and redirect_uri are required')
+        
+        # Require either PKCE verifier or client_secret
+        if not verifier and not client_secret:
+            return _oauth_error('invalid_request', 'code_verifier or client_secret is required')
+            
+        # If client_secret is provided, validate it against the configured studio secret
+        if client_secret and client_secret != settings.penpot_oidc_client_secret:
+            return _oauth_error('invalid_client', 'Invalid client secret', 401)
+            
         with SessionLocal.begin() as db:
             code = db.execute(text('SELECT * FROM agent_oauth_codes WHERE code_hash=:code_hash AND client_id=:client_id'), {'code_hash': _hash(raw_code), 'client_id': client_id}).mappings().first()
             if not code:
@@ -264,8 +274,10 @@ async def token(request: Request):
             code = dict(code)
             if int(code.get('consumed') or 0) or datetime.fromisoformat(str(code['expires_at']).replace('Z', '+00:00')) <= _now():
                 return _oauth_error('invalid_grant', 'Authorization code is expired')
-            if not hmac.compare_digest(str(code['redirect_uri']), redirect_uri) or not _pkce_valid(verifier, str(code['code_challenge'])):
-                return _oauth_error('invalid_grant', 'redirect_uri or PKCE verification failed')
+            if not hmac.compare_digest(str(code['redirect_uri']), redirect_uri):
+                return _oauth_error('invalid_grant', 'redirect_uri verification failed')
+            if verifier and not _pkce_valid(verifier, str(code['code_challenge'])):
+                return _oauth_error('invalid_grant', 'PKCE verification failed')
             if resource and resource != code['resource']:
                 return _oauth_error('invalid_target', 'resource does not match the authorization request')
             consumed = db.execute(text('UPDATE agent_oauth_codes SET consumed=1 WHERE code_hash=:code_hash AND consumed=0'), {'code_hash': code['code_hash']})

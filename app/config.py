@@ -149,6 +149,7 @@ class Settings(BaseSettings):
     # Penpot is feature-gated until a verified upstream distribution/runtime is
     # available. Empty upstream metadata is intentional and is not evidence.
     studio_engine: str = 'legacy'
+    penpot_oidc_client_secret: str = ''
     penpot_base_url: str = ''
     penpot_internal_url: str = ''
     penpot_upstream_repo: str = 'https://github.com/penpot/penpot'

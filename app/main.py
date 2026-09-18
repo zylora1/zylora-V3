@@ -18,6 +18,7 @@ from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, Res
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.responses import StreamingResponse
 from starlette.background import BackgroundTask
+from pydantic import BaseModel
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 
@@ -41,7 +42,7 @@ from .studio_document import validate_studio_document
 from .studio_renderer import render_page as render_studio_page
 from .penpot_manifest import PenpotManifest
 from .penpot_mapping import PenpotMappingError, penpot_mapping_service
-from .penpot_proxy import proxy_router as penpot_proxy_router, reverse_proxy_http
+from .penpot_proxy import proxy_router as penpot_proxy_router
 from .sales_assistant import prune_assistant_data
 from .notifications import retry_due_deliveries
 from .operations import record_operational_event, prune_old_analytics, safe_exception_summary
@@ -154,7 +155,7 @@ app.include_router(sales_assistant_router)
 app.include_router(super_admin_assistant_router)
 app.include_router(cms_router)
 app.include_router(crm_router)
-app.include_router(penpot_proxy_router, prefix='/penpot')
+app.include_router(penpot_proxy_router)
 app.include_router(agent_router)
 app.include_router(agent_mcp_router)
 app.include_router(agent_oauth_router)
@@ -560,6 +561,28 @@ def studio_publish(site_id: str, request: Request):
         site=db.execute(text('SELECT id FROM sites WHERE id=:site AND user_id=:user'),{'site':site_id,'user':user['id']}).first()
     if not site: raise HTTPException(404,'Site not found')
     return RedirectResponse(f'/studio/{site_id}?publish=1',status_code=307)
+class PenpotMappingIn(BaseModel):
+    team_id: str
+    project_id: str
+    file_id: str
+
+@app.post('/studio/{site_id}/mapping', include_in_schema=False)
+def save_studio_mapping(site_id: str, payload: PenpotMappingIn, request: Request):
+    user = current_user(request)
+    with SessionLocal() as db:
+        site = db.execute(text('SELECT id FROM sites WHERE id=:site AND user_id=:user'), {'site':site_id, 'user':user['id']}).first()
+    if not site: raise HTTPException(404, 'Site not found')
+    
+    penpot_mapping_service.upsert(
+        site_id=site_id,
+        penpot_team_id=payload.team_id,
+        penpot_project_id=payload.project_id,
+        penpot_file_id=payload.file_id,
+        migration_status='MIGRATED',
+        migration_version='2'
+    )
+    return {'ok': True}
+
 @app.get('/studio/{site_id}',include_in_schema=False)
 async def studio(site_id:str,request:Request):
     user=current_user(request)
@@ -571,36 +594,93 @@ async def studio(site_id:str,request:Request):
         gate = PenpotManifest.gate()
         if not gate['enabled']:
             raise HTTPException(503, detail={'code': 'PENPOT_NOT_READY', 'status': gate['status'], 'message': gate['reason']})
+        penpot_base = str(settings.penpot_base_url or '').strip().rstrip('/')
+        
         try:
             penpot_context = penpot_mapping_service.authorize(site_id, user['id'])
-        except PenpotMappingError as exc:
-            raise HTTPException(404, detail={'code': 'PENPOT_MAPPING_NOT_FOUND', 'message': str(exc)}) from exc
+        except PenpotMappingError:
+            penpot_context = {}
 
         project_id = str(penpot_context.get('penpot_project_id') or '')
         file_id = str(penpot_context.get('penpot_file_id') or '')
 
         if project_id and file_id:
-            # Full workspace URL: /workspace/{project_id}/{file_id}
             workspace_path = f"workspace/{project_id}/{file_id}"
         elif file_id:
-            # Fallback: /workspace with file-id query param (Penpot also accepts this)
             workspace_path = f"workspace?file-id={file_id}"
         else:
-            raise HTTPException(503, detail={'code': 'PENPOT_MAPPING_INCOMPLETE',
-                'message': 'Penpot project and file IDs are not yet configured for this site.'})
-
-        # If a separate public Penpot base URL is configured (dedicated studio origin),
-        # redirect the browser there. This is the preferred production architecture
-        # because it avoids cookie/CSP issues on a shared origin.
+            # Auto-provision Penpot file using a client-side script
+            # that uses the Penpot JSON-RPC API as the authenticated user.
+            html = f"""<!doctype html>
+<html>
+<head>
+    <title>Provisioning Studio...</title>
+    <style>body {{ font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #1a1a1a; color: white; }}</style>
+</head>
+<body>
+    <div>Provisioning Zylora Studio workspace...</div>
+    <script>
+    async function rpc(command, params) {{
+        const res = await fetch('{penpot_base}/api/rpc/command/' + command, {{
+            method: 'POST',
+            headers: {{'Content-Type': 'application/json'}},
+            body: JSON.stringify(params)
+        }});
+        if (!res.ok) throw new Error('RPC failed');
+        return await res.json();
+    }}
+    async function provision() {{
+        try {{
+            // 1. Get user profile (and default team)
+            const teams = await rpc('get-teams', {{}});
+            const defaultTeam = teams.find(t => t['is-default']) || teams[0];
+            
+            // 2. Create project
+            const proj = await rpc('create-project', {{
+                "team-id": defaultTeam["id"],
+                "name": "Zylora Site: {site_id}"
+            }});
+            
+            // 3. Create file
+            const file = await rpc('create-file', {{
+                "project-id": proj["id"],
+                "name": "{site.get('name') or site_id}"
+            }});
+            
+            // 4. Save mapping
+            await fetch('/studio/{site_id}/mapping', {{
+                method: 'POST',
+                headers: {{'Content-Type': 'application/json'}},
+                body: JSON.stringify({{
+                    "team_id": defaultTeam["id"],
+                    "project_id": proj["id"],
+                    "file_id": file["id"]
+                }})
+            }});
+            
+            // 5. Reload (will now redirect to workspace)
+            window.location.reload();
+        }} catch (err) {{
+            console.error(err);
+            document.body.innerHTML = '<div>Error provisioning workspace. <a href="/login" style="color:#f9a826">Please ensure you are logged in to Zylora Studio.</a></div>';
+        }}
+    }}
+    
+    // Attempt provisioning immediately
+    provision();
+    </script>
+</body>
+</html>"""
+            return HTMLResponse(html)
+        # The penpot_proxy_router is mounted at root and handles /workspace/* directly.
+        # We can just redirect the user to the workspace path on the current origin.
         penpot_base = str(settings.penpot_base_url or '').strip().rstrip('/')
         if penpot_base and penpot_base != str(settings.penpot_internal_url or '').strip().rstrip('/'):
             redirect_url = f"{penpot_base}/{workspace_path}"
-            return RedirectResponse(redirect_url, status_code=302)
-
-        # Same-origin proxy mode: proxy the Penpot workspace through Zylora.
-        # The penpot_proxy_router handles /penpot/* sub-paths; for the initial
-        # workspace HTML we call the proxy directly and rewrite any absolute paths.
-        return await reverse_proxy_http(request, workspace_path)
+        else:
+            redirect_url = f"/{workspace_path}"
+            
+        return RedirectResponse(redirect_url, status_code=302)
     raw=(ROOT/'static'/'studio.html').read_text(encoding='utf-8')
     context=json.dumps({'siteId':site_id,'siteName':site['name'],'published':str(site.get('status') or '').upper()=='LIVE','csrfToken':user['csrf_token'],'studioEngine':str(settings.studio_engine or 'legacy').lower(),'penpot':penpot_context},separators=(',',':')).replace('</','\u003c\\/')
     rendered=raw.replace('__ZYLORA_STUDIO_CONTEXT__',context)
