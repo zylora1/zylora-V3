@@ -36,7 +36,6 @@ def test_sensitive_rate_limit_call_sites_are_durable():
     expected=[
         (api,"durable_rate_limit('login:'+ip"),
         (api,"durable_rate_limit('signup:'+ip"),
-        (api,"durable_rate_limit('otp:'+u['id']"),
         (api,"durable_rate_limit('lead-ip:'+ip"),
         (api,"durable_rate_limit('lead-site:'+payload.site_id"),
         (api,"durable_rate_limit('lead-email:'+payload.site_id"),

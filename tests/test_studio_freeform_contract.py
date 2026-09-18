@@ -25,7 +25,7 @@ def test_scene_graph_commit_is_absolute_and_multi_selection_is_transactional():
 def test_resize_supports_aspect_ratio_and_center_modifiers():
     math = (ROOT / "studio" / "geometry" / "math.ts").read_text(encoding="utf-8")
     resize = (ROOT / "studio" / "interactions" / "useResize.ts").read_text(encoding="utf-8")
-    assert "modifiers: {aspect?:boolean;center?:boolean;rotation?:number}" in math
+    assert "modifiers: {aspect?:boolean;center?:boolean;rotation?:number;parentRotation?:number}" in math
     # Meta remains a snapping bypass, not an unexpected centre-resize modifier.
     assert "e.shiftKey" in resize and "center:e.altKey" in resize
 
