@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 import asyncio
 import time
 import os
+import httpx
 from html import escape
 from pathlib import Path
 from datetime import datetime, timezone
@@ -15,6 +16,8 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, Response, RedirectResponse, JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
+from starlette.responses import StreamingResponse
+from starlette.background import BackgroundTask
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 
@@ -38,6 +41,7 @@ from .studio_document import validate_studio_document
 from .studio_renderer import render_page as render_studio_page
 from .penpot_manifest import PenpotManifest
 from .penpot_mapping import PenpotMappingError, penpot_mapping_service
+from .penpot_proxy import proxy_router as penpot_proxy_router, reverse_proxy_http
 from .sales_assistant import prune_assistant_data
 from .notifications import retry_due_deliveries
 from .operations import record_operational_event, prune_old_analytics, safe_exception_summary
@@ -150,6 +154,7 @@ app.include_router(sales_assistant_router)
 app.include_router(super_admin_assistant_router)
 app.include_router(cms_router)
 app.include_router(crm_router)
+app.include_router(penpot_proxy_router, prefix='/penpot')
 app.include_router(agent_router)
 app.include_router(agent_mcp_router)
 app.include_router(agent_oauth_router)
@@ -556,7 +561,7 @@ def studio_publish(site_id: str, request: Request):
     if not site: raise HTTPException(404,'Site not found')
     return RedirectResponse(f'/studio/{site_id}?publish=1',status_code=307)
 @app.get('/studio/{site_id}',include_in_schema=False)
-def studio(site_id:str,request:Request):
+async def studio(site_id:str,request:Request):
     user=current_user(request)
     with SessionLocal() as db:
         site=db.execute(text('SELECT id,name,status FROM sites WHERE id=:site AND user_id=:user'),{'site':site_id,'user':user['id']}).mappings().first()
@@ -570,8 +575,34 @@ def studio(site_id:str,request:Request):
             penpot_context = penpot_mapping_service.authorize(site_id, user['id'])
         except PenpotMappingError as exc:
             raise HTTPException(404, detail={'code': 'PENPOT_MAPPING_NOT_FOUND', 'message': str(exc)}) from exc
+
+        project_id = str(penpot_context.get('penpot_project_id') or '')
+        file_id = str(penpot_context.get('penpot_file_id') or '')
+
+        if project_id and file_id:
+            # Full workspace URL: /workspace/{project_id}/{file_id}
+            workspace_path = f"workspace/{project_id}/{file_id}"
+        elif file_id:
+            # Fallback: /workspace with file-id query param (Penpot also accepts this)
+            workspace_path = f"workspace?file-id={file_id}"
+        else:
+            raise HTTPException(503, detail={'code': 'PENPOT_MAPPING_INCOMPLETE',
+                'message': 'Penpot project and file IDs are not yet configured for this site.'})
+
+        # If a separate public Penpot base URL is configured (dedicated studio origin),
+        # redirect the browser there. This is the preferred production architecture
+        # because it avoids cookie/CSP issues on a shared origin.
+        penpot_base = str(settings.penpot_base_url or '').strip().rstrip('/')
+        if penpot_base and penpot_base != str(settings.penpot_internal_url or '').strip().rstrip('/'):
+            redirect_url = f"{penpot_base}/{workspace_path}"
+            return RedirectResponse(redirect_url, status_code=302)
+
+        # Same-origin proxy mode: proxy the Penpot workspace through Zylora.
+        # The penpot_proxy_router handles /penpot/* sub-paths; for the initial
+        # workspace HTML we call the proxy directly and rewrite any absolute paths.
+        return await reverse_proxy_http(request, workspace_path)
     raw=(ROOT/'static'/'studio.html').read_text(encoding='utf-8')
-    context=json.dumps({'siteId':site_id,'siteName':site['name'],'published':str(site.get('status') or '').upper()=='LIVE','csrfToken':user['csrf_token'],'studioEngine':str(settings.studio_engine or 'legacy').lower(),'penpot':penpot_context},separators=(',',':')).replace('</','<\\/')
+    context=json.dumps({'siteId':site_id,'siteName':site['name'],'published':str(site.get('status') or '').upper()=='LIVE','csrfToken':user['csrf_token'],'studioEngine':str(settings.studio_engine or 'legacy').lower(),'penpot':penpot_context},separators=(',',':')).replace('</','\u003c\\/')
     rendered=raw.replace('__ZYLORA_STUDIO_CONTEXT__',context)
     if '/static/studio-ux.css' not in rendered:
         rendered=rendered.replace('</head>','<link rel="stylesheet" href="/static/studio-ux.css"></head>')

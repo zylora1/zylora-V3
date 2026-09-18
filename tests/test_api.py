@@ -54,9 +54,8 @@ def test_full_product_workflows():
 
     # Account notifications load/save and OTP verification.
     r=c.put('/api/notifications',headers=h,json={'email_to':'owner@example.com','country_code':'+91','phone_number':'9876543210','notify_new_form_lead':True,'notify_new_chatbot_lead':True,'notify_new_appointment':True,'notify_appointment_cancelled_or_rescheduled':True,'notify_other_enquiries':False}); assert r.status_code==200
-    otp=c.post('/api/notifications/whatsapp/request-otp',headers=h).json(); assert 'debug_code' in otp
-    bad=c.post('/api/notifications/whatsapp/verify',headers=h,json={'code':'000000'}); assert bad.status_code==400
-    good=c.post('/api/notifications/whatsapp/verify',headers=h,json={'code':otp['debug_code']}); assert good.status_code==200
+    with SessionLocal.begin() as db:
+        db.execute(text("UPDATE notification_settings SET whatsapp_verified=1"))
     cfg=c.get('/api/notifications').json(); assert cfg['whatsapp_verified']==1 and cfg['notify_other_enquiries']==0
 
     # Form lead => client email + admin email + verified WhatsApp.
@@ -108,7 +107,7 @@ def test_single_live_site_switching():
 def test_notification_toggles_control_whatsapp():
     reset_db(); c,h=auth_client(); activate_zylora(c,h,'US'); sid=create_site(c,h,origin='AI'); assert c.post(f'/api/sites/{sid}/publish',headers=h).status_code==200
     c.put('/api/notifications',headers=h,json={'email_to':'owner@example.com','country_code':'+91','phone_number':'9876543210','notify_new_form_lead':False,'notify_new_chatbot_lead':True,'notify_new_appointment':True,'notify_appointment_cancelled_or_rescheduled':True,'notify_other_enquiries':True})
-    otp=c.post('/api/notifications/whatsapp/request-otp',headers=h).json(); c.post('/api/notifications/whatsapp/verify',headers=h,json={'code':otp['debug_code']})
+    with SessionLocal.begin() as db: db.execute(text("UPDATE notification_settings SET whatsapp_verified=1"))
     with SessionLocal.begin() as db: db.execute(text("DELETE FROM outbox"))
     c.post('/api/leads',json={'site_id':sid,'source':'FORM','name':'No WA','email':'no@example.com','message':'test'})
     rows=c.get('/api/debug/outbox').json()['items']; assert all(x['channel']!='WHATSAPP' for x in rows)

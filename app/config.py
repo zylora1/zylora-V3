@@ -168,8 +168,8 @@ class Settings(BaseSettings):
     @classmethod
     def normalize_studio_engine(cls, value):
         engine = str(value or 'legacy').strip().lower()
-        if engine not in {'legacy', 'penpot'}:
-            raise ValueError('STUDIO_ENGINE must be legacy or penpot')
+        if engine not in {'legacy', 'native', 'penpot'}:
+            raise ValueError('STUDIO_ENGINE must be legacy, native, or penpot')
         return engine
 
     @model_validator(mode='after')
@@ -243,7 +243,7 @@ def validate_production_settings() -> None:
     if settings.cloudflare_api_token or settings.cloudflare_zone_id:
         need(bool(settings.cloudflare_api_token and settings.cloudflare_zone_id), 'CLOUDFLARE_API_TOKEN/CLOUDFLARE_ZONE_ID')
     need(bool(settings.cloudflare_saas_target and '.example' not in settings.cloudflare_saas_target), 'CLOUDFLARE_SAAS_TARGET')
-    need(settings.studio_engine in {'legacy', 'penpot'}, 'STUDIO_ENGINE=legacy or penpot')
+    need(settings.studio_engine in {'legacy', 'native', 'penpot'}, 'STUDIO_ENGINE=legacy, native, or penpot')
     if settings.ai_gateway_api_key:
         need(settings.ai_gateway_provider == 'vercel', 'AI_GATEWAY_PROVIDER=vercel')
         need(bool(settings.ai_gateway_base_url), 'AI_GATEWAY_BASE_URL')

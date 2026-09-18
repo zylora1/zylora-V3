@@ -47,7 +47,6 @@ def run(browser_name: str) -> dict:
             try:
                 page.wait_for_selector('.studio-canvas [data-studio-id]', timeout=15000)
             except Exception:
-                print('STUDIO_BOOT_DEBUG', {'errors': errors, 'types': page.locator('.studio-canvas [data-studio-type]').evaluate_all('(els)=>els.slice(0,20).map(e=>e.dataset.studioType)'), 'body': page.locator('body').inner_text()[:1000]}, flush=True)
                 raise
             check('blank Home Studio loads', page.locator('.studio-canvas [data-studio-id]').count() > 0)
 
@@ -74,15 +73,28 @@ def run(browser_name: str) -> dict:
             page.keyboard.press('Escape'); page.wait_for_timeout(80)
             page.get_by_role('button', name='Layers').click(); page.wait_for_timeout(80)
             page.locator(f'[data-layer-node-id="{shape_ids[-1]}"]').click(); page.wait_for_timeout(80)
-            art = page.locator('.studio-canvas').bounding_box(); box = active.bounding_box(); assert art and box
+            art = page.locator('.studio-canvas').bounding_box(); box = active.bounding_box(); first_box = first.bounding_box(); assert art and box and first_box
             x, y = box['x'] + box['width']/2, box['y'] + box['height']/2
-            target_x = art['x'] + art['width']/2 - box['width']/2
-            page.mouse.move(x, y); page.mouse.down(); page.mouse.move(target_x, y, steps=8); page.wait_for_timeout(80)
+            # The artboard can be wider than the viewport after fit-to-screen.
+            # Snap to a visible sibling edge instead of an off-screen artboard
+            # centre so the browser assertion observes the transient overlay.
+            target_x, target_y = x, first_box['y'] + box['height']/2
+            page.mouse.move(x, y); page.mouse.down(); page.mouse.move(target_x, target_y, steps=8); page.wait_for_timeout(180)
             guide_visible = page.locator('.snap-guide').count() > 0
-            page.mouse.up(); steps['temporary smart guide appears during drag'] = 'PASS' if guide_visible else 'UNVERIFIED'
+            guide_box = page.locator('.snap-guide.horizontal').first.bounding_box() if page.locator('.snap-guide.horizontal').count() else None
+            moving_box = active.bounding_box()
+            guide_targets = []
+            for candidate in (first_box, moving_box):
+                if candidate:
+                    guide_targets.extend([candidate['y'], candidate['y'] + candidate['height'] / 2, candidate['y'] + candidate['height']])
+            page.mouse.up(); page.wait_for_timeout(80)
+            guide_cleared = page.locator('.snap-guide').count() == 0
+            check('temporary smart guide appears during drag', guide_visible)
+            check('temporary guide aligns with snapped geometry', bool(guide_box and guide_targets and min(abs(guide_box['y'] - target) for target in guide_targets) <= 2.0))
+            check('temporary smart guide clears after pointer-up', guide_cleared)
 
             # Resize and rotate are committed after pointer release.
-            page.locator(f'[data-layer-node-id="{shape_ids[-1]}"]').click(); page.wait_for_timeout(100); before = active.bounding_box(); handle = active.locator('[data-handle="bottom-right"]'); hx, hy = centre(page, handle); page.mouse.move(hx, hy); page.mouse.down(); page.mouse.move(hx+30, hy+20, steps=3); page.mouse.up(); page.wait_for_timeout(80); after = active.bounding_box(); steps['resize changes geometry'] = 'PASS' if bool(before and after and after['width'] != before['width']) else 'UNVERIFIED'
+            page.locator(f'[data-layer-node-id="{shape_ids[-1]}"]').click(); page.wait_for_timeout(100); before = active.bounding_box(); handle = active.locator('[data-handle="bottom-right"]'); hx, hy = centre(page, handle); page.mouse.move(hx, hy); page.mouse.down(); page.mouse.move(hx+30, hy+20, steps=3); page.mouse.up(); page.wait_for_timeout(80); after = active.bounding_box(); check('resize changes geometry', bool(before and after and after['width'] > before['width'] and after['height'] > before['height']))
             page.get_by_label('Rotate selection').dispatch_event('pointerdown', {'clientX': x, 'clientY': y, 'pointerId': 81, 'button': 0, 'pointerType': 'mouse'})
             page.locator('body').dispatch_event('pointermove', {'clientX': x+35, 'clientY': y+20, 'pointerId': 81, 'pointerType': 'mouse'}); page.locator('body').dispatch_event('pointerup', {'clientX': x+35, 'clientY': y+20, 'pointerId': 81, 'pointerType': 'mouse'})
             check('rotation control is present', page.get_by_label('Rotate selection').count() == 1)

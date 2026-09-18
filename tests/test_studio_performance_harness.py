@@ -33,3 +33,11 @@ def test_drag_snap_targets_are_cached_for_the_gesture():
 
     assert "targets=latest.current.getTargets()" in source
     assert source.count("getTargets()") == 1
+
+
+def test_profile_accepts_large_preloaded_tiers_without_double_counting_nodes():
+    source = (Path(__file__).parents[1] / "scripts" / "studio_performance_profile.py").read_text(encoding="utf-8")
+
+    assert '"--counts"' in source
+    assert "The stress document already contains the requested number of nodes" in source
+    assert 'page.get_by_test_id("canvas-workspace")' in source

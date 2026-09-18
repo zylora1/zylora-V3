@@ -16,14 +16,20 @@ export function computeResize(
     pointerCurrent: Point,
     handle: string,
     zoom: number = 1,
-    modifiers: {aspect?:boolean;center?:boolean;rotation?:number} = {}
+    modifiers: {aspect?:boolean;center?:boolean;rotation?:number;parentRotation?:number} = {}
 ): Rect {
     const angle=(modifiers.rotation||0)*Math.PI/180;
+    const parentAngle=(modifiers.parentRotation||0)*Math.PI/180;
     const screenX=(pointerCurrent.x-pointerStart.x)/Math.max(.01,zoom);
     const screenY=(pointerCurrent.y-pointerStart.y)/Math.max(.01,zoom);
+    // Pointer deltas arrive in viewport coordinates. Resolve them into the
+    // parent coordinate system before resolving the node's own rotated axes.
+    // Translation does not affect a delta; ancestor rotation does.
+    const parentX=screenX*Math.cos(parentAngle)+screenY*Math.sin(parentAngle);
+    const parentY=-screenX*Math.sin(parentAngle)+screenY*Math.cos(parentAngle);
     const factor=modifiers.center?2:1;
-    const dx = (screenX*Math.cos(angle)+screenY*Math.sin(angle))*factor;
-    const dy = (-screenX*Math.sin(angle)+screenY*Math.cos(angle))*factor;
+    const dx = (parentX*Math.cos(angle)+parentY*Math.sin(angle))*factor;
+    const dy = (-parentX*Math.sin(angle)+parentY*Math.cos(angle))*factor;
     
     let { x, y, w, h } = originalRect;
 

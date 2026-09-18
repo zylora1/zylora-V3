@@ -1,0 +1,100 @@
+databases:
+  - name: zylora-db
+    databaseName: zylora
+    user: zylora
+    plan: starter
+
+  - name: penpot-db
+    databaseName: penpot
+    user: penpot
+    plan: starter
+
+services:
+  - type: redis
+    name: penpot-redis
+    plan: free
+
+  - type: pserv
+    name: penpot-exporter
+    env: docker
+    image: docker.io/penpotapp/exporter:2.17.0
+    envVars:
+      - key: PENPOT_PUBLIC_URI
+        value: "https://zylora-app.onrender.com"
+      - key: PENPOT_INTERNAL_URI
+        value: "http://penpot-frontend:80"
+      - key: PENPOT_REDIS_URI
+        fromService:
+          type: redis
+          name: penpot-redis
+          property: connectionString
+
+  - type: pserv
+    name: penpot-backend
+    env: docker
+    image: docker.io/penpotapp/backend:2.17.0
+    envVars:
+      - key: PENPOT_FLAGS
+        value: "login-with-oidc disable-email-verification enable-smtp enable-prepl-server disable-secure-session-cookies enable-mcp"
+      - key: PENPOT_PUBLIC_URI
+        value: "https://zylora-app.onrender.com"
+      - key: PENPOT_DATABASE_URI
+        fromDatabase:
+          name: penpot-db
+          property: connectionString
+      - key: PENPOT_REDIS_URI
+        fromService:
+          type: redis
+          name: penpot-redis
+          property: connectionString
+      - key: PENPOT_SECRET_KEY
+        generateValue: true
+      - key: PENPOT_OIDC_BASE_URI
+        value: "http://zylora-app:10000/oauth"
+      - key: PENPOT_OIDC_CLIENT_ID
+        value: "zylora_penpot_client"
+      - key: PENPOT_OIDC_CLIENT_SECRET
+        generateValue: true
+      - key: PENPOT_OIDC_AUTH_URI
+        value: "https://zylora-app.onrender.com/oauth/authorize"
+      - key: PENPOT_OIDC_TOKEN_URI
+        value: "http://zylora-app:10000/oauth/token"
+      - key: PENPOT_OIDC_USERINFO_URI
+        value: "http://zylora-app:10000/oauth/userinfo"
+      - key: PENPOT_OIDC_NAME
+        value: "Zylora Studio"
+      - key: PENPOT_HTTP_SERVER_MAX_BODY_SIZE
+        value: "367001600"
+
+  - type: pserv
+    name: penpot-frontend
+    env: docker
+    image: docker.io/penpotapp/frontend:2.17.0
+    envVars:
+      - key: PENPOT_FLAGS
+        value: "login-with-oidc disable-email-verification enable-smtp enable-prepl-server disable-secure-session-cookies enable-mcp"
+      - key: PENPOT_PUBLIC_URI
+        value: "https://zylora-app.onrender.com"
+
+  - type: web
+    name: zylora-app
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port 10000"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: zylora-db
+          property: connectionString
+      - key: APP_URL
+        value: "https://zylora-app.onrender.com"
+      - key: APP_SECRET_KEY
+        generateValue: true
+      - key: STUDIO_ENGINE
+        value: "penpot"
+      - key: PENPOT_INTERNAL_URL
+        value: "http://penpot-frontend:80"
+      - key: PENPOT_UPSTREAM_VERSION
+        value: "2.17.0"
+      - key: PENPOT_UPSTREAM_COMMIT
+        value: "bdce581"

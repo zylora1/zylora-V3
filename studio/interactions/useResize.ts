@@ -3,7 +3,7 @@ import {computeResize,Rect} from '../geometry/math';
 import {computeSnapping} from '../geometry/snapping';
 type Targets={peers:Rect[];parent:Rect|null};
 
-export function useResize(_initialRect:Rect,onResizeUpdate:(rect:Rect,lines?:any[])=>void,onResizeEnd:(rect:Rect)=>void,zoom=1,getTargets:()=>Targets=()=>({peers:[],parent:null}),rotation=0){
+export function useResize(_initialRect:Rect,onResizeUpdate:(rect:Rect,lines?:any[])=>void,onResizeEnd:(rect:Rect)=>void,zoom=1,getTargets:()=>Targets=()=>({peers:[],parent:null}),rotation=0,parentRotation=0){
  const [isResizing,setResizing]=useState(false);
  const cleanup=useRef<null|(()=>void)>(null);
  const latest=useRef({onResizeUpdate,onResizeEnd,zoom,getTargets,rotation});
@@ -19,7 +19,7 @@ export function useResize(_initialRect:Rect,onResizeUpdate:(rect:Rect,lines?:any
   setResizing(true);
   const calc=(e:PointerEvent)=>{
    const api=latest.current;
-   const raw=computeResize(base,start,{x:e.clientX,y:e.clientY},handle,api.zoom,{aspect:e.shiftKey,center:e.altKey,rotation:api.rotation});
+   const raw=computeResize(base,start,{x:e.clientX,y:e.clientY},handle,api.zoom,{aspect:e.shiftKey,center:e.altKey,rotation:api.rotation,parentRotation});
    // Snap the moving edge, not the entire rectangle and its fixed anchor.
    if(api.rotation||e.shiftKey||e.altKey)return {snappedRect:raw,snapLines:[]};
    const right=handle.includes('right'),bottom=handle.includes('bottom');
@@ -34,13 +34,20 @@ export function useResize(_initialRect:Rect,onResizeUpdate:(rect:Rect,lines?:any
   const finish=()=>{
    cancelAnimationFrame(frame);
    window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',cancel);
+   window.removeEventListener('blur',cancelInteraction);window.removeEventListener('keydown',keyDown);
+   target.removeEventListener('lostpointercapture',lostCapture);
    if(target.hasPointerCapture(pointerId))target.releasePointerCapture(pointerId);
    cleanup.current=null;setResizing(false);
   };
   const move=(e:PointerEvent)=>{if(e.pointerId!==pointerId)return;cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{const result=calc(e);latest.current.onResizeUpdate(result.snappedRect,result.snapLines)})};
   const up=(e:PointerEvent)=>{if(e.pointerId!==pointerId)return;const rect=calc(e).snappedRect;finish();latest.current.onResizeEnd(rect)};
-  const cancel=(e:PointerEvent)=>{if(e.pointerId!==pointerId)return;finish();latest.current.onResizeUpdate(base,[])};
-  window.addEventListener('pointermove',move);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',cancel);cleanup.current=finish;
+  const cancel=(e:PointerEvent)=>{if(e.pointerId!==pointerId)return;cancelInteraction()};
+  const lostCapture=(e:Event)=>{const pointer=(e as PointerEvent).pointerId;if(pointer!==undefined&&pointer!==pointerId)return;cancelInteraction()};
+  const keyDown=(e:KeyboardEvent)=>{if(e.key!=='Escape')return;e.preventDefault();cancelInteraction()};
+  const cancelInteraction=()=>{finish();latest.current.onResizeUpdate(base,[])};
+  window.addEventListener('pointermove',move);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',cancel);
+  window.addEventListener('blur',cancelInteraction);window.addEventListener('keydown',keyDown);target.addEventListener('lostpointercapture',lostCapture);
+  cleanup.current=finish;
  };
  return {isResizing,startResize};
 }

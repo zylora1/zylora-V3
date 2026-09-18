@@ -26,3 +26,41 @@
    Candidate snap targets are filtered using a 2D spatial grid index, ensuring snapping calculations remain $O(k)$ rather than $O(N)$ with respect to total document nodes.
 3. **Zero In-Memory Duplicate Graphs**:
    Eliminating parallel scene graphs saves $\sim 35\text{ MB}$ of heap allocation and eliminates garbage collection pauses during long editing sessions.
+
+## 4. Measured local probe (2026-09-17)
+
+The existing Chromium headless probe was run against the native Studio bundle
+with 50, 100, 250, and 500 requested rectangle insertions. The probe reports
+the time for the scripted insertion loop and a 24-move pointer drag; it is not
+a 60 FPS certification and it does not measure WASM or the full upstream
+Penpot runtime.
+
+| Requested nodes | Insertion (ms) | 24-move drag (ms) | Browser errors |
+| ---: | ---: | ---: |
+| 50 | 2,530.25 | 654.88 | 0 |
+| 100 | 5,265.78 | 657.43 | 0 |
+| 250 | 12,958.33 | 819.49 | 0 |
+| 500 | 28,647.89 | 792.05 | 0 |
+
+The rendered-node locator count includes the fixture's existing document
+nodes, so it is not equal to the requested insertion count. Treat the target
+latencies in section 1 as engineering goals until a dedicated frame-timing
+and memory profile is captured in a supported staging browser environment.
+
+## 5. Measured native interaction profile (2026-09-17)
+
+The instrumented profile was rerun against preloaded native Studio documents at
+750, 1,000, and 2,000 nodes. Each tier exercised selection, drag, resize,
+zoom, breakpoint switching, undo, and save. These are Chromium headless
+measurements on this host; they are evidence for interaction behavior, not a
+production-hardware SLA.
+
+| Nodes | Rendered nodes | Drag p95 frame (ms) | Resize p95 frame (ms) | Zoom p95 frame (ms) | Save wall time (ms) | Long tasks | Browser errors |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 750 | 751 | 16.8 | 16.7 | 16.7 | 785.93 | 0 | 0 |
+| 1,000 | 1,001 | 16.8 | 16.7 | 16.7 | 1,105.38 | 0 | 0 |
+| 2,000 | 2,001 | 16.7 | 16.8 | 33.4 | 1,973.67 | 1 (70 ms) | 0 |
+
+The profile recorded no browser errors. The 2,000-node undo operation produced
+one 70 ms long task; that remains a performance risk to investigate on
+representative staging hardware and is not hidden by averaging.

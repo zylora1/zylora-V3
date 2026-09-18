@@ -10,12 +10,20 @@ def test_central_geometry_engine_covers_guides_spacing_zoom_and_modifier_bypass(
     snapping = (ROOT / "studio" / "geometry" / "snapping.ts").read_text(encoding="utf-8")
     drag = (ROOT / "studio" / "interactions" / "useDrag.ts").read_text(encoding="utf-8")
     resize = (ROOT / "studio" / "interactions" / "useResize.ts").read_text(encoding="utf-8")
-    app = (ROOT / "studio" / "App.tsx").read_text(encoding="utf-8")
+    transient = (ROOT / "studio" / "engine" / "transient.ts").read_text(encoding="utf-8")
     assert "type SnapKind = 'edge' | 'center' | 'spacing' | 'guide'" in snapping
     assert "addSpacingCandidates" in snapping and "EPSILON=.75" in snapping
     assert "6/api.zoom" in drag and "e.ctrlKey||e.metaKey" in drag
     assert "computeSnapping" in resize and "e.ctrlKey||e.metaKey" in resize
-    assert "snap-${line.type}" in app and "line.label" in app
+    assert "parentRotation" in resize and "parentRotation" in (ROOT / "studio" / "geometry" / "math.ts").read_text(encoding="utf-8")
+    assert "parentX" in (ROOT / "studio" / "geometry" / "math.ts").read_text(encoding="utf-8")
+    assert "lostpointercapture" in resize and "window.addEventListener('blur',cancelInteraction)" in resize
+    assert "e.key!=='Escape'" in resize and "onResizeUpdate(base,[])" in resize
+    assert "window.addEventListener('blur',cancelInteraction)" in drag
+    assert "e.key!=='Escape'" in drag and "onDragEnd(base)" in drag
+    assert "snap-${line.type}" in transient and "line.label" in transient
+    canvas_node = (ROOT / "studio" / "components" / "CanvasNode.tsx").read_text(encoding="utf-8")
+    assert "canvasSnapLines" in canvas_node and "parentRect.left-canvasRect.left" in canvas_node
 
 
 def test_alignment_math_and_single_transaction_reducer_commands_exist():
@@ -31,9 +39,11 @@ def test_alignment_math_and_single_transaction_reducer_commands_exist():
 
 def test_guides_render_inside_transformed_artboard_and_layers_remain_semantic():
     app = (ROOT / "studio" / "App.tsx").read_text(encoding="utf-8")
+    transient = (ROOT / "studio" / "engine" / "transient.ts").read_text(encoding="utf-8")
     layers = (ROOT / "studio" / "components" / "LayersPanel.tsx").read_text(encoding="utf-8")
-    assert "className={`snap-guide ${line.orientation} snap-${line.type}`}" in app
-    assert "left:line.position" in app and "top:line.position" in app
+    assert "<TransientSnapLines />" in app
+    assert "className:`snap-guide ${line.orientation} snap-${line.type}`" in transient
+    assert "left:line.position" in transient and "top:line.position" in transient
     assert "return next" in layers
 
 
@@ -87,3 +97,65 @@ def test_geometry_primitives_cover_resize_alignment_distribution_and_screen_thre
     assert vectors['snapped']['snapLines'][0]['type'] == 'center'
     assert vectors['spacing']['snappedRect']['x'] == 220
     assert any(line['type'] == 'spacing' for line in vectors['spacing']['snapLines'])
+
+
+def test_snapping_matrix_covers_edges_centers_spacing_parent_bounds_and_zoom():
+    """Exercise every alignment relation against the production snap engine."""
+    with tempfile.TemporaryDirectory(prefix='studio-snap-matrix-') as target:
+        subprocess.run([
+            str(ROOT / 'node_modules' / '.bin' / 'tsc.cmd'),
+            'studio/geometry/snapping.ts',
+            '--outDir', target,
+            '--module', 'commonjs',
+            '--target', 'ES2020',
+            '--skipLibCheck',
+        ], cwd=ROOT, check=True, capture_output=True, text=True)
+        result = subprocess.run(['node', '-e', r'''
+const assert=require('node:assert/strict');
+const {computeSnapping}=require('./snapping.js');
+const close=(a,b,t=.000001)=>assert.ok(Math.abs(a-b)<=t,`${a} != ${b}`);
+const relationOffsets={left:0,center:20,right:40};
+const relationTargets={left:100,center:200,right:300};
+const relations=['left','center','right'];
+let horizontal=0,vertical=0;
+for(const source of relations) for(const target of relations){
+  const x=relationTargets[target]-relationOffsets[source]+3;
+  const result=computeSnapping({x,y:180,w:40,h:40},[{x:100,y:100,w:200,h:200}],null,6);
+  const line=result.snapLines.find(item=>item.orientation==='vertical');
+  assert.ok(line,`${source}->${target} has no vertical guide`);
+  close(line.position,relationTargets[target]);
+  close(result.snappedRect.x,relationTargets[target]-relationOffsets[source]);
+  horizontal++;
+  const y=relationTargets[target]-relationOffsets[source]+3;
+  const verticalResult=computeSnapping({x:180,y,w:40,h:40},[{x:100,y:100,w:200,h:200}],null,6);
+  const verticalLine=verticalResult.snapLines.find(item=>item.orientation==='horizontal');
+  assert.ok(verticalLine,`${source}->${target} has no horizontal guide`);
+  close(verticalLine.position,relationTargets[target]);
+  close(verticalResult.snappedRect.y,relationTargets[target]-relationOffsets[source]);
+  vertical++;
+}
+const gapX=computeSnapping({x:385,y:20,w:80,h:40},[
+  {x:100,y:10,w:80,h:60},{x:204,y:10,w:160,h:60}
+],null,6);
+const spacingX=gapX.snapLines.find(item=>item.type==='spacing');
+assert.ok(spacingX);close(gapX.snappedRect.x,388);close(spacingX.position,388);assert.equal(spacingX.label,'24 px');
+const gapY=computeSnapping({x:20,y:385,w:40,h:80},[
+  {x:10,y:100,w:60,h:80},{x:10,y:204,w:60,h:160}
+],null,6);
+const spacingY=gapY.snapLines.find(item=>item.type==='spacing');
+assert.ok(spacingY);close(gapY.snappedRect.y,388);close(spacingY.position,388);assert.equal(spacingY.label,'24 px');
+const nested=computeSnapping({x:196,y:130,w:40,h:40},[],{x:0,y:0,w:400,h:300},6);
+const parentLine=nested.snapLines.find(item=>item.orientation==='vertical');
+assert.ok(parentLine);close(parentLine.position,200);close(nested.snappedRect.x,200);
+const rotatedPolicy=computeSnapping({x:296,y:120,w:40,h:40},[{x:100,y:100,w:200,h:200}],null,6);
+assert.equal(rotatedPolicy.snapLines.find(item=>item.orientation==='vertical')?.position,300);
+for(const zoom of [.25,.5,.75,1,1.25,1.5,2,4]){
+  const threshold=6/zoom, offset=3/zoom;
+  const zoomed=computeSnapping({x:100-offset,y:180,w:200,h:40},[{x:100,y:100,w:100,h:200}],null,threshold);
+  close(zoomed.snappedRect.x,100);close(zoomed.snapLines.find(item=>item.orientation==='vertical').position,100);
+}
+console.log(JSON.stringify({horizontal,vertical,zoomLevels:8,policy:'axis-aligned bounding boxes'}));
+'''], cwd=target, check=False, capture_output=True, text=True)
+        assert result.returncode == 0, result.stderr + result.stdout
+        result_json = json.loads(result.stdout)
+        assert result_json == {'horizontal': 9, 'vertical': 9, 'zoomLevels': 8, 'policy': 'axis-aligned bounding boxes'}

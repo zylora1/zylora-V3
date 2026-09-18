@@ -30,11 +30,12 @@ def test_resize_supports_aspect_ratio_and_center_modifiers():
     assert "e.shiftKey" in resize and "center:e.altKey" in resize
 
 
-def test_editor_uses_one_transformed_artboard_and_touch_safe_pan():
+def test_editor_uses_one_native_artboard_and_touch_safe_pan():
     app = (ROOT / "studio" / "App.tsx").read_text(encoding="utf-8")
     css = (ROOT / "static" / "studio-ux.css").read_text(encoding="utf-8")
     assert "zoomAtPoint" in app
-    assert "translate3d(${viewport.x}px,${viewport.y}px,0) scale(${state.zoom})" in app
+    assert 'data-viewport={`${viewport.x},${viewport.y},${state.zoom}`}' in app
+    assert "width: width * state.zoom" in app
     assert "touch-action:none" in css and "overflow:hidden" in css
 
 

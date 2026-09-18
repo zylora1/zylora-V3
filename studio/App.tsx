@@ -1018,6 +1018,7 @@ export function App() {
                   >
                     {page ? (
                       <>
+                        <TransientSnapLines />
                         <CanvasNode nodeId={page.rootNodeId} />
                         {!preview && <SelectionOverlay />}
                       </>

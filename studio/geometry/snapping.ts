@@ -52,7 +52,16 @@ export function computeSnapping(rect:Rect,peers:Rect[],parentBounds:Rect|null,le
   const choose=(axis:'x'|'y',delta:number,line:SnapLine)=>{const distance=Math.abs(delta);if(options.disableSnapping||distance>threshold)return;const current=axis==='x'?bestX:bestY;if(!current||distance<current.distance-EPSILON){const next={delta,distance,line};if(axis==='x')bestX=next;else bestY=next;}};
   const sx=(target:number,source:number,type:SnapKind='edge')=>choose('x',target-source,{position:target,orientation:'vertical',type});
   const sy=(target:number,source:number,type:SnapKind='edge')=>choose('y',target-source,{position:target,orientation:'horizontal',type});
-  const candidate=(r:Rect)=>{xEdges(r).forEach(v=>{sx(v,rect.x);sx(v,rect.x+rect.w)});yEdges(r).forEach(v=>{sy(v,rect.y);sy(v,rect.y+rect.h)});sx(xCenter(r),xCenter(rect),'center');sy(yCenter(r),yCenter(rect),'center');};
+  const candidate=(r:Rect)=>{
+    // Evaluate every source/target relation: each edge and the centre of the
+    // moving rectangle may align to either edge or the centre of a peer. The
+    // previous edge-only pairing missed edge-to-centre and centre-to-edge
+    // cases even though the guide model supports them.
+    const xSources=[rect.x,rect.x+rect.w,xCenter(rect)],xTargets=[r.x,r.x+r.w,xCenter(r)];
+    const ySources=[rect.y,rect.y+rect.h,yCenter(rect)],yTargets=[r.y,r.y+r.h,yCenter(r)];
+    xSources.forEach((source,sourceIndex)=>xTargets.forEach((target,targetIndex)=>sx(target,source,sourceIndex===2||targetIndex===2?'center':'edge')));
+    ySources.forEach((source,sourceIndex)=>yTargets.forEach((target,targetIndex)=>sy(target,source,sourceIndex===2||targetIndex===2?'center':'edge')));
+  };
   if(!options.disableSnapping){
     if(parentBounds)candidate(parentBounds);
     // A peer can only snap when one of its edges/centers is near the moving
@@ -69,8 +78,12 @@ export function computeSnapping(rect:Rect,peers:Rect[],parentBounds:Rect|null,le
     // Keep edge/center/parent snapping at any size and reserve distance-guide
     // work for documents with at most 250 peers.
     if(peers.length<=250){
-      addSpacingCandidates(rect,nearby,true,(c,line)=>xs.push({candidate:c,line}));
-      addSpacingCandidates(rect,nearby,false,(c,line)=>ys.push({candidate:c,line}));
+      // Use the full peer set for interval discovery. The final `choose`
+      // threshold still limits what can snap, while considering only `nearby`
+      // peers can hide the first member of an equal-spacing pair when the
+      // moving node is just beyond the spatial envelope.
+      addSpacingCandidates(rect,peers,true,(c,line)=>xs.push({candidate:c,line}));
+      addSpacingCandidates(rect,peers,false,(c,line)=>ys.push({candidate:c,line}));
       xs.forEach(v=>choose('x',v.candidate-rect.x,v.line));ys.forEach(v=>choose('y',v.candidate-rect.y,v.line));
     }
   }

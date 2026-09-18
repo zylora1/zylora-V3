@@ -1268,34 +1268,7 @@ def set_notifications(payload:NotificationIn,request:Request,site_id:str|None=No
             db.execute(text('''INSERT INTO notification_settings(id,user_id,site_id,email_to,country_code,phone_number,whatsapp_verified,notify_new_form_lead,notify_new_chatbot_lead,notify_new_appointment,notify_appointment_cancelled_or_rescheduled,notify_other_enquiries,updated_at,created_at) VALUES (:i,:u,:s,:e,:cc,:p,:v,:f,:ch,:a,:ac,:o,:c,:c)'''),{**vals,'i':str(uuid4())})
     return {'ok':True,'whatsapp_verified':verified}
 
-@router.post('/notifications/whatsapp/request-otp')
-def request_otp(request:Request,site_id:str|None=None):
-    u=_user(request,True); durable_rate_limit('otp:'+u['id'],5,3600)
-    with SessionLocal() as db:
-        if site_id: _owned_site(db,u['id'],site_id)
-        row=db.execute(text('SELECT * FROM notification_settings WHERE user_id=:u AND ((site_id=:s) OR (site_id IS NULL AND :s IS NULL))'),{'u':u['id'],'s':site_id}).mappings().first()
-    if not row or not row['phone_number']: raise HTTPException(400,'Save a phone number first')
-    code=f'{random.randint(0,999999):06d}'; digest=hashlib.sha256(code.encode()).hexdigest(); e164=f"{row['country_code']}{row['phone_number']}"
-    with SessionLocal.begin() as db:
-        db.execute(text('INSERT INTO whatsapp_otps(id,user_id,site_id,phone_e164,code_hash,expires_at,attempts,consumed,created_at) VALUES (:i,:u,:s,:p,:h,:e,0,0,:c)'),{'i':str(uuid4()),'u':u['id'],'s':site_id,'p':e164,'h':digest,'e':(datetime.now(timezone.utc)+timedelta(minutes=10)).isoformat(),'c':now_iso()})
-    send_whatsapp(e164,f'Your Zylora verification code is {code}. It expires in 10 minutes.')
-    result={'ok':True,'destination':e164[-4:]}
-    if settings.app_env != 'production': result['debug_code']=code
-    return result
 
-@router.post('/notifications/whatsapp/verify')
-def verify_otp(payload:OtpIn,request:Request,site_id:str|None=None):
-    u=_user(request,True)
-    with SessionLocal.begin() as db:
-        row=db.execute(text('SELECT * FROM whatsapp_otps WHERE user_id=:u AND ((site_id=:s) OR (site_id IS NULL AND :s IS NULL)) AND consumed=0 ORDER BY created_at DESC LIMIT 1'),{'u':u['id'],'s':site_id}).mappings().first()
-        if not row: raise HTTPException(400,'No active verification request')
-        if datetime.fromisoformat(row['expires_at']) < datetime.now(timezone.utc): raise HTTPException(400,'Code expired')
-        if row['attempts']>=5: raise HTTPException(429,'Too many attempts')
-        db.execute(text('UPDATE whatsapp_otps SET attempts=attempts+1 WHERE id=:i'),{'i':row['id']})
-        if hashlib.sha256(payload.code.encode()).hexdigest()!=row['code_hash']: raise HTTPException(400,'Incorrect code')
-        db.execute(text('UPDATE whatsapp_otps SET consumed=1 WHERE id=:i'),{'i':row['id']})
-        db.execute(text('UPDATE notification_settings SET whatsapp_verified=1,updated_at=:c WHERE user_id=:u AND ((site_id=:s) OR (site_id IS NULL AND :s IS NULL))'),{'c':now_iso(),'u':u['id'],'s':site_id})
-    return {'ok':True,'whatsapp_verified':True}
 
 @router.get('/billing')
 def billing(request:Request):

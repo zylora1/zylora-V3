@@ -61,6 +61,9 @@ accepted as runtime evidence.
   persistent storage.
 - `STUDIO_ENGINE=legacy` remains the production/default value until the full
   Penpot runtime checklist passes in staging.
+- The native Zylora Studio candidate is selected independently with
+  `STUDIO_ENGINE=native`; unknown values fail closed. This value is staging
+  only until the authenticated golden path and PostgreSQL gates pass.
 
 ## Health and readiness
 

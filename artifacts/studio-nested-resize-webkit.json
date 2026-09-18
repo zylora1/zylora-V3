@@ -1,0 +1,229 @@
+{
+  "browser": "webkit",
+  "handles": {
+    "right": {
+      "before": {
+        "x": 100,
+        "y": 80,
+        "w": 220,
+        "h": 140,
+        "rotation": 30
+      },
+      "after": {
+        "x": 98,
+        "y": 88,
+        "w": 252,
+        "h": 140,
+        "rotation": 30
+      },
+      "handle_box": {
+        "x": 933.0046997070312,
+        "y": 460.4398498535156,
+        "width": 21.6090087890625,
+        "height": 21.609039306640625
+      },
+      "selected": "true",
+      "anchor_error": 0.143593539448986,
+      "changed": true,
+      "parent_rotation": 25,
+      "node_rotation": 30
+    },
+    "left": {
+      "before": {
+        "x": 100,
+        "y": 80,
+        "w": 220,
+        "h": 140,
+        "rotation": 30
+      },
+      "after": {
+        "x": 69,
+        "y": 72,
+        "w": 253,
+        "h": 140,
+        "rotation": 30
+      },
+      "handle_box": {
+        "x": 806.8268432617188,
+        "y": 280.23919677734375,
+        "width": 21.6090087890625,
+        "height": 21.609039306640625
+      },
+      "selected": "true",
+      "anchor_error": 0.25,
+      "changed": true,
+      "parent_rotation": 25,
+      "node_rotation": 30
+    },
+    "bottom": {
+      "before": {
+        "x": 100,
+        "y": 80,
+        "w": 220,
+        "h": 140,
+        "rotation": 30
+      },
+      "after": {
+        "x": 92,
+        "y": 78,
+        "w": 220,
+        "h": 171,
+        "rotation": 30
+      },
+      "handle_box": {
+        "x": 812.5706176757812,
+        "y": 410.48345947265625,
+        "width": 21.60906982421875,
+        "height": 21.609039306640625
+      },
+      "selected": "true",
+      "anchor_error": 0.25,
+      "changed": true,
+      "parent_rotation": 25,
+      "node_rotation": 30
+    },
+    "top": {
+      "before": {
+        "x": 100,
+        "y": 80,
+        "w": 220,
+        "h": 140,
+        "rotation": 30
+      },
+      "after": {
+        "x": 108,
+        "y": 51,
+        "w": 220,
+        "h": 171,
+        "rotation": 30
+      },
+      "handle_box": {
+        "x": 927.2391357421875,
+        "y": 330.19171142578125,
+        "width": 21.6090087890625,
+        "height": 21.60906982421875
+      },
+      "selected": "true",
+      "anchor_error": 0.25,
+      "changed": true,
+      "parent_rotation": 25,
+      "node_rotation": 30
+    },
+    "bottom-right": {
+      "before": {
+        "x": 100,
+        "y": 80,
+        "w": 220,
+        "h": 140,
+        "rotation": 30
+      },
+      "after": {
+        "x": 90,
+        "y": 86,
+        "w": 252,
+        "h": 173,
+        "rotation": 30
+      },
+      "handle_box": {
+        "x": 875.6640014648438,
+        "y": 500.5901794433594,
+        "width": 21.60906982421875,
+        "height": 21.609039306640625
+      },
+      "selected": "true",
+      "anchor_error": 0.3935935394490002,
+      "changed": true,
+      "parent_rotation": 25,
+      "node_rotation": 30
+    },
+    "bottom-left": {
+      "before": {
+        "x": 100,
+        "y": 80,
+        "w": 220,
+        "h": 140,
+        "rotation": 30
+      },
+      "after": {
+        "x": 61,
+        "y": 70,
+        "w": 253,
+        "h": 172,
+        "rotation": 30
+      },
+      "handle_box": {
+        "x": 749.4861450195312,
+        "y": 320.3895263671875,
+        "width": 21.60906982421875,
+        "height": 21.60906982421875
+      },
+      "selected": "true",
+      "anchor_error": 0.3935935394489718,
+      "changed": true,
+      "parent_rotation": 25,
+      "node_rotation": 30
+    },
+    "top-right": {
+      "before": {
+        "x": 100,
+        "y": 80,
+        "w": 220,
+        "h": 140,
+        "rotation": 30
+      },
+      "after": {
+        "x": 106,
+        "y": 58,
+        "w": 250,
+        "h": 171,
+        "rotation": 30
+      },
+      "handle_box": {
+        "x": 990.33251953125,
+        "y": 420.2984313964844,
+        "width": 21.60906982421875,
+        "height": 21.60906982421875
+      },
+      "selected": "true",
+      "anchor_error": 0.5766062413412101,
+      "changed": true,
+      "parent_rotation": 25,
+      "node_rotation": 30
+    },
+    "top-left": {
+      "before": {
+        "x": 100,
+        "y": 80,
+        "w": 220,
+        "h": 140,
+        "rotation": 30
+      },
+      "after": {
+        "x": 80,
+        "y": 43,
+        "w": 250,
+        "h": 172,
+        "rotation": 30
+      },
+      "handle_box": {
+        "x": 864.1546630859375,
+        "y": 240.09779357910156,
+        "width": 21.60906982421875,
+        "height": 21.609054565429688
+      },
+      "selected": "true",
+      "anchor_error": 0.3564064605509998,
+      "changed": true,
+      "parent_rotation": 25,
+      "node_rotation": 30
+    }
+  },
+  "nested": true,
+  "parent_transform": {
+    "x": 180,
+    "y": 120,
+    "rotation": 25
+  },
+  "node_rotation": 30,
+  "errors": []
+}

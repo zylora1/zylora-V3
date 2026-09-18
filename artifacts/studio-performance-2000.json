@@ -1,0 +1,143 @@
+[
+  {
+    "requested_nodes": 2000,
+    "rendered_nodes": 2001,
+    "dom_elements": 2236,
+    "fixture_build_ms": 1217.72,
+    "sequential_insertion_ms": null,
+    "operations": {
+      "selection": {
+        "frames": 13,
+        "median_frame_ms": 16.699999999999818,
+        "p95_frame_ms": 33.299999999999955,
+        "max_frame_ms": 33.299999999999955,
+        "long_task_count": 0,
+        "max_long_task_ms": 0,
+        "p95_long_task_ms": 0,
+        "input_event_count": 0,
+        "p95_input_duration_ms": 0,
+        "p95_input_delay_ms": 0,
+        "layout_reads": 0,
+        "layout_read_ms": 0,
+        "long_tasks": [],
+        "operation": "selection",
+        "wall_ms": 58.5
+      },
+      "drag": {
+        "frames": 42,
+        "median_frame_ms": 16.699999999999818,
+        "p95_frame_ms": 16.700000000000273,
+        "max_frame_ms": 33.30000000000018,
+        "long_task_count": 0,
+        "max_long_task_ms": 0,
+        "p95_long_task_ms": 0,
+        "input_event_count": 0,
+        "p95_input_duration_ms": 0,
+        "p95_input_delay_ms": 0,
+        "layout_reads": 27,
+        "layout_read_ms": 1.9000000059604645,
+        "long_tasks": [],
+        "operation": "drag",
+        "wall_ms": 527.4
+      },
+      "resize": {
+        "frames": 159,
+        "median_frame_ms": 16.699999999999818,
+        "p95_frame_ms": 16.800000000000182,
+        "max_frame_ms": 33.30000000000018,
+        "long_task_count": 0,
+        "max_long_task_ms": 0,
+        "p95_long_task_ms": 0,
+        "input_event_count": 0,
+        "p95_input_duration_ms": 0,
+        "p95_input_delay_ms": 0,
+        "layout_reads": 27,
+        "layout_read_ms": 0.5000000298023224,
+        "long_tasks": [],
+        "operation": "resize",
+        "wall_ms": 2511.68
+      },
+      "zoom": {
+        "frames": 11,
+        "median_frame_ms": 16.699999999999818,
+        "p95_frame_ms": 33.400000000000546,
+        "max_frame_ms": 33.400000000000546,
+        "long_task_count": 0,
+        "max_long_task_ms": 0,
+        "p95_long_task_ms": 0,
+        "input_event_count": 0,
+        "p95_input_duration_ms": 0,
+        "p95_input_delay_ms": 0,
+        "layout_reads": 1,
+        "layout_read_ms": 0,
+        "long_tasks": [],
+        "operation": "zoom",
+        "wall_ms": 9.55
+      },
+      "breakpoint": {
+        "frames": 17,
+        "median_frame_ms": 16.699999999999818,
+        "p95_frame_ms": 33.400000000000546,
+        "max_frame_ms": 33.400000000000546,
+        "long_task_count": 0,
+        "max_long_task_ms": 0,
+        "p95_long_task_ms": 0,
+        "input_event_count": 0,
+        "p95_input_duration_ms": 0,
+        "p95_input_delay_ms": 0,
+        "layout_reads": 0,
+        "layout_read_ms": 0,
+        "long_tasks": [],
+        "operation": "breakpoint",
+        "wall_ms": 130.89
+      },
+      "undo": {
+        "frames": 16,
+        "median_frame_ms": 16.699999999999818,
+        "p95_frame_ms": 49.899999999999636,
+        "max_frame_ms": 49.899999999999636,
+        "long_task_count": 1,
+        "max_long_task_ms": 70,
+        "p95_long_task_ms": 70,
+        "input_event_count": 0,
+        "p95_input_duration_ms": 0,
+        "p95_input_delay_ms": 0,
+        "layout_reads": 0,
+        "layout_read_ms": 0,
+        "long_tasks": [
+          {
+            "duration": 70,
+            "start": 6220.5,
+            "name": "self"
+          }
+        ],
+        "operation": "undo",
+        "wall_ms": 132.83
+      },
+      "save": {
+        "frames": 125,
+        "median_frame_ms": 16.699999999999818,
+        "p95_frame_ms": 16.700000000000728,
+        "max_frame_ms": 33.400000000000546,
+        "long_task_count": 0,
+        "max_long_task_ms": 0,
+        "p95_long_task_ms": 0,
+        "input_event_count": 0,
+        "p95_input_duration_ms": 0,
+        "p95_input_delay_ms": 0,
+        "layout_reads": 0,
+        "layout_read_ms": 0,
+        "long_tasks": [],
+        "operation": "save",
+        "wall_ms": 1973.67,
+        "serialization": {
+          "count": 2,
+          "total_ms": 16.899999976158142,
+          "max_ms": 10.399999976158142
+        }
+      }
+    },
+    "browser_errors": [],
+    "validation_errors": []
+  }
+]

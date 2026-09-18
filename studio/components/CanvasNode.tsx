@@ -64,8 +64,23 @@ function CanvasNodeView({nodeId,state,dispatch,pageRef,node,selectedNodeIds}:Can
   const gesture=React.useRef<{pointerId:number;startX:number;startY:number;base:any;active:boolean;kind:'select'|'move'}|null>(null);
  const suppressClick=React.useRef(false);
  const getRect=()=>{const el=elementRef.current;if(!el)return{x:parseFloat(cssStyles.left)||0,y:parseFloat(cssStyles.top)||0,w:100,h:40};return rectFromElement(el,el.parentElement,state.zoom,isAbsolute,cssStyles)};
+ const parentRotation=()=>{let parent=elementRef.current?.parentElement,parentAngle=0;while(parent&&parent.id!=='zylora-canvas'){const value=parseFloat(getComputedStyle(parent).rotate||'0');if(Number.isFinite(value))parentAngle+=value;parent=parent.parentElement}return parentAngle};
+ const canvasSnapLines=(lines:any[])=>{
+  const canvas=document.getElementById('zylora-canvas'),parent=elementRef.current?.parentElement;
+  if(!canvas||!parent||parent===canvas)return lines;
+  // Snapping is solved in the selected node's parent-local coordinates. The
+  // transient overlay is rooted at the artboard, so carry the parent's
+  // translation into canvas space exactly once for ordinary (unrotated)
+  // nested frames. Rotated-parent guides remain axis-aligned by policy and
+  // are left in the local frame for the dedicated rotated-node math path.
+  const parentAngle=parentRotation();
+  if(Math.abs(parentAngle)>.001)return lines;
+  const canvasRect=canvas.getBoundingClientRect(),parentRect=parent.getBoundingClientRect();
+  const offsetX=(parentRect.left-canvasRect.left)/Math.max(.01,state.zoom),offsetY=(parentRect.top-canvasRect.top)/Math.max(.01,state.zoom);
+  return lines.map(line=>({...line,position:line.position+(line.orientation==='vertical'?offsetX:offsetY)}));
+ };
  const clearPreview=()=>{clearTransientSnapLines()};
- const previewUpdate=(rect:any,lines:any[]=[])=>{setRectOverride(rect);setTransientSnapLines(lines)};
+ const previewUpdate=(rect:any,lines:any[]=[])=>{setRectOverride(rect);setTransientSnapLines(canvasSnapLines(lines))};
  const endDrag=(rect:any)=>{setRectOverride(null);clearPreview();if(!state.document)return;const geometry={position:'absolute',left:`${Math.round(rect.x)}px`,top:`${Math.round(rect.y)}px`};dragBase.current=null;dispatch({type:'UPDATE_NODE_GEOMETRY',payload:{nodeId,geometry}})};
   const getTargets=()=>{
    const parentId=node.parentId||page.rootNodeId;
@@ -80,14 +95,14 @@ function CanvasNodeView({nodeId,state,dispatch,pageRef,node,selectedNodeIds}:Can
   };
   const {startDrag}=useDrag(previewUpdate,endDrag,state.zoom,getTargets);
  const endResize=(rect:any)=>{setRectOverride(null);clearPreview();dispatch({type:'UPDATE_NODE_GEOMETRY',payload:{nodeId,geometry:{position:'absolute',width:`${Math.round(rect.w)}px`,height:`${Math.round(rect.h)}px`,left:`${Math.round(rect.x)}px`,top:`${Math.round(rect.y)}px`}}})};
-  const {startResize}=useResize({x:0,y:0,w:0,h:0},previewUpdate,endResize,state.zoom,getTargets,parseFloat(cssStyles.rotate||'0')||0);
+ const {startResize}=useResize({x:0,y:0,w:0,h:0},previewUpdate,endResize,state.zoom,getTargets,parseFloat(cssStyles.rotate||'0')||0,parentRotation());
  const startRotate=(e:React.PointerEvent)=>rotation.start(e,elementRef.current,parseFloat(cssStyles.rotate||'0')||0);
  const finishCrop=()=>{dispatch({type:'UPDATE_NODE_CROP',payload:{nodeId,crop:cropDraft}});dispatch({type:'SET_CROP_MODE',payload:null})};
  const cancelCrop=()=>{setCropDraft(cropValue);dispatch({type:'SET_CROP_MODE',payload:null})};
  const cropPointerDown=(e:React.PointerEvent)=>{e.stopPropagation();e.preventDefault();const frame=elementRef.current?.getBoundingClientRect();if(!frame)return;const start={x:cropDraft.x,y:cropDraft.y};const g={pointerId:e.pointerId,startX:e.clientX,startY:e.clientY,base:start,width:frame.width,height:frame.height};cropGesture.current=g;const move=(event:PointerEvent)=>{if(event.pointerId!==g.pointerId)return;const scale=Math.max(1,cropDraft.scale),max=50*scale;setCropDraft(previous=>({...previous,x:Math.max(-max,Math.min(max,g.base.x+(event.clientX-g.startX)/g.width*100)),y:Math.max(-max,Math.min(max,g.base.y+(event.clientY-g.startY)/g.height*100))}))};const up=(event:PointerEvent)=>{if(event.pointerId!==g.pointerId)return;window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);cropCleanup.current=null;cropGesture.current=null};cropCleanup.current=()=>{window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);cropGesture.current=null};window.addEventListener('pointermove',move);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up)};
  const cropPointerMove=(_:React.PointerEvent)=>{};
  const cropPointerUp=(_:React.PointerEvent)=>{};
- const select=(e:React.MouseEvent)=>{e.stopPropagation();dispatch({type:'SELECT_NODE',payload:e.shiftKey?(isSelected?state.selectedNodeIds.filter(id=>id!==nodeId):[...state.selectedNodeIds,nodeId]):[nodeId]})};
+ const select=(e:React.MouseEvent)=>{e.stopPropagation();if(node.type==='page')return;dispatch({type:'SELECT_NODE',payload:e.shiftKey?(isSelected?state.selectedNodeIds.filter(id=>id!==nodeId):[...state.selectedNodeIds,nodeId]):[nodeId]})};
  const pointerDown=(e:React.PointerEvent)=>{
   if(isLocked)return;
   if(e.button===1||(window as any).__zyloraSpacePressed)return;

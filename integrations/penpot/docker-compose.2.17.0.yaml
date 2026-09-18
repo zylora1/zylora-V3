@@ -24,10 +24,26 @@
 # WARNING: if you're exposing Penpot to the internet, you should remove the flags
 # 'disable-secure-session-cookies' and 'disable-email-verification'
 x-flags: &penpot-flags
-  PENPOT_FLAGS: disable-email-verification enable-smtp enable-prepl-server disable-secure-session-cookies enable-mcp
+  PENPOT_FLAGS: login-with-oidc disable-email-verification enable-smtp enable-prepl-server disable-secure-session-cookies enable-mcp
 
 x-uri: &penpot-public-uri
-  PENPOT_PUBLIC_URI: http://localhost:9001
+  # Set PENPOT_PUBLIC_URI to the user-facing Studio URL in production.
+  # For local development this is localhost. For Render/cloud, use the actual domain.
+  PENPOT_PUBLIC_URI: ${PENPOT_PUBLIC_URI:-http://localhost:9001}
+
+x-oidc: &penpot-oidc
+  # OIDC integration: Zylora acts as the OIDC provider.
+  # PENPOT_OIDC_BASE_URI must be reachable FROM the Penpot backend container.
+  # In production use the internal service name, not localhost.
+  # Example: http://zylora-app:8000/oauth  (if on same Docker network)
+  # These values are intentionally not hardcoded; provide via environment or .env file.
+  PENPOT_OIDC_BASE_URI: ${PENPOT_OIDC_BASE_URI:-http://zylora-app:8000/oauth}
+  PENPOT_OIDC_CLIENT_ID: ${PENPOT_OIDC_CLIENT_ID:-zylora_penpot_client}
+  PENPOT_OIDC_CLIENT_SECRET: ${PENPOT_OIDC_CLIENT_SECRET:-CHANGE_ME_IN_PRODUCTION}
+  PENPOT_OIDC_AUTH_URI: ${PENPOT_OIDC_AUTH_URI:-http://zylora-app:8000/oauth/authorize}
+  PENPOT_OIDC_TOKEN_URI: ${PENPOT_OIDC_TOKEN_URI:-http://zylora-app:8000/oauth/token}
+  PENPOT_OIDC_USERINFO_URI: ${PENPOT_OIDC_USERINFO_URI:-http://zylora-app:8000/oauth/userinfo}
+  PENPOT_OIDC_NAME: Zylora Studio
 
 x-body-size: &penpot-http-body-size
   # Max body size
@@ -111,7 +127,7 @@ services:
       # PENPOT_DISABLE_IPV6_LISTEN: "true"
 
   penpot-backend:
-    image: "penpotapp/backend:${PENPOT_VERSION:-2.16}"
+    image: "penpotapp/backend:${PENPOT_VERSION:-2.17.0}"
     restart: always
 
     volumes:
@@ -126,10 +142,10 @@ services:
     networks:
       - penpot
 
-    ## Configuration envronment variables for the backend container.
+    ## Configuration environment variables for the backend container.
 
     environment:
-      << : [*penpot-flags, *penpot-public-uri, *penpot-http-body-size, *penpot-secret-key]
+      <<: [*penpot-flags, *penpot-public-uri, *penpot-oidc, *penpot-http-body-size, *penpot-secret-key]
 
       ## Database connection parameters. Don't touch them unless you are using custom
       ## postgresql connection parameters.

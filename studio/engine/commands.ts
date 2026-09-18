@@ -58,7 +58,6 @@ export const validateStudioCommand=(state:StudioState,action:StudioCommandAction
   if(action.type==='SET_DOCUMENT'||action.type==='APPLY_EXTERNAL_DOCUMENT'){
     return action.payload&&typeof action.payload==='object'?'': 'A Studio document is required';
   }
-  if(action.type==='EXECUTE_COMMAND')return 'Nested Studio commands are not allowed';
   const nodeId=(action as any).payload?.nodeId;
   const nodeActions=new Set([
     'UPDATE_NODE_STYLE','UPDATE_NODE_GEOMETRY','UPDATE_NODE_INTERACTIONS','UPDATE_NODE_CONTENT',

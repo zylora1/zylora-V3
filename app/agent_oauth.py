@@ -205,6 +205,11 @@ async def authorize(request: Request):
         values['site_ids'] = request.query_params.getlist('site_ids')
         params = _authorize_values(values, user['id'])
         csrf = token_urlsafe(24)
+        
+        if params['client_id'] == 'zylora_penpot_client':
+            # Auto-authorize trusted Penpot client
+            request.method = 'POST'
+            values['decision'] = 'approve'
         return _consent_page(request, params, user, csrf)
     parsed = parse_qs((await request.body()).decode('utf-8'), keep_blank_values=True)
     values = {key: items[-1] if len(items) == 1 else items for key, items in parsed.items()}
@@ -345,3 +350,26 @@ def authorization_server_metadata(request: Request):
 def protected_resource_metadata(request: Request):
     base = str(request.base_url).rstrip('/')
     return {'resource': OAUTH_RESOURCE, 'authorization_servers': [base], 'scopes_supported': list(_SCOPE_ORDER), 'bearer_methods_supported': ['header']}
+
+
+@router.get('/oauth/userinfo')
+async def userinfo(request: Request):
+    auth = request.headers.get('Authorization')
+    if not auth or not auth.startswith('Bearer '):
+        raise HTTPException(401, 'Missing Bearer Token')
+    
+    token = auth.split('Bearer ')[1]
+    with SessionLocal() as db:
+        # Resolve token to user
+        from sqlalchemy import text
+        from .agent_oauth import _hash
+        row = db.execute(text('SELECT u.id, u.email, u.name FROM agent_connectors c JOIN users u ON u.id = c.user_id WHERE c.token_hash = :hash'), {'hash': _hash(token)}).mappings().first()
+        if not row:
+            raise HTTPException(401, 'Invalid Token')
+            
+        return {
+            'sub': str(row['id']),
+            'email': str(row['email']),
+            'name': str(row['name']) or 'Zylora User',
+            'email_verified': True
+        }

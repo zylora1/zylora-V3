@@ -1,6 +1,6 @@
 import pytest
 
-from app.config import settings
+from app.config import Settings, settings
 from app.penpot_manifest import PenpotManifest, PenpotManifestStatus
 from app.penpot_mapping import PenpotMappingError, PenpotMappingService
 from app.agent_gateway import _ensure_edit_source
@@ -25,9 +25,17 @@ def test_penpot_manifest_is_blocked_without_verified_upstream_commit(monkeypatch
 def test_penpot_engine_gate_defaults_to_legacy_and_rejects_unknown(monkeypatch):
     monkeypatch.setattr(settings, "studio_engine", "legacy")
     assert PenpotManifest.engine_enabled() is False
+    monkeypatch.setattr(settings, "studio_engine", "native")
+    assert PenpotManifest.engine_enabled() is False
     monkeypatch.setattr(settings, "studio_engine", "invalid", raising=False)
     with pytest.raises(ValueError):
         PenpotManifest.engine_enabled()
+
+
+def test_settings_accepts_native_engine_and_rejects_unknown_values():
+    assert Settings(_env_file=None, studio_engine="native").studio_engine == "native"
+    with pytest.raises(ValueError, match="legacy, native, or penpot"):
+        Settings(_env_file=None, studio_engine="unexpected")
 
 
 def test_mapping_authorization_is_tenant_scoped(monkeypatch):

@@ -113,8 +113,8 @@ class PenpotManifest:
     @classmethod
     def engine_enabled(cls) -> bool:
         engine = str(settings.studio_engine or 'legacy').strip().lower()
-        if engine not in {'legacy', 'penpot'}:
-            raise ValueError('STUDIO_ENGINE must be legacy or penpot')
+        if engine not in {'legacy', 'native', 'penpot'}:
+            raise ValueError('STUDIO_ENGINE must be legacy, native, or penpot')
         # A commit string alone is not a runnable integration. The upstream
         # source, Zylora OIDC SSO settings, and a started runtime are required
         # before the public /studio route can hand a user to Penpot.

@@ -214,8 +214,8 @@ function renderAssistantTestLine(role,text){const box=$('#assistantTestTranscrip
 async function startAssistantTest(){const siteId=assistantSiteId();if(!siteId)return;try{const j=await api(`/api/sites/${siteId}/assistant/test/conversations`,{method:'POST',body:JSON.stringify({session_id:`owner-test-${Date.now()}`,page_url:'/owner-test'})});assistantTestConversation=j.id;$('#assistantTestTranscript').innerHTML='<p class="muted-copy">Test mode active — no real lead, notification or booking side effects.</p>';toast('Assistant test started')}catch(e){toast(e.message)}}
 async function sendAssistantTest(){const siteId=assistantSiteId(),input=$('#assistantTestInput'),message=input?.value.trim();if(!siteId||!message)return;if(!assistantTestConversation)await startAssistantTest();if(!assistantTestConversation)return;input.value='';renderAssistantTestLine('visitor',message);try{const r=await api(`/api/sites/${siteId}/assistant/test/conversations/${assistantTestConversation}/messages`,{method:'POST',body:JSON.stringify({message})});renderAssistantTestLine('assistant',r.answer||'No answer returned.')}catch(e){renderAssistantTestLine('assistant',`Test error: ${e.message}`)}}
 async function saveSettings(e){e.preventDefault();const f=e.currentTarget;const payload={email_to:f.elements.email_to.value||null,country_code:f.elements.country_code.value||'+91',phone_number:f.elements.phone_number.value||null};for(const k of ['notify_new_form_lead','notify_new_chatbot_lead','notify_new_appointment','notify_appointment_cancelled_or_rescheduled','notify_other_enquiries'])payload[k]=f.elements[k].checked;try{const j=await api('/api/notifications',{method:'PUT',body:JSON.stringify(payload)});$('#notifyStatus').textContent='Settings saved.';$('#verifyState').textContent=j.whatsapp_verified?'WhatsApp number verified ✓':'WhatsApp number not verified';state.settingsLoaded=true}catch(err){$('#notifyStatus').textContent=err.message}}
-async function requestOtp(){try{const j=await api('/api/notifications/whatsapp/request-otp',{method:'POST'});$('#verifyState').textContent=`Code sent to number ending ${j.destination}.`;if(j.debug_code){$('#otpCode').value=j.debug_code;$('#verifyState').textContent+=` Development code: ${j.debug_code}`}}catch(e){toast(e.message)}}
-async function verifyOtp(){try{const code=$('#otpCode').value.trim();await api('/api/notifications/whatsapp/verify',{method:'POST',body:JSON.stringify({code})});$('#verifyState').textContent='WhatsApp number verified ✓';toast('WhatsApp verified')}catch(e){toast(e.message)}}
+
+
 async function loadGrowth(){try{const j=await api(`/api/growth?days=${Number(state.analyticsRange||30)}`),t=j.totals||{},af=j.assistant||{};const convText=Number(t.visitors||0)>0?`${Number(t.lead_conversion_rate||0).toFixed(1)}%`:'—';$('#growthVisitors')&&($('#growthVisitors').textContent=t.visitors||0);$('#growthViews')&&($('#growthViews').textContent=`${t.page_views||0} page views`);$('#growthConversion')&&($('#growthConversion').textContent=convText);$('#growthCtaRate')&&($('#growthCtaRate').textContent=`${Number(t.cta_rate||0).toFixed(1)}% CTA rate`);$('#assistantOpened')&&($('#assistantOpened').textContent=af.opened||0);$('#assistantMeaningful')&&($('#assistantMeaningful').textContent=af.meaningful_conversations||0);$('#assistantLeads')&&($('#assistantLeads').textContent=af.leads_captured||0);$('#assistantQualified')&&($('#assistantQualified').textContent=af.qualified_leads||0);$('#assistantHot')&&($('#assistantHot').textContent=af.hot_leads||0);$('#assistantAppointments')&&($('#assistantAppointments').textContent=af.appointments_booked||0);if($('#overviewLeadCount'))$('#overviewLeadCount').textContent=state.leads?.length||0;if($('#overviewQualifiedLeads'))$('#overviewQualifiedLeads').textContent=(state.leads||[]).filter(l=>['HOT','WARM','QUALIFIED'].includes(String(l.lead_temperature||l.status||'').toUpperCase())).length;if($('#overviewAppointmentsBooked'))$('#overviewAppointmentsBooked').textContent=af.appointments_booked||0;if($('#overviewConversionRate'))$('#overviewConversionRate').textContent=convText;if($('#overviewAssistantConvs'))$('#overviewAssistantConvs').textContent=af.meaningful_conversations||0;if($('#overviewAssistantLeads'))$('#overviewAssistantLeads').textContent=af.leads_captured||0;if($('#overviewAssistantRate'))$('#overviewAssistantRate').textContent=`${Number(af.conversion_rate||0).toFixed(1)}%`;(function(){var _base=Number(af.opened||0);var _bars=[{id:'funnelBarOpened',val:af.opened||0},{id:'funnelBarConversations',val:af.meaningful_conversations||0},{id:'funnelBarLeads',val:af.leads_captured||0},{id:'funnelBarQualified',val:af.qualified_leads||0},{id:'funnelBarHot',val:af.hot_leads||0},{id:'funnelBarAppointments',val:af.appointments_booked||0}];_bars.forEach(function(b){var el=document.getElementById(b.id);if(el){var pct=_base>0?Math.round((b.val/_base)*100):0;el.style.width=(_base>0?(b.id==='funnelBarOpened'?100:pct):0)+'%';}});})();$('#assistantFunnelCount')&&($('#assistantFunnelCount').textContent=af.leads_captured||0);$('#assistantFunnelRate')&&($('#assistantFunnelRate').textContent=`${Number(af.conversion_rate||0).toFixed(1)}% conversion`);const perfData=Array.isArray(j.performance_series)?j.performance_series:[];if(window.ZyloraCharts&&typeof window.ZyloraCharts.renderPerformanceChart==='function'){window.ZyloraCharts.renderPerformanceChart('shadcnWebsitePerfRoot',perfData)}const insights=$('#growthInsights');if(insights)insights.innerHTML=(j.insights||[]).map(x=>`<div class="stack-item"><div><b>${escapeHtml(x.title||x.code)}</b><small>${escapeHtml(x.detail||'')}</small></div>${x.action==='AI_OPTIMIZE_CTA'&&j.sites?.[0]?`<a class="ghost-btn" href="/studio/${j.sites[0].id}?ai=${encodeURIComponent('Improve conversion and CTA clarity using the current website design system. Preserve the brand direction.')}">Fix with AI</a>`:''}</div>`).join('')||'<p class="muted-copy">No recommendations yet. More traffic data will make this view more useful.</p>';const pages=$('#growthPages');if(pages)pages.innerHTML=(j.pages||[]).slice(0,10).map(x=>`<div class="stack-item"><div><b>${escapeHtml(x.path)}</b><small>${x.views} views · ${x.cta_clicks} CTA clicks</small></div><span class="status-badge">${Number(x.cta_rate||0).toFixed(1)}%</span></div>`).join('')||'<p class="muted-copy">No tracked page views yet.</p>'}catch(e){toast(e.message)}}
 function formatHealthStatusBadge(status) {
   const s = String(status || '').toUpperCase();
@@ -621,7 +621,7 @@ async function saveAppointmentSettings(e){
 }
 
 $$('.rail-btn[data-view]').forEach(b=>b.onclick=()=>setView(b.dataset.view));$$('[data-view-jump]').forEach(b=>b.onclick=()=>setView(b.dataset.viewJump));$$('[data-action="new-site"]').forEach(b=>b.onclick=()=>openCreate());$$('[data-close]').forEach(b=>b.onclick=()=>closeModal(b.dataset.close));document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-close]');if(b&&b.dataset.close)closeModal(b.dataset.close);});$$('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModal(m.id)}));
-$('#notifyForm')?.addEventListener('submit',saveSettings);$('#assistantSettingsForm')?.addEventListener('submit',saveAssistantSettings);$('#assistantSite')?.addEventListener('change',loadAssistantSettings);$('#assistantStartTest')?.addEventListener('click',startAssistantTest);$('#assistantSendTest')?.addEventListener('click',sendAssistantTest);$('#assistantTestInput')?.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendAssistantTest()}});$('#profileForm')?.addEventListener('submit',saveProfile);$('#openDeleteAccount')?.addEventListener('click',openDeleteAccount);$('#deleteAccountForm')?.addEventListener('submit',deleteAccount);$('#deleteAccountEmail')?.addEventListener('input',syncDeleteAccountButton);$('#deleteAccountText')?.addEventListener('input',syncDeleteAccountButton);$('#deleteAccountUnderstand')?.addEventListener('change',syncDeleteAccountButton);$('#deleteAccountReauth')?.addEventListener('click',reauthenticateForAccountDeletion);$('#requestOtp')?.addEventListener('click',requestOtp);$('#verifyOtp')?.addEventListener('click',verifyOtp);$('#refreshLeads')?.addEventListener('click',loadLeads);$('#leadSelectAll')?.addEventListener('change',e=>$$('.lead-row-check').forEach(x=>x.checked=e.target.checked));$$('[data-analytics-range]').forEach(b=>b.onclick=()=>{$$('[data-analytics-range]').forEach(x=>x.classList.toggle('active',x===b));state.analyticsRange=Number(b.dataset.analyticsRange||30);renderAnalytics();loadGrowth()});$$('[data-overview-range]').forEach(b=>b.onclick=()=>{$$('[data-overview-range]').forEach(x=>x.classList.toggle('active',x===b));state.analyticsRange=Number(b.dataset.overviewRange||7);loadGrowth()});$$('[data-billing-scroll-plans]').forEach(b=>b.onclick=()=>$('#billingPlans')?.scrollIntoView({behavior:'smooth',block:'start'}));$('#healthSite')?.addEventListener('change',loadHealth);$('#healthRefresh')?.addEventListener('click',loadHealth);$('#healthBackup')?.addEventListener('click',createHealthBackup);$('#healthRetryDeliveries')?.addEventListener('click',retryHealthDeliveries);$('#refreshBillingRecovery')?.addEventListener('click',loadBillingRecovery);$('#refreshChart')?.addEventListener('click',()=>{const p=$('#refreshChart');if(p){p.textContent='✓';setTimeout(()=>p.textContent='↻',700);}toast('Analytics refreshed')});$('#notificationBell')?.addEventListener('click',async()=>{const n=await refreshNotificationIndicator();toast(n?`${n} unread Support message${n===1?'':'s'}`:'No unread notifications')});$('#logoutBtn')?.addEventListener('click',async()=>{try{await api('/api/auth/logout',{method:'POST'})}finally{sessionStorage.clear();location.href='/'}});
+$('#notifyForm')?.addEventListener('submit',saveSettings);$('#assistantSettingsForm')?.addEventListener('submit',saveAssistantSettings);$('#assistantSite')?.addEventListener('change',loadAssistantSettings);$('#assistantStartTest')?.addEventListener('click',startAssistantTest);$('#assistantSendTest')?.addEventListener('click',sendAssistantTest);$('#assistantTestInput')?.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendAssistantTest()}});$('#profileForm')?.addEventListener('submit',saveProfile);$('#openDeleteAccount')?.addEventListener('click',openDeleteAccount);$('#deleteAccountForm')?.addEventListener('submit',deleteAccount);$('#deleteAccountEmail')?.addEventListener('input',syncDeleteAccountButton);$('#deleteAccountText')?.addEventListener('input',syncDeleteAccountButton);$('#deleteAccountUnderstand')?.addEventListener('change',syncDeleteAccountButton);$('#deleteAccountReauth')?.addEventListener('click',reauthenticateForAccountDeletion);$('#requestOtp')?.addEventListener('click',(()=>{} ));$('#verifyOtp')?.addEventListener('click',(()=>{}));$('#refreshLeads')?.addEventListener('click',loadLeads);$('#leadSelectAll')?.addEventListener('change',e=>$$('.lead-row-check').forEach(x=>x.checked=e.target.checked));$$('[data-analytics-range]').forEach(b=>b.onclick=()=>{$$('[data-analytics-range]').forEach(x=>x.classList.toggle('active',x===b));state.analyticsRange=Number(b.dataset.analyticsRange||30);renderAnalytics();loadGrowth()});$$('[data-overview-range]').forEach(b=>b.onclick=()=>{$$('[data-overview-range]').forEach(x=>x.classList.toggle('active',x===b));state.analyticsRange=Number(b.dataset.overviewRange||7);loadGrowth()});$$('[data-billing-scroll-plans]').forEach(b=>b.onclick=()=>$('#billingPlans')?.scrollIntoView({behavior:'smooth',block:'start'}));$('#healthSite')?.addEventListener('change',loadHealth);$('#healthRefresh')?.addEventListener('click',loadHealth);$('#healthBackup')?.addEventListener('click',createHealthBackup);$('#healthRetryDeliveries')?.addEventListener('click',retryHealthDeliveries);$('#refreshBillingRecovery')?.addEventListener('click',loadBillingRecovery);$('#refreshChart')?.addEventListener('click',()=>{const p=$('#refreshChart');if(p){p.textContent='✓';setTimeout(()=>p.textContent='↻',700);}toast('Analytics refreshed')});$('#notificationBell')?.addEventListener('click',async()=>{const n=await refreshNotificationIndicator();toast(n?`${n} unread Support message${n===1?'':'s'}`:'No unread notifications')});$('#logoutBtn')?.addEventListener('click',async()=>{try{await api('/api/auth/logout',{method:'POST'})}finally{sessionStorage.clear();location.href='/'}});
 $('#domainForm')?.addEventListener('submit',addDomain);if($('#domainSite'))$('#domainSite').onchange=loadDomains;$('#refreshDomains')?.addEventListener('click',loadDomains);$('#googleSheetConfig')?.addEventListener('submit',saveGoogleSheet);if($('#integrationSite'))$('#integrationSite').onchange=loadGoogleSheet;$('#googleSheetTest')?.addEventListener('click',testGoogleSheet);$('#googleSheetResync')?.addEventListener('click',resyncGoogleSheet);$('#googleSheetRemove')?.addEventListener('click',removeGoogleSheet);$('#knowledgeForm')?.addEventListener('submit',saveKnowledge);if($('#knowledgeSite'))$('#knowledgeSite').onchange=loadKnowledge;$('#refreshKnowledge')?.addEventListener('click',loadKnowledge);$('#freelancerApplicationForm')?.addEventListener('submit',saveFreelancerProfile);$('#freelancerStudioProfileForm')?.addEventListener('submit',saveStudioProfile);$('#publishTemplateForm')?.addEventListener('submit',publishTemplate);$('#refreshStudio')?.addEventListener('click',()=>{loadFreelancerStudio();loadEligibleRatings()});$('#newSupportConversation')?.addEventListener('click',supportComposer);$('#refreshSupport')?.addEventListener('click',loadSupport);$('#transferForm')?.addEventListener('submit',submitTransfer);$('#openProEnquiry')?.addEventListener('click',()=>{openModal('proModal');if($('#proName'))$('#proName').value=state.me?.name||'';if($('#proEmail'))$('#proEmail').value=state.me?.email||'';});$('#proForm')?.addEventListener('submit',submitPro);$('#resendVerify')?.addEventListener('click',resendVerification);$('#devVerify')?.addEventListener('click',devVerify);$$('[data-plan-change="FREE"]').forEach(b=>b.onclick=switchFree);$$('[data-paid-plan]').forEach(b=>b.onclick=()=>upgradePaid(b.dataset.paidPlan));
 $('#assistantViewSite')?.addEventListener('change',loadDedicatedAssistant);$('#dedicatedAssistantSettingsForm')?.addEventListener('submit',saveDedicatedAssistant);$('#assistantStartTestBtn')?.addEventListener('click',startDedicatedAssistantTest);$('#dedicatedAssistantSend')?.addEventListener('click',sendDedicatedAssistantMessage);$('#dedicatedAssistantInput')?.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendDedicatedAssistantMessage()}});
 $('#appointmentsSite')?.addEventListener('change',loadAppointments);$('#refreshAppointments')?.addEventListener('click',loadAppointments);$('#appointmentSettingsForm')?.addEventListener('submit',saveAppointmentSettings);
@@ -972,3 +972,73 @@ if(_planCopy){new MutationObserver(()=>{
 // visible plan cards from the same public catalogue used by the API so a
 // Super Admin change cannot leave stale credit quantities in the dashboard.
 (async()=>{try{const catalogue=await api('/api/public/plans');for(const plan of (catalogue.items||[])){const key=String(plan.plan||'').toUpperCase();for(const [attr,field] of [['data-plan-pages','page_limit'],['data-plan-ai','ai_credits'],['data-plan-leads','lead_credits'],['data-plan-reserve','chatbot_reserved_credits']])document.querySelectorAll(`[${attr}="${key}"]`).forEach(el=>{if(plan[field]!==undefined)el.textContent=Number(plan[field]).toLocaleString()})}}catch(e){/* billing remains usable with server-rendered defaults */}})();
+
+// Mobile Navigation Logic
+document.addEventListener('DOMContentLoaded', () => {
+    const bottomNavBtns = document.querySelectorAll('.mobile-nav-btn[data-view]');
+    const moreBtn = document.querySelector('[data-mobile-more]');
+    const moreSheet = document.getElementById('mobileMoreSheet');
+    const moreOverlay = document.getElementById('mobileMoreOverlay');
+    const moreClose = document.getElementById('mobileMoreClose');
+    const sheetBtns = document.querySelectorAll('.mobile-sheet-body .rail-btn[data-view]');
+    
+    function closeSheet() {
+        if (moreSheet) moreSheet.hidden = true;
+    }
+    
+    if (moreBtn) {
+        moreBtn.addEventListener('click', () => {
+            moreSheet.hidden = false;
+        });
+    }
+    
+    if (moreOverlay) moreOverlay.addEventListener('click', closeSheet);
+    if (moreClose) moreClose.addEventListener('click', closeSheet);
+    
+    bottomNavBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const viewId = btn.getAttribute('data-view');
+            if (viewId) {
+                // Remove active from all bottom navs
+                bottomNavBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                // Trigger the existing view switcher
+                const railBtn = document.querySelector(`.rail-btn[data-view="${viewId}"]`);
+                if (railBtn) railBtn.click();
+            }
+        });
+    });
+    
+    sheetBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const viewId = btn.getAttribute('data-view');
+            if (viewId) {
+                closeSheet();
+                const railBtn = document.querySelector(`.rail-btn[data-view="${viewId}"]`);
+                if (railBtn) railBtn.click();
+            }
+        });
+    });
+    
+    const mobileLogout = document.getElementById('mobileLogoutBtn');
+    if (mobileLogout) {
+        mobileLogout.addEventListener('click', () => {
+            const mainLogout = document.getElementById('logoutBtn');
+            if (mainLogout) mainLogout.click();
+        });
+    }
+    
+    // Add data-labels to table cells for mobile responsive rendering
+    const tables = document.querySelectorAll('.lead-table');
+    tables.forEach(table => {
+        const headers = Array.from(table.querySelectorAll('th')).map(th => th.textContent.trim());
+        const rows = table.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            Array.from(row.querySelectorAll('td')).forEach((td, i) => {
+                if (headers[i]) {
+                    td.setAttribute('data-label', headers[i]);
+                }
+            });
+        });
+    });
+});

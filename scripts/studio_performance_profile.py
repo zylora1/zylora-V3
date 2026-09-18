@@ -1,4 +1,4 @@
-"""Repeatable 500-node Studio resize profile.
+"""Repeatable Studio interaction profile for configurable document sizes.
 
 This is a read-only browser benchmark. It uses the real Studio bundle and
 browser pointer events against an isolated temporary SQLite database; it never
@@ -297,13 +297,10 @@ def run(count: int) -> dict:
         page.expose_function("__backendFetch", bridge(client))
         page.set_content(shell, wait_until="load")
         page.wait_for_selector('.studio-canvas [data-studio-id]', timeout=15000)
-        page.get_by_role("button", name="Elements").click()
-        add = page.get_by_role("button", name="Add Rectangle", exact=True)
-        started = time.perf_counter()
-        for _ in range(count):
-            add.click()
-        insertion_ms = (time.perf_counter() - started) * 1000
-        page.wait_for_timeout(300)
+        # The stress document already contains the requested number of nodes.
+        # Do not insert another N nodes here: that doubled the document size
+        # and made the 1000/2000 tiers measure browser memory exhaustion rather
+        # than Studio interaction performance.
         page.wait_for_function("document.querySelector('.save-status-control')?.title==='Saved'", timeout=30000)
         nodes = page.locator('.studio-canvas [data-studio-id]:not([data-studio-type="page"])')
         rendered = nodes.count()
@@ -329,11 +326,15 @@ def run(count: int) -> dict:
             "zoom": profile_operation(
                 page,
                 "zoom",
-                lambda: page.locator(".canvas-workspace").dispatch_event(
+                lambda: page.get_by_test_id("canvas-workspace").dispatch_event(
                     "wheel", {"deltaY": -100, "deltaX": 0, "ctrlKey": True, "clientX": 720, "clientY": 450}
                 ),
             ),
-            "breakpoint": profile_operation(page, "breakpoint", lambda: page.get_by_role("button", name="Resize").click()),
+            "breakpoint": profile_operation(
+                page,
+                "breakpoint",
+                lambda: page.locator('.bp-btn[title^="Tablet view"]').click(),
+            ),
             "undo": profile_operation(page, "undo", lambda: page.get_by_label("Undo").click()),
         }
 
@@ -381,10 +382,18 @@ def run(count: int) -> dict:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Profile the real Studio bundle with 500 nodes.")
+    parser = argparse.ArgumentParser(description="Profile the real Studio bundle at selected node counts.")
     parser.add_argument("--output", type=Path)
+    parser.add_argument(
+        "--counts",
+        default="50,100,250,500",
+        help="Comma-separated requested node counts (default: 50,100,250,500).",
+    )
     args = parser.parse_args()
-    results = [run(count) for count in (50, 100, 250, 500)]
+    counts = tuple(int(value.strip()) for value in args.counts.split(",") if value.strip())
+    if not counts or any(count < 1 for count in counts):
+        parser.error("--counts must contain positive integers")
+    results = [run(count) for count in counts]
     rendered = json.dumps(results, indent=2)
     print(rendered)
     if args.output:

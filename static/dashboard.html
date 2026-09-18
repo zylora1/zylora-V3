@@ -922,4 +922,48 @@
   </div>
 </div>
 
+
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <button class="mobile-nav-btn active" data-view="overview">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5.5 9.5V21h13V9.5"></path><path d="M9.5 21v-6h5v6"></path></svg>
+    <span>Home</span>
+  </button>
+  <button class="mobile-nav-btn" data-view="websites">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect height="16" rx="2" width="18" x="3" y="4"></rect><path d="M3 9h18M8 4v16"></path></svg>
+    <span>Sites</span>
+  </button>
+  <button class="mobile-nav-btn mobile-nav-primary" data-action="new-site">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg>
+    <span>Create</span>
+  </button>
+  <button class="mobile-nav-btn" data-view="leads">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"></circle><path d="M3.5 20v-1.5A4.5 4.5 0 0 1 8 14h2a4.5 4.5 0 0 1 4.5 4.5V20"></path><path d="M16 11a3 3 0 1 0 0-6M17 14h.5a3.5 3.5 0 0 1 3.5 3.5V20"></path></svg>
+    <span>Leads</span>
+  </button>
+  <button class="mobile-nav-btn" data-mobile-more>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+    <span>More</span>
+  </button>
+</nav>
+
+<div class="mobile-more-sheet" id="mobileMoreSheet" hidden>
+  <div class="mobile-sheet-overlay" id="mobileMoreOverlay"></div>
+  <div class="mobile-sheet-content">
+    <div class="mobile-sheet-header">
+      <h3>Menu</h3>
+      <button class="mobile-sheet-close" id="mobileMoreClose">&times;</button>
+    </div>
+    <div class="mobile-sheet-body">
+      <!-- We will move the sidebar nav here on mobile via CSS/JS or just duplicate the essential links -->
+      <button class="rail-btn" data-view="crm-overview">CRM Hub</button>
+      <button class="rail-btn" data-view="assistant">AI Assistant</button>
+      <button class="rail-btn" data-view="appointments">Appointments</button>
+      <button class="rail-btn" data-view="analytics">Growth</button>
+      <button class="rail-btn" data-view="domains">Domains</button>
+      <button class="rail-btn" data-view="settings">Settings</button>
+      <button class="rail-btn logout" id="mobileLogoutBtn">Log out</button>
+    </div>
+  </div>
+</div>
+
 </body></html>
