@@ -3,6 +3,7 @@ import { makeAutoObservable } from 'mobx';
 import type { CodeFileSystem } from '@onlook/file-system';
 import { type Branch } from '@onlook/models';
 import type { PostHog } from 'posthog-js/react';
+import type { ZyloraCodeFileSystemAdapter } from '../../zylora/adapters/ZyloraCodeFileSystemAdapter';
 import { ActionManager } from './action';
 import { ApiManager } from './api';
 import { AstManager } from './ast';
@@ -33,6 +34,7 @@ import { ThemeManager } from './theme';
 export class EditorEngine {
     readonly projectId: string;
     readonly posthog: PostHog;
+    readonly zyloraFilesystem?: ZyloraCodeFileSystemAdapter;
     readonly branches: BranchManager = new BranchManager(this);
 
     get activeSandbox(): SandboxManager {
@@ -72,9 +74,10 @@ export class EditorEngine {
     readonly api: ApiManager = new ApiManager(this);
     readonly ide: IdeManager = new IdeManager(this);
 
-    constructor(projectId: string, posthog: PostHog) {
+    constructor(projectId: string, posthog: PostHog, zyloraFilesystem?: ZyloraCodeFileSystemAdapter) {
         this.projectId = projectId;
         this.posthog = posthog;
+        this.zyloraFilesystem = zyloraFilesystem;
         makeAutoObservable(this);
     }
 

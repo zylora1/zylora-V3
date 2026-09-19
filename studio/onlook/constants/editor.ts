@@ -1,6 +1,8 @@
 import { Orientation, Theme } from './frame';
 
-export const APP_NAME = 'Onlook';
+// The editor engine is derived from Onlook OSS, but the customer-facing
+// product identity remains Zylora Studio.
+export const APP_NAME = 'Zylora Studio';
 export const APP_SCHEMA = 'onlook';
 export const HOSTING_DOMAIN = 'onlook.live';
 export const MAX_NAME_LENGTH = 50;

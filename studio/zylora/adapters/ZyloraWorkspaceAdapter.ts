@@ -71,6 +71,18 @@ export class ZyloraWorkspaceAdapter {
     this.cache.set(normalized, content);
   }
 
+  async deleteFile(filePath: string): Promise<void> {
+    const normalized = filePath.replace(/^\/+/, '');
+    const res = await fetch(`/api/sites/${encodeURIComponent(this.siteId)}/code/files?path=${encodeURIComponent(normalized)}`, {
+      method: 'DELETE',
+      headers: this.auth.getHeaders(),
+    });
+    if (!res.ok) {
+      throw new Error(`Failed to delete file ${normalized}: ${res.statusText}`);
+    }
+    this.cache.delete(normalized);
+  }
+
   async exists(filePath: string): Promise<boolean> {
     const files = await this.listFiles();
     const normalized = filePath.replace(/^\/+/, '');

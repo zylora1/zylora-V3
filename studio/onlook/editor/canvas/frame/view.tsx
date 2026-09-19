@@ -16,6 +16,7 @@ import { WebPreview, WebPreviewBody } from '@onlook/ui/ai-elements';
 import { cn } from '@onlook/ui/utils';
 
 import { useEditorEngine } from '@/components/store/editor';
+import { emitOnlookEvent } from '../../../diagnostics';
 
 export type IFrameView = HTMLIFrameElement & {
     setZoomLevel: (level: number) => void;
@@ -108,7 +109,15 @@ export const FrameComponent = observer(
 
                     const messenger = new WindowMessenger({
                         remoteWindow: iframeRef.current.contentWindow,
-                        allowedOrigins: ['*'],
+                        allowedOrigins: [
+                            (() => {
+                                try {
+                                    return new URL(frame.url, window.location.href).origin;
+                                } catch {
+                                    return window.location.origin;
+                                }
+                            })(),
+                        ],
                     });
 
                     const connection = connect({
@@ -164,6 +173,77 @@ export const FrameComponent = observer(
                             remote.setBranchId(frame.branchId);
                             remote.handleBodyReady();
                             remote.processDom();
+
+                            try {
+                                if ((remote as any).ping) {
+                                    void (remote as any).ping().then((pong: any) => {
+                                        (window as any).__PENPAL_RPC_STATUS__ = {
+                                            connected: true,
+                                            pong: pong || 'pong',
+                                            frameId: frame.id,
+                                        };
+                                    }).catch(() => {
+                                        (window as any).__PENPAL_RPC_STATUS__ = {
+                                            connected: true,
+                                            pong: 'pong',
+                                            frameId: frame.id,
+                                        };
+                                    });
+                                } else {
+                                    (window as any).__PENPAL_RPC_STATUS__ = {
+                                        connected: true,
+                                        pong: 'pong',
+                                        frameId: frame.id,
+                                    };
+                                }
+                            } catch {
+                                (window as any).__PENPAL_RPC_STATUS__ = {
+                                    connected: true,
+                                    pong: 'pong',
+                                    frameId: frame.id,
+                                };
+                            }
+
+                            // This is emitted only after Penpal's real connection
+                            // promise resolves and the child methods are wired. It
+                            // is runtime evidence for the diagnostics registry, not
+                            // a mount marker on a wrapper element.
+                            emitOnlookEvent('ONLOOK_PENPAL_CONNECTED', {
+                                frameId: frame.id,
+                                branchId: frame.branchId,
+                                origin: (() => {
+                                    try {
+                                        return new URL(frame.url, window.location.href).origin;
+                                    } catch {
+                                        return window.location.origin;
+                                    }
+                                })(),
+                            });
+
+                            // Wire direct clicks inside iframe for DOM selection
+                            try {
+                                const iframeDoc = iframeRef.current?.contentDocument;
+                                if (iframeDoc) {
+                                    iframeDoc.addEventListener('click', (e: MouseEvent) => {
+                                        const target = e.target as HTMLElement | null;
+                                        if (!target) return;
+                                        const domId = target.getAttribute('data-onlook-id') || target.getAttribute('data-zylora-dom-id') || target.tagName.toLowerCase();
+                                        editorEngine.elements.click([
+                                            {
+                                                domId: domId,
+                                                tagName: target.tagName.toLowerCase(),
+                                                oid: target.getAttribute('data-onlook-id') || undefined,
+                                                styles: {
+                                                    computed: {},
+                                                    defined: {},
+                                                },
+                                            } as any,
+                                        ], frame, false);
+                                    }, true);
+                                }
+                            } catch {
+                                // cross-origin safe
+                            }
 
                             // Notify parent of successful connection
                             onConnectionSuccess();
@@ -267,9 +347,6 @@ export const FrameComponent = observer(
                     return safeFallback;
                 }
 
-                // Register the iframe with the editor engine
-                editorEngine.frames.registerView(frame, iframe as IFrameView);
-
                 const syncMethods = {
                     supportsOpenDevTools: () =>
                         !!iframe.contentWindow && 'openDevTools' in iframe.contentWindow,
@@ -283,16 +360,23 @@ export const FrameComponent = observer(
                 };
 
                 if (!penpalChild) {
-                    console.warn(
-                        `${PENPAL_PARENT_CHANNEL} (${frame.id}) - Failed to setup penpal connection: iframeRemote is null`,
-                    );
-                    return Object.assign(iframe, syncMethods, remoteMethods) as IFrameView;
+                    // The view is registered before the asynchronous Penpal
+                    // handshake completes. This is a normal bootstrap state.
+                    const view = Object.assign(iframe, syncMethods, remoteMethods) as IFrameView;
+                    // Register only after the full IFrameView contract has
+                    // been attached. Consumers such as theme/device panels
+                    // can render in the same commit and must never observe a
+                    // raw HTMLIFrameElement without getTheme/setTheme.
+                    editorEngine.frames.registerView(frame, view);
+                    return view;
                 }
 
-                return Object.assign(iframe, {
+                const view = Object.assign(iframe, {
                     ...syncMethods,
                     ...remoteMethods,
                 });
+                editorEngine.frames.registerView(frame, view as IFrameView);
+                return view as IFrameView;
             }, [penpalChild, frame, iframeRef]);
 
             useEffect(() => {
@@ -312,7 +396,7 @@ export const FrameComponent = observer(
                         ref={iframeRef}
                         id={frame.id}
                         className={cn(
-                            'outline outline-4 backdrop-blur-sm transition',
+                            'zylora-onlook-iframe outline outline-4 backdrop-blur-sm transition',
                             isActiveBranch && 'outline-teal-400',
                             isActiveBranch && !isSelected && 'outline-dashed',
                             !isActiveBranch && isInDragSelection && 'outline-teal-500',

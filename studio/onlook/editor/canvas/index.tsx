@@ -273,6 +273,8 @@ export const Canvas = observer(() => {
     return (
         <HotkeysArea>
             <div
+                data-subsystem="onlook-canvas"
+                data-onlook-runtime="canvas"
                 ref={containerRef}
                 className="overflow-hidden bg-background-onlook flex flex-grow relative"
                 onMouseDown={handleCanvasMouseDown}

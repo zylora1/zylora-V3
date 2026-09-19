@@ -4,22 +4,21 @@ const BASE_EXCLUDED_DIRECTORIES = ['node_modules', 'dist', 'build', '.git', '.ne
 export const CUSTOM_OUTPUT_DIR = '.next-prod';
 export const ONLOOK_CACHE_DIRECTORY = '.onlook';
 
-// Preload script. Fetch from local public folder in dev, fetch from CDN in prod.
+// Preload script is served by the Zylora workspace/runtime.  Do not fetch the
+// upstream vendor CDN at runtime: source provenance is a build-time concern,
+// while the editor must remain self-contained and tenant-controlled.
 export const ONLOOK_PRELOAD_SCRIPT_FILE = 'onlook-preload-script.js';
 // Fetch path to load from local
 export const ONLOOK_DEV_PRELOAD_SCRIPT_SRC = `/${ONLOOK_PRELOAD_SCRIPT_FILE}`;
 // Path to write into sandbox
 export const ONLOOK_DEV_PRELOAD_SCRIPT_PATH = `public/${ONLOOK_PRELOAD_SCRIPT_FILE}`;
-// Fetch url to load from CDN
-const ONLOOK_PROD_PRELOAD_SCRIPT_SRC =
-    'https://cdn.jsdelivr.net/gh/onlook-dev/onlook@d3887f2/apps/web/client/public/onlook-preload-script.js';
-// Officially exported src to load from local or CDN
+// Production uses the same local asset.  Keep the internal constant name for
+// compatibility with the transplanted parser modules.
+const ONLOOK_PROD_PRELOAD_SCRIPT_SRC = ONLOOK_DEV_PRELOAD_SCRIPT_SRC;
 export const ONLOOK_PRELOAD_SCRIPT_SRC = isDev ? ONLOOK_DEV_PRELOAD_SCRIPT_SRC : ONLOOK_PROD_PRELOAD_SCRIPT_SRC;
 
 export const DEPRECATED_PRELOAD_SCRIPT_SRCS = [
     'https://cdn.jsdelivr.net/gh/onlook-dev/onlook@main/apps/web/client/public/onlook-preload-script.js',
-    // Intentionally reversed to deprecate non-preferred (local in prod, CDN in dev) usage.
-    isDev ? ONLOOK_PROD_PRELOAD_SCRIPT_SRC : ONLOOK_DEV_PRELOAD_SCRIPT_SRC,
 ];
 
 export const DEFAULT_IMAGE_DIRECTORY = 'public';

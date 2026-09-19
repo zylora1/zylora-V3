@@ -153,6 +153,7 @@ export const PagesTab = observer(() => {
     return (
         <div
             ref={ref}
+            data-onlook-runtime="pages"
             className="text-active flex h-full w-full flex-grow flex-col gap-2 overflow-hidden p-3 text-xs"
         >
             <div className="m-0 flex flex-row items-center justify-between gap-2">

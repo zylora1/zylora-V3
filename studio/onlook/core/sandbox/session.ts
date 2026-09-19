@@ -13,7 +13,8 @@ export class SessionManager {
 
     constructor(
         private readonly branch: Branch,
-        private readonly errorManager: ErrorManager
+        private readonly errorManager: ErrorManager,
+        private readonly siteId?: string,
     ) {
         makeAutoObservable(this);
     }
@@ -29,9 +30,10 @@ export class SessionManager {
         this.isConnecting = true;
 
         const attemptConnection = async () => {
-            const provider = await createCodeProviderClient(CodeProvider.CodeSandbox, {
+            const provider = await createCodeProviderClient(CodeProvider.Zylora, {
                 providerOptions: {
-                    codesandbox: {
+                    zylora: {
+                        siteId: this.siteId,
                         sandboxId,
                         userId,
                         initClient: true,

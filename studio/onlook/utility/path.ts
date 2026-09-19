@@ -1,71 +1,20 @@
 import { NEXT_JS_FILE_EXTENSIONS } from '@onlook/constants';
 import { RouterType } from '@onlook/models';
-
-// Browser-safe path helpers
-export const browserPath = {
-    sep: '/',
-    normalize(p: string): string {
-        if (!p) return '';
-        const isAbs = p.startsWith('/');
-        const parts = p.replace(/\\/g, '/').split('/').filter(Boolean);
-        const resolved: string[] = [];
-        for (const part of parts) {
-            if (part === '..') {
-                resolved.pop();
-            } else if (part !== '.') {
-                resolved.push(part);
-            }
-        }
-        return (isAbs ? '/' : '') + resolved.join('/');
-    },
-    resolve(...paths: string[]): string {
-        const combined = paths.join('/');
-        return this.normalize(combined);
-    },
-    extname(p: string): string {
-        const base = this.basename(p);
-        const idx = base.lastIndexOf('.');
-        return idx > 0 ? base.slice(idx) : '';
-    },
-    basename(p: string, ext?: string): string {
-        const normalized = p.replace(/\\/g, '/').replace(/\/$/, '');
-        const lastIdx = normalized.lastIndexOf('/');
-        const base = lastIdx >= 0 ? normalized.slice(lastIdx + 1) : normalized;
-        if (ext && base.endsWith(ext)) {
-            return base.slice(0, -ext.length);
-        }
-        return base;
-    },
-    dirname(p: string): string {
-        const normalized = p.replace(/\\/g, '/').replace(/\/$/, '');
-        const lastIdx = normalized.lastIndexOf('/');
-        return lastIdx > 0 ? normalized.slice(0, lastIdx) : (normalized.startsWith('/') ? '/' : '.');
-    },
-    posix: {
-        normalize(p: string): string {
-            return p.replace(/\\/g, '/').replace(/\/+/g, '/');
-        }
-    }
-};
-
-const path = browserPath;
-
-function isSubdir(parentDir: string, subdir: string): boolean {
-    const parent = normalize(parentDir).replace(/\/$/, '');
-    const sub = normalize(subdir).replace(/\/$/, '');
-    return sub === parent || sub.startsWith(parent + '/');
-}
+import isSubdir from 'is-subdir';
+import path from 'path';
 
 // Utility to normalize paths for comparison (handles Windows and POSIX)
 function normalize(p: string): string {
     if (typeof p !== 'string' || !p) return '';
     let np = p.replace(/\\/g, '/');
+    // Lowercase drive letter for Windows
     if (typeof np === 'string' && np.length > 0 && /^[A-Za-z]:\//.test(np)) {
         np = np[0]?.toLowerCase() + np.slice(1);
     }
     return np;
 }
 
+// See: https://www.npmjs.com/package/is-subdir
 // isSubdir(parentDir, subdir) returns true if subdir is the same as or inside parentDir
 export function isSubdirectory(filePath: string, directories: string[]): boolean {
     const absFilePath = path.resolve(filePath);
@@ -73,9 +22,11 @@ export function isSubdirectory(filePath: string, directories: string[]): boolean
     for (const directory of directories) {
         const absDirectory = path.resolve(directory);
         const normDirectory = normalize(absDirectory);
+        // Standard is-subdir check
         if (isSubdir(normDirectory, normFilePath)) {
             return true;
         }
+        // If directory is a simple name (like 'foo' or '.git'), check if filePath contains it as a segment
         if (
             !directory.includes(path.sep) &&
             !directory.includes('/') &&
@@ -86,6 +37,7 @@ export function isSubdirectory(filePath: string, directories: string[]): boolean
                 return true;
             }
         }
+        // Enhanced: handle mixed absolute/relative by checking if directory segments appear in file path
         const dirSegments = normalize(directory).split('/').filter(Boolean);
         const fileSegments = normFilePath.split('/').filter(Boolean);
         if (dirSegments.length > 0 && fileSegments.length >= dirSegments.length) {
@@ -150,6 +102,12 @@ export const isRootLayoutFile = (
 
 /**
  * Compare two file paths for equality, handling different formats robustly
+ * Normalizes both paths before comparison to handle leading slashes, double slashes, etc.
+ *
+ * Examples:
+ * - pathsEqual('/src/app/page.tsx', 'src/app/page.tsx') => true
+ * - pathsEqual('src//app/page.tsx', 'src/app/page.tsx') => true
+ * - pathsEqual('./src/app/page.tsx', 'src/app/page.tsx') => true
  */
 export function pathsEqual(path1: string | undefined | null, path2: string | undefined | null): boolean {
     if (!path1 || !path2) return false;

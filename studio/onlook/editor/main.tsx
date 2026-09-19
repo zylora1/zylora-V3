@@ -20,6 +20,7 @@ import { EditorBar } from './editor-bar';
 import { LeftPanel } from './left-panel';
 import { RightPanel } from './right-panel';
 import { TopBar } from './top-bar';
+import { emitOnlookEvent, initOnlookDiagnostics } from '../diagnostics';
 
 export const Main = observer(() => {
     const router = useRouter();
@@ -31,6 +32,42 @@ export const Main = observer(() => {
         leftPanelRef,
         rightPanelRef,
     );
+
+    useEffect(() => {
+        if (!isProjectReady) {
+            return;
+        }
+
+        // Runtime provenance is observed from the actual mounted upstream
+        // component roots. The registry is diagnostic-only and never drives
+        // editor state or rendering.
+        initOnlookDiagnostics(editorEngine, { name: 'Zylora AST parser' });
+        emitOnlookEvent('ONLOOK_EDITOR_STORE_READY', { projectId: editorEngine.projectId });
+
+        const surfaces: Array<[string, Parameters<typeof emitOnlookEvent>[0]]> = [
+            ['[data-onlook-runtime="topbar"]', 'ONLOOK_SHELL_MOUNTED'],
+            ['[data-onlook-runtime="canvas"]', 'ONLOOK_CANVAS_MOUNTED'],
+            ['[data-onlook-runtime="layers"]', 'ONLOOK_LAYERS_MOUNTED'],
+            ['[data-onlook-runtime="components"]', 'ONLOOK_COMPONENTS_MOUNTED'],
+            ['[data-onlook-runtime="left-panel"]', 'ONLOOK_DESIGN_PANEL_MOUNTED'],
+            ['[data-onlook-runtime="editor-bar"]', 'ONLOOK_SHELL_MOUNTED'],
+            ['[data-onlook-runtime="bottom-bar"]', 'ONLOOK_SHELL_MOUNTED'],
+            ['[data-subsystem="onlook-code-panel"]', 'ONLOOK_CODE_PANEL_MOUNTED'],
+        ];
+        const seen = new Set<string>();
+        const scan = () => {
+            for (const [selector, event] of surfaces) {
+                if (!seen.has(selector) && document.querySelector(selector)) {
+                    seen.add(selector);
+                    emitOnlookEvent(event, { selector });
+                }
+            }
+        };
+        scan();
+        const observer = new MutationObserver(scan);
+        observer.observe(document.body, { childList: true, subtree: true });
+        return () => observer.disconnect();
+    }, [editorEngine, isProjectReady]);
 
     useEffect(() => {
         function handleGlobalWheel(event: WheelEvent) {
@@ -81,10 +118,10 @@ export const Main = observer(() => {
 
     return (
         <TooltipProvider>
-            <div className="h-screen w-screen flex flex-row select-none relative overflow-hidden">
+            <div className="h-screen w-screen flex flex-row select-none relative overflow-hidden" data-subsystem="onlook-shell">
                 <Canvas />
 
-                <div className="absolute top-0 w-full">
+                <div className="absolute top-0 w-full" data-subsystem="onlook-topbar">
                     <TopBar />
                 </div>
 
@@ -92,6 +129,7 @@ export const Main = observer(() => {
                 <div
                     ref={leftPanelRef}
                     className="absolute top-10 left-0 h-[calc(100%-40px)] z-50"
+                    data-subsystem="onlook-leftpanel"
                 >
                     <LeftPanel />
                 </div>
@@ -108,6 +146,7 @@ export const Main = observer(() => {
                         justifyContent: 'center',
                         alignItems: 'flex-start',
                     }}
+                    data-subsystem="onlook-editorbar"
                 >
                     <div style={{ pointerEvents: 'auto' }}>
                         <EditorBar availableWidth={editorBarAvailableWidth} />
@@ -121,6 +160,7 @@ export const Main = observer(() => {
                         "absolute top-10 right-0 h-[calc(100%-40px)] z-50",
                         editorEngine.state.editorMode === EditorMode.PREVIEW && 'hidden'
                     )}
+                    data-subsystem="onlook-rightpanel"
                 >
                     <RightPanel />
                 </div>
@@ -132,3 +172,5 @@ export const Main = observer(() => {
         </TooltipProvider >
     );
 });
+
+export const ActualOnlookProjectEditor = Main;

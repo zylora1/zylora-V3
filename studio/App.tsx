@@ -151,6 +151,7 @@ export function App() {
     return (
       <ZyloraOnlookStudio
         siteId={siteId}
+        siteName={(window as any).ZYLORA_STUDIO_CONTEXT?.siteName}
         csrf={csrf}
         workspaceId={workspaceId}
       />

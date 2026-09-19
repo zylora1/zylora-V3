@@ -49,6 +49,19 @@ export class ZyloraAuthAdapter {
   }
 
   hasScope(scope: string): boolean {
-    return true;
+    if (!this.user) return false;
+    // The backend remains authoritative.  These values are UI capability
+    // hints only and deliberately fail closed for anonymous/missing context.
+    const role = String(this.user.role || 'USER').toUpperCase();
+    if (role === 'SUPER_ADMIN') return true;
+    return new Set([
+      'studio.read',
+      'studio.write',
+      'studio.publish',
+      'assets.read',
+      'assets.write',
+      'ai.use',
+      'domains.read',
+    ]).has(scope);
   }
 }

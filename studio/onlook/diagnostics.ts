@@ -82,7 +82,7 @@ export function initOnlookDiagnostics(store?: any, astParser?: any): OnlookDiagn
         EditorEngine: 'studio/onlook/core/engine.ts -> vendor/onlook/apps/web/client/src/components/store/editor/engine.ts',
         Canvas: 'studio/onlook/editor/canvas -> vendor/onlook/apps/web/client/src/app/project/[id]/_components/canvas',
         Layers: 'studio/onlook/editor/left-panel/design-panel/layers-tab -> vendor/onlook/apps/web/client/src/app/project/[id]/_components/left-panel/design-panel/layers-tab',
-        Components: 'studio/onlook/editor/left-panel/design-panel/brand-tab -> vendor/onlook/apps/web/client/src/app/project/[id]/_components/left-panel/design-panel/brand-tab',
+        Components: 'studio/onlook/editor/left-panel/design-panel/components-tab -> Zylora workspace/AST adapter (no matching pinned OSS surface)',
         EditorBar: 'studio/onlook/editor/editor-bar -> vendor/onlook/apps/web/client/src/app/project/[id]/_components/editor-bar',
         ASTParser: 'studio/onlook/parser -> vendor/onlook/packages/parser',
         Penpal: '@onlook/penpal -> vendor/onlook/packages/penpal',

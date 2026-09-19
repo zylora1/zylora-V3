@@ -1,5 +1,4 @@
 'use client';
-
 import { useEditorEngine } from '@/components/store/editor';
 import { transKeys } from '@/i18n/keys';
 import { Icons } from '@onlook/ui/icons/index';
@@ -17,10 +16,12 @@ export const RightPanel = observer(() => {
     const t = useTranslations();
     const [isChatHistoryOpen, setIsChatHistoryOpen] = useState(false);
     const currentConversation = editorEngine.chat.conversation.current;
-    const editPanelWidth = 352
+    const editPanelWidth = 352;
 
     return (
         <div
+            data-subsystem="onlook-right-panel"
+            data-onlook-runtime="right-panel"
             className='flex h-full w-full transition-width duration-300 bg-background/95 group/panel border-[0.5px] backdrop-blur-xl shadow rounded-tl-xl'
         >
             <ResizablePanel
@@ -49,7 +50,6 @@ export const RightPanel = observer(() => {
                         </div>
                     </div>
                     <ChatHistory isOpen={isChatHistoryOpen} onOpenChange={setIsChatHistoryOpen} />
-
                     <div className='flex-1 overflow-y-auto'>
                         {currentConversation && (
                             <ChatTab
@@ -59,7 +59,7 @@ export const RightPanel = observer(() => {
                         )}
                     </div>
                 </div>
-            </ResizablePanel >
-        </div >
+            </ResizablePanel>
+        </div>
     );
 });

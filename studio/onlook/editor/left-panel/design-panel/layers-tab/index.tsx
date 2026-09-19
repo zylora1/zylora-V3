@@ -131,6 +131,8 @@ export const LayersTab = observer(() => {
     return (
         <div
             ref={ref}
+            data-subsystem="onlook-layers"
+            data-onlook-runtime="layers"
             className="flex h-full w-full overflow-hidden text-xs text-active p-3"
             onMouseOver={() => setTreeHovered(true)}
             onMouseLeave={handleMouseLeaveTree}

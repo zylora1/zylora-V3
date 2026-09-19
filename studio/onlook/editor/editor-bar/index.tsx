@@ -93,6 +93,8 @@ export const EditorBar = observer(({ availableWidth }: { availableWidth?: number
     return (
         <DropdownManagerProvider>
             <motion.div
+                data-subsystem="onlook-editorbar"
+                data-onlook-runtime="editor-bar"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}

@@ -114,6 +114,7 @@ export const CodeControls = ({ isDirty, currentPath, onSave, onRefresh, onCreate
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <Button
+                            data-testid="save-code-btn"
                             variant="secondary"
                             size="icon"
                             onClick={handleSave}

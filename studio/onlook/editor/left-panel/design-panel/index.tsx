@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite';
 import { useTranslations } from 'next-intl';
 import { BranchesTab } from './branches-tab';
 import { BrandTab } from './brand-tab';
+import { ComponentsTab } from './components-tab';
 import { HelpButton } from './help-button';
 import { ImagesTab } from './image-tab';
 import { LayersTab } from './layers-tab';
@@ -24,6 +25,11 @@ const tabs: {
             value: LeftPanelTabValue.LAYERS,
             icon: <Icons.Layers className="w-5 h-5" />,
             label: transKeys.editor.panels.layers.tabs.layers,
+        },
+        {
+            value: LeftPanelTabValue.COMPONENTS,
+            icon: <Icons.Component className="w-5 h-5" />,
+            label: 'Components',
         },
         {
             value: LeftPanelTabValue.BRAND,
@@ -99,6 +105,8 @@ export const DesignPanel = observer(() => {
 
     return (
         <div
+            data-subsystem="onlook-design-panel"
+            data-onlook-runtime="left-panel"
             className="flex h-full overflow-auto"
             onMouseLeave={handleMouseLeave}
         >
@@ -107,6 +115,15 @@ export const DesignPanel = observer(() => {
                 {tabs.map((tab) => (
                     <button
                         key={tab.value}
+                        data-testid={
+                            tab.value === LeftPanelTabValue.LAYERS
+                                ? 'left-tab-layers'
+                                : tab.value === LeftPanelTabValue.COMPONENTS
+                                ? 'left-tab-components'
+                                : tab.value === LeftPanelTabValue.PAGES
+                                ? 'left-tab-pages'
+                                : undefined
+                        }
                         className={cn(
                             'w-16 h-16 rounded-xl flex flex-col items-center justify-center gap-1.5 p-2',
                             selectedTab === tab.value && isLocked
@@ -119,7 +136,7 @@ export const DesignPanel = observer(() => {
                         onMouseEnter={() => !tab.disabled && handleMouseEnter(tab.value)}
                     >
                         {tab.icon}
-                        <span className="text-xs leading-tight">{t(tab.label)}</span>
+                        <span className="text-xs leading-tight">{typeof tab.label === 'string' ? tab.label : t(tab.label)}</span>
                     </button>
                 ))}
 
@@ -135,6 +152,7 @@ export const DesignPanel = observer(() => {
                     <div className="flex-1 w-[280px] bg-background/95 rounded-xl">
                         <div className="border backdrop-blur-xl h-full shadow overflow-auto p-0 rounded-xl">
                             {selectedTab === LeftPanelTabValue.LAYERS && <LayersTab />}
+                            {selectedTab === LeftPanelTabValue.COMPONENTS && <ComponentsTab />}
                             {selectedTab === LeftPanelTabValue.BRAND && <BrandTab />}
                             {selectedTab === LeftPanelTabValue.PAGES && <PagesTab />}
                             {selectedTab === LeftPanelTabValue.IMAGES && <ImagesTab />}

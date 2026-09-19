@@ -596,7 +596,7 @@ async def studio(site_id:str,request:Request):
         site=db.execute(text('SELECT * FROM sites WHERE id=:site AND user_id=:user'),{'site':site_id,'user':user['id']}).mappings().first()
     if not site: raise HTTPException(404,'Site not found')
     raw=(ROOT/'static'/'studio.html').read_text(encoding='utf-8')
-    context=json.dumps({'siteId':site_id,'siteName':site['name'],'published':str(site.get('status') or '').upper()=='LIVE','csrfToken':user['csrf_token'],'studioEngine':str(site.get('studio_engine') or settings.studio_engine or 'legacy').lower(),'codeWorkspaceId':str(site.get('code_workspace_id') or '')},separators=(',',':')).replace('</','\u003c\\/')
+    context=json.dumps({'siteId':site_id,'siteName':site['name'],'published':str(site.get('status') or '').upper()=='LIVE','csrfToken':user['csrf_token'],'user':{'id':str(user['id']),'email':str(user.get('email') or ''),'name':str(user.get('name') or ''),'role':str(user.get('role') or 'USER')},'studioEngine':str(site.get('studio_engine') or settings.studio_engine or 'legacy').lower(),'codeWorkspaceId':str(site.get('code_workspace_id') or '')},separators=(',',':')).replace('</','\u003c\\/')
     rendered=raw.replace('__ZYLORA_STUDIO_CONTEXT__',context)
     if '/static/studio-ux.css' not in rendered:
         rendered=rendered.replace('</head>','<link rel="stylesheet" href="/static/studio-ux.css"></head>')

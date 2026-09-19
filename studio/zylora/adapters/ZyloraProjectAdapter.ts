@@ -12,6 +12,16 @@ export interface ZyloraSiteContext {
 }
 
 export class ZyloraProjectAdapter {
+  constructor(private readonly siteContext: ZyloraSiteContext) {}
+
+  getProject(): Project {
+    return ZyloraProjectAdapter.createProject(this.siteContext);
+  }
+
+  getDefaultBranch(): Branch {
+    return ZyloraProjectAdapter.createDefaultBranch(this.siteContext);
+  }
+
   static createProject(context: ZyloraSiteContext): Project {
     const now = new Date();
     return {

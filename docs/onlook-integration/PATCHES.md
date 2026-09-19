@@ -1,99 +1,71 @@
 # Onlook OSS Integration & Transplant Patches
 
-## 1. Upstream Metadata
-- **Upstream Repository**: `https://github.com/onlook-dev/onlook`
-- **Pinned Upstream Commit**: `423e2e924366419e418ee049093872d535eea41a`
-- **License**: Apache License 2.0 (see `legal/Apache-2.0-Onlook.txt`)
-- **Integration Strategy**: Maximum Practical OSS Reuse via clean transplant and sovereign Zylora platform adapters.
+## Upstream metadata
 
----
+- **Repository**: `https://github.com/onlook-dev/onlook`
+- **Pinned commit**: `423e2e924366419e418ee049093872d535eea41a`
+- **License**: Apache License 2.0 (`legal/Apache-2.0-Onlook.txt`)
+- **Strategy**: Preserve actual Onlook editor behavior and connect it to sovereign Zylora adapters.
 
-## 2. Transplanted Subsystems and File Inventory
+## Transplanted subsystems
 
-The transplant pulls full upstream subsystems intact from `vendor/onlook` into `studio/onlook/` and `static/`, mounting them when `studio_engine === 'code'`.
+| Upstream surface | Zylora path | Classification |
+|---|---|---|
+| `packages/models/src/` | `studio/onlook/models/` | DIRECT_ONLOOK_REUSE |
+| `packages/constants/src/` | `studio/onlook/constants/` | DIRECT_ONLOOK_REUSE |
+| `packages/penpal/src/` | `studio/onlook/penpal/` | ADAPTED_ONLOOK_REUSE |
+| `packages/utility/src/` | `studio/onlook/utility/` | DIRECT_ONLOOK_REUSE |
+| `packages/parser/src/` | `studio/onlook/parser/` | ADAPTED_ONLOOK_REUSE |
+| `packages/ui/src/` | `studio/onlook/ui/` | DIRECT_ONLOOK_REUSE |
+| `apps/web/client/src/components/store/editor/` | `studio/onlook/core/` | ADAPTED_ONLOOK_REUSE |
+| `apps/web/client/src/app/project/[id]/_components/` | `studio/onlook/editor/` | ADAPTED_ONLOOK_REUSE |
+| `apps/web/client/public/onlook-preload-script.js` | `static/onlook-preload-script.js` | ADAPTED_ONLOOK_REUSE |
 
-| Upstream Path (`vendor/onlook/`) | Transplant Path | Purpose & Functionality |
-| :--- | :--- | :--- |
-| `packages/models/src/` | `studio/onlook/models/` | Core domain models (`Action`, `ChatMessage`, `Code`, `Element`, `Editor`, `Project`, `User`, `Run`, `Settings`, `Socket`). |
-| `packages/constants/src/` | `studio/onlook/constants/` | Editor dimensions, default zoom, hotkeys, styling constants (`editor.ts`). |
-| `packages/penpal/src/` | `studio/onlook/penpal/` | PostMessage RPC bridge connecting the host editor to preview iframes. |
-| `packages/utility/src/` | `studio/onlook/utility/` | Deep cloning, tree traversal, cloning helpers, style normalization. |
-| `packages/parser/src/` | `studio/onlook/parser/` | Babel-based JSX/TSX AST parsing, code modification, stringification, DOM-to-source mapping. |
-| `packages/ui/src/` | `studio/onlook/ui/` | Onlook UI component library (`Button`, `Input`, `Icons`, `DropdownMenu`, etc.). |
-| `apps/web/client/src/components/store/editor/` | `studio/onlook/core/` | MobX-based core editor state engines (`EditorEngine`, `CanvasManager`, `HistoryManager`, `AstManager`, `ChatManager`). |
-| `apps/web/client/src/app/project/[id]/_components/` | `studio/onlook/editor/` | Upstream editor shell (`TopBar`, `EditorBar`, `LeftPanel`, `Canvas`, `RightPanel`, `BottomBar`). |
-| `apps/web/client/public/onlook-preload-script.js` | `static/onlook-preload-script.js` | Browser preview runtime script injected into projects for live Penpal RPC inspection and hover/click highlighting. |
+## Corrective continuation patches
 
----
+### RightPanel
 
-## 3. Adaptations and Modifications
+The pinned upstream RightPanel is a chat panel. It does not contain the former custom Zylora text/classes inspector. The previous local implementation added custom selected-element React state, a `window` selection listener, text/classes inputs, update buttons, fallback regex mutation, and direct PUT calls.
 
-To ensure seamless compilation inside Zylora's Vite-based build pipeline and maintain strict platform security, the following adaptations were applied:
+Those visible custom controls and the duplicate selection authority were removed. `studio/onlook/editor/right-panel/index.tsx` now preserves the pinned upstream structure: chat dropdown, chat controls, chat history, conversation panel, and resizable panel. The only Zylora addition is a non-visual `data-subsystem="onlook-right-panel"` hook for deterministic certification.
 
-1. **Vite & TSConfig Module Aliasing**:
-   - Configured `vite.studio.config.mjs` and `studio/tsconfig.json` with path aliases:
-     - `@onlook/models/*` -> `studio/onlook/models/*`
-     - `@onlook/constants/*` -> `studio/onlook/constants/*`
-     - `@onlook/penpal/*` -> `studio/onlook/penpal/*`
-     - `@onlook/utility/*` -> `studio/onlook/utility/*`
-     - `@onlook/parser/*` -> `studio/onlook/parser/*`
-     - `@onlook/ui/*` -> `studio/onlook/ui/*`
-     - `@/*` -> `studio/onlook/*`
-   - Bundled externalized dependencies: `mobx`, `mobx-react-lite`, `penpal`, `@babel/standalone`, `tailwind-merge`, `clsx`.
+| Classification | Final state |
+|---|---|
+| UPSTREAM_PRESERVED | Chat panel structure, layout, controls, history, conversation rendering |
+| ZYLORA_ADAPTER_WIRING | Platform boundaries remain below the editor shell |
+| CUSTOM_ZYLORA_UI | None in RightPanel |
+| TEST_ONLY_UI | None in RightPanel |
+| SAAS_DEPENDENCY_REPLACEMENT | Existing compatibility boundary remains isolated to unsupported cloud services |
 
-2. **Clean Engine Separation**:
-   - `studio/App.tsx` branches top-level mounting:
-     - `studio_engine === "native"`: Boots `NativeZyloraStudio` with Zylora's native document tree, tool rails, and visual canvas.
-     - `studio_engine === "code"`: Boots `ZyloraOnlookStudio` mounting Onlook's complete transplanted editor UI and engine.
-   - Zero regression or contamination to existing native Zylora projects.
+### Code editor
 
-3. **Preview Instrumentation Injection**:
-   - In `app/code_project.py`: `install_preview_instrumentation()` copies `static/onlook-preload-script.js` to `public/onlook-preload-script.js` in the project workspace and injects `<script src="/onlook-preload-script.js"></script>` into `index.html`.
-   - The preview iframe connects to the parent via Penpal child RPC for bidirectional element selection, bounding box tracking, and style application.
+The pinned upstream editor uses CodeMirror via `@uiw/react-codemirror`. The transparent `data-testid="code-editor-textarea"` overlay was test-only UI and has been removed. The E2E test now focuses the visible `.cm-editor`, performs `ControlOrMeta+A`, inserts source text, clicks the real save control, and verifies durable source persistence.
 
----
+### E2E selectors
 
-## 4. Zylora Platform Adapters (`studio/zylora/adapters/`)
+The old inspector selectors are no longer product requirements and have been removed from the test flow:
 
-All proprietary, non-OSS, and cloud-dependent services from Onlook were excluded and replaced with sovereign Zylora platform adapters:
+- `inspector-text-input`
+- `inspector-update-text-btn`
+- `inspector-classes-input`
+- `inspector-update-classes-btn`
+- `code-editor-textarea`
 
-1. **`ZyloraAuthAdapter`**:
-   - Replaces Supabase/Clerk authentication with Zylora's session cookies and CSRF headers (`X-CSRF-Token`).
-   - Validates user permissions against the active site.
+The E2E path now verifies the real Onlook RightPanel and real CodeMirror surface. The pinned commit does not provide the former custom Design inspector mutation controls, so the test does not fabricate them.
 
-2. **`ZyloraWorkspaceAdapter`**:
-   - Replaces local Electron filesystem operations and cloud file sync with Zylora's atomic REST endpoints:
-     - `GET /api/sites/{site_id}/code/files` (file tree listing)
-     - `GET /api/sites/{site_id}/code/file?path=...` (atomic read)
-     - `PUT /api/sites/{site_id}/code/file` (atomic write)
-   - Enforces lockfile blocking (`package-lock.json`, etc.) and directory traversal protection.
+### Canonical filesystem
 
-3. **`ZyloraSandboxAdapter`**:
-   - Replaces Onlook local daemon / Docker containers with Zylora's `LocalSandboxProvider`:
-     - `POST /api/sites/{site_id}/code/workspace/start`
-     - `POST /api/sites/{site_id}/code/workspace/stop`
-     - `GET /api/sites/{site_id}/code/workspace/status`
-   - Manages preview URLs on localhost with secure sandboxed iframes.
+`ZyloraCodeFileSystemAdapter` in `app/code_project.py` is the single filesystem contract for code-mode source operations. It delegates to the guarded tenant-scoped `CodeProjectAdapter` and supports initialization, reads, writes, directory reads, existence, creation, rename, delete, and watcher hooks. Zylora workspace files remain the durable authority; browser editor state is transient only.
 
-4. **`ZyloraProjectAdapter`**:
-   - Maps Zylora `Site` entity and workspace IDs into Onlook `Project` and `Branch` models.
+### Engine separation and adapters
 
-5. **`ZyloraAIAdapter`**:
-   - Replaces hardcoded Anthropic/OpenAI keys with Zylora's multi-model AI routing engine (`ZYLORA_AI_MODELS`).
-   - Connects to `/api/sites/{site_id}/code/source/text` and Zylora AI gateway.
+`studio/App.tsx` continues to preserve the native/code engine boundary. Code mode mounts `ZyloraOnlookStudio`; native mode remains the existing Zylora Native Studio. Zylora adapters continue to own authentication, project identity, workspace persistence, sandbox lifecycle, history, AI routing, permissions, and publishing.
 
-6. **`ZyloraHistoryAdapter`**:
-   - Bridges Onlook undo/redo transactions to Zylora snapshots (`POST /api/sites/{site_id}/code/snapshot` and restore).
+## Deliberately excluded upstream surfaces
 
-7. **`ZyloraPublishAdapter`**:
-   - Replaces Freestyle/Vercel hosting with Zylora's production publisher, executing sandbox build and publishing to live CDN.
-
----
-
-## 5. Deliberately Excluded Surfaces
-
-The following upstream surfaces were purposefully omitted:
-- Onlook SaaS backend and database schema (`apps/backend`, `packages/db`).
-- Onlook Cloud authentication, Supabase users, and billing (`Stripe`).
-- Onlook Telemetry and PostHog tracking.
+- Onlook SaaS backend and database schema.
+- Onlook cloud authentication and billing.
+- Onlook telemetry and PostHog tracking.
 - Onlook branding, marketing routes, and hosted domains.
+
+These exclusions are documented platform replacements, not hidden editor UI substitutions.

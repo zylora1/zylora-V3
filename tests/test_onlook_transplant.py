@@ -97,6 +97,12 @@ def test_code_file_read_and_write_endpoints(tmp_path, monkeypatch):
     verify_res = client.get(f"/api/sites/{site_id}/code/file?path=src/App.tsx", headers=headers)
     assert "Updated by Onlook" in verify_res.json()["content"]
 
+    # 4. Delete through the canonical workspace adapter boundary
+    delete_res = client.delete(f"/api/sites/{site_id}/code/files?path=src/App.tsx", headers=headers)
+    assert delete_res.status_code == 200, delete_res.text
+    missing_res = client.get(f"/api/sites/{site_id}/code/file?path=src/App.tsx", headers=headers)
+    assert missing_res.status_code == 404
+
 
 def test_preview_instrumentation_injects_onlook_preload(tmp_path, monkeypatch):
     monkeypatch.setattr("app.code_project.ROOT", tmp_path)
@@ -256,6 +262,5 @@ def test_onlook_cross_browser_certification():
     )
     assert result.returncode == 0, f"Cross-browser certification failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
     assert "ALL BROWSER ENGINES CERTIFIED SUCCESSFULLY (0 ERRORS)" in result.stdout
-
 
 

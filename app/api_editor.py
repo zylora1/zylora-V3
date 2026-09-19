@@ -1012,3 +1012,21 @@ def write_code_file(site_id: str, payload: CodeFileWriteIn, request: Request):
     try: adapter.write_file(payload.path,payload.content)
     except (CodeProjectError,FileNotFoundError) as exc: raise HTTPException(422,str(exc))
     return {'ok':True,'path':payload.path}
+
+@router.delete('/sites/{site_id}/code/files')
+def delete_code_file(site_id: str, path: str, request: Request):
+    """Delete a source file through the same tenant-scoped workspace boundary.
+
+    The editor-facing filesystem adapter exposes deletion as a first-class
+    operation. Keep the route separate from the collection listing endpoint
+    so path validation and authorization remain in the canonical code
+    workspace adapter rather than in browser cache code.
+    """
+    _,site=_code_site(site_id,request,True); adapter=bootstrap_code_project(str(site['code_workspace_id']))
+    try:
+        adapter.delete(path)
+    except FileNotFoundError as exc:
+        raise HTTPException(404,str(exc))
+    except CodeProjectError as exc:
+        raise HTTPException(422,str(exc))
+    return {'ok':True,'path':path}

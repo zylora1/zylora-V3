@@ -7,12 +7,12 @@ import { DesignPanel } from "./design-panel";
 
 export const LeftPanel = observer(() => {
     const editorEngine = useEditorEngine();
-    return <>
+    return <div data-onlook-runtime="left-panel" className="size-full">
         <div className={cn('size-full', editorEngine.state.editorMode !== EditorMode.DESIGN && editorEngine.state.editorMode !== EditorMode.PAN && 'hidden')}>
             <DesignPanel />
         </div>
         <div className={cn('size-full', editorEngine.state.editorMode !== EditorMode.CODE && 'hidden')}>
             <CodePanel />
         </div>
-    </>;
+    </div>;
 });

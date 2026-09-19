@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 from pathlib import Path
 from typing import Any
@@ -64,22 +65,32 @@ _DIRECT_PROVIDER_PATTERNS = {
 
 
 def _files(root: Path):
-    for path in sorted(root.rglob("*")):
-        if not path.is_file() or path.suffix.lower() not in _EXTENSIONS:
+    excluded_dirs = {".git", ".codex", ".pytest_cache", "node_modules", "artifacts"}
+    # Walk with directory pruning instead of Path.rglob().  Certification runs
+    # can leave large generated code workspaces behind; pruning prevents both
+    # their enumeration and the Windows handle pressure caused by stat-ing
+    # every nested file before applying source filters.
+    for dirpath, dirnames, filenames in os.walk(root):
+        current = Path(dirpath)
+        relative_dir = current.relative_to(root)
+        if relative_dir.parts and relative_dir.parts[0] not in _SOURCE_DIRS:
+            dirnames[:] = []
             continue
-        relative = path.relative_to(root)
-        relative_parts = set(relative.parts)
-        if len(relative.parts) > 1 and relative.parts[0] not in _SOURCE_DIRS:
-            continue
-        if len(relative.parts) == 1 and relative.name not in _ROOT_FILES:
-            continue
-        if relative_parts & {".git", ".codex", ".pytest_cache", "node_modules", "artifacts"}:
-            continue
-        if "static" in relative_parts and "vendor" in relative_parts:
-            continue
-        if relative.as_posix() in _EXCLUDED_FILES:
-            continue
-        yield path
+        dirnames[:] = sorted(
+            name for name in dirnames
+            if name not in excluded_dirs
+            and not (relative_dir.parts and relative_dir.parts[0] == "static" and name == "vendor")
+        )
+        for filename in sorted(filenames):
+            path = current / filename
+            relative = path.relative_to(root)
+            if len(relative.parts) == 1 and relative.name not in _ROOT_FILES:
+                continue
+            if path.suffix.lower() not in _EXTENSIONS:
+                continue
+            if relative.as_posix() in _EXCLUDED_FILES:
+                continue
+            yield path
 
 
 def collect_inventory(root: Path) -> dict[str, Any]:

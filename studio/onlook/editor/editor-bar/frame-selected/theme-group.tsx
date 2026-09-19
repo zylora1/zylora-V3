@@ -10,7 +10,7 @@ export function ThemeGroup({ frameData }: { frameData: FrameData }) {
     const [theme, setTheme] = useState<SystemTheme>(SystemTheme.SYSTEM);
     useEffect(() => {
         const getTheme = async () => {
-            if (!frameData?.view) {
+            if (!frameData?.view || typeof frameData.view.getTheme !== 'function') {
                 console.error('No frame view found');
                 return;
             }
@@ -24,7 +24,11 @@ export function ThemeGroup({ frameData }: { frameData: FrameData }) {
     async function changeTheme(newTheme: SystemTheme) {
         const previousTheme = theme;
         setTheme(newTheme);
-        const success = await frameData.view?.setTheme(newTheme);
+        if (typeof frameData.view?.setTheme !== 'function') {
+            toast.error('Frame view is still connecting');
+            return;
+        }
+        const success = await frameData.view.setTheme(newTheme);
         if (!success) {
             toast.error('Failed to change theme');
             setTheme(previousTheme);
@@ -59,4 +63,4 @@ export function ThemeGroup({ frameData }: { frameData: FrameData }) {
             </HoverOnlyTooltip>
         </>
     );
-} 
+}

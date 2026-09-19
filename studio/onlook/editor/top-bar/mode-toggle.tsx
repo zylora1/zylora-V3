@@ -61,6 +61,7 @@ export const ModeToggle = observer(() => {
                             <ToggleGroupItem
                                 value={item.mode}
                                 aria-label={item.hotkey.description}
+                                data-testid={`view-mode-${item.mode.toLowerCase()}`}
                                 className={cn(
                                     'transition-all duration-150 ease-in-out px-4 py-2 whitespace-nowrap bg-transparent cursor-pointer text-sm',
                                     mode === item.mode

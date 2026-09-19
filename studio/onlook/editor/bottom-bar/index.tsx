@@ -60,7 +60,7 @@ export const BottomBar = observer(() => {
     const shouldShow = editorEngine.state.editorMode === EditorMode.DESIGN || editorEngine.state.editorMode === EditorMode.PAN;
 
     return (
-        <div className="absolute left-1/2 -translate-x-1/2 bottom-4 overflow-hidden">
+        <div data-onlook-runtime="bottom-bar" className="absolute left-1/2 -translate-x-1/2 bottom-4 overflow-hidden">
             <AnimatePresence mode="wait">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

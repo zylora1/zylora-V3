@@ -29,7 +29,7 @@ export class SandboxManager {
         private readonly errorManager: ErrorManager,
         private readonly fs: CodeFileSystem,
     ) {
-        this.session = new SessionManager(this.branch, this.errorManager);
+        this.session = new SessionManager(this.branch, this.errorManager, this.editorEngine.projectId);
         this.gitManager = new GitManager(this);
         makeAutoObservable(this);
     }

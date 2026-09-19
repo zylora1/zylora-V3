@@ -12,7 +12,7 @@ export const DeviceSettings = observer(({ frameId }: { frameId: string }) => {
     const [theme, setTheme] = useState<SystemTheme>(SystemTheme.SYSTEM);
 
     useEffect(() => {
-        if (!frameData?.view) {
+        if (!frameData?.view || typeof frameData.view.getTheme !== 'function') {
             console.error('No frame view found');
             return;
         }
@@ -29,7 +29,7 @@ export const DeviceSettings = observer(({ frameId }: { frameId: string }) => {
         const previousTheme = theme;
         setTheme(newTheme);
 
-        if (!frameData?.view) {
+        if (!frameData?.view || typeof frameData.view.setTheme !== 'function') {
             console.error('No frame view found');
             return;
         }

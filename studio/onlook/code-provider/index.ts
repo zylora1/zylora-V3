@@ -1,6 +1,11 @@
 // Zylora Sovereign Code Provider
 // Implements Onlook OSS @onlook/code-provider interfaces backed by Zylora local sandbox runtime
 
+import { ZyloraAuthAdapter } from '../../zylora/adapters/ZyloraAuthAdapter';
+import { ZyloraCodeFileSystemAdapter } from '../../zylora/adapters/ZyloraCodeFileSystemAdapter';
+import { ZyloraSandboxAdapter } from '../../zylora/adapters/ZyloraSandboxAdapter';
+import { ZyloraWorkspaceAdapter } from '../../zylora/adapters/ZyloraWorkspaceAdapter';
+
 export enum CodeProvider {
     CodeSandbox = 'code_sandbox',
     E2B = 'e2b',
@@ -270,7 +275,7 @@ class ZyloraProviderTask extends ProviderTask {
     command = 'npm run dev';
     private listeners: ((data: string) => void)[] = [];
 
-    constructor(private siteId?: string) {
+    constructor(private siteId?: string, private sandbox?: ZyloraSandboxAdapter) {
         super();
     }
 
@@ -279,9 +284,7 @@ class ZyloraProviderTask extends ProviderTask {
     }
     async run(): Promise<void> {}
     async restart(): Promise<void> {
-        if (this.siteId) {
-            await fetch(`/api/sites/${this.siteId}/code/workspace/start`, { credentials: 'same-origin' });
-        }
+        if (this.sandbox) await this.sandbox.start();
     }
     async stop(): Promise<void> {}
     onOutput(callback: (data: string) => void): () => void {
@@ -294,10 +297,16 @@ class ZyloraProviderTask extends ProviderTask {
 
 export class ZyloraCodeProvider extends Provider {
     private siteId: string;
+    private readonly filesystem: ZyloraCodeFileSystemAdapter;
+    private readonly sandbox: ZyloraSandboxAdapter;
 
     constructor(options?: { siteId?: string }) {
         super();
         this.siteId = options?.siteId || (typeof window !== 'undefined' ? (window as any).__ZYLORA_SITE_ID__ || '' : '');
+        const auth = new ZyloraAuthAdapter();
+        const workspace = new ZyloraWorkspaceAdapter(this.siteId, auth);
+        this.filesystem = new ZyloraCodeFileSystemAdapter(this.siteId, auth, workspace);
+        this.sandbox = new ZyloraSandboxAdapter(this.siteId, auth);
     }
 
     async writeFile(input: WriteFileInput): Promise<WriteFileOutput> {
@@ -305,34 +314,35 @@ export class ZyloraCodeProvider extends Provider {
         const content = typeof input.args.content === 'string'
             ? input.args.content
             : new TextDecoder().decode(input.args.content);
-        const res = await fetch(`/api/sites/${this.siteId}/code/file?path=${encodeURIComponent(path)}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ content }),
-            credentials: 'same-origin',
-        });
-        return { success: res.ok };
+        await this.filesystem.write(path, content);
+        return { success: true };
     }
 
     async renameFile(input: RenameFileInput): Promise<RenameFileOutput> {
+        const oldPath = input.args.oldPath.replace(/^\//, '');
+        const newPath = input.args.newPath.replace(/^\//, '');
+        await this.filesystem.rename(oldPath, newPath);
         return {};
     }
 
     async statFile(input: StatFileInput): Promise<StatFileOutput> {
+        const path = input.args.path.replace(/^\//, '');
+        if (!(await this.filesystem.exists(path))) {
+            throw new Error(`File not found: ${path}`);
+        }
         return { type: 'file' };
     }
 
     async deleteFiles(input: DeleteFilesInput): Promise<DeleteFilesOutput> {
+        await this.filesystem.delete(input.args.path.replace(/^\//, ''));
         return {};
     }
 
     async listFiles(input: ListFilesInput): Promise<ListFilesOutput> {
-        const res = await fetch(`/api/sites/${this.siteId}/code/files`, { credentials: 'same-origin' });
-        if (!res.ok) return { files: [] };
-        const data = await res.json();
-        const files: ListFilesOutputFile[] = (data.files || []).map((f: any) => ({
-            name: typeof f === 'string' ? f : f.name || f.path,
-            type: (f.isDir || f.type === 'directory') ? 'directory' : 'file',
+        const sourceFiles = await this.filesystem.list(input.args.path || '');
+        const files: ListFilesOutputFile[] = sourceFiles.map((f: any) => ({
+            name: f.path,
+            type: 'file',
             isSymlink: false,
         }));
         return { files };
@@ -340,10 +350,7 @@ export class ZyloraCodeProvider extends Provider {
 
     async readFile(input: ReadFileInput): Promise<ReadFileOutput> {
         const path = input.args.path.replace(/^\//, '');
-        const res = await fetch(`/api/sites/${this.siteId}/code/file?path=${encodeURIComponent(path)}`, {
-            credentials: 'same-origin',
-        });
-        const content = res.ok ? await res.text() : '';
+        const content = await this.filesystem.read(path);
         return {
             file: {
                 path,
@@ -380,7 +387,7 @@ export class ZyloraCodeProvider extends Provider {
     }
 
     async getTask(input: GetTaskInput): Promise<GetTaskOutput> {
-        return { task: new ZyloraProviderTask(this.siteId) };
+        return { task: new ZyloraProviderTask(this.siteId, this.sandbox) };
     }
 
     async runCommand(input: TerminalCommandInput): Promise<TerminalCommandOutput> {
@@ -449,9 +456,11 @@ export interface CreateClientOptions {
 
 export async function createCodeProviderClient(
     codeProvider: CodeProvider,
-    _options?: CreateClientOptions,
+    options?: CreateClientOptions,
 ): Promise<Provider> {
-    const provider = new ZyloraCodeProvider();
+    const provider = new ZyloraCodeProvider({
+        siteId: options?.providerOptions?.zylora?.siteId,
+    });
     await provider.initialize({});
     return provider;
 }

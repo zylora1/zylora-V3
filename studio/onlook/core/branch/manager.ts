@@ -1,5 +1,5 @@
 import { api } from '@/trpc/client';
-import { CodeFileSystem } from '@onlook/file-system';
+import { CodeFileSystem, registerRuntimeFileSystem, unregisterRuntimeFileSystem, ZyloraCodeFileSystem } from '@onlook/file-system';
 import type { Branch, RouterType } from '@onlook/models';
 import { toast } from '@onlook/ui/sonner';
 import type { ParsedError } from '@onlook/utility';
@@ -31,11 +31,15 @@ export class BranchManager {
     async initBranches(branches: Branch[]): Promise<void> {
         this.reactionDisposer?.();
         this.reactionDisposer = null;
-        for (const { sandbox, history, error, codeEditor } of this.branchMap.values()) {
+        for (const branchData of this.branchMap.values()) {
+            const { sandbox, history, error, codeEditor, branch } = branchData;
             sandbox.clear();
             history.clear();
             error.clear();
             void codeEditor.cleanup();
+            if (codeEditor instanceof ZyloraCodeFileSystem) {
+                unregisterRuntimeFileSystem(this.editorEngine.projectId, branch.id);
+            }
         }
         this.branchMap.clear();
         for (const branch of branches) {
@@ -128,7 +132,12 @@ export class BranchManager {
     }
 
     private createBranchData(branch: Branch, routerType?: RouterType): BranchData {
-        const codeEditorApi = new CodeFileSystem(this.editorEngine.projectId, branch.id, { routerType });
+        const codeEditorApi = this.editorEngine.zyloraFilesystem
+            ? new ZyloraCodeFileSystem(this.editorEngine.projectId, branch.id, { routerType }, this.editorEngine.zyloraFilesystem)
+            : new CodeFileSystem(this.editorEngine.projectId, branch.id, { routerType });
+        if (codeEditorApi instanceof ZyloraCodeFileSystem) {
+            registerRuntimeFileSystem(codeEditorApi);
+        }
         const errorManager = new ErrorManager(branch);
         const sandboxManager = new SandboxManager(branch, this.editorEngine, errorManager, codeEditorApi);
         const historyManager = new HistoryManager(this.editorEngine);
@@ -288,6 +297,9 @@ export class BranchManager {
 
             // Clean up the entire branch directory
             await branchData.codeEditor.cleanup();
+            if (branchData.codeEditor instanceof ZyloraCodeFileSystem) {
+                unregisterRuntimeFileSystem(this.editorEngine.projectId, branchData.branch.id);
+            }
             // Remove from the map
             this.branchMap.delete(branchId);
 
@@ -310,6 +322,9 @@ export class BranchManager {
             branchData.history.clear();
             branchData.error.clear();
             await branchData.codeEditor.cleanup();
+            if (branchData.codeEditor instanceof ZyloraCodeFileSystem) {
+                unregisterRuntimeFileSystem(this.editorEngine.projectId, branchData.branch.id);
+            }
         }
         this.branchMap.clear();
         this.currentBranchId = null;

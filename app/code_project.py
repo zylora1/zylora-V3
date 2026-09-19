@@ -126,9 +126,116 @@ class CodeProjectAdapter:
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(content, encoding='utf-8', newline='\n')
 
+    def delete(self, path: str) -> None:
+        """Delete one tenant-scoped editable source file.
+
+        The same path validator used by reads and writes is deliberately used
+        here so the editor cannot turn a delete operation into traversal,
+        dotfile, lockfile, or arbitrary-directory access.
+        """
+        relative = self._relative(path)
+        target = self.root / relative
+        if not target.is_file():
+            raise FileNotFoundError(relative.as_posix())
+        target.unlink()
+
     def seed_files(self, files: Iterable[tuple[str, str]]) -> None:
         for path, content in files:
             self.write_file(path, content)
+
+
+class ZyloraCodeFileSystemAdapter:
+    """Canonical Onlook filesystem contract backed by Zylora workspace files.
+
+    The adapter deliberately has no independent durable cache. CodeMirror and
+    the preview may keep transient browser state, but every durable read/write
+    resolves through the tenant-scoped ``CodeProjectAdapter`` above.
+    """
+
+    def __init__(self, project_id: str):
+        self.project_id = project_id
+        self.workspace = CodeProjectAdapter(project_id)
+
+    def initialize(self) -> dict:
+        self.workspace.root.mkdir(parents=True, exist_ok=True)
+        return {
+            'project_id': self.project_id,
+            'files': [file.path for file in self.workspace.list_files()],
+            'durable_authority': 'zylora-workspace',
+            'cache': 'none',
+        }
+
+    def readFile(self, path: str) -> str:
+        return self.workspace.read_file(path)
+
+    def writeFile(self, path: str, content: str) -> None:
+        self.workspace.write_file(path, content)
+
+    def readDirectory(self, path: str = '') -> list[str]:
+        value = str(path or '').replace('\\', '/').strip('/')
+        parts = Path(value).parts if value else ()
+        if any(part in _BLOCKED_NAMES or part.startswith('.') for part in parts) or '..' in parts:
+            raise CodeProjectError('That directory path is restricted')
+        relative = Path(value) if value else Path('.')
+        directory = (self.workspace.root / relative).resolve()
+        if self.workspace.root not in directory.parents and directory != self.workspace.root:
+            raise CodeProjectError('Directory escapes the project workspace')
+        if not directory.is_dir():
+            raise FileNotFoundError(str(path))
+        return sorted(item.name for item in directory.iterdir() if item.name not in _BLOCKED_NAMES and not item.name.startswith('.'))
+
+    def exists(self, path: str) -> bool:
+        try:
+            return (self.workspace.root / self.workspace._relative(path)).is_file()
+        except CodeProjectError:
+            return False
+
+    def createFile(self, path: str, content: str = '') -> None:
+        if self.exists(path):
+            raise FileExistsError(path)
+        self.writeFile(path, content)
+
+    def createDirectory(self, path: str) -> None:
+        value = str(path or '').replace('\\', '/').strip('/')
+        if not value or '..' in Path(value).parts or any(part in _BLOCKED_NAMES or part.startswith('.') for part in Path(value).parts):
+            raise CodeProjectError('That directory path is restricted')
+        target = (self.workspace.root / value).resolve()
+        if self.workspace.root not in target.parents:
+            raise CodeProjectError('Directory escapes the project workspace')
+        target.mkdir(parents=True, exist_ok=True)
+
+    def rename(self, old_path: str, new_path: str) -> None:
+        source = self.workspace.root / self.workspace._relative(old_path)
+        target = self.workspace.root / self.workspace._relative(new_path)
+        if not source.is_file():
+            raise FileNotFoundError(old_path)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        source.rename(target)
+
+    def delete(self, path: str) -> None:
+        target = self.workspace.root / self.workspace._relative(path)
+        if target.is_file():
+            target.unlink()
+        elif target.is_dir():
+            shutil.rmtree(target)
+        else:
+            raise FileNotFoundError(path)
+
+    def watchFile(self, _path: str, _callback=None) -> None:
+        return None
+
+    def watchDirectory(self, _path: str = '', _callback=None) -> None:
+        return None
+
+
+_filesystem_adapters: dict[str, ZyloraCodeFileSystemAdapter] = {}
+
+
+def get_code_filesystem(project_id: str) -> ZyloraCodeFileSystemAdapter:
+    """Return the single process-scoped adapter for a project workspace."""
+    if project_id not in _filesystem_adapters:
+        _filesystem_adapters[project_id] = ZyloraCodeFileSystemAdapter(project_id)
+    return _filesystem_adapters[project_id]
 
 
 def detect_framework(adapter: CodeProjectAdapter) -> dict:

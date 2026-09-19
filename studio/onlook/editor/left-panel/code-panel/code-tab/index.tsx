@@ -82,7 +82,35 @@ export const CodeTab = memo(forwardRef<CodeTabRef, CodeTabProps>(({ projectId, b
         content: loadedContent,
     } = useFile(projectId, branchId, selectedFilePath || '');
 
+    // Auto-open the project entry file (or first JS/TS file) after the shared
+    // Zylora filesystem has hydrated from the durable workspace.
+    useEffect(() => {
+        if (filesLoading || selectedFilePath) return;
+
+        if (!fileEntries || fileEntries.length === 0) {
+            return;
+        }
+
+        // Prefer src/App.jsx then src/App.tsx then first .jsx/.tsx file
+        const flatten = (entries: typeof fileEntries): string[] => {
+            const paths: string[] = [];
+            for (const e of entries) {
+                if (!e.isDirectory) paths.push(e.path);
+                if (e.children) paths.push(...flatten(e.children));
+            }
+            return paths;
+        };
+        const allPaths = flatten(fileEntries);
+        const preferred = allPaths.find(p => p === 'src/App.jsx')
+            || allPaths.find(p => p === 'src/App.tsx')
+            || allPaths.find(p => p.endsWith('.jsx') || p.endsWith('.tsx'));
+        if (preferred) {
+            setSelectedFilePath(preferred);
+        }
+    }, [fileEntries, filesLoading, selectedFilePath, branchData]);
+
     // React to loadedContent changes - build local EditorFile and manage opened files
+
     useEffect(() => {
         if (!selectedFilePath || !loadedContent) return;
 
@@ -216,6 +244,7 @@ export const CodeTab = memo(forwardRef<CodeTabRef, CodeTabProps>(({ projectId, b
         }
 
         return file;
+
     };
 
     const handleSaveFile = async () => {

@@ -8,7 +8,9 @@ import re
 import sys
 import time
 import uuid
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from threading import Thread
 
 from fastapi.testclient import TestClient
 from playwright.sync_api import sync_playwright
@@ -54,6 +56,36 @@ def studio_html(context: dict) -> str:
     return html
 
 
+def load_studio_fixture(page, html: str) -> None:
+    """Stream the large built Studio document from a loopback fixture server.
+
+    Firefox can exceed Playwright's set_content timeout when a multi-megabyte
+    production bundle is passed through the protocol as one in-memory string.
+    This keeps the built artifact unchanged while giving every browser the same
+    real HTTP navigation path.
+    """
+    payload = html.encode('utf-8')
+
+    class FixtureHandler(BaseHTTPRequestHandler):
+        def do_GET(self):  # noqa: N802 - BaseHTTPRequestHandler API
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.send_header('Content-Length', str(len(payload)))
+            self.end_headers()
+            self.wfile.write(payload)
+
+        def log_message(self, _format, *_args):
+            return
+
+    server = ThreadingHTTPServer(('127.0.0.1', 0), FixtureHandler)
+    Thread(target=server.serve_forever, daemon=True).start()
+    try:
+        page.goto(f'http://127.0.0.1:{server.server_port}/studio-fixture/{uuid.uuid4().hex}/', wait_until='domcontentloaded', timeout=60000)
+    finally:
+        server.shutdown()
+        server.server_close()
+
+
 def _is_target_closed(exc: BaseException) -> bool:
     return exc.__class__.__name__ == "TargetClosedError" or "TargetClosedError" in str(exc)
 
@@ -84,7 +116,7 @@ def _new_page_with_browser_retry(launcher, browser, client: TestClient, viewport
 
 def run_engine(name: str, launcher, browser, client: TestClient, csrf: str, site_id: str):
     browser, page = _new_page_with_browser_retry(launcher, browser, client, (1440, 900))
-    page.set_content(studio_html({"siteId": site_id, "csrfToken": csrf, "siteName": "Untitled website"}), wait_until="domcontentloaded")
+    load_studio_fixture(page, studio_html({"siteId": site_id, "csrfToken": csrf, "siteName": "Untitled website"}))
     page.wait_for_selector(".tool-rail")
     page.wait_for_timeout(700)
     labels = page.locator(".tool-rail button span").all_inner_texts()
