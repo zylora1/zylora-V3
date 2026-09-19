@@ -143,7 +143,7 @@ export function ZyloraOnlookStudio({ siteId, csrf, workspaceId, onStatus, onBack
   const [files, setFiles] = useState<WorkspaceFileEntry[]>([]);
 
   // Code editor tab
-  const [activeFile, setActiveFile] = useState<string>('src/App.tsx');
+  const [activeFile, setActiveFile] = useState<string>('src/App.jsx');
   const [codeContent, setCodeContent] = useState<string>('');
   const [isSavingCode, setIsSavingCode] = useState<boolean>(false);
 
@@ -378,9 +378,16 @@ export function ZyloraOnlookStudio({ siteId, csrf, workspaceId, onStatus, onBack
       showToast('Select an element on canvas to apply styles');
       return;
     }
-    const targetPath = selectedElement.filePath || activeFile;
+    let targetPath = selectedElement.filePath || activeFile;
     try {
-      const currentCode = await workspace.readFile(targetPath);
+      let currentCode = '';
+      try {
+        currentCode = await workspace.readFile(targetPath);
+      } catch {
+        const resolved = files.find((f) => f.path.includes('App') || f.path === 'src/App.jsx' || f.path === 'src/App.tsx')?.path || 'src/App.jsx';
+        targetPath = resolved;
+        currentCode = await workspace.readFile(targetPath);
+      }
       // Run genuine Babel AST transformation via @onlook/parser
       const { updatedCode, modified } = await applyAstStyleChange(currentCode, {
         tag: selectedElement.tag,
@@ -423,9 +430,16 @@ export function ZyloraOnlookStudio({ siteId, csrf, workspaceId, onStatus, onBack
   // Direct Text Edit via Onlook AST Transformation
   const handleApplyText = async (newText: string) => {
     if (!selectedElement) return;
-    const targetPath = selectedElement.filePath || activeFile;
+    let targetPath = selectedElement.filePath || activeFile;
     try {
-      const currentCode = await workspace.readFile(targetPath);
+      let currentCode = '';
+      try {
+        currentCode = await workspace.readFile(targetPath);
+      } catch {
+        const resolved = files.find((f) => f.path.includes('App') || f.path === 'src/App.jsx' || f.path === 'src/App.tsx')?.path || 'src/App.jsx';
+        targetPath = resolved;
+        currentCode = await workspace.readFile(targetPath);
+      }
       const { updatedCode, modified } = await applyAstTextChange(currentCode, {
         tag: selectedElement.tag,
         oid: (selectedElement.attributes as any)?.['data-onlook-id'],
@@ -607,253 +621,341 @@ export function ZyloraOnlookStudio({ siteId, csrf, workspaceId, onStatus, onBack
   return (
     <EditorEngineContext.Provider value={editorEngine}>
       <div className="zylora-onlook-studio" data-engine="onlook-transplant" data-subsystem="onlook-shell">
-        {/* ── TOP BAR ── */}
+        {/* ── TOP BAR (Exact 40px Upstream Layout) ── */}
         <header className="zylora-onlook-topbar">
-        <div className="zylora-onlook-topbar-left">
-          <div className="zylora-onlook-brand">
-            <span className="zylora-badge">CODE MODE</span>
-            <span className="zylora-site-name">{siteId}</span>
-          </div>
-          {onBackToNative && (
-            <button className="zylora-btn-subtle" onClick={onBackToNative} title="Switch to Native SiteDocument editor">
-              Switch to Native Editor
-            </button>
-          )}
-        </div>
-
-        {/* Center Mode & Device Controls */}
-        <div className="zylora-onlook-topbar-center">
-          <div className="zylora-mode-pills">
-            <button
-              data-testid="view-mode-design"
-              className={viewMode === 'design' ? 'active' : ''}
-              onClick={() => setViewMode('design')}
-            >
-              Design
-            </button>
-            <button
-              data-testid="view-mode-code"
-              className={viewMode === 'code' ? 'active' : ''}
-              onClick={() => setViewMode('code')}
-            >
-              Code
-            </button>
-            <button
-              data-testid="view-mode-preview"
-              className={viewMode === 'preview' ? 'active' : ''}
-              onClick={() => setViewMode('preview')}
-            >
-              Preview
-            </button>
-          </div>
-
-          <div className="zylora-device-pills">
-            {(['desktop', 'tablet', 'mobile'] as DevicePreset[]).map((d) => (
-              <button key={d} className={device === d ? 'active' : ''} onClick={() => setDevice(d)} title={DEVICE_DIMENSIONS[d].label}>
-                {d === 'desktop' ? '🖥️' : d === 'tablet' ? '📱' : '📲'}
-              </button>
-            ))}
-          </div>
-
-          <div className="zylora-zoom-pills">
-            <button onClick={() => setZoomScale(Math.max(0.25, zoomScale - 0.25))}>-</button>
-            <span>{Math.round(zoomScale * 100)}%</span>
-            <button onClick={() => setZoomScale(Math.min(2, zoomScale + 0.25))}>+</button>
-            <button onClick={() => setZoomScale(1)}>100%</button>
-          </div>
-        </div>
-
-        {/* Right Actions */}
-        <div className="zylora-onlook-topbar-right">
-          <button
-            className={`zylora-mode-toggle ${studioMode === 'pro' ? 'active' : ''}`}
-            onClick={() => setStudioMode(studioMode === 'simple' ? 'pro' : 'simple')}
-            title="Toggle between Simple Mode and Pro Mode"
-          >
-            {studioMode === 'simple' ? 'Simple Mode' : 'Pro Mode'}
-          </button>
-          <button className="zylora-btn-subtle" onClick={() => void handleCreateSnapshot()} title="Create workspace checkpoint">
-            Checkpoint
-          </button>
-          <button
-            className="zylora-btn-publish"
-            onClick={() => void handlePublish()}
-            disabled={isPublishing || runtimeStatus !== 'ready'}
-          >
-            {isPublishing ? 'Publishing…' : 'Publish'}
-          </button>
-        </div>
-      </header>
-
-      {/* ── CONTEXTUAL EDITORBAR (STYLE TOOLBAR) ── */}
-      {viewMode === 'design' && (
-        <div className="zylora-onlook-editorbar" data-subsystem="onlook-editorbar">
-          {selectedElement ? (
-            <>
-              <div className="zylora-editorbar-badge">
-                &lt;{selectedElement.tag}&gt;
-                {selectedElement.classes && <span className="classes">.{selectedElement.classes.slice(0, 30)}</span>}
-              </div>
-
-              <div className="zylora-editorbar-section">
-                <span className="label">Typography</span>
-                <button onClick={() => void handleApplyStyle('text-sm')}>sm</button>
-                <button onClick={() => void handleApplyStyle('text-base')}>md</button>
-                <button onClick={() => void handleApplyStyle('text-lg')}>lg</button>
-                <button onClick={() => void handleApplyStyle('text-2xl')}>2xl</button>
-                <button onClick={() => void handleApplyStyle('font-bold')}>Bold</button>
-                <button onClick={() => void handleApplyStyle('text-center')}>Center</button>
-              </div>
-
-              <div className="zylora-editorbar-section">
-                <span className="label">Spacing</span>
-                <button onClick={() => void handleApplyStyle('p-4')}>P-4</button>
-                <button onClick={() => void handleApplyStyle('p-6')}>P-6</button>
-                <button onClick={() => void handleApplyStyle('m-4')}>M-4</button>
-                <button onClick={() => void handleApplyStyle('gap-4')}>Gap-4</button>
-              </div>
-
-              <div className="zylora-editorbar-section">
-                <span className="label">Layout</span>
-                <button onClick={() => void handleApplyStyle('flex items-center justify-between')}>Flex Between</button>
-                <button onClick={() => void handleApplyStyle('flex flex-col gap-3')}>Flex Col</button>
-                <button onClick={() => void handleApplyStyle('grid grid-cols-2 gap-4')}>Grid 2</button>
-              </div>
-
-              <div className="zylora-editorbar-section">
-                <span className="label">Color</span>
-                <button onClick={() => void handleApplyStyle('bg-slate-900 text-white')}>Dark</button>
-                <button onClick={() => void handleApplyStyle('bg-white text-slate-900')}>Light</button>
-                <button onClick={() => void handleApplyStyle('bg-indigo-600 text-white')}>Primary</button>
-              </div>
-            </>
-          ) : (
-            <div className="zylora-editorbar-idle" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '11px', color: '#94a3b8' }}>Select an element in canvas to style with EditorBar</span>
+          <div className="zylora-onlook-topbar-left">
+            <div className="zylora-onlook-brand">
+              <div className="zylora-logo-mark" title="Zylora Engine">Z</div>
+              <span className="zylora-site-name">{siteId}</span>
+              <span className="zylora-breadcrumb-sep">/</span>
+              <span className="zylora-branch-pill" title="Default branch">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="6" y1="3" x2="6" y2="15" />
+                  <circle cx="18" cy="6" r="3" />
+                  <circle cx="6" cy="18" r="3" />
+                  <path d="M18 9a9 9 0 0 1-9 9" />
+                </svg>
+                main
+              </span>
+              <span className="zylora-badge">CODE</span>
             </div>
-          )}
-        </div>
-      )}
+            {onBackToNative && (
+              <button className="zylora-btn-subtle" onClick={onBackToNative} title="Switch to Native SiteDocument editor">
+                Switch to Native
+              </button>
+            )}
+          </div>
 
-      {/* ── MAIN STUDIO BODY ── */}
-      <div className="zylora-onlook-body">
-        {/* ── LEFT PANEL ── */}
+          {/* Center Mode & Device Controls */}
+          <div className="zylora-onlook-topbar-center">
+            <div className="zylora-mode-pills">
+              <button
+                data-testid="view-mode-design"
+                className={viewMode === 'design' ? 'active' : ''}
+                onClick={() => setViewMode('design')}
+              >
+                Design
+              </button>
+              <button
+                data-testid="view-mode-code"
+                className={viewMode === 'code' ? 'active' : ''}
+                onClick={() => setViewMode('code')}
+              >
+                Code
+              </button>
+              <button
+                data-testid="view-mode-preview"
+                className={viewMode === 'preview' ? 'active' : ''}
+                onClick={() => setViewMode('preview')}
+              >
+                Preview
+              </button>
+            </div>
+
+            <div className="zylora-device-pills">
+              {(['desktop', 'tablet', 'mobile'] as DevicePreset[]).map((d) => (
+                <button
+                  key={d}
+                  className={device === d ? 'active' : ''}
+                  onClick={() => setDevice(d)}
+                  title={DEVICE_DIMENSIONS[d].label}
+                >
+                  {d === 'desktop' ? '🖥️' : d === 'tablet' ? '📱' : '📲'}
+                </button>
+              ))}
+            </div>
+
+            <div className="zylora-zoom-pills">
+              <button onClick={() => setZoomScale(Math.max(0.25, zoomScale - 0.25))}>-</button>
+              <span>{Math.round(zoomScale * 100)}%</span>
+              <button onClick={() => setZoomScale(Math.min(2, zoomScale + 0.25))}>+</button>
+              <button onClick={() => setZoomScale(1)}>100%</button>
+            </div>
+          </div>
+
+          {/* Right Actions */}
+          <div className="zylora-onlook-topbar-right">
+            <button
+              className={`zylora-mode-toggle ${studioMode === 'pro' ? 'active' : ''}`}
+              onClick={() => setStudioMode(studioMode === 'simple' ? 'pro' : 'simple')}
+              title="Toggle between Simple Mode and Pro Mode"
+            >
+              {studioMode === 'simple' ? 'Simple' : 'Pro'}
+            </button>
+            <button className="zylora-btn-subtle" onClick={() => void handleCreateSnapshot()} title="Create workspace checkpoint">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              Checkpoint
+            </button>
+            <button
+              className={`zylora-btn-publish ${runtimeStatus === 'ready' && !isPublishing ? 'live' : ''}`}
+              onClick={() => void handlePublish()}
+              disabled={isPublishing || runtimeStatus !== 'ready'}
+            >
+              {isPublishing ? (
+                <>
+                  <span className="status-dot starting" style={{ width: 6, height: 6 }} />
+                  Publishing…
+                </>
+              ) : (
+                <>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="2" y1="12" x2="22" y2="12" />
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                  </svg>
+                  Publish
+                </>
+              )}
+            </button>
+          </div>
+        </header>
+
+        {/* ── CONTEXTUAL EDITORBAR (Floating Pill at top 48px) ── */}
+        {viewMode === 'design' && (
+          <div className="zylora-onlook-editorbar-container">
+            <div className="zylora-onlook-editorbar" data-subsystem="onlook-editorbar">
+              {selectedElement ? (
+                <>
+                  <div className="zylora-editorbar-badge">
+                    &lt;{selectedElement.tag}&gt;
+                    {selectedElement.classes && <span className="classes">.{selectedElement.classes.slice(0, 30)}</span>}
+                  </div>
+
+                  <div className="zylora-editorbar-sep" />
+
+                  <div className="zylora-editorbar-section">
+                    <span className="label">Type</span>
+                    <button onClick={() => void handleApplyStyle('text-sm')}>sm</button>
+                    <button onClick={() => void handleApplyStyle('text-base')}>md</button>
+                    <button onClick={() => void handleApplyStyle('text-lg')}>lg</button>
+                    <button onClick={() => void handleApplyStyle('text-2xl')}>2xl</button>
+                    <button onClick={() => void handleApplyStyle('font-bold')}>Bold</button>
+                    <button onClick={() => void handleApplyStyle('text-center')}>Center</button>
+                  </div>
+
+                  <div className="zylora-editorbar-sep" />
+
+                  <div className="zylora-editorbar-section">
+                    <span className="label">Space</span>
+                    <button onClick={() => void handleApplyStyle('p-4')}>P-4</button>
+                    <button onClick={() => void handleApplyStyle('p-6')}>P-6</button>
+                    <button onClick={() => void handleApplyStyle('m-4')}>M-4</button>
+                    <button onClick={() => void handleApplyStyle('gap-4')}>Gap-4</button>
+                  </div>
+
+                  <div className="zylora-editorbar-sep" />
+
+                  <div className="zylora-editorbar-section">
+                    <span className="label">Layout</span>
+                    <button onClick={() => void handleApplyStyle('flex items-center justify-between')}>Between</button>
+                    <button onClick={() => void handleApplyStyle('flex flex-col gap-3')}>Col</button>
+                    <button onClick={() => void handleApplyStyle('grid grid-cols-2 gap-4')}>Grid-2</button>
+                  </div>
+
+                  <div className="zylora-editorbar-sep" />
+
+                  <div className="zylora-editorbar-section">
+                    <span className="label">Color</span>
+                    <button onClick={() => void handleApplyStyle('bg-slate-900 text-white')}>Dark</button>
+                    <button onClick={() => void handleApplyStyle('bg-white text-slate-900')}>Light</button>
+                    <button onClick={() => void handleApplyStyle('bg-indigo-600 text-white')}>Primary</button>
+                  </div>
+                </>
+              ) : (
+                <div className="zylora-editorbar-idle" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '2px 6px' }}>
+                  <span style={{ fontSize: '11px', color: '#737373' }}>Select an element in canvas to style with EditorBar</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ── LEFT PANEL (Upstream 2-Tier: 80px Rail + 280px Drawer) ── */}
         {viewMode !== 'preview' && (
           <aside className="zylora-onlook-leftpanel" data-subsystem="onlook-leftpanel">
-            <div className="zylora-leftpanel-nav">
+            {/* 80px Icon Rail */}
+            <div className="zylora-leftpanel-rail">
               <button
                 data-testid="left-tab-layers"
-                className={leftTab === 'layers' ? 'active' : ''}
+                className={`zylora-rail-btn ${leftTab === 'layers' ? 'active' : ''}`}
                 onClick={() => setLeftTab('layers')}
+                title="DOM Layers (L)"
               >
-                Layers
+                <svg viewBox="0 0 24 24">
+                  <path d="m12 2 10 5-10 5L2 7l10-5Z" />
+                  <path d="m2 17 10 5 10-5" />
+                  <path d="m2 12 10 5 10-5" />
+                </svg>
+                <span>Layers</span>
               </button>
+
               <button
                 data-testid="left-tab-components"
-                className={leftTab === 'components' ? 'active' : ''}
+                className={`zylora-rail-btn ${leftTab === 'components' ? 'active' : ''}`}
                 onClick={() => setLeftTab('components')}
+                title="Reusable Components (C)"
               >
-                Components
+                <svg viewBox="0 0 24 24">
+                  <path d="M5.5 8.5 9 12l-3.5 3.5L2 12l3.5-3.5Z" />
+                  <path d="m12 2 3.5 3.5L12 9 8.5 5.5 12 2Z" />
+                  <path d="m18.5 8.5 3.5 3.5-3.5 3.5L15 12l3.5-3.5Z" />
+                  <path d="m12 15 3.5 3.5L12 22l-3.5-3.5L12 15Z" />
+                </svg>
+                <span>Components</span>
               </button>
+
               <button
                 data-testid="left-tab-pages"
-                className={leftTab === 'pages' ? 'active' : ''}
+                className={`zylora-rail-btn ${leftTab === 'pages' ? 'active' : ''}`}
                 onClick={() => setLeftTab('pages')}
+                title="Pages & Routes (P)"
               >
-                Pages
+                <svg viewBox="0 0 24 24">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                  <polyline points="10 9 9 9 8 9" />
+                </svg>
+                <span>Pages</span>
               </button>
+
               {studioMode === 'pro' && (
                 <button
                   data-testid="left-tab-files"
-                  className={leftTab === 'files' ? 'active' : ''}
+                  className={`zylora-rail-btn ${leftTab === 'files' ? 'active' : ''}`}
                   onClick={() => setLeftTab('files')}
+                  title="Workspace Files (F)"
                 >
-                  Files
+                  <svg viewBox="0 0 24 24">
+                    <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z" />
+                  </svg>
+                  <span>Files</span>
                 </button>
               )}
             </div>
 
-            <div className="zylora-leftpanel-content">
+            {/* 280px Flyout Drawer */}
+            <div className="zylora-leftpanel-drawer">
               {leftTab === 'layers' && (
-                <div className="zylora-layers-view" data-subsystem="onlook-layers">
-                  <div className="zylora-panel-title">DOM Hierarchy & Layers</div>
-                  {layers.length > 0 ? (
-                    layers.map(renderLayerNode)
-                  ) : (
-                    <div className="zylora-empty-hint">
-                      {runtimeStatus === 'ready' ? 'Layers syncing from preview…' : 'Starting runtime…'}
-                    </div>
-                  )}
+                <div className="zylora-layers-view" data-subsystem="onlook-layers" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                  <div className="zylora-panel-header">DOM Hierarchy & Layers</div>
+                  <div className="zylora-panel-scroll">
+                    {layers.length > 0 ? (
+                      layers.map(renderLayerNode)
+                    ) : (
+                      <div className="zylora-empty-hint" style={{ padding: '16px', fontSize: '11px', color: '#737373' }}>
+                        {runtimeStatus === 'ready' ? 'Layers syncing from preview…' : 'Starting runtime…'}
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
 
               {leftTab === 'components' && (
-                <div className="zylora-components-view" data-subsystem="onlook-components">
-                  <div className="zylora-panel-title">Discovered Project Components</div>
-                  <div className="zylora-component-list">
-                    {files.filter((f) => f.path.startsWith('src/components/') && (f.path.endsWith('.jsx') || f.path.endsWith('.tsx'))).map((compFile) => {
-                      const compName = compFile.path.split('/').pop()?.replace(/\.[^/.]+$/, '') || 'Component';
-                      return (
-                        <div
-                          key={compFile.path}
-                          className="zylora-component-card project-component"
-                          data-component-name={compName}
-                          onClick={() => void handleInsertComponent(compName, `<${compName} />`, compFile.path)}
-                        >
-                          <strong>{compName}</strong>
-                          <span>{compFile.path}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <div className="zylora-panel-title" style={{ marginTop: '16px' }}>Basic UI Primitives</div>
-                  <div className="zylora-component-list">
-                    <div className="zylora-component-card" onClick={() => void handleInsertComponent('Button', '<button className="px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium shadow hover:bg-indigo-700 transition">Click me</button>')}>
-                      <strong>Button</strong>
-                      <span>Interactive primary button</span>
+                <div className="zylora-components-view" data-subsystem="onlook-components" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                  <div className="zylora-panel-header">Discovered Components</div>
+                  <div className="zylora-panel-scroll">
+                    <div className="zylora-component-list">
+                      {files.filter((f) => f.path.startsWith('src/components/') && (f.path.endsWith('.jsx') || f.path.endsWith('.tsx'))).map((compFile) => {
+                        const compName = compFile.path.split('/').pop()?.replace(/\.[^/.]+$/, '') || 'Component';
+                        return (
+                          <div
+                            key={compFile.path}
+                            className="zylora-component-card project-component"
+                            data-component-name={compName}
+                            onClick={() => void handleInsertComponent(compName, `<${compName} />`, compFile.path)}
+                          >
+                            <strong>{compName}</strong>
+                            <span>{compFile.path}</span>
+                          </div>
+                        );
+                      })}
                     </div>
-                    <div className="zylora-component-card" onClick={() => void handleInsertComponent('Card', '<div className="p-6 bg-white dark:bg-slate-800 rounded-xl shadow-md border border-slate-100 dark:border-slate-700"><h3 className="text-xl font-bold mb-2">Card Title</h3><p className="text-slate-600 dark:text-slate-300">Feature description here.</p></div>')}>
-                      <strong>Card</strong>
-                      <span>Container with shadow & border</span>
-                    </div>
-                    <div className="zylora-component-card" onClick={() => void handleInsertComponent('Heading', '<h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white my-4">New Section Heading</h2>')}>
-                      <strong>Heading</strong>
-                      <span>Responsive H2 section title</span>
-                    </div>
-                    <div className="zylora-component-card" onClick={() => void handleInsertComponent('Section', '<section className="py-12 px-6 max-w-7xl mx-auto"><h2 className="text-2xl font-bold mb-4">Section</h2><p className="text-slate-600">Content goes here.</p></section>')}>
-                      <strong>Section</strong>
-                      <span>Padded container section</span>
+                    <div className="zylora-panel-header" style={{ marginTop: '12px', borderTop: '1px solid #26262a' }}>Basic UI Primitives</div>
+                    <div className="zylora-component-list" style={{ marginTop: '6px' }}>
+                      <div className="zylora-component-card" onClick={() => void handleInsertComponent('Button', '<button className="px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium shadow hover:bg-indigo-700 transition">Click me</button>')}>
+                        <strong>Button</strong>
+                        <span>Interactive primary button</span>
+                      </div>
+                      <div className="zylora-component-card" onClick={() => void handleInsertComponent('Card', '<div className="p-6 bg-white dark:bg-slate-800 rounded-xl shadow-md border border-slate-100 dark:border-slate-700"><h3 className="text-xl font-bold mb-2">Card Title</h3><p className="text-slate-600 dark:text-slate-300">Feature description here.</p></div>')}>
+                        <strong>Card</strong>
+                        <span>Container with shadow & border</span>
+                      </div>
+                      <div className="zylora-component-card" onClick={() => void handleInsertComponent('Heading', '<h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white my-4">New Section Heading</h2>')}>
+                        <strong>Heading</strong>
+                        <span>Responsive H2 section title</span>
+                      </div>
+                      <div className="zylora-component-card" onClick={() => void handleInsertComponent('Section', '<section className="py-12 px-6 max-w-7xl mx-auto"><h2 className="text-2xl font-bold mb-4">Section</h2><p className="text-slate-600">Content goes here.</p></section>')}>
+                        <strong>Section</strong>
+                        <span>Padded container section</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               )}
 
               {leftTab === 'pages' && (
-                <div className="zylora-pages-view">
-                  <div className="zylora-panel-title">Pages & Routes</div>
-                  <ul className="zylora-pages-list">
-                    <li className="active">/ (Home)</li>
-                    <li>/about</li>
-                    <li>/services</li>
-                    <li>/contact</li>
-                  </ul>
+                <div className="zylora-pages-view" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                  <div className="zylora-panel-header">Pages & Routes</div>
+                  <div className="zylora-panel-scroll">
+                    <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                      <li style={{ padding: '6px 10px', background: 'rgba(59, 130, 246, 0.15)', color: '#93c5fd', borderRadius: '6px', fontSize: '12px', marginBottom: '2px' }}>/ (Home)</li>
+                      <li style={{ padding: '6px 10px', color: '#acacac', fontSize: '12px', marginBottom: '2px' }}>/about</li>
+                      <li style={{ padding: '6px 10px', color: '#acacac', fontSize: '12px', marginBottom: '2px' }}>/services</li>
+                      <li style={{ padding: '6px 10px', color: '#acacac', fontSize: '12px', marginBottom: '2px' }}>/contact</li>
+                    </ul>
+                  </div>
                 </div>
               )}
 
               {leftTab === 'files' && (
-                <div className="zylora-files-view">
-                  <div className="zylora-panel-title">Workspace Files</div>
-                  <ul className="zylora-files-list">
-                    {files.map((file) => (
-                      <li
-                        key={file.path}
-                        className={activeFile === file.path ? 'active' : ''}
-                        onClick={() => setActiveFile(file.path)}
-                      >
-                        📄 {file.path}
-                      </li>
-                    ))}
-                  </ul>
+                <div className="zylora-files-view" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                  <div className="zylora-panel-header">Workspace Files</div>
+                  <div className="zylora-panel-scroll">
+                    <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                      {files.map((file) => (
+                        <li
+                          key={file.path}
+                          style={{
+                            padding: '6px 10px',
+                            background: activeFile === file.path ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
+                            color: activeFile === file.path ? '#93c5fd' : '#acacac',
+                            borderRadius: '6px',
+                            fontSize: '12px',
+                            cursor: 'pointer',
+                            marginBottom: '2px',
+                          }}
+                          onClick={() => setActiveFile(file.path)}
+                        >
+                          📄 {file.path}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               )}
             </div>
@@ -868,7 +970,7 @@ export function ZyloraOnlookStudio({ siteId, csrf, workspaceId, onStatus, onBack
                 <span>{activeFile}</span>
                 <button
                   data-testid="save-code-btn"
-                  className="zylora-btn-save"
+                  className="zylora-btn-action"
                   onClick={() => void handleSaveCode()}
                   disabled={isSavingCode}
                 >
@@ -886,14 +988,14 @@ export function ZyloraOnlookStudio({ siteId, csrf, workspaceId, onStatus, onBack
           ) : (
             <div className="zylora-canvas-viewport" data-subsystem="onlook-canvas">
               {runtimeStatus === 'failed' ? (
-                <div className="zylora-canvas-error" role="alert">
-                  <h2>Sandbox Runtime Error</h2>
-                  <p>{errorMessage}</p>
-                  <button onClick={() => void startSandbox()}>Retry Sandbox</button>
+                <div className="zylora-canvas-error" role="alert" style={{ textAlign: 'center', color: '#f87171' }}>
+                  <h2 style={{ fontSize: '18px', marginBottom: '8px' }}>Sandbox Runtime Error</h2>
+                  <p style={{ fontSize: '13px', marginBottom: '16px' }}>{errorMessage}</p>
+                  <button className="zylora-btn-action" onClick={() => void startSandbox()}>Retry Sandbox</button>
                 </div>
               ) : !previewUrl ? (
-                <div className="zylora-canvas-loading">
-                  <span className="zylora-spinner" />
+                <div className="zylora-canvas-loading" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', color: '#acacac' }}>
+                  <span className="status-dot starting" style={{ width: 14, height: 14 }} />
                   <p>{runtimeStatus === 'starting' ? 'Starting Vite / Next dev server…' : 'Preparing workspace…'}</p>
                 </div>
               ) : (
@@ -961,14 +1063,22 @@ export function ZyloraOnlookStudio({ siteId, csrf, workspaceId, onStatus, onBack
           )}
         </main>
 
-        {/* ── RIGHT PANEL (INSPECTOR & AI CHAT) ── */}
-        {viewMode !== 'preview' && (
+        {/* ── RIGHT PANEL (Inspector & AI Chat, 352px width) ── */}
+        {viewMode === 'design' && (
           <aside className="zylora-onlook-rightpanel" data-subsystem="onlook-design-panel">
             <div className="zylora-rightpanel-nav">
-              <button className={rightTab === 'design' ? 'active' : ''} onClick={() => setRightTab('design')}>
+              <button
+                data-testid="right-tab-design"
+                className={rightTab === 'design' ? 'active' : ''}
+                onClick={() => setRightTab('design')}
+              >
                 Design
               </button>
-              <button className={rightTab === 'ai' ? 'active' : ''} onClick={() => setRightTab('ai')}>
+              <button
+                data-testid="right-tab-ai"
+                className={rightTab === 'ai' ? 'active' : ''}
+                onClick={() => setRightTab('ai')}
+              >
                 AI Assistant
               </button>
             </div>
@@ -976,12 +1086,12 @@ export function ZyloraOnlookStudio({ siteId, csrf, workspaceId, onStatus, onBack
             <div className="zylora-rightpanel-content">
               {rightTab === 'design' ? (
                 <div className="zylora-inspector-view">
-                  <div className="zylora-panel-title">Element Properties</div>
+                  <div className="zylora-panel-header" style={{ padding: '0 0 8px 0' }}>Element Properties</div>
                   {selectedElement ? (
                     <div className="zylora-inspector-fields">
                       <div className="field-group">
                         <label>Element Tag</label>
-                        <input value={selectedElement.tag} disabled />
+                        <input value={selectedElement.tag} disabled style={{ opacity: 0.6 }} />
                       </div>
                       <div className="field-group">
                         <label>Tailwind Classes</label>
@@ -1018,13 +1128,15 @@ export function ZyloraOnlookStudio({ siteId, csrf, workspaceId, onStatus, onBack
                       )}
                     </div>
                   ) : (
-                    <div className="zylora-empty-hint">Click any element in the canvas to inspect and edit styles.</div>
+                    <div className="zylora-empty-hint" style={{ color: '#737373', fontSize: '11px', padding: '12px 0' }}>
+                      Click any element in the canvas to inspect and edit styles.
+                    </div>
                   )}
                 </div>
               ) : (
-                <div className="zylora-ai-chat-view">
-                  <div className="zylora-ai-header">
-                    <div className="zylora-ai-mode-pills">
+                <div className="zylora-ai-chat-view" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                  <div className="zylora-ai-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                    <div className="zylora-mode-pills">
                       {(['ask', 'edit', 'agent'] as const).map((m) => (
                         <button key={m} className={aiMode === m ? 'active' : ''} onClick={() => setAiMode(m)}>
                           {m.toUpperCase()}
@@ -1032,7 +1144,8 @@ export function ZyloraOnlookStudio({ siteId, csrf, workspaceId, onStatus, onBack
                       ))}
                     </div>
                     <select
-                      className="zylora-ai-model-select"
+                      className="zylora-btn-subtle"
+                      style={{ background: '#121214', color: '#fff' }}
                       value={ai.getSelectedModel()}
                       onChange={(e) => ai.setSelectedModel(e.target.value)}
                     >
@@ -1044,31 +1157,31 @@ export function ZyloraOnlookStudio({ siteId, csrf, workspaceId, onStatus, onBack
                     </select>
                   </div>
 
-                  <div className="zylora-ai-messages">
+                  <div className="zylora-ai-messages" style={{ flex: '1 1 0', overflowY: 'auto', marginBottom: '12px' }}>
                     {aiMessages.length === 0 ? (
-                      <div className="zylora-ai-welcome">
-                        <p>Ask Zylora AI to modify code, add sections, adjust responsive styles, or inspect elements.</p>
-                        <div className="zylora-quick-prompts">
-                          <button onClick={() => setAiPrompt('Make this section more responsive with better mobile spacing')}>
+                      <div className="zylora-ai-welcome" style={{ color: '#acacac', fontSize: '12px' }}>
+                        <p style={{ marginBottom: '12px' }}>Ask Zylora AI to modify code, add sections, adjust responsive styles, or inspect elements.</p>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                          <button className="zylora-btn-subtle" onClick={() => setAiPrompt('Make this section more responsive with better mobile spacing')}>
                             Make responsive
                           </button>
-                          <button onClick={() => setAiPrompt('Increase whitespace and modernize typography')}>
+                          <button className="zylora-btn-subtle" onClick={() => setAiPrompt('Increase whitespace and modernize typography')}>
                             Modernize typography
                           </button>
-                          <button onClick={() => setAiPrompt('Add a call to action with a vibrant gradient button')}>
+                          <button className="zylora-btn-subtle" onClick={() => setAiPrompt('Add a call to action with a vibrant gradient button')}>
                             Add CTA button
                           </button>
                         </div>
                       </div>
                     ) : (
                       aiMessages.map((msg) => (
-                        <div key={msg.id} className={`zylora-chat-bubble ${msg.role}`}>
-                          <p>{msg.content}</p>
+                        <div key={msg.id} style={{ marginBottom: '10px', padding: '8px 10px', borderRadius: '6px', background: msg.role === 'user' ? '#1e1e20' : '#142036', fontSize: '12px' }}>
+                          <p style={{ margin: 0 }}>{msg.content}</p>
                           {msg.diff && (
-                            <div className="zylora-diff-box">
-                              <span className="diff-header">{msg.diff.path}</span>
-                              <pre className="diff-code">{msg.diff.generated.slice(0, 200)}...</pre>
-                              <button className="zylora-btn-apply" onClick={() => void handleApplyDiff(msg.diff!)}>
+                            <div style={{ marginTop: '8px', borderTop: '1px solid #333', paddingTop: '6px' }}>
+                              <span style={{ fontSize: '10px', color: '#93c5fd' }}>{msg.diff.path}</span>
+                              <pre style={{ fontSize: '10px', overflowX: 'auto', background: '#0e0e10', padding: '6px', borderRadius: '4px' }}>{msg.diff.generated.slice(0, 200)}...</pre>
+                              <button className="zylora-btn-action" onClick={() => void handleApplyDiff(msg.diff!)}>
                                 Apply Changes
                               </button>
                             </div>
@@ -1076,11 +1189,12 @@ export function ZyloraOnlookStudio({ siteId, csrf, workspaceId, onStatus, onBack
                         </div>
                       ))
                     )}
-                    {isAiGenerating && <div className="zylora-ai-loading">Zylora AI is reasoning and generating changes…</div>}
+                    {isAiGenerating && <div style={{ fontSize: '11px', color: '#93c5fd' }}>Zylora AI is reasoning and generating changes…</div>}
                   </div>
 
-                  <div className="zylora-ai-input-box">
+                  <div className="zylora-ai-input-box" style={{ display: 'flex', gap: '6px' }}>
                     <textarea
+                      style={{ flex: '1 1 0', height: '60px', background: '#121214', border: '1px solid #26262a', borderRadius: '6px', padding: '8px', color: '#fff', fontSize: '12px' }}
                       placeholder={selectedElement ? `Instruct AI regarding <${selectedElement.tag}>…` : 'Ask AI or request source edits…'}
                       value={aiPrompt}
                       onChange={(e) => setAiPrompt(e.target.value)}
@@ -1092,7 +1206,7 @@ export function ZyloraOnlookStudio({ siteId, csrf, workspaceId, onStatus, onBack
                       }}
                       disabled={isAiGenerating}
                     />
-                    <button className="zylora-btn-send" onClick={() => void handleSendAiPrompt()} disabled={isAiGenerating || !aiPrompt.trim()}>
+                    <button className="zylora-btn-action" style={{ height: '60px' }} onClick={() => void handleSendAiPrompt()} disabled={isAiGenerating || !aiPrompt.trim()}>
                       Send
                     </button>
                   </div>
@@ -1101,21 +1215,21 @@ export function ZyloraOnlookStudio({ siteId, csrf, workspaceId, onStatus, onBack
             </div>
           </aside>
         )}
-      </div>
 
-      {/* ── BOTTOM BAR ── */}
-      <footer className="zylora-onlook-bottombar">
-        <div className="zylora-status-indicator">
-          <span className={`status-dot ${runtimeStatus}`} />
-          <span>{runtimeStatus === 'ready' ? 'Sandbox Dev Server Active · HMR Connected' : runtimeStatus}</span>
-        </div>
-        <div className="zylora-viewport-readout">
-          {DEVICE_DIMENSIONS[device].width} × {DEVICE_DIMENSIONS[device].height} px
-        </div>
-      </footer>
+        {/* ── FLOATING BOTTOM BAR (Status & Resolution) ── */}
+        <footer className="zylora-onlook-bottombar">
+          <div className="zylora-status-indicator">
+            <span className={`status-dot ${runtimeStatus}`} />
+            <span>{runtimeStatus === 'ready' ? 'Dev Server Active · HMR Connected' : runtimeStatus}</span>
+          </div>
+          <span style={{ color: '#404040' }}>|</span>
+          <div className="zylora-viewport-readout">
+            {DEVICE_DIMENSIONS[device].width} × {DEVICE_DIMENSIONS[device].height} px
+          </div>
+        </footer>
 
-      {/* Toast Notification */}
-      {toast && <div className="zylora-toast">{toast}</div>}
+        {/* Toast Notification */}
+        {toast && <div className="zylora-toast">{toast}</div>}
       </div>
     </EditorEngineContext.Provider>
   );

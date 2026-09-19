@@ -1,0 +1,927 @@
+/* ============================================================
+   ZYLORA CODE STUDIO — STRICT ONLOOK VISUAL PARITY STYLESHEET
+   Pinned upstream reference: vendor/onlook @ 423e2e92
+   Strictly scoped to .zylora-onlook-studio for complete CSS isolation.
+   ============================================================ */
+
+.zylora-onlook-studio {
+  /* Onlook Design Tokens (Dark Theme) */
+  --onlook-bg: #101010;
+  --onlook-bg-panel: rgba(24, 24, 26, 0.95);
+  --onlook-bg-topbar: rgba(24, 24, 26, 0.75);
+  --onlook-bg-surface: #1e1e20;
+  --onlook-bg-surface-hover: #2a2a2e;
+  --onlook-border: #26262a;
+  --onlook-border-active: #787878;
+  --onlook-text-primary: #ffffff;
+  --onlook-text-secondary: #acacac;
+  --onlook-text-muted: #737373;
+  --onlook-accent: #3b82f6;
+  --onlook-accent-hover: #60a5fa;
+  --onlook-teal: #14b8a6;
+  --onlook-teal-bg: rgba(20, 184, 166, 0.15);
+  --onlook-radius: 8px;
+  --onlook-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.65);
+
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--onlook-bg);
+  color: var(--onlook-text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Inter, sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+  box-sizing: border-box;
+}
+
+.zylora-onlook-studio * {
+  box-sizing: border-box;
+}
+
+/* ────────────────────────────────────────────────────────────
+   1. TOPBAR (Exact 40px / h-10 upstream geometry)
+   ──────────────────────────────────────────────────────────── */
+.zylora-onlook-studio .zylora-onlook-topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  min-height: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  background: var(--onlook-bg-topbar);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--onlook-border);
+  z-index: 50;
+}
+
+.zylora-onlook-studio .zylora-onlook-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1 1 0;
+}
+
+.zylora-onlook-studio .zylora-onlook-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.zylora-onlook-studio .zylora-logo-mark {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 13px;
+  box-shadow: 0 2px 6px rgba(124, 58, 237, 0.4);
+}
+
+.zylora-onlook-studio .zylora-site-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--onlook-text-primary);
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.zylora-onlook-studio .zylora-breadcrumb-sep {
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 13px;
+}
+
+.zylora-onlook-studio .zylora-branch-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--onlook-border);
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--onlook-text-secondary);
+}
+
+.zylora-onlook-studio .zylora-badge {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  color: #93c5fd;
+}
+
+/* Center Controls: Mode Toggle, Device, Zoom */
+.zylora-onlook-studio .zylora-onlook-topbar-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex: 2 1 0;
+}
+
+/* Upstream Mode Toggle Pill */
+.zylora-onlook-studio .zylora-mode-pills {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--onlook-border);
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.zylora-onlook-studio .zylora-mode-pills button {
+  position: relative;
+  height: 22px;
+  padding: 0 10px;
+  border: none;
+  background: transparent;
+  color: var(--onlook-text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 140ms ease;
+}
+
+.zylora-onlook-studio .zylora-mode-pills button:hover {
+  color: var(--onlook-text-primary);
+}
+
+.zylora-onlook-studio .zylora-mode-pills button.active {
+  background: var(--onlook-bg-surface);
+  color: var(--onlook-text-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.zylora-onlook-studio .zylora-mode-pills button.active::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: 15%;
+  width: 70%;
+  height: 2px;
+  background: #ffffff;
+  border-radius: 1px;
+}
+
+/* Device Presets */
+.zylora-onlook-studio .zylora-device-pills {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 28px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--onlook-border);
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.zylora-onlook-studio .zylora-device-pills button {
+  width: 26px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 120ms ease;
+  color: var(--onlook-text-secondary);
+}
+
+.zylora-onlook-studio .zylora-device-pills button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.zylora-onlook-studio .zylora-device-pills button.active {
+  background: var(--onlook-bg-surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Zoom Controls */
+.zylora-onlook-studio .zylora-zoom-pills {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 28px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--onlook-border);
+  border-radius: 6px;
+  padding: 2px 4px;
+  font-size: 11px;
+  color: var(--onlook-text-secondary);
+}
+
+.zylora-onlook-studio .zylora-zoom-pills button {
+  height: 22px;
+  padding: 0 6px;
+  border: none;
+  background: transparent;
+  color: var(--onlook-text-secondary);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.zylora-onlook-studio .zylora-zoom-pills button:hover {
+  color: var(--onlook-text-primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.zylora-onlook-studio .zylora-zoom-pills span {
+  padding: 0 4px;
+  min-width: 36px;
+  text-align: center;
+}
+
+/* Right Actions */
+.zylora-onlook-studio .zylora-onlook-topbar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 1 1 0;
+}
+
+.zylora-onlook-studio .zylora-btn-subtle {
+  height: 28px;
+  padding: 0 10px;
+  background: transparent;
+  border: 1px solid var(--onlook-border);
+  border-radius: 6px;
+  color: var(--onlook-text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 120ms ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.zylora-onlook-studio .zylora-btn-subtle:hover {
+  border-color: var(--onlook-border-active);
+  color: var(--onlook-text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.zylora-onlook-studio .zylora-mode-toggle {
+  height: 28px;
+  padding: 0 8px;
+  background: transparent;
+  border: 1px solid var(--onlook-border);
+  border-radius: 6px;
+  color: var(--onlook-text-muted);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.zylora-onlook-studio .zylora-mode-toggle.active {
+  color: #93c5fd;
+  border-color: rgba(59, 130, 246, 0.3);
+  background: rgba(59, 130, 246, 0.1);
+}
+
+/* Upstream Publish Button */
+.zylora-onlook-studio .zylora-btn-publish {
+  height: 30px;
+  padding: 0 12px;
+  background: var(--onlook-bg-surface);
+  border: 1px solid var(--onlook-border-active);
+  border-radius: 6px;
+  color: var(--onlook-text-primary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 150ms ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.zylora-onlook-studio .zylora-btn-publish:hover {
+  background: var(--onlook-bg-surface-hover);
+  border-color: #ffffff;
+}
+
+.zylora-onlook-studio .zylora-btn-publish.live {
+  background: var(--onlook-teal-bg);
+  border-color: var(--onlook-teal);
+  color: var(--onlook-teal);
+}
+
+.zylora-onlook-studio .zylora-btn-publish:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ────────────────────────────────────────────────────────────
+   2. FLOATING CONTEXTUAL EDITORBAR (Anchored top-10 z-49)
+   ──────────────────────────────────────────────────────────── */
+.zylora-onlook-studio .zylora-onlook-editorbar-container {
+  position: absolute;
+  top: 48px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  pointer-events: none;
+  z-index: 49;
+}
+
+.zylora-onlook-studio .zylora-onlook-editorbar {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: var(--onlook-bg-panel);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--onlook-border);
+  border-radius: 10px;
+  box-shadow: var(--onlook-shadow);
+  max-width: calc(100vw - 720px);
+  overflow-x: auto;
+}
+
+.zylora-onlook-studio .zylora-editorbar-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #93c5fd;
+  white-space: nowrap;
+}
+
+.zylora-onlook-studio .zylora-editorbar-badge .classes {
+  font-weight: 400;
+  color: #bfdbfe;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.zylora-onlook-studio .zylora-editorbar-sep {
+  width: 1px;
+  height: 18px;
+  background: var(--onlook-border);
+  margin: 0 2px;
+}
+
+.zylora-onlook-studio .zylora-editorbar-section {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.zylora-onlook-studio .zylora-editorbar-section .label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--onlook-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-right: 2px;
+}
+
+.zylora-onlook-studio .zylora-editorbar-section button {
+  height: 24px;
+  padding: 0 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: var(--onlook-text-secondary);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 120ms ease;
+  white-space: nowrap;
+}
+
+.zylora-onlook-studio .zylora-editorbar-section button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--onlook-text-primary);
+  border-color: var(--onlook-border);
+}
+
+/* ────────────────────────────────────────────────────────────
+   3. LEFT PANEL (2-Tier: 80px Rail + 280px Flyout)
+   ──────────────────────────────────────────────────────────── */
+.zylora-onlook-studio .zylora-onlook-leftpanel {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  height: calc(100% - 40px);
+  z-index: 50;
+  display: flex;
+  pointer-events: none;
+}
+
+.zylora-onlook-studio .zylora-onlook-leftpanel > * {
+  pointer-events: auto;
+}
+
+/* Upstream 80px Rail (w-20) */
+.zylora-onlook-studio .zylora-leftpanel-rail {
+  width: 80px;
+  height: 100%;
+  background: var(--onlook-bg-topbar);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-right: 1px solid var(--onlook-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 0;
+  gap: 6px;
+}
+
+.zylora-onlook-studio .zylora-rail-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--onlook-text-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px;
+  cursor: pointer;
+  transition: all 140ms ease;
+}
+
+.zylora-onlook-studio .zylora-rail-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+}
+
+.zylora-onlook-studio .zylora-rail-btn span {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.zylora-onlook-studio .zylora-rail-btn:hover {
+  color: var(--onlook-text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.zylora-onlook-studio .zylora-rail-btn.active {
+  background: var(--onlook-bg-surface);
+  color: var(--onlook-text-primary);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Upstream 280px Flyout Panel */
+.zylora-onlook-studio .zylora-leftpanel-drawer {
+  width: 280px;
+  height: 100%;
+  background: var(--onlook-bg-panel);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-right: 1px solid var(--onlook-border);
+  box-shadow: var(--onlook-shadow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.zylora-onlook-studio .zylora-panel-header {
+  height: 38px;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--onlook-border);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--onlook-text-muted);
+}
+
+.zylora-onlook-studio .zylora-panel-scroll {
+  flex: 1 1 0;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+/* Layer Items */
+.zylora-onlook-studio .zylora-onlook-layer-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--onlook-text-secondary);
+  cursor: pointer;
+  transition: background 120ms ease;
+  margin-bottom: 2px;
+}
+
+.zylora-onlook-studio .zylora-onlook-layer-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--onlook-text-primary);
+}
+
+.zylora-onlook-studio .zylora-onlook-layer-item.active {
+  background: rgba(59, 130, 246, 0.2);
+  color: #ffffff;
+  border: 1px solid rgba(59, 130, 246, 0.35);
+}
+
+.zylora-onlook-studio .zylora-onlook-layer-tag {
+  font-family: monospace;
+  font-size: 11px;
+  color: #93c5fd;
+}
+
+.zylora-onlook-studio .zylora-onlook-layer-class {
+  font-family: monospace;
+  font-size: 10px;
+  color: var(--onlook-text-muted);
+}
+
+.zylora-onlook-studio .zylora-onlook-layer-text {
+  font-size: 11px;
+  color: var(--onlook-text-primary);
+  margin-left: auto;
+  max-width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Component Cards */
+.zylora-onlook-studio .zylora-component-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--onlook-border);
+  border-radius: 6px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: all 140ms ease;
+}
+
+.zylora-onlook-studio .zylora-component-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: var(--onlook-border-active);
+  transform: translateY(-1px);
+}
+
+.zylora-onlook-studio .zylora-component-card strong {
+  font-size: 12px;
+  color: var(--onlook-text-primary);
+}
+
+.zylora-onlook-studio .zylora-component-card span {
+  font-size: 10px;
+  color: var(--onlook-text-muted);
+}
+
+/* ────────────────────────────────────────────────────────────
+   4. RIGHT PANEL (352px width, Inspector & AI)
+   ──────────────────────────────────────────────────────────── */
+.zylora-onlook-studio .zylora-onlook-rightpanel {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  width: 352px;
+  height: calc(100% - 40px);
+  background: var(--onlook-bg-panel);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-left: 1px solid var(--onlook-border);
+  border-top-left-radius: 12px;
+  box-shadow: -10px 0 30px -5px rgba(0, 0, 0, 0.5);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.zylora-onlook-studio .zylora-rightpanel-nav {
+  height: 40px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  border-bottom: 1px solid var(--onlook-border);
+  gap: 4px;
+}
+
+.zylora-onlook-studio .zylora-rightpanel-nav button {
+  height: 28px;
+  padding: 0 12px;
+  border: none;
+  background: transparent;
+  color: var(--onlook-text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.zylora-onlook-studio .zylora-rightpanel-nav button:hover {
+  color: var(--onlook-text-primary);
+}
+
+.zylora-onlook-studio .zylora-rightpanel-nav button.active {
+  background: var(--onlook-bg-surface);
+  color: var(--onlook-text-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.zylora-onlook-studio .zylora-rightpanel-content {
+  flex: 1 1 0;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+/* Inspector Form Fields */
+.zylora-onlook-studio .zylora-inspector-fields .field-group {
+  margin-bottom: 12px;
+}
+
+.zylora-onlook-studio .zylora-inspector-fields label {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--onlook-text-secondary);
+  margin-bottom: 4px;
+}
+
+.zylora-onlook-studio .zylora-inspector-fields input,
+.zylora-onlook-studio .zylora-inspector-fields textarea {
+  width: 100%;
+  background: #121214;
+  border: 1px solid var(--onlook-border);
+  border-radius: 6px;
+  padding: 6px 8px;
+  color: #ffffff;
+  font-size: 12px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 120ms ease;
+}
+
+.zylora-onlook-studio .zylora-inspector-fields input:focus,
+.zylora-onlook-studio .zylora-inspector-fields textarea:focus {
+  border-color: var(--onlook-accent);
+}
+
+.zylora-onlook-studio .zylora-btn-action {
+  margin-top: 6px;
+  height: 28px;
+  padding: 0 12px;
+  background: var(--onlook-bg-surface);
+  border: 1px solid var(--onlook-border);
+  border-radius: 6px;
+  color: var(--onlook-text-primary);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.zylora-onlook-studio .zylora-btn-action:hover {
+  background: var(--onlook-bg-surface-hover);
+  border-color: var(--onlook-border-active);
+}
+
+/* ────────────────────────────────────────────────────────────
+   5. CANVAS VIEWPORT & SELECTION OVERLAYS
+   ──────────────────────────────────────────────────────────── */
+.zylora-onlook-studio .zylora-onlook-center {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 40px);
+  overflow: hidden;
+  background: var(--onlook-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zylora-onlook-studio .zylora-canvas-viewport {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  padding: 40px;
+}
+
+.zylora-onlook-studio .zylora-canvas-frame-container {
+  position: relative;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.zylora-onlook-studio .zylora-onlook-iframe {
+  border: none;
+  background: #ffffff;
+}
+
+/* Upstream Selection Chrome */
+.zylora-onlook-studio .zylora-selection-overlay {
+  position: absolute;
+  border: 2px solid var(--onlook-accent);
+  pointer-events: none;
+  z-index: 40;
+}
+
+.zylora-onlook-studio .zylora-hover-overlay {
+  position: absolute;
+  border: 1px dashed var(--onlook-accent-hover);
+  pointer-events: none;
+  z-index: 39;
+}
+
+.zylora-onlook-studio .zylora-overlay-badge {
+  position: absolute;
+  top: -22px;
+  left: -2px;
+  background: var(--onlook-accent);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 600;
+  font-family: monospace;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.zylora-onlook-studio .zylora-selection-overlay .handle {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: #ffffff;
+  border: 1.5px solid var(--onlook-accent);
+  border-radius: 1px;
+}
+
+.zylora-onlook-studio .zylora-selection-overlay .handle.nw { top: -4px; left: -4px; }
+.zylora-onlook-studio .zylora-selection-overlay .handle.ne { top: -4px; right: -4px; }
+.zylora-onlook-studio .zylora-selection-overlay .handle.sw { bottom: -4px; left: -4px; }
+.zylora-onlook-studio .zylora-selection-overlay .handle.se { bottom: -4px; right: -4px; }
+
+/* ────────────────────────────────────────────────────────────
+   6. CODE PANEL & FULL VIEW
+   ──────────────────────────────────────────────────────────── */
+.zylora-onlook-studio .zylora-code-editor-shell {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #0e0e10;
+  position: relative;
+  z-index: 60;
+}
+
+.zylora-onlook-studio .zylora-code-editor-header {
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: #141416;
+  border-bottom: 1px solid var(--onlook-border);
+  font-size: 12px;
+  font-family: monospace;
+  color: var(--onlook-text-secondary);
+}
+
+.zylora-onlook-studio .zylora-code-textarea {
+  flex: 1 1 0;
+  width: 100%;
+  background: transparent;
+  color: #e2e8f0;
+  font-family: 'Fira Code', Consolas, Monaco, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 16px;
+  border: none;
+  outline: none;
+  resize: none;
+}
+
+/* ────────────────────────────────────────────────────────────
+   7. FLOATING BOTTOM BAR
+   ──────────────────────────────────────────────────────────── */
+.zylora-onlook-studio .zylora-onlook-bottombar {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 28px;
+  padding: 0 14px;
+  background: var(--onlook-bg-panel);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--onlook-border);
+  border-radius: 9999px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 45;
+  font-size: 11px;
+  color: var(--onlook-text-secondary);
+}
+
+.zylora-onlook-studio .zylora-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.zylora-onlook-studio .status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+.zylora-onlook-studio .status-dot.starting {
+  background: #f59e0b;
+  animation: pulse 1s infinite;
+}
+
+.zylora-onlook-studio .status-dot.failed {
+  background: #ef4444;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Toast */
+.zylora-onlook-studio .zylora-toast {
+  position: absolute;
+  bottom: 50px;
+  right: 24px;
+  background: #1e1e20;
+  border: 1px solid var(--onlook-border-active);
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  animation: slideUp 200ms ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
