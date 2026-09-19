@@ -1,80 +1,52 @@
-# Upstream Provenance & Tracking: Zylora Studio editor core
+# Upstream Provenance & Tracking: Zylora Studio Editor Core
 
-## 1. Upstream source
+## 1. Active Upstream Source
 
-- **Repository**: `https://github.com/penpot/penpot`
-- **Tracked tag**: `2.17.0`
-- **Official upstream tag SHA**: `bdce5817ea86d028db29113d9ecdadcf07097b36`
-- **Checked-out source SHA**: `246c6a09eaf7c9806fda64ccd836be68c47eaeec`
-- **Checked-out source parent**: `bdce5817ea86d028db29113d9ecdadcf07097b36`
-- **Checked-out source commit**: `chore: add zylora workspace compilation target`
-- **Initial verification date**: `2026-09-17`
-- **Submodule/reference path**: `vendor/penpot`
-- **Upstream license**: Mozilla Public License Version 2.0 (MPL-2.0)
+- **Repository**: `https://github.com/onlook-dev/onlook`
+- **Branch**: `main`
+- **Imported Commit SHA**: `423e2e924366419e418ee049093872d535eea41a`
+- **Transplant Verification Date**: `2026-09-18`
+- **Vendored Reference Path**: `vendor/onlook`
+- **Upstream License**: Apache License 2.0 (see `legal/Apache-2.0-Onlook.txt`)
 
-The checked-out source contains one Zylora-owned build-target commit on top of
-the official upstream tag. The two SHAs are intentionally recorded separately:
-the tag identifies the upstream code being studied and the source SHA identifies
-the exact checkout used by this repository.
+---
 
-## 2. Adapted editor modules
+## 2. Transplant Architecture & Module Inventory
 
-Zylora Studio is a native website builder editor. Selected editor algorithms
-from Penpot are adapted into the TypeScript engine under `studio/editor-core/`
-and `studio/common/`; Zylora owns the document store, UI, persistence, semantic
-bindings and publisher.
+Zylora Studio operates with strict dual-engine separation:
+1. **Native Engine (`studio_engine === 'native'`)**: Runs `NativeZyloraStudio` with Zylora's native SiteDocument schema, canvas rendering, and tool rails.
+2. **Code Engine (`studio_engine === 'code'`)**: Mounts `ZyloraOnlookStudio`, transplanting the intact Onlook open-source editor shell and core engine.
 
-| Penpot upstream path | Zylora implementation | Purpose |
-| --- | --- | --- |
-| `common/src/app/common/geom/matrix.cljc` | `studio/editor-core/matrix.ts` | Affine transforms and decomposition |
-| `common/src/app/common/geom/rect.cljc`, `point.cljc`, `proportions.cljc` | `studio/editor-core/geometry.ts` | Rectangles, bounds and aspect constraints |
-| `common/src/app/common/geom/snap.cljc` | `studio/editor-core/snapping.ts` | Alignment, magnetic snapping and spacing guides |
-| `common/src/app/common/logic/flex_layout/`, `grid_layout/` | `studio/editor-core/layout.ts` | Website-friendly Flex/Grid layout calculations |
-| `common/src/app/common/logic/undo_stack.cljc` | `studio/editor-core/history.ts` and `studio/store.ts` | Atomic history and rollback behavior |
-| `common/src/app/common/types/` | `studio/common/types.ts` | Shared geometry/layout types |
+### Transplanted Subsystems
 
-These are adaptations, not a claim that the full ClojureScript/Rust Penpot
-application is embedded in Zylora.
+| Upstream Path (`vendor/onlook/`) | Transplant Path (`studio/onlook/`) | Purpose |
+| :--- | :--- | :--- |
+| `packages/models/src/` | `studio/onlook/models/` | Core domain models (`Action`, `ChatMessage`, `Code`, `Element`, `Editor`, `Project`, `User`, `Run`, `Settings`, `Socket`). |
+| `packages/constants/src/` | `studio/onlook/constants/` | Canvas dimensions, zoom ratios, hotkeys, styling constants (`editor.ts`). |
+| `packages/penpal/src/` | `studio/onlook/penpal/` | Bidirectional postMessage RPC communication between the editor shell and sandboxed iframe. |
+| `packages/utility/src/` | `studio/onlook/utility/` | Deep clone, tree traversal, cloning helpers, style normalization. |
+| `packages/parser/src/` | `studio/onlook/parser/` | Babel JSX/TSX AST parser, element locator, style injector, code stringifier. |
+| `packages/ui/src/` | `studio/onlook/ui/` | Onlook UI components (`Button`, `Input`, `Icons`, `DropdownMenu`, etc.). |
+| `apps/web/client/src/components/store/editor/` | `studio/onlook/core/` | MobX editor state engines (`EditorEngine`, `CanvasManager`, `HistoryManager`, `AstManager`, `ChatManager`). |
+| `apps/web/client/src/app/project/[id]/_components/` | `studio/onlook/editor/` | Transplanted editor UI shell (`TopBar`, `EditorBar`, `LeftPanel`, `Canvas`, `RightPanel`, `BottomBar`). |
+| `apps/web/client/public/onlook-preload-script.js` | `static/onlook-preload-script.js` | In-frame preview runtime script injected into project workspaces for live element inspection and click-to-select. |
 
-## 3. Deliberately omitted product runtime
+---
 
-The following upstream surfaces are not part of the ordinary Zylora Studio
-runtime:
+## 3. Zylora Platform Sovereignty & Adapters
 
-- Penpot backend, database, WebSocket sync and account/session stack
-- Penpot dashboard, teams, onboarding, billing and cloud product shell
-- Penpot plugin runtime and iframe sandbox
-- Penpot MCP/plugin bridge
-- Penpot exporter and media processor services
-- Penpot branding, community/help links and customer-facing routes
+To preserve Zylora's platform security, enterprise compliance, and multi-tenant isolation, Onlook's proprietary SaaS infrastructure (Supabase, Stripe, Freestyle, PostHog) was excluded and replaced with Zylora platform adapters located in `studio/zylora/adapters/`:
 
-Zylora authentication, authorization, billing, CRM, leads, booking, CMS, AI,
-analytics, publishing, domains and hosting remain authoritative. The browser
-mounts the native Zylora `CanvasNode` tree and selection overlay; it does not
-mount a `PENPOT_WORKSPACE` global or iframe.
+- **`ZyloraAuthAdapter`**: Bridges editor operations with Zylora session cookies and CSRF protection (`X-CSRF-Token`).
+- **`ZyloraWorkspaceAdapter`**: Bridges file read/write operations to `/api/sites/{site_id}/code/files` and `/api/sites/{site_id}/code/file`.
+- **`ZyloraSandboxAdapter`**: Controls local preview dev servers via Zylora's `LocalSandboxProvider` (`/api/sites/{site_id}/code/workspace/*`).
+- **`ZyloraProjectAdapter`**: Maps Zylora site entities to Onlook `Project` and `Branch` models.
+- **`ZyloraAIAdapter`**: Directs AI design prompts through Zylora's provider-neutral multi-model registry (`ZYLORA_AI_MODELS`).
+- **`ZyloraHistoryAdapter`**: Translates undo/redo steps to atomic snapshots (`/api/sites/{site_id}/code/snapshot`).
+- **`ZyloraPublishAdapter`**: Manages build execution and triggers Zylora production CDN deployment.
 
-## 4. License and attribution boundary
+---
 
-MPL-2.0 notices and third-party records remain in `legal/`. This repository
-keeps the upstream checkout intact and separates it from Zylora-authored
-adaptations. Any future copied or materially modified MPL-covered file must be
-added to `legal/THIRD_PARTY_NOTICES.md` and reviewed before distribution.
+## 4. Historical Provenance
 
-## 5. Updating the source
-
-1. Fetch and verify the desired upstream tag or commit.
-2. Record the upstream tag SHA and the exact checkout SHA in
-   `integrations/penpot/penpot.lock.json`.
-3. Inspect changes under the adapted geometry/layout paths.
-4. Port changes into the Zylora-owned TypeScript modules rather than copying
-   the Penpot product shell or backend.
-5. Run the focused Studio/Penpot suite, the native build, and the full suite.
-6. Update this file and the legal notices with the new evidence.
-
-## 6. Runtime certification status
-
-The source checkout is present and pinned. The actual upstream Penpot product
-runtime has not been started on this host, and no full upstream runtime
-certification is claimed. `STUDIO_ENGINE=legacy` remains the production default
-until a separately authorized native Studio rollout passes the browser,
-database, migration and publishing gates.
+Historical Penpot-derived algorithmic records (such as affine transforms and matrix utilities) remain cataloged in `legal/` for copyright compliance. The active Zylora Studio does not mount Penpot workspace frames or depend on Penpot backend services.

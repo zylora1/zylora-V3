@@ -1924,3 +1924,521 @@ body.studio-pan-active .canvas-workspace,
   font-size: 16px;
   pointer-events: none;
 }
+
+/* ── ONLOOK TRANSPLANT STUDIO STYLING ── */
+.zylora-onlook-studio {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background: #09090b;
+  color: #fafafa;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow: hidden;
+  user-select: none;
+}
+
+.zylora-onlook-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 16px;
+  background: #18181b;
+  border-bottom: 1px solid #27272a;
+  z-index: 100;
+}
+
+.zylora-onlook-topbar-left,
+.zylora-onlook-topbar-center,
+.zylora-onlook-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.zylora-badge {
+  background: #4f46e5;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+}
+
+.zylora-site-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #e4e4e7;
+}
+
+.zylora-mode-pills,
+.zylora-device-pills,
+.zylora-zoom-pills {
+  display: flex;
+  align-items: center;
+  background: #27272a;
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.zylora-mode-pills button,
+.zylora-device-pills button,
+.zylora-zoom-pills button {
+  background: transparent;
+  border: none;
+  color: #a1a1aa;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.zylora-mode-pills button.active,
+.zylora-device-pills button.active {
+  background: #3f3f46;
+  color: #fff;
+}
+
+.zylora-zoom-pills span {
+  font-size: 12px;
+  color: #d4d4d8;
+  padding: 0 6px;
+}
+
+.zylora-btn-subtle {
+  background: #27272a;
+  border: 1px solid #3f3f46;
+  color: #d4d4d8;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.zylora-btn-publish {
+  background: #6366f1;
+  border: none;
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.zylora-btn-publish:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.zylora-onlook-editorbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 6px 16px;
+  background: #1e1e24;
+  border-bottom: 1px solid #2e2e38;
+  font-size: 12px;
+  overflow-x: auto;
+  z-index: 90;
+}
+
+.zylora-editorbar-badge {
+  background: #312e81;
+  color: #c7d2fe;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.zylora-editorbar-badge .classes {
+  color: #a5b4fc;
+  margin-left: 6px;
+}
+
+.zylora-editorbar-section {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.zylora-editorbar-section .label {
+  color: #71717a;
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-right: 2px;
+}
+
+.zylora-editorbar-section button {
+  background: #27272a;
+  border: 1px solid #3f3f46;
+  color: #e4e4e7;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+}
+.zylora-editorbar-section button:hover { background: #3f3f46; }
+
+.zylora-onlook-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.zylora-onlook-leftpanel {
+  width: 280px;
+  background: #141417;
+  border-right: 1px solid #27272a;
+  display: flex;
+  flex-direction: column;
+  z-index: 40;
+}
+
+.zylora-leftpanel-nav,
+.zylora-rightpanel-nav {
+  display: flex;
+  border-bottom: 1px solid #27272a;
+  background: #18181b;
+}
+
+.zylora-leftpanel-nav button,
+.zylora-rightpanel-nav button {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #71717a;
+  padding: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.zylora-leftpanel-nav button.active,
+.zylora-rightpanel-nav button.active {
+  color: #fff;
+  border-bottom-color: #6366f1;
+}
+
+.zylora-leftpanel-content,
+.zylora-rightpanel-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+.zylora-panel-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #a1a1aa;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+}
+
+.zylora-onlook-layer-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #d4d4d8;
+}
+.zylora-onlook-layer-item:hover { background: #27272a; }
+.zylora-onlook-layer-item.active { background: #312e81; color: #e0e7ff; }
+.zylora-onlook-layer-tag { font-family: monospace; font-weight: 600; color: #818cf8; }
+.zylora-onlook-layer-class { color: #a1a1aa; font-size: 11px; }
+.zylora-onlook-layer-text { color: #71717a; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.zylora-component-card {
+  padding: 10px;
+  background: #1e1e24;
+  border: 1px solid #2e2e38;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.zylora-component-card:hover { border-color: #6366f1; }
+.zylora-component-card strong { display: block; font-size: 13px; color: #f4f4f5; }
+.zylora-component-card span { font-size: 11px; color: #71717a; }
+
+.zylora-pages-list,
+.zylora-files-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.zylora-pages-list li,
+.zylora-files-list li {
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  color: #a1a1aa;
+}
+.zylora-pages-list li:hover,
+.zylora-files-list li:hover { background: #27272a; color: #fff; }
+.zylora-pages-list li.active,
+.zylora-files-list li.active { background: #27272a; color: #818cf8; font-weight: 600; }
+
+.zylora-onlook-center {
+  flex: 1;
+  display: flex;
+  background: #111114;
+  overflow: auto;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+}
+
+.zylora-canvas-viewport {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100%;
+  min-height: 100%;
+  padding: 40px;
+}
+
+.zylora-canvas-frame-container {
+  position: relative;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  overflow: visible;
+}
+
+.zylora-onlook-iframe {
+  border: none;
+  background: #fff;
+  border-radius: 8px;
+  display: block;
+}
+
+.zylora-hover-overlay {
+  position: absolute;
+  pointer-events: none;
+  border: 1px dashed #818cf8;
+  background: rgba(129, 140, 248, 0.08);
+  z-index: 60;
+}
+
+.zylora-selection-overlay {
+  position: absolute;
+  pointer-events: none;
+  border: 2px solid #6366f1;
+  background: rgba(99, 102, 241, 0.05);
+  z-index: 70;
+}
+
+.zylora-overlay-badge {
+  position: absolute;
+  top: -22px;
+  left: 0;
+  background: #818cf8;
+  color: #fff;
+  font-size: 10px;
+  font-family: monospace;
+  padding: 1px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+.zylora-overlay-badge.selected { background: #4f46e5; }
+
+.zylora-onlook-rightpanel {
+  width: 320px;
+  background: #141417;
+  border-left: 1px solid #27272a;
+  display: flex;
+  flex-direction: column;
+  z-index: 40;
+}
+
+.zylora-code-editor-shell {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: #18181b;
+}
+
+.zylora-code-editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: #27272a;
+  font-size: 13px;
+  font-family: monospace;
+  color: #e4e4e7;
+}
+
+.zylora-code-textarea {
+  flex: 1;
+  background: #09090b;
+  color: #e4e4e7;
+  font-family: "Fira Code", monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 16px;
+  border: none;
+  outline: none;
+  resize: none;
+}
+
+.zylora-ai-chat-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.zylora-ai-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.zylora-ai-mode-pills {
+  display: flex;
+  background: #27272a;
+  border-radius: 4px;
+  padding: 2px;
+}
+.zylora-ai-mode-pills button {
+  background: transparent;
+  border: none;
+  color: #71717a;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.zylora-ai-mode-pills button.active { background: #4f46e5; color: #fff; border-radius: 3px; }
+
+.zylora-ai-model-select {
+  background: #27272a;
+  border: 1px solid #3f3f46;
+  color: #d4d4d8;
+  font-size: 11px;
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+
+.zylora-ai-messages {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.zylora-chat-bubble {
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.zylora-chat-bubble.user { background: #312e81; color: #e0e7ff; align-self: flex-end; max-width: 85%; }
+.zylora-chat-bubble.assistant { background: #1e1e24; border: 1px solid #2e2e38; color: #e4e4e7; }
+
+.zylora-diff-box {
+  margin-top: 8px;
+  background: #09090b;
+  border: 1px solid #27272a;
+  border-radius: 6px;
+  padding: 8px;
+}
+.diff-header { font-size: 11px; font-family: monospace; color: #818cf8; display: block; margin-bottom: 4px; }
+.diff-code { font-size: 11px; font-family: monospace; color: #a1a1aa; margin: 0 0 8px 0; overflow-x: auto; }
+.zylora-btn-apply {
+  background: #10b981;
+  border: none;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.zylora-ai-input-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.zylora-ai-input-box textarea {
+  background: #18181b;
+  border: 1px solid #27272a;
+  color: #e4e4e7;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  resize: none;
+  height: 64px;
+  outline: none;
+}
+.zylora-ai-input-box textarea:focus { border-color: #6366f1; }
+.zylora-btn-send {
+  background: #4f46e5;
+  border: none;
+  color: #fff;
+  padding: 6px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.zylora-onlook-bottombar {
+  height: 28px;
+  background: #18181b;
+  border-top: 1px solid #27272a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  font-size: 11px;
+  color: #71717a;
+  z-index: 100;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+.status-dot.ready { background: #10b981; box-shadow: 0 0 6px #10b981; }
+.status-dot.starting, .status-dot.bootstrapping { background: #f59e0b; }
+.status-dot.failed { background: #ef4444; }
+
+.zylora-toast {
+  position: fixed;
+  bottom: 40px;
+  right: 20px;
+  background: #18181b;
+  border: 1px solid #3f3f46;
+  color: #f4f4f5;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}

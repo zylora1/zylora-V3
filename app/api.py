@@ -1,5 +1,5 @@
 from __future__ import annotations
-import hashlib, io, json, random, re, secrets, zipfile
+import hashlib, io, json, random, re, secrets, shutil, zipfile
 from datetime import datetime, timedelta, timezone
 from uuid import uuid4
 from fastapi import APIRouter, HTTPException, Request, Response
@@ -13,7 +13,7 @@ from .templates import TEMPLATES, BY_SLUG, AI_RUNTIME_SLUG, render_template, ren
 from .template_catalogue import public_templates
 from .providers import ai_generate_site, ai_edit, send_whatsapp, sync_google_sheet_event, plan_site_architecture
 from .notifications import notify
-from .config import settings
+from .config import settings, ROOT
 from .ai_service import hosted_ai_configured
 from .plans import MAX_PAGES_PER_SITE, get_plan, tier3_page_limit, smallest_self_service_plan_for_pages, SELF_SERVICE_PLAN_KEYS, PAID_SELF_SERVICE_PLAN_KEYS
 from .settings_store import get_system_setting
@@ -985,6 +985,13 @@ def publish(site_id:str,request:Request,payload:PublishIn|None=None):
         })
         db.execute(text("INSERT INTO published_versions(id,site_id,revision,snapshot_json,structure_json,created_by,created_at) VALUES (:i,:s,:r,:snap,:st,:u,:a)"),{'i':str(uuid4()),'s':site_id,'r':next_revision,'snap':snapshot,'st':structure,'u':u['id'],'a':now_iso()})
         create_revision(db,site_id,u['id'],'PUBLISH','Published snapshot')
+        if s.get('studio_engine') == 'code' and s.get('code_workspace_id'):
+            ws_root = (ROOT / 'data' / 'code-projects' / str(s['code_workspace_id'])).resolve()
+            dist_dir = ws_root / 'dist'
+            if dist_dir.is_dir():
+                pub_dir = (ROOT / 'data' / 'published-code' / site_id / str(next_revision)).resolve()
+                pub_dir.mkdir(parents=True, exist_ok=True)
+                shutil.copytree(dist_dir, pub_dir, dirs_exist_ok=True)
     for old_path,new_path in redirect_pairs:
         create_redirect(site_id,old_path,new_path)
     _audit(u['id'],'SITE_PUBLISH','site',site_id,{'custom_domains_transferred':transferred_domains,'plan':active_plan,'is_paid':plan_is_paid(active_plan),**projection_meta})
@@ -1013,8 +1020,19 @@ def rollback_published(site_id:str,revision:int,request:Request):
         if not row: raise HTTPException(404,'Published revision not found')
         create_backup(db,site_id,u['id'],'PRE_ROLLBACK',f'Before rollback to published revision {revision}')
         next_revision=int(site.get('published_revision') or 0)+1
-        db.execute(text("UPDATE sites SET status='LIVE',published_snapshot_json=:snap,published_structure_json=:st,published_revision=:r,updated_at=:a WHERE id=:s"),{'snap':row['snapshot_json'],'st':row['structure_json'],'r':next_revision,'a':now_iso(),'s':site_id})
+        db.execute(text("""UPDATE sites SET status='LIVE',
+            published_snapshot_json=:snap,
+            published_structure_json=:st,
+            published_studio_document_json=:st,
+            published_revision=:r,updated_at=:a WHERE id=:s"""),
+            {'snap':row['snapshot_json'],'st':row['structure_json'],'r':next_revision,'a':now_iso(),'s':site_id})
         db.execute(text("INSERT INTO published_versions(id,site_id,revision,snapshot_json,structure_json,created_by,created_at) VALUES (:i,:s,:r,:snap,:st,:u,:a)"),{'i':str(uuid4()),'s':site_id,'r':next_revision,'snap':row['snapshot_json'],'st':row['structure_json'],'u':u['id'],'a':now_iso()})
+        if site.get('studio_engine') == 'code' and site.get('code_workspace_id'):
+            source_rev_dir = (ROOT / 'data' / 'published-code' / site_id / str(revision)).resolve()
+            target_rev_dir = (ROOT / 'data' / 'published-code' / site_id / str(next_revision)).resolve()
+            if source_rev_dir.is_dir():
+                target_rev_dir.mkdir(parents=True, exist_ok=True)
+                shutil.copytree(source_rev_dir, target_rev_dir, dirs_exist_ok=True)
     _audit(u['id'],'SITE_ROLLBACK','site',site_id,{'restored_revision':revision,'new_revision':next_revision})
     return {'ok':True,'restored_revision':revision,'published_revision':next_revision}
 

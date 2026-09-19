@@ -36,6 +36,8 @@ from .link_icons import normalize_footer_links, detect_link_platform, apply_foot
 from .studio_document import normalize_studio_document_json, validate_studio_document
 from .studio_renderer import render_page as render_studio_page
 from .studio_mutations import StudioMutationConflict, apply_operations
+from .code_project import CodeProjectError, code_engine_available_for_site, code_engine_enabled, bootstrap_code_project, local_sandbox
+from .source_editor import SourceEditError, map_source, replace_text
 
 router = APIRouter(prefix='/api')
 public_router = APIRouter()
@@ -491,6 +493,8 @@ def create_from_user_template(template_id: str, payload: BlankSiteIn, request: R
 def save_studio(site_id: str, document: dict, request: Request):
     u=_user(request,True)
     
+    if isinstance(document, dict) and "document" in document and isinstance(document["document"], dict) and "pages" in document["document"]:
+        document = document["document"]
     with SessionLocal.begin() as db:
         site=_owned_site(db,u['id'],site_id)
         if not site:
@@ -912,3 +916,99 @@ def accessibility_check(site_id: str, request: Request, page: str='home'):
         fid=field.get('id'); labelled=bool(field.get('aria-label') or (fid and soup.find('label',attrs={'for':fid})))
         if not labelled: warnings.append({'type':'unlabeled_field','target':field.get('data-zylora-id'),'message':'Form field needs a label.'})
     return {'warnings':warnings,'count':len(warnings)}
+
+
+# Code-backed Studio runtime and structured source editing.
+def _code_site(site_id: str, request: Request, write: bool=False):
+    u=_user(request,write)
+    with SessionLocal() as db: site=_owned_site(db,u['id'],site_id)
+    if not code_engine_available_for_site(site): raise HTTPException(409,'Code Studio is not enabled for this site')
+    if not site.get('code_workspace_id'): raise HTTPException(409,'This code project has no workspace')
+    return u,site
+
+class CodeCommandIn(BaseModel):
+    command:list[str]=Field(min_length=1,max_length=6)
+    timeout_seconds:int=Field(default=15,ge=1,le=30)
+class CodeSnapshotRestore(BaseModel):
+    snapshot_id:str=Field(min_length=36,max_length=36)
+class SourceTarget(BaseModel):
+    filePath:str=Field(min_length=1,max_length=240)
+    start:int=Field(ge=0)
+    end:int=Field(gt=0)
+    elementType:str|None=None
+class SourceTextEdit(BaseModel):
+    target:SourceTarget
+    value:str=Field(min_length=1,max_length=10000)
+
+class CodeFileWriteIn(BaseModel):
+    path:str=Field(min_length=1,max_length=240)
+    content:str=Field(max_length=1_000_000)
+
+@router.post('/sites/{site_id}/code/workspace/start')
+def start_code_workspace(site_id: str, request: Request):
+    _,site=_code_site(site_id,request,True)
+    try: result=local_sandbox.start_workspace(str(site['code_workspace_id']))
+    except CodeProjectError as exc: raise HTTPException(409,str(exc))
+    return {'ok':True,**result,'runtime':'local-vite-or-next-development','source_execution':'enabled-development-only'}
+
+@router.post('/sites/{site_id}/code/workspace/stop')
+def stop_code_workspace(site_id: str, request: Request):
+    _,site=_code_site(site_id,request,True); local_sandbox.stop_workspace(str(site['code_workspace_id']))
+    return {'ok':True,'status':'stopped'}
+
+@router.get('/sites/{site_id}/code/workspace/status')
+def code_workspace_status(site_id: str, request: Request):
+    _,site=_code_site(site_id,request); project_id=str(site['code_workspace_id'])
+    return {'ok':True,'status':local_sandbox.get_status(project_id),'preview_url':local_sandbox.get_preview_url(project_id),'logs':local_sandbox.get_logs(project_id),'runtime':'local-vite-or-next-development'}
+
+@router.post('/sites/{site_id}/code/command')
+def run_code_command(site_id: str, payload: CodeCommandIn, request: Request):
+    _,site=_code_site(site_id,request,True)
+    try: result=local_sandbox.run_command(str(site['code_workspace_id']),payload.command,payload.timeout_seconds)
+    except CodeProjectError as exc: raise HTTPException(422,str(exc))
+    return {'ok':result.returncode==0,'command_id':result.command_id,'returncode':result.returncode,'stdout':result.stdout,'stderr':result.stderr,'timed_out':result.timed_out}
+
+@router.post('/sites/{site_id}/code/snapshot')
+def snapshot_code_workspace(site_id: str, request: Request):
+    _,site=_code_site(site_id,request,True)
+    try: snapshot_id=local_sandbox.create_snapshot(str(site['code_workspace_id']))
+    except CodeProjectError as exc: raise HTTPException(422,str(exc))
+    return {'ok':True,'snapshot_id':snapshot_id}
+
+@router.post('/sites/{site_id}/code/snapshot/restore')
+def restore_code_workspace(site_id: str, payload: CodeSnapshotRestore, request: Request):
+    _,site=_code_site(site_id,request,True)
+    try: local_sandbox.restore_snapshot(str(site['code_workspace_id']),payload.snapshot_id)
+    except CodeProjectError as exc: raise HTTPException(422,str(exc))
+    return {'ok':True,'snapshot_id':payload.snapshot_id}
+
+@router.get('/sites/{site_id}/code/source/map')
+def map_code_source(site_id: str, path: str, request: Request):
+    _,site=_code_site(site_id,request); adapter=bootstrap_code_project(str(site['code_workspace_id']))
+    try: return {'ok':True,**map_source(adapter,path)}
+    except (CodeProjectError,SourceEditError,FileNotFoundError) as exc: raise HTTPException(422,str(exc))
+
+@router.post('/sites/{site_id}/code/source/text')
+def edit_code_source_text(site_id: str, payload: SourceTextEdit, request: Request):
+    _,site=_code_site(site_id,request,True); adapter=bootstrap_code_project(str(site['code_workspace_id']))
+    try: result=replace_text(adapter,payload.target.filePath,payload.target.model_dump(),payload.value)
+    except (CodeProjectError,SourceEditError,FileNotFoundError) as exc: raise HTTPException(422,str(exc))
+    return {'ok':True,**result,'hmr':'requested','history':'source-checkpoint-required'}
+
+@router.get('/sites/{site_id}/code/files')
+def list_code_files(site_id: str, request: Request):
+    _,site=_code_site(site_id,request); adapter=bootstrap_code_project(str(site['code_workspace_id']))
+    return {'ok':True,'files':[item.__dict__ for item in adapter.list_files() if item.extension in {'.jsx','.tsx','.js','.ts'}]}
+
+@router.get('/sites/{site_id}/code/file')
+def read_code_file(site_id: str, path: str, request: Request):
+    _,site=_code_site(site_id,request); adapter=bootstrap_code_project(str(site['code_workspace_id']))
+    try: return {'ok':True,'path':path,'content':adapter.read_file(path)}
+    except (CodeProjectError,FileNotFoundError) as exc: raise HTTPException(404,str(exc))
+
+@router.put('/sites/{site_id}/code/file')
+def write_code_file(site_id: str, payload: CodeFileWriteIn, request: Request):
+    _,site=_code_site(site_id,request,True); adapter=bootstrap_code_project(str(site['code_workspace_id']))
+    try: adapter.write_file(payload.path,payload.content)
+    except (CodeProjectError,FileNotFoundError) as exc: raise HTTPException(422,str(exc))
+    return {'ok':True,'path':payload.path}

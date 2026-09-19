@@ -118,6 +118,10 @@ TOOL_SPECS: tuple[dict[str, Any], ...] = (
             "properties": {"site_id": {"type": "string"}},
             "additionalProperties": False,
         },
+    },
+    {
+        "name": "zylora.apply_site_patch",
+        "description": "Apply typed patch operations to the canonical SiteDocument with concurrency protection.",
         "scope": "sites.edit",
         "inputSchema": {
             "type": "object",
@@ -508,6 +512,10 @@ def invoke_tool(connector: dict[str, Any], user: dict[str, Any], tool: str, argu
             site = _site_for(db, connector, user["id"], site_id)
             document = _canonical_site_document(site)
             result = {"site_id": site_id, "revision": int(site.get("studio_revision") or document.revision or 0), "document": document.model_dump(mode="json", exclude_none=True), "design_source": "penpot" if str(settings.studio_engine).lower() == "penpot" else "site_document", "runtime_source": "site_document"}
+        elif tool == "zylora.apply_site_patch":
+            site_id = str(args.get("site_id") or "")
+            if not site_id:
+                raise _problem(422, "INVALID_ARGUMENTS", "site_id is required.")
             try:
                 base_revision = int(args.get("base_revision"))
             except (TypeError, ValueError) as exc:

@@ -1,0 +1,172 @@
+/* Penpot/Super Premium Aesthetics Override */
+body.landing-page {
+    background-color: #0b0d0f !important; /* Deep dark background */
+    color: #e5e7eb !important;
+    font-family: 'Space Grotesk', 'Inter', sans-serif !important;
+}
+
+/* Add grid pattern overlay */
+body.landing-page::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background-image: radial-gradient(circle, #333 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.z-header, .nav-wrapper {
+    background-color: rgba(11, 13, 15, 0.8) !important;
+    backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid #2a2e33 !important;
+}
+.nav-link, .nav-community-link span, .logo {
+    color: #ffffff !important;
+}
+
+h1, h2, h3, h4, h5, h6, .section-title {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.04em !important;
+}
+
+#hero-title {
+    font-size: clamp(3rem, 6vw, 5rem) !important;
+}
+
+#hero-title span {
+    color: #4ade80 !important; /* vibrant neon green */
+}
+
+/* Premium Buttons */
+.btn-primary, .z-btn-primary, .bp-submit-button {
+    background-color: #4ade80 !important;
+    color: #0b0d0f !important;
+    border: 2px solid #4ade80 !important;
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+    font-family: 'Space Grotesk', sans-serif !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    box-shadow: 0 4px 14px rgba(74, 222, 128, 0.2) !important;
+    transition: all 0.2s ease !important;
+}
+
+.btn-primary:hover, .z-btn-primary:hover, .bp-submit-button:hover {
+    background-color: transparent !important;
+    color: #4ade80 !important;
+    transform: translateY(-2px) !important;
+}
+
+.btn-secondary, .z-btn-secondary, .bp-demo-button {
+    background-color: transparent !important;
+    color: #f3f4f6 !important;
+    border: 2px solid #3f4650 !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    font-family: 'Space Grotesk', sans-serif !important;
+}
+
+.btn-secondary:hover, .z-btn-secondary:hover, .bp-demo-button:hover {
+    border-color: #e5e7eb !important;
+    background-color: rgba(255,255,255,0.05) !important;
+}
+
+/* Cards (Capabilities, Pricing, etc) */
+.capability-card, .pricing-card {
+    background: #14171a !important;
+    border: 1px solid #2a2e33 !important;
+    border-radius: 12px !important;
+    padding: 32px !important;
+    transition: transform 0.2s, border-color 0.2s !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+}
+
+.capability-card:hover, .pricing-card:hover {
+    border-color: #4ade80 !important;
+    transform: translateY(-4px) !important;
+}
+
+.capability-card h3 {
+    color: #ffffff !important;
+    font-family: 'Space Grotesk', sans-serif !important;
+    font-size: 1.5rem !important;
+    margin-bottom: 12px !important;
+}
+
+.capability-desc {
+    color: #a1a1aa !important;
+    line-height: 1.6 !important;
+    font-size: 1.05rem !important;
+}
+
+.section-label, .eyebrow-pill, .bp-badge {
+    display: inline-block !important;
+    background: #1c2126 !important;
+    color: #4ade80 !important;
+    padding: 6px 12px !important;
+    border-radius: 999px !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    font-family: 'Space Grotesk', monospace !important;
+    margin-bottom: 16px !important;
+    font-weight: 600 !important;
+    border: 1px solid #2a2e33 !important;
+}
+
+/* Blueprint lines and visuals */
+.bp-hero-lines svg {
+    opacity: 0.4 !important;
+    stroke: #4ade80 !important;
+}
+
+/* Prompt textarea */
+#businessPrompt {
+    background: #090a0c !important;
+    border: 1px solid #3d434a !important;
+    color: #fff !important;
+    border-radius: 12px !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 1.1rem !important;
+}
+#businessPrompt:focus {
+    border-color: #4ade80 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(74,222,128, 0.15) !important;
+}
+
+.bp-prompt-area {
+    background: #14171a !important;
+    padding: 24px !important;
+    border-radius: 16px !important;
+    border: 1px solid #2a2e33 !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.8) !important;
+}
+
+/* Table styling for dark premium look */
+table {
+    background: #14171a !important;
+    border: 1px solid #2a2e33 !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+}
+th {
+    background: #090a0c !important;
+    color: #a1a1aa !important;
+    border-bottom: 2px solid #2a2e33 !important;
+    font-family: 'Space Grotesk', sans-serif !important;
+}
+td {
+    color: #e5e7eb !important;
+    border-bottom: 1px solid #2a2e33 !important;
+}
+td[style*="font-weight: bold"] {
+    color: #4ade80 !important;
+}
+/* Ensure the Zylora column header matches */
+th[style*="color: var(--zy-brand-primary)"] {
+    color: #4ade80 !important;
+}

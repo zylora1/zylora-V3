@@ -307,6 +307,34 @@ def _render_live_site_path(site: dict, path: str, *, request_host: str|None=None
         if not dynamic: return _site_not_found(render_site,request_host)
         dynamic=_apply_hosting_attribution(dynamic,render_site)
         return HTMLResponse(_with_public_runtime(dynamic,site['id']),headers={'Cache-Control':'public,max-age=60,stale-while-revalidate=300','X-Zylora-Renderer':'V4-DYNAMIC'})
+    if str(site.get('studio_engine') or '').lower() == 'code':
+        rev = str(site.get('published_revision') or 1)
+        code_pub_dir = (ROOT / 'data' / 'published-code' / site['id'] / rev).resolve()
+        if not code_pub_dir.is_dir() and site.get('code_workspace_id'):
+            code_pub_dir = (ROOT / 'data' / 'code-projects' / str(site['code_workspace_id']) / 'dist').resolve()
+        if code_pub_dir.is_dir():
+            target_file = (code_pub_dir / (clean or 'index.html')).resolve()
+            if code_pub_dir in target_file.parents or target_file == code_pub_dir:
+                if target_file.is_dir():
+                    target_file = target_file / 'index.html'
+                if target_file.is_file():
+                    import mimetypes
+                    suffix = target_file.suffix.lower()
+                    if suffix in {'.js', '.mjs'}:
+                        content_type = 'application/javascript'
+                    elif suffix == '.css':
+                        content_type = 'text/css'
+                    else:
+                        content_type = mimetypes.guess_type(str(target_file))[0] or 'application/octet-stream'
+                    if 'html' in content_type:
+                        html_text = target_file.read_text(encoding='utf-8', errors='replace')
+                        slug = site.get('slug') or ''
+                        if slug and not request_host:
+                            prefix = f'/s/{slug}'
+                            html_text = re.sub(r'''(?<=[="'])/(?!(?:api|static|manifest\.webmanifest))([^"'>]+)''', rf'{prefix}/\1', html_text)
+                        html_text = _apply_hosting_attribution(html_text, render_site)
+                        return HTMLResponse(_with_public_runtime(html_text, site['id']), headers={'Cache-Control':'public,max-age=60','X-Zylora-Renderer':'CODE-MODE'})
+                    return Response(target_file.read_bytes(), media_type=content_type, headers={'Cache-Control':'public,max-age=3600'})
     renderer=str(site.get('renderer_state') or 'LEGACY').upper()
     if renderer in {'V4_CANARY','V4'} and site.get('published_studio_document_json'):
         try:
@@ -565,10 +593,10 @@ def studio_publish(site_id: str, request: Request):
 async def studio(site_id:str,request:Request):
     user=current_user(request)
     with SessionLocal() as db:
-        site=db.execute(text('SELECT id,name,status FROM sites WHERE id=:site AND user_id=:user'),{'site':site_id,'user':user['id']}).mappings().first()
+        site=db.execute(text('SELECT * FROM sites WHERE id=:site AND user_id=:user'),{'site':site_id,'user':user['id']}).mappings().first()
     if not site: raise HTTPException(404,'Site not found')
     raw=(ROOT/'static'/'studio.html').read_text(encoding='utf-8')
-    context=json.dumps({'siteId':site_id,'siteName':site['name'],'published':str(site.get('status') or '').upper()=='LIVE','csrfToken':user['csrf_token'],'studioEngine':str(settings.studio_engine or 'legacy').lower()},separators=(',',':')).replace('</','\u003c\\/')
+    context=json.dumps({'siteId':site_id,'siteName':site['name'],'published':str(site.get('status') or '').upper()=='LIVE','csrfToken':user['csrf_token'],'studioEngine':str(site.get('studio_engine') or settings.studio_engine or 'legacy').lower(),'codeWorkspaceId':str(site.get('code_workspace_id') or '')},separators=(',',':')).replace('</','\u003c\\/')
     rendered=raw.replace('__ZYLORA_STUDIO_CONTEXT__',context)
     if '/static/studio-ux.css' not in rendered:
         rendered=rendered.replace('</head>','<link rel="stylesheet" href="/static/studio-ux.css"></head>')

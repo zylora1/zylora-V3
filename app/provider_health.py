@@ -73,6 +73,15 @@ def provider_health_snapshot() -> dict[str, Any]:
             "status": "CONFIGURED" if (_configured(getattr(settings, "google_client_id", "")) and _configured(getattr(settings, "google_client_secret", ""))) else "NOT_CONFIGURED",
         },
         {
+            "id": "penpot",
+            "name": "Penpot Editing Platform",
+            "category": "studio",
+            "configured": False,
+            "status": "BLOCKED_BY_EXTERNAL_ENVIRONMENT",
+            "source_present": True,
+            "source_mode": "git_submodule",
+            "source_path": "vendor/penpot",
+        },
     ]
     return {
         "checked_at": datetime.now(timezone.utc).isoformat(),

@@ -8,8 +8,8 @@ function formatMoney(amountMinor,currency='INR'){if(amountMinor===null||amountMi
 function leadDetailData(lead){const q=lead.qualification_data||{},reasons=Array.isArray(lead.score_reasons)?lead.score_reasons:[];return [{label:'Name',value:lead.name||'—'},{label:'Email',value:lead.email||'—'},{label:'Phone',value:lead.phone||'—'},{label:'Source',value:String(lead.source||'—').replaceAll('_',' ')},{label:'Status',value:lead.status||'NEW'},{label:'Intent',value:lead.intent||'—'},{label:'Service interest',value:lead.service_interest||q.service||'—'},{label:'Score',value:lead.lead_score===null||lead.lead_score===undefined?'—':`${lead.lead_score}/100 · ${lead.lead_temperature||'—'}`},{label:'Score reasons',value:reasons.length?reasons.join(' · '):'—',wide:true},{label:'Qualification',value:Object.entries(q).filter(([k])=>!k.endsWith('_consent')&&k!=='conversion_paths').map(([k,v])=>`${k.replaceAll('_',' ')}: ${Array.isArray(v)?v.join(', '):v}`).join(' · ')||'—',wide:true},{label:'Attribution',value:[lead.utm_source,lead.utm_medium,lead.utm_campaign,lead.page_url].filter(Boolean).join(' → ')||lead.referrer||'—',wide:true},{label:'Website',value:lead.business_name||'—'},{label:'Created',value:lead.created_at?new Date(lead.created_at).toLocaleString():'—'},{label:'Summary',value:lead.summary||lead.message||'No summary yet.',wide:true}]}
 function leadTemperatureClass(lead){const t=String(lead.lead_temperature||'').toLowerCase();return t==='hot'?'hot':t==='warm'?'warm':'cold'}
 async function openLeadConversation(lead){if(!lead?.conversation_id||!lead.site_id)return;try{const j=await api(`/api/sites/${lead.site_id}/assistant/conversations/${lead.conversation_id}`);$('#assistantConversationTitle').textContent=lead.name?`${lead.name} · Assistant conversation`:'Assistant conversation';const msgs=j.messages||j.items||[];$('#assistantConversationBody').innerHTML=msgs.length?msgs.map(m=>`<div class="stack-item assistant-owner-message"><div><b>${escapeHtml(String(m.role||m.sender||'message').replaceAll('_',' '))}</b><small>${escapeHtml(m.content||m.message||m.text||'')}</small></div><time>${m.created_at?new Date(m.created_at).toLocaleString():''}</time></div>`).join(''):'<p class="muted-copy">No transcript messages are available.</p>';openModal('assistantConversationModal')}catch(e){toast(e.message)}}
-function openLeadDetails(lead){if(!lead)return;$('#leadDetailName').textContent=lead.name||'Lead';$('#leadDetailBody').innerHTML=leadDetailData(lead).map(x=>`<div class="lead-detail-field ${x.wide?'wide':''}"><small>${escapeHtml(x.label)}</small>${x.wide?`<p>${escapeHtml(x.value)}</p>`:`<b>${escapeHtml(x.value)}</b>`}</div>`).join('')+`<div class="lead-detail-field wide lead-detail-actions"><small>Pipeline</small><div class="form-actions"><select id="leadStatusPicker" aria-label="Lead status">${['NEW','CONTACTED','QUALIFIED','WON','LOST'].map(v=>`<option ${String(lead.status||'NEW')===v?'selected':''}>${v}</option>`).join('')}</select><button class="accent-btn" id="leadStatusSave" type="button">Update status</button>${lead.conversation_id?'<button class="ghost-btn" id="leadConversationOpen" type="button">View AI conversation</button>':''}</div></div>`;$('#leadStatusSave').onclick=async()=>{try{await api(`/api/leads/${lead.id}/status`,{method:'PATCH',body:JSON.stringify({status:$('#leadStatusPicker').value})});toast('Lead status updated');closeModal('leadDetailModal');await loadLeads()}catch(e){toast(e.message)}};if($('#leadConversationOpen'))$('#leadConversationOpen').onclick=()=>openLeadConversation(lead);openModal('leadDetailModal')}
-function tenantLeadRow(lead,index){const source=String(lead.source||'OTHER').replaceAll('_',' '),temp=lead.lead_temperature?`<span class="lead-temperature ${leadTemperatureClass(lead)}">${escapeHtml(lead.lead_temperature)}</span>`:'';return `<tr data-search="${escapeHtml(`${lead.name} ${lead.email} ${lead.business_name} ${lead.source} ${lead.intent||''}`.toLowerCase())}"><td class="check-cell"><input class="checkbox lead-row-check" aria-label="Select ${escapeHtml(lead.name)}" type="checkbox"></td><td><div class="lead-person"><span class="lead-avatar">${escapeHtml(initials(lead.name))}</span><span><b>${escapeHtml(lead.name)}</b><small>${escapeHtml(lead.email)}</small></span></div></td><td><span class="source-pill source-${escapeHtml(String(lead.source||'other').toLowerCase())}">${escapeHtml(source)}</span></td><td>${escapeHtml(lead.business_name||'—')}</td><td>${temp}${lead.lead_score!==null&&lead.lead_score!==undefined?` <small>${lead.lead_score}/100</small>`:''}</td><td>${lead.created_at?new Date(lead.created_at).toLocaleString():'—'}</td><td><button class="lead-detail-btn" data-lead-detail="${index}">Open</button></td></tr>`}
+function openLeadDetails(lead){if(!lead)return;const drawer=$('#leadDetailDrawer');if(drawer){if($('#leadDrawerName'))$('#leadDrawerName').textContent=lead.name||'Lead';const grid=$('#leadDrawerDetailContent');if(grid){grid.innerHTML=leadDetailData(lead).map(x=>`<div class="lead-detail-field ${x.wide?'wide':''}"><small>${escapeHtml(x.label)}</small>${x.wide?`<p>${escapeHtml(x.value)}</p>`:`<b>${escapeHtml(x.value)}</b>`}</div>`).join('')+`<div class="lead-detail-field wide" style="margin-top:12px;"><small>Pipeline Stage</small><div style="margin-top:6px;"><select id="leadDrawerStatusPicker" aria-label="Lead status" class="filter-select" style="width:100%;">${['NEW','CONTACTED','QUALIFIED','WON','LOST'].map(v=>`<option ${String(lead.status||'NEW')===v?'selected':''}>${v}</option>`).join('')}</select></div></div>`;}const saveBtn=$('#leadDrawerSaveStatus');if(saveBtn){saveBtn.onclick=async()=>{const newStatus=$('#leadDrawerStatusPicker')?.value||lead.status;try{await api(`/api/leads/${lead.id}/status`,{method:'PATCH',body:JSON.stringify({status:newStatus})});toast('Lead status updated');drawer.classList.remove('open');await loadLeads()}catch(e){toast(e.message)}};}const convoBtn=$('#leadDrawerOpenConvo');if(convoBtn){convoBtn.style.display=lead.conversation_id?'inline-block':'none';convoBtn.onclick=()=>openLeadConversation(lead);}drawer.classList.add('open');}if($('#leadDetailName'))$('#leadDetailName').textContent=lead.name||'Lead';if($('#leadDetailBody')){$('#leadDetailBody').innerHTML=leadDetailData(lead).map(x=>`<div class="lead-detail-field ${x.wide?'wide':''}"><small>${escapeHtml(x.label)}</small>${x.wide?`<p>${escapeHtml(x.value)}</p>`:`<b>${escapeHtml(x.value)}</b>`}</div>`).join('')+`<div class="lead-detail-field wide lead-detail-actions"><small>Pipeline</small><div class="form-actions"><select id="leadStatusPicker" aria-label="Lead status">${['NEW','CONTACTED','QUALIFIED','WON','LOST'].map(v=>`<option ${String(lead.status||'NEW')===v?'selected':''}>${v}</option>`).join('')}</select><button class="accent-btn" id="leadStatusSave" type="button">Update status</button>${lead.conversation_id?'<button class="ghost-btn" id="leadConversationOpen" type="button">View AI conversation</button>':''}</div></div>`;$('#leadStatusSave')?.addEventListener('click',async()=>{try{await api(`/api/leads/${lead.id}/status`,{method:'PATCH',body:JSON.stringify({status:$('#leadStatusPicker').value})});toast('Lead status updated');closeModal('leadDetailModal');drawer?.classList.remove('open');await loadLeads()}catch(e){toast(e.message)}});if($('#leadConversationOpen'))$('#leadConversationOpen').onclick=()=>openLeadConversation(lead);}}
+function tenantLeadRow(lead,index){const source=String(lead.source||'OTHER').replaceAll('_',' '),temp=lead.lead_temperature?`<span class="lead-temperature ${leadTemperatureClass(lead)}">${escapeHtml(lead.lead_temperature)}</span>`:'';return `<tr data-lead-id="${lead.id}" data-status="${escapeHtml(lead.status||'NEW')}" data-search="${escapeHtml(`${lead.name} ${lead.email} ${lead.business_name} ${lead.source} ${lead.intent||''}`.toLowerCase())}"><td class="check-cell"><input class="checkbox lead-row-check" aria-label="Select ${escapeHtml(lead.name)}" type="checkbox"></td><td><div class="lead-person"><span class="lead-avatar">${escapeHtml(initials(lead.name))}</span><span><b>${escapeHtml(lead.name)}</b><small>${escapeHtml(lead.email)}</small></span></div></td><td><span class="source-pill source-${escapeHtml(String(lead.source||'other').toLowerCase())}">${escapeHtml(source)}</span></td><td>${escapeHtml(lead.business_name||'—')}</td><td>${temp}${lead.lead_score!==null&&lead.lead_score!==undefined?` <small>${lead.lead_score}/100</small>`:''}</td><td>${lead.created_at?new Date(lead.created_at).toLocaleString():'—'}</td><td><button class="lead-detail-btn" data-lead-detail="${index}">Open</button></td></tr>`}
 function adminLeadRow(lead,index){return `<tr data-search="${escapeHtml(`${lead.name} ${lead.email} ${lead.business_name} ${lead.owner_name} ${lead.owner_email} ${lead.source}`.toLowerCase())}"><td class="check-cell"><span class="lead-avatar">${escapeHtml(initials(lead.name))}</span></td><td><div class="lead-person"><span><b>${escapeHtml(lead.name)}</b><small>${escapeHtml(lead.email)}</small></span></div></td><td>${escapeHtml(lead.owner_name||'—')}<small style="display:block;color:#98a2b3">${escapeHtml(lead.owner_email||'')}</small></td><td><span class="source-pill">${escapeHtml(lead.source)}</span></td><td>${escapeHtml(lead.business_name||'—')}</td><td>${escapeHtml(lead.phone||lead.email||'—')}</td><td>${lead.created_at?new Date(lead.created_at).toLocaleString():'—'}</td><td><button class="lead-detail-btn" data-admin-lead-detail="${index}">details</button></td></tr>`}
 function renderAnalytics(){let start, end, range = Number(state.analyticsRange||30); const now=Date.now(); if (state.customDateRange && state.customDateRange.from) { start = new Date(state.customDateRange.from).setHours(0,0,0,0); end = state.customDateRange.to ? new Date(state.customDateRange.to).setHours(23,59,59,999) : now; range = Math.max(1, Math.round((end - start) / 86400000)); } else { start = now - range*86400000; end = now; }const leads=(state.leads||[]).filter(l=>{const t=Date.parse(l.created_at||'');return Number.isFinite(t)&&t>=start&&t<=end});$('#aLeads')&&($('#aLeads').textContent=leads.length);$('#aPublished')&&($('#aPublished').textContent=(state.sites||[]).filter(s=>s.status==='LIVE').length);$('#aCredits')&&($('#aCredits').textContent=state.me?.ai_credits??0);$('#analyticsLeadTotal')&&($('#analyticsLeadTotal').textContent=`${leads.length} lead${leads.length===1?'':'s'}`);const buckets=range<=30?6:9,bucketMs=(range*86400000)/buckets,counts=Array(buckets).fill(0),labels=[];for(const l of leads){const idx=Math.min(buckets-1,Math.max(0,Math.floor((Date.parse(l.created_at)-start)/bucketMs)));counts[idx]++}for(let i=0;i<buckets;i++){const d=new Date(start+(i+1)*bucketMs);labels.push(d.toLocaleDateString(undefined,{month:'short',day:'numeric'}))}const max=Math.max(1,...counts),w=720,h=220,pad=20;const pts=counts.map((v,i)=>[pad+(i*(w-2*pad)/Math.max(1,buckets-1)),h-pad-(v/max)*(h-2*pad)]);const line=pts.map((p,i)=>`${i?'L':'M'}${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(' ');const area=pts.length?`${line} L${pts.at(-1)[0].toFixed(1)} ${h} L${pts[0][0].toFixed(1)} ${h} Z`:'';$('#analyticsLinePath')?.setAttribute('d',line);$('#analyticsAreaPath')?.setAttribute('d',area);const layer=$('#analyticsPointLayer');if(layer)layer.innerHTML=pts.map(([x,y],i)=>`<circle class="chart-point" cx="${x}" cy="${y}" r="3.5"><title>${counts[i]} leads</title></circle>`).join('');const grid=$('.chart-grid',$('#analyticsLineChart'));if(grid)grid.innerHTML=[0,1,2,3].map(i=>`<line x1="20" y1="${20+i*60}" x2="700" y2="${20+i*60}"></line>`).join('');if($('#analyticsAxis'))$('#analyticsAxis').innerHTML=labels.map(x=>`<span>${escapeHtml(x)}</span>`).join('');const sources={};for(const l of leads){const k=(l.source||'OTHER').toUpperCase();sources[k]=(sources[k]||0)+1}const entries=Object.entries(sources).sort((a,b)=>b[1]-a[1]);const palette=['#4f46e5','#12b76a','#f79009','#667085','#e4e7ec'];if($('#analyticsDonut'))$('#analyticsDonut').style.background=leads.length?'#4f46e5':'#e4e7ec';if($('#analyticsDonutTotal'))$('#analyticsDonutTotal').textContent=leads.length;if($('#analyticsDonutLegend'))$('#analyticsDonutLegend').innerHTML=entries.length?entries.map(([k,v],i)=>`<div><span><i style="background:${palette[i%palette.length]}"></i>${escapeHtml(k)}</span><b>${v}</b></div>`).join(''):'<div><span>No lead sources yet</span><b>0</b></div>';if($('#analyticsRecentLeads'))$('#analyticsRecentLeads').innerHTML=leads.slice(0,6).map(l=>`<div class="analytics-recent-row"><b>${escapeHtml(l.name)}</b><span>${escapeHtml(l.business_name||'Website')}</span><span>${escapeHtml(l.source||'Lead')}</span><time>${new Date(l.created_at).toLocaleDateString()}</time></div>`).join('')||'<p class="muted-copy">No leads yet.</p>'}
 async function refreshNotificationIndicator(){try{const j=await api('/api/support/conversations'),n=(j.items||[]).reduce((a,x)=>a+(Number(x.unread_count)||0),0),badge=$('#notificationCount');if(badge){badge.textContent=String(n);badge.hidden=!n}return n}catch{return 0}}
@@ -23,11 +23,11 @@ async function api(url,opts={}){const headers={...(opts.headers||{})};if(!(opts.
 function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200)}
 function openModal(id){const el=$('#'+id);el.classList.add('open');el.setAttribute('aria-hidden','false')}
 function closeModal(id){const el=$('#'+id);el.classList.remove('open');el.setAttribute('aria-hidden','true')}
-function setView(id){$$('.view').forEach(v=>v.classList.toggle('active',v.id===id));$('#knowledgeFile')?.addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{$('#knowledgeContent').value=await f.text();if(!$('#knowledgeTitle').value)$('#knowledgeTitle').value=f.name.replace(/\.[^.]+$/,'')}catch{$('#knowledgeMsg').textContent='Could not read that text file.'}});
-$$('.rail-btn[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===id));if(id.startsWith('crm-')&&window.ZyloraCRM)window.ZyloraCRM.onView(id);if(id==='overview')renderHeroSiteCard();if(id==='assistant')loadDedicatedAssistant();if(id==='appointments')loadAppointments();if(id==='leads')loadLeads();if(id==='analytics')loadGrowth();if(id==='health')loadHealth();if(id==='settings')loadSettings();if(id==='billing')loadBilling();if(id==='domains')loadDomains();if(id==='integrations'){loadGoogleSheet();loadKnowledge()}if(id==='freelancer')loadFreelancer();if(id==='support')loadSupport();window.scrollTo({top:0,behavior:'smooth'})}
+function setView(id){if(id.startsWith('crm-'))mountCrmNav(id);$$('.view').forEach(v=>v.classList.toggle('active',v.id===id));$('#knowledgeFile')?.addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{$('#knowledgeContent').value=await f.text();if(!$('#knowledgeTitle').value)$('#knowledgeTitle').value=f.name.replace(/\.[^.]+$/,'')}catch{$('#knowledgeMsg').textContent='Could not read that text file.'}});
+$$('.rail-btn[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===id));if(id.startsWith('crm-')&&window.ZyloraCRM)window.ZyloraCRM.onView(id);if(id==='overview'){renderHeroSiteCard();renderHomeDashboard();}if(id==='assistant')loadDedicatedAssistant();if(id==='appointments')loadAppointments();if(id==='leads')loadLeads();if(id==='analytics')loadGrowth();if(id==='health')loadHealth();if(id==='settings')loadSettings();if(id==='billing')loadBilling();if(id==='domains')loadDomains();if(id==='integrations'){loadGoogleSheet();loadKnowledge()}if(id==='freelancer')loadFreelancer();if(id==='support')loadSupport();window.scrollTo({top:0,behavior:'smooth'})}
 function updateVerificationUI(){const banner=$('#verifyBanner');banner.hidden=!!state.me.email_verified;if(!state.me.email_verified){$('#verifyEmail').textContent=state.me.email;const token=sessionStorage.getItem('debugVerifyToken');$('#devVerify').hidden=!token}}
 async function init(){state.me=await api('/api/auth/me');sessionStorage.setItem('csrf',state.me.csrf_token);if($('#userName'))$('#userName').textContent=state.me.name;if($('#userPlan'))$('#userPlan').textContent=state.me.plan_selected?state.me.plan:'Choose at publish';renderAvatar($('#avatar'));renderAvatar($('#sideAvatar'));if($('#sideUserName'))$('#sideUserName').textContent=state.me.name;if($('#sideUserRole'))$('#sideUserRole').textContent=state.me.role==='SUPER_ADMIN'?'Super admin':'User';if($('#creditCount'))$('#creditCount').textContent=state.me.ai_credits;if($('#leadCreditCount'))$('#leadCreditCount').textContent=state.me.lead_credits??'—';if($('#aCredits'))$('#aCredits').textContent=state.me.ai_credits;const d=new Date();if($('#todayLabel'))$('#todayLabel').textContent=d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'})+' · Real-time overview';updateVerificationUI();if(state.me.role==='SUPER_ADMIN'&&$('#accountDangerCard')){$('#accountDangerCard').hidden=true;}loadBilling().catch(e=>toast(e.message));await loadSites();await loadLeads();loadGrowth().catch(()=>{});await loadSettings();await refreshNotificationIndicator();const params=new URLSearchParams(location.search),resumePublish=params.get('resumePublish');if(resumePublish){history.replaceState({},'',location.pathname);await publishFromDashboard(resumePublish)}if(params.get('view')){setView(params.get('view'));if(params.get('view')==='health'&&params.get('site')&&$('#healthSite')){$('#healthSite').value=params.get('site');loadHealth()}}if(params.get('deleteAccount')==='1'){setView('settings');openDeleteAccount();history.replaceState({},'',location.pathname)}}
-async function loadSites(){const r=await api('/api/sites');state.sites=r.items;renderSites();fillSiteSelectors();renderHeroSiteCard();const live=state.sites.filter(s=>s.status==='LIVE').length;if($('#liveCount'))$('#liveCount').textContent=`${live}/1`;if($('#siteCount'))$('#siteCount').textContent=state.sites.length;if($('#aPublished'))$('#aPublished').textContent=live;renderOverviewMomentum();const p=$('#priorityList');if(p){if(live){const s=state.sites.find(x=>x.status==='LIVE');p.innerHTML=`<div class="priority"><i style="background:#6ce481"></i><div><b>${escapeHtml(s.business_name)} is live</b><small>Published at /s/${escapeHtml(s.slug)}</small></div><span>✓</span></div>`}else p.innerHTML=`<div class="priority warn"><i></i><div><b>No site published yet</b><small>Create or publish a website to start collecting leads.</small></div><span>→</span></div>`;}renderAnalytics();
+async function loadSites(){const grid=$('#siteGrid'),empty=$('#siteEmpty'),skel=$('#siteSkeleton');if(skel)skel.style.display='grid';if(grid)grid.style.display='none';if(empty)empty.style.display='none';try{const r=await api('/api/sites');state.sites=r.items;if(skel)skel.style.display='none';if(grid)grid.style.display='';renderSites();fillSiteSelectors();renderHeroSiteCard();renderHomeDashboard();const live=state.sites.filter(s=>s.status==='LIVE').length;if($('#liveCount'))$('#liveCount').textContent=`${live}/1`;if($('#siteCount'))$('#siteCount').textContent=state.sites.length;if($('#aPublished'))$('#aPublished').textContent=live;renderOverviewMomentum();const p=$('#priorityList');if(p){if(live){const s=state.sites.find(x=>x.status==='LIVE');p.innerHTML=`<div class="priority"><i style="background:#6ce481"></i><div><b>${escapeHtml(s.business_name)} is live</b><small>Published at /s/${escapeHtml(s.slug)}</small></div><span>✓</span></div>`}else p.innerHTML=`<div class="priority warn"><i></i><div><b>No site published yet</b><small>Create or publish a website to start collecting leads.</small></div><span>→</span></div>`;}renderAnalytics();
 const analyticsCalendarRoot=$('#analyticsCalendarRoot');
 if (window.ZyloraCalendar && analyticsCalendarRoot && !analyticsCalendarRoot.dataset.mounted) {
   analyticsCalendarRoot.dataset.mounted='true';
@@ -57,7 +57,7 @@ if (window.PromptInputModule && assistantPromptInputRoot && !assistantPromptInpu
   });
 }
 window.dispatchEvent(new CustomEvent('zylora:sites-loaded', { detail: { sites: state.sites } }));
-}
+}catch(error){state.sites=[];if(skel)skel.style.display='none';if(grid){grid.style.display='';grid.innerHTML='<div class="error-state" role="alert"><b>We couldn’t load your projects.</b><span>Check your connection and try again.</span><button class="ghost-btn" type="button" id="retryProjects">Retry</button></div>';}if(empty)empty.style.display='none';renderHomeDashboard();document.getElementById('retryProjects')?.addEventListener('click',()=>loadSites());}}
 function fillSiteSelectors(){for(const id of ['domainSite','integrationSite','knowledgeSite','studioSiteSelect','healthSite','assistantSite','assistantViewSite','appointmentsSite']){const sel=$('#'+id);const current=sel?.value;if(!sel)continue;sel.innerHTML=state.sites.map(s=>`<option value="${s.id}">${escapeHtml(s.business_name)}</option>`).join('');if(current&&state.sites.some(s=>s.id===current))sel.value=current}state.selectedDomainSite=$('#domainSite')?.value||null;state.selectedIntegrationSite=$('#integrationSite')?.value||null}
 function periodTrend(current,previous){if(previous<=0)return current>0?{label:'NEW',kind:'up'}:null;const pct=((current-previous)/previous)*100;return{label:`${pct>=0?'▲':'▼'}${Math.abs(pct).toFixed(pct>=100?0:1)}%`,kind:pct>=0?'up':'down'}}
 function renderOverviewMomentum(){const now=Date.now(),week=7*864e5,month=30*864e5,count=(items,start,end)=>items.filter(x=>{const t=Date.parse(x.created_at||'');return Number.isFinite(t)&&t>=start&&t<=end&&t<end}).length;const lead=periodTrend(count(state.leads||[],now-week,now),count(state.leads||[],now-2*week,now-week));const site=periodTrend(count(state.sites||[],now-month,now),count(state.sites||[],now-2*month,now-month));for(const [id,v] of [['leadTrend',lead],['siteTrend',site]]){const el=$('#'+id);if(!el)continue;if(!v){el.hidden=true;continue}el.hidden=false;el.textContent=v.label;el.className=`micro-trend ${v.kind}`}}
@@ -96,14 +96,80 @@ function renderCreditTopups(catalogue){
   }).join('');
   $$('[data-topup-type]',grid).forEach(btn=>btn.onclick=()=>buyCreditTopup(btn.dataset.topupType,btn.dataset.topupCode));
 }
+function renderHomeDashboard(){
+  const snapTotal=$('#snapTotalProjects');
+  const snapLive=$('#snapLiveWebsites');
+  const snapLeads=$('#snapTotalLeads');
+  const snapCredits=$('#snapAiCredits');
+  const liveCount=(state.sites||[]).filter(s=>s.status==='LIVE').length;
+  if(snapTotal)snapTotal.textContent=state.sites?.length||0;
+  if(snapLive)snapLive.textContent=liveCount;
+  if(snapLeads)snapLeads.textContent=state.leads?.length||0;
+  if(snapCredits)snapCredits.textContent=state.me?.ai_credits??0;
+
+  const recentList=$('#homeRecentProjects');
+  if(recentList){
+    if(!state.sites||!state.sites.length){
+      recentList.innerHTML=`<div class="empty-state-box"><div class="empty-state-icon">▣</div><h4>No websites created yet</h4><p>Create your first website or start with a blank Studio canvas.</p><div style="margin-top:12px;display:flex;gap:8px;"><button class="accent-btn" data-action="open-create-modal" type="button">+ Create Website</button><button class="ghost-btn" data-action="new-site" type="button">⚡ Blank Studio</button></div></div>`;
+      $('[data-action="open-create-modal"]',recentList)?.addEventListener('click',()=>openModal('createProjectModal'));
+      $('[data-action="new-site"]',recentList)?.addEventListener('click',()=>openCreate());
+    }else{
+      const sorted=[...state.sites].sort((a,b)=>new Date(b.updated_at||b.created_at||0)-new Date(a.updated_at||a.created_at||0)).slice(0,3);
+      recentList.innerHTML=sorted.map(s=>{
+        const isLive=s.status==='LIVE';
+        const url=isLive?(s.custom_domain?`https://${s.custom_domain}`:`/s/${s.slug}`):`/api/sites/${s.id}/preview`;
+        return `<div class="recent-project-card"><div class="recent-proj-info"><div class="recent-proj-thumb" style="--site-accent:${escapeHtml(s.accent||'#b7ff3b')}"></div><div><div style="display:flex;align-items:center;gap:8px;"><b class="recent-proj-title">${escapeHtml(s.business_name||'Untitled')}</b><span class="status-badge ${isLive?'pass':'info'}">${isLive?'✓ LIVE':'○ DRAFT'}</span></div><small class="recent-proj-meta">${isLive?escapeHtml(s.custom_domain||`${s.slug}.zylora.site`):'Draft workspace'} · Updated ${s.updated_at?new Date(s.updated_at).toLocaleDateString():'recently'}</small></div></div><div class="recent-proj-actions"><a class="ghost-btn mini-btn" href="${url}" target="_blank" rel="noopener">Preview</a><a class="accent-btn mini-btn" href="/studio/${s.id}">Open Studio</a></div></div>`;
+      }).join('');
+    }
+  }
+
+  const needsAttention=$('#homeNeedsAttention');
+  if(needsAttention){
+    const alerts=[];
+    const drafts=(state.sites||[]).filter(s=>s.status!=='LIVE');
+    if(!state.sites||!state.sites.length){
+      alerts.push({type:'warn',title:'No website created',detail:'Create and launch your first website to start acquiring visitors and leads.',actionLabel:'Create Website',action:()=>openModal('createProjectModal')});
+    }else if(drafts.length>0){
+      alerts.push({type:'info',title:`${drafts.length} unpublished draft${drafts.length===1?'':'s'}`,detail:`"${drafts[0].business_name}" is currently in draft. Review and publish to make it live.`,actionLabel:'Review Draft',action:()=>setView('websites')});
+    }
+    if(!state.me?.email_verified){
+      alerts.push({type:'warn',title:'Email unverified',detail:'Verify your email address to enable live domain publishing and exports.',actionLabel:'Verify',action:()=>resendVerification()});
+    }
+    const newLeads=(state.leads||[]).filter(l=>(l.status||'NEW').toUpperCase()==='NEW');
+    if(newLeads.length>0){
+      alerts.push({type:'action',title:`${newLeads.length} new lead${newLeads.length===1?'':'s'} awaiting follow-up`,detail:`Latest enquiry from ${newLeads[0].name||newLeads[0].email}.`,actionLabel:'View Leads',action:()=>setView('leads')});
+    }
+    const credits=state.me?.ai_credits??100;
+    if(credits<20){
+      alerts.push({type:'warn',title:'AI credits running low',detail:`You have ${credits} AI credits remaining in your balance.`,actionLabel:'Top Up',action:()=>setView('billing')});
+    }
+    if(!alerts.length){
+      alerts.push({type:'pass',title:'All systems operational',detail:'Your live websites and AI Sales Assistant are healthy with no outstanding issues.',actionLabel:'Check Health',action:()=>setView('health')});
+    }
+    needsAttention.innerHTML=alerts.map((a,idx)=>`<div class="attention-item ${a.type}"><div class="attention-icon">${a.type==='pass'?'✓':a.type==='warn'?'!':'ℹ'}</div><div class="attention-body"><b>${escapeHtml(a.title)}</b><p>${escapeHtml(a.detail)}</p></div>${a.actionLabel?`<button class="ghost-btn mini-btn" data-attention-idx="${idx}" type="button">${escapeHtml(a.actionLabel)}</button>`:''}</div>`).join('');
+    $$('[data-attention-idx]',needsAttention).forEach(btn=>{const idx=Number(btn.dataset.attentionIdx);if(alerts[idx]?.action)btn.onclick=alerts[idx].action;});
+  }
+
+  const feed=$('#homeActivityFeed');
+  if(feed){
+    const acts=[];
+    (state.leads||[]).slice(0,5).forEach(l=>{acts.push({icon:'♙',title:`New lead: ${l.name||l.email}`,meta:`${l.source||'Form'} · ${l.created_at?new Date(l.created_at).toLocaleDateString():'Recently'}`,timestamp:l.created_at?new Date(l.created_at).getTime():0});});
+    (state.sites||[]).forEach(s=>{acts.push({icon:s.status==='LIVE'?'✓':'▣',title:`${s.status==='LIVE'?'Website published':'Website updated'}: ${s.business_name}`,meta:`/s/${s.slug} · ${s.updated_at?new Date(s.updated_at).toLocaleDateString():'Recently'}`,timestamp:s.updated_at?new Date(s.updated_at).getTime():0});});
+    acts.sort((a,b)=>b.timestamp-a.timestamp);
+    const visible=acts.slice(0,6);
+    feed.innerHTML=visible.length?visible.map(a=>`<div class="activity-feed-item"><div class="act-icon-badge">${a.icon}</div><div class="act-details"><b>${escapeHtml(a.title)}</b><small>${escapeHtml(a.meta)}</small></div></div>`).join(''):'<p class="muted-copy" style="padding:12px 0;">No workspace activity recorded yet.</p>';
+  }
+}
 function renderSites(){
   const g=$('#siteGrid'),empty=$('#siteEmpty');
   g.innerHTML='';
   empty.style.display=state.sites.length?'none':'grid';
+  if($('#websitesCountLabel'))$('#websitesCountLabel').textContent=`${state.sites.length} project${state.sites.length===1?'':'s'} in workspace · ${state.sites.filter(s=>s.status==='LIVE').length} published`;
   for(const s of state.sites){
     const c=document.createElement('article');
     c.className='site-card';
     c.dataset.search=`${s.business_name} ${s.slug} ${s.template_slug}`.toLowerCase();
+    c.dataset.status=s.status;
     const isLive = s.status === 'LIVE';
     c.innerHTML = `
       <div class="site-thumb" style="--site-accent:${escapeHtml(s.accent||'#b7ff3b')}"></div>
@@ -162,7 +228,7 @@ $('#confirmDeleteDraftBtn')?.addEventListener('click', async () => {
 function showPublishUpgrade(siteId,d){setView('billing');const box=$('#billingMsg');const recommended=String(d.recommended_plan||'STARTER').toUpperCase();const purchasable=['STARTER','GROWTH'].includes(recommended)?recommended:null;const planLabel=purchasable?purchasable[0]+purchasable.slice(1).toLowerCase():'an eligible plan';box.innerHTML=`<div class="publish-upgrade"><b>${purchasable?`Upgrade to ${escapeHtml(planLabel)}`:'Choose an eligible plan'} to publish this ${Number(d.page_count)||''}-page website</b><p>${escapeHtml(d.message||'Publishing limits depend on the selected plan and number of pages.')}</p>${purchasable?`<div class="form-actions"><button class="accent-btn" data-publish-upgrade="${purchasable}">Activate ${escapeHtml(planLabel)}</button></div>`:''}</div>`;const b=$('[data-publish-upgrade]',box);if(b)b.onclick=async()=>{b.disabled=true;const ok=await upgradePaid(purchasable,true);if(ok)await publishFromDashboard(siteId);else b.disabled=false}}
 async function publishFromDashboard(siteId){return ZyloraPublishFlow.start(siteId,{onPublished:async j=>{toast(j.structural_reset_applied?'Published on Free · layout reset, content preserved':'Website published');await loadSites();window.open(j.url,'_blank','noopener')},onError:e=>toast(e.message)})}
 
-async function loadLeads(){try{const r=await api('/api/leads');state.leads=r.items||[];const body=$('#leadRows');if(body)body.innerHTML=state.leads.map(tenantLeadRow).join('');if($('#leadEmpty'))$('#leadEmpty').style.display=state.leads.length?'none':'grid';$$('[data-lead-detail]').forEach(b=>b.onclick=()=>openLeadDetails(state.leads[Number(b.dataset.leadDetail)]));if($('#leadCount'))$('#leadCount').textContent=state.leads.length;if($('#overviewLeadCount'))$('#overviewLeadCount').textContent=state.leads.length;$('#aLeads')&&($('#aLeads').textContent=state.leads.length);renderOverviewMomentum();renderOverviewLeadChart();renderAnalytics();
+async function loadLeads(){try{const r=await api('/api/leads');state.leads=r.items||[];const body=$('#leadRows');if(body)body.innerHTML=state.leads.map(tenantLeadRow).join('');if($('#leadEmpty'))$('#leadEmpty').style.display=state.leads.length?'none':'grid';$$('[data-lead-detail]').forEach(b=>b.onclick=()=>openLeadDetails(state.leads[Number(b.dataset.leadDetail)]));if($('#leadCount'))$('#leadCount').textContent=state.leads.length;if($('#overviewLeadCount'))$('#overviewLeadCount').textContent=state.leads.length;$('#aLeads')&&($('#aLeads').textContent=state.leads.length);renderOverviewMomentum();renderOverviewLeadChart();renderAnalytics();renderHomeDashboard();
 const analyticsCalendarRoot=$('#analyticsCalendarRoot');
 if (window.ZyloraCalendar && analyticsCalendarRoot && !analyticsCalendarRoot.dataset.mounted) {
   analyticsCalendarRoot.dataset.mounted='true';
@@ -1042,3 +1108,272 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+// --- Modular Interactive Initializers ---
+function initCreateProjectModal(){
+  $$('[data-action="open-create-modal"]').forEach(btn=>{
+    btn.onclick=()=>{
+      if($('#createOptionsGrid'))$('#createOptionsGrid').style.display='grid';
+      if($('#createAiPane'))$('#createAiPane').style.display='none';
+      if($('#createTemplatePane'))$('#createTemplatePane').style.display='none';
+      openModal('createProjectModal');
+    };
+  });
+
+  $('#optionStartAi')?.addEventListener('click',()=>{
+    if($('#createOptionsGrid'))$('#createOptionsGrid').style.display='none';
+    if($('#createAiPane'))$('#createAiPane').style.display='block';
+    $('#createAiName')?.focus();
+  });
+
+  $('#optionStartTemplate')?.addEventListener('click',()=>{
+    if($('#createOptionsGrid'))$('#createOptionsGrid').style.display='none';
+    if($('#createTemplatePane'))$('#createTemplatePane').style.display='block';
+  });
+
+  $('#backToCreateOptions')?.addEventListener('click',()=>{
+    if($('#createAiPane'))$('#createAiPane').style.display='none';
+    if($('#createOptionsGrid'))$('#createOptionsGrid').style.display='grid';
+  });
+
+  $('#backToCreateFromTemplates')?.addEventListener('click',()=>{
+    if($('#createTemplatePane'))$('#createTemplatePane').style.display='none';
+    if($('#createOptionsGrid'))$('#createOptionsGrid').style.display='grid';
+  });
+
+  // Template category filter pills
+  $$('#templateCategoryPills button').forEach(pill=>{
+    pill.addEventListener('click',()=>{
+      $$('#templateCategoryPills button').forEach(p=>p.classList.remove('active'));
+      pill.classList.add('active');
+      const cat=(pill.dataset.cat||'all').toLowerCase();
+      $$('#templateCardsGrid .template-picker-card').forEach(card=>{
+        const slug=(card.dataset.templateSlug||'').toLowerCase();
+        card.style.display=(cat==='all'||slug.includes(cat))?'':'none';
+      });
+    });
+  });
+
+  // Template choose buttons
+  $$('[data-use-template]').forEach(btn=>{
+    btn.onclick=async()=>{
+      const slug=btn.dataset.useTemplate;
+      btn.disabled=true;
+      btn.textContent='Creating…';
+      try{
+        const formatted=slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+        const site=await api('/api/sites/blank',{method:'POST',body:JSON.stringify({name:`${formatted} Website`,template_slug:slug})});
+        closeModal('createProjectModal');
+        location.href=site.studio_url||`/studio/${encodeURIComponent(site.id)}`;
+      }catch(err){
+        toast(err.message);
+        btn.disabled=false;
+        btn.textContent='Use Template';
+      }
+    };
+  });
+
+  // AI creation form submission
+  $('#createAiForm')?.addEventListener('submit',async e=>{
+    e.preventDefault();
+    const submitBtn=$('#submitCreateAi'),statusMsg=$('#createAiStatus');
+    const name=$('#createAiName')?.value.trim()||'AI Generated Website';
+    const prompt=$('#createAiPrompt')?.value.trim()||'';
+    const tone=$('#createAiTone')?.value||'modern-clean';
+    if(!prompt)return;
+    submitBtn.disabled=true;
+    submitBtn.textContent='Initializing Studio…';
+    statusMsg.textContent='Provisioning new website workspace…';
+    try{
+      const site=await api('/api/sites/blank',{method:'POST',body:JSON.stringify({name,ai_prompt:prompt,tone})});
+      closeModal('createProjectModal');
+      location.href=`/studio/${encodeURIComponent(site.id)}?ai=${encodeURIComponent(prompt)}`;
+    }catch(err){
+      statusMsg.textContent=err.message;
+      submitBtn.disabled=false;
+      submitBtn.textContent='Generate Website with AI';
+    }
+  });
+}
+
+function initSlideOverDrawers(){
+  $('#leadDrawerClose')?.addEventListener('click',()=>{
+    $('#leadDetailDrawer')?.classList.remove('open');
+  });
+
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){
+      $('#leadDetailDrawer')?.classList.remove('open');
+      $('#googleSheetDrawer')?.classList.remove('open');
+    }
+  });
+
+  $$('[data-action="open-google-sheet-drawer"]').forEach(btn=>{
+    btn.onclick=()=>{
+      loadGoogleSheet();
+      $('#googleSheetDrawer')?.classList.add('open');
+    };
+  });
+
+  $$('[data-action="open-domain-modal"]').forEach(btn=>{
+    btn.onclick=()=>{
+      fillSiteSelectors();
+      openModal('domainSetupModal');
+    };
+  });
+}
+
+function initHubTabs(){
+  $$('.assistant-hub-tab').forEach(tab=>{
+    tab.onclick=()=>{
+      $$('.assistant-hub-tab').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      const target=tab.dataset.assistantTab;
+      $('#assistantPaneConfig')?.classList.toggle('active',target==='config');
+      $('#assistantPanePlayground')?.classList.toggle('active',target==='playground');
+      $('#assistantPaneKnowledge')?.classList.toggle('active',target==='knowledge');
+    };
+  });
+
+  $$('.settings-nav-item').forEach(tab=>{
+    tab.onclick=()=>{
+      $$('.settings-nav-item').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      const target=tab.dataset.settingsTab;
+      $('#settingsPaneProfile')?.classList.toggle('active',target==='profile');
+      $('#settingsPaneNotifications')?.classList.toggle('active',target==='notifications');
+      $('#settingsPaneWhatsapp')?.classList.toggle('active',target==='whatsapp');
+      $('#settingsPaneAssistant')?.classList.toggle('active',target==='assistant');
+      $('#settingsPaneDanger')?.classList.toggle('active',target==='danger');
+    };
+  });
+}
+
+function initLeadFiltersAndBulk(){
+  const input=$('#leadSearch');
+  const pills=$$('#leadStatusFilters button');
+  let currentFilter='ALL';
+
+  function applyLeadFilters(){
+    const q=(input?.value||'').trim().toLowerCase();
+    const rows=$$('#leadRows tr');
+    let visibleCount=0;
+    rows.forEach(r=>{
+      const text=(r.dataset.search||r.textContent).toLowerCase();
+      const status=(r.dataset.status||'NEW').toUpperCase();
+      const matchesSearch=!q||text.includes(q);
+      const matchesStatus=currentFilter==='ALL'||status===currentFilter;
+      const show=matchesSearch&&matchesStatus;
+      r.style.display=show?'':'none';
+      if(show)visibleCount++;
+    });
+    if($('#leadEmpty'))$('#leadEmpty').style.display=visibleCount>0||(!rows.length&&!q)?'none':'grid';
+  }
+
+  input?.addEventListener('input',applyLeadFilters);
+  pills.forEach(p=>{
+    p.addEventListener('click',()=>{
+      pills.forEach(x=>x.classList.remove('active'));
+      p.classList.add('active');
+      currentFilter=(p.dataset.leadFilter||'ALL').toUpperCase();
+      applyLeadFilters();
+    });
+  });
+
+  function updateBulkBar(){
+    const checked=$$('.lead-row-check:checked');
+    const bulkBar=$('#leadBulkBar'),bulkCount=$('#leadBulkCount');
+    if(bulkBar&&bulkCount){
+      if(checked.length>0){
+        bulkBar.style.display='flex';
+        bulkCount.textContent=`${checked.length} lead${checked.length===1?'':'s'} selected`;
+      }else{
+        bulkBar.style.display='none';
+      }
+    }
+  }
+
+  document.addEventListener('change',e=>{
+    if(e.target.classList.contains('lead-row-check')||e.target.id==='leadSelectAll'){
+      updateBulkBar();
+    }
+  });
+
+  const markSelectedStatus=async(newStatus)=>{
+    const checked=$$('.lead-row-check:checked');
+    if(!checked.length)return;
+    toast(`Updating ${checked.length} lead(s) to ${newStatus}…`);
+    for(const chk of checked){
+      const tr=chk.closest('tr');
+      const leadId=tr?.dataset?.leadId;
+      if(leadId){
+        try{await api(`/api/leads/${leadId}/status`,{method:'PATCH',body:JSON.stringify({status:newStatus})});}catch{}
+      }
+    }
+    toast('Status updated');
+    await loadLeads();
+    updateBulkBar();
+  };
+
+  $('#leadBulkContacted')?.addEventListener('click',()=>markSelectedStatus('CONTACTED'));
+  $('#leadBulkQualified')?.addEventListener('click',()=>markSelectedStatus('QUALIFIED'));
+}
+
+function initProjectViewControls(){
+  $('#viewModeGrid')?.addEventListener('click',()=>{
+    $('#viewModeGrid').classList.add('active');
+    $('#viewModeList').classList.remove('active');
+    $('#siteGrid')?.classList.remove('list-view');
+  });
+  $('#viewModeList')?.addEventListener('click',()=>{
+    $('#viewModeList').classList.add('active');
+    $('#viewModeGrid').classList.remove('active');
+    $('#siteGrid')?.classList.add('list-view');
+  });
+
+  const input=document.getElementById('projectSearch'),sort=document.getElementById('projectSort'),grid=document.getElementById('siteGrid');
+  const apply=()=>{
+    if(!grid)return;
+    const q=(input?.value||'').trim().toLowerCase();
+    [...grid.children].forEach(card=>{
+      if(card.classList.contains('site-card')){
+        card.hidden=!!q&&!card.textContent.toLowerCase().includes(q);
+      }
+    });
+    if(sort?.value==='name'){
+      const cards=[...grid.querySelectorAll('.site-card')];
+      cards.sort((a,b)=>a.textContent.localeCompare(b.textContent)).forEach(x=>grid.appendChild(x));
+    }else if(sort?.value==='status'){
+      const cards=[...grid.querySelectorAll('.site-card')];
+      cards.sort((a,b)=>(b.dataset.status==='LIVE'?1:0)-(a.dataset.status==='LIVE'?1:0)).forEach(x=>grid.appendChild(x));
+    }
+  };
+  input?.addEventListener('input',apply);
+  sort?.addEventListener('change',apply);
+}
+
+function mountCrmNav(viewId){
+  const root=document.getElementById(viewId);
+  if(!root)return;
+  let nav=root.querySelector('.crm-subnav');
+  if(!nav){
+    nav=document.createElement('nav');
+    nav.className='crm-subnav';
+    nav.setAttribute('aria-label','CRM sections');
+    nav.innerHTML=[['crm-overview','Overview'],['crm-contacts','Contacts'],['crm-companies','Companies'],['crm-deals','Pipeline'],['crm-tasks','Tasks'],['crm-automations','Automations'],['crm-reports','Analytics']].map(([id,label])=>`<button type="button" class="crm-subnav-item" data-crm-jump="${id}">${label}</button>`).join('');
+    const head=root.querySelector('.crm-header-row')||root.querySelector('.view-head');
+    if(head) head.after(nav);
+    else root.prepend(nav);
+    nav.querySelectorAll('[data-crm-jump]').forEach(b=>b.onclick=()=>setView(b.dataset.crmJump));
+  }
+  nav.querySelectorAll('[data-crm-jump]').forEach(b=>{
+    b.classList.toggle('active',b.dataset.crmJump===viewId);
+  });
+}
+
+initCreateProjectModal();
+initSlideOverDrawers();
+initHubTabs();
+initLeadFiltersAndBulk();
+initProjectViewControls();
+

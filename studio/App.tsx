@@ -12,6 +12,8 @@ import { RulersAndGuides, GuideItem } from './components/RulersAndGuides';
 import { UserTemplatesPanel } from './components/UserTemplatesPanel';
 import { SelectionOverlay } from './components/SelectionOverlay';
 import { PagesPanel } from './components/PagesPanel';
+import { CodePreview } from './components/CodePreview';
+import { ZyloraOnlookStudio } from './ZyloraOnlookStudio';
 import { StudioIcon } from './components/StudioIcon';
 import { useAutosave } from './persistence/useAutosave';
 import {
@@ -140,6 +142,25 @@ const acceptsChildren = (type: string, kind?: string) =>
   !['shape', 'card', 'spacer'].includes(String(kind || '').toLowerCase());
 
 export function App() {
+  const codeEngine = (window as any).ZYLORA_STUDIO_CONTEXT?.studioEngine === 'code';
+  const siteId = (window as any).ZYLORA_STUDIO_CONTEXT?.siteId;
+  const csrf = (window as any).ZYLORA_STUDIO_CONTEXT?.csrfToken;
+  const workspaceId = (window as any).ZYLORA_STUDIO_CONTEXT?.codeWorkspaceId;
+
+  if (codeEngine) {
+    return (
+      <ZyloraOnlookStudio
+        siteId={siteId}
+        csrf={csrf}
+        workspaceId={workspaceId}
+      />
+    );
+  }
+
+  return <NativeZyloraStudio />;
+}
+
+export function NativeZyloraStudio() {
   const [state, dispatch] = useReducer(studioReducer, initialState);
   const commandDispatch = useCallback(
     (action: StudioAction) => {
@@ -189,6 +210,7 @@ export function App() {
 
   const siteId = (window as any).ZYLORA_STUDIO_CONTEXT?.siteId;
   const csrf = (window as any).ZYLORA_STUDIO_CONTEXT?.csrfToken;
+  const codeEngine = (window as any).ZYLORA_STUDIO_CONTEXT?.studioEngine === 'code';
   const project = (window as any).ZYLORA_STUDIO_CONTEXT?.siteName || 'Untitled website';
   const autosave = useAutosave(state.document, siteId, csrf);
   const saveStatus = loadError || autosave.status;
@@ -1016,7 +1038,9 @@ export function App() {
                       backgroundColor: '#e5e5e5'
                     }}
                   >
-                    {page ? (
+                    {codeEngine ? (
+                      <CodePreview siteId={siteId} csrf={csrf} onStatus={setToast} />
+                    ) : page ? (
                       <>
                         <TransientSnapLines />
                         <CanvasNode nodeId={page.rootNodeId} />

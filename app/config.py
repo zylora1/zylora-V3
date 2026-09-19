@@ -155,10 +155,13 @@ class Settings(BaseSettings):
     onlook_upstream_repo: str = 'https://github.com/onlook/onlook'
     onlook_upstream_version: str = ''
     onlook_upstream_commit: str = ''
+    penpot_upstream_version: str = ''
+    penpot_upstream_commit: str = ''
     oidc_issuer: str = ''
     oidc_signing_key: str = ''
     oidc_signing_key_id: str = ''
     oidc_audience: str = ''
+    studio_code_enabled: bool = True
 
     @field_validator('ai_gateway_provider', mode='before')
     @classmethod

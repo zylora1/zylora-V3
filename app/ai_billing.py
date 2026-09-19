@@ -19,6 +19,7 @@ from sqlalchemy.exc import IntegrityError
 from .db import now_iso
 from .plans import get_plan
 from .settings_store import get_system_setting
+from .config import settings
 
 NORMAL = "NORMAL"
 CHATBOT_RESERVED = "CHATBOT_RESERVED"
@@ -174,9 +175,11 @@ def _sync_user_projection(db, user_id: str, normal_balance: Decimal | None = Non
     if normal_balance is None:
         normal_balance = _dec(row.get("normal_balance"))
     lead = sum((_dec(row[k]) for k in ("lead_monthly_remaining", "lead_signup_remaining", "lead_topup_remaining")), _ZERO)
-    db.execute(text("UPDATE users SET ai_credits=:a, lead_credits=:l, updated_at=:n WHERE id=:u"), {
-        "a": int(normal_balance.to_integral_value(rounding=ROUND_DOWN)),
-        "l": int(lead.to_integral_value(rounding=ROUND_DOWN)),
+    new_a = int(normal_balance.to_integral_value(rounding=ROUND_DOWN))
+    new_l = int(lead.to_integral_value(rounding=ROUND_DOWN))
+    db.execute(text("UPDATE users SET ai_credits=:a, lead_credits=:l, updated_at=:n WHERE id=:u AND (ai_credits<>:a OR lead_credits<>:l)"), {
+        "a": new_a,
+        "l": new_l,
         "n": now_iso(), "u": user_id,
     })
 

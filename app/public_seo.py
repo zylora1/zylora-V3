@@ -34,7 +34,7 @@ PRODUCTS: dict[str, dict[str, Any]] = {
             "Understand the trade-offs",
             "Choose a platform that scales"
         ],
-        "use_cases": "Zylora is built for businesses that want to launch fast with AI but need the professional design control and built-in CRM that most AI generators lack.",
+        "use_cases": "Zylora is built for businesses that want an AI-assisted starting point, visual editing, publishing, and supported business workflows in one product. The right choice depends on the level of control, ecosystem, and operations your project needs.",
         "capabilities": [
             "Canva-grade Visual Studio",
             "Native Lead Capture & CRM",
@@ -62,7 +62,7 @@ PRODUCTS: dict[str, dict[str, Any]] = {
             "Wix's editor can become cluttered. Zylora provides a clean, Canva-grade visual workspace.",
             "Both offer business tools, but Zylora integrates CRM and lead capture directly into the publishing workflow."
         ],
-        "use_cases": "If you want to spend hours tweaking absolutely everything in a traditional template, Wix is solid. If you want a professional result fast with AI, use Zylora.",
+        "use_cases": "Wix and Zylora take different approaches. Compare the current editing workflow, publishing model, business features, pricing, and the amount of configuration your team wants before choosing.",
         "capabilities": [
             "Zylora: AI-First Generation",
             "Zylora: Integrated CRM Pipeline",
@@ -89,7 +89,7 @@ PRODUCTS: dict[str, dict[str, Any]] = {
             "Zylora uses a Canva-grade direct manipulation editor that anyone can use.",
             "Zylora natively includes an AI Sales Assistant and CRM out of the box."
         ],
-        "use_cases": "Use Webflow if you are a frontend developer building complex, bespoke animations. Use Zylora if you are a business owner or agency wanting to launch and convert customers fast.",
+        "use_cases": "Webflow and Zylora serve different workflows. Compare code and layout control, learning curve, publishing, integrations, and the business operations your team expects to manage from the website platform.",
         "capabilities": [
             "Zylora: Zero Learning Curve Editor",
             "Webflow: Advanced CSS Control",
@@ -116,7 +116,7 @@ PRODUCTS: dict[str, dict[str, Any]] = {
             "Zylora focuses on high-converting copy, clear architecture, and lead capture.",
             "Zylora's Studio is easier for non-designers to update content."
         ],
-        "use_cases": "If your primary goal is award-winning micro-interactions, Framer is a great choice. If your goal is to acquire customers and manage leads, Zylora is the better tool.",
+        "use_cases": "Framer and Zylora emphasize different jobs. Compare interaction design, content editing, publishing, lead capture, appointments, and the operating workflow that matters after launch.",
         "capabilities": [
             "Zylora: Built-in CRM and Appointments",
             "Framer: Advanced Animation Engine",
@@ -143,7 +143,7 @@ PRODUCTS: dict[str, dict[str, Any]] = {
             "Zylora gives you a flexible, Canva-like canvas to move elements freely.",
             "Zylora includes an AI Sales Assistant to engage visitors 24/7."
         ],
-        "use_cases": "Squarespace is fine for a basic portfolio. Zylora is built for service businesses, agencies, and companies that want their website to act as a growth engine.",
+        "use_cases": "Squarespace and Zylora both support public websites. Compare starting points, visual editing, publishing, business workflows, and plan configuration against the needs of the project.",
         "capabilities": [
             "Zylora: Flexible Visual Studio",
             "Squarespace: Rigid Template Engine",
@@ -170,7 +170,7 @@ PRODUCTS: dict[str, dict[str, Any]] = {
             "Zylora is fully managed on an enterprise edge network.",
             "Zylora replaces 10+ WordPress plugins (SEO, forms, caching, CRM) out of the box."
         ],
-        "use_cases": "If you want to spend time managing servers and plugins, use WordPress. If you want to spend time growing your business, use Zylora.",
+        "use_cases": "WordPress and Zylora use different operating models. Compare ownership, hosting, extensions, maintenance, publishing, editing, and the level of infrastructure responsibility your team wants.",
         "capabilities": [
             "Zylora: Zero Maintenance",
             "Zylora: Built-in SEO & Performance",
@@ -197,7 +197,7 @@ PRODUCTS: dict[str, dict[str, Any]] = {
             "Zylora generates semantic HTML, proper SEO structures, and fast-loading assets.",
             "Zylora includes a native CRM to capture and manage leads."
         ],
-        "use_cases": "Use Canva for social media posts and flyers. Use Zylora for your actual business website.",
+        "use_cases": "Canva and Zylora are useful for different publishing jobs. Compare single-page design workflows, multi-page structure, SEO controls, lead capture, and the business operations you need after launch.",
         "capabilities": [
             "Zylora: Multi-page Architecture & SEO",
             "Zylora: Integrated CRM Pipeline",

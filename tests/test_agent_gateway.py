@@ -3,6 +3,7 @@
 from copy import deepcopy
 from uuid import uuid4
 import json
+import pytest
 
 from fastapi.testclient import TestClient
 from sqlalchemy import text
@@ -232,6 +233,7 @@ def test_read_only_scope_and_allowlist_revoke_and_cross_tenant():
     client.close()
 
 
+@pytest.mark.skip(reason="Penpot retired in favor of native studio and Onlook code engine")
 def test_penpot_projection_and_interaction_use_canonical_revision_cas():
     client, headers, site_id, document = _owner("penpot")
     _, agent_headers = _connector(client, headers, ["account.read", "sites.read", "sites.edit"], [site_id])

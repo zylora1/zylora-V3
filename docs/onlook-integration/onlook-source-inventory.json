@@ -1,0 +1,88 @@
+{
+  "upstream": {
+    "url": "https://github.com/onlook-dev/onlook",
+    "commit": "423e2e924366419e418ee049093872d535eea41a",
+    "branch": "main",
+    "imported_at": "2026-09-18",
+    "license": "Apache-2.0",
+    "license_file": "legal/Apache-2.0-Onlook.txt"
+  },
+  "repository": {
+    "workspace": "bun monorepo",
+    "apps": ["apps/web", "apps/backend"],
+    "packages": ["packages/parser", "packages/models", "packages/ai", "packages/code-provider", "packages/ui", "packages/penpal", "packages/constants", "packages/utility"],
+    "editor_surfaces": ["apps/web/client/src/components/store/editor", "apps/web/client/src/app/project/[id]/_components", "packages/parser/src", "packages/models/src", "packages/constants/src", "packages/penpal/src", "packages/utility/src", "packages/ui/src"],
+    "ai_surfaces": ["packages/ai/src/chat", "packages/ai/src/apply", "packages/ai/src/contexts"],
+    "sandbox_runtime": ["LocalSandboxProvider (Zylora sovereign)"],
+    "persistence": ["CodeProjectAdapter (Zylora sovereign SQLite + scoped fs)"],
+    "deployment": ["Zylora Publisher"]
+  },
+  "transplanted": {
+    "models": {
+      "upstream": "packages/models/src",
+      "target": "studio/onlook/models",
+      "status": "intact"
+    },
+    "constants": {
+      "upstream": "packages/constants/src",
+      "target": "studio/onlook/constants",
+      "status": "intact"
+    },
+    "penpal": {
+      "upstream": "packages/penpal/src",
+      "target": "studio/onlook/penpal",
+      "status": "intact"
+    },
+    "utility": {
+      "upstream": "packages/utility/src",
+      "target": "studio/onlook/utility",
+      "status": "intact"
+    },
+    "parser": {
+      "upstream": "packages/parser/src",
+      "target": "studio/onlook/parser",
+      "status": "intact"
+    },
+    "ui": {
+      "upstream": "packages/ui/src",
+      "target": "studio/onlook/ui",
+      "status": "intact"
+    },
+    "core_store": {
+      "upstream": "apps/web/client/src/components/store/editor",
+      "target": "studio/onlook/core",
+      "status": "intact"
+    },
+    "editor_shell": {
+      "upstream": "apps/web/client/src/app/project/[id]/_components",
+      "target": "studio/onlook/editor",
+      "status": "intact"
+    },
+    "preload_script": {
+      "upstream": "apps/web/client/public/onlook-preload-script.js",
+      "target": "static/onlook-preload-script.js",
+      "status": "intact"
+    }
+  },
+  "excluded": {
+    "paths": ["apps/backend", "packages/db", "packages/git", "packages/file-system", "packages/ai/src/tools"],
+    "reasons": [
+      "Onlook proprietary account, Supabase auth, Stripe billing, Freestyle hosting, and database boundaries must not replace Zylora platform systems.",
+      "Direct shell/Docker tool execution is replaced with Zylora's isolated LocalSandboxProvider and CodeProjectAdapter security boundary.",
+      "Zylora multi-model AI provider registry governs all AI design routing."
+    ]
+  },
+  "zylora_adapters": [
+    "studio/zylora/adapters/ZyloraAuthAdapter.ts",
+    "studio/zylora/adapters/ZyloraWorkspaceAdapter.ts",
+    "studio/zylora/adapters/ZyloraSandboxAdapter.ts",
+    "studio/zylora/adapters/ZyloraProjectAdapter.ts",
+    "studio/zylora/adapters/ZyloraAIAdapter.ts",
+    "studio/zylora/adapters/ZyloraHistoryAdapter.ts",
+    "studio/zylora/adapters/ZyloraPublishAdapter.ts"
+  ],
+  "engine_separation": {
+    "native": "studio/NativeZyloraStudio.tsx (SiteDocument visual site builder)",
+    "code": "studio/ZyloraOnlookStudio.tsx (Transplanted Onlook OSS editor mounting intact UI and engine)"
+  }
+}

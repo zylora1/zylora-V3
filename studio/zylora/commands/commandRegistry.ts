@@ -73,7 +73,7 @@ export class StudioCommandRegistry {
     const error=validateStudioCommand(state,action);
     if(error)throw new StudioCommandValidationError(error);
     const metadata=command.metadata;
-    const source=metadata?.source==='external'?'external':metadata?.source||'system';
+    const source=metadata?.source==='external'||metadata?.source==='user'?'external':metadata?.source||'system';
     return studioReducer(state,{type:'EXECUTE_COMMAND',payload:{command:createStudioCommand(action,{source,provenance:metadata})}} as StudioAction);
   }
 }

@@ -78,7 +78,7 @@ def _validate_operations(document: dict, operations: object, page_id: str) -> li
     return validated
 
 
-def generate_v4_operations(doc_json: str, instruction: str, selection: list[str], *, user_id: str | None = None, site_id: str | None = None, return_usage: bool = False):
+def generate_v4_operations(doc_json: str, instruction: str, selection: list[str], *, user_id: str | None = None, site_id: str | None = None, requested_model: str | None = None, return_usage: bool = False):
     document = validate_studio_document(json.loads(doc_json)).model_dump(exclude_none=True)
     page_id = _page_for_selection(document, selection)
     if not hosted_ai_configured():
@@ -95,7 +95,7 @@ def generate_v4_operations(doc_json: str, instruction: str, selection: list[str]
         "Inserted nodes require unique safe IDs, a supported node type, children:[], and structured content/style/metadata. Never output HTML, scripts, secrets, fake claims, or unsafe links. "
         f"Page ID: {page_id}. Root ID: {page['rootNodeId']}. Selected IDs: {json.dumps(selection)}. Objects: {json.dumps(node_context)}. User request: {instruction[:2000]}"
     )
-    selected_model = settings.ai_editor_model or settings.openai_model
+    selected_model = requested_model or settings.ai_editor_model or settings.openai_model
     parsed, response = ai_service.execute_json(
         "STUDIO_V4_EDIT",
         prompt,

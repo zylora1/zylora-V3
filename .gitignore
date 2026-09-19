@@ -30,3 +30,7 @@ release_context*.zip
 static/*.map
 .codex-tmp/
 *.tsbuildinfo
+data/code-projects/
+data/code-snapshots/
+data/published-code/
+data/*.json

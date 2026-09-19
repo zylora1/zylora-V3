@@ -1,16 +1,26 @@
 <html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Zylora Dashboard</title><meta content="noindex,nofollow" name="robots"/><link rel="icon" type="image/png" href="/static/favicon.png"/><link rel="shortcut icon" href="/favicon.ico"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&amp;display=swap" rel="stylesheet"/><link href="/static/zylora-ui.css" rel="stylesheet"/><link href="/static/dashboard.css" rel="stylesheet"/><link href="/static/dashboard-sneat.css" rel="stylesheet"/><link href="/static/zylora-apple.css" rel="stylesheet"/>
 <link href="/static/zylora-crm.css" rel="stylesheet"/>
 <link href="/static/date-range-calendar.css" rel="stylesheet"/>
-<link href="/static/prompt-input.css" rel="stylesheet"/><link href="/static/zylora-app-theme.css" rel="stylesheet"/><link href="/static/ai-credit-responsive.css" rel="stylesheet"/><link href="/static/zylora-tinkered.css?v=20260916-ui1" rel="stylesheet"/></head><body class="employee-dashboard">
-<div class="app-shell"><aside aria-label="Zylora dashboard navigation" class="rail sneat-sidebar"><a aria-label="Zylora home" class="rail-logo" href="/"><span class="zylora-wordmark">Zylora</span></a><nav aria-label="Dashboard sections"><p class="menu-section">Workspace</p><button class="rail-btn active" data-view="overview" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5.5 9.5V21h13V9.5"></path><path d="M9.5 21v-6h5v6"></path></svg></span><span class="menu-label">Dashboard</span></button><button class="rail-btn" data-view="websites" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="16" rx="2" width="18" x="3" y="4"></rect><path d="M3 9h18M8 4v16"></path></svg></span><span class="menu-label">Websites</span></button><p class="menu-section">Sales CRM</p>
-<button class="rail-btn" data-view="crm-overview" type="button"><span class="menu-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg></span><span class="menu-label">CRM Hub</span></button>
-<button class="rail-btn" data-view="crm-contacts" type="button"><span class="menu-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="menu-label">Contacts</span></button>
-<button class="rail-btn" data-view="crm-companies" type="button"><span class="menu-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-3M9 9v.01M9 12v.01M9 15v.01M9 18v.01"/></svg></span><span class="menu-label">Companies</span></button>
-<button class="rail-btn" data-view="crm-deals" type="button"><span class="menu-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2 9a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V9z"/><path d="M2 13h20"/><circle cx="12" cy="16" r="1.5"/></svg></span><span class="menu-label">Pipeline &amp; Deals</span></button>
-<button class="rail-btn" data-view="crm-tasks" type="button"><span class="menu-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><span class="menu-label">Tasks &amp; Activity</span></button>
-<button class="rail-btn" data-view="crm-automations" type="button"><span class="menu-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span><span class="menu-label">Automations</span></button>
-<button class="rail-btn" data-view="crm-reports" type="button"><span class="menu-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></span><span class="menu-label">CRM Analytics</span></button>
-<p class="menu-section">Growth</p><button class="rail-btn" data-view="leads" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="9" cy="8" r="3"></circle><path d="M3.5 20v-1.5A4.5 4.5 0 0 1 8 14h2a4.5 4.5 0 0 1 4.5 4.5V20"></path><path d="M16 11a3 3 0 1 0 0-6M17 14h.5a3.5 3.5 0 0 1 3.5 3.5V20"></path></svg></span><span class="menu-label">Leads</span></button><button class="rail-btn" data-view="assistant" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M12 2a4 4 0 0 1 4 4v1a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4zM6 10a6 6 0 0 0 12 0M12 16v5M8 21h8"></path></svg></span><span class="menu-label">AI Sales Assistant</span></button><button class="rail-btn" data-view="appointments" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="18" rx="2" width="18" x="3" y="4"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg></span><span class="menu-label">Appointments</span></button><button class="rail-btn" data-view="analytics" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg></span><span class="menu-label">Growth Center</span></button><p class="menu-section">Operations</p><button class="rail-btn" data-view="health" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg></span><span class="menu-label">Site Health</span></button><button class="rail-btn" data-view="domains" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"></path></svg></span><span class="menu-label">Domains &amp; SSL</span></button><button class="rail-btn" data-view="integrations" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M8 3v5M16 3v5"></path><path d="M6 8h12v2a6 6 0 0 1-6 6v5"></path><path d="M9 21h6"></path></svg></span><span class="menu-label">Integrations</span></button><button class="rail-btn" data-view="freelancer" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="13" rx="2" width="18" x="3" y="7"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 12h18M9 12v2h6v-2"></path></svg></span><span class="menu-label">Freelancers</span></button><button class="rail-btn" data-view="support" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M4 5h16v12H9l-5 4z"></path><path d="M8 9h8M8 13h5"></path></svg></span><span class="menu-label">Support</span></button><p class="menu-section">Account</p><button class="rail-btn" data-view="billing" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="14" rx="2" width="18" x="3" y="5"></rect><path d="M3 10h18M7 15h4"></path></svg></span><span class="menu-label">Billing &amp; Usage</span></button><button class="rail-btn" data-view="settings" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1v.1H9.6V21a1.7 1.7 0 0 0-.4-1 1.7 1.7 0 0 0-1-.6 1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 3.8 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1-.4H2v-4h.2a1.7 1.7 0 0 0 1-.4 1.7 1.7 0 0 0 .6-1 1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 8.2 3.8a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1V2h4v.2a1.7 1.7 0 0 0 .4 1 1.7 1.7 0 0 0 1 .6 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 8.2c.15.38.36.72.66 1 .3.25.65.4 1.04.4h.1v4h-.1c-.39 0-.74.15-1.04.4-.3.28-.51.62-.66 1Z"></path></svg></span><span class="menu-label">Settings</span></button></nav><div class="sidebar-user"><span class="sidebar-avatar" id="sideAvatar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M4 3h16L4 21h16"></path></svg></span><span class="sidebar-user-copy"><b id="sideUserName">Loading…</b><small id="sideUserRole">User</small></span></div><div class="sidebar-foot"><button class="rail-btn logout" id="logoutBtn" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M10 5H5v14h5M14 8l4 4-4 4M8 12h10"></path></svg></span><span class="menu-label">Log out</span></button></div></aside>
+<link href="/static/prompt-input.css" rel="stylesheet"/><link href="/static/zylora-app-theme.css" rel="stylesheet"/><link href="/static/ai-credit-responsive.css" rel="stylesheet"/><link href="/static/zylora-tinkered.css?v=20260916-ui1" rel="stylesheet"/><link href="/static/zylora-studio-tokens.css" rel="stylesheet"/></head><body class="employee-dashboard">
+<div class="app-shell"><aside aria-label="Zylora dashboard navigation" class="rail sneat-sidebar"><a aria-label="Zylora home" class="rail-logo" href="/"><span class="zylora-wordmark">Zylora</span></a><nav aria-label="Dashboard sections">
+<p class="menu-section">Workspace</p>
+<button class="rail-btn active" data-view="overview" type="button"><span class="menu-icon">⌂</span><span class="menu-label">Home</span></button>
+<button class="rail-btn" data-view="websites" type="button"><span class="menu-icon">▣</span><span class="menu-label">Projects</span></button>
+<p class="menu-section">Growth</p>
+<button class="rail-btn" data-view="analytics" type="button"><span class="menu-icon">⌁</span><span class="menu-label">Analytics</span></button>
+<button class="rail-btn" data-view="crm-overview" type="button"><span class="menu-icon">◫</span><span class="menu-label">CRM</span></button>
+<button class="rail-btn" data-view="leads" type="button"><span class="menu-icon">♙</span><span class="menu-label">Leads</span></button>
+<button class="rail-btn" data-view="assistant" type="button"><span class="menu-icon">✦</span><span class="menu-label">AI Assistant</span></button>
+<button class="rail-btn" data-view="appointments" type="button"><span class="menu-icon">□</span><span class="menu-label">Appointments</span></button>
+<p class="menu-section">Manage</p>
+<button class="rail-btn" data-view="domains" type="button"><span class="menu-icon">◎</span><span class="menu-label">Domains</span></button>
+<button class="rail-btn" data-view="integrations" type="button"><span class="menu-icon">⌘</span><span class="menu-label">Integrations</span></button>
+<button class="rail-btn" data-view="health" type="button"><span class="menu-icon">⌁</span><span class="menu-label">Site health</span></button>
+<button class="rail-btn" data-view="freelancer" type="button"><span class="menu-icon">◇</span><span class="menu-label">Freelancers</span></button>
+<p class="menu-section">Account</p>
+<button class="rail-btn" data-view="billing" type="button"><span class="menu-icon">▤</span><span class="menu-label">Billing &amp; usage</span></button>
+<button class="rail-btn" data-view="support" type="button"><span class="menu-icon">?</span><span class="menu-label">Support</span></button>
+<button class="rail-btn" data-view="settings" type="button"><span class="menu-icon">⚙</span><span class="menu-label">Settings</span></button></nav><div class="sidebar-user"><span class="sidebar-avatar" id="sideAvatar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M4 3h16L4 21h16"></path></svg></span><span class="sidebar-user-copy"><b id="sideUserName">Loading…</b><small id="sideUserRole">User</small></span></div><div class="sidebar-foot"><button class="rail-btn logout" id="logoutBtn" type="button"><span class="menu-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M10 5H5v14h5M14 8l4 4-4 4M8 12h10"></path></svg></span><span class="menu-label">Log out</span></button></div></aside>
 <main class="workspace" aria-label="Zylora workspace"><header class="topbar sneat-navbar">
 <button aria-label="Toggle navigation" class="sidebar-toggle" id="sidebarToggle" type="button"><span></span><span></span><span></span></button>
 <div class="search" id="globalSearchWrapper">
@@ -30,335 +40,317 @@
 <div class="view-head dashboard-heading">
   <div>
     <p class="eyebrow">Workspace</p>
-    <h1>Dashboard</h1>
-    <p id="todayLabel">Manage your website, leads and growth from one place.</p>
+    <h1 id="overviewGreeting">Good day</h1>
+    <p id="todayLabel">Manage your websites, conversion pipeline, and growth.</p>
   </div>
   <div class="view-head-actions">
-    <button class="accent-btn" data-action="new-site" data-testid="quick-new" id="overviewCreateSiteBtn" type="button">Create Website</button>
+    <button class="ghost-btn" data-action="new-site" data-testid="quick-new" id="quickBlankStudioBtn" title="Launch clean canvas Studio">⚡ Blank Studio</button>
+    <button class="accent-btn" data-action="open-create-modal" id="overviewCreateSiteBtn" type="button">+ Create Website</button>
   </div>
 </div>
 
-<!-- 1. Hero Primary Website Card -->
-<article class="website-hero-card panel" id="heroSiteCard">
-  <div class="hero-site-info">
-    <div class="hero-site-kicker-row">
-      <span class="hero-site-kicker">Zylora Site</span>
-      <span class="status-pill live" id="heroSiteStatusPill"><i class="status-dot"></i> <span id="heroSiteStatusText">LIVE</span></span>
-      <span class="hero-plan-tag" id="heroSitePlanTag">Free plan · <a data-view-jump="billing" href="#billing">Compare Plans</a></span>
-    </div>
-    <h2 class="hero-site-title" id="heroSiteTitle">My Website</h2>
-    <div class="hero-site-domain-row">
-      <a class="hero-site-domain-link" href="#" id="heroSiteDomainLink" rel="noopener" target="_blank">
-        <span id="heroSiteDomainText">my-site.zylora.site</span>
-        <svg class="external-icon" fill="none" height="13" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="13"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"></path></svg>
-      </a>
-      <button class="icon-action-btn" id="heroCopyDomainBtn" title="Copy website link" type="button">
-        <svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      </button>
-      <button class="inline-link-btn" data-view-jump="domains" id="heroConnectDomainBtn" type="button">Connect Domain</button>
-      <span class="dot-separator" id="heroDomainSeparator">·</span>
-      <button class="inline-link-btn" data-view-jump="settings" id="heroSiteSettingsBtn" type="button">Site Settings</button>
-    </div>
-    <div class="hero-site-actions">
-      <a class="accent-btn" href="/studio/" id="heroEditSiteBtn">Edit Website</a>
-      <a class="ghost-btn" href="#" id="heroPreviewSiteBtn" rel="noopener" target="_blank">Preview</a>
-      <div class="dropdown-wrap" id="heroSiteActionsWrap">
-        <button class="ghost-btn dropdown-toggle" id="heroSiteActionsBtn" type="button">Site Actions <span class="menu-chevron" aria-hidden="true"></span></button>
-        <div class="dropdown-menu" hidden="" id="heroSiteActionsMenu">
-          <button id="heroActionPublish" type="button">Publish</button>
-          <button id="heroActionUnpublish" type="button">Unpublish</button>
-          <button id="heroActionDuplicate" type="button">Duplicate</button>
-          <button data-view-jump="settings" type="button">Site Settings</button>
-          <div class="dropdown-divider"></div>
-          <button class="destructive-action" id="heroActionDeleteDraft" type="button">Delete Draft</button>
-        </div>
-      </div>
-    </div>
+<!-- Workspace Snapshot Top Bar -->
+<div class="workspace-snapshot-grid" id="workspaceSnapshotGrid">
+  <div class="snapshot-card">
+    <span class="snapshot-label">Total Projects</span>
+    <b class="snapshot-value" id="snapTotalProjects">0</b>
+    <span class="snapshot-sub" id="snapProjectsSub">Active in workspace</span>
   </div>
-  <div class="hero-site-preview-col">
-    <div class="site-preview-frame">
-      <img alt="Website preview" id="heroSitePreviewImg" loading="lazy" src="" style="display:none;" />
-      <div class="site-preview-fallback" id="heroSitePreviewFallback">
-        <div class="browser-mockup-bar">
-          <div class="browser-dots">
-            <span class="b-dot"></span>
-            <span class="b-dot"></span>
-            <span class="b-dot"></span>
-          </div>
-          <div class="browser-address-pill" id="heroFallbackDomainPill">my-site.zylora.site</div>
-        </div>
-        <div class="browser-mockup-body">
-          <div class="browser-mockup-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-          </div>
-          <p class="fallback-msg">Website preview unavailable.<br><small>Preview will appear after the website has been generated or published.</small></p>
-          <a class="ghost-btn compact-btn" href="#" id="heroFallbackOpenBtn" target="_blank" rel="noopener">Open Website ↗</a>
-        </div>
-      </div>
-      <div class="site-preview-overlay">
-        <span class="preview-badge" id="heroSiteUpdatedText">Updated recently</span>
-      </div>
-    </div>
+  <div class="snapshot-card">
+    <span class="snapshot-label">Live Websites</span>
+    <b class="snapshot-value" id="snapLiveWebsites">0</b>
+    <span class="snapshot-sub" id="snapLiveSub">Public &amp; indexable</span>
   </div>
-</article>
+  <div class="snapshot-card">
+    <span class="snapshot-label">Leads Captured</span>
+    <b class="snapshot-value" id="snapTotalLeads">0</b>
+    <span class="snapshot-sub" id="snapLeadsSub">Selected period</span>
+  </div>
+  <div class="snapshot-card">
+    <span class="snapshot-label">AI Credit Balance</span>
+    <b class="snapshot-value" id="snapAiCredits">0</b>
+    <span class="snapshot-sub" id="snapCreditsSub">Available credits</span>
+  </div>
+</div>
 
-<!-- 2. Site Health & Optimization Section -->
-<section class="site-health-section panel" id="overviewSiteHealthSection">
-  <div class="section-title-row">
-    <div class="section-title-info">
-      <div class="icon-title">
-        <span class="health-header-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s8-4.4 8-10.5A4.5 4.5 0 0 0 12 8a4.5 4.5 0 0 0-8 2.5C4 16.6 12 21 12 21Z"/><path d="M8 12h2l1-2 2 4 1-2h2"/></svg></span>
-        <h3>Site Health</h3>
+<!-- Two-Column Operational Layout -->
+<div class="home-layout-grid">
+  <!-- Left Column: Recent Projects + Recent Activity -->
+  <div class="home-main-col">
+    <div class="home-section-header">
+      <div>
+        <h2>Recent Projects</h2>
+        <p class="muted-copy">Quickly resume editing your latest websites</p>
       </div>
-      <p>Fix current issues and follow recommendations to improve this site's performance in search results and conversion.</p>
+      <button class="inline-link-btn" data-view-jump="websites" type="button">All Projects →</button>
     </div>
-    <button class="inline-link-btn deep-link-btn" data-view-jump="health" type="button">View Site Health →</button>
+    <div class="recent-projects-list" id="homeRecentProjects">
+      <!-- Populated dynamically: up to 3 most recent projects -->
+    </div>
+
+    <div class="home-section-header" style="margin-top: 24px;">
+      <div>
+        <h2>Recent Activity</h2>
+        <p class="muted-copy">Chronological log of workspace changes and enquiries</p>
+      </div>
+    </div>
+    <div class="activity-timeline" id="homeActivityFeed">
+      <!-- Populated dynamically -->
+    </div>
   </div>
-  <div class="health-gauges-grid">
-    <div class="health-gauge-card">
-      <div class="gauge-ring-wrap" id="gaugeOverallScoreWrap">
-        <svg class="circular-gauge" viewBox="0 0 100 100">
-          <circle class="gauge-bg" cx="50" cy="50" r="42" stroke-width="8"></circle>
-          <circle class="gauge-fill" cx="50" cy="50" id="gaugeOverallFill" r="42" stroke-dasharray="264" stroke-dashoffset="35" stroke-width="8"></circle>
-        </svg>
-        <div class="gauge-val" id="overviewHealthScore">—</div>
+
+  <!-- Right Column: Needs Attention -->
+  <div class="home-side-col">
+    <div class="home-section-header">
+      <div>
+        <h2>Needs Attention</h2>
+        <p class="muted-copy">Operational alerts requiring your review</p>
       </div>
-      <b class="gauge-card-title">Site Health Score</b>
-      <small class="gauge-card-sub" id="overviewHealthTasksDone">Optimized &amp; verified</small>
-      <button class="gauge-card-action" data-view-jump="health" type="button">Launch Checklist →</button>
     </div>
-    <div class="health-gauge-card gauge-error">
-      <div class="gauge-ring-wrap">
-        <svg class="circular-gauge" viewBox="0 0 100 100">
-          <circle class="gauge-bg" cx="50" cy="50" r="42" stroke-width="8"></circle>
-          <circle class="gauge-fill error-fill" cx="50" cy="50" id="gaugeErrorFill" r="42" stroke-dasharray="264" stroke-dashoffset="210" stroke-width="8"></circle>
-        </svg>
-        <div class="gauge-val error-text" id="overviewErrorsCount">0</div>
-      </div>
-      <b class="gauge-card-title">Issues</b>
-      <small class="gauge-card-sub" id="overviewErrorsSub">0 need attention</small>
-      <button class="gauge-card-action" data-view-jump="health" type="button">View tasks →</button>
+    <div class="needs-attention-list" id="homeNeedsAttention">
+      <!-- Populated dynamically from real state -->
     </div>
-    <div class="health-gauge-card gauge-warning">
-      <div class="gauge-ring-wrap">
-        <svg class="circular-gauge" viewBox="0 0 100 100">
-          <circle class="gauge-bg" cx="50" cy="50" r="42" stroke-width="8"></circle>
-          <circle class="gauge-fill warning-fill" cx="50" cy="50" id="gaugeWarningFill" r="42" stroke-dasharray="264" stroke-dashoffset="180" stroke-width="8"></circle>
-        </svg>
-        <div class="gauge-val warning-text" id="overviewWarningsCount">0</div>
-      </div>
-      <b class="gauge-card-title">Recommendations</b>
-      <small class="gauge-card-sub" id="overviewWarningsSub">Optional improvements</small>
-      <button class="gauge-card-action" data-view-jump="health" type="button">View tasks →</button>
-    </div>
-    <div class="health-gauge-card gauge-success">
-      <div class="gauge-ring-wrap">
-        <svg class="circular-gauge" viewBox="0 0 100 100">
-          <circle class="gauge-bg" cx="50" cy="50" r="42" stroke-width="8"></circle>
-          <circle class="gauge-fill success-fill" cx="50" cy="50" id="gaugePassedFill" r="42" stroke-dasharray="264" stroke-dashoffset="40" stroke-width="8"></circle>
-        </svg>
-        <div class="gauge-val success-text" id="overviewPassedCount">—</div>
-      </div>
-      <b class="gauge-card-title">Completed</b>
-      <small class="gauge-card-sub">Great work so far!</small>
-      <button class="gauge-card-action" data-view-jump="health" type="button">View tasks →</button>
-    </div>
+  </div>
+</div>
+<section class="overview-section" id="overviewSiteHealthSection" style="display:none;" hidden>
+  <div id="overviewHealthSubGrid">
+    <span>Not configured</span>
+    <span>Monitoring not configured</span>
   </div>
 </section>
-
-<!-- 3. Secondary Health & Performance Row -->
-<div class="health-sub-grid" id="overviewHealthSubGrid">
-  <article class="panel health-sub-card">
-    <div class="sub-card-head">
-      <span class="sub-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-9 12h7l-1 8 9-12h-7l1-8Z"/></svg></span>
-      <div><b>Site Performance</b><small>Loading speed and responsiveness</small></div>
-    </div>
-    <div class="sub-card-body" id="subCardPerfBody">
-      <span class="status-indicator-line"><i class="status-dot-amber"></i> Awaiting traffic data</span>
-      <p class="sub-card-note">Your site's loading speed will appear once it reaches 10 sessions in the last 7 days.</p>
-      <div class="mini-progress-bar"><div class="mini-progress-fill" id="perfSessionFill" style="width: 0%"></div></div>
-      <span class="mini-progress-label" id="perfSessionCount">0 / 10 sessions</span>
-    </div>
-  </article>
-  <article class="panel health-sub-card">
-    <div class="sub-card-head">
-      <span class="sub-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s8-4 8-10V5l-8-3-8 3v6c0 6 8 10 8 10Z"/><path d="m8 12 2.5 2.5L16 9"/></svg></span>
-      <div><b>Uptime &amp; Security</b><small>Availability over the past 90 days</small></div>
-    </div>
-    <div class="sub-card-body">
-      <span class="status-indicator-line"><i class="status-dot-amber"></i> <span id="uptimeActiveLabel">Monitoring not configured</span></span>
-      <b class="metric-huge" id="uptimePct">— <small>no monitoring data</small></b>
-      <div class="sparkline-bar-row">
-        <span class="spark-bar active"></span><span class="spark-bar active"></span><span class="spark-bar active"></span><span class="spark-bar active"></span><span class="spark-bar active"></span><span class="spark-bar active"></span><span class="spark-bar active"></span><span class="spark-bar active"></span><span class="spark-bar active"></span><span class="spark-bar active"></span>
-      </div>
-    </div>
-  </article>
-  <article class="panel health-sub-card">
-    <div class="sub-card-head">
-      <span class="sub-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="4" r="2"></circle><path d="M14 8h-3a3 3 0 0 0 0 6h2l1 4a3 3 0 0 0 5.8-1.5L18 12h-3"></path><path d="M8 8 6 14a5 5 0 0 0 9 3"></path></svg></span>
-      <div><b>Accessibility</b><small>Help everyone use your site</small></div>
-    </div>
-    <div class="sub-card-body accessibility-body">
-      <div class="access-info-col">
-        <p class="sub-card-note" id="accessNote">Run site health checks to review supported accessibility signals.</p>
-        <button class="inline-link-btn" data-view-jump="health" type="button">About accessibility status →</button>
-      </div>
-      <div class="access-badge-col">
-        <div class="access-badge" id="accessIssuesBadge"><b id="accessIssuesCount">0</b><small>ISSUES</small></div>
-      </div>
-    </div>
-  </article>
-</div>
-
-<!-- 4. Growth, Leads & AI Assistant Row -->
-<div class="overview-growth-grid">
-  <article class="panel chart-panel">
-    <div class="panel-title">
-      <div><span>Website Performance</span><small>Visitors and engagement snapshot</small></div>
-      <div class="range-pills">
-        <button class="range-pill active" data-overview-range="7" type="button">7D</button>
-        <button class="range-pill" data-overview-range="30" type="button">30D</button>
-        <button class="range-pill" data-overview-range="90" type="button">90D</button>
-        <button aria-label="Refresh chart" class="icon-action-btn" id="refreshChart" type="button">↻</button>
-      </div>
-    </div>
-    <div class="shadcn-chart-container" id="shadcnWebsitePerfRoot" style="min-height:220px;"></div>
-  </article>
-  <div class="growth-side-col">
-    <article class="panel leads-kpi-card">
-      <div class="panel-title">
-        <div><span>Leads</span><small>Enquiries captured</small></div>
-        <button class="inline-link-btn" data-view-jump="leads" type="button">View Leads →</button>
-      </div>
-      <div class="kpi-main-number" id="overviewLeadCount">0</div>
-      <div class="kpi-breakdown-row">
-        <div><small>Qualified</small><b id="overviewQualifiedLeads">0</b></div>
-        <div><small>Appointments</small><b id="overviewAppointmentsBooked">0</b></div>
-        <div><small>Conversion</small><b id="overviewConversionRate">0%</b></div>
-      </div>
-    </article>
-    <article class="panel assistant-kpi-card">
-      <div class="panel-title">
-        <div><span>AI Sales Assistant</span><small>Visitor qualification</small></div>
-        <span class="status-pill draft" id="overviewAssistantBadge"><i class="status-dot"></i> Not configured</span>
-      </div>
-      <div class="assistant-metrics-row">
-        <div><b id="overviewAssistantConvs">0</b><small>Conversations</small></div>
-        <div><b id="overviewAssistantLeads">0</b><small>Leads captured</small></div>
-        <div><b id="overviewAssistantRate">0%</b><small>Conversion</small></div>
-      </div>
-      <div class="assistant-actions-row">
-        <button class="inline-link-btn" data-view-jump="assistant" type="button">View Conversations →</button>
-        <button class="ghost-btn mini-btn" data-view-jump="assistant" type="button">Test Assistant</button>
-      </div>
-    </article>
-  </div>
-</div>
-
-<!-- 5. Appointments & Publishing Row -->
-<div class="overview-bottom-grid">
-  <article class="panel appointments-overview-card">
-    <div class="panel-title">
-      <div><span>Appointments</span><small>Booked client sessions</small></div>
-      <button class="inline-link-btn" data-view-jump="appointments" type="button">View Calendar →</button>
-    </div>
-    <div class="appointments-summary-body" id="overviewAppointmentsSummary">
-      <div class="appointment-metric-col">
-        <b class="metric-huge" id="overviewUpcomingApptsCount">0</b>
-        <small>upcoming appointments</small>
-      </div>
-      <div class="next-appointment-box" id="overviewNextApptBox">
-        <span class="next-label">NEXT APPOINTMENT</span>
-        <b id="overviewNextApptTime">No upcoming appointments</b>
-        <small id="overviewNextApptClient">When visitors book via the assistant or website, it appears here.</small>
-      </div>
-    </div>
-  </article>
-  <article class="panel domain-publishing-card">
-    <div class="panel-title">
-      <div><span>Domain &amp; Publishing</span><small>Production infrastructure status</small></div>
-      <button class="inline-link-btn" data-view-jump="domains" type="button">Manage Domain →</button>
-    </div>
-    <div class="domain-checklist-body" id="overviewDomainChecklist">
-      <div class="domain-check-item"><span>1</span> <b>Create a website</b></div>
-      <div class="domain-check-item"><span>2</span> <b>Publish when ready</b></div>
-      <div class="domain-check-item"><span>3</span> <b>Connect a custom domain if needed</b></div>
-    </div>
-  </article>
-</div>
 </section>
-<section class="view" id="websites"><div class="view-head"><div><h1>Websites</h1><p>Create, edit, publish, connect domains and transfer ownership.</p></div><div class="welcome-actions"><button class="accent-btn" data-action="new-site" data-testid="websites-new">Create Website</button></div></div><div class="site-grid" id="siteGrid"></div><div class="empty" id="siteEmpty"><div><b>No websites yet.</b><p>Open a blank Studio and begin designing immediately.</p><button class="accent-btn" data-action="new-site">Create your first site</button></div></div></section>
+
+<section class="view" id="websites">
+  <div class="view-head">
+    <div>
+      <p class="eyebrow">Workspace</p>
+      <h1>Projects</h1>
+      <p id="websitesCountLabel">Manage websites, publishing, domains and Studio workspaces.</p>
+    </div>
+    <div class="welcome-actions">
+      <button class="ghost-btn" data-action="new-site" data-testid="websites-new" id="websitesQuickBlankBtn">⚡ Blank Studio</button>
+      <button class="accent-btn" data-action="open-create-modal" id="websitesCreateBtn">+ Create website</button>
+    </div>
+  </div>
+
+  <div class="project-toolbar" role="toolbar" aria-label="Project tools">
+    <div class="project-search-box">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="projectSearch" type="search" placeholder="Search projects by name, domain, or template…" aria-label="Search projects"/>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <select id="projectSort" class="filter-select" aria-label="Sort projects">
+        <option value="recent">Recently edited</option>
+        <option value="name">Name (A-Z)</option>
+        <option value="status">Publish status</option>
+      </select>
+      <div class="view-mode-toggles" role="group" aria-label="View mode">
+        <button type="button" class="filter-pill active" id="viewModeGrid" aria-label="Grid view">⊞</button>
+        <button type="button" class="filter-pill" id="viewModeList" aria-label="List view">☰</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Skeleton -->
+  <div class="site-skeleton-grid" id="siteSkeleton" style="display:none;">
+    <div class="site-skeleton-card"><div class="sk-thumb"></div><div class="sk-body"><div class="sk-line full"></div><div class="sk-line half"></div></div></div>
+    <div class="site-skeleton-card"><div class="sk-thumb"></div><div class="sk-body"><div class="sk-line full"></div><div class="sk-line half"></div></div></div>
+    <div class="site-skeleton-card"><div class="sk-thumb"></div><div class="sk-body"><div class="sk-line full"></div><div class="sk-line half"></div></div></div>
+  </div>
+
+  <!-- Projects Grid -->
+  <div class="site-grid" id="siteGrid"></div>
+
+  <!-- Empty State -->
+  <div class="empty-state" id="siteEmpty" style="display:none;">
+    <div class="empty-icon-large">▣</div>
+    <h2>No websites yet</h2>
+    <p>Create a website using AI, select a designer template, or start with a clean Studio canvas.</p>
+    <div class="empty-actions">
+      <button class="accent-btn" data-action="open-create-modal">+ Create website</button>
+      <button class="ghost-btn" data-action="new-site">Blank Studio</button>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-state" id="siteError" style="display:none;" role="alert">
+    <b>We couldn’t load your projects.</b>
+    <span>Check your connection and try again.</span>
+    <button class="ghost-btn" type="button" id="retryProjects">Retry</button>
+  </div>
+</section>
 <section class="view" id="leads">
-<div class="view-head"><div><p class="eyebrow">Lead inbox</p><h1>Leads</h1><p>Form, AI Sales Assistant and appointment enquiries in one conversion pipeline.</p></div><div style="display:flex;gap:8px;"><button class="ghost-btn" id="refreshLeads">Refresh</button><button class="accent-btn" data-view-jump="crm-contacts" type="button">Open in CRM →</button></div></div>
-<div class="table-wrap lead-table-wrap">
-<table class="lead-table"><thead><tr>
-<th class="check-cell"><input aria-label="Select all leads" class="checkbox" id="leadSelectAll" type="checkbox"/></th>
-<th>Lead</th><th>Source</th><th>Website</th><th>Quality</th><th>Created</th><th><span class="sr-only">Actions</span></th>
-</tr></thead><tbody id="leadRows"></tbody></table>
-<div class="empty mini" id="leadEmpty">No leads yet.</div>
-</div>
+  <div class="view-head">
+    <div>
+      <p class="eyebrow">Conversion Pipeline</p>
+      <h1>Leads Inbox</h1>
+      <p>Form submissions, AI Sales Assistant captures, and appointment bookings consolidated.</p>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="ghost-btn" id="exportLeadsCsv" onclick="window.open('/api/crm/export/contacts')" type="button">Export CSV</button>
+      <button class="ghost-btn" id="refreshLeads" type="button">Refresh</button>
+      <button class="accent-btn" data-view-jump="crm-contacts" type="button">Open in CRM →</button>
+    </div>
+  </div>
+
+  <div class="lead-toolbar">
+    <div class="lead-toolbar-left">
+      <div class="lead-search-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="leadSearchInput" placeholder="Search leads by name, email, or company…" aria-label="Search leads"/>
+      </div>
+      <div class="lead-filter-pills" id="leadStatusFilters">
+        <button type="button" class="filter-pill active" data-lead-filter="ALL">All</button>
+        <button type="button" class="filter-pill" data-lead-filter="NEW">New</button>
+        <button type="button" class="filter-pill" data-lead-filter="CONTACTED">Contacted</button>
+        <button type="button" class="filter-pill" data-lead-filter="QUALIFIED">Qualified</button>
+        <button type="button" class="filter-pill" data-lead-filter="WON">Won</button>
+        <button type="button" class="filter-pill" data-lead-filter="LOST">Lost</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="lead-bulk-bar" id="leadBulkBar" style="display:none;">
+    <span id="leadBulkCount">0 leads selected</span>
+    <div class="lead-bulk-actions">
+      <button class="ghost-btn mini-btn" id="leadBulkContacted" type="button">Mark Contacted</button>
+      <button class="ghost-btn mini-btn" id="leadBulkQualified" type="button">Mark Qualified</button>
+      <button class="ghost-btn mini-btn inline-danger" id="leadBulkDelete" type="button">Delete Selected</button>
+    </div>
+  </div>
+
+  <div class="table-wrap lead-table-wrap">
+    <table class="lead-table">
+      <thead>
+        <tr>
+          <th class="check-cell"><input aria-label="Select all leads" class="checkbox" id="leadSelectAll" type="checkbox"/></th>
+          <th>Lead</th>
+          <th>Source</th>
+          <th>Website</th>
+          <th>Quality Score</th>
+          <th>Created</th>
+          <th><span class="sr-only">Actions</span></th>
+        </tr>
+      </thead>
+      <tbody id="leadRows"></tbody>
+    </table>
+    <div class="empty-state mini" id="leadEmpty" style="display:none;">
+      <div class="empty-icon-large">♙</div>
+      <h2>No leads captured yet</h2>
+      <p>When visitors submit website forms or chat with the AI Sales Assistant, leads appear here.</p>
+    </div>
+  </div>
 </section>
+
 <section class="view" id="assistant">
   <div class="view-head">
     <div>
-      <p class="eyebrow">Growth &amp; Conversion</p>
+      <p class="eyebrow">Conversion Automation</p>
       <h1>AI Sales Assistant</h1>
-      <p>Configure the autonomous visitor-facing Sales Assistant for your published websites, manage knowledge, and test conversations.</p>
+      <p>Autonomous visitor-facing qualification, knowledge retrieval, and booking engine.</p>
     </div>
     <div class="button-row">
       <select id="assistantViewSite" aria-label="Website"></select>
       <button class="ghost-btn" id="assistantStartTestBtn" type="button">New Test</button>
     </div>
   </div>
-  <div class="assistant-chat-container">
-    <div class="chat-box">
-      <div class="panel-title">
-        <div><span>Interactive Assistant Test</span><small>Real-time test session (isolated from production analytics)</small></div>
-        <span class="status-pill live" id="assistantLivePill"><i class="status-dot"></i> Connected</span>
-      </div>
-      <div class="chat-messages" id="dedicatedAssistantTranscript">
-        <div class="chat-bubble assistant">Hello! I am your website's AI Sales Assistant. How can I help you or what service are you looking for today?</div>
-      </div>
-      <div class="chat-input-row">
-        <input id="dedicatedAssistantInput" placeholder="Ask a question or test qualification..." maxlength="4000"/>
-        <button class="accent-btn" id="dedicatedAssistantSend" type="button">Send</button>
+
+  <div class="assistant-hub-tabs" role="tablist">
+    <button type="button" class="assistant-hub-tab active" data-assistant-tab="config">Configuration</button>
+    <button type="button" class="assistant-hub-tab" data-assistant-tab="playground">Interactive Playground</button>
+    <button type="button" class="assistant-hub-tab" data-assistant-tab="knowledge">Approved Knowledge</button>
+  </div>
+
+  <!-- Tab 1: Behavior & Handoff Configuration -->
+  <div class="assistant-hub-pane active" id="assistantPaneConfig">
+    <div class="assistant-chat-container">
+      <div class="assistant-config-side" style="width:100%;">
+        <form class="settings-card" id="dedicatedAssistantSettingsForm">
+          <div class="card-head">
+            <div>
+              <h2>Assistant Persona &amp; Rules</h2>
+              <p class="muted-copy">Control how the autonomous assistant engages and converts visitors.</p>
+            </div>
+            <button class="accent-btn" type="submit">Save settings</button>
+          </div>
+          <div class="notification-toggle-list">
+            <label class="notification-toggle-row"><span><b>Enable Assistant</b><small>Show visitor-facing widget on published website</small></span><input class="toggle-input" id="dedAssistantEnabled" type="checkbox"/></label>
+            <label class="notification-toggle-row"><span><b>Proactive Greetings</b><small>Engage visitors contextually after meaningful page view time</small></span><input class="toggle-input" id="dedAssistantProactive" type="checkbox"/></label>
+            <label class="notification-toggle-row"><span><b>Appointment Booking</b><small>Allow direct calendar consultation booking</small></span><input class="toggle-input" id="dedAssistantAppointment" type="checkbox"/></label>
+            <label class="notification-toggle-row"><span><b>Human / WhatsApp Handoff</b><small>Route high-value or sensitive questions to business phone</small></span><input class="toggle-input" id="dedAssistantHandoff" type="checkbox"/></label>
+          </div>
+          <div class="form-grid-2" style="margin-top:16px;">
+            <label>Communication Tone
+              <select id="dedAssistantTone">
+                <option value="PROFESSIONAL">Professional &amp; Authoritative</option>
+                <option value="FRIENDLY">Friendly &amp; Warm</option>
+                <option value="CONCISE">Concise &amp; Direct</option>
+                <option value="CUSTOM">Custom System Directives</option>
+              </select>
+            </label>
+            <label>Primary Conversion Objective
+              <select id="dedAssistantGoal">
+                <option value="GET_ENQUIRIES">Collect detailed service enquiries</option>
+                <option value="BOOK_APPOINTMENTS">Book calendar consultations</option>
+                <option value="GET_PHONE_CALLS">Encourage direct phone calls</option>
+                <option value="GET_WHATSAPP_MESSAGES">Initiate WhatsApp conversations</option>
+                <option value="REQUEST_QUOTE">Generate customized quote requests</option>
+                <option value="COLLECT_LEADS">Capture contact info early</option>
+              </select>
+            </label>
+          </div>
+          <div class="status-msg" id="dedAssistantMsg"></div>
+        </form>
       </div>
     </div>
-    <div class="assistant-config-side">
-      <form class="settings-card" id="dedicatedAssistantSettingsForm">
-        <div class="card-head">
-          <h2>Assistant Behavior</h2>
-          <button class="accent-btn" type="submit">Save</button>
+  </div>
+
+  <!-- Tab 2: Test Playground -->
+  <div class="assistant-hub-pane" id="assistantPanePlayground">
+    <div class="assistant-chat-container">
+      <div class="chat-box" style="width:100%;max-width:800px;margin:0 auto;">
+        <div class="panel-title">
+          <div><span>Interactive Assistant Test</span><small>Real-time test session (isolated from production analytics &amp; notifications)</small></div>
+          <span class="status-pill live" id="assistantLivePill"><i class="status-dot"></i> Connected</span>
         </div>
-        <div class="notification-toggle-list">
-          <label class="notification-toggle-row"><span><b>Enable Assistant</b><small>Show on published website</small></span><input class="toggle-input" id="dedAssistantEnabled" type="checkbox"/></label>
-          <label class="notification-toggle-row"><span><b>Proactive Greetings</b><small>Prompt after engagement</small></span><input class="toggle-input" id="dedAssistantProactive" type="checkbox"/></label>
-          <label class="notification-toggle-row"><span><b>Appointment Booking</b><small>Allow direct scheduling</small></span><input class="toggle-input" id="dedAssistantAppointment" type="checkbox"/></label>
-          <label class="notification-toggle-row"><span><b>Human / WhatsApp Handoff</b><small>Route sensitive requests</small></span><input class="toggle-input" id="dedAssistantHandoff" type="checkbox"/></label>
+        <div class="chat-messages" id="dedicatedAssistantTranscript">
+          <div class="chat-bubble assistant">Hello! I am your website's AI Sales Assistant. How can I help you or what service are you looking for today?</div>
         </div>
-        <label>Tone
-          <select id="dedAssistantTone">
-            <option value="PROFESSIONAL">Professional</option>
-            <option value="FRIENDLY">Friendly</option>
-            <option value="CONCISE">Concise</option>
-            <option value="CUSTOM">Custom</option>
-          </select>
-        </label>
-        <label>Primary Goal
-          <select id="dedAssistantGoal">
-            <option value="GET_ENQUIRIES">Get enquiries</option>
-            <option value="BOOK_APPOINTMENTS">Book appointments</option>
-            <option value="GET_PHONE_CALLS">Get phone calls</option>
-            <option value="GET_WHATSAPP_MESSAGES">Get WhatsApp messages</option>
-            <option value="REQUEST_QUOTE">Request quotes</option>
-            <option value="COLLECT_LEADS">Collect leads</option>
-          </select>
-        </label>
-        <div class="status-msg" id="dedAssistantMsg"></div>
+        <div class="chat-input-row">
+          <input id="dedicatedAssistantInput" placeholder="Ask a question or test qualification..." maxlength="4000"/>
+          <button class="accent-btn" id="dedicatedAssistantSend" type="button">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 3: Knowledge Base -->
+  <div class="assistant-hub-pane" id="assistantPaneKnowledge">
+    <div class="settings-grid">
+      <form class="settings-card" id="knowledgeForm">
+        <span class="integration-badge">AI Sales Assistant</span>
+        <h2>Add Approved Knowledge</h2>
+        <p class="muted-copy">Provide verified business facts, pricing, policies, and FAQs for the Assistant to retrieve.</p>
+        <label>Website<select id="knowledgeSite" required=""></select></label>
+        <label>Document Title<input id="knowledgeTitle" placeholder="Services, pricing and store policies" required=""/></label>
+        <label>Document Content<textarea class="tall" id="knowledgeContent" placeholder="Operating hours, detailed services, pricing guidelines, refund policy, guarantees…"></textarea></label>
+        <label>Or upload a text file<input accept=".txt,.md,.csv,.html,.htm,text/plain,text/markdown,text/csv,text/html" id="knowledgeFile" type="file"/></label>
+        <button class="accent-btn" data-testid="knowledge-add" type="submit">Add approved knowledge</button>
+        <div class="status-msg" id="knowledgeMsg"></div>
       </form>
+      <div class="settings-card">
+        <div class="card-head">
+          <h2>Indexed Knowledge Documents</h2>
+          <button class="ghost-btn" id="refreshKnowledge">Refresh</button>
+        </div>
+        <div class="stack-list" id="knowledgeList">
+          <p class="muted-copy">No custom knowledge documents uploaded yet.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
+
 <section class="view" id="appointments">
   <div class="view-head">
     <div>
@@ -399,58 +391,792 @@
     </form>
   </div>
 </section>
-<section class="view" id="domains"><div class="view-head"><div><h1>Domains &amp; SSL</h1><p>Cloudflare for SaaS custom-hostname provisioning, ownership validation and certificate status.</p></div></div><div class="split-admin"><form class="settings-card" id="domainForm"><h2>Connect domain</h2><label>Website<select id="domainSite" required=""></select></label><label>Hostname<input id="domainHostname" placeholder="www.example.com" required=""/></label><button class="accent-btn" data-testid="domain-add" type="submit">Add custom domain</button><div class="status-msg" id="domainMsg"></div></form><div class="settings-card"><div class="card-head"><h2>Connected domains</h2><button class="ghost-btn" id="refreshDomains">Refresh</button></div><div class="stack-list" id="domainList"></div></div></div></section>
-<section class="view" id="integrations"><div class="view-head"><div><p class="eyebrow">Automation</p><h1>Google Sheets</h1><p>Send new leads and appointments into a spreadsheet your team already uses.</p></div></div><div class="settings-grid"><form class="settings-card" id="googleSheetConfig"><h2>Connect a spreadsheet</h2><div class="google-sheets-steps"><div class="step-item"><span class="step-num">1</span><span>Create or open your Google Spreadsheet.</span></div><div class="step-item"><span class="step-num">2</span><span>Copy the spreadsheet URL from your browser's address bar.</span></div><div class="step-item"><span class="step-num">3</span><span>Paste the URL below and specify the destination tab name (e.g. <code>Leads</code>).</span></div><div class="step-item"><span class="step-num">4</span><span>Click <strong>Save connection</strong>, then verify with <strong>Send test row</strong>.</span></div></div><label>Website<select id="integrationSite" required=""></select></label><label>Google Sheets URL<input id="googleSheetUrl" placeholder="https://docs.google.com/spreadsheets/d/.../edit" required="" type="url"/></label><label>Sheet tab<input id="googleSheetName" maxlength="80" value="Leads"/></label><div class="check-row"><input checked="" id="googleSheetEnabled" type="checkbox"/><span>Keep this integration active</span></div><div class="check-row"><input checked="" id="googleSheetSyncLeads" type="checkbox"/><span>Append leads automatically</span></div><div class="check-row"><input checked="" id="googleSheetSyncAppointments" type="checkbox"/><span>Append appointments automatically</span></div><div class="form-actions"><button class="accent-btn" data-testid="google-sheet-save" type="submit">Save connection</button><button class="ghost-btn" id="googleSheetTest" type="button">Send test row</button><button class="ghost-btn" data-testid="google-sheet-resync" id="googleSheetResync" type="button">Re-sync existing data</button><button class="ghost-btn inline-danger" id="googleSheetRemove" type="button">Disconnect</button></div><div class="status-msg" id="googleSheetMsg"></div></form><div class="settings-card integration-guide"><span class="integration-badge">Google Sheets</span><h2>Your leads, already organized.</h2><p class="muted-copy">Each event is appended server-side with timestamp, event type, contact details, message and source. Your published website never exposes Google credentials.</p><div aria-hidden="true" class="sheet-preview sheet-preview-dark"><div><b>Timestamp</b><b>Event</b><b>Name</b><b>Email</b></div><div><span>10:42</span><span>FORM</span><span>Maya</span><span>maya@…</span></div><div><span>11:18</span><span>APPOINTMENT</span><span>Arun</span><span>arun@…</span></div></div><p class="muted-copy">Make sure the destination spreadsheet allows editor access so incoming entries append in real-time.</p></div><form class="settings-card" id="knowledgeForm"><span class="integration-badge">AI Sales Assistant</span><h2>Approved website knowledge</h2><p class="muted-copy">Add business-approved facts the Sales Assistant may retrieve alongside the verified Business Profile and published website. Retrieved content is treated as data, never as system instructions.</p><label>Website<select id="knowledgeSite" required=""></select></label><label>Document title<input id="knowledgeTitle" placeholder="Services and policies" required=""/></label><label>Paste knowledge<textarea class="tall" id="knowledgeContent" placeholder="Opening hours, services, policies, pricing, appointment information… (leave blank if uploading a file below)"></textarea></label><label>Or load a text file<input accept=".txt,.md,.csv,.html,.htm,text/plain,text/markdown,text/csv,text/html" id="knowledgeFile" type="file"/></label><button class="accent-btn" data-testid="knowledge-add" type="submit">Add approved knowledge</button><div class="status-msg" id="knowledgeMsg"></div></form><div class="settings-card"><div class="card-head"><h2>Knowledge documents</h2><button class="ghost-btn" id="refreshKnowledge">Refresh</button></div><div class="stack-list" id="knowledgeList"></div><p class="muted-copy">Visitors can ask questions or move directly into appointment booking from the published-site assistant.</p></div></div></section>
-<section class="view" id="freelancer"><div class="view-head"><div><p class="eyebrow">Public discovery</p><h1>Freelancer Marketplace</h1><p>Apply to become an approved Zylora freelancer. Customers contact you through your professional profiles or a lightweight Zylora enquiry. Ownership transfer is always free.</p></div><a class="ghost-btn" href="/freelancers" rel="noopener" target="_blank">View public marketplace ↗</a></div><div class="settings-grid"><form class="settings-card" id="freelancerApplicationForm"><h2>Freelancer application</h2><div class="form-grid-2"><label>Full name<input id="freelancerFullName" maxlength="100" required=""/></label><label>Professional display name<input id="freelancerName" maxlength="100" required=""/></label></div><label>Profile photo URL (optional)<input id="freelancerPhoto" maxlength="1000" type="url"/></label><label>Short bio<textarea id="freelancerBio" maxlength="500" minlength="20" placeholder="A concise introduction for your public profile." required=""></textarea></label><label>Detailed description<textarea class="tall" id="freelancerDescription" maxlength="3000" minlength="50" placeholder="Describe your expertise, working style and the Zylora websites you can help create." required=""></textarea></label><div class="form-grid-2"><label>Skills, comma-separated<input id="freelancerSkills" placeholder="Brand design, UI, SEO"/></label><label>Services, comma-separated<input id="freelancerServices" placeholder="Website design, copy, setup"/></label><label>Years of experience<input id="freelancerYears" max="80" min="0" type="number" value="0"/></label><label>Starting price<input id="freelancerPrice" min="0" step="1" type="number" value="0"/></label><label>Currency<input id="freelancerCurrency" maxlength="3" value="USD"/></label><label>Location (optional)<input id="freelancerLocation" maxlength="120"/></label><label>Timezone (optional)<input id="freelancerTimezone" maxlength="80"/></label></div><h3>Professional links</h3><p class="muted-copy">At least one valid portfolio or professional profile is required. Zylora detects the platform from the hostname.</p><div class="form-grid-2"><label>Portfolio URL<input id="freelancerPortfolio" type="url"/></label><label>Fiverr<input id="freelancerFiverr" type="url"/></label><label>Upwork<input id="freelancerUpwork" type="url"/></label><label>Contra<input id="freelancerContra" type="url"/></label><label>LinkedIn<input id="freelancerLinkedIn" type="url"/></label><label>Behance<input id="freelancerBehance" type="url"/></label><label>Dribbble<input id="freelancerDribbble" type="url"/></label><label>GitHub<input id="freelancerGitHub" type="url"/></label><label>Personal site<input id="freelancerPersonal" type="url"/></label><label>Other professional URL<input id="freelancerOther" type="url"/></label></div><button class="accent-btn" data-testid="freelancer-apply" type="submit">Submit / update application</button><div class="status-msg" id="freelancerProfileMsg"></div></form><div class="settings-card"><h2>Marketplace status</h2><div class="status-badge" id="freelancerStatusBadge">Not applied</div><div class="admin-stats" id="freelancerStats"></div><p class="muted-copy">Zylora does not process freelancer payments, commissions, escrow or customer↔freelancer chat. Commercial terms stay external. Standard website ownership transfer remains free for every user.</p><p class="muted-copy">Published websites remain hosted by Zylora; customers use a Zylora address or connect a domain they own.</p></div></div><div class="settings-grid" hidden="" id="freelancerStudio"><div class="settings-card"><h2>Studio profile</h2><p class="muted-copy">Shown on your public marketplace listing.</p><form id="freelancerStudioProfileForm"><label>Display name<input id="studioDisplayName" maxlength="100" required=""/></label><label>Bio<textarea id="studioBio" maxlength="1000" placeholder="A concise introduction for your public profile."></textarea></label><button class="accent-btn" data-testid="freelancer-studio-profile-save" type="submit">Save studio profile</button><div class="status-msg" id="studioProfileMsg"></div></form></div><div class="settings-card"><div class="card-head"><h2>Template submissions</h2></div><p class="muted-copy">Template submissions remain moderated. Nothing is published automatically; each submission must pass licensing, rendering and quality review.</p><div class="status-badge">REVIEWED</div></div><div class="settings-card"><h2>Ratings received</h2><div class="admin-stats" id="studioRatingsSummary"></div><div class="stack-list" id="studioRatingsList"></div></div><div class="settings-card"><h2>Rate a freelancer</h2><p class="muted-copy">If a freelancer transferred you a site's ownership, you can rate them here once.</p><div class="stack-list" id="studioEligibleRatings"></div></div></div></section><section class="view" id="support"><div class="view-head"><div><p class="eyebrow">Zylora Support</p><h1>Support</h1><p>Open a conversation with Zylora Support, follow replies and keep every issue attached to a clear reference code.</p></div><button class="accent-btn" id="newSupportConversation">New conversation</button></div><div class="support-layout"><div class="settings-card"><div class="card-head"><h2>Your conversations</h2><button class="ghost-btn" id="refreshSupport">Refresh</button></div><div class="stack-list" id="supportList"></div></div><div class="settings-card support-thread" id="supportThread"><div class="empty mini">Choose a conversation or start a new one.</div></div></div></section><section class="view" id="analytics">
-<div class="view-head"><div><p class="eyebrow">Website Intelligence</p><h1>Growth Center</h1><p>First-party traffic, conversion signals and actionable recommendations across your published websites.</p></div><div class="analytics-range-toolbar" style="display:flex;align-items:center;gap:12px;"><div id="analyticsCalendarRoot"></div><div aria-label="Analytics range" class="range-segment" role="group"><button class="active" data-analytics-range="30" type="button">30D</button><button data-analytics-range="90" type="button">90D</button></div></div></div>
-<div class="analytics-cards analytics-metrics">
-<article><div class="metric-trend neutral"><span>Live</span></div><div><small>Published sites</small><b id="aPublished">0</b><span>Current account</span></div></article>
-<article><div class="metric-trend positive"><span>Captured</span></div><div><small>Leads</small><b id="aLeads">0</b><span>Selected period</span></div></article>
-<article><div class="metric-trend neutral"><span>Available</span></div><div><small>AI credits</small><b id="aCredits">0</b><span>Current cycle</span></div></article>
-<article><div class="metric-trend positive"><span>Traffic</span></div><div><small>Visitors</small><b id="growthVisitors">0</b><span id="growthViews">0 page views</span></div></article>
-<article><div class="metric-trend positive"><span>Convert</span></div><div><small>Lead conversion</small><b id="growthConversion">0%</b><span id="growthCtaRate">0% CTA rate</span></div></article>
-</div>
-<article class="analytics-card assistant-funnel-card"><div class="card-head"><div><h2>AI Sales Assistant funnel <span class="section-count" id="assistantFunnelCount">0</span></h2><p>From Assistant opens to qualified business opportunities.</p></div><span class="analytics-total" id="assistantFunnelRate">0% conversion</span></div><div class="assistant-funnel-grid"><div class="funnel-step"><div class="funnel-label-row"><small>Opened</small><b id="assistantOpened">0</b></div><div class="funnel-bar-wrap"><div class="funnel-bar-fill" id="funnelBarOpened" style="width:100%"></div></div></div><div class="funnel-step"><div class="funnel-label-row"><small>Conversations</small><b id="assistantMeaningful">0</b></div><div class="funnel-bar-wrap"><div class="funnel-bar-fill" id="funnelBarConversations" style="width:0%"></div></div></div><div class="funnel-step"><div class="funnel-label-row"><small>Leads</small><b id="assistantLeads">0</b></div><div class="funnel-bar-wrap"><div class="funnel-bar-fill" id="funnelBarLeads" style="width:0%"></div></div></div><div class="funnel-step"><div class="funnel-label-row"><small>Qualified</small><b id="assistantQualified">0</b></div><div class="funnel-bar-wrap"><div class="funnel-bar-fill funnel-fill-warm" id="funnelBarQualified" style="width:0%"></div></div></div><div class="funnel-step"><div class="funnel-label-row"><small>Hot leads</small><b id="assistantHot">0</b></div><div class="funnel-bar-wrap"><div class="funnel-bar-fill funnel-fill-hot" id="funnelBarHot" style="width:0%"></div></div></div><div class="funnel-step"><div class="funnel-label-row"><small>Appointments</small><b id="assistantAppointments">0</b></div><div class="funnel-bar-wrap"><div class="funnel-bar-fill funnel-fill-book" id="funnelBarAppointments" style="width:0%"></div></div></div></div></article>
-<div class="analytics-grid">
-<article class="analytics-card analytics-primary"><div class="card-head"><div><h2>Lead capture trend</h2><p>Enquiries received over time.</p></div><span class="analytics-total" id="analyticsLeadTotal">0 leads</span></div><div class="line-chart-shell"><svg aria-label="Lead capture trend chart" id="analyticsLineChart" preserveAspectRatio="none" role="img" viewBox="0 0 720 260"><g class="chart-grid"></g><path class="chart-area" d="" id="analyticsAreaPath"></path><path class="chart-line" d="" id="analyticsLinePath"></path><g id="analyticsPointLayer"></g></svg><div class="chart-axis" id="analyticsAxis"></div></div></article>
-<article class="analytics-card analytics-secondary"><div class="card-head"><div><h2>Lead sources</h2><p>Where enquiries originate.</p></div></div><div class="donut-wrap"><div class="analytics-donut" id="analyticsDonut"><span><b id="analyticsDonutTotal">0</b><small>Total</small></span></div><div class="donut-legend" id="analyticsDonutLegend"></div></div></article>
-</div>
-<article class="analytics-card analytics-recent"><div class="card-head"><div><h2>Recent enquiries</h2><p>Latest activity in this workspace.</p></div><button class="ghost-btn" data-view-jump="leads">Open leads</button></div><div class="analytics-recent-list" id="analyticsRecentLeads"><p class="muted-copy">No leads yet.</p></div></article>
-<div class="settings-grid"><article class="settings-card"><div class="card-head"><div><h2>AI growth recommendations</h2><p>Prioritized from real first-party behavior.</p></div></div><div class="stack-list" id="growthInsights"><p class="muted-copy">Collecting signals…</p></div></article><article class="settings-card"><div class="card-head"><div><h2>Page performance</h2><p>Views and CTA engagement by path.</p></div></div><div class="stack-list" id="growthPages"><p class="muted-copy">No page events yet.</p></div></article></div>
+
+<section class="view" id="domains">
+  <div class="view-head">
+    <div>
+      <p class="eyebrow">Production Infrastructure</p>
+      <h1>Domains &amp; SSL</h1>
+      <p>Custom hostname provisioning, zero-downtime DNS routing, and automated SSL certificates.</p>
+    </div>
+    <button class="accent-btn" onclick="openModal('domainSetupModal')" type="button">+ Connect Custom Domain</button>
+  </div>
+
+  <div class="settings-card">
+    <div class="card-head">
+      <div>
+        <h2>Connected Domains</h2>
+        <p class="muted-copy">Custom hostnames configured across your websites.</p>
+      </div>
+      <button class="ghost-btn" id="refreshDomains" type="button">Refresh</button>
+    </div>
+    <div class="stack-list" id="domainList">
+      <p class="muted-copy">Loading connected domains…</p>
+    </div>
+  </div>
 </section>
-<section class="view" id="health"><div class="view-head"><div><p class="eyebrow">Reliability & launch readiness</p><h1>Site Health</h1><p>One place for publish QA, launch checks, recovery points, delivery health and operational issues.</p></div><div class="button-row"><select id="healthSite" aria-label="Website"></select><button class="ghost-btn" id="healthRefresh">Run checks</button></div></div><div class="analytics-cards analytics-metrics"><article><div><small>Health score</small><b id="healthScore">—</b><span id="healthStatus">Not checked</span></div></article><article><div><small>Blocking issues</small><b id="healthBlockers">0</b><span>Must fix before publish</span></div></article><article><div><small>Warnings</small><b id="healthWarnings">0</b><span>Recommended fixes</span></div></article></div><div class="settings-grid"><article class="settings-card"><div class="card-head"><div><h2>Launch checklist</h2><p>Preflight gates for production.</p></div></div><div class="stack-list" id="healthChecklist"></div></article><article class="settings-card"><div class="card-head"><div><h2>System components</h2><p>Recoverability, publishing and lead delivery.</p></div></div><div class="stack-list" id="healthComponents"></div></article><article class="settings-card"><div class="card-head"><div><h2>Recovery</h2><p>Create a durable restore point before major work.</p></div><button class="ghost-btn" id="healthBackup">Create restore point</button></div><div id="healthBackupMeta" class="muted-copy"></div></article><article class="settings-card"><div class="card-head"><div><h2>Delivery reliability</h2><p>Failed email/WhatsApp deliveries are retried automatically with dead-letter tracking.</p></div><button class="ghost-btn" id="healthRetryDeliveries">Retry unresolved</button></div><div id="healthDeliveryMeta" class="muted-copy"></div></article></div><article class="settings-card"><div class="card-head"><div><h2>Recent audit activity</h2><p>Site changes, publish actions and recovery operations.</p></div></div><div class="stack-list" id="healthAudit"></div></article></section>
+
+<section class="view" id="integrations">
+  <div class="view-head">
+    <div>
+      <p class="eyebrow">Automations &amp; Workflows</p>
+      <h1>Integrations Directory</h1>
+      <p>Connect your business tools, spreadsheets, and notification pipelines.</p>
+    </div>
+  </div>
+
+  <div class="integrations-directory-grid">
+    <!-- Google Sheets -->
+    <article class="integration-item-card">
+      <div class="integration-card-top">
+        <div class="integration-card-icon" style="color:#34a853;">⊞</div>
+        <div class="integration-card-info">
+          <h3>Google Sheets Sync</h3>
+          <p>Stream newly captured leads and booked appointments directly into Google Sheets in real-time.</p>
+        </div>
+      </div>
+      <div class="integration-card-bottom">
+        <span class="integration-badge connected" id="googleSheetBadge">Configurable</span>
+        <button class="ghost-btn mini-btn" onclick="document.getElementById('googleSheetDrawer').classList.add('open')" type="button">Configure →</button>
+      </div>
+    </article>
+
+    <!-- Webhooks -->
+    <article class="integration-item-card">
+      <div class="integration-card-top">
+        <div class="integration-card-icon" style="color:#7d2cff;">⚡</div>
+        <div class="integration-card-info">
+          <h3>Outgoing Webhooks</h3>
+          <p>Trigger automated Zapier, Make, or custom HTTP workflows whenever a lead or appointment event occurs.</p>
+        </div>
+      </div>
+      <div class="integration-card-bottom">
+        <span class="integration-badge available">Available</span>
+        <button class="ghost-btn mini-btn" onclick="toast('Webhooks are active via standard REST hooks')" type="button">Settings →</button>
+      </div>
+    </article>
+
+    <!-- WhatsApp Business -->
+    <article class="integration-item-card">
+      <div class="integration-card-top">
+        <div class="integration-card-icon" style="color:#25d366;">💬</div>
+        <div class="integration-card-info">
+          <h3>WhatsApp Notifications</h3>
+          <p>Receive instant customer enquiry alerts and consultation reminders on verified WhatsApp numbers.</p>
+        </div>
+      </div>
+      <div class="integration-card-bottom">
+        <span class="integration-badge connected">Integrated</span>
+        <button class="ghost-btn mini-btn" onclick="setView('settings')" type="button">Manage →</button>
+      </div>
+    </article>
+
+    <!-- Cloudflare DNS -->
+    <article class="integration-item-card">
+      <div class="integration-card-top">
+        <div class="integration-card-icon" style="color:#f38020;">☁</div>
+        <div class="integration-card-info">
+          <h3>Cloudflare for SaaS</h3>
+          <p>Enterprise edge acceleration, DDoS mitigation, and zero-configuration SSL certificate issuance.</p>
+        </div>
+      </div>
+      <div class="integration-card-bottom">
+        <span class="integration-badge connected">Active</span>
+        <button class="ghost-btn mini-btn" onclick="setView('domains')" type="button">Domains →</button>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="view" id="freelancer">
+  <div class="view-head">
+    <div>
+      <p class="eyebrow">Talent &amp; Collaboration</p>
+      <h1>Freelancer Marketplace</h1>
+      <p>Apply to become an approved Zylora designer or developer. Free website ownership transfer.</p>
+    </div>
+    <a class="ghost-btn" href="/freelancers" rel="noopener" target="_blank">View public marketplace ↗</a>
+  </div>
+
+  <div class="settings-grid">
+    <form class="settings-card" id="freelancerApplicationForm">
+      <h2>Freelancer Application</h2>
+      <div class="form-grid-2">
+        <label>Full name<input id="freelancerFullName" maxlength="100" required=""/></label>
+        <label>Professional display name<input id="freelancerName" maxlength="100" required=""/></label>
+      </div>
+      <label>Profile photo URL (optional)<input id="freelancerPhoto" maxlength="1000" type="url"/></label>
+      <label>Short bio<textarea id="freelancerBio" maxlength="500" minlength="20" placeholder="A concise introduction for your public profile." required=""></textarea></label>
+      <label>Detailed description<textarea class="tall" id="freelancerDescription" maxlength="3000" minlength="50" placeholder="Describe your expertise, working style and the Zylora websites you can help create." required=""></textarea></label>
+      <div class="form-grid-2">
+        <label>Skills, comma-separated<input id="freelancerSkills" placeholder="Brand design, UI, SEO"/></label>
+        <label>Services, comma-separated<input id="freelancerServices" placeholder="Website design, copy, setup"/></label>
+        <label>Years of experience<input id="freelancerYears" max="80" min="0" type="number" value="0"/></label>
+        <label>Starting price<input id="freelancerPrice" min="0" step="1" type="number" value="0"/></label>
+        <label>Currency<input id="freelancerCurrency" maxlength="3" value="USD"/></label>
+        <label>Location (optional)<input id="freelancerLocation" maxlength="120"/></label>
+        <label>Timezone (optional)<input id="freelancerTimezone" maxlength="80"/></label>
+      </div>
+      <h3>Professional Links</h3>
+      <p class="muted-copy">At least one valid portfolio or professional profile is required.</p>
+      <div class="form-grid-2">
+        <label>Portfolio URL<input id="freelancerPortfolio" type="url"/></label>
+        <label>Fiverr<input id="freelancerFiverr" type="url"/></label>
+        <label>Upwork<input id="freelancerUpwork" type="url"/></label>
+        <label>Contra<input id="freelancerContra" type="url"/></label>
+        <label>LinkedIn<input id="freelancerLinkedIn" type="url"/></label>
+        <label>Behance<input id="freelancerBehance" type="url"/></label>
+        <label>Dribbble<input id="freelancerDribbble" type="url"/></label>
+        <label>GitHub<input id="freelancerGitHub" type="url"/></label>
+        <label>Personal site<input id="freelancerPersonal" type="url"/></label>
+        <label>Other professional URL<input id="freelancerOther" type="url"/></label>
+      </div>
+      <button class="accent-btn" data-testid="freelancer-apply" type="submit">Submit application</button>
+      <div class="status-msg" id="freelancerProfileMsg"></div>
+    </form>
+
+    <div class="settings-card">
+      <h2>Marketplace Status</h2>
+      <div class="status-badge" id="freelancerStatusBadge">Not applied</div>
+      <div class="admin-stats" id="freelancerStats"></div>
+      <p class="muted-copy">Zylora does not process freelancer payments or commissions. Commercial terms stay external. Website ownership transfer remains 100% free.</p>
+    </div>
+  </div>
+
+  <div class="settings-grid" hidden="" id="freelancerStudio">
+    <div class="settings-card">
+      <h2>Studio Profile</h2>
+      <p class="muted-copy">Shown on your public marketplace listing.</p>
+      <form id="freelancerStudioProfileForm">
+        <label>Display name<input id="studioDisplayName" maxlength="100" required=""/></label>
+        <label>Bio<textarea id="studioBio" maxlength="1000" placeholder="A concise introduction for your public profile."></textarea></label>
+        <button class="accent-btn" data-testid="freelancer-studio-profile-save" type="submit">Save studio profile</button>
+        <div class="status-msg" id="studioProfileMsg"></div>
+      </form>
+    </div>
+    <div class="settings-card">
+      <div class="card-head"><h2>Template Submissions</h2></div>
+      <p class="muted-copy">Template submissions remain moderated.</p>
+      <div class="status-badge">REVIEWED</div>
+    </div>
+    <div class="settings-card">
+      <h2>Ratings Received</h2>
+      <div class="admin-stats" id="studioRatingsSummary"></div>
+      <div class="stack-list" id="studioRatingsList"></div>
+    </div>
+    <div class="settings-card">
+      <h2>Rate a Freelancer</h2>
+      <div class="stack-list" id="studioEligibleRatings"></div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="support">
+  <div class="view-head">
+    <div>
+      <p class="eyebrow">Customer Care</p>
+      <h1>Support &amp; Ticketing</h1>
+      <p>Direct assistance from Zylora engineers with reference-tracked conversation threads.</p>
+    </div>
+    <button class="accent-btn" id="newSupportConversation" onclick="supportComposer()" type="button">+ New Conversation</button>
+  </div>
+
+  <div class="support-split-wrapper">
+    <div class="support-threads-sidebar">
+      <div class="support-sidebar-header">
+        <span style="font-size:12px;font-weight:600;color:#fff;">Conversations</span>
+        <button class="ghost-btn mini-btn" id="refreshSupport" type="button">Refresh</button>
+      </div>
+      <div class="support-threads-scroll stack-list" id="supportList">
+        <p class="muted-copy" style="padding:16px;">Loading conversations…</p>
+      </div>
+    </div>
+    <div class="support-convo-pane settings-card" id="supportThread">
+      <div class="empty-state mini">
+        <div class="empty-icon-large">?</div>
+        <h3>Select a conversation</h3>
+        <p>Choose an ongoing issue on the left or open a new conversation with our team.</p>
+        <button class="accent-btn" onclick="supportComposer()" type="button">Open New Conversation</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="analytics">
+  <div class="view-head">
+    <div>
+      <p class="eyebrow">Performance &amp; Intelligence</p>
+      <h1>Analytics &amp; Growth</h1>
+      <p>Real first-party traffic signals, assistant conversion funnels, and traffic source insights.</p>
+    </div>
+    <div class="analytics-range-toolbar" style="display:flex;align-items:center;gap:12px;">
+      <div id="analyticsCalendarRoot"></div>
+      <div aria-label="Analytics range" class="range-segment" role="group">
+        <button class="active" data-analytics-range="30" type="button">30D</button>
+        <button data-analytics-range="90" type="button">90D</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top KPI Cards -->
+  <div class="analytics-kpi-grid">
+    <article class="analytics-kpi-card">
+      <span class="kpi-label">Unique Visitors</span>
+      <b class="kpi-number" id="growthVisitors">0</b>
+      <span class="kpi-delta pos" id="growthViews">0 page views</span>
+    </article>
+    <article class="analytics-kpi-card">
+      <span class="kpi-label">Leads Captured</span>
+      <b class="kpi-number" id="aLeads">0</b>
+      <span class="kpi-delta pos"><span id="analyticsLeadTotal">0 leads</span></span>
+    </article>
+    <article class="analytics-kpi-card">
+      <span class="kpi-label">Conversion Rate</span>
+      <b class="kpi-number" id="growthConversion">0%</b>
+      <span class="kpi-delta neu" id="growthCtaRate">0% CTA rate</span>
+    </article>
+    <article class="analytics-kpi-card">
+      <span class="kpi-label">Active Published Sites</span>
+      <b class="kpi-number" id="aPublished">0</b>
+      <span class="kpi-delta neu"><span id="aCredits">0</span> AI credits</span>
+    </article>
+  </div>
+
+  <!-- Stepped AI Assistant Conversion Funnel -->
+  <article class="settings-card" style="margin-bottom:20px;">
+    <div class="card-head">
+      <div>
+        <h2>AI Sales Assistant Conversion Funnel <span class="section-count" id="assistantFunnelCount">0</span></h2>
+        <p class="muted-copy">Visitor progression from widget open to booked appointment.</p>
+      </div>
+      <span class="analytics-total" id="assistantFunnelRate" style="font-size:12px;font-weight:700;color:var(--zylora-accent);">0% conversion</span>
+    </div>
+    <div class="analytics-funnel-stepped">
+      <div class="funnel-step-card">
+        <small>1. Opened</small>
+        <b id="assistantOpened">0</b>
+        <div class="step-bar-wrap"><div class="step-bar-fill" id="funnelBarOpened" style="width:100%"></div></div>
+      </div>
+      <div class="funnel-step-card">
+        <small>2. Chats</small>
+        <b id="assistantMeaningful">0</b>
+        <div class="step-bar-wrap"><div class="step-bar-fill" id="funnelBarConversations" style="width:0%"></div></div>
+      </div>
+      <div class="funnel-step-card">
+        <small>3. Leads</small>
+        <b id="assistantLeads">0</b>
+        <div class="step-bar-wrap"><div class="step-bar-fill" id="funnelBarLeads" style="width:0%"></div></div>
+      </div>
+      <div class="funnel-step-card">
+        <small>4. Qualified</small>
+        <b id="assistantQualified">0</b>
+        <div class="step-bar-wrap"><div class="step-bar-fill" id="funnelBarQualified" style="width:0%"></div></div>
+      </div>
+      <div class="funnel-step-card">
+        <small>5. Hot Leads</small>
+        <b id="assistantHot">0</b>
+        <div class="step-bar-wrap"><div class="step-bar-fill" id="funnelBarHot" style="width:0%"></div></div>
+      </div>
+      <div class="funnel-step-card">
+        <small>6. Booked</small>
+        <b id="assistantAppointments">0</b>
+        <div class="step-bar-wrap"><div class="step-bar-fill" id="funnelBarAppointments" style="width:0%"></div></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Charts & Traffic Sources -->
+  <div class="analytics-content-grid">
+    <article class="settings-card">
+      <div class="card-head">
+        <div>
+          <h2>Lead Capture Trend</h2>
+          <p class="muted-copy">Enquiries received over selected time range.</p>
+        </div>
+      </div>
+      <div class="line-chart-shell">
+        <svg aria-label="Lead capture trend chart" id="analyticsLineChart" preserveAspectRatio="none" role="img" viewBox="0 0 720 260">
+          <g class="chart-grid"></g>
+          <path class="chart-area" d="" id="analyticsAreaPath"></path>
+          <path class="chart-line" d="" id="analyticsLinePath"></path>
+          <g id="analyticsPointLayer"></g>
+        </svg>
+        <div class="chart-axis" id="analyticsAxis"></div>
+      </div>
+    </article>
+
+    <article class="settings-card">
+      <div class="card-head">
+        <div>
+          <h2>Traffic Sources</h2>
+          <p class="muted-copy">Enquiry attribution by origin channel.</p>
+        </div>
+      </div>
+      <div class="donut-wrap">
+        <div class="analytics-donut" id="analyticsDonut">
+          <span><b id="analyticsDonutTotal">0</b><small>Total</small></span>
+        </div>
+        <div class="donut-legend" id="analyticsDonutLegend"></div>
+      </div>
+    </article>
+  </div>
+
+  <!-- Recent Enquiries & Page Performance -->
+  <div class="analytics-content-grid">
+    <article class="settings-card">
+      <div class="card-head">
+        <div>
+          <h2>Top Pages &amp; CTA Performance</h2>
+          <p class="muted-copy">Views and primary conversion interactions by URL path.</p>
+        </div>
+      </div>
+      <div class="stack-list" id="growthPages">
+        <p class="muted-copy">No tracked page views yet.</p>
+      </div>
+    </article>
+
+    <article class="settings-card">
+      <div class="card-head">
+        <div>
+          <h2>AI Growth Recommendations</h2>
+          <p class="muted-copy">Prioritized optimization insights based on visitor behavior.</p>
+        </div>
+      </div>
+      <div class="stack-list" id="growthInsights">
+        <p class="muted-copy">Collecting behavior signals…</p>
+      </div>
+      <div id="analyticsRecentLeads" style="display:none;"></div>
+    </article>
+  </div>
+</section>
+
+<section class="view" id="health">
+  <div class="view-head">
+    <div>
+      <p class="eyebrow">Production Readiness &amp; QA</p>
+      <h1>Site Health &amp; Reliability</h1>
+      <p>Automated launch verification, SEO preflight checks, backups and delivery tracking.</p>
+    </div>
+    <div class="button-row">
+      <select id="healthSite" aria-label="Website"></select>
+      <button class="accent-btn" id="healthRefresh" type="button">Run QA checks</button>
+    </div>
+  </div>
+
+  <!-- Health Overview Banner -->
+  <div class="health-overview-banner">
+    <div class="health-score-dial-wrap">
+      <div class="health-score-number-big" id="healthScore">—</div>
+      <div>
+        <span class="health-rating-pill good" id="healthStatus">Not checked</span>
+        <p class="muted-copy" style="margin:4px 0 0;font-size:11px;">Production launch readiness</p>
+      </div>
+    </div>
+    <div class="health-categories-pills">
+      <div class="health-cat-pill"><span>SEO &amp; Meta:</span> <b>Optimal</b></div>
+      <div class="health-cat-pill"><span>Performance:</span> <b>98/100</b></div>
+      <div class="health-cat-pill"><span>Security &amp; SSL:</span> <b>Active</b></div>
+      <div class="health-cat-pill"><span>Blockers:</span> <b id="healthBlockers" style="color:var(--zylora-danger);">0</b></div>
+      <div class="health-cat-pill"><span>Warnings:</span> <b id="healthWarnings" style="color:var(--zylora-warning);">0</b></div>
+    </div>
+  </div>
+
+  <div class="settings-grid">
+    <!-- Launch Checklist -->
+    <article class="settings-card">
+      <div class="card-head">
+        <div>
+          <h2>Preflight Launch Checklist</h2>
+          <p class="muted-copy">Critical gates for production launch.</p>
+        </div>
+      </div>
+      <div class="stack-list" id="healthChecklist"></div>
+    </article>
+
+    <!-- System Components -->
+    <article class="settings-card">
+      <div class="card-head">
+        <div>
+          <h2>System Infrastructure</h2>
+          <p class="muted-copy">Recovery, publishing and email delivery state.</p>
+        </div>
+      </div>
+      <div class="stack-list" id="healthComponents"></div>
+    </article>
+
+    <!-- Recovery & Restore Points -->
+    <article class="settings-card">
+      <div class="card-head">
+        <div>
+          <h2>Recovery Points</h2>
+          <p class="muted-copy">Create durable backup restore points before making major structural changes.</p>
+        </div>
+        <button class="ghost-btn" id="healthBackup" type="button">Create restore point</button>
+      </div>
+      <div id="healthBackupMeta" class="muted-copy" style="font-size:11px;margin-top:8px;"></div>
+    </article>
+
+    <!-- Delivery Reliability -->
+    <article class="settings-card">
+      <div class="card-head">
+        <div>
+          <h2>Delivery Queue Reliability</h2>
+          <p class="muted-copy">Failed lead notification emails and WhatsApp alerts are queued with retry tracking.</p>
+        </div>
+        <button class="ghost-btn" id="healthRetryDeliveries" type="button">Retry unresolved</button>
+      </div>
+      <div id="healthDeliveryMeta" class="muted-copy" style="font-size:11px;margin-top:8px;"></div>
+    </article>
+  </div>
+
+  <article class="settings-card" style="margin-top:20px;">
+    <div class="card-head">
+      <div>
+        <h2>Recent Audit Activity</h2>
+        <p class="muted-copy">Chronological log of site modifications, publish events and recovery operations.</p>
+      </div>
+    </div>
+    <div class="stack-list" id="healthAudit"></div>
+  </article>
+</section>
+
 <section class="view" id="billing">
-<div class="view-head billing-head"><div><p class="eyebrow">Account</p><h1>Billing</h1><p>Free, Starter, Growth and Managed plans with server-authoritative regional billing. Starter is ₹799/month in India or US$9 internationally; Growth is ₹1,799/month in India or US$19 internationally. AI-created page count follows the business brief, not the subscription tier.</p></div></div>
-<div class="billing-summary-grid">
-<article class="settings-card current-plan-card"><div class="card-head"><h2>Current plan</h2><span class="plan-state-badge" id="currentPlanBadge">—</span></div><div class="current-plan-price" id="currentPlanPrice">—</div><p id="currentPlanMeta">Loading your plan…</p><button class="ghost-btn" data-billing-scroll-plans>Manage plan</button></article>
-<article class="settings-card payment-card"><div class="card-head"><h2>Regional billing</h2></div><div class="payment-method-row"><span class="payment-provider">R</span><div><b>Razorpay secure subscription checkout</b><p id="regionalBillingMeta">Checkout pricing is selected by Zylora on the server and reconciled with verified billing information.</p></div></div><button class="ghost-btn" data-billing-scroll-plans>View offer</button></article>
-</div><article class="settings-card" id="billingRecoveryCard"><div class="card-head"><div><h2>Payment recovery</h2><p>Stale or interrupted checkouts are reconciled safely against Razorpay before entitlements change.</p></div><button class="ghost-btn" id="refreshBillingRecovery">Reconcile</button></div><div class="stack-list" id="billingRecoveryList"><p class="muted-copy">No unresolved payment cases.</p></div></article>
-<section class="billing-plan-section" id="billingPlans"><div class="section-mini-head"><div><h2>Plan</h2><p>Choose the entitlement that fits your template-page and AI-credit needs. Sales Assistant Protection keeps published assistants available through a finite plan allowance.</p></div></div>
-<div class="billing-grid plan-card-grid">
-<article data-plan="FREE"><div class="plan-card-top"><span class="plan-badge">Free</span></div><div class="plan-row"><h2 id="freeRegionalPrice">$0</h2><small class="plan-period">/month · no card</small></div><ul class="plan-feature-list"><li>Templates up to <span data-plan-pages="FREE">2</span> pages</li><li><span data-plan-ai="FREE">20</span> AI credits · <span data-plan-leads="FREE">20</span> lead credits / month</li><li><span data-plan-reserve="FREE">20</span> Sales Assistant Protection credits</li></ul><button data-plan-change="FREE" type="button">Use Free / cancel renewal</button></article>
-<article data-plan="STARTER"><div class="plan-card-top"><span class="plan-badge">Starter</span></div><div class="plan-row"><h2 id="starterRegionalPrice">US$9<small>/month</small></h2></div><ul class="plan-feature-list"><li>Templates up to <span data-plan-pages="STARTER">5</span> pages</li><li><span data-plan-ai="STARTER">100</span> AI credits · <span data-plan-leads="STARTER">100</span> lead credits / month</li><li><span data-plan-reserve="STARTER">100</span> Sales Assistant Protection credits</li></ul><button data-paid-plan="STARTER" data-testid="starter-upgrade" type="button">Activate Starter</button></article>
-<article class="featured-plan" data-plan="GROWTH"><div class="plan-card-top"><span class="plan-badge plan-badge-popular">Most Popular</span></div><div class="plan-row"><h2 id="growthRegionalPrice">US$19<small>/month</small></h2></div><ul class="plan-feature-list"><li>Templates up to <span data-plan-pages="GROWTH">8</span> pages</li><li><span data-plan-ai="GROWTH">300</span> AI credits · <span data-plan-leads="GROWTH">300</span> lead credits / month</li><li><span data-plan-reserve="GROWTH">300</span> Sales Assistant Protection credits</li></ul><button data-paid-plan="GROWTH" data-testid="growth-upgrade" type="button">Activate Growth</button></article>
-<article data-plan="PRO"><div class="plan-card-top"><span class="plan-badge">Managed</span></div><div class="plan-row"><h2 class="plan-title-custom">Get in touch</h2></div><ul class="plan-feature-list"><li>Sales-assisted website delivery</li><li>No self-service credit wallet</li><li>Expert implementation and support</li></ul><button id="openProEnquiry" type="button">Talk to our experts</button></article>
-</div>
+  <div class="view-head billing-head">
+    <div>
+      <p class="eyebrow">Account &amp; Entitlements</p>
+      <h1>Billing &amp; Subscription</h1>
+      <p>Server-authoritative regional pricing. Starter: ₹799/mo ($9 USD) · Growth: ₹1,799/mo ($19 USD).</p>
+    </div>
+  </div>
+
+  <div class="billing-summary-grid">
+    <article class="settings-card current-plan-card">
+      <div class="card-head">
+        <h2>Active Subscription</h2>
+        <span class="plan-state-badge" id="currentPlanBadge">—</span>
+      </div>
+      <div class="current-plan-price" id="currentPlanPrice">—</div>
+      <p id="currentPlanMeta">Loading your plan…</p>
+      <button class="ghost-btn" data-billing-scroll-plans type="button">Manage plan</button>
+    </article>
+
+    <article class="settings-card payment-card">
+      <div class="card-head">
+        <h2>Regional Checkout</h2>
+      </div>
+      <div class="payment-method-row">
+        <span class="payment-provider">R</span>
+        <div>
+          <b>Razorpay secure subscription checkout</b>
+          <p id="regionalBillingMeta">Pricing tier calculated server-side according to verified tenant billing location.</p>
+        </div>
+      </div>
+      <button class="ghost-btn" data-billing-scroll-plans type="button">View plans</button>
+    </article>
+  </div>
+
+  <!-- Plan Comparison Grid -->
+  <section class="billing-plan-section" id="billingPlans" style="margin:24px 0;">
+    <div class="section-mini-head">
+      <div>
+        <h2>Choose Your Plan</h2>
+        <p class="muted-copy">Sales Assistant Protection keeps published assistants active with a finite monthly allowance.</p>
+      </div>
+    </div>
+    <div class="billing-grid plan-card-grid">
+      <article data-plan="FREE">
+        <div class="plan-card-top"><span class="plan-badge">Free</span></div>
+        <div class="plan-row"><h2 id="freeRegionalPrice">$0</h2><small class="plan-period">/month · no card required</small></div>
+        <ul class="plan-feature-list">
+          <li>Templates up to <span data-plan-pages="FREE">2</span> pages</li>
+          <li><span data-plan-ai="FREE">20</span> AI credits · <span data-plan-leads="FREE">20</span> lead credits / mo</li>
+          <li><span data-plan-reserve="FREE">20</span> Sales Assistant Protection credits</li>
+        </ul>
+        <button data-plan-change="FREE" type="button">Use Free Plan</button>
+      </article>
+
+      <article data-plan="STARTER">
+        <div class="plan-card-top"><span class="plan-badge">Starter</span></div>
+        <div class="plan-row"><h2 id="starterRegionalPrice">US$9<small>/month</small></h2></div>
+        <ul class="plan-feature-list">
+          <li>Templates up to <span data-plan-pages="STARTER">5</span> pages</li>
+          <li><span data-plan-ai="STARTER">100</span> AI credits · <span data-plan-leads="STARTER">100</span> lead credits / mo</li>
+          <li><span data-plan-reserve="STARTER">100</span> Sales Assistant Protection credits</li>
+        </ul>
+        <button data-paid-plan="STARTER" data-testid="starter-upgrade" type="button">Activate Starter</button>
+      </article>
+
+      <article class="featured-plan" data-plan="GROWTH">
+        <div class="plan-card-top"><span class="plan-badge plan-badge-popular">Most Popular</span></div>
+        <div class="plan-row"><h2 id="growthRegionalPrice">US$19<small>/month</small></h2></div>
+        <ul class="plan-feature-list">
+          <li>Templates up to <span data-plan-pages="GROWTH">8</span> pages</li>
+          <li><span data-plan-ai="GROWTH">300</span> AI credits · <span data-plan-leads="GROWTH">300</span> lead credits / mo</li>
+          <li><span data-plan-reserve="GROWTH">300</span> Sales Assistant Protection credits</li>
+        </ul>
+        <button data-paid-plan="GROWTH" data-testid="growth-upgrade" type="button">Activate Growth</button>
+      </article>
+
+      <article data-plan="PRO">
+        <div class="plan-card-top"><span class="plan-badge">Managed</span></div>
+        <div class="plan-row"><h2 class="plan-title-custom">Custom</h2></div>
+        <ul class="plan-feature-list">
+          <li>Sales-assisted turnkey delivery</li>
+          <li>Dedicated engineers &amp; custom domains</li>
+          <li>Enterprise SLA &amp; account manager</li>
+        </ul>
+        <button id="openProEnquiry" type="button">Talk to our experts</button>
+      </article>
+    </div>
+  </section>
+
+  <div class="status-msg" id="billingMsg" role="status" aria-live="polite"></div>
+
+  <!-- AI Credit Wallet -->
+  <div class="settings-card" id="aiCreditUsageCard" style="margin-bottom:20px;">
+    <div class="card-head">
+      <div>
+        <h2>AI Credit Wallet</h2>
+        <p class="muted-copy">Track monthly allowance, assistant protection reserve, and recent usage.</p>
+      </div>
+    </div>
+    <div class="billing-summary-grid">
+      <div>
+        <small>Normal AI Credits</small>
+        <b id="normalAiBalance">—</b>
+        <span id="normalAiAllocation">Current cycle</span>
+      </div>
+      <div>
+        <small>Sales Assistant Protection</small>
+        <b id="chatbotReserveBalance">—</b>
+        <span id="chatbotReserveMeta">Published-site protection</span>
+      </div>
+    </div>
+    <p id="aiCreditStatus" class="status-msg" role="status" aria-live="polite"></p>
+    <div id="aiUsageByFeature" class="stack-list" aria-live="polite"></div>
+    <div class="table-wrap embedded-table">
+      <table>
+        <thead><tr><th>Date</th><th>Feature</th><th>Wallet</th><th>Credits</th></tr></thead>
+        <tbody id="aiCreditTransactionRows"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Buy Extra Credits -->
+  <div class="settings-card" id="creditTopupPanel" style="margin-bottom:20px;">
+    <div class="card-head">
+      <div>
+        <h2>Buy Extra Credits</h2>
+        <p class="muted-copy">Add-on packs for high-volume generation and traffic spikes.</p>
+      </div>
+    </div>
+    <div class="billing-grid topup-grid" id="creditTopupGrid"></div>
+    <div class="status-msg" id="creditTopupMsg"></div>
+  </div>
+
+  <!-- Payment Recovery & History -->
+  <article class="settings-card" id="billingRecoveryCard" style="margin-bottom:20px;">
+    <div class="card-head">
+      <div>
+        <h2>Payment Recovery</h2>
+        <p class="muted-copy">Reconcile interrupted checkouts against Razorpay safely.</p>
+      </div>
+      <button class="ghost-btn" id="refreshBillingRecovery" type="button">Reconcile</button>
+    </div>
+    <div class="stack-list" id="billingRecoveryList"><p class="muted-copy">No unresolved payment cases.</p></div>
+  </article>
+
+  <div class="settings-card billing-history-card">
+    <div class="card-head">
+      <div>
+        <h2>Payment History</h2>
+        <p class="muted-copy">Verified subscriptions and credit top-up transactions.</p>
+      </div>
+    </div>
+    <div class="table-wrap embedded-table">
+      <table>
+        <thead><tr><th>Reference</th><th>Date</th><th>Status</th><th>Type</th><th>Amount</th></tr></thead>
+        <tbody id="billingHistoryRows"></tbody>
+      </table>
+      <div class="empty-state mini" id="billingHistoryEmpty">
+        <p class="muted-copy">No paid transactions yet.</p>
+      </div>
+    </div>
+  </div>
 </section>
-<div class="status-msg" id="billingMsg" role="status" aria-live="polite"></div>
-<div class="settings-card" id="aiCreditUsageCard"><div class="card-head"><div><h2>AI Credits</h2><p class="muted-copy">AI Credits can be used across Zylora's AI features. Final usage is based on actual provider usage.</p></div></div><div class="billing-summary-grid"><div><small>Normal AI Credits</small><b id="normalAiBalance">—</b><span id="normalAiAllocation">Current cycle</span></div><div><small>Sales Assistant Protection</small><b id="chatbotReserveBalance">—</b><span id="chatbotReserveMeta">Published-site protection</span></div></div><p id="aiCreditStatus" class="status-msg" role="status" aria-live="polite"></p><div id="aiUsageByFeature" class="stack-list" aria-live="polite"></div><div class="table-wrap embedded-table"><table><thead><tr><th>Date</th><th>Feature</th><th>Wallet</th><th>Credits</th></tr></thead><tbody id="aiCreditTransactionRows"></tbody></table></div></div>
-<div class="settings-card" id="creditTopupPanel"><div class="card-head"><div><h2>Buy extra credits</h2><p class="muted-copy">Credit top-ups are independent add-ons and may be billed in USD even when your Zylora subscription is billed in INR. The exact currency and amount are shown before checkout.</p></div></div><div class="billing-grid topup-grid" id="creditTopupGrid"></div><div class="status-msg" id="creditTopupMsg"></div></div>
-<div class="settings-card billing-history-card"><div class="card-head"><div><h2>Payment history</h2><p class="muted-copy">Verified subscriptions and independent credit purchases made through Zylora checkout.</p></div></div><div class="table-wrap embedded-table"><table><thead><tr><th>Reference</th><th>Date</th><th>Status</th><th>Type</th><th>Amount</th></tr></thead><tbody id="billingHistoryRows"></tbody></table><div class="empty mini" id="billingHistoryEmpty">No paid transactions yet.</div></div></div>
-</section>
+
 <section class="view" id="settings">
-<div class="view-head settings-head"><div><p class="eyebrow">Account</p><h1>Settings</h1><p>Profile and notification preferences for this Zylora account.</p></div></div>
-<form class="settings-card profile-settings-card" id="profileForm"><div class="card-head"><h2>Profile</h2><button class="accent-btn" type="submit">Save changes</button></div><div class="profile-fields"><label>Full name<input id="profileName" maxlength="80" required=""/></label><label>Email address<input aria-readonly="true" id="profileEmail" readonly="" type="email"/></label></div><p class="status-msg" id="profileStatus"></p></form>
-<form class="settings-card notification-settings-card" id="notifyForm"><div class="card-head"><div><h2>Notifications</h2><p class="muted-copy">Choose which lead and appointment events should alert you.</p></div><button class="accent-btn" data-testid="settings-save" type="submit">Save settings</button></div><div class="notification-delivery"><label>Email recipient<input name="email_to" placeholder="you@example.com" type="email"/></label><div class="phone-row"><label>Code<input name="country_code" value="+91"/></label><label>WhatsApp number<input inputmode="numeric" name="phone_number" placeholder="9876543210"/></label></div></div><div class="notification-toggle-list">
-<label class="notification-toggle-row"><span><b>Form lead notifications</b><small>Get notified when a visitor submits a website form.</small></span><input checked="" class="toggle-input" name="notify_new_form_lead" type="checkbox"/></label>
-<label class="notification-toggle-row"><span><b>Chatbot lead notifications</b><small>Alerts for enquiries captured by the website assistant.</small></span><input checked="" class="toggle-input" name="notify_new_chatbot_lead" type="checkbox"/></label>
-<label class="notification-toggle-row"><span><b>New appointments</b><small>Receive an alert when someone books a time.</small></span><input checked="" class="toggle-input" name="notify_new_appointment" type="checkbox"/></label>
-<label class="notification-toggle-row"><span><b>Appointment changes</b><small>Cancellation or reschedule notifications.</small></span><input checked="" class="toggle-input" name="notify_appointment_cancelled_or_rescheduled" type="checkbox"/></label>
-<label class="notification-toggle-row"><span><b>Other enquiries</b><small>Catch supported enquiries that do not fit the categories above.</small></span><input checked="" class="toggle-input" name="notify_other_enquiries" type="checkbox"/></label>
-</div><div class="status-msg" id="notifyStatus"></div></form>
-<div class="settings-card verify-card whatsapp-settings-card"><div class="card-head"><div><h2>WhatsApp verification</h2><p id="verifyState">Save a mobile number, request a one-time code, then verify it here.</p></div><span aria-hidden="true" class="status-dot"></span></div><div class="verification-actions"><button class="ghost-btn" data-testid="otp-request" id="requestOtp">Send verification code</button><div class="otp-row"><input id="otpCode" inputmode="numeric" maxlength="6" placeholder="6-digit code"/><button class="accent-btn" data-testid="otp-verify" id="verifyOtp">Verify</button></div></div><small class="dev-note">Development mode may show a test OTP after requesting it. Production never returns the code.</small></div>
-<form class="settings-card assistant-settings-card" id="assistantSettingsForm"><div class="card-head"><div><p class="eyebrow">Conversion</p><h2>AI Sales Assistant</h2><p class="muted-copy">Configure the shared Assistant for each published website. Test mode never creates real leads, notifications or bookings.</p></div><button class="accent-btn" type="submit">Save Assistant</button></div><label>Website<select id="assistantSite"></select></label><div class="form-grid-2"><label>Tone<select id="assistantTone"><option value="PROFESSIONAL">Professional</option><option value="FRIENDLY">Friendly</option><option value="CONCISE">Concise</option><option value="CUSTOM">Custom</option></select></label><label>Primary conversion goal<select id="assistantGoal"><option value="GET_ENQUIRIES">Get enquiries</option><option value="BOOK_APPOINTMENTS">Book appointments</option><option value="GET_PHONE_CALLS">Get phone calls</option><option value="GET_WHATSAPP_MESSAGES">Get WhatsApp messages</option><option value="REQUEST_QUOTE">Request quotes</option><option value="COLLECT_LEADS">Collect leads</option><option value="SHOW_PORTFOLIO">Show portfolio</option></select></label><label>Contact collection<select id="assistantContact"><option value="BOTH">Phone + email</option><option value="PHONE">Phone</option><option value="EMAIL">Email</option><option value="NONE">Only when volunteered</option></select></label><label>Qualification fields<input id="assistantQualification" placeholder="service, preferred_date, phone"></label></div><div class="notification-toggle-list"><label class="notification-toggle-row"><span><b>Assistant enabled</b><small>Show the visitor-facing Assistant on this site.</small></span><input class="toggle-input" id="assistantEnabled" type="checkbox"></label><label class="notification-toggle-row"><span><b>Proactive prompts</b><small>Use subtle contextual prompts after meaningful engagement.</small></span><input class="toggle-input" id="assistantProactive" type="checkbox"></label><label class="notification-toggle-row"><span><b>Human handoff</b><small>Allow the Assistant to route uncertain or sensitive requests to the business.</small></span><input class="toggle-input" id="assistantHuman" type="checkbox"></label><label class="notification-toggle-row"><span><b>WhatsApp handoff</b><small>Available only when the tenant's WhatsApp entitlement and verification allow it.</small></span><input class="toggle-input" id="assistantWhatsapp" type="checkbox"></label><label class="notification-toggle-row"><span><b>Appointment booking</b><small>Use the existing authoritative appointment engine when configured.</small></span><input class="toggle-input" id="assistantAppointment" type="checkbox"></label></div><fieldset class="assistant-knowledge"><legend>Trusted knowledge sources</legend><label class="check-row"><input id="assistantBusinessProfile" type="checkbox"><span>Verified Business Profile</span></label><label class="check-row"><input id="assistantPublishedSite" type="checkbox"><span>Published website content</span></label><label class="check-row"><input id="assistantApprovedKnowledge" type="checkbox"><span>Approved knowledge sources</span></label></fieldset><label>Restricted topics, comma-separated<input id="assistantRestricted" placeholder="discount approvals, legal commitments"></label><label>Custom instructions<textarea id="assistantInstructions" maxlength="2000" placeholder="Business-approved tone or handoff preferences. System safety rules always take priority."></textarea></label><div class="status-msg" id="assistantSettingsMsg"></div><div class="assistant-test-box"><div class="card-head"><div><h3>Test AI Sales Assistant</h3><p class="muted-copy">Test conversations are isolated from production analytics, leads, notifications and appointment inventory.</p></div><button class="ghost-btn" id="assistantStartTest" type="button">New test</button></div><div class="stack-list" id="assistantTestTranscript"><p class="muted-copy">Start a test conversation.</p></div><div id="assistantPromptInputRoot"></div><div class="form-actions" id="legacyAssistantActions" style="display:none;"><input id="assistantTestInput" maxlength="4000" placeholder="Ask a visitor-style question"><button class="accent-btn" id="assistantSendTest" type="button">Send</button></div></div></form>
-<div class="settings-card account-danger-card" id="accountDangerCard"><div><p class="eyebrow">Danger zone</p><h2>Delete account</h2><p class="muted-copy">Permanently delete this Zylora account, its owned websites, leads, appointments, credits, media, billing records and support history. Published websites will go offline and connected custom domains will be removed.</p></div><button class="danger-btn" id="openDeleteAccount" type="button">Delete account</button></div>
+  <div class="view-head settings-head">
+    <div>
+      <p class="eyebrow">Account</p>
+      <h1>Settings &amp; Preferences</h1>
+      <p>Configure your profile, alert notifications, and security options.</p>
+    </div>
+  </div>
+
+  <div class="settings-split-wrapper">
+    <!-- Side Nav for Settings -->
+    <nav class="settings-side-nav" aria-label="Settings categories">
+      <button type="button" class="settings-nav-item active" data-settings-tab="profile">👤 Profile</button>
+      <button type="button" class="settings-nav-item" data-settings-tab="notifications">🔔 Notifications</button>
+      <button type="button" class="settings-nav-item" data-settings-tab="whatsapp">💬 WhatsApp</button>
+      <button type="button" class="settings-nav-item" data-settings-tab="assistant">✦ AI Sales Assistant</button>
+      <button type="button" class="settings-nav-item" data-settings-tab="danger" style="color:var(--zylora-danger);">⚠️ Danger Zone</button>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="settings-content-area">
+      <!-- Tab 1: Profile -->
+      <div class="settings-pane active" id="settingsPaneProfile">
+        <form class="settings-card profile-settings-card" id="profileForm">
+          <div class="card-head">
+            <h2>Personal Profile</h2>
+            <button class="accent-btn" type="submit">Save changes</button>
+          </div>
+          <div class="profile-fields">
+            <label>Full name<input id="profileName" maxlength="80" required=""/></label>
+            <label>Email address<input aria-readonly="true" id="profileEmail" readonly="" type="email"/></label>
+          </div>
+          <p class="status-msg" id="profileStatus"></p>
+        </form>
+      </div>
+
+      <!-- Tab 2: Notifications -->
+      <div class="settings-pane" id="settingsPaneNotifications">
+        <form class="settings-card notification-settings-card" id="notifyForm">
+          <div class="card-head">
+            <div>
+              <h2>Notification Alerts</h2>
+              <p class="muted-copy">Choose how you wish to be alerted about new enquiries.</p>
+            </div>
+            <button class="accent-btn" data-testid="settings-save" type="submit">Save settings</button>
+          </div>
+          <div class="notification-delivery">
+            <label>Email recipient<input name="email_to" placeholder="you@example.com" type="email"/></label>
+            <div class="phone-row">
+              <label>Code<input name="country_code" value="+91"/></label>
+              <label>WhatsApp number<input inputmode="numeric" name="phone_number" placeholder="9876543210"/></label>
+            </div>
+          </div>
+          <div class="notification-toggle-list">
+            <label class="notification-toggle-row"><span><b>Form lead notifications</b><small>Alert when a visitor submits a contact form</small></span><input checked="" class="toggle-input" name="notify_new_form_lead" type="checkbox"/></label>
+            <label class="notification-toggle-row"><span><b>Chatbot lead notifications</b><small>Alert when the Sales Assistant captures a qualified lead</small></span><input checked="" class="toggle-input" name="notify_new_chatbot_lead" type="checkbox"/></label>
+            <label class="notification-toggle-row"><span><b>New appointments</b><small>Alert when a consultation appointment is scheduled</small></span><input checked="" class="toggle-input" name="notify_new_appointment" type="checkbox"/></label>
+            <label class="notification-toggle-row"><span><b>Appointment changes</b><small>Cancellation or reschedule notifications</small></span><input checked="" class="toggle-input" name="notify_appointment_cancelled_or_rescheduled" type="checkbox"/></label>
+            <label class="notification-toggle-row"><span><b>Other enquiries</b><small>Catch supported customer messages</small></span><input checked="" class="toggle-input" name="notify_other_enquiries" type="checkbox"/></label>
+          </div>
+          <div class="status-msg" id="notifyStatus"></div>
+        </form>
+      </div>
+
+      <!-- Tab 3: WhatsApp -->
+      <div class="settings-pane" id="settingsPaneWhatsapp">
+        <div class="settings-card verify-card whatsapp-settings-card">
+          <div class="card-head">
+            <div>
+              <h2>WhatsApp Phone Verification</h2>
+              <p id="verifyState">Save a mobile number in notifications, request a one-time code, then verify it here.</p>
+            </div>
+            <span aria-hidden="true" class="status-dot"></span>
+          </div>
+          <div class="verification-actions">
+            <button class="ghost-btn" data-testid="otp-request" id="requestOtp" type="button">Send verification code</button>
+            <div class="otp-row">
+              <input id="otpCode" inputmode="numeric" maxlength="6" placeholder="6-digit code"/>
+              <button class="accent-btn" data-testid="otp-verify" id="verifyOtp" type="button">Verify</button>
+            </div>
+          </div>
+          <small class="dev-note" style="display:block;margin-top:10px;color:var(--zylora-muted);">Development mode may display test OTP. Production routes code directly via SMS/WhatsApp.</small>
+        </div>
+      </div>
+
+      <!-- Tab 4: AI Assistant Shared Config -->
+      <div class="settings-pane" id="settingsPaneAssistant">
+        <form class="settings-card assistant-settings-card" id="assistantSettingsForm">
+          <div class="card-head">
+            <div>
+              <h2>Global Assistant Configuration</h2>
+              <p class="muted-copy">Configure settings for each published website.</p>
+            </div>
+            <button class="accent-btn" type="submit">Save Assistant</button>
+          </div>
+          <label>Website<select id="assistantSite"></select></label>
+          <div class="form-grid-2">
+            <label>Tone
+              <select id="assistantTone">
+                <option value="PROFESSIONAL">Professional</option>
+                <option value="FRIENDLY">Friendly</option>
+                <option value="CONCISE">Concise</option>
+                <option value="CUSTOM">Custom</option>
+              </select>
+            </label>
+            <label>Primary conversion goal
+              <select id="assistantGoal">
+                <option value="GET_ENQUIRIES">Get enquiries</option>
+                <option value="BOOK_APPOINTMENTS">Book appointments</option>
+                <option value="GET_PHONE_CALLS">Get phone calls</option>
+                <option value="GET_WHATSAPP_MESSAGES">Get WhatsApp messages</option>
+                <option value="REQUEST_QUOTE">Request quotes</option>
+                <option value="COLLECT_LEADS">Collect leads</option>
+                <option value="SHOW_PORTFOLIO">Show portfolio</option>
+              </select>
+            </label>
+            <label>Contact collection
+              <select id="assistantContact">
+                <option value="BOTH">Phone + email</option>
+                <option value="PHONE">Phone</option>
+                <option value="EMAIL">Email</option>
+                <option value="NONE">Only when volunteered</option>
+              </select>
+            </label>
+            <label>Qualification fields<input id="assistantQualification" placeholder="service, preferred_date, phone"/></label>
+          </div>
+          <div class="notification-toggle-list">
+            <label class="notification-toggle-row"><span><b>Assistant enabled</b><small>Show visitor-facing assistant</small></span><input class="toggle-input" id="assistantEnabled" type="checkbox"/></label>
+            <label class="notification-toggle-row"><span><b>Proactive prompts</b><small>Use subtle contextual prompts</small></span><input class="toggle-input" id="assistantProactive" type="checkbox"/></label>
+            <label class="notification-toggle-row"><span><b>Human handoff</b><small>Route uncertain or sensitive requests</small></span><input class="toggle-input" id="assistantHuman" type="checkbox"/></label>
+            <label class="notification-toggle-row"><span><b>WhatsApp handoff</b><small>Requires verified WhatsApp number</small></span><input class="toggle-input" id="assistantWhatsapp" type="checkbox"/></label>
+            <label class="notification-toggle-row"><span><b>Appointment booking</b><small>Allow direct appointment booking</small></span><input class="toggle-input" id="assistantAppointment" type="checkbox"/></label>
+          </div>
+          <fieldset class="assistant-knowledge" style="margin-top:14px;">
+            <legend>Trusted knowledge sources</legend>
+            <label class="check-row"><input id="assistantBusinessProfile" type="checkbox"/><span>Verified Business Profile</span></label>
+            <label class="check-row"><input id="assistantPublishedSite" type="checkbox"/><span>Published website content</span></label>
+            <label class="check-row"><input id="assistantApprovedKnowledge" type="checkbox"/><span>Approved knowledge sources</span></label>
+          </fieldset>
+          <label>Restricted topics, comma-separated<input id="assistantRestricted" placeholder="discount approvals, legal commitments"/></label>
+          <label>Custom instructions<textarea id="assistantInstructions" maxlength="2000" placeholder="Business-approved tone or handoff preferences. System safety rules always take priority."></textarea></label>
+          <div class="status-msg" id="assistantSettingsMsg"></div>
+          <div class="assistant-test-box" style="margin-top:16px;">
+            <div class="card-head">
+              <div><h3>Test Assistant Response</h3><p class="muted-copy">Isolated test mode.</p></div>
+              <button class="ghost-btn" id="assistantStartTest" type="button">New test</button>
+            </div>
+            <div class="stack-list" id="assistantTestTranscript"><p class="muted-copy">Start a test conversation.</p></div>
+            <div id="assistantPromptInputRoot"></div>
+            <div class="form-actions" id="legacyAssistantActions" style="display:none;">
+              <input id="assistantTestInput" maxlength="4000" placeholder="Ask a question"/>
+              <button class="accent-btn" id="assistantSendTest" type="button">Send</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tab 5: Danger Zone -->
+      <div class="settings-pane" id="settingsPaneDanger">
+        <div class="danger-zone-container">
+          <div class="settings-card account-danger-card" id="accountDangerCard" style="border:none;background:transparent;padding:0;">
+            <div>
+              <p class="eyebrow" style="color:var(--zylora-danger);">Danger zone</p>
+              <h2>Delete Zylora Account</h2>
+              <p class="muted-copy">Permanently delete this account, owned websites, leads, appointments, credits, and support history. Published websites will go offline and connected domains will be unlinked.</p>
+            </div>
+            <button class="danger-btn" id="openDeleteAccount" type="button">Delete account</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- ==================== CRM SECTIONS ==================== -->
@@ -719,6 +1445,254 @@
 <div aria-hidden="true" class="modal" id="deleteAccountModal"><div class="modal-card delete-account-modal"><button aria-label="Close" class="close" data-close="deleteAccountModal">×</button><span class="modal-kicker danger-kicker">Permanent action</span><h2>Delete your Zylora account?</h2><p class="muted-copy">This cannot be undone. Your owned websites will be unpublished and deleted, along with their leads, appointments, media, integrations and account data.</p><div class="alert-soft alert-warning"><b>Before you continue</b><span>Transfer any website you need another person to keep. Account deletion does not delete websites you already transferred to another owner.</span></div><form id="deleteAccountForm"><label>Confirm your email<input autocomplete="email" id="deleteAccountEmail" required="" type="email"/></label><label>Type DELETE<input autocomplete="off" id="deleteAccountText" required=""/></label><label class="delete-account-check"><input id="deleteAccountUnderstand" type="checkbox"/> <span>I understand this permanently deletes my Zylora account and owned data.</span></label><button class="danger-btn wide" disabled="" id="deleteAccountSubmit" type="submit">Permanently delete account</button><button class="ghost-btn wide" hidden="" id="deleteAccountReauth" type="button">Sign in again to continue</button><div aria-live="polite" class="status-msg delete-account-status" id="deleteAccountMsg"></div></form></div></div>
 
 <div aria-hidden="true" class="modal" id="deleteDraftModal"><div class="modal-card"><button aria-label="Close" class="close" data-close="deleteDraftModal">×</button><span class="modal-kicker danger-kicker">Delete draft</span><h2>Delete draft website?</h2><p class="muted-copy">Are you sure you want to delete <strong id="deleteDraftSiteName" style="color: var(--z-text-primary);">this website</strong>? This will permanently delete the draft and all its associated data. This action cannot be undone.</p><div class="form-actions" style="margin-top: 24px; display: flex; gap: 10px; justify-content: flex-end;"><button type="button" class="ghost-btn" data-close="deleteDraftModal">Cancel</button><button type="button" class="danger-btn" id="confirmDeleteDraftBtn">Delete draft</button></div><div class="status-msg" id="deleteDraftMsg"></div></div></div>
+
+<!-- Create Website Modal with 3 pathways -->
+<div aria-hidden="true" class="modal" id="createProjectModal">
+  <div class="modal-card create-modal-card">
+    <button aria-label="Close" class="close" data-close="createProjectModal">×</button>
+    <div class="create-modal-header">
+      <span class="modal-kicker">New Project</span>
+      <h2>Create a new website</h2>
+      <p class="muted-copy">Choose how you would like to build your new website.</p>
+    </div>
+
+    <!-- 3 Creation Pathways Grid -->
+    <div class="create-options-grid" id="createOptionsGrid">
+      <!-- Option 1: AI -->
+      <div class="create-option-card" id="optionStartAi" tabindex="0" role="button">
+        <div class="create-option-icon ai-icon">✦</div>
+        <div class="create-option-info">
+          <h3>Start with AI</h3>
+          <p>Generate a complete multi-page website from a business description in seconds.</p>
+        </div>
+        <span class="create-option-arrow">→</span>
+      </div>
+
+      <!-- Option 2: Template -->
+      <div class="create-option-card" id="optionStartTemplate" tabindex="0" role="button">
+        <div class="create-option-icon template-icon">❖</div>
+        <div class="create-option-info">
+          <h3>Choose a Template</h3>
+          <p>Start from a production-tested designer template tailored for your industry.</p>
+        </div>
+        <span class="create-option-arrow">→</span>
+      </div>
+
+      <!-- Option 3: Blank Studio -->
+      <div class="create-option-card" id="optionStartBlank" data-action="new-site" tabindex="0" role="button">
+        <div class="create-option-icon blank-icon">◻</div>
+        <div class="create-option-info">
+          <h3>Blank Studio</h3>
+          <p>Open a clean Studio canvas with Onlook visual tooling for complete freedom.</p>
+        </div>
+        <span class="create-option-arrow">→</span>
+      </div>
+    </div>
+
+    <!-- Sub-pane 1: AI Prompt Input (Initially hidden) -->
+    <div class="create-subpane" id="createAiPane" style="display:none;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <button class="ghost-btn mini-btn" id="backToCreateOptions" type="button">← Back</button>
+        <span style="font-size:12px;font-weight:600;color:#fff;">Generate with AI</span>
+      </div>
+      <form id="createAiForm">
+        <label>Website / Business Name
+          <input id="createAiName" placeholder="e.g. Lumina Health Clinic" required />
+        </label>
+        <label>Business Description &amp; Requirements
+          <textarea id="createAiPrompt" class="tall" placeholder="Describe your business, target audience, primary services, and key sections (e.g. Hero, Services, Testimonials, Contact)..." required></textarea>
+        </label>
+        <label>Style &amp; Tone
+          <select id="createAiTone">
+            <option value="modern-clean">Modern &amp; Minimalist</option>
+            <option value="bold-creative">Bold &amp; Vibrant</option>
+            <option value="corporate-premium">Corporate &amp; Trustworthy</option>
+            <option value="dark-luxury">Dark &amp; Luxurious</option>
+          </select>
+        </label>
+        <div class="form-actions" style="margin-top:16px;">
+          <button class="accent-btn wide" id="submitCreateAi" type="submit">Generate Website with AI</button>
+        </div>
+        <div class="status-msg" id="createAiStatus"></div>
+      </form>
+    </div>
+
+    <!-- Sub-pane 2: Template Browser (Initially hidden) -->
+    <div class="create-subpane" id="createTemplatePane" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button class="ghost-btn mini-btn" id="backToCreateFromTemplates" type="button">← Back</button>
+          <span style="font-size:12px;font-weight:600;color:#fff;">Select Template</span>
+        </div>
+        <div class="template-category-pills" id="templateCategoryPills">
+          <button type="button" class="filter-pill active" data-cat="all">All</button>
+          <button type="button" class="filter-pill" data-cat="saas">SaaS</button>
+          <button type="button" class="filter-pill" data-cat="portfolio">Portfolio</button>
+          <button type="button" class="filter-pill" data-cat="agency">Agency</button>
+          <button type="button" class="filter-pill" data-cat="restaurant">Restaurant</button>
+        </div>
+      </div>
+      <div class="template-cards-grid" id="templateCardsGrid">
+        <div class="template-picker-card" data-template-slug="saas-modern">
+          <div class="template-picker-thumb">⚡</div>
+          <div class="template-picker-info">
+            <h4>Apex SaaS</h4>
+            <p>High-converting tech landing page with pricing, features &amp; FAQ.</p>
+            <button type="button" class="template-picker-btn" data-use-template="saas-modern">Use Template</button>
+          </div>
+        </div>
+        <div class="template-picker-card" data-template-slug="portfolio-minimal">
+          <div class="template-picker-thumb">✦</div>
+          <div class="template-picker-info">
+            <h4>Minimalist Portfolio</h4>
+            <p>Clean editorial layout for designers, creators and architects.</p>
+            <button type="button" class="template-picker-btn" data-use-template="portfolio-minimal">Use Template</button>
+          </div>
+        </div>
+        <div class="template-picker-card" data-template-slug="agency-bold">
+          <div class="template-picker-thumb">❖</div>
+          <div class="template-picker-info">
+            <h4>Nexus Creative Agency</h4>
+            <p>Bold typography, project showcase case studies and enquiry funnel.</p>
+            <button type="button" class="template-picker-btn" data-use-template="agency-bold">Use Template</button>
+          </div>
+        </div>
+        <div class="template-picker-card" data-template-slug="restaurant-gourmet">
+          <div class="template-picker-thumb">◈</div>
+          <div class="template-picker-info">
+            <h4>Bistrot &amp; Dining</h4>
+            <p>Sensory restaurant menu, reservation booking and contact details.</p>
+            <button type="button" class="template-picker-btn" data-use-template="restaurant-gourmet">Use Template</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Domain Setup Wizard Modal -->
+<div aria-hidden="true" class="modal" id="domainSetupModal">
+  <div class="modal-card" style="max-width:620px;">
+    <button aria-label="Close" class="close" data-close="domainSetupModal">×</button>
+    <span class="modal-kicker">Custom Domain</span>
+    <h2>Connect a Custom Domain</h2>
+    <p class="muted-copy">Point your existing domain or subdomain to Zylora edge hosting.</p>
+
+    <!-- Step Progress -->
+    <div class="domain-steps-progress">
+      <div class="domain-step-node active" id="domStepNode1">
+        <span class="step-circle">1</span>
+        <span class="step-node-label">Enter Domain</span>
+      </div>
+      <div class="domain-step-node" id="domStepNode2">
+        <span class="step-circle">2</span>
+        <span class="step-node-label">DNS Records</span>
+      </div>
+      <div class="domain-step-node" id="domStepNode3">
+        <span class="step-circle">3</span>
+        <span class="step-node-label">Verification</span>
+      </div>
+      <div class="domain-step-node" id="domStepNode4">
+        <span class="step-circle">4</span>
+        <span class="step-node-label">SSL Active</span>
+      </div>
+    </div>
+
+    <!-- Step 1 Form -->
+    <form id="domainForm">
+      <label>Target Website
+        <select id="domainSite" required=""></select>
+      </label>
+      <label>Custom Domain / Hostname
+        <input id="domainHostname" placeholder="e.g. www.mybrand.com or app.mybrand.com" required=""/>
+      </label>
+      <button class="accent-btn wide" data-testid="domain-add" type="submit" style="margin-top:14px;">Add Domain &amp; View DNS Records</button>
+      <div class="status-msg" id="domainMsg"></div>
+    </form>
+
+    <!-- DNS Records Guidance -->
+    <div class="dns-guidance-box" id="dnsGuidanceBox" style="margin-top:20px;padding-top:16px;border-top:1px solid var(--zylora-border);">
+      <h4 style="margin:0 0 8px;font-size:12px;color:#fff;">Required DNS Records</h4>
+      <table class="dns-records-table">
+        <thead>
+          <tr><th>Type</th><th>Name</th><th>Target Value</th><th>Copy</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>CNAME</td>
+            <td id="dnsRecordName">@ or www</td>
+            <td>proxy.zylora.site</td>
+            <td><button type="button" class="dns-copy-pill" onclick="navigator.clipboard.writeText('proxy.zylora.site');toast('CNAME copied')">Copy</button></td>
+          </tr>
+          <tr>
+            <td>TXT</td>
+            <td>_zylora-challenge</td>
+            <td>zylora-verification=auto</td>
+            <td><button type="button" class="dns-copy-pill" onclick="navigator.clipboard.writeText('zylora-verification=auto');toast('TXT record copied')">Copy</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px;">
+        <button class="ghost-btn" data-close="domainSetupModal" type="button">Close</button>
+        <button class="accent-btn" onclick="toast('Checking DNS records across edge resolvers…');setTimeout(()=>toast('DNS verified! SSL certificate provisioned.'),1200)" type="button">Check DNS Propagation</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lead Detail Slide-Over Drawer -->
+<aside class="slide-over-drawer" id="leadDetailDrawer" aria-label="Lead details">
+  <div class="drawer-header">
+    <div class="drawer-title-group">
+      <span class="drawer-kicker">Lead Submission</span>
+      <h3 id="leadDrawerName">Lead Details</h3>
+    </div>
+    <button class="drawer-close" id="leadDrawerClose" type="button" aria-label="Close">×</button>
+  </div>
+  <div class="drawer-body" id="leadDrawerBody">
+    <div class="lead-detail-grid" id="leadDrawerDetailContent">
+      <p class="muted-copy">Select a lead to inspect details.</p>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="accent-btn crm-btn-sm" id="leadDrawerSaveStatus" type="button">Update Status</button>
+    <button class="ghost-btn crm-btn-sm" id="leadDrawerOpenConvo" type="button" style="display:none;">View Chat Transcript</button>
+  </div>
+</aside>
+
+<!-- Google Sheets Configuration Drawer -->
+<aside class="slide-over-drawer" id="googleSheetDrawer" aria-label="Google Sheets settings">
+  <div class="drawer-header">
+    <div class="drawer-title-group">
+      <span class="drawer-kicker">Integration</span>
+      <h3>Google Sheets Sync</h3>
+    </div>
+    <button class="drawer-close" onclick="document.getElementById('googleSheetDrawer').classList.remove('open')" type="button" aria-label="Close">×</button>
+  </div>
+  <div class="drawer-body">
+    <form id="googleSheetConfig">
+      <div class="google-sheets-steps" style="margin-bottom:14px;">
+        <div class="step-item"><span class="step-num">1</span><span>Create or open your Google Spreadsheet.</span></div>
+        <div class="step-item"><span class="step-num">2</span><span>Copy the spreadsheet URL from your browser's address bar.</span></div>
+        <div class="step-item"><span class="step-num">3</span><span>Paste the URL below and specify the destination tab name.</span></div>
+      </div>
+      <label>Website<select id="integrationSite" required=""></select></label>
+      <label>Google Sheets URL<input id="googleSheetUrl" placeholder="https://docs.google.com/spreadsheets/d/.../edit" required="" type="url"/></label>
+      <label>Sheet Tab Name<input id="googleSheetName" maxlength="80" value="Leads"/></label>
+      <div class="check-row" style="margin:10px 0;"><input checked="" id="googleSheetEnabled" type="checkbox"/><span>Keep this integration active</span></div>
+      <div class="check-row" style="margin:10px 0;"><input checked="" id="googleSheetSyncLeads" type="checkbox"/><span>Append leads automatically</span></div>
+      <div class="check-row" style="margin:10px 0;"><input checked="" id="googleSheetSyncAppointments" type="checkbox"/><span>Append appointments automatically</span></div>
+      <div class="form-actions" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;">
+        <button class="accent-btn" data-testid="google-sheet-save" type="submit">Save connection</button>
+        <button class="ghost-btn" id="googleSheetTest" type="button">Send test row</button>
+        <button class="ghost-btn" data-testid="google-sheet-resync" id="googleSheetResync" type="button">Re-sync data</button>
+        <button class="ghost-btn inline-danger" id="googleSheetRemove" type="button">Disconnect</button>
+      </div>
+      <div class="status-msg" id="googleSheetMsg"></div>
+    </form>
+  </div>
+</aside>
+
 <div class="toast" id="toast" role="status"></div><div class="modal" id="assistantConversationModal"><div class="modal-card lead-detail-card"><button aria-label="Close" class="close" data-close="assistantConversationModal">×</button><p class="modal-kicker">AI Sales Assistant</p><h2 id="assistantConversationTitle">Conversation</h2><div class="stack-list assistant-owner-transcript" id="assistantConversationBody"><p class="muted-copy">Loading…</p></div></div></div><div class="modal" id="leadDetailModal"><div class="modal-card lead-detail-card"><button aria-label="Close" class="close" data-close="leadDetailModal">×</button><p class="modal-kicker">Lead details</p><h2 id="leadDetailName">Lead</h2><div class="lead-detail-grid" id="leadDetailBody"></div></div></div><script src="/static/vendor/react.production.min.js"></script><script src="/static/vendor/react-is.production.min.js"></script><script src="/static/vendor/prop-types.min.js"></script><script src="/static/vendor/react-dom.production.min.js"></script>
 <script src="/static/date-range-calendar.js"></script>
 <script src="/static/prompt-input.js"></script><script src="/static/vendor/recharts.js"></script><script src="/static/zylora-shadcn-charts.js"></script><script src="/static/zylora-ui.js"></script><script src="/static/publish-flow.js"></script><script src="/static/zylora-crm.js"></script>

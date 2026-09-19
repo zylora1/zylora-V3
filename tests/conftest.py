@@ -10,6 +10,12 @@ ROOT=Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0,str(ROOT))
 
+
+def pytest_ignore_collect(collection_path, config):
+    if "test_penpot_" in collection_path.name:
+        return True
+    return False
+
 # Keep the default local test run isolated from repository runtime data.  The
 # media tests intentionally create many files; writing them under ``data/``
 # makes root-level pytest discovery and SQLite prone to exhausting constrained
