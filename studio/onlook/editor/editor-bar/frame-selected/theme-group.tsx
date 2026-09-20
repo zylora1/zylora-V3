@@ -11,7 +11,6 @@ export function ThemeGroup({ frameData }: { frameData: FrameData }) {
     useEffect(() => {
         const getTheme = async () => {
             if (!frameData?.view || typeof frameData.view.getTheme !== 'function') {
-                console.error('No frame view found');
                 return;
             }
 

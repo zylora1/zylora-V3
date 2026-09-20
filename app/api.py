@@ -172,6 +172,24 @@ def _publish_plan_options() -> list[dict]:
     return items
 
 
+def _strip_code_preview_runtime(dist_dir):
+    """Remove editor-only preview hooks from a published code artifact."""
+    index = dist_dir / 'index.html'
+    if index.is_file():
+        source = index.read_text(encoding='utf-8', errors='replace')
+        source = re.sub(
+            r'<script\b[^>]*\bsrc=["\']/(?:onlook-preload-script|zylora-instrumentation)\.js["\'][^>]*>\s*</script>',
+            '',
+            source,
+            flags=re.IGNORECASE,
+        )
+        index.write_text(source, encoding='utf-8')
+    for filename in ('onlook-preload-script.js', 'zylora-instrumentation.js'):
+        generated = dist_dir / filename
+        if generated.is_file():
+            generated.unlink()
+
+
 def _structural_snapshot_for_site(db, site: dict) -> dict:
     existing=site.get('template_default_structural_snapshot_json')
     if existing:
@@ -992,6 +1010,7 @@ def publish(site_id:str,request:Request,payload:PublishIn|None=None):
                 pub_dir = (ROOT / 'data' / 'published-code' / site_id / str(next_revision)).resolve()
                 pub_dir.mkdir(parents=True, exist_ok=True)
                 shutil.copytree(dist_dir, pub_dir, dirs_exist_ok=True)
+                _strip_code_preview_runtime(pub_dir)
     for old_path,new_path in redirect_pairs:
         create_redirect(site_id,old_path,new_path)
     _audit(u['id'],'SITE_PUBLISH','site',site_id,{'custom_domains_transferred':transferred_domains,'plan':active_plan,'is_paid':plan_is_paid(active_plan),**projection_meta})
@@ -1033,6 +1052,7 @@ def rollback_published(site_id:str,revision:int,request:Request):
             if source_rev_dir.is_dir():
                 target_rev_dir.mkdir(parents=True, exist_ok=True)
                 shutil.copytree(source_rev_dir, target_rev_dir, dirs_exist_ok=True)
+                _strip_code_preview_runtime(target_rev_dir)
     _audit(u['id'],'SITE_ROLLBACK','site',site_id,{'restored_revision':revision,'new_revision':next_revision})
     return {'ok':True,'restored_revision':revision,'published_revision':next_revision}
 

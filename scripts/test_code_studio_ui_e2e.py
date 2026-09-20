@@ -152,8 +152,8 @@ def run(browser_filter: list[str] | None = None):
             page.on("pageerror", record_page_error)
             page.add_init_script("window.__ZYLORA_TRPC_TRACE_ENABLED__ = true")
 
-            client = TestClient(app)
             uid = f"{browser_type[:4]}_{uuid.uuid4().hex[:6]}"
+            client = TestClient(app, client=(f"cert-{uid}", 50000))
             user_email = f"user_{uid}@example.com"
             user_pass = "Password123!"
 
@@ -173,6 +173,7 @@ def run(browser_filter: list[str] | None = None):
             page.click('button[type="submit"]')
             page.wait_for_url(re.compile(r"/dashboard"), timeout=15000)
             check("/dashboard" in page.url, f"[{browser_type}] Authenticated and redirected to /dashboard")
+            page.wait_for_load_state("networkidle", timeout=15000)
 
             # Create Code Site
             code_site_res = client.post("/api/sites/blank", headers={"X-CSRF-Token": csrf}, json={"name": f"Code Project {uid}"})
@@ -323,15 +324,23 @@ export default function PricingCard({ plan = 'Pro', price = '$29' }) {
             check(page.is_visible('[data-subsystem="onlook-code-panel"]'), f"[{browser_type}] Code editor panel active")
 
             code_panel_text = f"{browser_type.title()} Code Panel Verified"
-            current_code = adapter.read_file("src/App.jsx")
-            # Append a valid source comment so the test does not depend on a hidden
-            # textarea or a particular starter string surviving a source transform.
-            edited_code = current_code.rstrip() + f"\n// {code_panel_text}\n"
-            editor = page.locator('.cm-editor:visible').first
-            editor.click()
-            page.keyboard.press("ControlOrMeta+A")
-            page.keyboard.insert_text(edited_code)
-            page.click('[data-testid="save-code-btn"]')
+            editor = page.locator('[data-subsystem="onlook-code-panel"] .cm-editor:visible').first
+            editor.wait_for(state="visible", timeout=5000)
+            editor_content = page.locator('[data-subsystem="onlook-code-panel"] .cm-content:visible').first
+            editor_content.wait_for(state="visible", timeout=5000)
+            editor_content.click()
+            editor_content.press("Control+End")
+            page.keyboard.type(f"\n// {code_panel_text}\n")
+            deadline = time.time() + 5.0
+            while time.time() < deadline and code_panel_text not in (editor_content.text_content() or ""):
+                time.sleep(0.1)
+            check(code_panel_text in (editor_content.text_content() or ""), f"[{browser_type}] CodeMirror rendered the requested source edit")
+            save_button = page.locator('[data-testid="save-code-btn"]')
+            deadline = time.time() + 5.0
+            while time.time() < deadline and not save_button.is_enabled():
+                time.sleep(0.1)
+            check(save_button.is_enabled(), f"[{browser_type}] CodeMirror edit enables the real Save control")
+            save_button.click()
 
             deadline = time.time() + 10.0
             while time.time() < deadline:
@@ -360,7 +369,9 @@ export default function PricingCard({ plan = 'Pro', price = '$29' }) {
 
                 # Set v1 production copy
                 v1_text = "Zylora final production certification"
-                app_jsx_v1 = adapter.read_file("src/App.jsx").replace(code_panel_text, v1_text)
+                current_app_jsx = adapter.read_file("src/App.jsx")
+                app_jsx_v1 = current_app_jsx.replace("Hello Onlook", v1_text, 1)
+                check(app_jsx_v1 != current_app_jsx, "Rendered heading exists before production revision 1")
                 adapter.write_file("src/App.jsx", app_jsx_v1)
 
                 # 1. Run production build via sandbox command API
@@ -397,6 +408,8 @@ export default function PricingCard({ plan = 'Pro', price = '$29' }) {
                 page.wait_for_function(f"() => (document.getElementById('root')?.innerText || '').includes('{v1_text}')", timeout=15000)
                 live_html_v1 = page.content()
                 check(v1_text in live_html_v1, f"Live public site serves production code containing '{v1_text}'")
+                check("onlook-preload-script.js" not in live_html_v1, "Published site excludes the Onlook preview preload")
+                check("zylora-instrumentation.js" not in live_html_v1, "Published site excludes the Studio DOM instrumentation")
 
                 # 4. Publish Version 2
                 print("[*] Performing second edit and publishing version 2...")
@@ -424,6 +437,8 @@ export default function PricingCard({ plan = 'Pro', price = '$29' }) {
                 page.wait_for_function(f"() => (document.getElementById('root')?.innerText || '').includes('{v2_text}')", timeout=15000)
                 live_html_v2 = page.content()
                 check(v2_text in live_html_v2, f"Live public route updated to version 2 containing '{v2_text}'")
+                check("onlook-preload-script.js" not in live_html_v2, "Published revision 2 excludes the Onlook preview preload")
+                check("zylora-instrumentation.js" not in live_html_v2, "Published revision 2 excludes the Studio DOM instrumentation")
 
                 # 5. Execute Rollback to Version 1
                 print("[*] Executing rollback to published revision 1...")
@@ -435,6 +450,8 @@ export default function PricingCard({ plan = 'Pro', price = '$29' }) {
                 live_html_rolled_back = page.content()
                 check(v1_text in live_html_rolled_back, f"Live public route reverted to version 1 containing '{v1_text}'")
                 check(v2_text not in live_html_rolled_back, "Version 2 content cleanly removed by rollback")
+                check("onlook-preload-script.js" not in live_html_rolled_back, "Rolled-back site excludes the Onlook preview preload")
+                check("zylora-instrumentation.js" not in live_html_rolled_back, "Rolled-back site excludes the Studio DOM instrumentation")
 
                 print("\n>>> GATE 4 CERTIFIED: CODE-MODE PRODUCTION BUILD, PUBLISH, LIVE VERIFY & ROLLBACK CONFIRMED <<<\n")
 

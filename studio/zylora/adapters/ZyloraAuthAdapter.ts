@@ -25,6 +25,7 @@ export class ZyloraAuthAdapter {
       if (meta?.content) return meta.content;
       const ctx = (window as any).ZYLORA_STUDIO_CONTEXT;
       if (ctx?.csrf) return ctx.csrf;
+      if (ctx?.csrfToken) return ctx.csrfToken;
     }
     return '';
   }

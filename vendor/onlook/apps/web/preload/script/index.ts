@@ -34,6 +34,19 @@ const findOnlookParent = (): Window => {
     return window.parent;
 };
 
+/** Resolve the embedding application's origin without falling back to a wildcard. */
+const getParentOrigin = (): string | null => {
+    try {
+        const configuredOrigin = new URL(window.location.href).searchParams.get('zylora_parent_origin');
+        if (configuredOrigin) return new URL(configuredOrigin).origin;
+        const referrer = document.referrer;
+        if (!referrer) return null;
+        return new URL(referrer).origin;
+    } catch {
+        return null;
+    }
+};
+
 const createMessageConnection = async () => {
     if (isConnecting || penpalParent) {
         return penpalParent;
@@ -42,10 +55,20 @@ const createMessageConnection = async () => {
     isConnecting = true;
     console.log(`${PENPAL_CHILD_CHANNEL} - Creating penpal connection`);
 
+    const parentOrigin = getParentOrigin();
+    if (!parentOrigin) {
+        // A published page may contain the bootstrap asset but is not embedded
+        // in Studio. Refuse wildcard trust and stay a quiet top-level no-op.
+        if (window !== window.top) {
+            console.error(`${PENPAL_CHILD_CHANNEL} - Missing embedding origin; refusing wildcard connection`);
+        }
+        isConnecting = false;
+        return null;
+    }
+
     const messenger = new WindowMessenger({
         remoteWindow: findOnlookParent(),
-        // TODO: Use a proper origin
-        allowedOrigins: ['*'],
+        allowedOrigins: [parentOrigin],
     });
 
     const connection = connect({

@@ -2,7 +2,7 @@
 
 Certifies:
 - Gate 1: PostgreSQL 18 Production-Like Runtime across Chromium, Firefox, WebKit
-  (Real Uvicorn, 51 migrations, idempotency, login, dashboard, native studio edit/persist/publish/rollback)
+  (Real Uvicorn, current migrations, idempotency, login, dashboard, native studio edit/persist/publish/rollback)
 - Gate 3: Real Bidirectional Penpal RPC Handshake across Chromium, Firefox, WebKit
   (Child iframe ping -> Parent receives pong via postMessage RPC, __PENPAL_RPC_STATUS__ verified)
 """
@@ -29,7 +29,10 @@ if hasattr(sys.stderr, 'reconfigure'):
     sys.stderr.reconfigure(encoding='utf-8', errors='backslashreplace')
 
 # Configure PostgreSQL Database
-PG_URL = "postgresql://postgres:postgres@127.0.0.1:5432/zylora_prod_cert"
+PG_URL = os.environ.get(
+    "ZYLORA_CERT_DATABASE_URL",
+    "postgresql://postgres:postgres@127.0.0.1:5432/zylora_prod_cert",
+)
 os.environ["APP_ENV"] = "test"
 os.environ["DATABASE_URL"] = PG_URL
 
@@ -106,7 +109,7 @@ def run():
     with engine.connect() as conn:
         mig_count = conn.execute(text("SELECT COUNT(*) FROM schema_migrations")).scalar()
     print(f"  Executed migrations. Current count in DB: {mig_count} (total migration files: {total_migration_files})")
-    check(mig_count == total_migration_files, f"All {total_migration_files} migrations (001-051) verified on PostgreSQL (got {mig_count})")
+    check(mig_count == total_migration_files, f"All {total_migration_files} migration files verified on PostgreSQL (got {mig_count})")
 
     # Verify idempotency
     migrate()
@@ -135,7 +138,7 @@ def run():
     browsers = ["chromium", "firefox", "webkit"]
     cert_matrix = {
         "database": "PostgreSQL 18.6 (WSL2 Debian/Ubuntu)",
-        "migrations": 51,
+        "migrations": int(mig_count),
         "migration_idempotent": True,
         "browsers": {}
     }

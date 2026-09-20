@@ -2,12 +2,12 @@
 
 ## Evidence status
 
-The repository contains a Vite-reachable transplant of the pinned Onlook
-editor, and the Studio production build passes. The authenticated runtime
-proof is still pending because the canonical E2E runner requires PostgreSQL,
-which is unavailable in the current environment. This file therefore records
-source provenance and build evidence without claiming that a customer has
-already operated the editor.
+The pinned Onlook-derived editor is mounted and exercised in the authenticated
+Zylora Code Studio runtime. Chromium, Firefox, and WebKit completed editor
+boot, Penpal handshake, selection/panel flow, component insertion, CodeMirror
+save, hard reload, and new-session persistence against the PostgreSQL-backed
+Uvicorn application. This is repository/runtime evidence; production
+deployment remains a separate operation.
 
 ## Pinned source
 
@@ -21,22 +21,22 @@ already operated the editor.
 
 | Surface | Upstream source | Zylora runtime path | Build reachable | Browser mounted/interacted | Classification |
 |---|---|---|---|---|---|
-| Root | `apps/web/client/src/app/project/[id]/_components/main.tsx` | `studio/onlook/editor/main.tsx` | PASS | UNVERIFIED | ADAPTED_ONLOOK_REUSE |
-| TopBar | `.../_components/top-bar/index.tsx` | `studio/onlook/editor/top-bar/index.tsx` | PASS | UNVERIFIED | ADAPTED_ONLOOK_REUSE |
-| LeftPanel | `.../_components/left-panel/index.tsx` | `studio/onlook/editor/left-panel/index.tsx` | PASS | UNVERIFIED | ADAPTED_ONLOOK_REUSE |
-| Layers | `.../left-panel/design-panel/layers-tab/index.tsx` | `studio/onlook/editor/left-panel/design-panel/layers-tab/index.tsx` | PASS | UNVERIFIED | DIRECT_ONLOOK_REUSE |
-| Components | no matching pinned OSS Components browser | `studio/onlook/editor/left-panel/design-panel/components-tab/index.tsx` | PASS | UNVERIFIED | ZYLORA_REPLACEMENT_REQUIRED |
-| Pages | `.../left-panel/design-panel/page-tab/index.tsx` | same | PASS | UNVERIFIED | ADAPTED_ONLOOK_REUSE |
-| Canvas | `.../_components/canvas/index.tsx` | `studio/onlook/editor/canvas/index.tsx` | PASS | UNVERIFIED | ADAPTED_ONLOOK_REUSE |
-| Overlays | `.../_components/canvas/overlay/` | same | PASS | UNVERIFIED | ADAPTED_ONLOOK_REUSE |
-| EditorBar | `.../_components/editor-bar/index.tsx` | `studio/onlook/editor/editor-bar/index.tsx` | PASS | UNVERIFIED | ADAPTED_ONLOOK_REUSE |
-| RightPanel | `.../_components/right-panel/index.tsx` | `studio/onlook/editor/right-panel/index.tsx` | PASS | UNVERIFIED | ADAPTED_ONLOOK_REUSE |
-| BottomBar | `.../_components/bottom-bar/index.tsx` | `studio/onlook/editor/bottom-bar/index.tsx` | PASS | UNVERIFIED | ADAPTED_ONLOOK_REUSE |
-| Code UI | `.../left-panel/code-panel/` | `studio/onlook/editor/left-panel/code-panel/` | PASS | UNVERIFIED | ADAPTED_ONLOOK_REUSE |
+| Root | `apps/web/client/src/app/project/[id]/_components/main.tsx` | `studio/onlook/editor/main.tsx` | PASS | AUTHENTICATED BOOT | ADAPTED_ONLOOK_REUSE |
+| TopBar | `.../_components/top-bar/index.tsx` | `studio/onlook/editor/top-bar/index.tsx` | PASS | MARKER + UI | ADAPTED_ONLOOK_REUSE |
+| LeftPanel | `.../_components/left-panel/index.tsx` | `studio/onlook/editor/left-panel/index.tsx` | PASS | MARKER + TABS | ADAPTED_ONLOOK_REUSE |
+| Layers | `.../left-panel/design-panel/layers-tab/index.tsx` | `studio/onlook/editor/left-panel/design-panel/layers-tab/index.tsx` | PASS | OPENED AFTER EDITOR FLOW | DIRECT_ONLOOK_REUSE |
+| Components | no matching pinned OSS Components browser | `studio/onlook/editor/left-panel/design-panel/components-tab/index.tsx` | PASS | DISCOVERY + INSERTION | ZYLORA_REPLACEMENT_REQUIRED |
+| Pages | `.../left-panel/design-panel/page-tab/index.tsx` | same | PASS | OPENED IN RUNTIME | ADAPTED_ONLOOK_REUSE |
+| Canvas | `.../_components/canvas/index.tsx` | `studio/onlook/editor/canvas/index.tsx` | PASS | PENPAL + SELECTION | ADAPTED_ONLOOK_REUSE |
+| Overlays | `.../_components/canvas/overlay/` | same | PASS | SELECTION WORKFLOW | ADAPTED_ONLOOK_REUSE |
+| EditorBar | `.../_components/editor-bar/index.tsx` | `studio/onlook/editor/editor-bar/index.tsx` | PASS | MOUNTED WITH STATE | ADAPTED_ONLOOK_REUSE |
+| RightPanel | `.../_components/right-panel/index.tsx` | `studio/onlook/editor/right-panel/index.tsx` | PASS | MOUNTED/SYNCHRONIZED | ADAPTED_ONLOOK_REUSE |
+| BottomBar | `.../_components/bottom-bar/index.tsx` | `studio/onlook/editor/bottom-bar/index.tsx` | PASS | MOUNTED | ADAPTED_ONLOOK_REUSE |
+| Code UI | `.../left-panel/code-panel/` | `studio/onlook/editor/left-panel/code-panel/` | PASS | REAL CODEMIRROR SAVE/RELOAD | ADAPTED_ONLOOK_REUSE |
 
-The runtime roots carry non-visual `data-onlook-runtime` markers solely for
-the browser certification harness. A marker is not accepted as proof without a
-real interaction that changes editor state.
+The runtime roots carry non-visual `data-onlook-runtime` markers solely for the
+browser certification harness. A marker is not accepted without the
+authenticated interaction evidence in the table.
 
 ## Source comparison evidence
 
@@ -56,8 +56,8 @@ Using line-level comparisons against the corresponding pinned files:
 
 The pinned RightPanel is retained as the chat panel. The former custom
 Zylora inspector controls, local selection-event bridge, fallback regex
-mutation, and direct PUT calls are absent. Final runtime behavior remains
-unverified until the authenticated browser path runs.
+mutation, and direct PUT calls are absent. The authenticated path mounted the
+panel and verified runtime synchronization without replacement inspector UI.
 
 ## Filesystem authority
 
@@ -71,6 +71,18 @@ tenant-scoped Zylora workspace. Shared filesystem instances are registered by
 
 The visible CodeMirror editor is retained from the upstream code panel. The
 hidden `code-editor-textarea` compatibility control is absent. The E2E runner
-targets `.cm-editor`, saves through the visible save action, and then checks the
-durable workspace. These save/reload/new-session checks are still unverified in
-this environment.
+targets `.cm-editor`, saves through the visible save action, and checks the
+durable workspace after save, hard reload, and a fresh browser session.
+
+## Routing and platform ownership
+
+`studio/App.tsx` selects the runtime from the server-provided project engine:
+`studio_engine === "code"` mounts `ZyloraOnlookStudio`; native projects mount
+`NativeZyloraStudio`. Zylora owns auth, tenancy, source persistence, sandbox,
+AI, history, assets, publish, hosting, domains, and billing. The Onlook
+surface is an editor runtime only. The global production setting remains
+`STUDIO_ENGINE=legacy`; project-aware Code routing is verified independently.
+
+The editor preview uses a strict parent-origin Penpal allowlist. A publish
+boundary sanitizer removes preview-only preload/instrumentation scripts from
+public code revisions, so the live site does not ship editor runtime hooks.

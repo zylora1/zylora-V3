@@ -169,10 +169,16 @@ export const FrameComponent = observer(
 
                             const remote = child as unknown as PenpalChildMethods;
                             setPenpalChild(remote);
-                            remote.setFrameId(frame.id);
-                            remote.setBranchId(frame.branchId);
-                            remote.handleBodyReady();
-                            remote.processDom();
+                            void Promise.all([
+                                remote.setFrameId(frame.id),
+                                remote.setBranchId(frame.branchId),
+                                remote.handleBodyReady(),
+                                remote.processDom(),
+                            ]).catch((error) => {
+                                if (!isDestroyedConnection(error)) {
+                                    console.error(`${PENPAL_PARENT_CHANNEL} (${frame.id}) - Initial frame sync failed:`, error);
+                                }
+                            });
 
                             try {
                                 if ((remote as any).ping) {
@@ -220,36 +226,14 @@ export const FrameComponent = observer(
                                 })(),
                             });
 
-                            // Wire direct clicks inside iframe for DOM selection
-                            try {
-                                const iframeDoc = iframeRef.current?.contentDocument;
-                                if (iframeDoc) {
-                                    iframeDoc.addEventListener('click', (e: MouseEvent) => {
-                                        const target = e.target as HTMLElement | null;
-                                        if (!target) return;
-                                        const domId = target.getAttribute('data-onlook-id') || target.getAttribute('data-zylora-dom-id') || target.tagName.toLowerCase();
-                                        editorEngine.elements.click([
-                                            {
-                                                domId: domId,
-                                                tagName: target.tagName.toLowerCase(),
-                                                oid: target.getAttribute('data-onlook-id') || undefined,
-                                                styles: {
-                                                    computed: {},
-                                                    defined: {},
-                                                },
-                                            } as any,
-                                        ], frame, false);
-                                    }, true);
-                                }
-                            } catch {
-                                // cross-origin safe
-                            }
-
                             // Notify parent of successful connection
                             onConnectionSuccess();
                         })
                         .catch((error) => {
                             isConnecting.current = false;
+                            if (connectionRef.current !== connection || isDestroyedConnection(error)) {
+                                return;
+                            }
                             console.error(
                                 `${PENPAL_PARENT_CHANNEL} (${frame.id}) - Failed to setup penpal connection:`,
                                 error,
@@ -269,8 +253,11 @@ export const FrameComponent = observer(
                 return async (...args: Parameters<T>) => {
                     try {
                         if (!method) throw new Error('Method not initialized');
-                        return method(...args);
+                        return await method(...args);
                     } catch (error) {
+                        if (isDestroyedConnection(error)) {
+                            return undefined as ReturnType<T>;
+                        }
                         console.error(
                             `${PENPAL_PARENT_CHANNEL} (${frame.id}) - Method failed:`,
                             error,
@@ -348,15 +335,14 @@ export const FrameComponent = observer(
                 }
 
                 const syncMethods = {
-                    supportsOpenDevTools: () =>
-                        !!iframe.contentWindow && 'openDevTools' in iframe.contentWindow,
+                    supportsOpenDevTools: () => false,
                     setZoomLevel: (level: number) => {
                         zoomLevel.current = level;
                         iframe.style.transform = `scale(${level})`;
                         iframe.style.transformOrigin = 'top left';
                     },
                     reload: () => reloadIframe(),
-                    isLoading: () => iframe.contentDocument?.readyState !== 'complete',
+                    isLoading: () => !penpalChild,
                 };
 
                 if (!penpalChild) {
@@ -401,7 +387,7 @@ export const FrameComponent = observer(
                             isActiveBranch && !isSelected && 'outline-dashed',
                             !isActiveBranch && isInDragSelection && 'outline-teal-500',
                         )}
-                        src={frame.url}
+                        src={withParentOrigin(frame.url)}
                         sandbox="allow-modals allow-forms allow-same-origin allow-scripts allow-popups allow-downloads"
                         allow="geolocation; microphone; camera; midi; encrypted-media"
                         style={{ width: frame.dimension.width, height: frame.dimension.height }}
@@ -413,3 +399,18 @@ export const FrameComponent = observer(
         },
     ),
 );
+
+function isDestroyedConnection(error: unknown): boolean {
+    const message = error instanceof Error ? error.message : String(error);
+    return /destroyed connection|connection timeout/i.test(message);
+}
+
+function withParentOrigin(url: string): string {
+    try {
+        const parsed = new URL(url, window.location.href);
+        parsed.searchParams.set('zylora_parent_origin', window.location.origin);
+        return parsed.toString();
+    } catch {
+        return url;
+    }
+}

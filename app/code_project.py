@@ -101,12 +101,28 @@ class CodeProjectAdapter:
         if not self.root.exists():
             return []
         files: list[CodeFile] = []
-        for path in sorted(self.root.rglob('*')):
-            if not path.is_file() or any(part in _BLOCKED_NAMES or part.startswith('.') for part in path.relative_to(self.root).parts):
-                continue
-            relative = path.relative_to(self.root)
-            if path.suffix.lower() in _ALLOWED_EXTENSIONS:
-                files.append(CodeFile(relative.as_posix(), path.stat().st_size, path.suffix.lower()))
+        # Walk top-down so blocked/generated directories are pruned before the
+        # filesystem touches their children. Code workspaces link the shared
+        # dependency cache as ``node_modules`` for preview startup; traversing
+        # that tree with Path.rglob can exhaust Windows handles and surface
+        # WinError 1450 during otherwise harmless file-list requests.
+        for directory, dirnames, filenames in os.walk(self.root, topdown=True, followlinks=False):
+            dirnames[:] = sorted(
+                name for name in dirnames
+                if name not in _BLOCKED_NAMES and not name.startswith('.')
+            )
+            for filename in sorted(filenames):
+                if filename in _BLOCKED_NAMES or filename.startswith('.'):
+                    continue
+                path = Path(directory) / filename
+                relative = path.relative_to(self.root)
+                if path.suffix.lower() not in _ALLOWED_EXTENSIONS:
+                    continue
+                try:
+                    size = path.stat().st_size
+                except OSError:
+                    continue
+                files.append(CodeFile(relative.as_posix(), size, path.suffix.lower()))
         return files
 
     def read_file(self, path: str) -> str:
@@ -273,7 +289,7 @@ def install_preview_instrumentation(adapter: CodeProjectAdapter, project_id: str
     if '/onlook-preload-script.js' not in source and (adapter.root / 'public' / 'onlook-preload-script.js').is_file():
         tags.append('<script src="/onlook-preload-script.js"></script>')
     if '/zylora-instrumentation.js' not in source:
-        script = """(()=>{const projectId=%r,workspaceId=%r,parentOrigin=document.referrer?new URL(document.referrer).origin:'';let serial=0,ids=new WeakMap(),selected=null,hover=null;const types=new Set(['PREVIEW_READY','ELEMENT_HOVER','ELEMENT_SELECTED','ELEMENT_BOUNDS','ELEMENT_METADATA']);const id=e=>{let v=ids.get(e);if(!v){v='dom_'+(++serial);ids.set(e,v);e.setAttribute('data-zylora-dom-id',v)}return v};const send=(type,e)=>{if(!parentOrigin)return;const r=e&&e.getBoundingClientRect();const m={type,projectId,workspaceId,elementId:e?id(e):undefined,parentId:e&&e.parentElement?id(e.parentElement):null,bounds:r?{x:r.x,y:r.y,width:r.width,height:r.height}:undefined,metadata:e?{tag:e.tagName.toLowerCase(),text:(e.textContent||'').trim().slice(0,240),children:[...e.children].map(id)}:{instrumented:true}};parent.postMessage(m,parentOrigin)};document.addEventListener('mousemove',e=>{const t=e.target instanceof Element?e.target:null;if(t===hover)return;if(hover)hover.removeAttribute('data-zylora-hover');hover=t;if(t){t.setAttribute('data-zylora-hover','true');send('ELEMENT_HOVER',t)}},true);document.addEventListener('click',e=>{const t=e.target instanceof Element?e.target:null;if(!t)return;e.stopPropagation();if(selected)selected.removeAttribute('data-zylora-selected');selected=t;t.setAttribute('data-zylora-selected','true');send('ELEMENT_SELECTED',t)},true);addEventListener('resize',()=>selected&&send('ELEMENT_BOUNDS',selected));send('PREVIEW_READY',null)})()""" % (project_id, project_id)
+        script = """(()=>{const projectId=%r,workspaceId=%r,configuredOrigin=new URL(location.href).searchParams.get('zylora_parent_origin'),parentOrigin=configuredOrigin?new URL(configuredOrigin).origin:(document.referrer?new URL(document.referrer).origin:'');let serial=0,ids=new WeakMap(),selected=null,hover=null;const types=new Set(['PREVIEW_READY','ELEMENT_HOVER','ELEMENT_SELECTED','ELEMENT_BOUNDS','ELEMENT_METADATA']);const id=e=>{let v=ids.get(e);if(!v){v='dom_'+(++serial);ids.set(e,v);e.setAttribute('data-zylora-dom-id',v)}return v};const send=(type,e)=>{if(!parentOrigin)return;const r=e&&e.getBoundingClientRect();const m={type,projectId,workspaceId,elementId:e?id(e):undefined,parentId:e&&e.parentElement?id(e.parentElement):null,bounds:r?{x:r.x,y:r.y,width:r.width,height:r.height}:undefined,metadata:e?{tag:e.tagName.toLowerCase(),text:(e.textContent||'').trim().slice(0,240),children:[...e.children].map(id)}:{instrumented:true}};parent.postMessage(m,parentOrigin)};document.addEventListener('mousemove',e=>{const t=e.target instanceof Element?e.target:null;if(t===hover)return;if(hover)hover.removeAttribute('data-zylora-hover');hover=t;if(t){t.setAttribute('data-zylora-hover','true');send('ELEMENT_HOVER',t)}},true);document.addEventListener('click',e=>{const t=e.target instanceof Element?e.target:null;if(!t)return;e.stopPropagation();if(selected)selected.removeAttribute('data-zylora-selected');selected=t;t.setAttribute('data-zylora-selected','true');send('ELEMENT_SELECTED',t)},true);addEventListener('resize',()=>selected&&send('ELEMENT_BOUNDS',selected));send('PREVIEW_READY',null)})()""" % (project_id, project_id)
         adapter.write_file('public/zylora-instrumentation.js', script)
         tags.append('<script src="/zylora-instrumentation.js"></script>')
 

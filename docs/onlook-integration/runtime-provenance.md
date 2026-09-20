@@ -2,8 +2,8 @@
 
 **Pinned Upstream Commit**: `423e2e924366419e418ee049093872d535eea41a`  
 **License**: Apache-2.0  
-**Verification Date**: 2026-09-19  
-**Status**: Source/build provenance recorded; local fixture mount evidence exists; authenticated runtime **UNVERIFIED**
+**Verification Date**: 2026-09-20
+**Status**: Authenticated PostgreSQL-backed runtime certified; production deployment remains separate
 
 ---
 
@@ -15,8 +15,8 @@ Per the strict certification guidelines ("Copied is not Used"), this document di
 | :--- | :--- | :--- |
 | **Source Transplanted Modules** | **419 files** | Files transplanted from Onlook OSS vendor tree into `studio/onlook/` |
 | **Reachable Bundled Modules** | **419 modules** | Modules statically resolved, transformed, and bundled into `static/studio.js` by Vite |
-| **Runtime-Proven Reused Subsystems** | **FIXTURE-ONLY** | The loopback fixture emitted store/shell/canvas/design/code lifecycle events; the PostgreSQL-backed browser runner cannot start in the current environment |
-| **Dual-Engine Isolation Fidelity** | **BUILD-ONLY** | The code/native branch is present in the bundle; authenticated browser isolation remains unverified |
+| **Runtime-Proven Reused Subsystems** | **AUTHENTICATED** | Chromium, Firefox, and WebKit exercised the real Uvicorn/PostgreSQL Code Studio path, Penpal handshake, panels, CodeMirror persistence, publish, and rollback |
+| **Dual-Engine Isolation Fidelity** | **AUTHENTICATED** | Native projects mounted `NativeZyloraStudio`; Code projects mounted `ZyloraOnlookStudio` in the PostgreSQL browser run |
 
 ---
 
@@ -27,7 +27,7 @@ Per the strict certification guidelines ("Copied is not Used"), this document di
 | **Authoritative Store (`EditorEngine`)** | `studio/ZyloraOnlookStudio.tsx` | `studio/onlook/core/engine.ts` | `apps/web/client/src/components/store/editor/engine.ts` | `DIRECT_REUSE` | Tenant auth & site context injected via `window.ZYLORA_STUDIO_CONTEXT` | Emits `ONLOOK_EDITOR_STORE_READY`; sets `window.__ONLOOK_DIAGNOSTICS__.store`; coordinates canvas, elements, frames, ast, style, and code managers. |
 | **Visual Canvas & Viewport** | `studio/ZyloraOnlookStudio.tsx` | `studio/onlook/editor/canvas` | `apps/web/client/src/app/project/[id]/_components/canvas` | `ADAPTED_REUSE` | Frame renders sovereign sandboxed iframe pointing to real preview URL | Emits `ONLOOK_CANVAS_MOUNTED`; element click & hover synchronizes with `editorEngine.elements`; viewport container tagged with `data-subsystem="onlook-canvas"`. |
 | **DOM Layers & Hierarchy** | `studio/ZyloraOnlookStudio.tsx` | `studio/onlook/editor/left-panel/design-panel/layers-tab` | `apps/web/client/src/app/project/[id]/_components/left-panel/design-panel/layers-tab` | `ADAPTED_REUSE` | Tree populated by Penpal `onDomProcessed` event with AST node mappings | Emits `ONLOOK_LAYERS_MOUNTED`; layer selection updates `editorEngine.elements.selected`; tagged with `data-subsystem="onlook-layers"`. |
-| **Components Library** | `studio/ZyloraOnlookStudio.tsx` | `studio/onlook/editor/left-panel/design-panel/components-tab` | No matching pinned OSS Components browser | `ZYLORA_REPLACEMENT_REQUIRED` | Workspace-backed component discovery and AST insertion | Runtime marker exists; interaction remains unverified until PostgreSQL-backed browser E2E runs. |
+| **Components Library** | `studio/ZyloraOnlookStudio.tsx` | `studio/onlook/editor/left-panel/design-panel/components-tab` | No matching pinned OSS Components browser | `ZYLORA_REPLACEMENT_REQUIRED` | Workspace-backed component discovery and AST insertion | Authenticated PostgreSQL browser E2E discovered PricingCard and inserted it into source; runtime marker and source/HMR path verified. |
 | **EditorBar / Style Toolbar** | `studio/ZyloraOnlookStudio.tsx` | `studio/onlook/editor/editor-bar` | `apps/web/client/src/app/project/[id]/_components/editor-bar` | `DIRECT_REUSE` | Style edits route to `applyAstStyleChange` and `editorEngine.style.update` | Emits `ONLOOK_SHELL_MOUNTED`; buttons apply Tailwind classes directly to AST nodes; tagged with `data-subsystem="onlook-editorbar"`. |
 | **AST Parser & Code Transformers** | `studio/onlook/ast-actions.ts` | `studio/onlook/parser` | `packages/parser/src` | `DIRECT_REUSE` | Pure Babel AST transformation, no string regex hacks | Babel standalone parses JSX/TSX; executes `getAstFromContent`, `getContentFromAst`, `addClassToNode`, `replaceNodeClasses`, `updateNodeTextContent`, `insertElementToNode`. Verified by `scripts/verify_onlook_ast.mjs`. |
 | **Code Editor Panel** | `studio/ZyloraOnlookStudio.tsx` | `studio/onlook/editor/left-panel/code-panel` | `apps/web/client/src/app/project/[id]/_components/left-panel/code-panel` | `ADAPTED_REUSE` | Sovereign workspace filesystem REST endpoints (`/api/sites/:id/code/file`) | Emits `ONLOOK_CODE_PANEL_MOUNTED`; file selection reads source; atomic save writes directly to disk; tagged with `data-subsystem="onlook-code-panel"`. |
@@ -47,12 +47,10 @@ Per the strict certification guidelines ("Copied is not Used"), this document di
 
 ## 4. Runtime Diagnostic Registry (`window.__ONLOOK_DIAGNOSTICS__`)
 
-The code-mode bundle contains the diagnostic registry hooks. The local
-loopback fixture observed store, shell, canvas, design-panel, editor-bar,
-bottom-bar, and code-panel events. Those events are recorded as fixture-only
-evidence; they are not authenticated persistence or publish certification.
-The PostgreSQL-backed browser runner has not produced the required end-to-end
-evidence.
+The code-mode bundle contains the diagnostic registry hooks. The authenticated
+PostgreSQL-backed browser runner observed store, shell, canvas, design-panel,
+editor-bar, bottom-bar, code-panel, and Penpal events in all three browsers;
+the loopback fixture remains supplementary evidence only.
 
 When Zylora Studio mounts in Code Mode, it initializes the diagnostic registry on `window.__ONLOOK_DIAGNOSTICS__`:
 

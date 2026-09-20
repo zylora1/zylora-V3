@@ -392,7 +392,10 @@ def run_certification():
                 # observes the real layer tree rather than an unmounted tab.
                 layers_button = page.locator('button[data-testid="left-tab-layers"]')
                 layers_button.click(timeout=5000, force=True, no_wait_after=True)
-                page.wait_for_selector('[data-subsystem="onlook-layers"]', state='attached', timeout=5000)
+                # WebKit can defer the lazy panel mount until the next render
+                # turn after the tab click. Keep the assertion deterministic,
+                # but allow that real render window before declaring a failure.
+                page.wait_for_selector('[data-subsystem="onlook-layers"]', state='attached', timeout=15000)
                 check(page.locator('[data-subsystem="onlook-layers"]').count() == 1, f"{name}: Layers tab opened")
                 after_layers = page.evaluate("() => ({events: window.__ONLOOK_DIAGNOSTICS__?.events?.map(e => e.event) ?? [], mounted: window.__ONLOOK_DIAGNOSTICS__?.subsystems?.Layers?.mounted ?? false})")
                 check("ONLOOK_LAYERS_MOUNTED" in after_layers["events"], f"{name}: ONLOOK_LAYERS_MOUNTED event fired")
@@ -401,7 +404,7 @@ def run_certification():
                 # Test Tab Switching: Components Tab
                 components_button = page.locator('button[data-testid="left-tab-components"]')
                 components_button.click(timeout=5000, force=True, no_wait_after=True)
-                page.wait_for_selector('[data-subsystem="onlook-components"]', state='attached', timeout=5000)
+                page.wait_for_selector('[data-subsystem="onlook-components"]', state='attached', timeout=15000)
                 check(page.locator('[data-subsystem="onlook-components"]').count() == 1, f"{name}: Components tab opened")
                 after_components = page.evaluate("() => ({events: window.__ONLOOK_DIAGNOSTICS__?.events?.map(e => e.event) ?? [], mounted: window.__ONLOOK_DIAGNOSTICS__?.subsystems?.Components?.mounted ?? false})")
                 check("ONLOOK_COMPONENTS_MOUNTED" in after_components["events"], f"{name}: ONLOOK_COMPONENTS_MOUNTED event fired")

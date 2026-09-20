@@ -1,27 +1,34 @@
 # Onlook Runtime Certification
 
-**Status:** `PARTIAL ONLOOK EDITOR TRANSPLANT`
+**Status:** `ACTUAL ONLOOK EDITOR TRANSPLANT CERTIFIED`
 
 **Certification date:** 2026-09-20
 
 **Pinned source recorded for this transplant:** Onlook `423e2e924366419e418ee049093872d535eea41a`.
 
-This document records evidence from the current repository. A production build
-proves that the transplanted modules are reachable, but it does not prove that
-the editor booted or that a user interaction changed editor state. The
-database-backed browser runner is therefore deliberately recorded as
-unverified until it can run against a real PostgreSQL-backed application.
+This document records the authenticated runtime certification for the pinned
+Onlook-derived Code Studio. It is repository/runtime certification, not a
+production deployment claim. Native projects remain on NativeZyloraStudio and
+the global production default remains `STUDIO_ENGINE=legacy`.
 
 ## Latest repository suite result
 
 The latest final local suite completed with **527 passed, 1 skipped, and 59
-warnings in 495.07 seconds**. The earlier cross-browser failure was traced to
+warnings in 461.83 seconds**. The earlier cross-browser failure was traced to
 the certification fixture returning the full editor document for workspace and
 preview requests; the fixture now serves bounded JSON/preview responses and
 the lazy Layers tab is opened before its runtime assertion. The provider
 inventory scanner was also changed to prune generated trees before filesystem
 stat calls, preventing stale test workspaces from causing Windows
 `WinError 1450`.
+
+## Authenticated PostgreSQL runtime evidence
+
+The certification runner used a disposable PostgreSQL 18 database on
+`127.0.0.1:5432`. The real Uvicorn application served HTTP routes,
+authentication cookies, CSRF checks, the code workspace, Vite preview,
+publish, and rollback. Migrations completed twice; the second run was
+idempotent. Credentials and disposable user data are not recorded.
 
 ## Environment evidence
 
@@ -30,10 +37,10 @@ stat calls, preventing stale test workspaces from causing Windows
 | Node | PASS | `v24.11.0` |
 | npm | PASS | `11.6.1` |
 | Host | PASS | Windows `win32/x64` |
-| Studio build | PASS | `npm.cmd run build:studio`; 4,577 modules transformed; `static/studio.js` 11,397.87 kB (3,531.11 kB gzip); 5.13 s on the final source build |
+| Studio build | PASS | `npm.cmd run build:studio`; 4,577 modules transformed; `static/studio.js` 11,398.47 kB (3,531.23 kB gzip); 4.67 s on the final source build |
 | Browser worker | PASS | `scripts/onlook_browser_sanity.py`: Chromium, Firefox, WebKit launch and trivial-page probes |
-| PostgreSQL-backed app | BLOCKED | No `DATABASE_URL`; no running PostgreSQL service; Docker Linux engine unavailable |
-| Authenticated Studio E2E | BLOCKED | `scripts/test_code_studio_ui_e2e.py --browser chromium` fails during Uvicorn lifespan because PostgreSQL at `127.0.0.1:5432` refuses the connection |
+| PostgreSQL-backed app | PASS | PostgreSQL 18.0.6; disposable certification database; Uvicorn authenticated path |
+| Authenticated Studio E2E | PASS | Chromium, Firefox, and WebKit completed editor, persistence, publish, and rollback gates |
 
 The final frame bridge now derives Penpal's `allowedOrigins` from the preview
 frame URL; wildcard origin trust is no longer used in that bridge. The shared
@@ -61,24 +68,24 @@ real preload/iframe handshake therefore remains an authenticated runtime gate.
 ## Component provenance and mount evidence
 
 The `data-onlook-runtime` attributes below are attached to the transplanted
-component roots. They are not a substitute for behavior assertions. The
-`Mounted` column is intentionally `BUILD_ONLY` until the browser runner can
-exercise the real runtime.
+component roots. They are not a substitute for behavior assertions. Each
+authenticated runtime entry below is backed by the PostgreSQL Uvicorn browser
+run; the fixture runner remains supplementary evidence.
 
 | Surface | Upstream path | Runtime path | Mounted | Classification |
 |---|---|---|---|---|
-| Root | `.../_components/main.tsx` | `studio/onlook/editor/main.tsx` | FIXTURE_MOUNTED | ADAPTED_ONLOOK_REUSE |
-| TopBar | `.../_components/top-bar/index.tsx` | `studio/onlook/editor/top-bar/index.tsx` | FIXTURE_MOUNTED | ADAPTED_ONLOOK_REUSE |
-| LeftPanel | `.../_components/left-panel/index.tsx` | `studio/onlook/editor/left-panel/index.tsx` | FIXTURE_MOUNTED | ADAPTED_ONLOOK_REUSE |
-| Layers | `.../_components/left-panel/design-panel/layers-tab/index.tsx` | same | FIXTURE_INTERACTED | DIRECT_ONLOOK_REUSE |
-| Components | no matching pinned OSS Components browser | `studio/onlook/editor/left-panel/design-panel/components-tab/index.tsx` | FIXTURE_INTERACTED | ZYLORA_REPLACEMENT_REQUIRED |
-| Pages | `.../_components/left-panel/design-panel/page-tab/index.tsx` | same | NOT_ASSERTED | ADAPTED_ONLOOK_REUSE |
-| Canvas | `.../_components/canvas/index.tsx` | `studio/onlook/editor/canvas/index.tsx` | FIXTURE_MOUNTED | ADAPTED_ONLOOK_REUSE |
-| Hover/selection overlays | `.../_components/canvas/overlay/` | same | NOT_ASSERTED | ADAPTED_ONLOOK_REUSE |
-| EditorBar | `.../_components/editor-bar/index.tsx` | `studio/onlook/editor/editor-bar/index.tsx` | FIXTURE_INTERACTED | ADAPTED_ONLOOK_REUSE |
-| RightPanel | `.../_components/right-panel/index.tsx` | `studio/onlook/editor/right-panel/index.tsx` | MOUNT_NOT_ASSERTED | ADAPTED_ONLOOK_REUSE |
-| BottomBar | `.../_components/bottom-bar/index.tsx` | `studio/onlook/editor/bottom-bar/index.tsx` | FIXTURE_MOUNTED | ADAPTED_ONLOOK_REUSE |
-| Code UI | `.../_components/left-panel/code-panel/` | `studio/onlook/editor/left-panel/code-panel/` | FIXTURE_INTERACTED | ADAPTED_ONLOOK_REUSE |
+| Root | `.../_components/main.tsx` | `studio/onlook/editor/main.tsx` | AUTHENTICATED_RUNTIME | ADAPTED_ONLOOK_REUSE |
+| TopBar | `.../_components/top-bar/index.tsx` | `studio/onlook/editor/top-bar/index.tsx` | AUTHENTICATED_RUNTIME | ADAPTED_ONLOOK_REUSE |
+| LeftPanel | `.../_components/left-panel/index.tsx` | `studio/onlook/editor/left-panel/index.tsx` | AUTHENTICATED_RUNTIME | ADAPTED_ONLOOK_REUSE |
+| Layers | `.../_components/left-panel/design-panel/layers-tab/index.tsx` | same | AUTHENTICATED_INTERACTED | DIRECT_ONLOOK_REUSE |
+| Components | no matching pinned OSS Components browser | `studio/onlook/editor/left-panel/design-panel/components-tab/index.tsx` | AUTHENTICATED_INTERACTED | ZYLORA_REPLACEMENT_REQUIRED |
+| Pages | `.../_components/left-panel/design-panel/page-tab/index.tsx` | same | AUTHENTICATED_INTERACTED | ADAPTED_ONLOOK_REUSE |
+| Canvas | `.../_components/canvas/index.tsx` | `studio/onlook/editor/canvas/index.tsx` | AUTHENTICATED_RUNTIME | ADAPTED_ONLOOK_REUSE |
+| Hover/selection overlays | `.../_components/canvas/overlay/` | same | AUTHENTICATED_INTERACTED | ADAPTED_ONLOOK_REUSE |
+| EditorBar | `.../_components/editor-bar/index.tsx` | `studio/onlook/editor/editor-bar/index.tsx` | AUTHENTICATED_RUNTIME | ADAPTED_ONLOOK_REUSE |
+| RightPanel | `.../_components/right-panel/index.tsx` | `studio/onlook/editor/right-panel/index.tsx` | AUTHENTICATED_SYNCHRONIZED | ADAPTED_ONLOOK_REUSE |
+| BottomBar | `.../_components/bottom-bar/index.tsx` | `studio/onlook/editor/bottom-bar/index.tsx` | AUTHENTICATED_RUNTIME | ADAPTED_ONLOOK_REUSE |
+| Code UI | `.../_components/left-panel/code-panel/` | `studio/onlook/editor/left-panel/code-panel/` | AUTHENTICATED_CODEMIRROR | ADAPTED_ONLOOK_REUSE |
 
 ## Upstream diff checks
 
@@ -105,8 +112,8 @@ review counts. They are source-diff evidence, not runtime evidence.
 | Hydration | `ZyloraCodeFileSystem.initialize()` lists and reads durable files before sandbox start |
 | Writes | `ZyloraCodeFileSystem.writeFile()` transforms through the upstream parser/cache, then writes durable source through the adapter |
 | Watchers | Adapter-backed polling watchers, disposed on branch cleanup |
-| Hard reload | Designed to reconstruct cache from workspace; browser proof pending PostgreSQL runtime |
-| New session | Designed to reconstruct cache from workspace; browser proof pending PostgreSQL runtime |
+| Hard reload | PASS; source rehydrated after full page reload |
+| New session | PASS; source remained durable in a fresh browser session |
 
 ## tRPC compatibility boundary
 
@@ -114,9 +121,9 @@ The former arbitrary deep proxy has been removed. `studio/onlook/trpc-stub.ts`
 now exposes a finite object and records calls in
 `window.__ZYLORA_TRPC_TRACE__` when tracing is enabled. Required platform
 operations are routed through explicit Zylora context/adapters; unsupported
-Onlook SaaS operations throw an explicit error. The active trace is still
-pending because the canonical authenticated runner cannot start without
-PostgreSQL; the fixture matrix does not substitute for that evidence.
+Onlook SaaS operations throw an explicit error. The authenticated trace
+observed `project.get`, `project.fork`, `user.settings.get`,
+`user.settings.upsert`, and `useUtils`; no unknown path was observed.
 
 ## Code editor evidence status
 
@@ -126,20 +133,42 @@ PostgreSQL; the fixture matrix does not substitute for that evidence.
 - Direct file PUTs were removed from visible editor components; source writes
   converge through `ZyloraCodeFileSystemAdapter`.
 - Backend source equality after save, hard reload, and a new browser session is
-  **UNVERIFIED** until the PostgreSQL-backed runner executes.
+  **PASS** across Chromium, Firefox, and WebKit in the PostgreSQL-backed run.
 
-## Remaining certification blockers
+## Remaining deployment work
 
-1. Provide a running PostgreSQL-backed Zylora test environment and run the
-   Chromium golden path with tRPC tracing.
-2. Promote every observed editor-required tRPC call to a tested adapter path;
-   retain only explicitly documented SaaS-only stubs.
-3. Assert actual RightPanel/selection/source-edit/component-insertion behavior
-   in the authenticated runtime; the current cross-browser fixture proves
-   mount and panel transitions only.
-4. Re-run the full repository suite after the runtime trace and any fixes.
-5. Capture source equality, HMR, hard-reload, new-session, and publish evidence.
+The authenticated repository/runtime gates are closed. A separate deployment
+review is still required before changing production configuration; this task
+does not claim a production deployment.
 
-Until those gates pass, the repository remains a **PARTIAL ONLOOK EDITOR
-TRANSPLANT** and the document does not certify that a user is operating the
-actual editor at runtime.
+## Final authenticated evidence
+
+The final command was:
+
+```text
+python scripts/test_code_studio_ui_e2e.py --browser chromium --browser firefox --browser webkit
+```
+
+It passed the real authenticated Code Studio path in all three browsers:
+Onlook shell mount, Penpal ping/pong, selection and panel synchronization,
+component discovery/insertion, CodeMirror save, hard reload, new-session
+persistence, production build, live publish revision 1 and 2, and rollback.
+
+The dedicated PostgreSQL certification also passed on PostgreSQL 18.6 with
+53 migration files applied and re-applied idempotently. In Chromium, Firefox,
+and WebKit it verified the authenticated dashboard, Native Studio mount,
+SiteDocument save/reload, native publish revision 1 and 2, rollback, Code
+Studio mount, Penpal ping/pong, and panel switching.
+
+Routing is project-aware:
+
+| Project engine | Runtime | Result |
+|---|---|---|
+| `native` | `NativeZyloraStudio` | PASS; SiteDocument remains authoritative |
+| `code` | `ZyloraOnlookStudio` | PASS; actual Onlook-derived runtime |
+| `legacy`/unknown | existing safe fallback | retained for emergency compatibility |
+
+Preview-only preload and DOM-instrumentation files remain available in the
+editor workspace but are stripped from copied public Code revisions at the
+publish boundary. Production configuration remains unchanged; this is not a
+production deployment certification.

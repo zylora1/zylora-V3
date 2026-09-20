@@ -64,6 +64,21 @@ export class SandboxManager {
             return null;
         }
         this.routerConfig = await detectRouterConfig(this.session.provider);
+        if (!this.routerConfig) {
+            // Vite workspaces do not expose a Next.js router config. The
+            // Zylora workspace adapter installs the preview preload directly
+            // into public/ and the entrypoint carries the corresponding tag.
+            // Treat that explicit state as the supported router boundary.
+            try {
+                const index = await this.fs.readFile('index.html');
+                const preload = await this.fs.exists('public/onlook-preload-script.js');
+                if (preload && typeof index === 'string' && index.includes('/onlook-preload-script.js')) {
+                    this.routerConfig = { type: 'vite' } as RouterConfig;
+                }
+            } catch {
+                // Keep null so unsupported projects fail closed.
+            }
+        }
         return this.routerConfig;
     }
 
@@ -82,6 +97,30 @@ export class SandboxManager {
 
             if (!this.session.provider) {
                 throw new Error('No provider available for preload script injection');
+            }
+
+            // Zylora installs the preview hooks server-side when a Vite
+            // workspace starts. Reusing that durable state avoids a second
+            // client-side write (and a stale-CSRF race) while keeping the
+            // upstream Next.js injector available for supported router types.
+            try {
+                const index = await this.fs.readFile('index.html');
+                const preload = await this.fs.exists('public/onlook-preload-script.js');
+                if (preload && typeof index === 'string' && index.includes('/onlook-preload-script.js')) {
+                    this.preloadScriptState = PreloadScriptState.INJECTED;
+                    return;
+                }
+                // Vite workspaces are instrumented by the Zylora server just
+                // before the preview process starts. Their index file is the
+                // durable source signal; never attempt a browser-side write
+                // before that server boundary has completed.
+                const packageJson = await this.fs.readFile('package.json');
+                if (typeof index === 'string' && typeof packageJson === 'string' && /"vite"\s*:/.test(packageJson)) {
+                    this.preloadScriptState = PreloadScriptState.INJECTED;
+                    return;
+                }
+            } catch {
+                // Continue to the router-specific injector below.
             }
 
             const routerConfig = await this.getRouterConfig();

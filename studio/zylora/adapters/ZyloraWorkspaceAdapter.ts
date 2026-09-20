@@ -46,6 +46,7 @@ export class ZyloraWorkspaceAdapter {
 
   async readFile(filePath: string): Promise<string> {
     const normalized = filePath.replace(/^\/+/, '');
+    if (!normalized) return '';
     const res = await fetch(`/api/sites/${encodeURIComponent(this.siteId)}/code/file?path=${encodeURIComponent(normalized)}`, {
       headers: this.auth.getHeaders(),
     });

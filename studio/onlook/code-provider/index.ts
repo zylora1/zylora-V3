@@ -350,6 +350,7 @@ export class ZyloraCodeProvider extends Provider {
 
     async readFile(input: ReadFileInput): Promise<ReadFileOutput> {
         const path = input.args.path.replace(/^\//, '');
+        if (!path) return { file: { path, content: '', toString: () => '' } };
         const content = await this.filesystem.read(path);
         return {
             file: {

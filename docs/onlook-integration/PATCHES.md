@@ -69,3 +69,26 @@ The E2E path now verifies the real Onlook RightPanel and real CodeMirror surface
 - Onlook branding, marketing routes, and hosted domains.
 
 These exclusions are documented platform replacements, not hidden editor UI substitutions.
+
+## Authenticated Code Studio cutover evidence
+
+The final authenticated runner used a disposable PostgreSQL-backed Zylora
+server and a real Code project. Chromium, Firefox, and WebKit proved the
+Onlook-derived shell, Penpal ping/pong, source-backed preview selection,
+Layers/RightPanel/EditorBar synchronization, component discovery and
+insertion, real CodeMirror editing, durable save, hard reload, and fresh
+session persistence. Zylora publish revision 1, revision 2, and rollback were
+also verified.
+
+Routing remains project-aware:
+
+- `studio_engine=native` mounts `NativeZyloraStudio` and preserves SiteDocument.
+- `studio_engine=code` mounts `ZyloraOnlookStudio` and uses JSX/TSX/CSS source
+  through `ZyloraCodeFileSystemAdapter`.
+- The global production default remains `STUDIO_ENGINE=legacy`; the legacy
+  path is retained as an emergency compatibility option during rollout review.
+
+Preview-only scripts remain available in the editor workspace, but `app/api.py`
+strips their tags and generated files at the publish boundary. Public Code
+revisions therefore do not ship the Onlook preload or Zylora DOM
+instrumentation.

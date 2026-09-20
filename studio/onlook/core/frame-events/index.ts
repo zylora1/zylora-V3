@@ -134,7 +134,6 @@ export class FrameEventManager {
             selectedElements.map(async (el) => {
                 const frameData = this.editorEngine.frames.get(el.frameId);
                 if (!frameData?.view) {
-                    console.error('No frame view found');
                     return null;
                 }
                 try {
@@ -156,4 +155,4 @@ export class FrameEventManager {
         this.viewportReactionDisposer?.();
         this.viewportReactionDisposer = undefined;
     }
-} 
+}
